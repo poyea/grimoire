@@ -1,88 +1,217 @@
 = Graphs
 
+*Representation tradeoffs:*
+- *Adjacency matrix:* $O(V^2)$ space. O(1) edge lookup. Cache-friendly for dense graphs. Row-major iteration optimal.
+- *Adjacency list:* $O(V + E)$ space. O(degree) edge lookup. Better for sparse graphs. Pointer chasing = cache-unfriendly.
+- *Edge list:* $O(E)$ space. Used for Kruskal's, union-find. Must sort for many algorithms.
+
+```cpp
+// Adjacency list: vector of vectors (cache-friendly)
+vector<vector<int>> adj(n);
+
+// Alternative: vector of unordered_set (fast removal, more overhead)
+vector<unordered_set<int>> adj(n);
+```
+
 == Number of Islands
 
 *Problem:* Count number of islands in 2D grid ('1' = land, '0' = water).
 
-*Approach - BFS:* $O(n #sym.times m)$ time, $O(n #sym.times m)$ space
-- Initialize `result = 0`, `visited = set()`, get rows and cols
-- Define `bfs(r, c)`:
-  + Create queue: `queue = [(r, c)]`
-  + Add to visited: `visited.add((r, c))`
-  + While queue:
-    * `row, col = queue.pop(0)`
-    * For all 4 directions (up, down, left, right):
-      - If in bounds, equals '1', and not visited:
-        + Add to queue and visited
-- For each cell in grid:
-  + If `grid[r][c] == '1' and (r, c) not in visited`:
-    * Increment result
-    * Call `bfs(r, c)`
-- Return result
+*Approach - BFS:* $O(n m)$ time, $O(n m)$ space
 
-*Key insight:* Each BFS explores one complete island.
+```cpp
+int numIslands(vector<vector<char>>& grid) {
+    int rows = grid.size(), cols = grid[0].size();
+    int islands = 0;
+
+    auto bfs = [&](int r, int c) {
+        deque<pair<int, int>> queue = {{r, c}};
+        grid[r][c] = '0';  // Mark visited in-place
+
+        constexpr int dirs[4][2] = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+        while (!queue.empty()) {
+            auto [row, col] = queue.front();
+            queue.pop_front();
+
+            for (auto [dr, dc] : dirs) {
+                int nr = row + dr, nc = col + dc;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == '1') {
+                    grid[nr][nc] = '0';
+                    queue.push_back({nr, nc});
+                }
+            }
+        }
+    };
+
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            if (grid[r][c] == '1') {
+                islands++;
+                bfs(r, c);
+            }
+        }
+    }
+    return islands;
+}
+```
+
+*2D grid access patterns:*
+- Row-major iteration (`grid[r][c]`): cache-friendly, prefetcher works
+- Random neighbor access: depends on island shape, generally poor locality
+- In-place marking eliminates `unordered_set<pair<int,int>>`: saves ~40 bytes per cell + hash overhead
+
+*DFS vs BFS:*
+- DFS: O(nm) stack depth worst case (snake island) = stack overflow risk
+- BFS: O(nm) queue size worst case (diagonal island)
+- Cache: both have poor locality due to random neighbor access
 
 == Clone Graph
 
 *Problem:* Deep copy an undirected graph.
 
-*Approach - DFS with HashMap:* $O(n + e)$ time, $O(n)$ space
-- Create hashmap: `oldToNew = {}`
-- Define `dfs(node)`:
-  + If `node in oldToNew`: return `oldToNew[node]` (already cloned)
-  + Create copy: `copy = Node(node.val)`
-  + Store mapping: `oldToNew[node] = copy`
-  + For each neighbor:
-    - `copy.neighbors.append(dfs(neighbor))`
-  + Return copy
-- Return `dfs(node) if node else None`
+*Approach - DFS with HashMap:* $O(V + E)$ time, $O(V)$ space
 
-*Key insight:* HashMap prevents infinite loops and tracks cloned nodes.
+```cpp
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node(int _val) : val(_val) {}
+};
+
+Node* cloneGraph(Node* node) {
+    if (!node) return nullptr;
+
+    unordered_map<Node*, Node*> cloned;
+
+    function<Node*(Node*)> dfs = [&](Node* curr) -> Node* {
+        if (cloned.count(curr)) return cloned[curr];
+
+        Node* copy = new Node(curr->val);
+        cloned[curr] = copy;  // Must add before recursing to handle cycles
+
+        for (Node* neighbor : curr->neighbors) {
+            copy->neighbors.push_back(dfs(neighbor));
+        }
+        return copy;
+    };
+
+    return dfs(node);
+}
+```
+
+*Hash map performance:*
+- `unordered_map<Node*, Node*>`: pointer keys = fast hash (identity)
+- Load factor: default 1.0. Rehashing at 0.75-0.9 = better cache hit rate
+- `reserve(V)` if vertex count known: avoids rehash overhead
+
+== Course Schedule (Cycle Detection)
+
+*Problem:* Determine if you can finish all courses given prerequisites (detect cycle in directed graph).
+
+*Approach - DFS with Coloring:* $O(V + E)$ time, $O(V)$ space
+
+```cpp
+bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+    vector<vector<int>> adj(numCourses);
+    for (auto& edge : prerequisites) {
+        adj[edge[0]].push_back(edge[1]);
+    }
+
+    enum State { UNVISITED, VISITING, VISITED };
+    vector<State> state(numCourses, UNVISITED);
+
+    function<bool(int)> hasCycle = [&](int node) -> bool {
+        if (state[node] == VISITING) return true;  // Back edge = cycle
+        if (state[node] == VISITED) return false;  // Already processed
+
+        state[node] = VISITING;
+        for (int neighbor : adj[node]) {
+            if (hasCycle(neighbor)) return true;
+        }
+        state[node] = VISITED;
+        return false;
+    };
+
+    for (int i = 0; i < numCourses; i++) {
+        if (state[i] == UNVISITED && hasCycle(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+
+*Three-color algorithm:*
+- UNVISITED (white): not seen
+- VISITING (gray): in current DFS path
+- VISITED (black): finished processing
+- Cycle exists iff we reach VISITING node (back edge)
+
+*State representation:*
+- `vector<State>` vs `vector<int>`: enum is self-documenting, compiles to same code
+- Could use 2 bits per node: `vector<uint8_t> state((n+3)/4)` for memory efficiency
 
 == Pacific Atlantic Water Flow
 
 *Problem:* Find cells where water can flow to both Pacific and Atlantic oceans.
 
-*Approach - Reverse DFS from Oceans:* $O(n #sym.times m)$ time, $O(n #sym.times m)$ space
-- Initialize `pacific = set()`, `atlantic = set()`
-- Define `dfs(r, c, visited, prevHeight)`:
-  + If out of bounds, visited, or `heights[r][c] < prevHeight`: return
-  + Add to visited: `visited.add((r, c))`
-  + DFS all 4 directions with `heights[r][c]` as prevHeight
-- Start DFS from ocean borders:
-  + Pacific: top row and left column
-  + Atlantic: bottom row and right column
-- Find intersection: cells in both pacific and atlantic sets
-- Return result list
+*Approach - Reverse DFS from Oceans:* $O(n m)$ time, $O(n m)$ space
 
-*Key insight:* Start from oceans and flow upward (reverse flow) to find reachable cells.
+```cpp
+vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+    int rows = heights.size(), cols = heights[0].size();
 
-== Course Schedule
+    vector<vector<bool>> pacific(rows, vector<bool>(cols));
+    vector<vector<bool>> atlantic(rows, vector<bool>(cols));
 
-*Problem:* Determine if you can finish all courses given prerequisites (detect cycle in directed graph).
+    function<void(int, int, vector<vector<bool>>&)> dfs =
+        [&](int r, int c, vector<vector<bool>>& ocean) {
+        ocean[r][c] = true;
 
-*Approach - DFS Cycle Detection:* $O(n + p)$ time where p is prerequisites
-- Build adjacency list: `graph = {i: [] for i in range(numCourses)}`
-- For each `[course, prereq]`: `graph[course].append(prereq)`
-- Initialize `visited = set()` (tracks current DFS path)
-- Define `dfs(course)`:
-  + If `course in visited`: return False (cycle detected)
-  + If `graph[course] == []`: return True (no prerequisites)
-  + Add to visited: `visited.add(course)`
-  + For each prereq: if `not dfs(prereq)`: return False
-  + Backtrack: `visited.remove(course)`
-  + Mark as processed: `graph[course] = []`
-  + Return True
-- For each course: if `not dfs(course)`: return False
-- Return True
+        constexpr int dirs[4][2] = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+        for (auto [dr, dc] : dirs) {
+            int nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols &&
+                !ocean[nr][nc] && heights[nr][nc] >= heights[r][c]) {
+                dfs(nr, nc, ocean);
+            }
+        }
+    };
 
-*Key insight:* Visited set tracks current path to detect cycles; clear prerequisites after processing.
+    // Start from borders
+    for (int i = 0; i < rows; i++) {
+        dfs(i, 0, pacific);
+        dfs(i, cols - 1, atlantic);
+    }
+    for (int j = 0; j < cols; j++) {
+        dfs(0, j, pacific);
+        dfs(rows - 1, j, atlantic);
+    }
 
-== Course Schedule II
+    // Find intersection
+    vector<vector<int>> result;
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            if (pacific[r][c] && atlantic[r][c]) {
+                result.push_back({r, c});
+            }
+        }
+    }
+    return result;
+}
+```
 
-*Problem:* Return ordering of courses to finish all (topological sort).
+*Memory optimization:*
+`vector<vector<bool>>` is specialized: uses 1 bit per element, but slow due to bit manipulation. Use `vector<vector<uint8_t>>` for 8x memory but ~2-3x faster access.
 
-*Approach - DFS Topological Sort:* $O(n + p)$ time
-- Similar to Course Schedule but collect courses in post-order
-- Add courses to result after exploring all prerequisites
-- Reverse result at end to get correct order
+*Bitset alternative:*
+```cpp
+bitset<10000> pacific, atlantic;  // For max grid size 100x100
+int idx = r * cols + c;
+pacific[idx] = true;
+```
+Faster bitwise AND for intersection.
+
+*Cache:* Row-major iteration in result collection = good spatial locality. DFS traversal = poor locality (random access pattern).

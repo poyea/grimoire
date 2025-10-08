@@ -1,28 +1,65 @@
 = Heap/Priority Queue
 
+*Array-based heap performance:* Binary heap stored in array = excellent cache locality. Parent at `i`, children at `2i+1`, `2i+2`. Sequential memory access during sift operations.
+
 == Find Median from Data Stream
 
 *Problem:* Design data structure to support adding numbers and finding median efficiently.
 
-*Approach - Two Heaps:* $O(log n)$ add, $O(1)$ findMedian
-- Use two heaps to maintain median:
-  + `small` - max heap (negate values) for smaller half
-  + `large` - min heap for larger half
-- Keep heaps balanced: `|len(small) - len(large)| <= 1`
+*Approach - Two Heaps:* $O(log n)$ addNum, $O(1)$ findMedian
 
-*addNum(num):*
-- Add to small heap: `heappush(self.small, -1 * num)`
-- Balance values: if `max(small) > min(large)`:
-  + Move max from small to large
-- Rebalance sizes: if one heap has 2+ more elements than other, move element
+```cpp
+class MedianFinder {
+    priority_queue<int> maxHeap;  // Smaller half (max on top)
+    priority_queue<int, vector<int>, greater<int>> minHeap;  // Larger half (min on top)
 
-*findMedian():*
-- If `len(small) > len(large)`: return `-small[0]`
-- If `len(large) > len(small)`: return `large[0]`
-- Else: return `(-small[0] + large[0]) / 2.0`
+public:
+    void addNum(int num) {
+        // Add to max heap first
+        maxHeap.push(num);
 
-*Key insight:* Two heaps maintain sorted middle elements for $O(1)$ median access.
+        // Balance values: ensure max(small) <= min(large)
+        if (!minHeap.empty() && maxHeap.top() > minHeap.top()) {
+            minHeap.push(maxHeap.top());
+            maxHeap.pop();
+        }
 
-*Key Python concepts:*
-- `heapq` module for min heap
-- Negate values for max heap: `heappush(heap, -val)`
+        // Balance sizes: |size_diff| <= 1
+        if (maxHeap.size() > minHeap.size() + 1) {
+            minHeap.push(maxHeap.top());
+            maxHeap.pop();
+        } else if (minHeap.size() > maxHeap.size()) {
+            maxHeap.push(minHeap.top());
+            minHeap.pop();
+        }
+    }
+
+    double findMedian() {
+        if (maxHeap.size() > minHeap.size()) {
+            return maxHeap.top();
+        }
+        return (maxHeap.top() + minHeap.top()) / 2.0;
+    }
+};
+```
+
+*Heap implementation details:*
+- `priority_queue` uses `vector` internally = contiguous array = cache-friendly
+- `push()`: append + sift-up. Average O(1), worst O(log n)
+- `pop()`: swap with last + sift-down. O(log n) always
+
+*Memory layout:*
+```
+Heap array: [root, L1, R1, L1-L, L1-R, R1-L, R1-R, ...]
+Indices:     [0,    1,  2,  3,    4,    5,    6,    ...]
+```
+Parent-child jumps = predictable stride pattern. CPU prefetcher can partially predict.
+
+*Cache behavior:*
+- Small heaps (< 256 elements = ~1KB): entire heap fits in L1 cache = < 5 cycles per access
+- Medium heaps (< 32K elements = ~128KB): fits in L2 = ~15 cycles per access
+- Large heaps: only root path (log n nodes) accessed = log n cache misses max
+
+*Alternative - Bucket approach:* For bounded range [0, M], use counting array. O(1) insert, O(M) median. Faster if M < log n.
+
+*SIMD optimization:* Heapify operation on small heaps (n < 32) can use SIMD compare-and-swap for parallel sift-down.

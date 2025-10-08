@@ -99,3 +99,35 @@ int maxArea(vector<int>& height) {
 ```
 
 *Greedy choice:* Always move pointer with smaller height. Moving larger height can never improve area (width decreases, height stays ≤ min).
+
+== Two-Pointer Performance
+
+*Prefetching:*
+```cpp
+// Manual prefetch hints for large arrays
+int twoSum(vector<int>& nums, int target) {
+    int l = 0, r = nums.size() - 1;
+
+    while (l < r) {
+        __builtin_prefetch(&nums[l + 1]);  // Hint: will access soon
+        __builtin_prefetch(&nums[r - 1]);
+
+        int sum = nums[l] + nums[r];
+        if (sum == target) return {l + 1, r + 1};
+        else if (sum < target) l++;
+        else r--;
+    }
+    return {};
+}
+```
+
+*Memory access pattern:*
+- Left pointer: forward, sequential = prefetcher friendly
+- Right pointer: backward, sequential = prefetcher can adapt
+- Both converge = good spatial locality as pointers get closer
+
+*Cache line reuse:*
+When `l` and `r` point to same cache line (64 bytes apart = ~16 ints), single cache line loaded for both accesses. Final iterations = very cache-efficient.
+
+*Branch prediction:*
+`if-else` chain: pattern depends on data distribution. Sorted + target near median = branches alternate = poor prediction. Use profile-guided optimization (PGO) for critical paths.

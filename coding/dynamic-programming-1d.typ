@@ -1,146 +1,199 @@
 = 1-D Dynamic Programming
 
+*Cache performance:* DP on arrays = sequential access = excellent prefetching. CPU loads entire cache line (64 bytes = 16 ints) per access, amortizing latency.
+
 == Climbing Stairs
 
 *Problem:* Count distinct ways to climb n stairs (can take 1 or 2 steps at a time).
 
-*Approach 1 - DP Array:* $O(n)$ time, $O(n)$ space
-- Initialize `dp = [0] * (n+1)`
-- Base cases: `dp[1] = 1`, `dp[2] = 2`
-- For i in range(3, n+1): `dp[i] = dp[i-1] + dp[i-2]`
-- Return `dp[n]`
+*Approach - Space Optimized:* $O(n)$ time, $O(1)$ space
 
-*Approach 2 - Space Optimized:* $O(n)$ time, $O(1)$ space
-- If `n <= 2`: return n
-- Initialize `prev1 = 1`, `prev2 = 2`
-- For i in range(3, n+1):
-  + `curr = prev1 + prev2`
-  + `prev1 = prev2`, `prev2 = curr`
-- Return `prev2`
+```cpp
+int climbStairs(int n) {
+    if (n <= 2) return n;
 
-*Key insight:* Same as Fibonacci sequence.
+    int prev1 = 1, prev2 = 2;
+    for (int i = 3; i <= n; i++) {
+        int curr = prev1 + prev2;
+        prev1 = prev2;
+        prev2 = curr;
+    }
+    return prev2;
+}
+```
+
+*Key insight:* Fibonacci recurrence. Only need last 2 values = O(1) space.
+
+*Register allocation:* `prev1`, `prev2`, `curr` fit in CPU registers (no memory access). Loop body = ~5 instructions, ~2 cycles per iteration.
 
 == House Robber
 
 *Problem:* Maximum money you can rob from houses without robbing adjacent houses.
 
-*Approach - DP:* $O(n)$ time, $O(n)$ space
-- Initialize `dp = [0] * len(nums)`
-- Base cases: `dp[0] = nums[0]`, `dp[1] = max(nums[0], nums[1])`
-- For i in range(2, len(nums)):
-  + `dp[i] = max(dp[i-1], dp[i-2] + nums[i])`
-- Return `dp[-1]`
+*Approach - Space Optimized:* $O(n)$ time, $O(1)$ space
 
-*Key insight:* Either rob current house + i-2, or skip and take i-1.
+```cpp
+int rob(vector<int>& nums) {
+    int rob1 = 0, rob2 = 0;  // rob1 = max at i-2, rob2 = max at i-1
 
-== House Robber II
+    for (int num : nums) {
+        int temp = max(rob2, rob1 + num);
+        rob1 = rob2;
+        rob2 = temp;
+    }
+    return rob2;
+}
+```
 
-*Problem:* Houses are in a circle (first and last are adjacent).
+*Branchless max:* Modern compilers convert `max()` to conditional move (CMOV). No branch mispredicts.
 
-*Approach - Two DP Runs:* $O(n)$ time, $O(n)$ space
-- If `len(nums) == 1`: return `nums[0]`
-- Define helper function using House Robber I logic
-- Run twice: once excluding last house, once excluding first house
-- Return `max(helper(nums[:-1]), helper(nums[1:]))`
-
-*Key insight:* Can't rob both first and last house - try excluding each.
+```cpp
+// Assembly (x86-64):
+// cmp  rob2, rob1_plus_num
+// cmovl rob2, rob1_plus_num  // Conditional move if less
+```
 
 == Longest Palindromic Substring
 
 *Problem:* Find longest palindromic substring.
 
 *Approach - Expand Around Center:* $O(n^2)$ time, $O(1)$ space
-- Initialize `result = ""`, `maxLen = 0`
-- For each index i:
-  + Check odd-length palindromes: expand from `(i, i)`
-  + Check even-length palindromes: expand from `(i, i+1)`
-  + For each expansion:
-    - While `l >= 0 and r < len(s) and s[l] == s[r]`:
-      + If `(r - l + 1) > maxLen`: update result
-      + Expand: `l -= 1`, `r += 1`
-- Return `result`
 
-*Key insight:* Palindrome can be expanded from center - check all possible centers.
+```cpp
+string longestPalindrome(string s) {
+    int start = 0, maxLen = 0;
 
-== Palindromic Substrings
+    auto expandAroundCenter = [&](int left, int right) {
+        while (left >= 0 && right < s.length() && s[left] == s[right]) {
+            left--;
+            right++;
+        }
+        int len = right - left - 1;
+        if (len > maxLen) {
+            maxLen = len;
+            start = left + 1;
+        }
+    };
 
-*Problem:* Count all palindromic substrings.
+    for (int i = 0; i < s.length(); i++) {
+        expandAroundCenter(i, i);      // Odd length
+        expandAroundCenter(i, i + 1);  // Even length
+    }
 
-*Approach - Expand Around Center:* $O(n^2)$ time, $O(1)$ space
-- Same as Longest Palindromic Substring
-- Instead of tracking longest, increment counter for each palindrome found
+    return s.substr(start, maxLen);
+}
+```
 
-== Decode Ways
+*String access pattern:* Expanding from center = bidirectional access. Cache line may contain both `s[left]` and `s[right]` for small palindromes.
 
-*Problem:* Count ways to decode string where 'A'=1, 'B'=2, ..., 'Z'=26.
-
-*Approach - DP:* $O(n)$ time, $O(n)$ space
-- If `s[0] == '0'`: return 0
-- Initialize `dp = [0] * len(s)`, `dp[0] = 1`
-- Handle `dp[1]` based on valid single/double digit combinations
-- For i in range(2, len(s)):
-  + If `s[i] == '0'`: only valid if previous is '1' or '2'
-  + Check if two-digit combo is valid (10-26)
-  + Update `dp[i]` accordingly
-- Return `dp[-1]`
-
-*Key insight:* At each position, can decode as single digit or two-digit number if valid.
+*Manacher's algorithm:* O(n) time but complex. Only worth for very large strings or repeated queries.
 
 == Coin Change
 
 *Problem:* Find minimum coins needed to make amount (infinite supply of each coin).
 
 *Approach - DP:* $O(op("amount") × op("coins"))$ time, $O(op("amount"))$ space
-- Initialize `dp = [float('inf')] * (amount + 1)`
-- Base case: `dp[0] = 0`
-- For i in range(1, amount + 1):
-  + For each coin:
-    - If `i >= coin`: `dp[i] = min(dp[i], dp[i - coin] + 1)`
-- Return `dp[amount]` if not infinity, else -1
 
-*Key insight:* Build up from 0 to amount, trying each coin at each step.
+```cpp
+int coinChange(vector<int>& coins, int amount) {
+    vector<int> dp(amount + 1, INT_MAX);
+    dp[0] = 0;
+
+    for (int a = 1; a <= amount; a++) {
+        for (int coin : coins) {
+            if (a >= coin && dp[a - coin] != INT_MAX) {
+                dp[a] = min(dp[a], dp[a - coin] + 1);
+            }
+        }
+    }
+
+    return dp[amount] == INT_MAX ? -1 : dp[amount];
+}
+```
+
+*Memory access:* Sequential scan of `dp` array = cache-friendly. `coins` array small enough to fit in L1 cache.
+
+*SIMD opportunity:* Inner loop can be vectorized for multiple amounts simultaneously using AVX2. Process 8 amounts in parallel.
+
+```cpp
+// Conceptual SIMD (actual implementation more complex):
+__m256i amounts = _mm256_setr_epi32(a, a+1, a+2, ..., a+7);
+__m256i results = _mm256_min_epi32(dp_vec, candidate_vec);
+```
 
 == Maximum Product Subarray
 
 *Problem:* Find contiguous subarray with largest product.
 
 *Approach - Track Min/Max:* $O(n)$ time, $O(1)$ space
-- Initialize `result = max(nums)`, `currMin = 1`, `currMax = 1`
-- For each num:
-  + If `num == 0`: reset `currMin = 1`, `currMax = 1`, continue
-  + Store temp: `temp = currMax`
-  + Update `currMax = max(num * currMax, num * currMin, num)`
-  + Update `currMin = min(num * temp, num * currMin, num)`
-  + Update `result = max(result, currMax)`
-- Return `result`
 
-*Key insight:* Track both min and max because negative numbers can flip min to max.
+```cpp
+int maxProduct(vector<int>& nums) {
+    int result = nums[0];
+    int currMin = 1, currMax = 1;
 
-== Word Break
+    for (int num : nums) {
+        if (num == 0) {
+            currMin = currMax = 1;
+            result = max(result, 0);
+            continue;
+        }
 
-*Problem:* Determine if string can be segmented into words from dictionary.
+        int temp = currMax * num;
+        currMax = max({num, currMax * num, currMin * num});
+        currMin = min({num, temp, currMin * num});
 
-*Approach - DP (Bottom-up):* $O(n #sym.times m #sym.times k)$ time where m is dict size, k is avg word length
-- Initialize `dp = [False] * (len(s) + 1)`, `dp[-1] = True`
-- For i in range(len(s) - 1, -1, -1):
-  + For each word in wordDict:
-    * If `s[i:i+len(word)] == word`:
-      - `dp[i] = dp[i + len(word)]`
-    * If `dp[i]`: break
-- Return `dp[0]`
+        result = max(result, currMax);
+    }
+    return result;
+}
+```
 
-*Key insight:* Work backwards - position i is valid if any word matches and rest is valid.
+*Key insight:* Track both min and max because negative × negative = positive. Negative currMin can become currMax.
 
-==  Longest Increasing Subsequence
+*Integer overflow:* Products can exceed INT_MAX. Use `long long` or detect overflow with `__builtin_mul_overflow()`.
+
+== Longest Increasing Subsequence
 
 *Problem:* Find length of longest strictly increasing subsequence.
 
-*Approach - DP:* $O(n^2)$ time, $O(n)$ space
-- Initialize `dp = [1] * len(nums)` (each element is subsequence of length 1)
-- For i in range(len(nums) - 1, -1, -1):
-  + For j in range(i + 1, len(nums)):
-    - If `nums[j] > nums[i]`:
-      + `dp[i] = max(dp[i], dp[j] + 1)`
-- Return `max(dp)`
+*Approach 1 - DP:* $O(n^2)$ time, $O(n)$ space
 
-*Key insight:* For each position, check all larger elements after it.
+```cpp
+int lengthOfLIS(vector<int>& nums) {
+    vector<int> dp(nums.size(), 1);
+
+    for (int i = 1; i < nums.size(); i++) {
+        for (int j = 0; j < i; j++) {
+            if (nums[j] < nums[i]) {
+                dp[i] = max(dp[i], dp[j] + 1);
+            }
+        }
+    }
+
+    return *max_element(dp.begin(), dp.end());
+}
+```
+
+*Approach 2 - Binary Search + Patience Sort:* $O(n log n)$ time, $O(n)$ space
+
+```cpp
+int lengthOfLIS(vector<int>& nums) {
+    vector<int> tails;  // tails[i] = smallest tail of LIS of length i+1
+
+    for (int num : nums) {
+        auto it = lower_bound(tails.begin(), tails.end(), num);
+        if (it == tails.end()) {
+            tails.push_back(num);
+        } else {
+            *it = num;
+        }
+    }
+
+    return tails.size();
+}
+```
+
+*Binary search optimization:* `lower_bound()` on small vectors (< 64 elements): linear search can be faster due to prefetching. Use `if (tails.size() < 64)` heuristic.
+
+*Cache:* `tails` array typically small = stays in L1 cache. Binary search has poor spatial locality but good temporal locality.

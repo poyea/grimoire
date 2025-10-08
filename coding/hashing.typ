@@ -167,3 +167,51 @@ int longestConsecutive(vector<int>& nums) {
 ```
 
 *Key optimization:* Check `num - 1` to identify sequence starts. Prevents redundant work, ensures O(n).
+
+== Hash Table Deep Dive
+
+*Load factor & performance:*
+```cpp
+unordered_set<int> s;
+s.max_load_factor(0.75);  // Default 1.0
+s.reserve(10000);  // Pre-allocate buckets
+```
+
+- Load factor = elements / buckets
+- Higher load = more collisions = slower lookups (more linked list traversal)
+- Lower load = less collisions but more memory
+- Optimal: 0.75-0.9 for cache efficiency
+
+*Collision resolution:*
+- *Chaining (STL default):* Each bucket = linked list. Cache-hostile for long chains.
+- *Open addressing (robin hood, linear probing):* Store in array with probing. Better cache locality but not in STL.
+
+*Hash function analysis:*
+```cpp
+// Identity hash (default for integers)
+hash<int>{}(42) == 42;  // Perfect for sequential keys
+
+// Bad pattern: many collisions
+for (int i = 0; i < 1000; i += 8) {
+    set.insert(i);  // All hash to same bucket % 8
+}
+
+// Custom hash to avoid patterns:
+struct CustomHash {
+    size_t operator()(int x) const {
+        x ^= x >> 16;
+        x *= 0x85ebca6b;
+        x ^= x >> 13;
+        return x;
+    }
+};
+unordered_set<int, CustomHash> s;
+```
+
+*Memory layout:*
+`unordered_set` = array of buckets + linked lists. Each node = ~24 bytes (next ptr, hash cache, value). 1000 elements ≈ 24KB minimum.
+
+*Cache behavior:*
+- Small sets (< 100 elements): entire hash table fits in L1 = fast
+- Large sets: bucket array may fit in cache, but nodes scattered = pointer chasing
+- Alternative: `flat_hash_set` (absl::) uses open addressing = 2-3x faster

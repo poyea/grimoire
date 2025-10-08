@@ -101,3 +101,45 @@ bool dfs(vector<vector<char>>& board, string& word, int r, int c, int i) {
     return found;
 }
 ```
+
+== Backtracking Performance
+
+*Stack frame overhead:*
+- Each recursive call = ~64-128 bytes stack frame
+- Deep recursion (depth 1000) = 64-128KB stack usage
+- Default stack size: 1-8MB. Deep trees risk overflow.
+
+*Tail call optimization:*
+Backtracking is NOT tail-recursive (need to restore state after call). Compiler cannot optimize to iteration.
+
+*Iterative backtracking (manual stack):*
+```cpp
+// Avoids recursion overhead, explicit control
+struct State { int r, c, i; };
+stack<State> stk;
+stk.push({start_r, start_c, 0});
+
+while (!stk.empty()) {
+    auto [r, c, i] = stk.top();
+    stk.pop();
+
+    // Process state, push next states...
+}
+```
+
+Pros: No stack overflow, easier to add pruning.
+Cons: More code, harder to read.
+
+*Branch ordering:*
+```cpp
+// Try most promising direction first (early termination)
+if (heuristic_best(r+1, c)) {
+    if (dfs(board, word, r+1, c, i+1)) return true;
+}
+// Then try others...
+```
+
+*Cache behavior:*
+- Backtracking = random memory access = cache unfriendly
+- In-place marking eliminates `unordered_set`: saves 40+ bytes per cell + hash overhead
+- Small boards (< 20×20): entire board fits in L1 cache

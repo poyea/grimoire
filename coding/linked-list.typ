@@ -1,98 +1,220 @@
 = Linked List
 
+*Critical performance note:* Linked lists have poor cache behavior. Each `next` pointer dereference = potential cache miss (~200 cycles). Array-based solutions are typically 10-100x faster. Use linked lists only when required (LRU cache, memory pooling).
+
+```cpp
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x = 0, ListNode* n = nullptr) : val(x), next(n) {}
+};
+```
+
 == Reverse Linked List
 
 *Problem:* Reverse a singly linked list.
 
 *Approach 1 - Iterative:* $O(n)$ time, $O(1)$ space
-- Initialize `prev = None`
-- While `head`:
-  + Store next: `temp = head.next`
-  + Reverse pointer: `head.next = prev`
-  + Move prev and head forward: `prev = head`, `head = temp`
-- Return `prev`
 
-*Approach 2 - Recursive:* $O(n)$ time, $O(n)$ space (call stack)
-- Base case: if `head is None`: return None
-- Recursively reverse rest: `newHead = reverseList(head.next)`
-- Reverse current: `head.next.next = head`
-- Set current next to None: `head.next = None`
-- Return `newHead`
+```cpp
+ListNode* reverseList(ListNode* head) {
+    ListNode* prev = nullptr;
+
+    while (head) {
+        ListNode* next = head->next;  // Prefetch hint opportunity
+        head->next = prev;
+        prev = head;
+        head = next;
+    }
+    return prev;
+}
+```
+
+*Pointer chasing cost:* Each iteration has dependent load: `head->next`. CPU stalls ~150-200 cycles on L3 miss. Cannot parallelize - loads are serialized.
+
+*Prefetch optimization:*
+```cpp
+ListNode* reverseList(ListNode* head) {
+    ListNode* prev = nullptr;
+
+    while (head) {
+        if (head->next) {
+            __builtin_prefetch(head->next->next);  // Prefetch 2 ahead
+        }
+        ListNode* next = head->next;
+        head->next = prev;
+        prev = head;
+        head = next;
+    }
+    return prev;
+}
+```
+
+*Approach 2 - Recursive:* $O(n)$ time, $O(n)$ space (stack frames)
+
+```cpp
+ListNode* reverseList(ListNode* head) {
+    if (!head || !head->next) return head;
+
+    ListNode* newHead = reverseList(head->next);
+    head->next->next = head;
+    head->next = nullptr;
+    return newHead;
+}
+```
+
+*Stack frame cost:* Each call = ~64 bytes (return addr, saved registers, local vars). 10K nodes = 640KB stack. Risk stack overflow. Iterative version has no call overhead.
 
 == Merge Two Sorted Lists
 
 *Problem:* Merge two sorted linked lists into one sorted list.
 
 *Approach - Dummy Node:* $O(n + m)$ time, $O(1)$ space
-- Create dummy node: `result = ListNode()`
-- Initialize pointer: `curr = result`
-- While both `list1` and `list2`:
-  + If `list1.val < list2.val`:
-    - `curr.next = list1`, `list1 = list1.next`
-  + Else:
-    - `curr.next = list2`, `list2 = list2.next`
-  + Move curr: `curr = curr.next`
-- Attach remaining nodes: `curr.next = list1 or list2`
-- Return `result.next` (skip dummy)
 
-== Reorder List
+```cpp
+ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+    ListNode dummy;
+    ListNode* curr = &dummy;
 
-*Problem:* Reorder list to L0→Ln→L1→Ln-1→L2→Ln-2→...
+    while (list1 && list2) {
+        if (list1->val < list2->val) {
+            curr->next = list1;
+            list1 = list1->next;
+        } else {
+            curr->next = list2;
+            list2 = list2->next;
+        }
+        curr = curr->next;
+    }
+    curr->next = list1 ? list1 : list2;
+    return dummy.next;
+}
+```
 
-*Approach - Stack:* $O(n)$ time, $O(n)$ space
-- Push all node values to stack
-- Initialize `curr = head`, pop first element from stack
-- While stack not empty:
-  + Alternate between popping from front and back
-  + Create new node and attach: `curr.next = ListNode(val)`
-  + Move curr: `curr = curr.next`
-- Set `head.next = None` before loop to avoid cycle
+*Branch prediction:* If lists have similar value distributions, branches are ~50% predictable = many mispredicts (~15-20 cycle penalty each).
 
-*Alternative $O(1)$ space:* Find middle, reverse second half, merge two halves
+*Branchless version:*
+```cpp
+ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+    ListNode dummy;
+    ListNode* curr = &dummy;
 
-== Remove Nth Node From End of List
+    while (list1 && list2) {
+        // Use conditional pointer selection (no branches)
+        bool take1 = list1->val < list2->val;
+        ListNode*& chosen = take1 ? list1 : list2;
+        curr->next = chosen;
+        chosen = chosen->next;
+        curr = curr->next;
+    }
+    curr->next = list1 ? list1 : list2;
+    return dummy.next;
+}
+```
+
+== Remove Nth Node From End
 
 *Problem:* Remove nth node from end of linked list.
 
 *Approach - Two Pointers:* $O(n)$ time, $O(1)$ space
-- Create dummy node: `dummy = ListNode(0, head)`
-- Initialize `right = head`
-- Move right n steps forward:
-  + For i in range(n): `right = right.next`
-- Initialize `left = dummy`
-- Move both pointers until right reaches end:
-  + While `right`: `left = left.next`, `right = right.next`
-- Remove node: `left.next = left.next.next`
-- Return `dummy.next`
 
-*Key insight:* n-step gap between pointers ensures left stops at node before target.
+```cpp
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+    ListNode dummy(0, head);
+    ListNode* fast = head;
+    ListNode* slow = &dummy;
 
-== Linked List Cycle
+    // Move fast n steps ahead
+    for (int i = 0; i < n; i++) {
+        fast = fast->next;
+    }
+
+    // Move both until fast reaches end
+    while (fast) {
+        __builtin_prefetch(fast->next);  // Prefetch next iteration
+        __builtin_prefetch(slow->next);
+        fast = fast->next;
+        slow = slow->next;
+    }
+
+    ListNode* toDelete = slow->next;
+    slow->next = slow->next->next;
+    delete toDelete;  // Avoid memory leak
+
+    return dummy.next;
+}
+```
+
+*Two-pointer pattern:* Maintains n-gap between pointers. Still suffers pointer chasing but processes list in single pass.
+
+== Linked List Cycle Detection
 
 *Problem:* Detect if linked list has a cycle.
 
-*Approach - Floyd's Cycle Detection (Fast & Slow):* $O(n)$ time, $O(1)$ space
-- Initialize `slow = head`, `fast = head`
-- While `fast` and `fast.next`:
-  + Move pointers: `slow = slow.next`, `fast = fast.next.next`
-  + If `slow == fast`: return True (cycle detected)
-- Return False
+*Approach - Floyd's Tortoise & Hare:* $O(n)$ time, $O(1)$ space
 
-*Key insight:* Fast pointer catches up to slow pointer if there's a cycle.
+```cpp
+bool hasCycle(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast) return true;
+    }
+    return false;
+}
+```
+
+*Cache behavior:* If cycle exists, eventually both pointers traverse same nodes repeatedly = high cache hit rate. Initial traversal before cycle entry = all cache misses.
+
+*Memory-level parallelism:* Fast pointer issues 2 dependent loads per iteration. Modern out-of-order CPUs can overlap these loads if memory subsystem supports multiple outstanding misses.
 
 == Merge K Sorted Lists
 
 *Problem:* Merge k sorted linked lists into one sorted list.
 
-*Approach - Divide and Conquer:* $O(n log k)$ time where n is total nodes, k is number of lists
-- Define helper function `mergeTwoLists(l1, l2)` (same as problem 2)
-- While `len(lists) > 1`:
-  + Create `mergedLists = []`
-  + For i in range(0, len(lists), 2):
-    - Get `list1 = lists[i]`
-    - Get `list2 = lists[i+1]` if exists, else None
-    - Append `mergeTwoLists(list1, list2)` to mergedLists
-  + Update `lists = mergedLists`
-- Return `lists[0]`
+*Approach - Divide & Conquer:* $O(n log k)$ time, $n$ = total nodes, $k$ = number of lists
 
-*Key insight:* Pair-wise merging reduces k lists in $O(log k)$ rounds.
+```cpp
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    ListNode dummy;
+    ListNode* curr = &dummy;
+
+    while (l1 && l2) {
+        if (l1->val < l2->val) {
+            curr->next = l1;
+            l1 = l1->next;
+        } else {
+            curr->next = l2;
+            l2 = l2->next;
+        }
+        curr = curr->next;
+    }
+    curr->next = l1 ? l1 : l2;
+    return dummy.next;
+}
+
+ListNode* mergeKLists(vector<ListNode*>& lists) {
+    if (lists.empty()) return nullptr;
+
+    while (lists.size() > 1) {
+        vector<ListNode*> merged;
+        merged.reserve((lists.size() + 1) / 2);
+
+        for (size_t i = 0; i < lists.size(); i += 2) {
+            ListNode* l1 = lists[i];
+            ListNode* l2 = (i + 1 < lists.size()) ? lists[i + 1] : nullptr;
+            merged.push_back(mergeTwoLists(l1, l2));
+        }
+        lists = move(merged);
+    }
+    return lists[0];
+}
+```
+
+*Alternative - Min Heap:* $O(n log k)$ time but worse constants. Priority queue operations = 3-5x overhead vs direct merge. Use only if streaming input.
+
+*Memory insight:* Divide-and-conquer reuses pointers (no new nodes). Heap creates temporary nodes. Zero allocation = zero malloc/free overhead (~500 cycles each).
