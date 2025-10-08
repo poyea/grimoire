@@ -42,6 +42,7 @@ bool isValid(string s) {
 bool isValid(string s) {
     char stack[10000];  // Stack-allocated, zero malloc overhead
     int top = -1;
+    // ⚠️ Warning: Large stack arrays risk overflow. Increase stack size if needed.
 
     for (char c : s) {
         if (c == '(' || c == '[' || c == '{') {
@@ -56,8 +57,8 @@ bool isValid(string s) {
 ```
 
 *Performance comparison:*
-- `std::stack<char>`: 3-5 ns/element (deque overhead, non-contiguous)
-- `vector<char>`: 1-2 ns/element (contiguous, prefetcher efficient)
-- Static array: 0.5-1 ns/element (no bounds check, no heap, stays in L1)
+- `std::stack<char>`: Uses `std::deque` by default (chunked $#sym.tilde.op$4KB blocks). $#sym.tilde.op$10-20% overhead vs vector due to indirection
+- `vector<char>`: Contiguous memory, excellent prefetcher efficiency
+- Static array: Fastest option (no bounds checking, no heap allocation). *Warning:* Large stack arrays (10KB+) risk stack overflow on some platforms
 
 *Hardware insight:* Stack operations exhibit temporal locality - recently pushed data is immediately popped. Modern CPUs keep stack top in L1 cache (< 4 cycles access).

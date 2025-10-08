@@ -1,6 +1,6 @@
 = Linked List
 
-*Critical performance note:* Linked lists have poor cache behavior. Each `next` pointer dereference = potential cache miss (~200 cycles). Array-based solutions are typically 10-100x faster. Use linked lists only when required (LRU cache, memory pooling).
+*Critical performance note:* Linked lists have poor cache behavior. Each `next` pointer dereference = potential cache miss ($#sym.tilde.op$200 cycles). Array-based solutions are typically 10-100x faster. Use linked lists only when required (LRU cache, memory pooling).
 
 ```cpp
 struct ListNode {
@@ -30,7 +30,7 @@ ListNode* reverseList(ListNode* head) {
 }
 ```
 
-*Pointer chasing cost:* Each iteration has dependent load: `head->next`. CPU stalls ~150-200 cycles on L3 miss. Cannot parallelize - loads are serialized.
+*Pointer chasing cost:* Each iteration has dependent load: `head->next`. CPU stalls $#sym.tilde.op$40-75 cycles on L3 miss, up to $#sym.tilde.op$200 cycles on main memory access. Cannot parallelize - loads are serialized.
 
 *Prefetch optimization:*
 ```cpp
@@ -91,26 +91,7 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
 }
 ```
 
-*Branch prediction:* If lists have similar value distributions, branches are ~50% predictable = many mispredicts (~15-20 cycle penalty each).
-
-*Branchless version:*
-```cpp
-ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-    ListNode dummy;
-    ListNode* curr = &dummy;
-
-    while (list1 && list2) {
-        // Use conditional pointer selection (no branches)
-        bool take1 = list1->val < list2->val;
-        ListNode*& chosen = take1 ? list1 : list2;
-        curr->next = chosen;
-        chosen = chosen->next;
-        curr = curr->next;
-    }
-    curr->next = list1 ? list1 : list2;
-    return dummy.next;
-}
-```
+*Branch prediction:* If lists have similar value distributions, branches are ~50% predictable = many mispredicts (~15-20 cycle penalty each on misprediction). Modern CPUs have ~95% prediction accuracy for simple patterns.
 
 == Remove Nth Node From End
 
@@ -217,4 +198,4 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 
 *Alternative - Min Heap:* $O(n log k)$ time but worse constants. Priority queue operations = 3-5x overhead vs direct merge. Use only if streaming input.
 
-*Memory insight:* Divide-and-conquer reuses pointers (no new nodes). Heap creates temporary nodes. Zero allocation = zero malloc/free overhead (~500 cycles each).
+*Memory insight:* Divide-and-conquer reuses pointers (no new nodes). Heap creates temporary nodes. Zero allocation = zero malloc/free overhead (typically ~20-100 cycles each for modern allocators like tcmalloc, jemalloc).

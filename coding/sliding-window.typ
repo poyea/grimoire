@@ -19,16 +19,9 @@ int maxProfit(vector<int>& prices) {
 }
 ```
 
-*Cache behavior:* Sequential array access = optimal prefetching. CPU fetches 64-byte cache line (~16 ints), amortizing memory latency (~200 cycles) across elements.
+*Cache behavior:* Sequential array access = optimal prefetching. CPU fetches 64-byte cache line ($#sym.tilde.op$16 ints), amortizing memory latency across elements.
 
-*Branchless optimization:*
-```cpp
-// Avoid branches using conditional moves (CMOV instruction)
-int diff = price - minPrice;
-maxProfit = maxProfit * (maxProfit >= diff) + diff * (diff > maxProfit);
-minPrice = minPrice * (minPrice <= price) + price * (price < minPrice);
-```
-*Note:* Modern compilers auto-vectorize simple max/min. Profile before micro-optimizing.
+*Compiler optimization:* Modern compilers already optimize `max()`/`min()` to conditional moves (CMOV) when beneficial. Manual arithmetic tricks are unnecessary and often slower.
 
 == Longest Substring Without Repeating Characters
 
@@ -58,7 +51,7 @@ int lengthOfLongestSubstring(string s) {
 
 *Memory hierarchy:*
 - `array<int, 128>` = 512 bytes fits in L1 cache (32-48KB typical)
-- Stack allocation avoids heap overhead (~100-500 cycles for malloc)
+- Stack allocation avoids heap overhead ($#sym.tilde.op$20-100 cycles for malloc in modern allocators)
 - `unordered_set<char>` requires heap + pointer chasing = 3-5x slower
 
 *Cache miss analysis:* String scan is sequential (good). Array lookups have random access pattern but data fits in L1 (< 4 cycle latency).

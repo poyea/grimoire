@@ -17,7 +17,7 @@ bool containsDuplicate(vector<int>& nums) {
 }
 ```
 
-*Alternative:* Sort + adjacent check for $O(1)$ space but $O(n log n)$ time.
+*Alternative:* Sort and adjacent check for $O(1)$ space but $O(n log n)$ time.
 
 == Valid Anagram
 
@@ -63,22 +63,22 @@ vector<int> twoSum(vector<int>& nums, int target) {
 
 *Critical:* Check complement before inserting to avoid using same element twice.
 
+#pagebreak()
+
 == Group Anagrams
 
 *Problem:* Group anagrams together.
 
-*Sorted Key:* $O(n k log k)$ time where k = max string length
+*Sorted Key:* $O(n #sym.times k log k)$ time where $k = "max string length"$
 
 ```cpp
 vector<vector<string>> groupAnagrams(vector<string>& strs) {
     unordered_map<string, vector<string>> groups;
-
     for (string& s : strs) {
         string key = s;
         sort(key.begin(), key.end());
         groups[key].push_back(s);
     }
-
     vector<vector<string>> result;
     for (auto& [_, group] : groups) {
         result.push_back(move(group));
@@ -87,13 +87,12 @@ vector<vector<string>> groupAnagrams(vector<string>& strs) {
 }
 ```
 
-*Optimization:* Use char count array as key for $O(n k)$ time:
+*Optimization:* Use char count array as key for $O(n #sym.times k)$ time:
 
 ```cpp
 string getKey(const string& s) {
     array<int, 26> count = {};
     for (char c : s) count[c - 'a']++;
-
     string key;
     for (int i = 0; i < 26; i++) {
         if (count[i]) {
@@ -114,14 +113,11 @@ string getKey(const string& s) {
 vector<int> topKFrequent(vector<int>& nums, int k) {
     unordered_map<int, int> freq;
     for (int num : nums) freq[num]++;
-
     int n = nums.size();
     vector<vector<int>> buckets(n + 1);
-
     for (auto& [num, count] : freq) {
         buckets[count].push_back(num);
     }
-
     vector<int> result;
     for (int i = n; i >= 0 && result.size() < k; i--) {
         for (int num : buckets[i]) {
@@ -151,7 +147,6 @@ priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> minHeap;
 int longestConsecutive(vector<int>& nums) {
     unordered_set<int> numSet(nums.begin(), nums.end());
     int maxLen = 0;
-
     for (int num : numSet) {
         // Only start counting from sequence starts
         if (!numSet.count(num - 1)) {
@@ -188,14 +183,12 @@ s.reserve(10000);  // Pre-allocate buckets
 
 *Hash function analysis:*
 ```cpp
-// Identity hash (default for integers)
-hash<int>{}(42) == 42;  // Perfect for sequential keys
-
+// Common implementation uses identity hash for integers (not guaranteed by standard)
+hash<int>{}(42) == 42;  // Note: identity hash can cause clustering with power-of-2 bucket counts
 // Bad pattern: many collisions
 for (int i = 0; i < 1000; i += 8) {
     set.insert(i);  // All hash to same bucket % 8
 }
-
 // Custom hash to avoid patterns:
 struct CustomHash {
     size_t operator()(int x) const {
@@ -209,7 +202,7 @@ unordered_set<int, CustomHash> s;
 ```
 
 *Memory layout:*
-`unordered_set` = array of buckets + linked lists. Each node = ~24 bytes (next ptr, hash cache, value). 1000 elements ≈ 24KB minimum.
+`unordered_set` = array of buckets + linked lists. Each node = ~16-24 bytes depending on implementation (8-byte next ptr, optionally 8-byte cached hash, value + padding). 1000 elements ≈ 16-24KB minimum.
 
 *Cache behavior:*
 - Small sets (< 100 elements): entire hash table fits in L1 = fast

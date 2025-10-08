@@ -32,23 +32,9 @@ cmp  ecx, eax
 cmovl ecx, eax       ; if currSum < 0: currSum = 0
 ```
 
-*SIMD vectorization:* Process 8 elements in parallel with AVX2. Requires horizontal max reduction at end.
+*SIMD vectorization challenges:* Kadane's algorithm has loop-carried dependencies (`currSum` depends on previous iteration's `currSum`), making effective SIMD parallelization difficult. Advanced techniques exist but add significant complexity (e.g., processing multiple independent streams, prefix sum approaches).
 
-```cpp
-// Conceptual AVX2 version (simplified):
-__m256i curr = _mm256_setzero_si256();
-__m256i maxVec = _mm256_set1_epi32(INT_MIN);
-
-for (int i = 0; i < n; i += 8) {
-    __m256i nums_vec = _mm256_loadu_si256((__m256i*)&nums[i]);
-    curr = _mm256_add_epi32(curr, nums_vec);
-    curr = _mm256_max_epi32(curr, _mm256_setzero_si256());
-    maxVec = _mm256_max_epi32(maxVec, curr);
-}
-// Horizontal max of maxVec...
-```
-
-*When to vectorize:* Arrays > 10K elements. Overhead of setup/reduction not worth it for small arrays.
+*For high-performance needs:* Consider data-level parallelism by processing multiple arrays simultaneously rather than trying to vectorize a single array's Kadane's algorithm.
 
 == Jump Game
 
@@ -72,7 +58,7 @@ bool canJump(vector<int>& nums) {
 
 *Key insight:* Work backwards - if we can reach position i, we just need to reach i (not the end).
 
-*Branch prediction:* `if (i + nums[i] >= goal)` predictability depends on input. Sorted array = predictable. Random = unpredictable. ~10-20% of iterations update goal typically.
+*Branch prediction:* `if (i + nums[i] >= goal)` predictability depends on input. Sorted array = predictable. Random = unpredictable. $#sym.tilde.op$10-20% of iterations update goal typically.
 
 *Branchless alternative:*
 ```cpp

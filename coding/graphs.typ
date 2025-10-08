@@ -59,7 +59,7 @@ int numIslands(vector<vector<char>>& grid) {
 *2D grid access patterns:*
 - Row-major iteration (`grid[r][c]`): cache-friendly, prefetcher works
 - Random neighbor access: depends on island shape, generally poor locality
-- In-place marking eliminates `unordered_set<pair<int,int>>`: saves ~40 bytes per cell + hash overhead
+- In-place marking eliminates `unordered_set<pair<int,int>>`: saves $#sym.tilde.op$40 bytes per cell + hash overhead
 
 *DFS vs BFS:*
 - DFS: O(nm) stack depth worst case (snake island) = stack overflow risk
@@ -204,7 +204,7 @@ vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
 ```
 
 *Memory optimization:*
-`vector<vector<bool>>` is specialized: uses 1 bit per element, but slow due to bit manipulation. Use `vector<vector<uint8_t>>` for 8x memory but ~2-3x faster access.
+`vector<vector<bool>>` contains bit-packed `vector<bool>` objects. The inner `vector<bool>` uses 1 bit per element but has slower access due to bit manipulation (masking and shifting). Use `vector<vector<uint8_t>>` for 8x memory but $#sym.tilde.op$2-3x faster access.
 
 *Bitset alternative:*
 ```cpp

@@ -1,6 +1,6 @@
 = Tries
 
-*Memory overhead warning:* Naive trie = 26 pointers per node = 208 bytes (64-bit). Empty children waste space. Typical string dataset: 95%+ pointers are null.
+*Memory overhead warning:* Naive trie = 26 pointers per node = 208 bytes (64-bit). Empty children waste space. Typical English word datasets: 70-95% of pointers are null due to sparse branching.
 
 == Implement Trie (Prefix Tree)
 
@@ -74,7 +74,7 @@ struct TrieNode {
 
 *Cache analysis:*
 - Each level traversal = pointer dereference = potential cache miss
-- Word length m = m pointer chases = m × ~200 cycles worst case
+- Word length m = m pointer chases = m × $#sym.tilde.op$200 cycles worst case
 - `unordered_map` adds hash computation + bucket lookup overhead
 
 == Word Search II
@@ -162,6 +162,6 @@ Remove leaf nodes after finding word to avoid revisiting. Reduces trie size duri
 *Cache behavior:*
 - Board access: depends on DFS path. Random 2D access = cache unfriendly
 - Trie traversal: pointer chasing = cache unfriendly
-- Combined: each step = ~2 cache misses (board + trie) = ~400 cycles per character
+- Combined: each step = $#sym.tilde.op$2 cache misses (board + trie) = $#sym.tilde.op$400 cycles per character
 
 *Memory:* Trie with k words of avg length m: O(km) nodes worst case (no prefix sharing). Shared prefixes reduce to O(total characters).

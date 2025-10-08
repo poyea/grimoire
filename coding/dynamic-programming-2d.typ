@@ -114,7 +114,7 @@ int longestCommonSubsequence(string text1, string text2) {
 *Array swap:* `swap(prev, curr)` swaps pointers, not data. O(1) operation. `curr = prev` would copy entire array.
 
 *Cache analysis:*
-- Small strings (n < 1000): both `prev` and `curr` fit in L1 = ~4 cycles per access
+- Small strings (n < 1000): both `prev` and `curr` fit in L1 = $#sym.tilde.op$4 cycles per access
 - Large strings: sequential access still cache-friendly due to prefetching
 
 *SIMD potential:* `max(prev[j], curr[j-1])` can be vectorized across 8 elements using `_mm256_max_epi32()`. Requires careful handling of dependencies.
@@ -125,11 +125,6 @@ alignas(32) vector<int> dp(n + 1);
 // Or use aligned_alloc / _mm_malloc
 ```
 
-*Branch prediction:* `if (text1[i-1] == text2[j-1])` depends on string similarity. Random strings = 1/26 matches = predictable. Similar strings = unpredictable.
+*Branch prediction:* `if (text1[i-1] == text2[j-1])` depends on string similarity. Random strings = $#sym.tilde.op$1/26 matches = highly predictable. Similar strings = more unpredictable but still manageable for modern branch predictors.
 
-*Branchless alternative:*
-```cpp
-bool match = (text1[i-1] == text2[j-1]);
-curr[j] = match * (1 + prev[j-1]) + (!match) * max(prev[j], curr[j-1]);
-```
-Usually slower unless branch mispredicts are severe (>30%).
+*Note:* Arithmetic with booleans rarely improves performance over well-predicted branches on modern CPUs. The compiler already optimizes simple branches to conditional moves when beneficial.

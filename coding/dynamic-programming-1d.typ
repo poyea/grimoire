@@ -24,7 +24,7 @@ int climbStairs(int n) {
 
 *Key insight:* Fibonacci recurrence. Only need last 2 values = O(1) space.
 
-*Register allocation:* `prev1`, `prev2`, `curr` fit in CPU registers (no memory access). Loop body = ~5 instructions, ~2 cycles per iteration.
+*Register allocation:* `prev1`, `prev2`, `curr` typically kept in registers (no memory loads). Loop body achieves $#sym.tilde.op$3-5 cycles per iteration with good branch prediction on modern CPUs.
 
 == House Robber
 

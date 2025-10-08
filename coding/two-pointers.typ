@@ -127,7 +127,7 @@ int twoSum(vector<int>& nums, int target) {
 - Both converge = good spatial locality as pointers get closer
 
 *Cache line reuse:*
-When `l` and `r` point to same cache line (64 bytes apart = ~16 ints), single cache line loaded for both accesses. Final iterations = very cache-efficient.
+When `l` and `r` point to same cache line (64 bytes apart = $#sym.tilde.op$16 ints), single cache line loaded for both accesses. This benefit is minor since it only applies to the final $#sym.tilde.op$16 elements of iteration.
 
 *Branch prediction:*
 `if-else` chain: pattern depends on data distribution. Sorted + target near median = branches alternate = poor prediction. Use profile-guided optimization (PGO) for critical paths.

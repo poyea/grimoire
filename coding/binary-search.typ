@@ -35,10 +35,10 @@ int findMin(vector<int>& nums) {
 *Cache & Branch Optimization:*
 - Array scan: sequential access = prefetcher friendly when falling back to linear scan
 - Branch predictor trains on sorted/unsorted pattern after few iterations
-- Avoid `(left + right) / 2`: integer overflow + division is ~10x slower than shifts
-- Modern compilers convert `/ 2` to `>> 1` but `left + (right - left) / 2` is explicit
+- Avoid `(left + right) / 2` due to integer overflow. Use `left + (right - left) / 2`
+- Modern compilers automatically optimize division by power-of-2 to right shift
 
-*Hardware insight:* Binary search has poor cache locality (random access pattern). For arrays < 64KB, linear scan can outperform due to prefetching + branch prediction.
+*Hardware insight:* Binary search has poor cache locality (random access pattern). For small arrays (n < 32-128 elements), linear scan can outperform due to prefetching and branch prediction. The exact crossover depends on data type and access patterns.
 
 == Search in Rotated Sorted Array
 
@@ -78,6 +78,6 @@ int search(vector<int>& nums, int target) {
 
 *Key insight:* At least one half is always sorted - exploit this to determine search direction.
 
-*Branch prediction:* Pattern depends on rotation point. CPU branch predictor achieves ~85-90% accuracy after warmup. Use `__builtin_expect()` if rotation point is known to be left/right biased.
+*Branch prediction:* Pattern depends on rotation point. CPU branch predictor achieves $#sym.tilde.op$ 85-90% accuracy after warmup. Use `__builtin_expect()` if rotation point is known to be left/right biased.
 
 *SIMD alternative:* For small arrays (n < 32) with high query rate, consider linear SIMD scan with `_mm256_cmpeq_epi32()` - avoids branch mispredicts entirely.

@@ -23,7 +23,7 @@ priority_queue<T>   // Binary heap on vector. O(log n) push/pop. Cache-friendly.
 
 *Critical optimizations:*
 - *`reserve()`:* Pre-allocate to avoid reallocation. `vector` default = 2x growth = wasted copies.
-- *`emplace_back()`* vs `push_back()`: Constructs in-place, avoids copy. ~20-30% faster for complex types.
+- *`emplace_back()`* vs `push_back()`: Constructs in-place, avoids copy. $#sym.tilde.op$20-30% faster for complex types.
 - *Flat containers:* For small sets/maps (< 64 elements), use `vector` with `sort()` + `binary_search()`. 5-10x faster than `set`/`map`.
 
 == Algorithm Complexity
@@ -110,9 +110,9 @@ alignas(32) int data[8];  // Aligned for _mm256 operations
 == Bit Manipulation
 
 ```cpp
-__builtin_popcount(x);     // Count set bits. Single instruction (POPCNT).
-__builtin_clz(x);          // Count leading zeros. BSR instruction.
-__builtin_ctz(x);          // Count trailing zeros. BSF instruction.
+__builtin_popcount(x);     // Count set bits. Single POPCNT instruction if enabled
+__builtin_clz(x);          // Count leading zeros. LZCNT/BSR instruction.
+__builtin_ctz(x);          // Count trailing zeros. TZCNT/BSF instruction.
 __builtin_parity(x);       // Parity (XOR of all bits).
 
 // Bit scan: find lowest set bit
@@ -120,7 +120,7 @@ int lowestBit = x & -x;    // Isolate lowest set bit
 int pos = __builtin_ctz(x); // Position of lowest set bit
 ```
 
-*Compiler intrinsics:* Direct CPU instructions. ~1 cycle vs ~20 cycles for loop.
+*Compiler intrinsics:* Compile to CPU instructions with `-march=native` or `-mpopcnt`/`-mlzcnt`. Typically 1-3 cycle latency vs $#sym.tilde.op$10-20 cycles for loop implementation. Without target flags, may compile to loops.
 
 == Iterators & Ranges
 
@@ -141,17 +141,16 @@ for (auto x : vec) { ... }
 // GOOD: Reference (no copy)
 for (const auto& x : vec) { ... }
 
-// BAD: Division (slow, ~10-40 cycles)
-int half = n / 2;
+// Division by compile-time constant: optimized automatically
+int half = n / 2;  // Compiler converts to n >> 1 automatically
 
-// GOOD: Shift (fast, 1 cycle)
-int half = n >> 1;  // Only for power-of-2 divisors
+// Variable division: slower on some older CPUs ($#sym.tilde.op$10-20 cycles)
+int result = n / divisor;  // Modern x86: $#sym.tilde.op$3-10 cycles depending on CPU
 
-// BAD: Modulo (slow, ~10-40 cycles)
-int rem = n % 8;
+// Modulo by power-of-2: optimized automatically
+int rem = n % 8;  // Compiler converts to n & 7 automatically
 
-// GOOD: Bitwise AND (fast, 1 cycle)
-int rem = n & 7;  // Only for power-of-2 modulus
+// Manual optimization rarely needed - trust your compiler with -O2/-O3
 ```
 
 == Profiling & Benchmarking

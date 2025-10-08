@@ -1,6 +1,6 @@
 = Trees
 
-*Cache locality note:* Tree traversal = pointer chasing = poor cache behavior. Each node access can be cache miss (~200 cycles). Array-based heaps/segment trees have better locality.
+*Cache locality note:* Tree traversal = pointer chasing = poor cache behavior. Each node access can be cache miss ($#sym.tilde.op$200 cycles). Array-based heaps/segment trees have better locality.
 
 ```cpp
 struct TreeNode {
@@ -11,7 +11,7 @@ struct TreeNode {
 };
 ```
 
-*Memory layout:* TreeNode = 16 bytes (4-byte int + 4-byte padding + 2×8-byte pointers on 64-bit). Nodes scattered in heap = no spatial locality.
+*Memory layout:* TreeNode = 24 bytes on 64-bit systems (4-byte int + 4-byte padding + 2×8-byte pointers). Nodes scattered in heap = no spatial locality.
 
 == Invert Binary Tree
 
@@ -31,7 +31,7 @@ TreeNode* invertTree(TreeNode* root) {
 }
 ```
 
-*Stack depth:* Balanced tree: $O(log n)$ frames. Skewed tree: $O(n)$ frames = stack overflow risk. Each recursive call = ~64-byte stack frame + return address.
+*Stack depth:* Balanced tree: $O(log n)$ frames. Skewed tree: $O(n)$ frames = stack overflow risk. Each recursive call adds a stack frame ($#sym.tilde.op$16-48 bytes including return address and saved registers).
 
 == Maximum Depth
 
