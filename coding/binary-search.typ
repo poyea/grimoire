@@ -78,6 +78,6 @@ int search(vector<int>& nums, int target) {
 
 *Key insight:* At least one half is always sorted - exploit this to determine search direction.
 
-*Branch prediction:* Pattern depends on rotation point. CPU branch predictor achieves $#sym.tilde.op$ 85-90% accuracy after warmup. Use `__builtin_expect()` if rotation point is known to be left/right biased.
+*Branch prediction:* Pattern depends on rotation point. CPU branch predictor achieves $#sym.tilde.op$85-90% accuracy after warmup. Use `__builtin_expect()` if rotation point is known to be left/right biased.
 
 *SIMD alternative:* For small arrays (n < 32) with high query rate, consider linear SIMD scan with `_mm256_cmpeq_epi32()` - avoids branch mispredicts entirely.
