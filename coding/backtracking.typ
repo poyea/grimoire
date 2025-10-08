@@ -105,7 +105,7 @@ bool dfs(vector<vector<char>>& board, string& word, int r, int c, int i) {
 == Backtracking Performance
 
 *Stack frame overhead:*
-- Each recursive call = $#sym.tilde.op$ 16-48 bytes stack frame (varies with local variables and saved registers)
+- Each recursive call = $#sym.tilde.op$16-48 bytes stack frame (varies with local variables and saved registers)
 - Deep recursion (depth 1000) = 16-48KB stack usage
 - Default stack size: 1-8MB. Deep recursion may risk overflow on some platforms.
 
@@ -141,5 +141,5 @@ if (heuristic_best(r+1, c)) {
 
 *Cache behavior:*
 - Backtracking = random memory access = cache unfriendly
-- In-place marking eliminates `unordered_set`: saves 40+ bytes per cell + hash overhead
+- In-place marking eliminates `unordered_set`: saves $#sym.tilde.op$40 bytes per cell + hash overhead
 - Small boards (< 20×20): entire board fits in L1 cache

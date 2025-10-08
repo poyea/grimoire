@@ -63,7 +63,7 @@ ListNode* reverseList(ListNode* head) {
 }
 ```
 
-*Stack frame cost:* Each call = ~64 bytes (return addr, saved registers, local vars). 10K nodes = 640KB stack. Risk stack overflow. Iterative version has no call overhead.
+*Stack frame cost:* Each call = $#sym.tilde.op$16-48 bytes (return addr, saved registers, local vars). 10K nodes = 160-480KB stack. Risk stack overflow. Iterative version has no call overhead.
 
 == Merge Two Sorted Lists
 
@@ -91,7 +91,7 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
 }
 ```
 
-*Branch prediction:* If lists have similar value distributions, branches are ~50% predictable = many mispredicts (~15-20 cycle penalty each on misprediction). Modern CPUs have ~95% prediction accuracy for simple patterns.
+*Branch prediction:* If lists have similar value distributions, branches are $#sym.tilde.op$50% predictable = many mispredicts ($#sym.tilde.op$15-20 cycle penalty each on misprediction). Modern CPUs have $#sym.tilde.op$95% prediction accuracy for simple patterns.
 
 == Remove Nth Node From End
 
@@ -198,4 +198,4 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 
 *Alternative - Min Heap:* $O(n log k)$ time but worse constants. Priority queue operations = 3-5x overhead vs direct merge. Use only if streaming input.
 
-*Memory insight:* Divide-and-conquer reuses pointers (no new nodes). Heap creates temporary nodes. Zero allocation = zero malloc/free overhead (typically ~20-100 cycles each for modern allocators like tcmalloc, jemalloc).
+*Memory insight:* Divide-and-conquer reuses pointers (no new nodes). Heap creates temporary nodes. Zero allocation = zero malloc/free overhead (typically $#sym.tilde.op$20-100 cycles each for modern allocators like tcmalloc, jemalloc).

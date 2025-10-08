@@ -202,7 +202,7 @@ unordered_set<int, CustomHash> s;
 ```
 
 *Memory layout:*
-`unordered_set` = array of buckets + linked lists. Each node = ~16-24 bytes depending on implementation (8-byte next ptr, optionally 8-byte cached hash, value + padding). 1000 elements ≈ 16-24KB minimum.
+`unordered_set` = array of buckets + linked lists. Each node = $#sym.tilde.op$16-24 bytes depending on implementation (8-byte next ptr, optionally 8-byte cached hash, value + padding). 1000 elements ≈ 16-24KB minimum.
 
 *Cache behavior:*
 - Small sets (< 100 elements): entire hash table fits in L1 = fast

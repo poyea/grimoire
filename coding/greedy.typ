@@ -12,7 +12,8 @@ int maxSubArray(vector<int>& nums) {
     int currSum = 0;
 
     for (int num : nums) {
-        currSum = max(0, currSum + num);  // Reset if negative
+        if (currSum < 0) currSum = 0;  // Reset if negative
+        currSum += num;
         maxSum = max(maxSum, currSum);
     }
 
@@ -22,9 +23,9 @@ int maxSubArray(vector<int>& nums) {
 
 *Key insight:* Negative prefix sum can never help future subarrays - discard it.
 
-*Branch prediction:* `max(0, currSum + num)` becomes `CMOV` (conditional move). No branch, no mispredicts. Perfect for modern CPUs.
+*Branch prediction:* The `if (currSum < 0)` branch is predictable in most cases. Alternatively, use `currSum = max(0, currSum + num)` which compilers can optimize to conditional move (CMOV) with no branches.
 
-*Assembly pattern (x86-64):*
+*Assembly pattern (x86-64 with CMOV):*
 ```asm
 add  ecx, edx        ; currSum += num
 xor  eax, eax        ; eax = 0
