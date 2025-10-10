@@ -1,0 +1,46 @@
+name: Build and Release PDF
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - main
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v3
+        with:
+          typst-version: 'latest'
+
+      - name: Find and compile all Typst documents
+        run: |
+          # Find all .typ files in the root directory (not subdirectories)
+          for typfile in *.typ; do
+            if [ -f "$typfile" ]; then
+              pdffile="${typfile%.typ}.pdf"
+              echo "Compiling $typfile to $pdffile"
+              typst compile "$typfile" "$pdffile"
+            fi
+          done
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: '*.pdf'
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
