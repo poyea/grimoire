@@ -7,7 +7,7 @@
     #h(0.5fr)
     #emph(text[#datetime.today().display()])
     #h(0.5fr)
-    #emph(link("https://github.com/poyea/grimoire")[poyea/grimoire])
+    #emph(link("https://github.com/poyea/grimoire")[poyea/grimoire::coding])
   ],
 )
 #set text(font: "New Computer Modern", size: 11pt)
