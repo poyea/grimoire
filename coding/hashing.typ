@@ -428,6 +428,72 @@ struct SHA256Hash {
 - Pros: guaranteed O(1) read, no tombstones
 - Cons: complex, higher load factor limit (~0.5)
 
+*Flat hash map (Google Abseil / Swiss Tables):*
+
+Modern flat hash map design combining best of multiple techniques.
+
+*Core design (Swiss Tables):*
+```cpp
+// Metadata byte per slot (SIMD-friendly)
+struct Group {
+    uint8_t ctrl[16];  // SSE register width
+    // ctrl[i] values:
+    // - 0x80-0xFF (MSB=1): empty slot
+    // - 0x00-0x7F (MSB=0): H2 hash (7 bits of hash)
+    // Special values:
+    // - 0xFF: never used (empty)
+    // - 0xFE: deleted (tombstone)
+};
+
+// Layout: [ctrl bytes...] [slots...]
+// ctrl and slots are separate for SIMD matching
+```
+
+*Collision resolution - quadratic probing with SIMD:*
+```cpp
+// Probe sequence: triangular numbers (0, 1, 3, 6, 10, 15...)
+size_t probe_index(size_t hash, size_t i) {
+    return (hash + i * (i + 1) / 2) & mask;
+}
+
+// SIMD lookup in group of 16 slots
+__m128i ctrl_vec = _mm_loadu_si128((__m128i*)ctrl);
+__m128i target = _mm_set1_epi8(h2);  // Broadcast H2 hash
+__m128i cmp = _mm_cmpeq_epi8(ctrl_vec, target);
+int mask = _mm_movemask_epi8(cmp);
+
+// mask = bitmap of matching slots (check up to 16 at once)
+while (mask != 0) {
+    int index = __builtin_ctz(mask);  // Find first set bit
+    // Check actual key at slots[index]
+    mask &= mask - 1;  // Clear lowest bit
+}
+```
+
+*Key innovations:*
+1. *Metadata separation:* Control bytes separate from data = better cache usage
+2. *SIMD probing:* Check 16 slots simultaneously with SSE2
+3. *H2 hash filtering:* 7-bit secondary hash reduces false positives
+4. *Quadratic probing:* Better distribution than linear, avoids clustering
+
+*Memory layout example:*
+```
+// Group of 16 slots:
+ctrl:  [h2][h2][empty][h2][deleted][h2]...[h2]  (16 bytes)
+slots: [K,V][K,V][---][K,V][---][K,V]...[K,V]  (16 × sizeof(pair<K,V>))
+```
+
+*Why it's fast:*
+- SIMD lookup: check 16 ctrl bytes in ~3-5 cycles
+- No pointer chasing (vs chaining)
+- Good cache locality (vs std::unordered_map)
+- Low load factor (typically 87.5% = 14/16 slots used)
+
+*Comparison to other schemes:*
+- Robin Hood: simpler, but no SIMD acceleration
+- Cuckoo: O(1) worst-case lookup, but higher failure rate on insert
+- Chaining (std::unordered_map): poor cache, pointer overhead
+
 *Hopscotch hashing:*
 - Hybrid: open addressing + local chaining
 - "Neighborhood" = H consecutive slots (H = 32 typical)
@@ -444,3 +510,13 @@ struct SHA256Hash {
 | tsl::robin_map           |         160 |         110 |          30 |
 
 *Recommendation:* Use `absl::flat_hash_map` or `tsl::robin_map` for performance-critical code. Fallback to `std::unordered_map` for simplicity.
+
+*Implementation references:*
+- `absl::flat_hash_map`: Swiss Tables design [Kulukundis 2017, CppCon talk]
+- `tsl::robin_map`: Robin Hood hashing [Tessil, GitHub]
+- `ska::flat_hash_map`: Another Swiss Tables variant
+
+*Further reading:*
+- Kulukundis, M. (2017). "Designing a Fast, Efficient, Cache-friendly Hash Table, Step by Step." CppCon 2017.
+- Alcantara, D. et al. (2011). "Building an Efficient Hash Table on the GPU." IEEE IPDPS.
+- Richter, S. et al. (2015). "A Seven-Dimensional Analysis of Hashing Methods." PVLDB 9(3).
