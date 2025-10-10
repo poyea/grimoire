@@ -1,13 +1,39 @@
 #set document(title: "Coding", author: "John Law")
-#set page(paper: "us-letter", margin: (x: 1cm, y: 1cm))
+#set page(
+  paper: "us-letter",
+  margin: (x: 1cm, y: 1cm),
+  header: [
+    #smallcaps[_Coding Notes by #link("https://github.com/poyea")[\@poyea]_]
+    #h(0.5fr)
+    #emph(text[#datetime.today().display()])
+    #h(0.5fr)
+    #emph(link("https://github.com/poyea/grimoire")[poyea/grimoire])
+  ],
+)
 #set text(font: "New Computer Modern", size: 11pt)
 #set heading(numbering: "1.")
 
 #align(center)[
-  #text(size: 24pt, weight: "bold")[Coding]
+  #block(
+    fill: luma(245),
+    inset: 10pt,
+    width: 80%,
+    text(size: 9pt)[
+      #align(center)[
+        #text(size: 24pt, weight: "bold")[Coding]
+      ]
+    ]
+  )
 ]
 
-#v(1em)
+#outline(
+  title: "Table of Contents",
+  depth: 2,
+)
+
+#emph[Enjoy.]
+
+#pagebreak()
 
 #include "coding/arrays.typ"
 #pagebreak()
