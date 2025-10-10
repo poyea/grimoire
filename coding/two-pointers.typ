@@ -131,3 +131,264 @@ When `l` and `r` point to same cache line (64 bytes apart = $#sym.tilde.op$16 in
 
 *Branch prediction:*
 `if-else` chain: pattern depends on data distribution. Sorted + target near median = branches alternate = poor prediction. Use profile-guided optimization (PGO) for critical paths.
+
+== SIMD Palindrome Check
+
+*Vectorized string comparison (AVX2):*
+```cpp
+#include <immintrin.h>
+
+bool isPalindromeSIMD(const string& s) {
+    // Filter to alphanumeric and lowercase
+    string filtered;
+    filtered.reserve(s.length());
+    for (char c : s) {
+        if (isalnum(c)) filtered += tolower(c);
+    }
+
+    int n = filtered.length();
+    int l = 0, r = n - 1;
+
+    // Process 32 chars at once (AVX2 = 256 bits = 32 bytes)
+    while (r - l >= 31) {
+        __m256i left_chunk = _mm256_loadu_si256((__m256i*)&filtered[l]);
+
+        // Reverse right chunk manually (no native reverse in AVX2)
+        char reversed[32];
+        for (int i = 0; i < 32; i++) {
+            reversed[i] = filtered[r - i];
+        }
+        __m256i right_chunk = _mm256_loadu_si256((__m256i*)reversed);
+
+        // Compare
+        __m256i cmp = _mm256_cmpeq_epi8(left_chunk, right_chunk);
+        int mask = _mm256_movemask_epi8(cmp);
+
+        if (mask != -1) return false;  // Not all equal
+
+        l += 32;
+        r -= 32;
+    }
+
+    // Scalar cleanup
+    while (l < r) {
+        if (filtered[l++] != filtered[r--]) return false;
+    }
+
+    return true;
+}
+```
+
+*Limitation:* No native reverse instruction. Better approach: SIMD for preprocessing (lowercase, filter), then scalar comparison.
+
+*Practical SIMD use case - batch palindrome checking:*
+```cpp
+// Check 8 strings in parallel (data-level parallelism)
+// Better than vectorizing single string
+```
+
+== Branchless Two Pointers
+
+*CMOV-based comparison:*
+```cpp
+vector<int> twoSumBranchless(vector<int>& nums, int target) {
+    int l = 0, r = nums.size() - 1;
+
+    while (l < r) {
+        int sum = nums[l] + nums[r];
+        bool found = (sum == target);
+        bool less = (sum < target);
+
+        // Branchless update using arithmetic
+        l += less;              // Increment if sum < target
+        r -= !less && !found;   // Decrement if sum >= target and not found
+
+        if (found) return {l + 1, r + 1};  // Still need branch for early exit
+    }
+    return {};
+}
+
+// Assembly uses CMOV:
+// cmp    eax, edx
+// setl   cl        ; Set cl = 1 if less
+// movzx  ecx, cl
+// add    esi, ecx  ; l += less
+```
+
+*Tradeoff:* Eliminates branch mispredicts but introduces data dependencies. Only beneficial if branches are unpredictable (random data).
+
+== 3Sum Optimization - Hash Set Alternative
+
+*Two pointers (original):* $O(n^2)$ with $O(1)$ space.
+
+*Hash set approach:* $O(n^2)$ with $O(n)$ space, better for unsorted input.
+
+```cpp
+vector<vector<int>> threeSumHash(vector<int>& nums) {
+    set<vector<int>> result_set;
+
+    for (int i = 0; i < nums.size(); i++) {
+        unordered_set<int> seen;
+        int target = -nums[i];
+
+        for (int j = i + 1; j < nums.size(); j++) {
+            int complement = target - nums[j];
+            if (seen.count(complement)) {
+                vector<int> triplet = {nums[i], nums[j], complement};
+                sort(triplet.begin(), triplet.end());
+                result_set.insert(triplet);
+            }
+            seen.insert(nums[j]);
+        }
+    }
+
+    return vector<vector<int>>(result_set.begin(), result_set.end());
+}
+```
+
+*When to use:*
+- Input already sorted: two pointers
+- Input not sorted + many duplicates: hash set (avoid sort cost)
+- Input not sorted + few duplicates: sort + two pointers
+
+== Container With Most Water - SIMD Scan
+
+*Brute force vectorized:*
+```cpp
+int maxAreaSIMD(vector<int>& height) {
+    int n = height.size();
+    int maxArea = 0;
+
+    // For small arrays: try all pairs with SIMD
+    for (int l = 0; l < n; l++) {
+        int hl = height[l];
+
+        // Process 8 right pointers at once
+        for (int r = l + 8; r < n; r += 8) {
+            __m256i widths = _mm256_setr_epi32(
+                r-7-l, r-6-l, r-5-l, r-4-l,
+                r-3-l, r-2-l, r-1-l, r-l
+            );
+
+            __m256i heights_r = _mm256_loadu_si256((__m256i*)&height[r-7]);
+            __m256i heights_l = _mm256_set1_epi32(hl);
+
+            // min(hl, hr) * width
+            __m256i min_h = _mm256_min_epi32(heights_l, heights_r);
+            __m256i areas = _mm256_mullo_epi32(min_h, widths);
+
+            // Horizontal max
+            int temp[8];
+            _mm256_storeu_si256((__m256i*)temp, areas);
+            for (int i = 0; i < 8; i++) {
+                maxArea = max(maxArea, temp[i]);
+            }
+        }
+
+        // Scalar cleanup
+        for (int r = ((n-l-1)/8)*8 + l + 1; r < n; r++) {
+            maxArea = max(maxArea, min(height[l], height[r]) * (r - l));
+        }
+    }
+
+    return maxArea;
+}
+```
+
+*Complexity:* Still $O(n^2)$ but with 6-8x speedup from SIMD. Two-pointer $O(n)$ algorithm is still better for large n.
+
+*When SIMD brute force wins:* Small n (< 1000) where constant factor matters more than big-O.
+
+== Memory Access Patterns
+
+*Two pointers convergence:*
+```cpp
+// Left pointer: forward sequential (good)
+// Right pointer: backward sequential (good)
+// Converge: both in cache as gap closes
+
+// Cache behavior analysis:
+// Early iterations: l and r far apart = 2 cache misses per iteration
+// Late iterations: l and r close = same cache line = 0-1 miss per iteration
+// Average: ~1.5 cache misses per iteration for large arrays
+```
+
+*Prefetching for large arrays:*
+```cpp
+int maxArea(vector<int>& height) {
+    int l = 0, r = height.size() - 1;
+    int maxArea = 0;
+
+    while (l < r) {
+        // Prefetch next iterations
+        if (l + 4 < r) {
+            __builtin_prefetch(&height[l + 4]);
+            __builtin_prefetch(&height[r - 4]);
+        }
+
+        int area = min(height[l], height[r]) * (r - l);
+        maxArea = max(maxArea, area);
+
+        if (height[l] < height[r]) l++;
+        else r--;
+    }
+
+    return maxArea;
+}
+// Speedup: 5-10% for arrays > 10MB
+```
+
+== Parallel Two Pointers (Multithreading)
+
+*3Sum with thread-level parallelism:*
+```cpp
+#include <thread>
+#include <mutex>
+
+vector<vector<int>> threeSumParallel(vector<int>& nums, int num_threads = 4) {
+    sort(nums.begin(), nums.end());
+    vector<vector<int>> result;
+    mutex result_mutex;
+
+    auto worker = [&](int start, int end) {
+        vector<vector<int>> local_result;
+
+        for (int i = start; i < end; i++) {
+            if (i > start && nums[i] == nums[i-1]) continue;
+
+            int l = i + 1, r = nums.size() - 1;
+            while (l < r) {
+                int sum = nums[i] + nums[l] + nums[r];
+                if (sum == 0) {
+                    local_result.push_back({nums[i], nums[l], nums[r]});
+                    l++;
+                    while (l < r && nums[l] == nums[l-1]) l++;
+                } else if (sum < 0) {
+                    l++;
+                } else {
+                    r--;
+                }
+            }
+        }
+
+        lock_guard<mutex> lock(result_mutex);
+        result.insert(result.end(), local_result.begin(), local_result.end());
+    };
+
+    // Partition work
+    int chunk_size = nums.size() / num_threads;
+    vector<thread> threads;
+
+    for (int t = 0; t < num_threads; t++) {
+        int start = t * chunk_size;
+        int end = (t == num_threads - 1) ? nums.size() : (t + 1) * chunk_size;
+        threads.emplace_back(worker, start, end);
+    }
+
+    for (auto& th : threads) th.join();
+
+    return result;
+}
+```
+
+*Speedup:* 3-4x on 4 cores (not perfect due to synchronization overhead and uneven work distribution).

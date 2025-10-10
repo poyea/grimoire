@@ -179,3 +179,268 @@ static void BM_Sort(benchmark::State& state) {
 }
 BENCHMARK(BM_Sort);
 ```
+
+== System-Level Performance
+
+*Virtual memory & paging:*
+- Default page size: 4KB (x86-64)
+- Page table walk: 4-level on x86-64 = 4 memory accesses ($#sym.tilde.op$800 cycles without TLB)
+- TLB (Translation Lookaside Buffer): L1 TLB = 64 entries, L2 TLB = 1024-2048 entries
+- TLB miss penalty: $#sym.tilde.op$20-100 cycles (page table walk)
+- Huge pages (2MB/1GB): 512x/262144x fewer TLB entries, better for large datasets
+
+*Memory allocation costs:*
+```cpp
+// Small allocations (<= 256 bytes)
+int* p = new int[64];  // tcmalloc thread cache: ~10-20 cycles
+delete[] p;            // ~10-20 cycles
+
+// Large allocations (> 32KB)
+int* p = new int[10000];  // mmap syscall: ~1000+ cycles
+delete[] p;               // munmap syscall: ~1000+ cycles
+
+// Stack allocation (fastest)
+int arr[1000];  // ~0 cycles (just adjust stack pointer)
+```
+
+*Modern allocator internals:*
+- tcmalloc/jemalloc: thread-local caches eliminate lock contention
+- Size classes: reduce fragmentation (16, 32, 48, 64, 80... bytes)
+- Allocation overhead: 8-16 bytes metadata per block
+- Bulk deallocation: free list batching = amortized O(1)
+
+*Page faults:*
+```cpp
+// Minor fault (page in RAM, not mapped): ~5000 cycles
+char* p = (char*)mmap(NULL, 1GB, ...);
+p[0] = 1;  // First access triggers fault
+
+// Major fault (load from disk): ~1-10 million cycles
+// Demand paging: OS loads on access, not allocation
+```
+
+*Huge pages configuration:*
+```cpp
+// Transparent Huge Pages (THP) - automatic
+// /sys/kernel/mm/transparent_hugepage/enabled
+
+// Explicit huge pages
+void* p = mmap(NULL, 2MB, PROT_READ|PROT_WRITE,
+               MAP_PRIVATE|MAP_ANONYMOUS|MAP_HUGETLB, -1, 0);
+// Benefit: 2MB page = 1 TLB entry vs 512 entries for 4KB pages
+```
+
+*System call overhead:*
+- syscall cost: $#sym.tilde.op$50-150 cycles (user→kernel context switch)
+- vDSO (virtual dynamic shared object): $#sym.tilde.op$5-10 cycles (no kernel transition)
+- vDSO functions: `gettimeofday()`, `clock_gettime()`, `getcpu()`
+
+```cpp
+#include <time.h>
+timespec ts;
+clock_gettime(CLOCK_MONOTONIC, &ts);  // vDSO: ~10 cycles, not syscall
+```
+
+*Cache hierarchy timing:*
+- L1 access: $#sym.tilde.op$4-5 cycles (32-48KB data + 32KB instruction)
+- L2 access: $#sym.tilde.op$12-15 cycles (256KB-512KB private per core)
+- L3 access: $#sym.tilde.op$40-75 cycles (8-32MB shared across cores)
+- RAM access: $#sym.tilde.op$200 cycles (DDR4/DDR5)
+- Cache line: 64 bytes (fetch entire line on miss)
+
+*NUMA (Non-Uniform Memory Access):*
+```cpp
+// Local node memory: ~200 cycles
+// Remote node memory: ~300-400 cycles (cross-socket)
+// Use numactl to bind process to node:
+// numactl --cpunodebind=0 --membind=0 ./program
+```
+
+== Compiler Optimization Deep Dive
+
+*Optimization levels:*
+- `-O0`: No optimization, fast compile, debuggable
+- `-O1`: Basic optimization, some inlining
+- `-O2`: Recommended default, aggressive inlining, vectorization attempts
+- `-O3`: `-O2` + loop unrolling, function cloning, more aggressive opts
+- `-Os`: Optimize for size (may be faster due to better i-cache usage)
+- `-Ofast`: `-O3` + fast-math (breaks IEEE 754, use with caution)
+
+*Auto-vectorization (SIMD):*
+```cpp
+// Compile with: g++ -O3 -march=native -fopt-info-vec
+void add(int* a, int* b, int* c, int n) {
+    for (int i = 0; i < n; i++) {
+        c[i] = a[i] + b[i];
+    }
+}
+// Auto-vectorizes to: AVX2 = 8 int32 per cycle, AVX-512 = 16 int32 per cycle
+
+// Requirements for auto-vectorization:
+// 1. Countable loop (known bounds)
+// 2. No pointer aliasing (use __restrict)
+// 3. Aligned data (alignas(32) or alignas(64))
+// 4. No function calls in loop
+// 5. Simple data dependencies
+
+// Example with restrict:
+void add(int* __restrict a, int* __restrict b, int* __restrict c, int n) {
+    // Tells compiler: a, b, c don't overlap → enables vectorization
+}
+```
+
+*Profile-Guided Optimization (PGO):*
+```bash
+# Step 1: Compile with instrumentation
+g++ -O3 -fprofile-generate program.cpp -o program
+
+# Step 2: Run with representative workload
+./program < typical_input.txt
+
+# Step 3: Recompile with profile data
+g++ -O3 -fprofile-use program.cpp -o program_optimized
+
+# Benefits:
+# - Better branch prediction (hot/cold path layout)
+# - Improved inlining decisions (inline hot functions)
+# - Better register allocation
+# - Result: 10-30% speedup typical
+```
+
+*Link-Time Optimization (LTO):*
+```bash
+g++ -O3 -flto file1.cpp file2.cpp -o program
+# Whole-program optimization:
+# - Cross-file inlining
+# - Dead code elimination across files
+# - Devirtualization (static resolution of virtual calls)
+# - Cost: slower compile time, 5-15% runtime speedup
+```
+
+*Branch optimization:*
+```cpp
+// Likely/unlikely hints
+if (__builtin_expect(ptr != nullptr, 1)) {  // Likely true
+    // Hot path
+}
+
+// C++20 attributes:
+if (x > 0) [[likely]] {
+    // Compiler places this code first
+} else [[unlikely]] {
+    // Cold path moved away
+}
+```
+
+*Loop optimizations:*
+```cpp
+// Loop unrolling (automatic with -O3)
+for (int i = 0; i < n; i++) {
+    sum += arr[i];
+}
+// Becomes (4x unroll):
+for (int i = 0; i < n; i += 4) {
+    sum += arr[i] + arr[i+1] + arr[i+2] + arr[i+3];
+}
+
+// Manual unroll for specific count:
+#pragma unroll 8
+for (int i = 0; i < n; i++) { ... }
+
+// Prevent unrolling if harmful:
+#pragma nounroll
+for (int i = 0; i < n; i++) { ... }
+```
+
+*Inlining control:*
+```cpp
+__attribute__((always_inline)) inline int fastFunc() { ... }
+__attribute__((noinline)) int debugFunc() { ... }
+
+// Force inline small functions in hot paths
+// Prevent inline for cold/large functions to reduce i-cache pressure
+```
+
+*Floating-point optimization:*
+```cpp
+// -ffast-math enables:
+// - Reassociation: (a+b)+c → a+(b+c)
+// - No NaN/Inf checks
+// - Reciprocal approximation: x/y → x*(1/y)
+// - Fused multiply-add: a*b+c → fma(a,b,c)
+
+// Safer alternative: -fno-math-errno -fno-trapping-math
+```
+
+== Advanced Performance Topics
+
+*Move semantics & RVO:*
+```cpp
+// RVO (Return Value Optimization) - automatic, zero cost
+vector<int> create() {
+    vector<int> v(1000);
+    return v;  // No copy, no move - direct construction in caller
+}
+
+// NRVO (Named RVO)
+vector<int> create() {
+    vector<int> result;
+    result.reserve(1000);
+    // ... populate result
+    return result;  // Often elided, check with -fno-elide-constructors
+}
+
+// Move: O(1) - swap 3 pointers (~10-20 cycles)
+vector<int> v1 = create();
+vector<int> v2 = std::move(v1);  // v1 now empty, v2 owns data
+
+// Copy: O(n) - deep copy (~1000s of cycles for large containers)
+```
+
+*Memory order & atomics:*
+```cpp
+#include <atomic>
+
+atomic<int> counter(0);
+
+// Relaxed: no synchronization (~1-2 cycles)
+counter.fetch_add(1, memory_order_relaxed);
+
+// Acquire/Release: synchronizes with other threads (~5-10 cycles)
+counter.store(42, memory_order_release);
+int x = counter.load(memory_order_acquire);
+
+// Seq_cst: total ordering, slowest (~10-20 cycles)
+counter.fetch_add(1, memory_order_seq_cst);  // Default
+```
+
+*False sharing:*
+```cpp
+// BAD: Multiple threads update adjacent counters
+struct Counters {
+    atomic<int> count1;  // Same cache line
+    atomic<int> count2;  // Ping-pong between cores = 10-100x slower
+};
+
+// GOOD: Separate cache lines (64 bytes)
+struct Counters {
+    alignas(64) atomic<int> count1;
+    alignas(64) atomic<int> count2;
+};
+// Each counter on own cache line → no false sharing
+```
+
+*Prefetching hints:*
+```cpp
+// Software prefetch (for random access patterns)
+__builtin_prefetch(&data[next_index], 0, 3);
+// Params: address, write(1)/read(0), temporal locality(0-3)
+
+// Temporal locality:
+// 0 = low (single use)
+// 3 = high (reuse soon)
+
+// Example: linked list prefetch 2-3 nodes ahead
+Node* curr = head;
+if (curr->next) __builtin_prefetch(curr->next->next);
+```
