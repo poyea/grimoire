@@ -30,7 +30,7 @@ ListNode* reverseList(ListNode* head) {
 }
 ```
 
-*Pointer chasing cost:* Each iteration has dependent load: `head->next`. CPU stalls $#sym.tilde.op$40-75 cycles on L3 miss, up to $#sym.tilde.op$200 cycles on main memory access. Cannot parallelize - loads are serialized.
+*Pointer chasing cost:* Each iteration has dependent load: `head->next`. CPU stalls $#sym.tilde.op$40-75 cycles on L3 miss, up to $#sym.tilde.op$200 cycles on main memory access [Drepper 2007, §3.3; Intel Memory Latency Checker measurements]. Cannot parallelize - loads are serialized.
 
 *Prefetch optimization:*
 ```cpp

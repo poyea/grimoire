@@ -74,7 +74,7 @@ struct TrieNode {
 
 *Cache analysis:*
 - Each level traversal = pointer dereference = potential cache miss
-- Word length m = m pointer chases = m × $#sym.tilde.op$200 cycles worst case
+- Word length m = m pointer chases = up to m × $#sym.tilde.op$200 cycles worst case (L3 miss to main memory) [Drepper 2007, §3.3]
 - `unordered_map` adds hash computation + bucket lookup overhead
 
 == Word Search II

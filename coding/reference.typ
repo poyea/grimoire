@@ -290,6 +290,17 @@ void add(int* __restrict a, int* __restrict b, int* __restrict c, int n) {
 }
 ```
 
+*Warning about `-march=native`:*
+```bash
+# DANGER: Optimizes for build machine, not deployment target
+g++ -O3 -march=native program.cpp  # Binary may crash on older CPUs
+
+# SAFER: Use architecture level tiers for compatibility
+g++ -O3 -march=x86-64-v2 program.cpp  # SSE4.2, POPCNT (2009+)
+g++ -O3 -march=x86-64-v3 program.cpp  # AVX2, FMA (2013+)
+g++ -O3 -march=x86-64-v4 program.cpp  # AVX-512 (2017+)
+```
+
 *Profile-Guided Optimization (PGO):*
 ```bash
 # Step 1: Compile with instrumentation

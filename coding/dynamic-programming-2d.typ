@@ -125,6 +125,6 @@ alignas(32) vector<int> dp(n + 1);
 // Or use aligned_alloc / _mm_malloc
 ```
 
-*Branch prediction:* `if (text1[i-1] == text2[j-1])` depends on string similarity. Random strings = $#sym.tilde.op$1/26 matches = highly predictable. Similar strings = more unpredictable but still manageable for modern branch predictors.
+*Branch prediction:* `if (text1[i-1] == text2[j-1])` depends on string similarity. Random strings = $#sym.tilde.op$1/26 match rate = predictable pattern for modern branch predictors. Similar strings = higher match rate but still predictable. Branch misprediction penalty is low ($#sym.tilde.op$15-20 cycles) on modern CPUs.
 
 *Note:* Arithmetic with booleans rarely improves performance over well-predicted branches on modern CPUs. The compiler already optimizes simple branches to conditional moves when beneficial.

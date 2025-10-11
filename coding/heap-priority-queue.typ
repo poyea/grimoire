@@ -56,8 +56,8 @@ Indices:     [0,    1,  2,  3,    4,    5,    6,    ...]
 Parent-child jumps = predictable stride pattern. CPU prefetcher can partially predict.
 
 *Cache behavior:*
-- Small heaps (< 8K elements = $#sym.tilde.op$32KB): entire heap fits in L1 data cache = $#sym.tilde.op$4-5 cycles per access
-- Medium heaps (< 64K elements = $#sym.tilde.op$256KB): fits in L2 cache = $#sym.tilde.op$12-15 cycles per access
+- Small heaps (< 8K elements = 32KB): entire heap fits in L1 data cache (32-48KB typical) = $#sym.tilde.op$4-5 cycles per access [Intel Opt. Manual 2023, §2.1.5]
+- Medium heaps (< 64K elements = 256KB): fits in L2 cache (256-512KB typical) = $#sym.tilde.op$12-15 cycles per access
 - Large heaps: only root path (log n nodes) accessed during operations = log n cache misses worst case
 
 *Alternative - Bucket approach:* For bounded range [0, M], use counting array. O(1) insert, O(M) median. Faster if M < log n.

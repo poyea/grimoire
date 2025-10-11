@@ -105,7 +105,7 @@ bool dfs(vector<vector<char>>& board, string& word, int r, int c, int i) {
 == Backtracking Performance
 
 *Stack frame overhead:*
-- Each recursive call = $#sym.tilde.op$16-48 bytes stack frame (varies with local variables and saved registers)
+- Each recursive call = $#sym.tilde.op$16-48 bytes stack frame including return address, saved registers, and local variables [System V ABI x86-64, §3.2.2]
 - Deep recursion (depth 1000) = 16-48KB stack usage
 - Default stack size: 1-8MB. Deep recursion may risk overflow on some platforms.
 

@@ -57,7 +57,7 @@ bool isValid(string s) {
 ```
 
 *Performance comparison:*
-- `std::stack<char>`: Uses `std::deque` by default (chunked $#sym.tilde.op$4KB blocks). $#sym.tilde.op$10-20% overhead vs vector due to indirection
+- `std::stack<char>`: Uses `std::deque` by default (chunked $#sym.tilde.op$4KB blocks per implementation). $#sym.tilde.op$10-20% overhead vs vector due to indirection [libstdc++ and libc++ default chunk size]
 - `vector<char>`: Contiguous memory, excellent prefetcher efficiency
 - Static array: Fastest option (no bounds checking, no heap allocation). *Warning:* Large stack arrays (10KB+) risk stack overflow on some platforms
 
