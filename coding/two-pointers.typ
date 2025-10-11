@@ -253,7 +253,8 @@ vector<vector<int>> threeSumHash(vector<int>& nums) {
 
 == Container With Most Water - SIMD Scan
 
-*Brute force vectorized:*
+*SIMD brute force approach:* O(n²) complexity but parallelizes inner loop.
+
 ```cpp
 int maxAreaSIMD(vector<int>& height) {
     int n = height.size();
@@ -264,7 +265,8 @@ int maxAreaSIMD(vector<int>& height) {
         int hl = height[l];
 
         // Process 8 right pointers at once
-        for (int r = l + 8; r < n; r += 8) {
+        int r = l + 8;
+        for (; r < n; r += 8) {
             __m256i widths = _mm256_setr_epi32(
                 r-7-l, r-6-l, r-5-l, r-4-l,
                 r-3-l, r-2-l, r-1-l, r-l
@@ -285,8 +287,8 @@ int maxAreaSIMD(vector<int>& height) {
             }
         }
 
-        // Scalar cleanup
-        for (int r = ((n-l-1)/8)*8 + l + 1; r < n; r++) {
+        // Scalar cleanup for remaining elements
+        for (r = max(l + 1, (r - 8)); r < n; r++) {
             maxArea = max(maxArea, min(height[l], height[r]) * (r - l));
         }
     }

@@ -40,7 +40,7 @@ nth_element(v.begin(), v.begin()+k, v.end());   // O(n). Partial quickselect.
 ```cpp
 sort(v.begin(), v.end(), [](int a, int b) { return a > b; });  // Descending
 ```
-Lambda inlined by compiler. No function call overhead.
+Lambda inlined by compiler with `-O2`/`-O3`. No function call overhead [GCC/Clang inline small lambdas automatically].
 
 *Searching:*
 ```cpp
@@ -120,7 +120,7 @@ int lowestBit = x & -x;    // Isolate lowest set bit
 int pos = __builtin_ctz(x); // Position of lowest set bit
 ```
 
-*Compiler intrinsics:* Compile to CPU instructions with `-march=native` or `-mpopcnt`/`-mlzcnt`. Typically 1-3 cycle latency vs $#sym.tilde.op$10-20 cycles for loop implementation. Without target flags, may compile to loops.
+*Compiler intrinsics:* Compile to CPU instructions with `-march=native` or `-mpopcnt`/`-mlzcnt`. Typically 1-3 cycle latency [Intel Opt. Manual 2023, Appx. C: POPCNT = 3 cycles, LZCNT = 3 cycles on modern CPUs] vs $#sym.tilde.op$10-20 cycles for loop implementation. Without target flags, may compile to loops.
 
 == Iterators & Ranges
 
@@ -144,8 +144,9 @@ for (const auto& x : vec) { ... }
 // Division by compile-time constant: optimized automatically
 int half = n / 2;  // Compiler converts to n >> 1 automatically
 
-// Variable division: slower on some older CPUs ($#sym.tilde.op$10-20 cycles)
-int result = n / divisor;  // Modern x86: $#sym.tilde.op$3-10 cycles depending on CPU
+// Variable division: slower on some CPUs
+int result = n / divisor;  // Modern x86 (Skylake+): ~3-6 cycles [Intel Opt. Manual 2023, Table C-16]
+                           // Older CPUs (pre-Skylake): ~10-40 cycles
 
 // Modulo by power-of-2: optimized automatically
 int rem = n % 8;  // Compiler converts to n & 7 automatically

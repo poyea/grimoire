@@ -287,9 +287,11 @@ public:
     }
 
     void resize() {
+        size_t new_size = table.size() * 2;
+        if (new_size < table.size()) return;  // Overflow check
+
         vector<Entry> old = move(table);
-        table.clear();
-        table.resize(old.size() * 2);
+        table = vector<Entry>(new_size);  // Create new table with default-constructed entries
         count = 0;
 
         for (auto& e : old) {

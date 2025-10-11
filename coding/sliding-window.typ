@@ -197,50 +197,37 @@ int maxProfit(vector<int>& prices) {
 == SIMD for Sliding Window
 
 *Minimum in sliding window (fixed size k):*
-```cpp
-#include <immintrin.h>
 
-// Find minimum in every window of size k
-vector<int> slidingWindowMinSIMD(const vector<int>& nums, int k) {
-    int n = nums.size();
+For small windows (k ≤ 8), SIMD horizontal minimum has $O(log k)$ reduction steps but copying to aligned buffer defeats the purpose. Better: use monotonic deque which is O(1) amortized per element.
+
+```cpp
+// Monotonic deque approach (optimal)
+vector<int> slidingWindowMin(const vector<int>& nums, int k) {
+    deque<int> dq;  // Stores indices
     vector<int> result;
 
-    // For small k, SIMD horizontal min
-    if (k <= 8) {
-        for (int i = 0; i <= n - k; i++) {
-            // Load k elements (pad with INT_MAX if k < 8)
-            int temp[8];
-            for (int j = 0; j < k; j++) temp[j] = nums[i + j];
-            for (int j = k; j < 8; j++) temp[j] = INT_MAX;
-
-            __m256i vec = _mm256_loadu_si256((__m256i*)temp);
-
-            // Horizontal minimum using tree reduction
-            __m256i perm = _mm256_permute2x128_si256(vec, vec, 1);
-            vec = _mm256_min_epi32(vec, perm);  // Compare across 128-bit lanes
-
-            __m128i low = _mm256_castsi256_si128(vec);
-            __m128i high = _mm256_extracti128_si256(vec, 1);
-            __m128i min128 = _mm_min_epi32(low, high);
-
-            // Further reduction
-            __m128i shuf = _mm_shuffle_epi32(min128, _MM_SHUFFLE(1, 0, 3, 2));
-            min128 = _mm_min_epi32(min128, shuf);
-            shuf = _mm_shuffle_epi32(min128, _MM_SHUFFLE(2, 3, 0, 1));
-            min128 = _mm_min_epi32(min128, shuf);
-
-            result.push_back(_mm_extract_epi32(min128, 0));
+    for (int i = 0; i < nums.size(); i++) {
+        // Remove elements outside window
+        while (!dq.empty() && dq.front() < i - k + 1) {
+            dq.pop_front();
         }
-    } else {
-        // For large k: use deque-based monotonic queue (better complexity)
-        // SIMD doesn't help much for large windows
+
+        // Maintain increasing order
+        while (!dq.empty() && nums[dq.back()] >= nums[i]) {
+            dq.pop_back();
+        }
+
+        dq.push_back(i);
+
+        if (i >= k - 1) {
+            result.push_back(nums[dq.front()]);
+        }
     }
 
     return result;
 }
+// O(n) time, O(k) space - optimal complexity
 ```
-
-*Horizontal min complexity:* $O(log k)$ SIMD operations. Only beneficial for tiny k (2-16).
 
 *Better SIMD opportunity - parallel window processing:*
 ```cpp

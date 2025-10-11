@@ -129,7 +129,7 @@ Value: 6  3  9  2  5  8  10 1  4  7  11
 
 *Conversion:*
 ```cpp
-void eytzinger(const vector<int>& sorted, vector<int>& bfs, int i = 0, int k = 1) {
+void eytzinger(const vector<int>& sorted, vector<int>& bfs, int& i, int k = 1) {
     if (k <= sorted.size()) {
         eytzinger(sorted, bfs, i, 2 * k);      // Left child
         bfs[k] = sorted[i++];                  // Current node
@@ -140,18 +140,24 @@ void eytzinger(const vector<int>& sorted, vector<int>& bfs, int i = 0, int k = 1
 // Usage:
 vector<int> sorted = {1,2,3,4,5,6,7,8,9,10,11};
 vector<int> bfs(sorted.size() + 1);  // 1-indexed
-eytzinger(sorted, bfs);
+int idx = 0;
+eytzinger(sorted, bfs, idx);
 ```
 
 *Binary search on Eytzinger layout:*
 ```cpp
 int eytzinger_search(const vector<int>& bfs, int target) {
+    if (bfs.empty()) return -1;
     int k = 1;  // Start at root (1-indexed)
 
     while (k < bfs.size()) {
-        // Prefetch both children
-        __builtin_prefetch(&bfs[min((size_t)(2 * k), bfs.size() - 1)]);
-        __builtin_prefetch(&bfs[min((size_t)(2 * k + 1), bfs.size() - 1)]);
+        // Prefetch both children if they exist
+        if (2 * k < bfs.size()) {
+            __builtin_prefetch(&bfs[2 * k]);
+        }
+        if (2 * k + 1 < bfs.size()) {
+            __builtin_prefetch(&bfs[2 * k + 1]);
+        }
 
         if (bfs[k] == target) return k;
         else if (target < bfs[k]) k = 2 * k;      // Go left

@@ -290,21 +290,27 @@ vEB layout:   [1, 2,3, 8,9,10,11, 4,5, 12,13, 6,7, 14,15]
               [top 2 levels][left subtree][mid subtrees][right subtree]
 ```
 
-*Implementation (conceptual):*
+*Implementation (recursive index mapping):*
 ```cpp
-// Recursive vEB index mapping
+// Helper: size of vEB tree of height h
+int veb_size(int h) {
+    return (1 << h) - 1;
+}
+
+// Recursive vEB index mapping from BFS index to vEB index
 int veb_index(int i, int h) {
     if (h <= 2) return i;  // Base case: BFS
 
     int h_top = h / 2;
     int h_bot = h - h_top;
-    int top_size = (1 << h_top) - 1;
+    int top_size = veb_size(h_top);
 
     if (i < top_size) {
         return veb_index(i, h_top);  // In top tree
     } else {
-        int subtree = (i - top_size) / ((1 << h_bot) - 1);
-        int offset = (i - top_size) % ((1 << h_bot) - 1);
+        int bot_size = veb_size(h_bot);
+        int subtree = (i - top_size) / bot_size;
+        int offset = (i - top_size) % bot_size;
         return top_size + subtree * veb_size(h_bot) + veb_index(offset, h_bot);
     }
 }

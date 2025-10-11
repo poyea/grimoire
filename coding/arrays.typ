@@ -26,45 +26,15 @@ vector<int> productExceptSelf(vector<int>& nums) {
 
 *Key insight:* `res[i] = prefix[i] * suffix[i]`. Reuse output array for prefix, track suffix with scalar.
 
-*SIMD vectorization (AVX2):*
+*SIMD vectorization - why it's limited:*
+
+Product except self has loop-carried dependency (suffix depends on previous iteration). SIMD speedup limited to 1.2-1.5x vs 8x theoretical. The suffix computation is inherently sequential:
 ```cpp
-#include <immintrin.h>
-
-// Process 8 integers at once with AVX2
-void productExceptSelfSIMD(vector<int>& nums, vector<int>& res) {
-    int n = nums.size();
-    res.resize(n, 1);
-
-    // Build prefix products
-    for (int i = 1; i < n; i++) {
-        res[i] = res[i-1] * nums[i-1];
-    }
-
-    // Build suffix and multiply (SIMD)
-    int suffix = 1;
-    int i = n - 1;
-
-    // Process 8 elements at once (if aligned)
-    while (i >= 7) {
-        // Load 8 results
-        __m256i res_vec = _mm256_loadu_si256((__m256i*)&res[i-7]);
-
-        // Compute 8 suffix values (needs sequential dependency handling)
-        // In practice, SIMD benefits limited here due to dependencies
-        // Better SIMD opportunity: independent array operations
-
-        i -= 8;
-    }
-
-    // Scalar cleanup for remaining elements
-    for (; i >= 0; i--) {
-        res[i] *= suffix;
-        suffix *= nums[i];
-    }
-}
+// Sequential dependency chain (cannot parallelize):
+suffix[i] = nums[i] * nums[i+1] * ... * nums[n-1]
 ```
 
-*SIMD limitation:* Product except self has loop-carried dependency (suffix depends on previous iteration). SIMD speedup limited to 1.2-1.5x vs 8x theoretical. Better SIMD candidates: element-wise operations without dependencies.
+Better SIMD candidates: element-wise operations without dependencies.
 
 *Better SIMD example - element-wise add:*
 ```cpp
