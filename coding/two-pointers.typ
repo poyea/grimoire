@@ -1,5 +1,9 @@
 = Two Pointers
 
+*Two pointers technique processes arrays/sequences with two indices moving toward each other or in same direction. Requires: sorted data or specific pattern. Benefits: $O(1)$ space vs $O(n)$ for hash-based solutions.*
+
+*See also:* Sliding Window (for variable-size windows), Hashing (for unsorted data alternatives), Binary Search (for search-based two pointer variants)
+
 == Valid Palindrome
 
 *Problem:* Check if string is palindrome (alphanumeric only, case-insensitive).
@@ -41,6 +45,8 @@ vector<int> twoSum(vector<int>& nums, int target) {
 ```
 
 *Why it works:* Array is sorted. If sum too small, increase left. If sum too large, decrease right.
+
+*See also:* Hashing (for Two Sum on unsorted array with $O(n)$ time but $O(n)$ space)
 
 == 3Sum
 
@@ -99,6 +105,8 @@ int maxArea(vector<int>& height) {
 ```
 
 *Greedy choice:* Always move pointer with smaller height. Moving larger height can never improve area (width decreases, height stays ≤ min).
+
+*See also:* Greedy (for proving correctness of greedy strategies), Dynamic Programming (for problems where greedy doesn't work)
 
 == Two-Pointer Performance
 
@@ -215,7 +223,7 @@ vector<int> twoSumBranchless(vector<int>& nums, int target) {
 // add    esi, ecx  ; l += less
 ```
 
-*Tradeoff:* Eliminates branch mispredicts but introduces data dependencies. Only beneficial if branches are unpredictable (random data).
+*Tradeoff:* Eliminates branch mispredictions (which cost approximately 15-20 cycles each when they occur) but introduces data dependencies through CMOV instructions. Data dependencies force the CPU to wait for previous operations to complete before executing dependent instructions, reducing instruction-level parallelism.#footnote[Instruction-level parallelism (ILP) is the CPU's ability to execute multiple instructions simultaneously using techniques like out-of-order execution and multiple execution units. Data dependencies limit ILP because dependent instructions must wait for their operands.] This approach is only beneficial when branches are unpredictable (such as with random data), where the cost of frequent mispredictions outweighs the serialization penalty.
 
 == 3Sum Optimization - Hash Set Alternative
 

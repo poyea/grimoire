@@ -1,5 +1,9 @@
 = Linked List
 
+*Linked lists store elements with explicit pointers between nodes. Enables $O(1)$ insertion/deletion at known positions, but sacrifices random access and cache locality.*
+
+*See also:* Arrays (for cache-friendly alternatives), Trees (similar pointer-based structure), Two Pointers (for linked list traversal patterns), Hashing (for fast cycle detection alternatives)
+
 *Critical performance note:* Linked lists have poor cache behavior. Each `next` pointer dereference = potential cache miss ($#sym.tilde.op$200 cycles). Array-based solutions are typically 10-100x faster. Use linked lists only when required (LRU cache, memory pooling).
 
 ```cpp
@@ -30,7 +34,7 @@ ListNode* reverseList(ListNode* head) {
 }
 ```
 
-*Pointer chasing cost:* Each iteration has dependent load: `head->next`. CPU stalls $#sym.tilde.op$40-75 cycles on L3 miss, up to $#sym.tilde.op$200 cycles on main memory access [Drepper 2007, §3.3; Intel Memory Latency Checker measurements]. Cannot parallelize - loads are serialized.
+*Pointer chasing cost:* Each iteration has dependent load: `head->next`. CPU stalls $#sym.tilde.op$40-75 cycles on L3 miss, up to $#sym.tilde.op$200 cycles on main memory access [Drepper 2007, §3.3; Intel Memory Latency Checker measurements]. Cannot parallelize - loads are serialized. This is because each load depends on the result of the previous load: we must load `head->next` before we can load `head->next->next`. Modern out-of-order execution CPUs can overlap independent loads, but pointer chasing creates a dependency chain where each load becomes a bottleneck. The CPU's memory-level parallelism#footnote[Memory-level parallelism (MLP) is the ability to have multiple outstanding memory requests in flight simultaneously. Modern CPUs can track 10-12 concurrent cache misses, but pointer chasing limits this to 1-2 because each miss depends on the previous one completing.] is effectively reduced to 1, eliminating one of the primary techniques CPUs use to hide memory latency.
 
 *Prefetch optimization:*
 ```cpp

@@ -1,5 +1,9 @@
 = Binary Search
 
+*Binary search finds target in sorted array in $O(log n)$ time. Key invariant: search space halves each iteration. Template applies to any monotonic function.*
+
+*See also:* Two Pointers (for linear search on sorted arrays), Dynamic Programming (for optimization problems with search space), Trees (binary search trees)
+
 == Find Minimum in Rotated Sorted Array
 
 *Problem:* Find the minimum element in a rotated sorted array (no duplicates).
@@ -110,6 +114,12 @@ T* search(T* arr, int n, T target) {
 
 Crossover typically n = 32-128 depending on element size and access pattern.
 
+*Why the crossover exists:*
+- Binary search: O(log n) comparisons, but each comparison may cause a cache miss due to random memory access, costing approximately 200 cycles per miss
+- Linear search: O(n) comparisons, but sequential memory access allows the CPU's hardware prefetcher to preload cache lines (64 bytes = 16 integers for int32), reducing the effective cost to approximately 4-5 cycles per element
+
+For small n (typically 32-128 depending on element size), the O(n) × 4 cycles of linear search is less than O(log n) × 200 cycles of binary search with cache misses.
+
 == Eytzinger (BFS) Layout
 
 *Idea:* Store array in breadth-first order like a binary heap. Improves cache locality - children are close to parent in memory.
@@ -219,7 +229,7 @@ int branchfree_search(const vector<int>& arr, int target) {
 
 *Performance tradeoffs:*
 - Eliminates branch mispredicts ($#sym.tilde.op$15-20 cycles saved per mispredict)
-- Introduces data dependency (CMOV has 1-2 cycle latency)
+- Introduces data dependency. The CMOV instruction#footnote[CMOV (Conditional Move) is an x86 instruction that performs a register-to-register move based on a condition flag, eliminating the need for branch instructions. Unlike branches, CMOV executes unconditionally but only commits the result if the condition is true.] has a 1-2 cycle latency, which means subsequent instructions that depend on its result must wait for it to complete. This serializes execution, preventing the CPU from executing other independent instructions in parallel during those cycles.
 - Best for: unpredictable data, CPU with slow branch predictor
 - Worse for: sorted/predictable data, modern CPUs with good prediction
 

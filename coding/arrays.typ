@@ -1,5 +1,9 @@
 = Arrays
 
+*Arrays provide $O(1)$ random access with excellent cache locality when accessed sequentially. Foundation for most data structures and algorithms.*
+
+*See also:* Hashing (for $O(1)$ lookup without ordering), Sliding Window (for contiguous subarray problems), Dynamic Programming (arrays as DP state storage)
+
 == Product of Array Except Self
 
 *Problem:* Return array where `result[i] = product of all elements except nums[i]`. No division.
@@ -56,6 +60,11 @@ void addArraysSIMD(const vector<int>& a, const vector<int>& b, vector<int>& c) {
     }
 }
 // Speedup: ~6-7x on modern CPUs (near theoretical 8x)
+// The gap from theoretical maximum occurs due to:
+// - Memory bandwidth limitations (RAM throughput saturates before computation)
+// - Loop overhead (bounds checking, pointer arithmetic)
+// - Unaligned loads/stores incurring 1-2 cycle penalties
+// - CPU front-end limitations (instruction decode/fetch bottlenecks)
 ```
 
 == Vector Growth Strategies
@@ -79,7 +88,7 @@ v.push_back(5);  // capacity = 8 (reallocate + copy)
 *Growth factor tradeoffs:*
 - Factor 2.0 (typical): fast growth, wastes ~50% memory on average
 - Factor 1.5 (MSVC): slower growth, wastes ~33% memory
-- Factor φ ≈ 1.618 (golden ratio): theoretical optimal for memory reuse
+- Factor φ ≈ 1.618 (golden ratio): theoretical optimal for memory reuse. This growth factor allows previously freed memory blocks to be reused more efficiently because the sum of all previous allocations (φ⁰ + φ¹ + φ² + ... + φⁿ⁻¹) equals φⁿ, enabling perfect memory recycling in some allocator implementations.#footnote[The golden ratio property stems from the Fibonacci sequence relationship: F(n) = F(n-1) + F(n-2). When resizing by φ, the new allocation can potentially reuse all previous deallocated space.]
 
 *Pre-allocation eliminates copies:*
 ```cpp
@@ -200,6 +209,27 @@ for (auto& x : points.x) {
 - Usually access all fields together
 - Small objects (< 64 bytes)
 - Better for random access patterns
+
+*See also:* Reference (for detailed cache hierarchy and SIMD vectorization techniques)
+
+*Cache-oblivious blocked layout:*
+For 2D arrays larger than cache, blocked layout improves locality for both row and column access:
+
+```cpp
+// Standard row-major: a[i][j] = data[i * cols + j]
+// Poor for column access (stride = cols)
+
+// Blocked layout: divide into B×B blocks
+const int B = 32;  // Block size chosen to fit in L1 cache
+int block_row = i / B;
+int block_col = j / B;
+int in_block_row = i % B;
+int in_block_col = j % B;
+int idx = (block_row * (cols/B) + block_col) * (B*B) +
+          (in_block_row * B + in_block_col);
+```
+
+Improves both row and column traversal by factor of B/cache_line_size.
 
 == String Encode and Decode
 

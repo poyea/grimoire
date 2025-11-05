@@ -1,5 +1,9 @@
 = Hashing
 
+*Hash tables provide $O(1)$ average-case lookup, insert, delete. Key tradeoffs: memory overhead vs speed, collision handling, cache locality.*
+
+*See also:* Arrays (for cache-friendly alternatives to hash sets), Two Pointers (for $O(1)$ space solutions on sorted data)
+
 == Contains Duplicate
 
 *Problem:* Check if array has duplicates.
@@ -62,6 +66,8 @@ vector<int> twoSum(vector<int>& nums, int target) {
 ```
 
 *Critical:* Check complement before inserting to avoid using same element twice.
+
+*See also:* Two Pointers (for Two Sum II on sorted array with $O(1)$ space)
 
 #pagebreak()
 
@@ -137,6 +143,8 @@ priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> minHeap;
 // Keep heap size ≤ k, top k elements have highest frequency
 ```
 
+*See also:* Heap & Priority Queue (for detailed heap operations and complexity analysis)
+
 == Longest Consecutive Sequence
 
 *Problem:* Find length of longest consecutive sequence in unsorted array.
@@ -202,7 +210,9 @@ unordered_set<int, CustomHash> s;
 ```
 
 *Memory layout:*
-`unordered_set` = array of buckets + linked lists. Each node = $#sym.tilde.op$16-24 bytes depending on implementation (8-byte next ptr, optionally 8-byte cached hash, value + padding). 1000 elements ≈ 16-24KB minimum.
+`unordered_set` = array of buckets + linked lists. Each node = $#sym.tilde.op$16-24 bytes depending on implementation (breakdown: 8 bytes for next pointer, 0-8 bytes for cached hash value depending on implementation#footnote[Some implementations cache the hash value in each node to avoid recomputing during rehashing. This trades 8 bytes per node for faster rehash operations, a worthwhile tradeoff for expensive hash functions like strings.], plus the key-value pair size and any alignment padding to maintain proper memory alignment). 1000 elements ≈ 16-24KB minimum.
+
+*See also:* Reference (for detailed memory alignment and cache hierarchy information)
 
 *Cache behavior:*
 - Small sets (< 100 elements): entire hash table fits in L1 = fast
@@ -215,7 +225,7 @@ unordered_set<int, CustomHash> s;
 
 *Algorithm:*
 - Hash collision → linear probing
-- Track PSL (Probe Sequence Length) = distance from ideal position
+- Track PSL#footnote[PSL (Probe Sequence Length) is the distance between an element's current position and its ideal hash position. In Robin Hood hashing, PSL is used to maintain fairness: elements with longer PSL values are given priority over those with shorter PSL values during collision resolution.] (Probe Sequence Length) = distance from ideal position
 - On insert: if new element's PSL > existing element's PSL, swap and continue inserting the evicted element
 - Result: tight clustering, bounded worst-case search
 
@@ -457,6 +467,12 @@ struct Group {
 size_t probe_index(size_t hash, size_t i) {
     return (hash + i * (i + 1) / 2) & mask;
 }
+// Why triangular numbers?
+// Linear probing (step by 1) creates primary clustering - long chains of occupied slots.
+// Quadratic probing using triangular numbers (0, 1, 3, 6, 10...) spreads out probes more evenly,
+// reducing clustering. The triangular number formula i(i+1)/2 is the sum 1+2+3+...+i, which grows
+// quadratically but maintains the property that all slots are eventually visited when the table
+// size is a power of 2.#footnote[The mathematical proof relies on the fact that for power-of-2 table sizes, the sequence i(i+1)/2 mod 2ⁿ generates a permutation of all odd offsets, ensuring complete coverage when combined with any hash value.]
 
 // SIMD lookup in group of 16 slots
 __m128i ctrl_vec = _mm_loadu_si128((__m128i*)ctrl);
@@ -490,6 +506,15 @@ slots: [K,V][K,V][---][K,V][---][K,V]...[K,V]  (16 × sizeof(pair<K,V>))
 - No pointer chasing (vs chaining)
 - Good cache locality (vs std::unordered_map)
 - Low load factor (typically 87.5% = 14/16 slots used)
+
+*Why SIMD matching is effective:*
+The key insight is that by storing metadata (control bytes) separately from the actual key-value data, we can:
+1. Load 16 control bytes (one SSE2 register) with a single memory access
+2. Compare all 16 bytes against the target H2 hash simultaneously using `_mm_cmpeq_epi8`
+3. Extract a bitmask of matches using `_mm_movemask_epi8`, then iterate only over matching slots
+4. This reduces branch mispredictions and cache pollution by checking metadata before accessing the larger key-value pairs
+
+Traditional chaining would require following pointers and loading entire entries (potentially 16-32 bytes each) for every comparison, causing significantly more cache traffic.
 
 *Comparison to other schemes:*
 - Robin Hood: simpler, but no SIMD acceleration

@@ -1,5 +1,9 @@
 = Trees
 
+*Trees organize data hierarchically with parent-child relationships. Binary trees: each node has ≤2 children. Traversals: inorder, preorder, postorder (recursive/iterative).*
+
+*See also:* Graphs (trees are acyclic connected graphs), Binary Search (for binary search trees), Dynamic Programming (tree DP), Heap & Priority Queue (for array-based trees)
+
 *Cache locality note:* Tree traversal = pointer chasing = poor cache behavior. Each node access can be cache miss ($#sym.tilde.op$200 cycles). Array-based heaps/segment trees have better locality.
 
 ```cpp
@@ -282,6 +286,14 @@ int right(int i) { return 2 * i + 2; }
 1. Split tree into top $sqrt(h)$ levels and bottom $sqrt(h)$ levels
 2. Store top recursively, then each subtree recursively
 3. Result: parent/child closer in memory
+
+*Why vEB layout improves cache performance:*
+
+Standard BFS layout visits nodes in this order: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11...
+When traversing from node 1 to its grandchild 4, the memory distance is 3 elements.
+For a deep tree, visiting node 1 then its great-great-grandchild 16 spans 15 elements (960 bytes for integers), likely spanning multiple cache lines.
+
+vEB layout recursively groups related subtrees together in memory. The top $sqrt(h)$ levels are stored first, followed by each subtree stored recursively. This ensures that a traversal of depth d typically touches at most $O(log_B d)$ cache lines rather than $O(d)$ cache lines, where B is the cache line size. The recursive subdivision naturally aligns with cache hierarchy: frequently-accessed top levels stay in L1/L2, while deeper subtrees may reside in L3 or RAM but are accessed less frequently.
 
 *Example (height 4 tree):*
 ```

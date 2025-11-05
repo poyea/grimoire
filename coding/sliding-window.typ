@@ -1,5 +1,9 @@
 = Sliding Window
 
+*Sliding window maintains a contiguous subarray/substring while expanding or contracting based on constraints. Key: amortized $O(n)$ time as each element added/removed at most once.*
+
+*See also:* Two Pointers (sliding window is a special case), Hashing (for tracking window state), Dynamic Programming (for more complex optimization problems)
+
 == Best Time to Buy and Sell Stock
 
 *Problem:* Find maximum profit from buying and selling stock once (buy before sell).
@@ -89,6 +93,8 @@ int characterReplacement(string s, int k) {
 
 *Optimization:* No need to recompute maxFreq when shrinking window. It only matters for expanding window. maxFreq is monotonic upper bound.
 
+*See also:* Hashing (frequency counting techniques), String Algorithms (for more complex string patterns)
+
 == Minimum Window Substring
 
 *Problem:* Find minimum window in string s that contains all characters from string t.
@@ -176,7 +182,7 @@ int maxProfit(vector<int>& prices) {
 - 1-2 branch units
 - 2-4 load/store units
 
-Result: ~2-3 instructions per cycle (IPC) for this loop.
+Result: ~2-3 instructions per cycle (IPC)#footnote[IPC (Instructions Per Cycle) measures how many instructions a CPU completes on average per clock cycle. Modern CPUs can achieve IPC values of 3-4 through superscalar execution (multiple instructions per cycle) when instructions are independent. Values below 2.0 typically indicate memory bottlenecks, branch mispredictions, or data dependencies limiting parallelism.] for this loop. This IPC value indicates good instruction-level parallelism: the CPU is successfully executing 2-3 instructions per clock cycle through its multiple execution units (typical modern CPUs have 4-8 execution ports). The theoretical maximum IPC is limited by the CPU's width (4-6 instructions per cycle for modern x86-64 CPUs), and achieving 2-3 IPC is considered excellent for code with memory dependencies.
 
 *Breaking parallelism (anti-pattern):*
 ```cpp

@@ -186,7 +186,7 @@ BENCHMARK(BM_Sort);
 *Virtual memory & paging:*
 - Default page size: 4KB (x86-64) [Intel SDM Vol. 3A]
 - Page table walk: 4-level on x86-64 = 4 memory accesses ($#sym.tilde.op$800 cycles without TLB) [Drepper 2007]
-- TLB (Translation Lookaside Buffer): L1 TLB = 64 entries (data) + 128 entries (instruction), L2 TLB = 1024-2048 entries [Intel Optimization Manual 2023, §2.1.5]
+- TLB#footnote[The TLB (Translation Lookaside Buffer) is a small hardware cache that stores recent virtual-to-physical address translations. Without the TLB, every memory access would require walking the page table (4 memory accesses on x86-64), costing approximately 800 cycles. The TLB reduces this to zero cost for cached translations, making it critical for performance.] (Translation Lookaside Buffer): L1 TLB = 64 entries (data) + 128 entries (instruction), L2 TLB = 1024-2048 entries [Intel Optimization Manual 2023, §2.1.5]
 - TLB miss penalty: $#sym.tilde.op$20-100 cycles (page table walk, varies by CPU) [Agner Fog 2023, Table 14.3]
 - Huge pages (2MB/1GB): 512x/262144x fewer TLB entries [Linux Kernel Doc: hugetlbpage.txt]
 
@@ -233,7 +233,7 @@ void* p = mmap(NULL, 2MB, PROT_READ|PROT_WRITE,
 
 *System call overhead:*
 - syscall cost: $#sym.tilde.op$50-150 cycles (user→kernel context switch) [Soares & Stumm 2010, FlexSC; varies by CPU generation]
-- vDSO (virtual dynamic shared object): $#sym.tilde.op$5-10 cycles (no kernel transition) [Linux vDSO(7) man page]
+- vDSO#footnote[vDSO (virtual dynamic shared object) is a Linux kernel mechanism that maps certain system call implementations directly into userspace memory, allowing programs to invoke them without the expensive kernel mode transition. This reduces overhead from approximately 50-150 cycles (syscall) to 5-10 cycles (function call).] (virtual dynamic shared object): $#sym.tilde.op$5-10 cycles (no kernel transition) [Linux vDSO(7) man page]
 - vDSO functions: `gettimeofday()`, `clock_gettime()`, `getcpu()` [mapped to userspace]
 
 ```cpp
@@ -275,7 +275,7 @@ void add(int* a, int* b, int* c, int n) {
         c[i] = a[i] + b[i];
     }
 }
-// Auto-vectorizes to: AVX2 = 8 int32 per cycle, AVX-512 = 16 int32 per cycle
+// Auto-vectorizes to: AVX2#footnote[AVX2 (Advanced Vector Extensions 2) is an x86 SIMD instruction set extension introduced in Intel's Haswell microarchitecture (2013). It provides 256-bit wide vector registers capable of processing 8 32-bit integers or 4 64-bit integers simultaneously, enabling significant performance improvements for data-parallel operations.] = 8 int32 per cycle, AVX-512 = 16 int32 per cycle
 
 // Requirements for auto-vectorization:
 // 1. Countable loop (known bounds)
@@ -384,11 +384,35 @@ __attribute__((noinline)) int debugFunc() { ... }
 // Safer alternative: -fno-math-errno -fno-trapping-math
 ```
 
+== Debugging Optimized Code
+
+*Challenge:* Aggressive optimization (-O2/-O3) makes debugging difficult due to:
+- Inlined functions (stack traces don't show call sites)
+- Reordered instructions (breakpoints hit out of source order)
+- Optimized-away variables (cannot inspect values)
+
+*Solutions:*
+```cpp
+// Per-function optimization control
+__attribute__((optimize("-O0"))) void debugFunction() {
+    // This function compiled without optimization
+}
+
+// Selective variable preservation
+volatile int debug_value = x;  // Prevents optimization
+```
+
+*Incremental approach:*
+1. Debug with -O0, profile with -O2
+2. If bug only in -O2: binary search by disabling optimizations on half the functions
+3. Use -O2 -g for debug symbols with optimization
+4. Consider -Og (optimize for debugging) as middle ground
+
 == Advanced Performance Topics
 
 *Move semantics & RVO:*
 ```cpp
-// RVO (Return Value Optimization) - automatic, zero cost
+// RVO#footnote[RVO (Return Value Optimization) is a compiler optimization that eliminates unnecessary copy/move operations when returning objects from functions. Instead of constructing the object in the function and then copying it to the caller, the compiler constructs it directly in the caller's memory location. NRVO (Named RVO) extends this to named return values, though it's less reliably applied.] (Return Value Optimization) - automatic, zero cost
 vector<int> create() {
     vector<int> v(1000);
     return v;  // No copy, no move - direct construction in caller
