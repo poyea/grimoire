@@ -34,7 +34,7 @@
   depth: 2,
 )
 
-#emph[A comprehensive reference covering computer architecture from instruction execution to memory hierarchies, with emphasis on performance, microarchitecture, and modern processor designs.]
+#emph[Enjoy.]
 
 #pagebreak()
 

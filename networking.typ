@@ -34,7 +34,7 @@
   depth: 2,
 )
 
-#emph[A comprehensive reference covering computer networking from hardware interrupts to application protocols, with emphasis on performance, concurrency, and modern high-speed networking techniques.]
+#emph[Enjoy.]
 
 #pagebreak()
 
