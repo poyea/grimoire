@@ -9,6 +9,9 @@
     #h(0.5fr)
     #emph(link("https://github.com/poyea/grimoire")[poyea/grimoire::networking])
   ],
+  footer: context [
+    #align(right)[#counter(page).display("1")]
+  ]
 )
 #set text(font: "New Computer Modern", size: 11pt)
 #set heading(numbering: "1.")
