@@ -31,13 +31,11 @@ Private: L1, L2 (32-512 KB per core)
 Shared: L3 (8-64 MB across all cores)
 ```
 
-*Resource sharing:*
-- Private: L1/L2 cache, execution units, TLB
-- Shared: L3 cache, memory controller, memory bandwidth
+Resources are divided between private and shared components. Each core has private L1/L2 caches, execution units, and TLB, while all cores share the L3 cache, memory controller, and memory bandwidth.
 
 == Cache Coherence Problem
 
-*Problem:* Multiple cores cache same memory location → inconsistent views.
+The cache coherence problem arises when multiple cores cache the same memory location, leading to inconsistent views of data. Consider the scenario where Memory[X] initially equals 0. Core 0 loads X into its L1 cache, Core 1 also loads X into its L1 cache, then Core 0 stores X = 1 in its L1 cache. When Core 1 subsequently loads X, it still reads 0 from its stale cache, creating an inconsistency.
 
 ```
 Initial: Memory[X] = 0
@@ -48,7 +46,7 @@ Core 0: Store X = 1 → L1 cache[X] = 1
 Core 1: Load X → L1 cache[X] = 0 ???  (Stale data!)
 ```
 
-*Solution:* Cache coherence protocol ensures all cores see consistent data.
+Cache coherence protocols solve this problem by ensuring all cores see consistent data.
 
 == MESI Protocol
 
@@ -123,7 +121,7 @@ Cost: ~40-80 cycles (depending on core count and distance)
 
 == False Sharing
 
-*Problem:* Two variables on same cache line → unnecessary coherence traffic.
+False sharing occurs when two variables reside on the same cache line, generating unnecessary coherence traffic. Consider a structure where counter1 at offset 0 and counter2 at offset 4 share the same 64-byte cache line. When Thread 0 increments counter1 and Thread 1 increments counter2, each write invalidates the other thread's cache line, creating a ping-pong effect that can be 10-100× slower than if the variables were on separate cache lines.
 
 ```c
 struct Counter {
@@ -143,7 +141,7 @@ Effect:
 - Ping-pong effect: 10-100× slower than separate cache lines
 ```
 
-*Solution:* Align to cache line boundaries.
+The solution is to align each variable to cache line boundaries, ensuring each variable occupies its own cache line and eliminating false sharing:
 
 ```c
 struct Counter {
@@ -301,6 +299,108 @@ pthread_setaffinity_np(pthread_self(), sizeof(cpuset), &cpuset);
 
 // Allocate memory on local node
 numa_set_localalloc();  // or numa_alloc_onnode(node)
+```
+
+*Complete NUMA optimization example:*
+
+```c
+#include <numa.h>
+#include <pthread.h>
+
+struct thread_data {
+    int node;
+    float* data;
+    int size;
+};
+
+void* worker(void* arg) {
+    struct thread_data* td = (struct thread_data*)arg;
+
+    // 1. Pin thread to NUMA node
+    numa_run_on_node(td->node);
+    numa_set_preferred(td->node);
+
+    // 2. Allocate memory on local node
+    td->data = numa_alloc_onnode(td->size * sizeof(float), td->node);
+
+    // 3. First-touch policy: initialize on same thread
+    for (int i = 0; i < td->size; i++) {
+        td->data[i] = 0.0f;  // Page allocated on local NUMA node
+    }
+
+    // 4. Process data (local access, ~200 cycles)
+    for (int i = 0; i < td->size; i++) {
+        td->data[i] += compute(td->data[i]);
+    }
+
+    return NULL;
+}
+
+int main() {
+    int num_nodes = numa_num_configured_nodes();
+    pthread_t threads[num_nodes];
+    struct thread_data td[num_nodes];
+
+    for (int i = 0; i < num_nodes; i++) {
+        td[i].node = i;
+        td[i].size = 1000000;
+        pthread_create(&threads[i], NULL, worker, &td[i]);
+    }
+
+    for (int i = 0; i < num_nodes; i++) {
+        pthread_join(threads[i], NULL);
+    }
+}
+// Result: All accesses local, optimal performance
+```
+
+*Detecting NUMA problems:*
+
+```bash
+# Check NUMA statistics
+numastat
+# High "numa_foreign" or "numa_miss" indicates remote access
+
+# Profile NUMA access patterns
+perf stat -e node-loads,node-load-misses,node-stores ./program
+
+# Detailed per-node statistics
+perf mem record -a ./program
+perf mem report --sort=mem,symbol
+
+# Visualize NUMA topology
+lstopo  # from hwloc package
+```
+
+*Common NUMA anti-patterns:*
+
+```c
+// ANTI-PATTERN 1: Master thread allocates, workers access
+float* data = malloc(SIZE);  // Allocated on node 0
+#pragma omp parallel for
+for (int i = 0; i < SIZE; i++) {
+    data[i] = compute(data[i]);  // Threads on node 1 → remote access!
+}
+
+// FIX: First-touch allocation
+float* data = malloc(SIZE);
+#pragma omp parallel for
+for (int i = 0; i < SIZE; i++) {
+    data[i] = 0;  // Each thread touches its portion → local allocation
+}
+#pragma omp parallel for
+for (int i = 0; i < SIZE; i++) {
+    data[i] = compute(data[i]);  // Now local!
+}
+
+// ANTI-PATTERN 2: Shared queue (hot NUMA node)
+queue_t* shared_queue = create_queue();  // All threads contend on node 0
+
+// FIX: Per-NUMA-node queues
+queue_t* queues[num_nodes];
+for (int i = 0; i < num_nodes; i++) {
+    queues[i] = numa_alloc_onnode(sizeof(queue_t), i);
+}
 ```
 
 == Simultaneous Multithreading (SMT / Hyper-Threading)

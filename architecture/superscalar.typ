@@ -6,9 +6,7 @@ Superscalar processors execute multiple instructions per cycle using multiple ex
 
 == Superscalar Execution
 
-*Scalar pipeline:* 1 instruction/cycle maximum.
-
-*Superscalar:* N instructions/cycle (N-way superscalar).
+A scalar pipeline can execute at most one instruction per cycle, while a superscalar processor can execute N instructions per cycle, making it an N-way superscalar architecture. Modern CPUs typically implement 4-way superscalar execution: Cycle 1 fetches 4 instructions, Cycle 2 decodes them, Cycle 3 executes all 4 if they are independent and execution units are available, and Cycle 4 retires them. The theoretical maximum is 4 instructions per cycle (IPC), but practical performance typically achieves 2-3 IPC due to data dependencies and resource constraints.
 
 ```
 4-way superscalar (modern CPUs):
@@ -60,7 +58,7 @@ add rax, r8     ; Cycle 4 (depends on rax from cycle 3)
 
 == Out-of-Order Execution (OoO)
 
-*Problem:* In-order execution stalls on long-latency operations.
+In-order execution suffers from stalls during long-latency operations. When a load takes 5 cycles, subsequent dependent instructions must wait, even if other independent instructions could execute. The load completes in cycle 5, the add executes in cycle 6, the multiply (which is independent) must wait until cycle 7, and the subtract completes in cycle 10, for a total of 10 cycles.
 
 ```asm
 ; In-order execution:
@@ -72,7 +70,7 @@ sub  r9,  r10      ; Stalled (waits for mul), independent!
 Total: 5 + 1 + 3 + 1 = 10 cycles
 ```
 
-*Out-of-order execution:* Execute mul and sub while waiting for load.
+Out-of-order execution identifies that the multiply and subtract are independent of the load, allowing them to execute in parallel with it. The load occupies cycles 1-5, the multiply executes during cycles 1-3 in parallel, the subtract completes in cycle 1, and only the dependent add must wait until cycle 6. This reduces total execution time to 6 cycles, compared to 10 cycles for in-order execution.
 
 ```asm
 ld   rax, [rbx]    ; Cycle 1-5
@@ -120,7 +118,7 @@ Total: 6 cycles (vs 10 in-order)
 
 == Register Renaming
 
-*Problem:* False dependencies limit parallelism.
+False dependencies limit parallelism even when no true data flow exists. Write After Read (WAR) hazards occur when a write must wait for a previous read to complete, and Write After Write (WAW) hazards occur when multiple writes to the same register must preserve program order, even though the intermediate values are never used.
 
 ```asm
 ; WAR hazard (Write After Read)
@@ -134,7 +132,9 @@ mov rax, rbx    ; Write rax
 mov rax, rcx    ; Write rax - must preserve program order
 ```
 
-*Solution:* Rename registers to physical registers.
+Register renaming solves this by mapping architectural registers to a larger pool of physical registers. Modern CPUs provide 128 or more physical registers (P0, P1, P2, ..., P127) to back the 16 architectural registers (rax, rbx, ..., r15). The Register Alias Table (RAT) maintains the mapping from architectural to physical registers.
+
+When `mov rax, rbx` executes, rax is mapped to physical register P10 and rbx to P20. The subsequent `mov rax, rcx` remaps rax to a different physical register P11, eliminating the WAW hazard. The following `add rdx, rax` uses the new mapping (P11), creating no dependency on the first instruction. This eliminates false dependencies and increases the instruction window for out-of-order execution.
 
 ```
 Architectural registers: rax, rbx, ..., r15 (16 registers)
@@ -147,8 +147,6 @@ mov rax, rbx    ; P10 ← P20 (rax mapped to P10, rbx to P20)
 mov rax, rcx    ; P11 ← P30 (rax remapped to P11, eliminates WAW)
 add rdx, rax    ; P40 ← P40 + P11 (uses new rax, no dependency)
 ```
-
-*Benefit:* Eliminates false dependencies, increases instruction window.
 
 == Reorder Buffer (ROB)
 
@@ -290,6 +288,87 @@ for (int i = 0; i < N; i += 4) {
 }
 int sum = sum1 + sum2 + sum3 + sum4;
 // IPC ~3.5 (4 independent chains, limited by load throughput)
+```
+
+== Practical Optimization for OoO
+
+*Guideline 1: Expose instruction-level parallelism*
+
+```c
+// BAD: Single accumulator (dependency chain)
+float sum = 0.0f;
+for (int i = 0; i < n; i++) {
+    sum += arr[i];  // IPC ~1.0, serialized by dependency
+}
+
+// GOOD: Multiple accumulators (parallel chains)
+float sum0 = 0, sum1 = 0, sum2 = 0, sum3 = 0;
+for (int i = 0; i < n; i += 4) {
+    sum0 += arr[i];
+    sum1 += arr[i+1];
+    sum2 += arr[i+2];
+    sum3 += arr[i+3];
+}
+float sum = sum0 + sum1 + sum2 + sum3;
+// IPC ~3.0, 3x faster!
+```
+
+*Guideline 2: Keep pipeline full*
+
+```c
+// BAD: Complex conditions in hot loop
+for (int i = 0; i < n; i++) {
+    if (complex_check(arr[i])) {  // Stalls pipeline
+        result[i] = expensive_compute(arr[i]);
+    }
+}
+
+// GOOD: Separate filtering from computation
+int count = 0;
+for (int i = 0; i < n; i++) {
+    if (complex_check(arr[i])) {
+        indices[count++] = i;
+    }
+}
+for (int j = 0; j < count; j++) {
+    result[indices[j]] = expensive_compute(arr[indices[j]]);
+}
+// Better pipelining: fewer branch mispredicts, better prefetching
+```
+
+*Guideline 3: Avoid memory aliasing*
+
+```c
+// BAD: Compiler can't prove independence
+void process(int* a, int* b, int* c, int n) {
+    for (int i = 0; i < n; i++) {
+        c[i] = a[i] + b[i];  // May alias, can't reorder
+    }
+}
+
+// GOOD: Use restrict to guarantee no aliasing
+void process(int* __restrict a, int* __restrict b,
+             int* __restrict c, int n) {
+    for (int i = 0; i < n; i++) {
+        c[i] = a[i] + b[i];  // Proven independent, aggressive optimization
+    }
+}
+```
+
+*Measuring ILP effectiveness:*
+
+```bash
+# Check instruction throughput
+perf stat -e uops_issued.any,uops_executed.thread ./program
+
+# High IPC but low utilization → frontend bottleneck
+# Low IPC with high backend stalls → dependencies or memory
+
+# Port utilization (Intel)
+perf stat -e uops_dispatched_port.port_0,\
+uops_dispatched_port.port_1,\
+uops_dispatched_port.port_5 ./program
+# Balanced usage across ports = good ILP
 ```
 
 == References

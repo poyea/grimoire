@@ -6,7 +6,7 @@ Branch prediction guesses the outcome and target of branches to maintain pipelin
 
 == Cost of Misprediction
 
-*Pipeline flush penalty:*
+When a branch is mispredicted, the pipeline must be flushed, incurring a significant performance penalty. Modern CPUs have pipeline depths of 16-20 stages, resulting in misprediction penalties of 10-20 cycles. For example, with one branch per five instructions and a 5% mispredict rate, the branch overhead calculates to 0.2 × 0.05 × 15 = 0.15 cycles per instruction (CPI penalty).
 
 ```
 Pipeline depth: 16-20 stages (modern CPUs)
@@ -18,35 +18,31 @@ Branch overhead = 0.2 × 0.05 × 15 = 0.15 CPI penalty
 
 == Branch Types
 
-*Conditional branches:*
+Conditional branches evaluate a condition and may or may not be taken depending on the outcome:
 ```asm
 cmp rax, rbx
 je  target      ; Taken or not taken?
 ```
 
-*Unconditional branches:*
+Unconditional branches always alter the control flow. The `jmp` instruction always jumps to the target, `call` jumps and pushes the return address onto the stack, while `ret` returns to the address predicted from the return address stack:
 ```asm
 jmp target      ; Always taken
 call func       ; Always taken + push return
 ret             ; Return address predicted from stack
 ```
 
-*Indirect branches:*
+Indirect branches have targets that are unknown until runtime, commonly used for virtual function calls and switch statements:
 ```asm
 jmp [rax]       ; Target unknown until runtime (virtual functions, switch)
 ```
 
 == Static Prediction
 
-*Compiler hints (legacy):*
-- Backward branches (loops): Predict taken
-- Forward branches: Predict not taken
-
-*Performance:* ~60-70% accuracy (inadequate for modern CPUs).
+Static prediction uses compiler hints to guess branch outcomes. Backward branches, typically found in loops, are predicted as taken, while forward branches are predicted as not taken. This legacy approach achieves approximately 60-70% accuracy, which is inadequate for modern CPU performance requirements.
 
 == Dynamic Branch Prediction
 
-*1-Bit Predictor:* Remember last outcome.
+A 1-bit predictor remembers only the last branch outcome. This simple approach has a significant problem with loops: on the last iteration, it mispredicts the transition from taken to not taken, and on the first iteration of the next loop invocation, it mispredicts again when transitioning from not taken to taken, resulting in two mispredicts per loop.
 
 ```
 State: Taken | Not Taken
@@ -57,7 +53,7 @@ Problem: Loop with N iterations
 - 2 mispredicts per loop (poor for tight loops)
 ```
 
-*2-Bit Saturating Counter:* Hysteresis.
+The 2-bit saturating counter introduces hysteresis, using four states: strongly not taken (00), weakly not taken (01), weakly taken (10), and strongly taken (11). When a branch is taken, the counter increments and saturates at 11; when not taken, it decrements and saturates at 00. The prediction is "taken" for states 10 and 11, and "not taken" for states 00 and 01. This approach provides a key benefit: a single anomalous outcome does not immediately change the prediction, and a loop with N iterations produces only one mispredict at the end.
 
 ```
 States: 00 (Strongly Not Taken)
@@ -76,9 +72,9 @@ Loop with N iterations: Only 1 mispredict at end
 
 == Branch Target Buffer (BTB)
 
-*Problem:* Need predicted target address early in pipeline.
+The Branch Target Buffer (BTB) solves the problem of needing the predicted target address early in the pipeline. It functions as a cache that maps branch program counter values to their target addresses.
 
-*BTB:* Cache mapping branch PC → target address.
+Each BTB entry contains the branch PC as a tag, the target address, the branch type (conditional, call, return, or indirect), and prediction bits implementing a 2-bit counter. The lookup occurs in parallel with instruction fetch: the PC is hashed to determine a BTB index, the tag is compared to check for a hit, and if a hit occurs, the predictor decides whether the branch is taken or not taken and fetches from the target address. On a miss, the predictor assumes the branch is not taken and fetches sequentially.
 
 ```
 BTB Entry:
@@ -94,15 +90,12 @@ Lookup (parallel with instruction fetch):
 4. If miss: Predict not taken (fetch sequentially)
 ```
 
-*BTB size:* 4096-8192 entries typical (Intel Skylake: 4K entries).
-
-*BTB miss:* First encounter of branch → predict not taken → mispredict if taken.
+Typical BTB sizes range from 4096 to 8192 entries, with Intel Skylake featuring 4K entries. When a branch is encountered for the first time and causes a BTB miss, the predictor assumes it is not taken, which results in a misprediction if the branch is actually taken.
 
 == Two-Level Adaptive Predictors
 
-*Key insight:* Branch outcome correlates with recent branch history [Yeh & Patt 1991].
+Two-level adaptive predictors exploit the key insight that branch outcomes correlate with recent branch history [Yeh & Patt 1991]. For example, consider two branches where Branch B's outcome depends on Branch A's behavior:
 
-*Example:*
 ```c
 if (x < 0)      // Branch A
     y = -x;
@@ -110,7 +103,9 @@ if (y > 100)    // Branch B (correlates with A!)
     z = 100;
 ```
 
-*Global History Register (GHR):* Track last N branch outcomes (N-bit shift register).
+The Global History Register (GHR) tracks the last N branch outcomes using an N-bit shift register. The Pattern History Table (PHT) is indexed by XORing the GHR with the branch PC to achieve better distribution, with each PHT entry containing a 2-bit counter.
+
+During prediction, the processor reads the GHR, computes the index by XORing GHR with the PC, reads the 2-bit counter from PHT[index], and makes the prediction. After the branch resolves, the GHR is updated by shifting left and ORing with the outcome, and the PHT[index] is updated based on the actual outcome.
 
 ```
 GHR = 10110  (last 5 branches: TNTTNT)
@@ -129,11 +124,13 @@ Update:
 2. Update PHT[index] based on outcome
 ```
 
-*Performance:* ~90-95% accuracy for integer code.
+This approach achieves approximately 90-95% accuracy for integer code.
 
 == TAGE Predictor (Tagged Geometric History)
 
-*State-of-the-art predictor [Seznec & Michaud 2006]:*
+The TAGE predictor represents the state-of-the-art in branch prediction [Seznec & Michaud 2006]. It uses multiple Pattern History Tables with geometrically increasing history lengths: 2, 4, 8, 16, 32, up to 1024 entries.
+
+During lookup, all PHTs are checked in parallel, prioritizing the longest history first. The prediction comes from the longest matching history entry, which provides the most specific context. If no match is found, the predictor falls back to a base predictor. Updates occur when mispredictions happen: the predictor allocates an entry in a longer-history table to learn the pattern, and unused entries are aged out over time.
 
 ```
 Multiple PHTs with different history lengths: 2, 4, 8, 16, 32, ..., 1024
@@ -148,15 +145,13 @@ Update:
 - Age out unused entries
 ```
 
-*Performance:* 97-99% accuracy.
-
-*Intel implementation:* Variants of TAGE in modern CPUs (proprietary details).
+The TAGE predictor achieves 97-99% accuracy. Intel uses variants of TAGE in modern CPUs, though the specific implementation details remain proprietary.
 
 == Return Address Stack (RAS)
 
-*Problem:* `ret` instruction has unpredictable target (depends on call chain).
+The `ret` instruction presents a prediction problem because its target depends on the call chain and is therefore unpredictable using standard techniques. The solution is a hardware stack that tracks return addresses.
 
-*Solution:* Hardware stack tracks return addresses.
+When a `call` instruction executes, the return address is pushed onto the RAS before jumping to the function. When a `ret` instruction executes, the return address is popped from the RAS, and the CPU predicts a return to that popped address. Typical RAS sizes range from 16 to 32 entries.
 
 ```
 call func:
@@ -170,7 +165,7 @@ ret:
 RAS size: 16-32 entries typical
 ```
 
-*RAS overflow:* Deep recursion exceeds RAS → stack wraps → mispredicts.
+RAS overflow occurs when deep recursion exceeds the RAS capacity, causing the stack to wrap around and resulting in mispredictions. For example, with a 40-level recursion and a 32-entry RAS, overflows occur at depths greater than 32, and returns at depth 33 and beyond will mispredict due to RAS wraparound:
 
 ```c
 // 40 levels of recursion, RAS size = 32
@@ -183,7 +178,7 @@ void deep_recursion(int n) {
 
 == Indirect Branch Prediction
 
-*Challenge:* Virtual function calls, function pointers, switch statements.
+Indirect branches present a significant challenge because their targets are determined at runtime. Common sources include virtual function calls, function pointers, and switch statements. For example, a virtual function call through a vtable has an unknown target until the object type is resolved:
 
 ```cpp
 class Base {
@@ -195,7 +190,7 @@ void call_virtual(Base* obj) {
 }
 ```
 
-*Target cache:* Store recent targets indexed by branch PC.
+The target cache addresses this challenge by storing recent targets indexed by the branch PC. Each entry contains the branch PC as a tag and 2-4 recent targets maintained with an LRU replacement policy. The predictor returns the most recent target for a given PC, achieving accuracy of 80-90% depending on the degree of polymorphism.
 
 ```
 Indirect Target Cache:
@@ -206,11 +201,11 @@ Prediction: Return most recent target for this PC
 Accuracy: 80-90% (depends on polymorphism degree)
 ```
 
-*Advanced:* Tagged target predictors using call-site history.
+Advanced implementations use tagged target predictors that incorporate call-site history to improve prediction accuracy.
 
 == Predication (Branchless Code)
 
-*Alternative to prediction:* Eliminate branch via conditional move.
+Predication offers an alternative to branch prediction by eliminating the branch entirely through conditional move instructions. The branching version uses a jump that may be mispredicted, while the predicated version executes a conditional move that avoids branches altogether:
 
 ```asm
 ; Branching version:
@@ -227,16 +222,14 @@ No branch → no misprediction penalty
 Cost: Always execute both paths (wastes work if condition predictable)
 ```
 
-*When to use:*
-- Unpredictable branches (< 90% accuracy)
-- Short code sequences (1-3 instructions)
-- No side effects (cmov safe only for simple operations)
+The benefit of predication is that it eliminates misprediction penalties, but the cost is that both paths always execute, wasting work when the condition is highly predictable.
 
-*Compiler flags:* `-fno-if-conversion` disables automatic predication.
+Predication is most effective for unpredictable branches with less than 90% accuracy, short code sequences of 1-3 instructions, and operations without side effects (since `cmov` is only safe for simple operations). The compiler flag `-fno-if-conversion` can be used to disable automatic predication.
 
 == Software Hints
 
-*Likely/unlikely attributes (C++20):*
+C++20 provides likely and unlikely attributes that guide the compiler's code generation. The `[[likely]]` attribute suggests that a path is frequently executed, prompting the compiler to place the code inline, while `[[unlikely]]` indicates a cold path that the compiler may outline:
+
 ```cpp
 if (x > 0) [[likely]] {
     // Hot path - compiler places code inline
@@ -245,14 +238,15 @@ if (x > 0) [[likely]] {
 }
 ```
 
-*Builtin hints (GCC/Clang):*
+GCC and Clang provide builtin hints through `__builtin_expect`, where the second argument indicates the expected value:
+
 ```cpp
 if (__builtin_expect(ptr != NULL, 1)) {  // Likely true
     // Hot path
 }
 ```
 
-*Effect:* Code layout optimization (not direct prediction control on modern CPUs).
+These hints primarily affect code layout optimization rather than directly controlling prediction on modern CPUs.
 
 == Measurement
 
@@ -268,6 +262,88 @@ perf stat -e branches,branch-misses ./program
 ```bash
 perf record -e branch-misses ./program
 perf report
+
+# Detailed branch types (Intel)
+perf stat -e br_inst_retired.conditional,\
+br_misp_retired.conditional,\
+br_inst_retired.near_call,\
+br_misp_retired.near_call ./program
+```
+
+== Practical Optimization Techniques
+
+*1. Profile-Guided Optimization (PGO):*
+
+```bash
+# Step 1: Compile with profiling
+gcc -O3 -fprofile-generate code.c -o program
+
+# Step 2: Run with representative workload
+./program < typical_input.txt
+
+# Step 3: Compile with profile data
+gcc -O3 -fprofile-use code.c -o program_optimized
+
+# Benefits: 5-15% speedup from better:
+# - Code layout (hot paths inline, cold paths outlined)
+# - Branch prediction hints
+# - Inlining decisions
+```
+
+*2. Sorting data for better predictability:*
+
+```c
+// BAD: Random order (50% mispredicts)
+int sum = 0;
+for (int i = 0; i < n; i++) {
+    if (data[i] > threshold) {
+        sum += data[i];
+    }
+}
+// Branch miss rate: ~50% if data random
+
+// GOOD: Sort first (0% mispredicts after initial transient)
+qsort(data, n, sizeof(int), compare);
+for (int i = 0; i < n; i++) {
+    if (data[i] > threshold) {  // Predictable: all false, then all true
+        sum += data[i];
+    }
+}
+// Branch miss rate: <1%
+// Note: Only worthwhile if data reused multiple times
+```
+
+*3. Branch elimination with computation:*
+
+```c
+// Instead of:
+if (x < 0) x = -x;
+
+// Use:
+int mask = x >> 31;      // Arithmetic shift: -1 if negative, 0 if positive
+x = (x ^ mask) - mask;   // Branchless absolute value
+
+// Or compiler intrinsic:
+x = abs(x);  // Often compiled to branchless code
+```
+
+*4. Early exit optimization:*
+
+```c
+// BAD: Check condition on every iteration
+for (int i = 0; i < 1000000; i++) {
+    if (unlikely_condition) break;  // Mispredicted 999,999 times!
+    work(i);
+}
+
+// GOOD: Hoist check outside hot path
+bool should_continue = true;
+for (int i = 0; i < 1000000 && should_continue; i++) {
+    work(i);
+    if (i % 1000 == 0) {  // Check less frequently
+        should_continue = !unlikely_condition;
+    }
+}
 ```
 
 == References

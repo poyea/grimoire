@@ -6,9 +6,7 @@ Memory hierarchy bridges the speed gap between fast CPU registers and slow main 
 
 == The Memory Wall
 
-*Problem:* CPU speed increased 50%/year (1980-2005), DRAM latency improved only 7%/year [Hennessy & Patterson 2017].
-
-*Result:* Memory latency gap.
+The memory wall problem arose because CPU speeds increased at approximately 50% per year from 1980 to 2005, while DRAM latency improved by only 7% per year [Hennessy & Patterson 2017]. This disparity created an ever-widening memory latency gap. In 1980, a memory access cost just one CPU cycle, but by 2020, the same access required 200 cycles due to the dramatic difference in improvement rates.
 
 ```
 Year  CPU Cycle Time  DRAM Latency  Latency (cycles)
@@ -19,9 +17,7 @@ Year  CPU Cycle Time  DRAM Latency  Latency (cycles)
 2020        0.3 ns        60 ns          200
 ```
 
-*Without caches:* Every memory access = 200 cycle stall → CPU spends 99% time waiting.
-
-*With caches:* 95% hit rate, 4 cycle L1 → average = 0.95×4 + 0.05×200 = 13.8 cycles (14x speedup).
+Without caches, every memory access would incur a 200-cycle stall, causing the CPU to spend 99% of its time waiting. With caches, assuming a 95% hit rate and 4-cycle L1 latency, the average access time becomes 0.95×4 + 0.05×200 = 13.8 cycles, providing a 14x speedup.
 
 == Cache Hierarchy Overview
 
@@ -53,12 +49,7 @@ Year  CPU Cycle Time  DRAM Latency  Latency (cycles)
                       Bandwidth: ~20-50 GB/s (per channel)
 ```
 
-*Cache line:* 64 bytes (all modern CPUs). Unit of transfer between cache levels.
-
-*Why 64 bytes?*
-- Spatial locality: Adjacent data often accessed together
-- Bus efficiency: Amortize address transfer over 64 bytes
-- Tradeoff: Too large → waste bandwidth, too small → more transfers
+The cache line is the fundamental unit of transfer between cache levels, with a standard size of 64 bytes across all modern CPUs. This size was chosen for several reasons: spatial locality means adjacent data is often accessed together, bus efficiency benefits from amortizing the address transfer overhead across 64 bytes of data, and it represents an optimal tradeoff where larger sizes would waste bandwidth on unused data while smaller sizes would require more frequent transfers.
 
 == Cache Organization
 
@@ -75,7 +66,7 @@ Example: 32 KB cache, 64-byte lines
 Lookup: Index selects cache line, compare tag, if match → hit
 ```
 
-*Direct-mapped problem:* Two addresses with same index → conflict misses.
+Direct-mapped caches suffer from a critical problem: when two addresses map to the same index, conflict misses occur. A pathological case arises when the stride equals the cache size, resulting in zero hit rate:
 
 ```cpp
 // Pathological case: stride = cache_size
@@ -85,7 +76,7 @@ for (int i = 0; i < 8192; i += 512) {
 }
 ```
 
-*Set-associative cache:*
+Set-associative caches address this problem by providing N cache lines per set. For example, a 32 KB cache with 64-byte lines and 8-way associativity uses 6 bits for the offset, 6 bits for the set index (giving 64 sets), and the remaining bits for the tag. The lookup process uses the index to select a set of 8 lines, then checks all 8 tags in parallel.
 
 ```
 N-way set associative: N cache lines per set
@@ -100,13 +91,7 @@ Example: 32 KB, 64-byte lines, 8-way associative
 Lookup: Index selects set of 8 lines, check all 8 tags in parallel
 ```
 
-*Associativity tradeoffs:*
-- Higher associativity: Fewer conflict misses, more complex/slower lookup
-- L1: 8-way typical (fast lookup required)
-- L2: 8-16 way
-- L3: 16-20 way (larger capacity, can afford complexity)
-
-*Fully associative:* Any line can go anywhere. Used for TLB (small, needs fast lookup).
+The choice of associativity involves tradeoffs: higher associativity reduces conflict misses but increases lookup complexity and latency. L1 caches typically use 8-way associativity to maintain fast lookups, L2 caches use 8-16 way, while L3 caches can afford 16-20 way associativity given their larger capacity and less stringent latency requirements. Fully associative caches, where any line can be placed anywhere, are used for small structures like TLBs that require fast lookups.
 
 == Cache Replacement Policies
 
@@ -156,21 +141,13 @@ Example: L1 with 95% hit rate
 AMAT = 4 + 0.05 × 200 = 14 cycles average
 ```
 
-*Inclusive vs exclusive caches:*
-
-*Inclusive (Intel):* L3 contains everything in L1/L2.
-- Pro: Simple coherence (check L3 only)
-- Con: Wasted capacity (duplication)
-
-*Exclusive (AMD Zen):* L3 contains only evicted data from L1/L2.
-- Pro: Effective capacity = L1 + L2 + L3
-- Con: Complex coherence
+Cache hierarchies can be organized as either inclusive or exclusive. In Intel's inclusive design, the L3 cache contains everything present in L1 and L2 caches. This approach simplifies coherence protocols since checking only the L3 is sufficient, but wastes capacity due to duplication. AMD's Zen architecture uses an exclusive design where L3 contains only data evicted from L1 and L2, providing an effective capacity equal to the sum of all cache levels, though at the cost of more complex coherence management.
 
 == Three C's of Cache Misses
 
-*Compulsory (cold) misses:* First access to data - unavoidable.
+Compulsory or cold misses occur on the first access to data and are unavoidable by definition.
 
-*Capacity misses:* Working set larger than cache.
+Capacity misses happen when the working set exceeds the cache size. For example, when processing an 8 MB array with only a 4 MB L3 cache, each access evicts previously loaded data, resulting in misses on every access:
 
 ```cpp
 // Working set = 8 MB, L3 = 4 MB → capacity misses
@@ -180,7 +157,7 @@ for (int i = 0; i < 2000000; i++) {
 }
 ```
 
-*Conflict misses:* Addresses map to same cache set.
+Conflict misses occur when multiple addresses map to the same cache set despite sufficient total capacity. This thrashing behavior can dramatically degrade performance:
 
 ```cpp
 // Two arrays, same alignment mod cache size
@@ -192,7 +169,7 @@ for (int i = 0; i < N; i++) {
 }
 ```
 
-*Solution:* Pad arrays, align differently, or use cache-oblivious algorithms.
+Solutions include padding arrays to change alignment, aligning them differently in memory, or using cache-oblivious algorithms that perform well regardless of cache parameters.
 
 == Cache Line States (MESI Protocol)
 
@@ -251,14 +228,9 @@ for (int i = 0; i < N; i += 10) {
 }
 ```
 
-*Prefetch distance:* How far ahead to fetch (tunable, ~10-20 cache lines typical).
+Prefetch distance, which determines how far ahead data is fetched, is tunable with typical values of 10-20 cache lines. The effectiveness of prefetching varies dramatically by access pattern: sequential access eliminates 90-95% of misses, constant-stride access eliminates 80-90%, while random access patterns see no benefit due to the absence of detectable patterns.
 
-*Prefetch effectiveness:*
-- Sequential: 90-95% of misses eliminated
-- Stride: 80-90% eliminated
-- Random: 0% (no pattern)
-
-*Software prefetch:*
+Software prefetching allows explicit control through compiler intrinsics. The parameters specify the address to prefetch, whether the access will be a write (1) or read (0), and the temporal locality level (0-3):
 
 ```cpp
 // Explicit prefetch hint
@@ -270,12 +242,7 @@ for (int i = 0; i < N; i++) {
 // Parameters: address, write(1)/read(0), temporal locality (0-3)
 ```
 
-*When to use software prefetch:*
-- Linked lists (unpredictable next pointers)
-- Complex data structures
-- Known future access not detectable by hardware
-
-*Cost:* Prefetch uses cache bandwidth. Over-prefetching can evict useful data.
+Software prefetch is most beneficial for linked lists where next pointers are unpredictable, complex data structures, and cases where future accesses are known but not detectable by hardware prefetchers. However, prefetching consumes cache bandwidth, and over-prefetching can evict useful data, potentially harming performance.
 
 == Cache-Conscious Programming
 
@@ -321,6 +288,146 @@ for (int ii = 0; ii < N; ii += B)
             C[i][j] += A[i][k] * B[k][j];
 
 // Speedup: 5-10x for large N (cache misses reduced dramatically)
+```
+
+*Modern CPU cache sizes (2023-2024):*
+
+```
+Intel Raptor Lake (13th gen):
+- L1: 48 KB I-cache + 32 KB D-cache per P-core
+- L2: 2 MB per P-core, 4 MB shared per E-core cluster
+- L3: 36 MB shared (inclusive)
+
+AMD Zen 4 (Ryzen 7000):
+- L1: 32 KB I-cache + 32 KB D-cache per core
+- L2: 1 MB per core (exclusive)
+- L3: 32 MB shared per CCD (exclusive)
+- Effective capacity: L2 + L3 = 40 MB (due to exclusivity)
+
+Apple M3:
+- L1: 192 KB I-cache + 128 KB D-cache per P-core
+- L2: 16 MB shared per core cluster
+- L3 (System Level Cache): 24-32 MB
+```
+
+== Real-World Optimization Examples
+
+*Example 1: Matrix transpose optimization*
+
+```c
+// BAD: Column-major access (cache miss on every access)
+void transpose_naive(float* A, float* B, int n) {
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            B[j*n + i] = A[i*n + j];  // B[j][i] = A[i][j]
+}
+// Performance: ~50 cycles per element (L1 miss rate: 90%)
+
+// GOOD: Blocked transpose (tile fits in cache)
+void transpose_blocked(float* A, float* B, int n) {
+    const int BLOCK = 32;  // 32×32 floats = 4 KB (fits in L1)
+    for (int i = 0; i < n; i += BLOCK)
+        for (int j = 0; j < n; j += BLOCK)
+            for (int ii = i; ii < min(i+BLOCK, n); ii++)
+                for (int jj = j; jj < min(j+BLOCK, n); jj++)
+                    B[jj*n + ii] = A[ii*n + jj];
+}
+// Performance: ~4 cycles per element (L1 miss rate: 10%)
+// Speedup: 12x
+```
+
+*Example 2: Structure of Arrays vs Array of Structures*
+
+```c
+// BAD: Array of Structures (poor spatial locality)
+struct Particle {
+    float x, y, z;     // Position
+    float vx, vy, vz;  // Velocity
+    float mass;        // 28 bytes per particle
+    float padding;     // 32 bytes with padding
+};
+
+struct Particle particles[10000];
+
+void update_positions(struct Particle* p, int n, float dt) {
+    for (int i = 0; i < n; i++) {
+        p[i].x += p[i].vx * dt;  // Loads entire 32-byte struct
+        p[i].y += p[i].vy * dt;  // Only use 12 bytes, waste 20 bytes
+        p[i].z += p[i].vz * dt;  // bandwidth per cache line!
+    }
+}
+// Cache line utilization: 37.5% (12/32 bytes used)
+
+// GOOD: Structure of Arrays (perfect spatial locality)
+struct ParticlesSoA {
+    float x[10000];
+    float y[10000];
+    float z[10000];
+    float vx[10000];
+    float vy[10000];
+    float vz[10000];
+};
+
+void update_positions_soa(struct ParticlesSoA* p, int n, float dt) {
+    for (int i = 0; i < n; i++) {
+        p->x[i] += p->vx[i] * dt;  // Sequential access
+        p->y[i] += p->vy[i] * dt;  // Perfect prefetching
+        p->z[i] += p->vz[i] * dt;  // 100% cache line utilization
+    }
+}
+// Cache line utilization: 100% (16 floats per 64-byte line)
+// Speedup: 2-3x
+```
+
+*Example 3: Loop fusion for cache reuse*
+
+```c
+// BAD: Multiple passes (evict data between loops)
+for (int i = 0; i < n; i++)
+    a[i] = b[i] + c[i];
+
+for (int i = 0; i < n; i++)
+    d[i] = a[i] * 2.0f;
+
+for (int i = 0; i < n; i++)
+    e[i] = d[i] + 1.0f;
+// Problem: 'a' and 'd' evicted from cache between loops
+
+// GOOD: Fused loop (keep data in cache)
+for (int i = 0; i < n; i++) {
+    float temp1 = b[i] + c[i];
+    float temp2 = temp1 * 2.0f;
+    e[i] = temp2 + 1.0f;
+}
+// Benefit: Data stays in registers/L1, no intermediate array storage
+// Speedup: 3-4x for large n
+```
+
+== Cache-Oblivious Algorithms
+
+Cache-oblivious algorithms perform well across all cache levels without knowing cache parameters [Frigo et al. 1999].
+
+*Cache-oblivious matrix multiply:*
+
+```c
+// Recursive divide-and-conquer automatically adapts to cache size
+void matmul_recursive(float* A, float* B, float* C,
+                      int n, int i0, int j0, int k0) {
+    if (n <= 32) {  // Base case: small enough for L1
+        for (int i = 0; i < n; i++)
+            for (int k = 0; k < n; k++)
+                for (int j = 0; j < n; j++)
+                    C[(i0+i)*N + (j0+j)] +=
+                        A[(i0+i)*N + (k0+k)] * B[(k0+k)*N + (j0+j)];
+    } else {
+        int m = n / 2;  // Divide into quadrants
+        // Recursively multiply 8 subproblems
+        matmul_recursive(A, B, C, m, i0,   j0,   k0);
+        matmul_recursive(A, B, C, m, i0,   j0,   k0+m);
+        // ... 6 more recursive calls
+    }
+}
+// Automatically optimal for L1, L2, L3 without tuning!
 ```
 
 == Cache Performance Measurement
@@ -371,6 +478,83 @@ pqos -e "llc:0=0xf;llc:1=0xf0"
 
 Stores lines evicted from L1 → reduces conflict misses. Transparent to software.
 
+== Debugging Cache Issues
+
+*Detecting cache problems:*
+
+```bash
+# Quick cache health check
+perf stat -e cycles,instructions,L1-dcache-load-misses,LLC-load-misses ./program
+
+# Rule of thumb:
+# L1 miss rate > 10%: Cache thrashing, check data layout
+# LLC miss rate > 30%: Working set too large, consider blocking
+
+# Find hot cache-missing code
+perf record -e mem_load_retired.l3_miss ./program
+perf report --sort=symbol,dso --stdio
+
+# Identify false sharing (multicore)
+perf c2c record -a -- ./program
+perf c2c report --stdio
+# Look for high HITM (cache line modified by another core)
+```
+
+*Common cache-related bugs:*
+
+```c
+// 1. Unintentional cache line sharing
+struct SharedData {
+    int counter1;  // Thread 1 writes
+    int counter2;  // Thread 2 writes (same cache line → false sharing!)
+} __attribute__((packed));
+
+// Fix: Pad to separate cache lines
+struct SharedData {
+    int counter1;
+    char pad1[60];  // Force new cache line
+    int counter2;
+    char pad2[60];
+} __attribute__((aligned(64)));
+
+// 2. Cache pollution from streaming data
+void process_stream(char* huge_buffer, size_t size) {
+    for (size_t i = 0; i < size; i++) {
+        process(huge_buffer[i]);  // Evicts useful cache data!
+    }
+}
+
+// Fix: Use non-temporal stores (bypass cache)
+void process_stream_nt(char* huge_buffer, size_t size) {
+    for (size_t i = 0; i < size; i += 64) {
+        _mm_stream_si64((long long*)&huge_buffer[i], 0);
+    }
+}
+
+// 3. Power-of-2 stride conflict
+int matrix[1024][1024];  // 1024 * 4 bytes = 4096 bytes = cache size!
+for (int i = 0; i < 1024; i++)
+    sum += matrix[i][0];  // Every access conflicts in same cache set!
+
+// Fix: Add padding to break power-of-2 alignment
+int matrix[1024][1025];  // Extra column breaks alignment
+```
+
+*Profiling specific cache issues:*
+
+```bash
+# Cache line splits (unaligned access crosses cache line)
+perf stat -e mem_inst_retired.split_loads,mem_inst_retired.split_stores ./program
+
+# Hardware prefetcher effectiveness
+perf stat -e l1d_pend_miss.pending,l1d_pend_miss.fb_full ./program
+
+# Memory-level parallelism
+perf stat -e cycle_activity.stalls_l1d_miss,\
+cycle_activity.stalls_l2_miss,\
+cycle_activity.stalls_l3_miss ./program
+```
+
 == References
 
 *Primary sources:*
@@ -392,3 +576,5 @@ Fog, A. (2023). Optimizing Software in C++. Technical University of Denmark. Cha
 Smith, A.J. (1982). "Cache Memories." ACM Computing Surveys 14(3): 473-530.
 
 Baer, J-L. & Wang, W-H. (1988). "On the Inclusion Properties for Multi-Level Cache Hierarchies." ISCA '88.
+
+Frigo, M., Leiserson, C.E., Prokop, H., & Ramachandran, S. (1999). "Cache-Oblivious Algorithms." FOCS '99.

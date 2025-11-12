@@ -79,7 +79,7 @@ private:
 
 *Key design decisions:*
 
-**1. Cache line alignment (64 bytes):**
+*1. Cache line alignment (64 bytes):*
 ```cpp
 alignas(64) std::atomic<size_t> head_;
 alignas(64) std::atomic<size_t> tail_;
@@ -87,14 +87,14 @@ alignas(64) std::atomic<size_t> tail_;
 
 Without alignment: Producer writes `head`, invalidates cache line containing `tail` → Consumer stalls on `tail` access = false sharing = 10-100x slower.
 
-**2. Memory ordering:**
+*2. Memory ordering:*
 - `memory_order_relaxed`: No synchronization (local variable only)
 - `memory_order_acquire`: Synchronize with release (read remote variable)
 - `memory_order_release`: Make writes visible to acquire (write remote variable)
 
 *Why not `memory_order_seq_cst`?* Sequential consistency requires full memory barriers (~10-20 cycles). Acquire/release are cheaper (~2-5 cycles) and sufficient for SPSC.
 
-**3. Power-of-2 size:**
+*3. Power-of-2 size:*
 ```cpp
 next_index = (index + 1) & (SIZE - 1);  // Fast modulo
 ```
@@ -136,7 +136,7 @@ if (tail != head_.load(memory_order_acquire)) {     // (4) Load head
 - (1) happens-before (2) (same thread)
 - (2) synchronizes-with (4) (release-acquire pair)
 - (4) happens-before (5) (same thread)
-- **Therefore: (1) happens-before (5)** → Consumer always sees Producer's data
+- *Therefore: (1) happens-before (5)* → Consumer always sees Producer's data
 
 *Without memory_order_release/acquire:* CPU/compiler may reorder (2) before (1) → Consumer reads uninitialized data!
 

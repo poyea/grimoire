@@ -6,7 +6,7 @@ Pipelining overlaps instruction execution: while one instruction executes, the n
 
 == Classic 5-Stage Pipeline
 
-*RISC pipeline stages [Hennessy & Patterson 2017]:*
+The classic RISC pipeline consists of five stages [Hennessy & Patterson 2017]: Instruction Fetch (IF) reads the instruction from the I-cache, Instruction Decode (ID) decodes the opcode and reads registers, Execute (EX) performs ALU operations or address calculations, Memory Access (MEM) handles loads and stores to the D-cache, and Write Back (WB) writes the result to the register file. In steady state, one instruction completes per cycle (CPI = 1) with a latency of 5 cycles per instruction and throughput of 1 instruction/cycle, providing 5x faster execution than a non-pipelined design.
 
 ```
 IF  (Instruction Fetch): Read instruction from I-cache
@@ -27,7 +27,7 @@ Latency: 5 cycles per instruction
 Throughput: 1 instruction/cycle (5x faster than non-pipelined)
 ```
 
-*x86 decode complexity:* Variable-length instructions → multi-stage decode.
+Modern x86 processors face additional decode complexity due to variable-length instructions, requiring multi-stage decode. The simplified x86 pipeline flows from Fetch through Predecode, Decode, Micro-op Queue, Execute, and finally Retire. The decode stages include length decode to determine instruction boundaries, instruction decode to identify the opcode, and micro-op translation to convert CISC instructions to RISC-like μops. Intel Skylake features a 16+ stage pipeline, while AMD Zen 3 uses a 19-stage pipeline.
 
 ```
 Modern x86 pipeline (simplified):
@@ -40,6 +40,27 @@ Decode stages:
 
 Intel Skylake: 16+ stage pipeline
 AMD Zen 3: 19 stage pipeline
+Intel Raptor Lake: 14-18 stages (reduced vs Skylake)
+AMD Zen 4: 19 stages (similar to Zen 3)
+Apple M3: ~16 stages (estimated)
+```
+
+*Modern pipeline characteristics:*
+
+```
+Trend: Moderate depth (14-20 stages) for balance
+- Too shallow: Lower frequency
+- Too deep: Higher misprediction penalty
+- Modern CPUs: 3-4 GHz base, 5+ GHz boost
+
+Pipeline width (decode):
+- Intel P-cores: 6-wide
+- AMD Zen 4: 4-wide
+- Apple M3: 16-wide (!!)
+
+Branch misprediction recovery:
+- ~15-20 cycles typical
+- Determines acceptable misprediction rate (<5%)
 ```
 
 == Pipeline Hazards

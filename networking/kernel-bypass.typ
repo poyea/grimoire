@@ -11,7 +11,7 @@ Kernel networking stack adds 2-5μs latency per packet. Kernel bypass eliminates
 - Context switch: ~1μs
 - Protocol stack (TCP/IP): ~500ns-1μs
 - Memory copies: ~500ns
-- **Total: 2-5μs minimum**
+- *Total: 2-5μs minimum*
 
 *At 10Gbps (1.25GB/s, 64-byte packets = 14.8M PPS):*
 - Kernel processing: 14.8M × 3μs = 44 seconds of CPU per second (impossible!)
@@ -79,19 +79,19 @@ int main(int argc, char** argv) {
 
 *Key components:*
 
-**1. Poll Mode Driver (PMD):**
+*1. Poll Mode Driver (PMD):*
 - No interrupts - CPU continuously polls NIC ring buffer
 - Tight loop checks descriptor "done" bit: ~50-100 cycles per check
 - 100% CPU usage, but 10-100x throughput vs interrupts
 
-**2. Huge pages (2MB/1GB):**
+*2. Huge pages (2MB/1GB):*
 ```bash
 echo 1024 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
 ```
 - Reduces TLB misses: 512x fewer TLB entries (2MB vs 4KB pages)
 - DMA requires physically contiguous memory - huge pages simplify allocation
 
-**3. CPU isolation:**
+*3. CPU isolation:*
 ```bash
 isolcpus=4-7 nohz_full=4-7  # Kernel boot parameters
 ```

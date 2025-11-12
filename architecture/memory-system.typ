@@ -6,13 +6,7 @@ DRAM (Dynamic Random-Access Memory) provides main memory storage. Understanding 
 
 == DRAM Organization
 
-*DRAM cell:* 1 transistor + 1 capacitor = 1 bit.
-
-*Capacitor charge:* Stores bit (charged = 1, discharged = 0).
-
-*Destructive read:* Reading discharges capacitor → must refresh after read.
-
-*Refresh:* Periodic recharge (every 64ms) to prevent data loss → 10-15% overhead.
+A DRAM cell consists of one transistor and one capacitor to store a single bit. The capacitor charge represents the bit value: a charged capacitor stores 1, while a discharged capacitor stores 0. Reading is destructive because it discharges the capacitor, requiring a refresh after each read. Periodic recharging every 64ms prevents data loss, incurring a 10-15% performance overhead.
 
 == DRAM Hierarchy
 
@@ -32,17 +26,11 @@ Chip internals:
   │   └─ Columns (1K-4K columns per bank)
 ```
 
-*Bank:* Independent array, can operate in parallel.
-
-*Row:* 1-8 KB data (page size).
-
-*Column:* Minimal addressable unit (typically 8 bytes).
+Each bank is an independent array that can operate in parallel with other banks. A row contains 1-8 KB of data and represents the page size. The column is the minimal addressable unit, typically 8 bytes.
 
 == DRAM Access
 
-*Row Buffer:* Cache one row per bank (8 KB typical).
-
-*Access pattern:*
+The row buffer acts as a cache for one row per bank, typically holding 8 KB. The DRAM access pattern involves three steps: Row Activate (RAS) loads a row into the row buffer with latency of approximately 15-20 ns (tRCD = RAS-to-CAS delay), Column Access (CAS) reads a column from the row buffer with latency of 10-15 ns, and Precharge closes the row to prepare for the next activate with latency of 15-20 ns (tRP = row precharge time). The total random access latency sums to tRP + tRCD + CAS = 40-55 ns.
 
 ```
 1. Row Activate (RAS): Load row into row buffer
@@ -57,14 +45,14 @@ Chip internals:
 Total random access latency: tRP + tRCD + CAS = 40-55 ns
 ```
 
-*Row buffer hit:* Accessing same row (sequential access).
+A row buffer hit occurs when accessing the same row during sequential access. The first access requires Activate + CAS = 25-35 ns, while subsequent accesses to the same row require only CAS = 10-15 ns, providing a 2-3x speedup.
 
 ```
 First access: Activate + CAS = 25-35 ns
 Subsequent accesses (same row): CAS only = 10-15 ns (2-3x faster!)
 ```
 
-*Row buffer miss:* Accessing different row in same bank.
+A row buffer miss occurs when accessing a different row in the same bank, requiring Precharge (close old row) + Activate (open new row) + CAS = 40-55 ns.
 
 ```
 Precharge (close old row) + Activate (open new row) + CAS = 40-55 ns
@@ -230,6 +218,92 @@ sum3 = arr3[i];  // Bank 2
 - Bandwidth: ~5% reduction
 
 *Use case:* Servers, mission-critical systems (prevent silent corruption).
+
+== Bandwidth Optimization Strategies
+
+*1. Stream efficiently:*
+
+```c
+// BAD: Read-modify-write (3× bandwidth)
+for (int i = 0; i < n; i++)
+    array[i] = 0;  // Read old value, write new value
+
+// GOOD: Write-only stream (1× bandwidth)
+memset(array, 0, n * sizeof(int));  // Or non-temporal stores
+// Or explicit non-temporal:
+for (int i = 0; i < n; i += 16)
+    _mm_stream_si128((__m128i*)&array[i], _mm_setzero_si128());
+```
+
+*2. Prefetch for irregular access:*
+
+```c
+// BAD: Pointer chasing (serialized, ~200 cycles per access)
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+int sum = 0;
+for (struct Node* p = head; p != NULL; p = p->next) {
+    sum += p->data;  // Wait for p→next load before next iteration
+}
+
+// BETTER: Software prefetch (overlaps latency)
+for (struct Node* p = head; p != NULL; p = p->next) {
+    if (p->next) __builtin_prefetch(p->next, 0, 3);  // Prefetch next node
+    if (p->next && p->next->next)
+        __builtin_prefetch(p->next->next, 0, 3);  // Prefetch 2 ahead
+    sum += p->data;
+}
+// Can hide ~50% of latency with good prefetch distance
+```
+
+*3. Maximize row buffer hits:*
+
+```c
+// BAD: Large stride (row buffer misses)
+int matrix[1024][1024];
+for (int col = 0; col < 1024; col++)
+    for (int row = 0; row < 1024; row++)
+        sum += matrix[row][col];  // Stride = 4096 bytes, new row every access
+
+// GOOD: Sequential access (row buffer hits)
+for (int row = 0; row < 1024; row++)
+    for (int col = 0; col < 1024; col++)
+        sum += matrix[row][col];  // Sequential, same row for 4KB
+// Speedup: 3-5× from better DRAM access pattern
+```
+
+*Measuring memory bandwidth:*
+
+```bash
+# Monitor bandwidth usage
+perf stat -e uncore_imc/event=0x04,umask=0x03/,\
+uncore_imc/event=0x04,umask=0x0c/ ./program
+
+# Or use Intel MLC tool
+mlc --loaded_latency  # Shows latency under bandwidth load
+mlc --bandwidth_matrix  # Bandwidth between NUMA nodes
+
+# Simple bandwidth test
+dd if=/dev/zero of=/dev/null bs=1M count=10000 iflag=fullblock
+```
+
+*Modern DDR5 characteristics (2024):*
+
+```
+DDR5-4800:
+- Clock: 2400 MHz (DDR = 4800 MT/s)
+- Bandwidth: 38.4 GB/s per channel
+- Dual-channel: 76.8 GB/s
+- On-die ECC (reliability improvement)
+- Lower voltage: 1.1V (vs 1.2V for DDR4)
+
+Latency comparison:
+DDR4-3200 CL16: ~50ns
+DDR5-4800 CL40: ~50ns (similar despite higher absolute latency)
+```
 
 == References
 

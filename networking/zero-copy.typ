@@ -27,7 +27,7 @@ User buffer               Kernel buffer           NIC buffer
 - User → kernel copy: 1024 × 5ns = 5μs
 - Kernel → NIC copy: 1024 × 5ns = 5μs
 - TCP/IP processing: ~1-2μs
-- **Total: ~11-12μs per packet**
+- *Total: ~11-12μs per packet*
 
 *Memory bandwidth:* Copying 1GB = 2× memory bandwidth (read + write) = 10GB/s on DDR4-2400.
 
@@ -59,7 +59,7 @@ sendfile(socket_fd, file_fd, &offset, file_size);
 *Performance [Pai et al. 2000]:*
 - Traditional: 450 MB/s, 60% CPU
 - sendfile(): 900 MB/s, 30% CPU
-- **2x throughput, 50% CPU reduction**
+- *2x throughput, 50% CPU reduction*
 
 *Limitation:* Only works for file → socket. Cannot modify data in transit (no encryption, compression).
 

@@ -6,14 +6,11 @@ The Central Processing Unit executes instructions stored in memory. Understandin
 
 == Instruction Set Architecture (ISA)
 
-*ISA defines:* Instructions, registers, addressing modes, memory model - the contract between hardware and software.
+The Instruction Set Architecture defines the contract between hardware and software, specifying the instructions, registers, addressing modes, and memory model that software can rely upon.
 
-*Major ISAs:*
-- *x86-64 (AMD64):* Complex Instruction Set Computer (CISC), variable-length encoding, 16 GP registers
-- *ARM (AArch64):* Reduced Instruction Set Computer (RISC), fixed-length encoding, 31 GP registers
-- *RISC-V:* Open RISC ISA, modular extensions
+The major ISAs in use today include x86-64 (AMD64), which is a Complex Instruction Set Computer (CISC) with variable-length encoding and 16 general-purpose registers; ARM (AArch64), a Reduced Instruction Set Computer (RISC) with fixed-length encoding and 31 general-purpose registers; and RISC-V, an open RISC ISA with modular extensions.
 
-*CISC vs RISC:*
+The CISC versus RISC distinction involves several key differences. CISC architectures like x86-64 use variable instruction lengths from 1 to 15 bytes, support complex addressing modes with memory operands, have fewer registers (16 general-purpose), and employ microcode for complex instructions. An example is `mov rax, [rbx + rcx*8 + 0x100]`, which performs a memory load with scaling. RISC architectures like ARM and RISC-V use fixed 32-bit instruction lengths, follow a load/store architecture where only load and store instructions access memory, provide many registers (31-32 general-purpose), and use simple, regular instruction formats. An example is `ldr x0, [x1, x2, lsl #3]`, which loads with a shifted offset.
 
 ```
 CISC (x86-64):
@@ -31,7 +28,28 @@ RISC (ARM, RISC-V):
 - Example: ldr x0, [x1, x2, lsl #3]  # Load with shifted offset
 ```
 
-*Historical note:* CISC vs RISC debate (1980s-1990s) largely resolved. Modern CISC (x86) internally translates to RISC-like micro-ops [Intel SDM].
+Historically, the CISC versus RISC debate dominated the 1980s and 1990s, but has since been largely resolved. Modern CISC implementations like x86 internally translate instructions to RISC-like micro-ops [Intel SDM].
+
+*Modern implementations (2023-2024):*
+
+```
+Intel Raptor Lake (13th/14th gen):
+- 8 P-cores (Performance) + 16 E-cores (Efficiency)
+- P-cores: 6-wide decode, 512-entry ROB
+- E-cores: 4-wide decode, smaller structures
+- Hybrid architecture optimized by OS scheduler
+
+AMD Zen 4 (Ryzen 7000):
+- 4-way decode, 256-entry ROB
+- Unified scheduler with 6 ALU ports
+- Improved branch predictor (12K BTB entries)
+- DDR5 support, up to 5.7 GHz boost
+
+Apple M3:
+- ARM-based, 16-wide decode (widest in industry!)
+- Massive reorder buffer (600+ entries estimated)
+- 3nm process, excellent performance-per-watt
+```
 
 == x86-64 Registers
 
@@ -146,11 +164,9 @@ test rax, rax         ; Bitwise AND, sets flags (common idiom for zero check)
 
 == Instruction Latency vs Throughput
 
-*Latency:* Cycles from operand ready to result available (dependency chain).
+Latency measures the cycles from when operands are ready until the result becomes available, which matters for dependency chains. Throughput, measured in cycles per instruction (CPI), indicates how many cycles elapse before another instruction of the same type can be issued, with its reciprocal representing instructions per cycle.
 
-*Throughput (CPI):* Cycles per instruction sustained (reciprocal of throughput = instructions per cycle).
-
-*Example - Modern CPU (Zen 3, Skylake):*
+Modern CPUs like Zen 3 and Skylake exhibit varying latency and throughput characteristics across different instruction types:
 
 | Instruction | Latency (cycles) | Throughput (CPI) | Execution Units |
 |:------------|:----------------:|:----------------:|:----------------|
@@ -161,9 +177,8 @@ test rax, rax         ; Bitwise AND, sets flags (common idiom for zero check)
 | store       | 1 (ST) | 1 | 1 store port + 1 data |
 | idiv        | 20-40 | 20-40 | 1 divider, not pipelined |
 
-*Key insight:* Throughput-bound vs latency-bound code.
+The key insight is the distinction between throughput-bound and latency-bound code. Throughput-bound code consists of independent operations that can be issued in parallel, with all four additions potentially executing in the same cycle using the available ALU ports:
 
-*Throughput-bound:* Independent operations → can issue 4/cycle.
 ```asm
 add rax, rbx     ; Cycle 0
 add rcx, rdx     ; Cycle 0 (parallel)
@@ -172,7 +187,8 @@ add r10, r11     ; Cycle 0 (parallel)
 ; All 4 execute in same cycle (4 ALU ports)
 ```
 
-*Latency-bound:* Dependent operations → serialized by data dependencies.
+Latency-bound code involves dependent operations that are serialized by data dependencies. Each instruction must wait for the previous one to complete, resulting in four cycles total despite each instruction having a 0.25 CPI throughput:
+
 ```asm
 add rax, rbx     ; Cycle 0, result ready cycle 1
 add rax, rcx     ; Cycle 1, waits for rax from cycle 0
@@ -183,7 +199,7 @@ add rax, r8      ; Cycle 3, waits for rax from cycle 2
 
 == Zero-Latency Idioms
 
-*CPU recognizes special patterns:*
+Modern CPUs recognize special instruction patterns that can be executed with zero latency and without using an execution unit. The patterns `xor rax, rax` and `sub rax, rax` both zero the register in 0 cycles, `mov rax, rax` is eliminated as a no-op during register renaming, and `test rax, rax` checks for zero in 0 cycles when the previous writer is known:
 
 ```asm
 xor rax, rax          ; Zero register (0 cycles, no execution unit)
@@ -192,9 +208,7 @@ mov rax, rax          ; No-op, eliminated during rename
 test rax, rax         ; Check if zero (0 cycles if previous writer known)
 ```
 
-*Why it works:* Register renaming tracks that result is constant, eliminates execution.
-
-*Dependency breaking:* Allows out-of-order execution to proceed without waiting.
+This works because register renaming tracks that the result is a constant value and eliminates the actual execution. These idioms provide dependency breaking, allowing out-of-order execution to proceed without waiting for previous operations. A false dependency where the old register value is irrelevant but the CPU waits anyway can be avoided by using the proper form that the CPU recognizes:
 
 ```asm
 ; BAD: False dependency
@@ -338,6 +352,154 @@ perf stat -e cycles,instructions,branches,branch-misses ./program
 - Memory bandwidth usage
 
 *See Performance Analysis section for detailed profiling techniques.*
+
+== Common Performance Pitfalls
+
+*1. False dependencies from partial register writes:*
+
+```asm
+; BAD: Partial register stall
+mov al, 1         ; Write 8-bit subregister
+add rax, rbx      ; Read full 64-bit register → stall waiting for merge
+
+; GOOD: Write full register
+xor eax, eax      ; Zero idiom clears full register
+mov al, 1
+add rax, rbx      ; No stall
+```
+
+*2. Unnecessary memory operations:*
+
+```asm
+; BAD: Load-store redundancy
+mov rax, [mem]
+mov [mem], rax    ; Unnecessary store
+
+; GOOD: Keep in register
+mov rax, [mem]
+; Use rax...
+```
+
+*3. Division performance:*
+
+```c
+// BAD: Division in hot loop (20-40 cycles!)
+for (int i = 0; i < n; i++) {
+    result[i] = data[i] / constant;
+}
+
+// GOOD: Convert to multiplication
+float inv = 1.0f / constant;  // Once, outside loop
+for (int i = 0; i < n; i++) {
+    result[i] = data[i] * inv;  // 4-5 cycles
+}
+```
+
+*4. Branch misprediction in tight loops:*
+
+```c
+// BAD: Unpredictable branch
+for (int i = 0; i < n; i++) {
+    if (data[i] > threshold) {  // Random data → 50% mispredict!
+        sum += data[i];
+    }
+}
+
+// GOOD: Branchless with CMOV
+for (int i = 0; i < n; i++) {
+    int mask = -(data[i] > threshold);  // 0 or -1
+    sum += data[i] & mask;
+}
+```
+
+*5. Cache line splits:*
+
+```c
+// BAD: Structure spans cache lines
+struct Data {
+    char padding[60];
+    int value;  // Crosses 64-byte boundary!
+};
+
+// GOOD: Align to cache line
+struct Data {
+    alignas(64) int value;
+    char padding[60];
+};
+```
+
+== Compiler Optimization Flags
+
+*GCC/Clang optimization levels:*
+
+```bash
+-O0  # No optimization (debugging)
+-O1  # Basic optimization
+-O2  # Recommended for production (balance speed/size)
+-O3  # Aggressive optimization (may increase code size)
+     # Enables: vectorization, loop unrolling, inline functions
+-Os  # Optimize for size
+-Ofast # -O3 + fast-math (non-standard floating point)
+
+# Architecture-specific
+-march=native      # Use all CPU features (AVX2, BMI2, etc.)
+-march=skylake     # Target specific microarchitecture
+-mtune=native      # Tune for CPU without requiring features
+
+# Useful flags
+-ffast-math        # Aggressive FP optimization (breaks IEEE754)
+-funroll-loops     # Unroll loops for better ILP
+-finline-functions # Aggressive inlining
+-fomit-frame-pointer  # Free up rbp register
+
+# Profiling
+-pg                # Generate profiling info for gprof
+-fprofile-generate # First pass for PGO
+-fprofile-use      # Second pass uses profile data
+```
+
+*Performance analysis during compilation:*
+
+```bash
+# See what got vectorized
+gcc -O3 -march=native -fopt-info-vec-all code.c
+
+# Generate assembly
+gcc -S -O3 -march=native code.c -o code.s
+
+# See optimization remarks
+clang -O3 -Rpass=inline -Rpass=vectorize code.c
+```
+
+== Debugging Performance Issues
+
+*Quick diagnosis with perf:*
+
+```bash
+# Is it CPU-bound or memory-bound?
+perf stat -e cycles,instructions,cache-misses,L1-dcache-load-misses ./program
+
+# High IPC (>2): CPU-bound, check for vectorization
+# Low IPC (<1): Likely memory-bound or branch mispredicts
+
+# Check specific bottleneck
+perf stat -e cycles,stalled-cycles-frontend,stalled-cycles-backend ./program
+
+# Frontend stalls: Instruction fetch issues (I-cache, branch prediction)
+# Backend stalls: Execution issues (D-cache, dependencies)
+```
+
+*Assembly inspection:*
+
+```bash
+# Disassemble with Intel syntax (easier to read)
+objdump -d -M intel program | less
+
+# Look for hot spots
+perf record ./program
+perf report
+perf annotate function_name  # See assembly with profiling data
+```
 
 == References
 

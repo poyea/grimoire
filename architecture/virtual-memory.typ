@@ -6,11 +6,7 @@ Virtual memory provides memory abstraction: each process sees isolated, contiguo
 
 == Virtual vs Physical Addresses
 
-*Virtual address space:* 48-bit on x86-64 (256 TB addressable), 48-bit on ARM64.
-
-*Physical address space:* 40-48 bits typical (1-256 TB of RAM).
-
-*Translation:* Virtual Address (VA) → Page Table Walk → Physical Address (PA)
+Modern architectures use 48-bit virtual address spaces on both x86-64 and ARM64, providing 256 TB of addressable memory per process. Physical address spaces typically range from 40 to 48 bits, supporting 1 to 256 TB of actual RAM. The Memory Management Unit (MMU) translates Virtual Addresses (VA) to Physical Addresses (PA) through a page table walk.
 
 ```
 Virtual Address (48-bit):
@@ -101,11 +97,9 @@ VA: 0000 0000 0000 0000 0111 1111 1000 1010 1011 0000 0000 0001 0010 0011 0100
 
 == TLB (Translation Lookaside Buffer)
 
-*Problem:* Page table walk is expensive (800 cycles).
+Page table walks are prohibitively expensive at 800 cycles, making caching essential. The Translation Lookaside Buffer (TLB) caches virtual to physical address translations, dramatically reducing translation overhead.
 
-*Solution:* TLB caches virtual → physical translations.
-
-*TLB structure (x86-64):*
+The TLB structure on x86-64 processors like Intel Skylake includes specialized components. The L1 Data TLB (DTLB) holds 64 entries in a 4-way associative organization for 4 KB pages, with an additional 32 entries for larger 2 MB/4 MB/1 GB pages. The L1 Instruction TLB (ITLB) provides 128 entries in an 8-way associative structure for 4 KB instruction pages. The shared L2 TLB contains 1536 entries in a 12-way associative organization, supporting all page sizes.
 
 ```
 L1 DTLB (Data):     64 entries, 4-way associative, 4 KB pages
@@ -152,19 +146,9 @@ TLB miss: 20-100 cycles (page walk latency)
 
 == Huge Pages
 
-*Problem:* TLB coverage insufficient for large working sets.
+TLB coverage becomes insufficient for large working sets, where the limited number of TLB entries cannot cover all actively used pages. Larger pages provide a solution by increasing the memory range covered by each TLB entry.
 
-*Solution:* Larger pages (2 MB / 1 GB instead of 4 KB).
-
-*2 MB pages (x86-64):*
-- Skip L1 page table → 3-level walk instead of 4
-- TLB coverage: 32 entries × 2 MB = 64 MB
-- 512x better coverage than 4 KB pages
-
-*1 GB pages:*
-- Skip L1 and L2 → 2-level walk
-- TLB coverage: 32 entries × 1 GB = 32 GB
-- 262,144x better coverage than 4 KB pages
+Two-megabyte pages on x86-64 skip the L1 page table level, reducing the page table walk from 4 levels to 3. With 32 TLB entries, 2 MB pages provide 64 MB of coverage, which is 512× better than 4 KB pages. One-gigabyte pages skip both the L1 and L2 page table levels, reducing the walk to just 2 levels. With 32 TLB entries, 1 GB pages cover 32 GB of memory, providing 262,144× better coverage than 4 KB pages.
 
 *Enabling huge pages (Linux):*
 
@@ -211,9 +195,9 @@ Workload: Random access to 8 GB array
 
 == Page Faults
 
-*Page fault types:*
+Page faults occur when the CPU attempts to access memory that is not currently mapped. There are three types, each with different causes and costs.
 
-*1. Minor fault (soft fault):* Page in RAM but not mapped (lazy allocation).
+A minor fault (soft fault) occurs when a page exists in RAM but is not yet mapped in the page tables, typically due to lazy allocation. When `mmap` allocates memory with `MAP_ANONYMOUS`, the page tables are created but physical pages are not allocated until first access. The first write triggers a minor fault, where the kernel allocates a physical page, updates the page table entry, and resumes execution. This costs 5000-20000 cycles (approximately 2-5 μs).
 
 ```cpp
 char* ptr = mmap(NULL, 1GB, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
@@ -224,7 +208,7 @@ ptr[0] = 1;  // First write: minor fault
 // Cost: 5000-20000 cycles (~2-5 μs)
 ```
 
-*2. Major fault (hard fault):* Page on disk (swapped out or file-backed).
+A major fault (hard fault) occurs when the page resides on disk, either swapped out or file-backed. When memory-mapping a file, the first access triggers a major fault where the kernel must read the page from disk. SSD latency is approximately 100 μs, while HDD latency ranges from 5-10 ms, costing over 1,000,000 cycles.
 
 ```cpp
 // mmap file
@@ -236,7 +220,7 @@ char c = data[0];  // First access: major fault
 // Cost: 1,000,000+ cycles
 ```
 
-*3. Invalid access:* Segmentation fault (SIGSEGV).
+An invalid access occurs when the page has no valid mapping, resulting in a segmentation fault (SIGSEGV). Dereferencing a null pointer causes a page fault with the Present bit cleared, and since no valid mapping exists, the kernel sends SIGSEGV to the process.
 
 ```cpp
 char* ptr = NULL;
@@ -415,6 +399,97 @@ numactl --hardware
 ```
 
 *Performance impact:* Remote access 1.5-2x slower. Pin threads to same NUMA node as data.
+
+== Debugging Virtual Memory Issues
+
+*Detecting excessive page faults:*
+
+```bash
+# Monitor page faults
+perf stat -e page-faults,minor-faults,major-faults ./program
+
+# Minor faults > 100k/sec: Check memory allocation patterns
+# Major faults > 100/sec: Likely swapping (very bad!)
+
+# Real-time monitoring
+watch -n 1 'cat /proc/$(pgrep program)/status | grep -E "VmSize|VmRSS|VmSwap"'
+
+# Detailed fault analysis
+perf record -e page-faults ./program
+perf report  # Shows where faults occur
+```
+
+*Common issues and fixes:*
+
+```c
+// ISSUE 1: Lazy allocation causing faults on first access
+char* buffer = mmap(NULL, 1GB, PROT_READ|PROT_WRITE,
+                    MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+// First access: minor fault for every page (256k faults for 1GB!)
+
+// FIX: Pre-fault pages
+madvise(buffer, 1GB, MADV_WILLNEED);  // Hint to pre-populate
+// Or manually touch all pages:
+for (size_t i = 0; i < 1GB; i += 4096)
+    buffer[i] = 0;
+
+// ISSUE 2: TLB thrashing
+int* huge_array = malloc(4GB);  // 1M pages = TLB thrashing
+for (int i = 0; i < 1000000000; i++)
+    sum += huge_array[random() % 1000000000];  // TLB miss on every access
+
+// FIX: Enable huge pages
+echo always > /sys/kernel/mm/transparent_hugepage/enabled
+// Or explicit huge pages
+int* huge_array = mmap(NULL, 4GB, PROT_READ|PROT_WRITE,
+                       MAP_ANONYMOUS|MAP_PRIVATE|MAP_HUGETLB, -1, 0);
+
+// ISSUE 3: COW overhead in fork()
+pid_t pid = fork();
+if (pid == 0) {
+    // Child process
+    large_buffer[0] = 1;  // COW fault on first write to any page!
+}
+
+// FIX: Use threads instead of processes, or use vfork() for exec-only child
+```
+
+*Debugging TLB performance:*
+
+```bash
+# Measure TLB misses
+perf stat -e dTLB-load-misses,dTLB-store-misses,iTLB-load-misses ./program
+
+# Check page table walk cost
+perf stat -e page_walker.walks,page_walker.cycles ./program
+# High cycles/walk ratio indicates expensive walks (DRAM latency)
+
+# Verify huge page usage
+grep Huge /proc/meminfo
+# HugePages_Total should be > 0
+# HugePages_Free should be < HugePages_Total (some in use)
+
+# Per-process huge page usage
+cat /proc/$(pgrep program)/smaps | grep -E 'AnonHugePages|ShmemHugePages'
+```
+
+*Memory mapping debugging:*
+
+```bash
+# View process memory map
+cat /proc/$(pgrep program)/maps
+
+# Example output:
+# 00400000-00500000 r-xp ... /path/to/program   # Code segment
+# 00700000-00800000 rw-p ... [heap]             # Heap
+# 7f0000000000-7f0010000000 rw-p ... [anon]     # mmap region
+#
+# Flags: r=read, w=write, x=execute, p=private, s=shared
+
+# Check for memory leaks via mapping growth
+watch -n 1 'cat /proc/$(pgrep program)/maps | wc -l'
+# Growing count → memory leaks (unmapped regions)
+```
 
 == References
 

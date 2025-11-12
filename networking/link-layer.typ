@@ -32,7 +32,7 @@ The link layer handles physical transmission of bits over a medium. For Ethernet
 *Performance implications:*
 - Small packets: header overhead = 18/64 = 28% for minimum frame
 - Large packets: header overhead = 18/1518 = 1.2%
-- **PPS (Packets Per Second) vs throughput:** 10 Gbps link theoretical max = 14.88 million packets/sec (64-byte frames) or 812K packets/sec (1518-byte frames)
+- *PPS (Packets Per Second) vs throughput:* 10 Gbps link theoretical max = 14.88 million packets/sec (64-byte frames) or 812K packets/sec (1518-byte frames)
 
 *Calculation:* $"PPS" = "Bandwidth" / (("Frame size" + "IFG") × 8)$ where IFG (Inter-Frame Gap) = 12 bytes
 

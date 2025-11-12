@@ -6,7 +6,7 @@ Understanding where time is spent requires measurement tools and techniques. Har
 
 == Performance Counters
 
-*Hardware counters:* CPU tracks events with dedicated registers.
+Hardware counters are dedicated CPU registers that track execution events. Common events include cycles (clock cycles elapsed), instructions (instructions retired), branches (branch instructions executed), branch-misses (mispredicted branches), L1-dcache-loads (L1 data cache loads), L1-dcache-load-misses (L1 data cache misses), LLC-loads (last-level cache loads), and LLC-load-misses (last-level cache misses).
 
 ```
 Common events:
@@ -43,7 +43,7 @@ perf stat --per-thread ./program
 
 == Sampling and Profiling
 
-*Statistical sampling:* Periodically record PC (program counter) of executing instruction.
+Statistical sampling periodically records the program counter (PC) of the executing instruction to identify performance hotspots. The `perf record -g` command records a profile with callgraph information, `perf report` displays hot functions and call chains, and `perf annotate` shows the assembly code annotated with sample counts for a specific function.
 
 ```bash
 # Record profile
@@ -230,23 +230,183 @@ perf stat -e cycles,stalled-cycles-frontend,stalled-cycles-backend ./program
 == Bottleneck Decision Tree
 
 ```
-IPC < 1.0:
-├─ Frontend stalls > 20%?
-│  ├─ Yes: I-cache miss or branch mispredict
-│  └─ No: Check backend
-├─ Backend stalls > 50%?
-│  ├─ L3 miss rate > 10%?
-│  │  ├─ Yes: Memory-bound → improve locality
-│  │  └─ No: Core-bound → reduce dependencies
-│  └─ Branch mispredict > 5%?
-│     ├─ Yes: Improve predictability
-│     └─ No: Check long-latency ops (div, sqrt)
+Step 1: Quick health check
+perf stat -e cycles,instructions,cache-misses,branch-misses ./program
 
-IPC > 2.5:
-└─ Instruction-level parallelism good, check:
-   ├─ Memory bandwidth saturated?
-   ├─ SIMD vectorization opportunities?
-   └─ Multicore scaling?
+IPC = instructions / cycles
+
+IPC < 0.5: Severe bottleneck
+├─ Cache misses > 5%?
+│  ├─ Yes: Memory-bound (see Step 2a)
+│  └─ No: Check branch-misses (see Step 2b)
+
+IPC 0.5-1.5: Moderate bottleneck
+├─ Frontend stalls > 20%?
+│  ├─ Yes: Instruction fetch bottleneck (see Step 3a)
+│  └─ No: Backend bottleneck (see Step 3b)
+
+IPC 1.5-2.5: Good performance
+└─ Optimization opportunities:
+   ├─ Vectorization (see Step 4a)
+   ├─ Multicore parallelism (see Step 4b)
+   └─ Algorithm improvements
+
+IPC > 2.5: Excellent performance
+└─ Check system-level bottlenecks:
+   ├─ Memory bandwidth saturation
+   ├─ I/O wait time
+   └─ Multicore scaling
+
+---
+
+Step 2a: Memory-bound diagnosis
+perf stat -e L1-dcache-load-misses,LLC-load-misses,dTLB-load-misses ./program
+
+├─ L1 miss rate > 10%?
+│  ├─ Yes: Poor data locality
+│  │   Solutions:
+│  │   - Use cache blocking/tiling
+│  │   - Improve data layout (AoS → SoA)
+│  │   - Reduce working set size
+│  └─ No: Check L3
+├─ LLC miss rate > 30%?
+│  ├─ Yes: Working set exceeds LLC
+│  │   Solutions:
+│  │   - Algorithmic changes
+│  │   - Streaming optimizations
+│  │   - Non-temporal stores for write-only data
+│  └─ No: Check TLB
+└─ TLB miss rate > 1%?
+    └─ Yes: Enable huge pages
+        echo always > /sys/kernel/mm/transparent_hugepage/enabled
+
+Step 2b: Branch misprediction diagnosis
+perf record -e branch-misses:pp ./program
+perf report
+
+├─ Mispredict rate > 10%?
+│  Solutions:
+│  - Profile-Guided Optimization (PGO)
+│  - Eliminate branches (use CMOV, masks)
+│  - Sort data for predictability
+│  - Reduce branch count
+
+Step 3a: Frontend bottleneck diagnosis
+perf stat -e idq_uops_not_delivered.core,\
+icache_64b.iftag_miss ./program
+
+├─ I-cache misses high?
+│  Solutions:
+│  - PGO for better code layout
+│  - Reduce code size
+│  - Link-time optimization (LTO)
+└─ Branch mispredicts?
+    See Step 2b
+
+Step 3b: Backend bottleneck diagnosis
+perf stat -e cycle_activity.stalls_mem_any,\
+cycle_activity.stalls_total ./program
+
+├─ Memory stalls > 50%?
+│  └─ See Step 2a (memory-bound)
+└─ Execution stalls?
+    ├─ Long-latency ops (div, sqrt)?
+    │   Solutions:
+    │   - Replace division with multiplication
+    │   - Use faster approximations
+    └─ Data dependencies?
+        Solutions:
+        - Loop unrolling
+        - Break dependency chains
+        - Increase ILP
+
+Step 4a: Vectorization check
+gcc -O3 -march=native -fopt-info-vec-missed code.c
+
+├─ Loops not vectorized?
+│  Solutions:
+│  - Add __restrict to pointers
+│  - Remove loop-carried dependencies
+│  - Simplify control flow
+│  - Use #pragma GCC ivdep
+└─ Verify SIMD usage:
+    perf stat -e fp_arith_inst_retired.256b_packed_single ./program
+
+Step 4b: Multicore scalability
+perf stat -e cache-misses,cycles,instructions -a ./program
+
+├─ Cache misses scale linearly with threads?
+│  └─ False sharing problem
+│      Solutions:
+│      - Pad data to cache line boundaries
+│      - Thread-local storage
+│      - perf c2c to identify hot lines
+└─ Speedup < 0.8 * num_threads?
+    ├─ Load imbalance
+    ├─ Synchronization overhead
+    └─ Memory bandwidth saturation
+```
+
+== Diagnostic Workflow
+
+*Complete performance investigation:*
+
+```bash
+#!/bin/bash
+# Step 1: Baseline measurement
+echo "=== Baseline ==="
+perf stat -e cycles,instructions,cache-references,cache-misses,\
+branches,branch-misses,L1-dcache-load-misses,LLC-load-misses ./program
+
+# Step 2: Identify hot functions
+echo "=== Hot Functions ==="
+perf record -g ./program
+perf report --stdio | head -30
+
+# Step 3: Cache analysis
+echo "=== Cache Analysis ==="
+perf stat -e L1-dcache-loads,L1-dcache-load-misses,\
+LLC-loads,LLC-load-misses,dTLB-load-misses ./program
+
+# Step 4: Branch analysis
+echo "=== Branch Analysis ==="
+perf stat -e branches,branch-misses,\
+br_misp_retired.all_branches ./program
+
+# Step 5: Pipeline stalls
+echo "=== Pipeline Stalls ==="
+perf stat -e cycles,stalled-cycles-frontend,\
+stalled-cycles-backend ./program
+
+# Step 6: Memory bandwidth
+echo "=== Memory Bandwidth ==="
+perf stat -e cpu/event=0xd1,umask=0x01/,\
+cpu/event=0xd1,umask=0x02/ ./program
+
+# Step 7: Top-down analysis (Intel only)
+echo "=== Top-Down Microarchitecture Analysis ==="
+perf stat --topdown ./program
+```
+
+*Interpreting results:*
+
+```bash
+# Example output interpretation:
+# 1,234,567,890 cycles
+# 1,000,000,000 instructions
+# IPC = 1000M / 1234M = 0.81  ← Below ideal (1.5-2.0)
+
+# 50,000,000 branches
+# 2,500,000 branch-misses
+# Miss rate = 2.5M / 50M = 5%  ← Acceptable (<5% is good)
+
+# 100,000,000 cache-references
+# 10,000,000 cache-misses
+# Miss rate = 10%  ← High! Memory-bound workload
+
+# Action: Investigate cache misses
+# perf record -e mem_load_retired.l3_miss ./program
+# perf report → identify functions with most L3 misses
 ```
 
 == Microbenchmarking
