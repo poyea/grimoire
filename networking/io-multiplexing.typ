@@ -162,12 +162,15 @@ io_uring_cqe_seen(&ring, cqe);
 
 == Comparison
 
-| Mechanism | Complexity | Max Connections | Batch Support | Zero-Copy |
-|:----------|:-----------|----------------:|:--------------|:----------|
-| select | $O(n)$ | 1024 | No | No |
-| poll | $O(n)$ | Unlimited | No | No |
-| epoll | $O(1)$ | 100K+ | No | No |
-| io_uring | $O(1)$ | 100K+ | Yes | Yes |
+#table(
+  columns: 5,
+  align: (left, left, right, left, left),
+  table.header([Mechanism], [Complexity], [Max Connections], [Batch Support], [Zero-Copy]),
+  [select], [$O(n)$], [1024], [No], [No],
+  [poll], [$O(n)$], [Unlimited], [No], [No],
+  [epoll], [$O(1)$], [100K+], [No], [No],
+  [io_uring], [$O(1)$], [100K+], [Yes], [Yes],
+)
 
 *Recommendation:*
 - Legacy systems: poll()

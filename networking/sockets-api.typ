@@ -193,16 +193,19 @@ netstat -an | grep TIME_WAIT | wc -l
 
 *System call overhead [Linux 5.x, x86-64]:*
 
-| Operation | Latency | Notes |
-|:----------|--------:|:------|
-| socket() | ~1-2μs | Allocate fd, socket structure |
-| bind() | ~500ns | Update kernel tables |
-| connect() (localhost) | ~30-50μs | Full 3-way handshake |
-| accept() (ready) | ~2-4μs | Pop from accept queue |
-| accept() (blocked) | ~10-20μs | Wake from sleep + context switch |
-| send() (buffered) | ~500ns-2μs | Copy to kernel buffer |
-| recv() (ready) | ~500ns-2μs | Copy from kernel buffer |
-| close() | ~1-3μs | Update state, free resources |
+#table(
+  columns: 3,
+  align: (left, right, left),
+  table.header([Operation], [Latency], [Notes]),
+  [socket()], [~1-2μs], [Allocate fd, socket structure],
+  [bind()], [~500ns], [Update kernel tables],
+  [connect() (localhost)], [~30-50μs], [Full 3-way handshake],
+  [accept() (ready)], [~2-4μs], [Pop from accept queue],
+  [accept() (blocked)], [~10-20μs], [Wake from sleep + context switch],
+  [send() (buffered)], [~500ns-2μs], [Copy to kernel buffer],
+  [recv() (ready)], [~500ns-2μs], [Copy from kernel buffer],
+  [close()], [~1-3μs], [Update state, free resources],
+)
 
 *Key insight:* System call overhead ~= L3 cache miss. Amortize by batching I/O.
 

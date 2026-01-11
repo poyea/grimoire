@@ -529,12 +529,15 @@ Traditional chaining would require following pointers and loading entire entries
 - Cons: more complex than Robin Hood
 
 *Performance comparison (1M inserts, random int keys):*
-| Hash Table Type          | Insert (ms) | Lookup (ms) | Memory (MB) |
-|:-------------------------|------------:|------------:|------------:|
-| std::unordered_map       |         450 |         380 |          48 |
-| Robin Hood (custom)      |         180 |         120 |          32 |
-| absl::flat_hash_map      |         150 |         100 |          28 |
-| tsl::robin_map           |         160 |         110 |          30 |
+#table(
+  columns: 4,
+  align: (left, right, right, right),
+  table.header([Hash Table Type], [Insert (ms)], [Lookup (ms)], [Memory (MB)]),
+  [std::unordered_map], [450], [380], [48],
+  [Robin Hood (custom)], [180], [120], [32],
+  [absl::flat_hash_map], [150], [100], [28],
+  [tsl::robin_map], [160], [110], [30],
+)
 
 *Recommendation:* Use `absl::flat_hash_map` or `tsl::robin_map` for performance-critical code. Fallback to `std::unordered_map` for simplicity.
 

@@ -240,13 +240,16 @@ ibv_post_send(qp, &wr, &bad_wr);  // Async, returns immediately
 
 == Comparison
 
-| Technique | Latency | Throughput | CPU | Kernel Integration | Complexity |
-|:----------|--------:|-----------:|----:|:-------------------|:-----------|
-| Kernel (epoll) | 10-30μs | 1-3M PPS | 20% | Full | Low |
-| XDP | 1-3μs | 24M PPS | 100% | Partial | Medium |
-| AF_XDP | 2-5μs | 10-20M PPS | 100% | Partial | Medium |
-| DPDK | 0.5-1μs | 40-200M PPS | 100% | None | High |
-| RDMA | 1-2μs | 100M msgs/s | 5% | None | Very High |
+#table(
+  columns: 6,
+  align: (left, right, right, right, left, left),
+  table.header([Technique], [Latency], [Throughput], [CPU], [Kernel Integration], [Complexity]),
+  [Kernel (epoll)], [10-30μs], [1-3M PPS], [20%], [Full], [Low],
+  [XDP], [1-3μs], [24M PPS], [100%], [Partial], [Medium],
+  [AF_XDP], [2-5μs], [10-20M PPS], [100%], [Partial], [Medium],
+  [DPDK], [0.5-1μs], [40-200M PPS], [100%], [None], [High],
+  [RDMA], [1-2μs], [100M msgs/s], [5%], [None], [Very High],
+)
 
 *Decision tree:*
 1. Need kernel stack (iptables, routing)? → XDP

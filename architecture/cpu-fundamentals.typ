@@ -168,14 +168,17 @@ Latency measures the cycles from when operands are ready until the result become
 
 Modern CPUs like Zen 3 and Skylake exhibit varying latency and throughput characteristics across different instruction types:
 
-| Instruction | Latency (cycles) | Throughput (CPI) | Execution Units |
-|:------------|:----------------:|:----------------:|:----------------|
-| mov r, r    | 0-1 | 0.25 | Renamed away or ALU |
-| add r, r    | 1 | 0.25 | 4 ALU ports |
-| imul r, r   | 3 | 1 | 1 multiplier |
-| load        | 4-5 | 0.5 | 2 load ports |
-| store       | 1 (ST) | 1 | 1 store port + 1 data |
-| idiv        | 20-40 | 20-40 | 1 divider, not pipelined |
+#table(
+  columns: 4,
+  align: (left, center, center, left),
+  table.header([Instruction], [Latency (cycles)], [Throughput (CPI)], [Execution Units]),
+  [mov r, r], [0-1], [0.25], [Renamed away or ALU],
+  [add r, r], [1], [0.25], [4 ALU ports],
+  [imul r, r], [3], [1], [1 multiplier],
+  [load], [4-5], [0.5], [2 load ports],
+  [store], [1 (ST)], [1], [1 store port + 1 data],
+  [idiv], [20-40], [20-40], [1 divider, not pipelined],
+)
 
 The key insight is the distinction between throughput-bound and latency-bound code. Throughput-bound code consists of independent operations that can be issued in parallel, with all four additions potentially executing in the same cycle using the available ALU ports:
 

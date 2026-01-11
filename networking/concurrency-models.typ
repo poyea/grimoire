@@ -151,13 +151,16 @@ Context* ctx = io_uring_cqe_get_data(cqe);
 
 == Comparison
 
-| Model | Connections | CPU Cores | Complexity | Memory |
-|:------|------------:|----------:|:-----------|-------:|
-| Thread-per-connection | 10K | Full | Low | High (8GB) |
-| Thread pool | 10K | Full | Low | Medium (64MB) |
-| Reactor (epoll) | 100K+ | Single | High | Low (8MB) |
-| Reactor × cores | 100K+ | Full | High | Low (64MB) |
-| Proactor (io_uring) | 100K+ | Full | Medium | Low (64MB) |
+#table(
+  columns: 5,
+  align: (left, right, right, left, right),
+  table.header([Model], [Connections], [CPU Cores], [Complexity], [Memory]),
+  [Thread-per-connection], [10K], [Full], [Low], [High (8GB)],
+  [Thread pool], [10K], [Full], [Low], [Medium (64MB)],
+  [Reactor (epoll)], [100K+], [Single], [High], [Low (8MB)],
+  [Reactor × cores], [100K+], [Full], [High], [Low (64MB)],
+  [Proactor (io_uring)], [100K+], [Full], [Medium], [Low (64MB)],
+)
 
 *Recommendation:*
 - Low concurrency (< 1K): Thread pool (simplicity)

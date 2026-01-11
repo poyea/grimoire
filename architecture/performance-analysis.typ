@@ -456,15 +456,18 @@ BENCHMARK(BM_Operation);
 
 == Tools Summary
 
-| Tool | Purpose | Platform |
-|:-----|:--------|:---------|
-| perf | General profiling, counters | Linux |
-| Intel VTune | Advanced profiling, TMAM | Linux, Windows |
-| AMD uProf | AMD-specific profiling | Linux, Windows |
-| valgrind/cachegrind | Cache simulation | Linux, macOS |
-| gprof | Function-level profiling | Linux, macOS |
-| Instruments | macOS profiling | macOS |
-| ETW/WPA | Windows profiling | Windows |
+#table(
+  columns: 3,
+  align: (left, left, left),
+  table.header([Tool], [Purpose], [Platform]),
+  [perf], [General profiling, counters], [Linux],
+  [Intel VTune], [Advanced profiling, TMAM], [Linux, Windows],
+  [AMD uProf], [AMD-specific profiling], [Linux, Windows],
+  [valgrind/cachegrind], [Cache simulation], [Linux, macOS],
+  [gprof], [Function-level profiling], [Linux, macOS],
+  [Instruments], [macOS profiling], [macOS],
+  [ETW/WPA], [Windows profiling], [Windows],
+)
 
 == References
 

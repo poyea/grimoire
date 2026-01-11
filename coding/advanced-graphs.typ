@@ -49,12 +49,15 @@ Don't mark as visited, just check `d > dist[u]` and skip. Avoids separate visite
 
 *Comparison - Heap Types:*
 
-| Heap Type                | Push         | Pop          | Decrease-Key | Notes                   |
-|:-------------------------|:-------------|:-------------|:-------------|:------------------------|
-| Binary Heap (std)        | O(log V)     | O(log V)     | O(V)         | Best for sparse graphs  |
-| D-ary Heap (d=4)         | O(log_d V)   | O(d log_d V) | O(log_d V)   | Better for dense graphs |
-| Fibonacci Heap           | O(1) amort   | O(log V)     | O(1) amort   | Theory only, high const |
-| Pairing Heap             | O(1) amort   | O(log V)     | O(log V)     | Simpler than Fibonacci  |
+#table(
+  columns: 5,
+  align: (left, left, left, left, left),
+  table.header([Heap Type], [Push], [Pop], [Decrease-Key], [Notes]),
+  [Binary Heap (std)], [O(log V)], [O(log V)], [O(V)], [Best for sparse graphs],
+  [D-ary Heap (d=4)], [O(log_d V)], [O(d log_d V)], [O(log_d V)], [Better for dense graphs],
+  [Fibonacci Heap], [O(1) amort], [O(log V)], [O(1) amort], [Theory only, high const],
+  [Pairing Heap], [O(1) amort], [O(log V)], [O(log V)], [Simpler than Fibonacci],
+)
 
 *Recommendation:* Binary heap for most cases. D=4 heap for dense graphs (more cache-friendly children).
 

@@ -255,13 +255,16 @@ struct sg_desc {
 
 == Practical Recommendations
 
-| Scenario | Technique | Rationale |
-|:---------|:----------|:----------|
-| Static file serving | sendfile() | Simple, kernel-optimized |
-| Large bulk transfer | MSG_ZEROCOPY | CPU savings > complexity cost |
-| High-throughput server | io_uring | Batching + zero-copy |
-| Low-latency trading | Kernel bypass (DPDK) | Eliminate kernel entirely |
-| Standard CRUD app | Traditional send/recv | Simplicity > micro-optimization |
+#table(
+  columns: 3,
+  align: (left, left, left),
+  table.header([Scenario], [Technique], [Rationale]),
+  [Static file serving], [sendfile()], [Simple, kernel-optimized],
+  [Large bulk transfer], [MSG_ZEROCOPY], [CPU savings > complexity cost],
+  [High-throughput server], [io_uring], [Batching + zero-copy],
+  [Low-latency trading], [Kernel bypass (DPDK)], [Eliminate kernel entirely],
+  [Standard CRUD app], [Traditional send/recv], [Simplicity > micro-optimization],
+)
 
 == References
 

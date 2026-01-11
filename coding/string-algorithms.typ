@@ -490,14 +490,17 @@ vector<int> avx2_search(const string& text, const string& pattern) {
 
 *Test: Find pattern "algorithm" in 1MB text (English):*
 
-| Algorithm          | Time (μs) | Notes                                         |
-|:-------------------|----------:|:----------------------------------------------|
-| Naive (substr)     |     12000 | Worst case O(nm), poor branch prediction      |
-| KMP                |      2500 | Linear time, good cache locality              |
-| Z-algorithm        |      2800 | Similar to KMP, simpler code                  |
-| Rabin-Karp         |      3500 | Hash collisions require verification          |
-| SSE4.2 PCMPESTRI   |       800 | Pattern ≤ 16 chars, hardware accelerated      |
-| AVX2 (first char)  |      1500 | Good for rare first character                 |
+#table(
+  columns: 3,
+  align: (left, right, left),
+  table.header([Algorithm], [Time (μs)], [Notes]),
+  [Naive (substr)], [12000], [Worst case O(nm), poor branch prediction],
+  [KMP], [2500], [Linear time, good cache locality],
+  [Z-algorithm], [2800], [Similar to KMP, simpler code],
+  [Rabin-Karp], [3500], [Hash collisions require verification],
+  [SSE4.2 PCMPESTRI], [800], [Pattern ≤ 16 chars, hardware accelerated],
+  [AVX2 (first char)], [1500], [Good for rare first character],
+)
 
 *Cache effects:* Small text (< 32KB) stays in L1 = 2-3x faster across all algorithms. Large text (> 8MB) = LLC misses dominate.
 

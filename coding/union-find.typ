@@ -78,11 +78,14 @@ int find_path_splitting(int x) {
 
 *Performance comparison:*
 
-| Variant              | Amortized Time | Recursion | Cache Behavior      |
-|:---------------------|:---------------|:----------|:--------------------|
-| Full compression     | $O(alpha(n))$  | Yes       | Poor (recursion)    |
-| Path halving         | $O(alpha(n))$  | No        | Better (iterative)  |
-| Path splitting       | $O(alpha(n))$  | No        | Better (iterative)  |
+#table(
+  columns: 4,
+  align: (left, left, left, left),
+  table.header([Variant], [Amortized Time], [Recursion], [Cache Behavior]),
+  [Full compression], [$O(alpha(n))$], [Yes], [Poor (recursion)],
+  [Path halving], [$O(alpha(n))$], [No], [Better (iterative)],
+  [Path splitting], [$O(alpha(n))$], [No], [Better (iterative)],
+)
 
 All three have same asymptotic complexity. Iterative versions avoid recursion overhead (~10-20 cycles per call) and have better cache behavior.
 

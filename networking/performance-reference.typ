@@ -89,24 +89,30 @@ Example: 10MB window, 50ms RTT
 
 *Required window sizes for full utilization:*
 
-| Bandwidth | RTT | Window Size |
-|:----------|----:|------------:|
-| 1 Gbps | 10ms | 1.25 MB |
-| 1 Gbps | 100ms | 12.5 MB |
-| 10 Gbps | 10ms | 12.5 MB |
-| 10 Gbps | 100ms | 125 MB |
-| 100 Gbps | 10ms | 125 MB |
+#table(
+  columns: 3,
+  align: (left, right, right),
+  table.header([Bandwidth], [RTT], [Window Size]),
+  [1 Gbps], [10ms], [1.25 MB],
+  [1 Gbps], [100ms], [12.5 MB],
+  [10 Gbps], [10ms], [12.5 MB],
+  [10 Gbps], [100ms], [125 MB],
+  [100 Gbps], [10ms], [125 MB],
+)
 
 *Formula:* BDP (Bandwidth-Delay Product) = Bandwidth × RTT
 
 == Interrupt Coalescing Impact
 
-| Coalesce Time | Latency | PPS | CPU % (10G) |
-|:--------------|--------:|----:|------------:|
-| 0 (no coalesce) | 2-3 μs | 14.88M | 40-50% |
-| 10 μs | 10-15 μs | 100K | 5-10% |
-| 50 μs | 50-70 μs | 20K | 1-3% |
-| 100 μs | 100-150 μs | 10K | \<1% |
+#table(
+  columns: 4,
+  align: (left, right, right, right),
+  table.header([Coalesce Time], [Latency], [PPS], [CPU % (10G)]),
+  [0 (no coalesce)], [2-3 μs], [14.88M], [40-50%],
+  [10 μs], [10-15 μs], [100K], [5-10%],
+  [50 μs], [50-70 μs], [20K], [1-3%],
+  [100 μs], [100-150 μs], [10K], [\<1%],
+)
 
 *Tradeoff:* Low latency requires high CPU. Tune based on workload.
 
