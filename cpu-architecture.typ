@@ -77,34 +77,34 @@ Modern computer architecture represents decades of optimization at every level: 
 
 #pagebreak()
 
-#include "architecture/cpu-fundamentals.typ"
+#include "cpu-architecture/cpu-fundamentals.typ"
 #pagebreak()
 
-#include "architecture/pipelining.typ"
+#include "cpu-architecture/pipelining.typ"
 #pagebreak()
 
-#include "architecture/superscalar.typ"
+#include "cpu-architecture/superscalar.typ"
 #pagebreak()
 
-#include "architecture/branch-prediction.typ"
+#include "cpu-architecture/branch-prediction.typ"
 #pagebreak()
 
-#include "architecture/cache-hierarchy.typ"
+#include "cpu-architecture/cache-hierarchy.typ"
 #pagebreak()
 
-#include "architecture/memory-system.typ"
+#include "cpu-architecture/memory-system.typ"
 #pagebreak()
 
-#include "architecture/virtual-memory.typ"
+#include "cpu-architecture/virtual-memory.typ"
 #pagebreak()
 
-#include "architecture/simd.typ"
+#include "cpu-architecture/simd.typ"
 #pagebreak()
 
-#include "architecture/multicore.typ"
+#include "cpu-architecture/multicore.typ"
 #pagebreak()
 
-#include "architecture/performance-analysis.typ"
+#include "cpu-architecture/performance-analysis.typ"
 #pagebreak()
 
 = Conclusion
