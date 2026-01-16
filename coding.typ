@@ -113,6 +113,5 @@
 #include "coding/advanced-systems.typ"
 #pagebreak()
 
-#include "coding/advanced_java.typ"
-#pagebreak()
+#include "coding/advanced-java-sections.typ"
 ]

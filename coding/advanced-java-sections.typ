@@ -44,29 +44,28 @@ This section covers both foundational and advanced Java concepts critical for se
 
 #pagebreak()
 
-#include "advanced_java/core-java-oop.typ"
+#include "advanced-java/core-java-oop.typ"
 #pagebreak()
 
-#include "advanced_java/jvm-internals.typ"
+#include "advanced-java/jvm-internals.typ"
 #pagebreak()
 
-#include "advanced_java/concurrency-primitives.typ"
+#include "advanced-java/concurrency-primitives.typ"
 #pagebreak()
 
-#include "advanced_java/concurrent-utilities.typ"
+#include "advanced-java/concurrent-utilities.typ"
 #pagebreak()
 
-#include "advanced_java/advanced-concurrency.typ"
+#include "advanced-java/advanced-concurrency.typ"
 #pagebreak()
 
-#include "advanced_java/jvm-performance.typ"
+#include "advanced-java/jvm-performance.typ"
 #pagebreak()
 
-#include "advanced_java/low-latency.typ"
+#include "advanced-java/low-latency.typ"
 #pagebreak()
 
-#include "advanced_java/modern-java.typ"
+#include "advanced-java/modern-java.typ"
 #pagebreak()
 
-#include "advanced_java/design-patterns.typ"
-#pagebreak()
+#include "advanced-java/design-patterns.typ"
