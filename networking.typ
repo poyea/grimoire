@@ -1,22 +1,7 @@
-#set document(title: "Networking", author: "John Law")
-#set page(
-  paper: "us-letter",
-  margin: (x: 1cm, y: 1cm),
-  header: [
-    #smallcaps[_Networking Notes by #link("https://github.com/poyea")[\@poyea]_]
-    #h(0.5fr)
-    #emph(text[#datetime.today().display()])
-    #h(0.5fr)
-    #emph(link("https://github.com/poyea/grimoire")[poyea/grimoire::networking])
-  ],
-  footer: context [
-    #align(right)[#counter(page).display("1")]
-  ]
-)
-#set text(font: "New Computer Modern", size: 11pt)
-#set heading(numbering: "1.")
+#import "template.typ": project
 
-#align(center)[
+#project("Networking")[
+  #align(center)[
   #block(
     fill: luma(245),
     inset: 10pt,
@@ -95,6 +80,18 @@ The OSI 7-layer model is pedagogical; practical implementations use TCP/IP 4-lay
 #include "networking/application-protocols.typ"
 #pagebreak()
 
+#include "networking/websockets.typ"
+#pagebreak()
+
+#include "networking/dns.typ"
+#pagebreak()
+
+#include "networking/grpc.typ"
+#pagebreak()
+
+#include "networking/tls.typ"
+#pagebreak()
+
 #include "networking/zero-copy.typ"
 #pagebreak()
 
@@ -111,6 +108,33 @@ The OSI 7-layer model is pedagogical; practical implementations use TCP/IP 4-lay
 #pagebreak()
 
 #include "networking/performance-reference.typ"
+#pagebreak()
+
+#include "networking/debugging.typ"
+#pagebreak()
+
+#include "networking/nat-firewalls.typ"
+#pagebreak()
+
+#include "networking/load-balancing.typ"
+#pagebreak()
+
+#include "networking/container-networking.typ"
+#pagebreak()
+
+#include "networking/service-mesh.typ"
+#pagebreak()
+
+#include "networking/service-discovery.typ"
+#pagebreak()
+
+#include "networking/connection-pooling.typ"
+#pagebreak()
+
+#include "networking/resilience-patterns.typ"
+#pagebreak()
+
+#include "networking/network-security.typ"
 #pagebreak()
 
 = Conclusion
@@ -148,3 +172,4 @@ Modern networking requires understanding multiple layers:
 - *ZeroMQ:* Distributed systems, microservices, avoiding raw socket complexity
 
 Further reading: Stevens et al. (2003) "Unix Network Programming"; Kerrisk (2010) "The Linux Programming Interface"; Marek & Corbet (2005) "The Linux Networking Architecture".
+]

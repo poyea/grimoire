@@ -1,22 +1,7 @@
-#set document(title: "Computer Architecture", author: "John Law")
-#set page(
-  paper: "us-letter",
-  margin: (x: 1cm, y: 1cm),
-  header: [
-    #smallcaps[_Computer Architecture Notes by #link("https://github.com/poyea")[\@poyea]_]
-    #h(0.5fr)
-    #emph(text[#datetime.today().display()])
-    #h(0.5fr)
-    #emph(link("https://github.com/poyea/grimoire")[poyea/grimoire::architecture])
-  ],
-  footer: context [
-    #align(right)[#counter(page).display("1")]
-  ]
-)
-#set text(font: "New Computer Modern", size: 11pt)
-#set heading(numbering: "1.")
+#import "template.typ": project
 
-#align(center)[
+#project("Computer Architecture")[
+  #align(center)[
   #block(
     fill: luma(245),
     inset: 10pt,
@@ -184,3 +169,4 @@ Jouppi, N.P. (1990). "Improving Direct-Mapped Cache Performance by the Addition 
 Kocher, P. et al. (2019). "Spectre Attacks: Exploiting Speculative Execution." S&P '19.
 
 Lipp, M. et al. (2018). "Meltdown: Reading Kernel Memory from User Space." USENIX Security '18.
+]
