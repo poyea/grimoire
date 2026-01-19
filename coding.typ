@@ -113,5 +113,20 @@
 #include "coding/advanced-systems.typ"
 #pagebreak()
 
+#include "coding/probabilistic-data-structures.typ"
+#pagebreak()
+
+#include "coding/segment-trees.typ"
+#pagebreak()
+
+#include "coding/advanced-string-algorithms.typ"
+#pagebreak()
+
+#include "coding/streaming-algorithms.typ"
+#pagebreak()
+
+#include "coding/computational-geometry.typ"
+#pagebreak()
+
 #include "coding/advanced-java-sections.typ"
 ]

@@ -137,6 +137,21 @@ The OSI 7-layer model is pedagogical; practical implementations use TCP/IP 4-lay
 #include "networking/network-security.typ"
 #pagebreak()
 
+#include "networking/bgp-routing.typ"
+#pagebreak()
+
+#include "networking/sdn-programmable-networks.typ"
+#pagebreak()
+
+#include "networking/wireless-protocols.typ"
+#pagebreak()
+
+#include "networking/observability.typ"
+#pagebreak()
+
+#include "networking/realtime-protocols.typ"
+#pagebreak()
+
 = Conclusion
 
 Modern networking requires understanding multiple layers:
