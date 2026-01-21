@@ -86,11 +86,14 @@
     }
 
     .book {
+      display: block;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1.5rem;
       transition: all 0.2s ease;
+      text-decoration: none;
+      color: inherit;
     }
 
     .book:hover {
@@ -185,29 +188,29 @@
     </div>
 
     <div class="books">
-      <div class="book">
+      <a href="https://github.com/poyea/grimoire/releases" class="book">
         <div class="book-icon">&#128187;</div>
         <h3>Coding</h3>
         <p>Programming fundamentals and software development concepts</p>
-      </div>
+      </a>
 
-      <div class="book">
+      <a href="https://github.com/poyea/grimoire/releases" class="book">
         <div class="book-icon">&#9881;</div>
         <h3>CPU Architecture</h3>
         <p>Processor design, instruction sets, and computer organization</p>
-      </div>
+      </a>
 
-      <div class="book">
+      <a href="https://github.com/poyea/grimoire/releases" class="book">
         <div class="book-icon">&#9889;</div>
         <h3>GPU Architecture</h3>
         <p>Graphics processing, parallel computing, and CUDA fundamentals</p>
-      </div>
+      </a>
 
-      <div class="book">
+      <a href="https://github.com/poyea/grimoire/releases" class="book">
         <div class="book-icon">&#127760;</div>
         <h3>Networking</h3>
         <p>Network protocols, architecture, and communication systems</p>
-      </div>
+      </a>
     </div>
 
     <div class="cta">
@@ -220,6 +223,7 @@
     </div>
 
     <footer>
+      <p>Brought to you by <a href="https://github.com/poyea">@poyea</a> with love</p>
       <p>Built with <a href="https://typst.app">Typst</a> &middot; <a href="https://github.com/poyea/grimoire">Source</a></p>
     </footer>
   </div>
