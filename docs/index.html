@@ -112,6 +112,22 @@
       font-size: 0.9rem;
     }
 
+    .book .topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+      margin-top: 0.75rem;
+    }
+
+    .book .topic {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
     .book-icon {
       display: inline-block;
       width: 2rem;
@@ -192,24 +208,65 @@
         <div class="book-icon">&#128187;</div>
         <h3>Coding</h3>
         <p>Programming fundamentals and software development concepts</p>
+        <div class="topics">
+          <span class="topic">Arrays & Hashing</span>
+          <span class="topic">Binary Search</span>
+          <span class="topic">Trees & Tries</span>
+          <span class="topic">Dynamic Programming</span>
+          <span class="topic">Graph Algorithms</span>
+          <span class="topic">Backtracking</span>
+          <span class="topic">Bit Manipulation</span>
+          <span class="topic">Segment Trees</span>
+          <span class="topic">Computational Geometry</span>
+        </div>
       </a>
 
       <a href="https://github.com/poyea/grimoire/releases" class="book">
         <div class="book-icon">&#9881;</div>
         <h3>CPU Architecture</h3>
         <p>Processor design, instruction sets, and computer organization</p>
+        <div class="topics">
+          <span class="topic">Pipelining</span>
+          <span class="topic">Superscalar Execution</span>
+          <span class="topic">Branch Prediction</span>
+          <span class="topic">Cache Hierarchy</span>
+          <span class="topic">Virtual Memory</span>
+          <span class="topic">SIMD</span>
+          <span class="topic">Multicore</span>
+          <span class="topic">Performance Analysis</span>
+        </div>
       </a>
 
       <a href="https://github.com/poyea/grimoire/releases" class="book">
         <div class="book-icon">&#9889;</div>
         <h3>GPU Architecture</h3>
         <p>Graphics processing, parallel computing, and CUDA fundamentals</p>
+        <div class="topics">
+          <span class="topic">SIMT Model</span>
+          <span class="topic">Warps & Threads</span>
+          <span class="topic">Memory Hierarchy</span>
+          <span class="topic">CUDA & Tensor Cores</span>
+          <span class="topic">Occupancy Tuning</span>
+          <span class="topic">Kernel Fusion</span>
+          <span class="topic">Profiling & Debugging</span>
+        </div>
       </a>
 
       <a href="https://github.com/poyea/grimoire/releases" class="book">
         <div class="book-icon">&#127760;</div>
         <h3>Networking</h3>
         <p>Network protocols, architecture, and communication systems</p>
+        <div class="topics">
+          <span class="topic">TCP/UDP/QUIC</span>
+          <span class="topic">TLS/SSL</span>
+          <span class="topic">DNS</span>
+          <span class="topic">gRPC</span>
+          <span class="topic">I/O Multiplexing</span>
+          <span class="topic">Zero-Copy & Kernel Bypass</span>
+          <span class="topic">Load Balancing</span>
+          <span class="topic">Container Networking</span>
+          <span class="topic">Service Mesh</span>
+        </div>
       </a>
     </div>
 
