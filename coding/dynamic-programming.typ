@@ -570,3 +570,17 @@ int maxValue = [&]() {
 - State: `dp[mask]` where mask represents subset
 
 *See also:* Backtracking (for exhaustive search baseline), Greedy (when DP unnecessary), Graphs (for shortest path DP variants)
+
+== Complexity Reference
+
+#table(
+  columns: (auto, auto, auto),
+  [*Problem*], [*Time*], [*Space*],
+  [Longest Common Subsequence (LCS)], [$O(n m)$], [$O(min(n, m))$ optimized],
+  [Longest Increasing Subsequence (LIS)], [$O(n log n)$], [$O(n)$],
+  [0/1 Knapsack], [$O(n W)$], [$O(W)$ optimized],
+  [Edit distance], [$O(n m)$], [$O(min(n, m))$ optimized],
+  [Coin change], [$O(n times "amount")$], [$O("amount")$],
+  [Climbing stairs], [$O(n)$], [$O(1)$],
+  [Maximum product subarray], [$O(n)$], [$O(1)$],
+)

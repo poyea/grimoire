@@ -143,3 +143,15 @@ if (heuristic_best(r+1, c)) {
 - Backtracking = random memory access = cache unfriendly
 - In-place marking eliminates `unordered_set`: saves $#sym.tilde.op$40 bytes per cell + hash overhead
 - Small boards (< 20×20): entire board fits in L1 cache
+
+== Complexity Reference
+
+#table(
+  columns: (auto, auto, auto),
+  [*Problem*], [*Time*], [*Space*],
+  [N-Queens], [$O(n!)$], [$O(n)$],
+  [Subsets], [$O(n dot 2^n)$], [$O(n)$ recursion depth],
+  [Permutations], [$O(n dot n!)$], [$O(n)$ recursion depth],
+  [Combination sum], [$O(2^t)$ where $t$ = target], [$O(t)$ recursion depth],
+  [Word search], [$O(n m dot 4^L)$ where $L$ = word length], [$O(L)$ recursion depth],
+)

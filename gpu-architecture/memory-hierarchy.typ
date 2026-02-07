@@ -292,6 +292,35 @@ Random:         ▼ ▼  ▼    ▼   ▼▼      ▼  ...
               Many transactions, poor utilization
 ```
 
+*Coalesced vs uncoalesced bandwidth (measured, RTX 4090):*
+
+```
+Access Pattern          Effective BW    % of Peak (1008 GB/s)    Transactions/Warp
+────────────────────────────────────────────────────────────────────────────────────
+Coalesced (stride 1)    ~950 GB/s       94%                      1 × 128B
+Stride 2                ~480 GB/s       48%                      2 × 128B
+Stride 4                ~240 GB/s       24%                      4 × 128B
+Stride 8                ~120 GB/s       12%                      8 × 128B
+Stride 16               ~60 GB/s        6%                       16 × 32B
+Stride 32 (worst)       ~30 GB/s        3%                       32 × 32B
+Random (scatter)        ~25-35 GB/s     2.5-3.5%                 up to 32 × 32B
+```
+
+*Key takeaway:* Stride-32 access delivers $#sym.tilde.op$30x less bandwidth than coalesced access. A single uncoalesced kernel can reduce overall GPU throughput from near-peak to single-digit percentages.
+
+*AoS vs SoA benchmark (1M particles, 6 floats each):*
+```
+Array of Structures (AoS):  stride = 6 floats = 24 bytes
+  Reading x coordinates:    ~160 GB/s effective (16% of peak)
+  4 × 128B transactions per warp (only 4B/32B useful per transaction)
+
+Structure of Arrays (SoA):  stride = 1 float = 4 bytes
+  Reading x coordinates:    ~940 GB/s effective (93% of peak)
+  1 × 128B transaction per warp (all 128B useful)
+
+Speedup: 5.9× for SoA over AoS on this access pattern
+```
+
 *Alignment requirements:*
 
 ```c

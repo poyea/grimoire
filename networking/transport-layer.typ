@@ -138,6 +138,63 @@ enum BBRMode {
 - Can be unfair to loss-based congestion control
 - Requires careful tuning in shared environments
 
+*BBR vs CUBIC numerical walkthrough:*
+
+Scenario: 100 Mbps bottleneck link, 50ms RTT, 1% random packet loss.
+
+```
+                    CUBIC                           BBR
+                    ─────                           ───
+Initial cwnd:       10 segments (14.6 KB)           10 segments (14.6 KB)
+MSS:                1460 bytes                      1460 bytes
+
+Slow start:
+  RTT 1:            cwnd = 20 (29.2 KB)             cwnd = 20 (29.2 KB)
+  RTT 2:            cwnd = 40 (58.4 KB)             cwnd = 40 (58.4 KB)
+  RTT 3:            cwnd = 80 (116.8 KB)            cwnd = 80 (116.8 KB)
+  ...               doubles until loss               doubles until BtlBw estimated
+
+BDP = 100 Mbps × 50ms = 625 KB ≈ 428 segments
+
+After reaching BDP:
+  CUBIC:            cwnd grows until loss detected
+                    1% loss → cwnd cut to 0.7 × cwnd_max
+                    cwnd_max = 428, after loss: cwnd ≈ 300
+                    Cubic regrowth: W(t) = 0.4(t - K)³ + cwnd_max
+                    K = ∛(cwnd_max × 0.3 / 0.4) = ∛(321) ≈ 6.9 RTTs
+                    Recovery to cwnd_max takes ~14 RTTs = 700ms
+
+  BBR:              Measures BtlBw = 100 Mbps, RTprop = 50ms
+                    pacing_rate = BtlBw × gain (1.25 in PROBE_BW)
+                    cwnd = 2 × BDP = 1250 KB (inflight cap)
+                    Ignores 1% loss entirely (not a congestion signal)
+                    Steady throughput ≈ 98 Mbps
+
+Steady-state throughput:
+  CUBIC:            Sawtooth pattern between 70-100 Mbps
+                    Average ≈ 85 Mbps (loses ~15% to loss recovery)
+                    Fills router buffers → adds 10-50ms latency
+
+  BBR:              Stable at ~98 Mbps
+                    Minimal buffering → RTT stays near 50ms
+                    PROBE_RTT phase: brief dip every ~10s (cwnd = 4)
+
+Summary (100 Mbps, 50ms RTT, 1% loss):
+  CUBIC avg throughput:  ~85 Mbps    avg RTT: 60-100ms
+  BBR avg throughput:    ~98 Mbps    avg RTT: 50-55ms
+```
+
+*High-bandwidth scenario (10 Gbps, 100ms RTT, 0.01% loss):*
+```
+BDP = 10 Gbps × 100ms = 125 MB ≈ 85,616 segments
+
+CUBIC: cwnd recovery after loss takes ~40 RTTs = 4 seconds
+       Average utilization: ~60-70% (slow cubic regrowth)
+
+BBR:   Maintains ~95% utilization
+       pacing_rate adapts within 6-8 RTTs
+```
+
 *Enable BBR:*
 ```bash
 echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf

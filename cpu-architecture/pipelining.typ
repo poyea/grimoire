@@ -91,6 +91,8 @@ sub rcx, rax      ; Needs rax from add (available cycle 5)
 *WAR (Write After Read):* Anti-dependency (solved by register renaming).
 *WAW (Write After Write):* Output dependency (solved by register renaming).
 
+_IPC impact:_ On a 4-wide superscalar, a RAW chain like `ld rax,[mem]; add rbx,rax; sub rcx,rbx` serializes three dependent ops, dropping IPC from ~4.0 to ~1.3 for this sequence. A pipeline flush from a control hazard costs 12--20 cycles on modern x86 (Skylake: ~16 cycles, Zen 4: ~13 cycles).
+
 *Control hazard:* Branch changes control flow.
 
 ```asm

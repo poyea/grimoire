@@ -6,7 +6,7 @@ Branch prediction guesses the outcome and target of branches to maintain pipelin
 
 == Cost of Misprediction
 
-When a branch is mispredicted, the pipeline must be flushed, incurring a significant performance penalty. Modern CPUs have pipeline depths of 16-20 stages, resulting in misprediction penalties of 10-20 cycles. For example, with one branch per five instructions and a 5% mispredict rate, the branch overhead calculates to 0.2 × 0.05 × 15 = 0.15 cycles per instruction (CPI penalty).
+When a branch is mispredicted, the pipeline must be flushed, incurring a significant performance penalty. Modern CPUs have pipeline depths of 16-20 stages, resulting in misprediction penalties of 10-20 cycles. Measured per-architecture: ~15 cycles on Intel Skylake, ~13 cycles on AMD Zen 3/Zen 4, ~11 cycles on Apple M1/M3, ~31 cycles on Pentium 4 Prescott. For example, with one branch per five instructions and a 5% mispredict rate, the branch overhead calculates to 0.2 × 0.05 × 15 = 0.15 cycles per instruction (CPI penalty).
 
 ```
 Pipeline depth: 16-20 stages (modern CPUs)

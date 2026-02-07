@@ -263,3 +263,18 @@ public:
 ```
 
 *Why it works:* Length prefix avoids delimiter conflicts. Format: `"4#word5#hello"`
+
+== Complexity Reference
+
+#table(
+  columns: (auto, auto, auto, auto, auto),
+  [*Operation*], [*Time (Best)*], [*Time (Avg)*], [*Time (Worst)*], [*Space*],
+  [Access by index], [$O(1)$], [$O(1)$], [$O(1)$], [$O(1)$],
+  [Search (unsorted)], [$O(1)$], [$O(n)$], [$O(n)$], [$O(1)$],
+  [Search (sorted, binary)], [$O(1)$], [$O(log n)$], [$O(log n)$], [$O(1)$],
+  [Insert at back], [$O(1)$], [$O(1)$ amortized], [$O(n)$ realloc], [$O(1)$],
+  [Insert at front], [$O(n)$], [$O(n)$], [$O(n)$], [$O(1)$],
+  [Insert at middle], [$O(n)$], [$O(n)$], [$O(n)$], [$O(1)$],
+  [Delete at back], [$O(1)$], [$O(1)$], [$O(1)$], [$O(1)$],
+  [Delete at front/middle], [$O(n)$], [$O(n)$], [$O(n)$], [$O(1)$],
+)

@@ -571,3 +571,18 @@ void iterativeInorder(TreeNode* root) {
 ```
 
 *Stack size:* $O(h)$ where $h$ is height. Balanced tree: $O(log n)$, skewed: $O(n)$.
+
+== Complexity Reference
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*Operation*], [*Time (Best/Balanced)*], [*Time (Worst/Unbalanced)*], [*Space*],
+  [BST search], [$O(log n)$], [$O(n)$], [$O(1)$ iter / $O(h)$ rec],
+  [BST insert], [$O(log n)$], [$O(n)$], [$O(1)$ iter / $O(h)$ rec],
+  [BST delete], [$O(log n)$], [$O(n)$], [$O(1)$ iter / $O(h)$ rec],
+  [Inorder traversal], [$O(n)$], [$O(n)$], [$O(h)$],
+  [Preorder traversal], [$O(n)$], [$O(n)$], [$O(h)$],
+  [Postorder traversal], [$O(n)$], [$O(n)$], [$O(h)$],
+  [Level-order traversal], [$O(n)$], [$O(n)$], [$O(n)$],
+  [Morris traversal], [$O(n)$], [$O(n)$], [$O(1)$],
+)

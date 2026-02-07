@@ -338,3 +338,16 @@ double ternary_search(function<double(double)> f, double lo, double hi) {
 ```
 
 *Complexity:* $O(log_(3/2) n) approx O(1.58 log n)$ - slower than binary search but works for unimodal functions where binary search doesn't apply.
+
+== Complexity Reference
+
+#table(
+  columns: (auto, auto, auto, auto, auto),
+  [*Algorithm*], [*Time (Best)*], [*Time (Avg)*], [*Time (Worst)*], [*Space*],
+  [Standard binary search], [$O(1)$], [$O(log n)$], [$O(log n)$], [$O(1)$],
+  [Lower / upper bound], [$O(log n)$], [$O(log n)$], [$O(log n)$], [$O(1)$],
+  [Rotated array search], [$O(1)$], [$O(log n)$], [$O(log n)$], [$O(1)$],
+  [Interpolation search], [$O(1)$], [$O(log log n)$], [$O(n)$], [$O(1)$],
+  [Exponential search], [$O(1)$], [$O(log i)$], [$O(log n)$], [$O(1)$],
+  [Ternary search], [$O(1)$], [$O(log n)$], [$O(log n)$], [$O(1)$],
+)

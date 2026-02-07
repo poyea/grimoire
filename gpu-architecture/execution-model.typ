@@ -104,6 +104,10 @@ __global__ void divergent(int* data, int* result) {
 // Pass 1: Threads 0,2,4,...,30 execute (16 active), others masked
 // Pass 2: Threads 1,3,5,...,31 execute (16 active), others masked
 // Result: 2× slower than non-divergent code
+//
+// Quantified cost: This warp executes at 50% SIMT efficiency —
+// throughput drops from 32 to 16 active threads per cycle per pass.
+// With N divergent paths, efficiency = 1/N (e.g., 3 paths → 33%, 4 paths → 25%).
 ```
 
 *Divergence visualization:*
