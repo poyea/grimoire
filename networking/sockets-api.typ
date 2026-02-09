@@ -226,6 +226,249 @@ if (n > 0) {
 
 *Benefit:* Avoid over-allocation, reduce memory waste.
 
+#pagebreak()
+
+== I/O Multiplexing with epoll
+
+*Problem:* One-thread-per-client does not scale beyond ~1K connections (stack memory + context switch overhead).
+
+*Solution:* `epoll` provides $O(1)$ event notification for ready file descriptors. Handles 10K+ concurrent connections on a single thread (C10K problem).
+
+*API overview:*
+
+```cpp
+int epoll_create1(int flags);           // Create epoll instance
+int epoll_ctl(int epfd, int op,         // Add/modify/remove watched fds
+              int fd, struct epoll_event *event);
+int epoll_wait(int epfd,                // Wait for events
+               struct epoll_event *events,
+               int maxevents, int timeout);
+```
+
+*epoll-based TCP server:*
+
+```cpp
+#include <sys/epoll.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <cstring>
+
+constexpr int MAX_EVENTS = 1024;
+
+void set_nonblocking(int fd) {
+    int flags = fcntl(fd, F_GETFL, 0);
+    fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+}
+
+int main() {
+    int server = socket(AF_INET, SOCK_STREAM, 0);
+    int opt = 1;
+    setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
+    struct sockaddr_in addr = {};
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_port = htons(8080);
+    bind(server, (struct sockaddr*)&addr, sizeof(addr));
+    listen(server, 128);
+    set_nonblocking(server);
+
+    // 1. Create epoll instance
+    int epfd = epoll_create1(0);
+
+    // 2. Register server socket for read events
+    struct epoll_event ev = {};
+    ev.events = EPOLLIN;
+    ev.data.fd = server;
+    epoll_ctl(epfd, EPOLL_CTL_ADD, server, &ev);
+
+    struct epoll_event events[MAX_EVENTS];
+    char buf[4096];
+
+    // 3. Event loop
+    while (true) {
+        int n_ready = epoll_wait(epfd, events, MAX_EVENTS, -1);
+
+        for (int i = 0; i < n_ready; ++i) {
+            if (events[i].data.fd == server) {
+                // Accept all pending connections
+                while (true) {
+                    int client = accept(server, nullptr, nullptr);
+                    if (client < 0) break;  // EAGAIN = no more
+                    set_nonblocking(client);
+                    ev.events = EPOLLIN | EPOLLET;  // Edge-triggered
+                    ev.data.fd = client;
+                    epoll_ctl(epfd, EPOLL_CTL_ADD, client, &ev);
+                }
+            } else {
+                // Handle client data
+                int fd = events[i].data.fd;
+                ssize_t n = recv(fd, buf, sizeof(buf), 0);
+                if (n <= 0) {
+                    close(fd);  // Removes from epoll automatically
+                } else {
+                    send(fd, buf, n, 0);  // Echo back
+                }
+            }
+        }
+    }
+
+    close(epfd);
+    close(server);
+}
+```
+
+*Performance comparison:*
+
+#table(
+  columns: 3,
+  align: (left, right, left),
+  table.header([Model], [10K Connections], [Notes]),
+  [Thread-per-client], [~80 MB RAM], [8 KB stack each + context switches],
+  [`select()`], [$O(n)$ per call], [Scans entire fd set; limit 1024 fds],
+  [`poll()`], [$O(n)$ per call], [No fd limit but still linear scan],
+  [`epoll`], [$O(1)$ per event], [Kernel maintains ready list; edge-triggered mode],
+)
+
+*Edge-triggered vs level-triggered:*
+- *Level-triggered (default):* `epoll_wait` returns fd whenever data is available. Simpler but more syscalls.
+- *Edge-triggered (`EPOLLET`):* Returns fd only on state change. Must drain all data per event (`recv` until `EAGAIN`). Fewer syscalls, higher throughput.
+
+== UDP Server Example
+
+UDP sockets require no `listen()` or `accept()`. Each `recvfrom()` returns the sender's address for reply via `sendto()`. No connection state is maintained.
+
+```cpp
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <cstring>
+
+int main() {
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+
+    struct sockaddr_in addr = {};
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_port = htons(9000);
+    bind(sock, (struct sockaddr*)&addr, sizeof(addr));
+
+    char buf[65535];  // Max UDP payload
+
+    while (true) {
+        struct sockaddr_in client_addr;
+        socklen_t addr_len = sizeof(client_addr);
+
+        // Receive datagram + sender address
+        ssize_t n = recvfrom(sock, buf, sizeof(buf), 0,
+                             (struct sockaddr*)&client_addr, &addr_len);
+        if (n < 0) continue;
+
+        // Echo back to sender (no connection needed)
+        sendto(sock, buf, n, 0,
+               (struct sockaddr*)&client_addr, addr_len);
+    }
+
+    close(sock);
+}
+```
+
+*TCP vs UDP socket differences:*
+
+#table(
+  columns: 3,
+  align: (left, left, left),
+  table.header([Aspect], [TCP (`SOCK_STREAM`)], [UDP (`SOCK_DGRAM`)]),
+  [Setup], [`listen` + `accept`], [`bind` only],
+  [Transfer], [`send` / `recv`], [`sendto` / `recvfrom`],
+  [State], [Per-connection fd], [Single fd for all clients],
+  [Ordering], [Guaranteed in-order], [No ordering guarantee],
+  [Max payload], [Stream (no boundary)], [65,507 bytes per datagram],
+)
+
+*Performance:* UDP avoids 3-way handshake (~1 RTT saved). Single-socket model uses $O(1)$ file descriptors regardless of client count.
+
+== Error Handling Patterns
+
+*Common socket error codes:*
+
+#table(
+  columns: 3,
+  align: (left, left, left),
+  table.header([Error], [Cause], [Strategy]),
+  [`ECONNRESET`], [Peer sent RST (crashed or aborted)], [Close fd, clean up session],
+  [`EPIPE`], [Write to closed connection], [Close fd; suppress `SIGPIPE` with `MSG_NOSIGNAL`],
+  [`ETIMEDOUT`], [Connection timed out (peer unreachable)], [Retry with backoff or fail],
+  [`EADDRINUSE`], [Port already bound], [Set `SO_REUSEADDR` before `bind()`],
+  [`ECONNREFUSED`], [No server listening on target port], [Retry or report to caller],
+  [`EAGAIN`], [Non-blocking op would block], [Retry later (epoll/poll)],
+  [`EINTR`], [Syscall interrupted by signal], [Retry the syscall immediately],
+)
+
+*Robust recv loop:* Handles partial reads, connection resets, and signals.
+
+```cpp
+#include <sys/socket.h>
+#include <cerrno>
+#include <cstdint>
+
+// Read exactly `len` bytes. Returns bytes read, or -1 on error.
+ssize_t recv_exact(int sockfd, uint8_t* buf, size_t len) {
+    size_t total = 0;
+
+    while (total < len) {
+        ssize_t n = recv(sockfd, buf + total, len - total, 0);
+
+        if (n > 0) {
+            total += n;             // Partial read, continue
+        } else if (n == 0) {
+            break;                  // Peer closed connection
+        } else {
+            if (errno == EINTR) {
+                continue;           // Signal interrupted, retry
+            }
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                break;              // Non-blocking: no more data now
+            }
+            // ECONNRESET, ETIMEDOUT, etc.
+            return -1;             // Unrecoverable error
+        }
+    }
+
+    return static_cast<ssize_t>(total);
+}
+```
+
+*Robust send loop:* Handles partial writes and suppresses `SIGPIPE`.
+
+```cpp
+ssize_t send_all(int sockfd, const uint8_t* buf, size_t len) {
+    size_t total = 0;
+
+    while (total < len) {
+        ssize_t n = send(sockfd, buf + total, len - total, MSG_NOSIGNAL);
+
+        if (n > 0) {
+            total += n;
+        } else if (n < 0) {
+            if (errno == EINTR) continue;
+            if (errno == EAGAIN || errno == EWOULDBLOCK) continue;
+            return -1;  // EPIPE, ECONNRESET, etc.
+        }
+    }
+
+    return static_cast<ssize_t>(total);
+}
+```
+
+*Key practices:*
+- Always check return values of `send()` and `recv()` --- partial transfers are normal.
+- Use `MSG_NOSIGNAL` on `send()` to avoid `SIGPIPE` killing the process (alternative: `signal(SIGPIPE, SIG_IGN)`).
+- Distinguish retriable errors (`EINTR`, `EAGAIN`) from fatal errors (`ECONNRESET`, `EPIPE`).
+- Set `SO_RCVTIMEO` / `SO_SNDTIMEO` to bound blocking calls and prevent indefinite hangs.
+
 == References
 
 POSIX.1-2017: The Open Group Base Specifications Issue 7. IEEE Std 1003.1-2017.

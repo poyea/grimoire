@@ -321,6 +321,108 @@ Structure of Arrays (SoA):  stride = 1 float = 4 bytes
 Speedup: 5.9× for SoA over AoS on this access pattern
 ```
 
+*Additional access pattern benchmarks (RTX 4090):*
+
+*Pattern: Matrix Multiply (naive vs tiled)*
+
+```c
+// NAIVE: Each thread reads full row/column from global memory
+// C[i][j] = sum(A[i][k] * B[k][j]) for k in [0, N)
+// A row access: coalesced. B column access: stride = N (non-coalesced!)
+__global__ void matmul_naive(float* C, float* A, float* B, int N) {
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    float sum = 0;
+    for (int k = 0; k < N; k++)
+        sum += A[row * N + k] * B[k * N + col];  // B access stride = N
+    C[row * N + col] = sum;
+}
+// Effective BW: ~200 GB/s (20% of peak) — B column reads non-coalesced
+
+// TILED: Load tiles into shared memory, reuse N/32 times
+__global__ void matmul_tiled(float* C, float* A, float* B, int N) {
+    __shared__ float As[32][32], Bs[32][33];  // Padded to avoid bank conflicts
+    int row = blockIdx.y * 32 + threadIdx.y;
+    int col = blockIdx.x * 32 + threadIdx.x;
+    float sum = 0;
+    for (int t = 0; t < N; t += 32) {
+        As[threadIdx.y][threadIdx.x] = A[row * N + t + threadIdx.x];
+        Bs[threadIdx.y][threadIdx.x] = B[(t + threadIdx.y) * N + col];
+        __syncthreads();
+        for (int k = 0; k < 32; k++)
+            sum += As[threadIdx.y][k] * Bs[k][threadIdx.x];
+        __syncthreads();
+    }
+    C[row * N + col] = sum;
+}
+// Effective BW: ~900 GB/s (89% of peak) — all global loads coalesced, 32× reuse in SMEM
+```
+
+*Pattern: Parallel Reduction (addressing order)*
+
+```c
+// INTERLEAVED (non-coalesced in early iterations):
+for (int s = 1; s < blockDim.x; s *= 2) {
+    if (tid % (2 * s) == 0)
+        sdata[tid] += sdata[tid + s];  // Stride doubles each step
+    __syncthreads();
+}
+// Step 1: threads 0,2,4,6... active (stride 2) → ~400 GB/s effective
+// Warp divergence + non-sequential access pattern
+
+// SEQUENTIAL (coalesced):
+for (int s = blockDim.x / 2; s > 0; s >>= 1) {
+    if (tid < s)
+        sdata[tid] += sdata[tid + s];  // Contiguous threads active
+    __syncthreads();
+}
+// Threads 0..s-1 active (contiguous) → ~850 GB/s effective
+// 2.1× faster: no warp divergence, sequential SMEM access
+```
+
+*Pattern: Histogram (scatter vs privatized)*
+
+```c
+// GLOBAL ATOMICS (random scatter):
+__global__ void histogram_global(int* data, int* bins, int n) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    if (tid < n)
+        atomicAdd(&bins[data[tid]], 1);  // Random bin → serialized
+}
+// Effective BW: ~15-25 GB/s (1.5-2.5%) — atomic contention at popular bins
+
+// PRIVATIZED (shared memory atomics + merge):
+__global__ void histogram_private(int* data, int* bins, int n, int num_bins) {
+    extern __shared__ int local_bins[];
+    int tid_local = threadIdx.x;
+    for (int i = tid_local; i < num_bins; i += blockDim.x)
+        local_bins[i] = 0;
+    __syncthreads();
+
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    if (tid < n)
+        atomicAdd(&local_bins[data[tid]], 1);  // SMEM atomic: ~5 cycles
+    __syncthreads();
+
+    for (int i = tid_local; i < num_bins; i += blockDim.x)
+        atomicAdd(&bins[i], local_bins[i]);  // Merge: few global atomics
+}
+// Effective BW: ~300 GB/s (30%) — 12-20× faster than global atomics
+// SMEM atomics ~5 cycles vs global atomics ~100+ cycles under contention
+```
+
+*Access pattern benchmark summary (RTX 4090):*
+
+#table(
+  columns: 4,
+  align: (left, right, right, left),
+  table.header([Pattern], [Naive BW], [Optimized BW], [Technique]),
+  [Matrix multiply], [~200 GB/s], [~900 GB/s], [Shared memory tiling],
+  [Reduction], [~400 GB/s], [~850 GB/s], [Sequential addressing],
+  [Histogram], [~20 GB/s], [~300 GB/s], [Privatized shared memory],
+  [AoS → SoA], [~160 GB/s], [~940 GB/s], [Data layout transform],
+)
+
 *Alignment requirements:*
 
 ```c

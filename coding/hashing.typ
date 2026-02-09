@@ -322,6 +322,28 @@ public:
 - High load factor tolerable (0.8-0.9)
 - Performance critical hash tables
 
+== Complexity Reference
+
+#table(
+  columns: 5,
+  align: (left, center, center, center, left),
+  table.header([Structure], [Insert], [Lookup], [Delete], [Notes]),
+  [std::unordered_map], [$O(1)$ avg], [$O(1)$ avg], [$O(1)$ avg], [Chaining, $O(n)$ worst],
+  [std::unordered_set], [$O(1)$ avg], [$O(1)$ avg], [$O(1)$ avg], [Same as map, no values],
+  [Robin Hood Map], [$O(1)$ avg], [$O(1)$ avg], [$O(1)$ avg], [Better cache, bounded probe],
+  [Swiss Table (flat)], [$O(1)$ avg], [$O(1)$ avg], [$O(1)$ avg], [SIMD probe, 2-3x faster],
+  [Cuckoo Hash], [$O(1)$ amort], [$O(1)$ worst], [$O(1)$ worst], [2 tables, ~50% load max],
+  [std::map (red-black)], [$O(log n)$], [$O(log n)$], [$O(log n)$], [Ordered, stable iterators],
+)
+
+== When to Use What
+
+- *Default:* `std::unordered_map` --- simple, widely supported, good enough for most cases.
+- *Performance-critical:* `absl::flat_hash_map` or `tsl::robin_map` --- 2-3x faster due to open addressing and cache locality.
+- *Ordered iteration needed:* `std::map` --- red-black tree, $O(log n)$ but sorted traversal.
+- *Worst-case guarantees:* Cuckoo hashing --- $O(1)$ worst-case lookup at cost of ~50% max load.
+- *Small key sets (< 100):* Sorted `std::vector` + binary search --- cache-friendly, beats hash tables for small $n$.
+
 == Hash Function Quality
 
 *std::hash properties:*

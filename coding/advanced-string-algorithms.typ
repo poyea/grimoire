@@ -4,6 +4,88 @@
 
 *See also:* String Algorithms (for KMP, Rabin-Karp, Z-algorithm), Tries (for prefix trees), Hashing (for rolling hash techniques)
 
+== Boyer-Moore Algorithm
+
+*Key insight:* Compare pattern right-to-left. On mismatch, skip ahead using precomputed shift tables. Average case $O(n\/m)$ --- sublinear, faster for larger alphabets.
+
+*Two heuristics:*
+1. *Bad character rule:* On mismatch at text[i], shift pattern so last occurrence of text[i] in pattern aligns. If not in pattern, skip entire pattern length.
+2. *Good suffix rule:* On mismatch after matching a suffix, shift to align with next occurrence of that suffix in pattern. (More complex, omitted for brevity.)
+
+*Bad character implementation:*
+
+```cpp
+vector<int> boyer_moore_search(const string& text, const string& pattern) {
+    int n = text.size(), m = pattern.size();
+    vector<int> matches;
+    if (m == 0 || m > n) return matches;
+
+    // Build bad character table
+    array<int, 256> bad_char;
+    bad_char.fill(-1);
+    for (int j = 0; j < m; j++) {
+        bad_char[(unsigned char)pattern[j]] = j;
+    }
+
+    int i = 0;  // Offset in text
+    while (i <= n - m) {
+        int j = m - 1;  // Compare right-to-left
+
+        while (j >= 0 && pattern[j] == text[i + j]) {
+            j--;
+        }
+
+        if (j < 0) {
+            matches.push_back(i);
+            // Shift: align next char in text after match
+            i += (i + m < n) ? m - bad_char[(unsigned char)text[i + m]] : 1;
+        } else {
+            // Shift by bad character rule
+            int shift = j - bad_char[(unsigned char)text[i + j]];
+            i += max(1, shift);
+        }
+    }
+
+    return matches;
+}
+```
+
+*Boyer-Moore-Horspool (simplified variant):*
+
+Uses only the bad character rule applied to the *last* character of the window. Simpler, nearly as fast in practice.
+
+```cpp
+vector<int> horspool_search(const string& text, const string& pattern) {
+    int n = text.size(), m = pattern.size();
+    vector<int> matches;
+    if (m == 0 || m > n) return matches;
+
+    // Shift table: distance from rightmost occurrence to end of pattern
+    array<int, 256> shift;
+    shift.fill(m);
+    for (int j = 0; j < m - 1; j++) {
+        shift[(unsigned char)pattern[j]] = m - 1 - j;
+    }
+
+    int i = 0;
+    while (i <= n - m) {
+        if (text.compare(i, m, pattern) == 0) {
+            matches.push_back(i);
+        }
+        i += shift[(unsigned char)text[i + m - 1]];
+    }
+
+    return matches;
+}
+```
+
+*Complexity:*
+- Preprocessing: $O(m + |Sigma|)$ where $|Sigma|$ = alphabet size
+- Best/average case: $O(n\/m)$ --- sublinear, skips large portions of text
+- Worst case (bad char only): $O(n m)$. With good suffix rule: $O(n)$.
+
+*When to prefer Boyer-Moore:* Large alphabets (ASCII, Unicode) where mismatches cause large skips. Less effective on small alphabets (DNA: only 4 chars).
+
 == Suffix Array Construction
 
 *Definition:* Array of starting indices of all suffixes, sorted lexicographically.
@@ -608,6 +690,7 @@ string minRotation(const string& s) {
   [Suffix Array], [$O(n log n)$], [$O(m log n)$], [Pattern search, LCP queries],
   [Suffix Automaton], [$O(n)$], [$O(m)$], [Substring check, counting],
   [Aho-Corasick], [$O(sum |p|)$], [$O(n + z)$], [Multiple pattern matching],
+  [Boyer-Moore], [$O(m + |Sigma|)$], [$O(n\/m)$ avg], [Single pattern, large alphabets],
   [Z-Algorithm], [$O(n)$], [N/A], [Single pattern, period finding],
   [Manacher], [$O(n)$], [N/A], [Palindrome finding],
 )

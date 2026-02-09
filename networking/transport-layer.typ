@@ -188,12 +188,39 @@ Summary (100 Mbps, 50ms RTT, 1% loss):
 ```
 BDP = 10 Gbps × 100ms = 125 MB ≈ 85,616 segments
 
-CUBIC: cwnd recovery after loss takes ~40 RTTs = 4 seconds
-       Average utilization: ~60-70% (slow cubic regrowth)
+CUBIC cwnd evolution after loss at cwnd_max = 85,616:
+  RTT 0 (loss):    cwnd = 0.7 × 85,616 = 59,931
+  K = ∛(85,616 × 0.3 / 0.4) = ∛(64,212) ≈ 40 RTTs
+  RTT 5:           cwnd ≈ 60,100  (slow cubic regrowth)
+  RTT 10:          cwnd ≈ 61,500
+  RTT 20:          cwnd ≈ 68,000
+  RTT 40 (= K):    cwnd ≈ 85,616  (inflection point, full recovery)
+  Total recovery:  ~40 RTTs = 4 seconds at 60-70% utilization
 
-BBR:   Maintains ~95% utilization
-       pacing_rate adapts within 6-8 RTTs
+BBR cwnd evolution (same scenario):
+  RTT 0 (loss):    No cwnd cut — loss is not a congestion signal
+  RTT 1-6:         PROBE_BW phase, pacing_gain cycles [1.25, 0.75, 1, 1, 1, 1, 1, 1]
+  RTT 6-8:         BtlBw re-estimated within 6-8 RTTs
+  Steady state:    pacing_rate = 10 Gbps × 1.0 = 10 Gbps
+                   cwnd = 2 × BDP = 250 MB (inflight cap)
+                   Throughput ≈ 9.5 Gbps (95% utilization)
+  Every ~10s:      PROBE_RTT phase — cwnd = 4 for 200ms (brief dip)
 ```
+
+*Summary comparison:*
+
+#table(
+  columns: 5,
+  align: (left, right, right, right, right),
+  table.header([Metric], [CUBIC (100M)], [BBR (100M)], [CUBIC (10G)], [BBR (10G)]),
+  [Avg Throughput], [~85 Mbps], [~98 Mbps], [~6.5 Gbps], [~9.5 Gbps],
+  [Avg RTT], [60-100ms], [50-55ms], [120-200ms], [100-105ms],
+  [Recovery Time], [~700ms], [N/A], [~4s], [~800ms],
+  [Buffer Occupancy], [High], [Low], [Very High], [Low],
+  [Loss Sensitivity], [High], [Low], [Very High], [Low],
+)
+
+*Fairness note:* BBRv1 can starve CUBIC flows on shared bottlenecks (BBR claims ~40% more bandwidth). BBRv2 [2019] adds explicit loss reaction and ECN support to coexist fairly with loss-based algorithms.
 
 *Enable BBR:*
 ```bash
