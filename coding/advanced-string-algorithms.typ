@@ -507,20 +507,19 @@ public:
     }
 
     // Count occurrences of pattern
-    int countOccurrences(const string& pattern) {
+    int count_occurrences(const string& pattern) {
         int curr = 0;
         for (char c : pattern) {
             if (!st[curr].next.count(c)) return 0;
             curr = st[curr].next[c];
         }
-
-        // Count paths to terminal states (need preprocessing)
-        // Each state represents an equivalence class
-        return countPaths(curr);
+        // Precompute occurrence counts via suffix link tree
+        auto cnt = count_paths();
+        return cnt[curr];
     }
 
     // Count distinct substrings
-    int64_t countDistinct() {
+    int64_t count_distinct() {
         int64_t total = 0;
         for (int i = 1; i < st.size(); i++) {
             total += st[i].len - st[st[i].link].len;
@@ -529,10 +528,22 @@ public:
     }
 
 private:
-    // DFS to count paths (preprocessing needed for occurrence counting)
-    int countPaths(int v) {
-        // Implementation depends on use case
-        return 0;
+    // Count reachable end-positions via topological sort on suffix links
+    vector<int> count_paths() {
+        int n = st.size();
+        vector<int> cnt(n, 0);
+        // Each state added by extend() has exactly one end-position
+        for (int i = 1; i < n; i++) cnt[i] = 1;
+        // Sort states by length descending, propagate counts up suffix links
+        vector<int> order(n);
+        iota(order.begin(), order.end(), 0);
+        sort(order.begin(), order.end(),
+             [&](int a, int b) { return st[a].len > st[b].len; });
+        for (int v : order) {
+            if (st[v].link >= 0)
+                cnt[st[v].link] += cnt[v];
+        }
+        return cnt;
     }
 };
 ```

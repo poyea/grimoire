@@ -51,7 +51,7 @@ bool isAnagram(string s, string t) {
 *Hash Map:* $O(n)$ time, $O(n)$ space
 
 ```cpp
-vector<int> twoSum(vector<int>& nums, int target) {
+vector<int> two_sum(vector<int>& nums, int target) {
     unordered_map<int, int> seen;
 
     for (int i = 0; i < nums.size(); i++) {

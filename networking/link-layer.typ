@@ -384,6 +384,36 @@ At 10Gbps (1.25GB/s), processing 1M packets/sec:
 
 *Next:* See Kernel Bypass section for DPDK, XDP alternatives that eliminate this overhead.
 
+== Protocol and Frame Type Reference
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*Protocol / Frame Type*], [*EtherType*], [*Max Payload*], [*Use Case*],
+  [IPv4], [0x0800], [1500 bytes], [Standard internet traffic],
+  [IPv6], [0x86DD], [1500 bytes (jumbo: 9000)], [Next-gen internet traffic],
+  [ARP], [0x0806], [28 bytes (typical)], [IP → MAC resolution],
+  [VLAN (802.1Q)], [0x8100], [1500 bytes + 4B tag], [Virtual LAN tagging],
+  [MPLS], [0x8847/0x8848], [Variable], [Label-switched forwarding],
+  [LLDP], [0x88CC], [Variable], [Link Layer Discovery],
+  [PTP (IEEE 1588)], [0x88F7], [Variable], [Precision time sync ($< 1 mu$s)],
+)
+
+=== NIC Offload Comparison
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*Offload*], [*CPU Savings*], [*Latency Impact*], [*Availability*],
+  [TCP Checksum Offload (TCO)], [~5% CPU], [None], [Universal],
+  [TCP Segmentation Offload (TSO)], [~15-20% CPU], [Slight increase (batching)], [Universal],
+  [Large Receive Offload (LRO)], [~10-15% CPU], [Increases (aggregation)], [Most NICs],
+  [Generic Receive Offload (GRO)], [~10% CPU], [Minimal], [Linux kernel],
+  [RSS (Receive Side Scaling)], [Linear with cores], [None], [Most 10G+ NICs],
+  [HW Timestamping], [Minimal], [Sub-$mu$s accuracy], [Intel i210/X710, Mellanox],
+  [Flow Director / aRFS], [~5-10% CPU], [Reduces (~cache affinity)], [Intel 10G+],
+)
+
+_Typical server: enabling TSO + GRO + RSS reduces CPU utilization by 30-40% at 10 Gbps line rate._
+
 == References
 
 *Primary sources:*

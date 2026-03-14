@@ -11,7 +11,7 @@
 *Approach - Stack:* $O(n)$ time, $O(n)$ space
 
 ```cpp
-bool isValid(string s) {
+bool is_valid(string s) {
     // Static lookup: branch predictor friendly, no cache misses
     constexpr array<char, 128> pairs = []() {
         array<char, 128> a{};
@@ -43,7 +43,7 @@ bool isValid(string s) {
 
 *Alternative - Static array stack:*
 ```cpp
-bool isValid(string s) {
+bool is_valid(string s) {
     char stack[10000];  // Stack-allocated, zero malloc overhead
     int top = -1;
 

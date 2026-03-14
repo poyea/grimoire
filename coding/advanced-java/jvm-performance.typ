@@ -1,991 +1,1303 @@
-= Part V: JVM Performance & Tuning
+= Part V: C++ Memory Model & Performance
 
-== Garbage Collection
+== Memory Management: RAII and Allocators
 
-=== GC Algorithms
+=== Allocation Strategies
 
-*Serial GC:* Single-threaded, stop-the-world
-```bash
--XX:+UseSerialGC
+*Stack allocation:* Fastest, automatic lifetime
+```cpp
+void process() {
+    int buffer[1024];          // Stack-allocated (fast)
+    std::array<int, 256> arr;  // Stack-allocated, bounds-safe
+    // Automatically freed when scope exits
+}
 ```
-- Young: Single thread, copying
-- Old: Single thread, mark-sweep-compact
-- Use: Single-core, small heap (`<100MB`), batch jobs
+- No allocator overhead (~0 ns)
+- Limited by stack size (typically 1--8 MB)
+- Use: Small, fixed-size, short-lived data
 
-*Parallel GC (Throughput):* Multi-threaded, stop-the-world
-```bash
--XX:+UseParallelGC
+*Heap allocation (default):* `new`/`delete`, flexible
+```cpp
+auto ptr = std::make_unique<Widget>(42);  // Heap-allocated
+auto vec = std::make_shared<std::vector<int>>(1000);
+// Freed automatically by smart pointer destructor (RAII)
 ```
-- Young: Multiple threads, copying
-- Old: Multiple threads, mark-sweep-compact
-- Goal: Maximize throughput (minimize GC time %)
-- Use: Batch processing, scientific computing
+- Allocator overhead (~50--100 ns per allocation)
+- Unlimited size (bounded by virtual memory)
+- Use: Dynamic-size, long-lived, polymorphic objects
 
-*G1 GC (Balanced):* Region-based, mostly concurrent
-```bash
--XX:+UseG1GC (default since Java 9)
-```
-- Heap divided into regions (~2048 regions)
-- Young + Old collected incrementally
-- Goal: Predictable pause times
-- Target: `-XX:MaxGCPauseMillis=200` (default 200ms)
-- Use: Large heaps (>4GB), balanced latency/throughput
+*Arena allocator:* Bulk allocation, fast deallocation
+```cpp
+class ArenaAllocator {
+    char* buffer_;
+    size_t offset_ = 0;
+    size_t capacity_;
+public:
+    explicit ArenaAllocator(size_t cap)
+        : buffer_(new char[cap]), capacity_(cap) {}
+    ~ArenaAllocator() { delete[] buffer_; }
 
-*ZGC (Low-latency):* Concurrent, colored pointers
-```bash
--XX:+UseZGC
+    void* allocate(size_t size, size_t align = alignof(std::max_align_t)) {
+        size_t aligned = (offset_ + align - 1) & ~(align - 1);
+        if (aligned + size > capacity_) throw std::bad_alloc();
+        void* ptr = buffer_ + aligned;
+        offset_ = aligned + size;
+        return ptr;
+    }
+    void reset() { offset_ = 0; }  // Free all at once (O(1))
+};
 ```
-- Pause times `<10ms` (even for TB heaps!)
-- Concurrent marking, compaction, relocation
-- Uses colored pointers (metadata in pointer bits)
-- Trade-off: Higher CPU usage (~15%)
-- Use: Low-latency requirements (`<10ms` pauses)
+- Allocation: ~5 ns (bump pointer)
+- Deallocation: O(1) reset (free everything at once)
+- Use: Request processing, frame allocators, parsers
 
-*Shenandoah:* Concurrent, brooks pointers
-```bash
--XX:+UseShenandoahGC
+*Pool allocator:* Fixed-size blocks, no fragmentation
+```cpp
+template <typename T, size_t BlockSize = 4096>
+class PoolAllocator {
+    union Block { T data; Block* next; };
+    Block* free_list_ = nullptr;
+    std::vector<std::unique_ptr<Block[]>> chunks_;
+public:
+    T* allocate() {
+        if (!free_list_) grow();
+        Block* block = free_list_;
+        free_list_ = block->next;
+        return reinterpret_cast<T*>(block);
+    }
+    void deallocate(T* ptr) {
+        auto* block = reinterpret_cast<Block*>(ptr);
+        block->next = free_list_;
+        free_list_ = block;
+    }
+private:
+    void grow() {
+        auto chunk = std::make_unique<Block[]>(BlockSize);
+        for (size_t i = 0; i < BlockSize - 1; ++i)
+            chunk[i].next = &chunk[i + 1];
+        chunk[BlockSize - 1].next = free_list_;
+        free_list_ = &chunk[0];
+        chunks_.push_back(std::move(chunk));
+    }
+};
 ```
-- Similar to ZGC (`<10ms` pauses)
-- Uses indirection pointers (forwarding)
-- Trade-off: Memory overhead (~10%)
-- Use: Low-latency alternative to ZGC
+- Allocation: ~10 ns (pop from free list)
+- Deallocation: ~5 ns (push to free list)
+- Use: Game entities, network packets, AST nodes
+
+*Slab allocator:* Cached object pools (kernel-style)
+```cpp
+// Pre-constructed objects, reuse without re-initialization
+template <typename T>
+class SlabAllocator {
+    std::vector<T> slab_;
+    std::stack<size_t> free_indices_;
+public:
+    explicit SlabAllocator(size_t count) : slab_(count) {
+        for (size_t i = 0; i < count; ++i)
+            free_indices_.push(i);
+    }
+    T* allocate() {
+        size_t idx = free_indices_.top();
+        free_indices_.pop();
+        return &slab_[idx];
+    }
+    void deallocate(T* ptr) {
+        size_t idx = ptr - slab_.data();
+        free_indices_.push(idx);
+    }
+};
+```
+- Use: Frequently created/destroyed objects of same type
 
 *Comparison:*
 ```
-Algorithm    Pause Time    Throughput    Heap Size    Use Case
-Serial       100-1000ms    High          <100MB       Small apps
-Parallel     100-1000ms    Highest       GB           Batch jobs
-G1           10-200ms      Good          GB           General purpose
-ZGC          <10ms         Good          TB           Low-latency
-Shenandoah   <10ms         Good          GB-TB        Low-latency
+Strategy     Alloc Time    Dealloc Time    Fragmentation    Use Case
+Stack        ~0 ns         automatic       None             Local variables
+Heap (new)   ~50-100 ns    ~50-100 ns      Yes              General purpose
+Arena        ~5 ns         O(1) reset      None             Batch processing
+Pool         ~10 ns        ~5 ns           None             Fixed-size objects
+Slab         ~10 ns        ~5 ns           None             Hot object reuse
 ```
 
-=== Generational Hypothesis & Object Lifecycle
+=== RAII and Smart Pointers
 
-*Generational hypothesis:* Most objects die young (~90%).
+*RAII (Resource Acquisition Is Initialization):* Tie resource lifetime to scope.
 
-*Object lifecycle:*
-```
-1. Allocate in Eden
-2. Survive minor GC → S0 (age 1)
-3. Survive minor GC → S1 (age 2)
-4. ...
-5. Survive minor GC (age 15) → Old Gen (tenured)
-6. Major GC → Free (if unreachable)
-```
+*Core principle:* Constructor acquires, destructor releases.
+```cpp
+class FileHandle {
+    FILE* file_;
+public:
+    explicit FileHandle(const char* path) : file_(fopen(path, "r")) {
+        if (!file_) throw std::runtime_error("cannot open file");
+    }
+    ~FileHandle() { if (file_) fclose(file_); }
 
-*Young generation collection (minor GC):*
-- Fast (~10-50ms)
-- Frequent (Eden fills quickly)
-- Copy live objects (Eden + S0 → S1, swap survivors)
-- Dead objects implicitly collected (not copied)
-
-*Old generation collection (major/full GC):*
-- Slow (~100-1000ms)
-- Infrequent (old gen fills slowly)
-- Mark-sweep-compact (scan all live objects)
-- Stop-the-world (application paused)
-
-*Promotion:*
-- Object survives 15 minor GCs → promoted to old gen
-- Threshold: `-XX:MaxTenuringThreshold=15`
-- Premature promotion: Large objects go directly to old gen
-
-=== GC Tuning Flags
-
-*Heap sizing:*
-```bash
--Xms4g          # Initial heap size
--Xmx8g          # Maximum heap size
--Xmn2g          # Young generation size
-
-# Or ratio-based:
--XX:NewRatio=2  # Old:Young = 2:1 (Young = 1/3 of heap)
+    // Non-copyable, movable
+    FileHandle(const FileHandle&) = delete;
+    FileHandle& operator=(const FileHandle&) = delete;
+    FileHandle(FileHandle&& other) noexcept : file_(std::exchange(other.file_, nullptr)) {}
+    FileHandle& operator=(FileHandle&& other) noexcept {
+        if (file_) fclose(file_);
+        file_ = std::exchange(other.file_, nullptr);
+        return *this;
+    }
+};
 ```
 
-*GC selection:*
-```bash
--XX:+UseG1GC                # G1 (default Java 9+)
--XX:+UseZGC                 # ZGC (low-latency)
--XX:+UseParallelGC          # Parallel (throughput)
+*Smart pointer guide:*
+```
+Pointer            Overhead     Ownership         Use Case
+unique_ptr<T>      0 (zero!)    Exclusive          Default choice
+shared_ptr<T>      2 pointers   Shared (refcount)  Shared ownership
+weak_ptr<T>        2 pointers   Non-owning         Break cycles
+T* (raw)           1 pointer    Non-owning         Observers only
 ```
 
-*G1 tuning:*
-```bash
--XX:MaxGCPauseMillis=200    # Target max pause (default 200ms)
--XX:G1HeapRegionSize=16m    # Region size (1-32MB)
--XX:InitiatingHeapOccupancyPercent=45  # Start concurrent marking at 45%
+*`unique_ptr`:* Zero overhead, exclusive ownership
+```cpp
+auto widget = std::make_unique<Widget>(42);     // Heap alloc
+auto arr = std::make_unique<int[]>(1000);        // Array
+auto moved = std::move(widget);                  // Transfer ownership
+// widget is now nullptr
 ```
 
-*ZGC tuning:*
-```bash
--XX:+UseZGC
--XX:ZCollectionInterval=5   # Min interval between GCs (seconds)
--XX:ZAllocationSpikeTolerance=2  # Handle allocation spikes
+*`shared_ptr`:* Reference-counted, thread-safe refcount
+```cpp
+auto data = std::make_shared<Data>();  // Single allocation (object + refcount)
+auto copy = data;                      // refcount = 2 (atomic increment)
+// Last shared_ptr destroyed → object freed
 ```
 
-*GC logging:*
-```bash
-# Java 9+
--Xlog:gc*:file=gc.log:time,uptime,level,tags
-
-# Java 8
--XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:gc.log
+*Pitfall -- reference cycles:*
+```cpp
+struct Node {
+    std::shared_ptr<Node> next;  // Cycle: A→B→A (memory leak!)
+};
+// Fix: use weak_ptr for back-references
+struct Node {
+    std::shared_ptr<Node> next;
+    std::weak_ptr<Node> prev;    // Doesn't prevent deletion
+};
 ```
 
-=== Low-Latency GC Strategies
+=== Copy Elision: RVO, NRVO, and Move Semantics
 
-*Goal:* Minimize GC pauses (`<10ms` for HFT)
+*Return Value Optimization (RVO):* Construct return value in caller's space.
 
-*Strategy 1: Use ZGC/Shenandoah*
-```bash
--XX:+UseZGC -Xmx16g -Xms16g
-# Pauses <10ms even with 16GB heap
+```cpp
+std::vector<int> make_vector() {
+    return std::vector<int>{1, 2, 3, 4, 5};  // Guaranteed RVO (C++17)
+    // No copy, no move -- constructed directly in caller's memory
+}
+
+std::string build_string() {
+    std::string result;       // NRVO: Named RVO (not guaranteed, but common)
+    result += "hello";
+    result += " world";
+    return result;            // Compiler elides copy (usually)
+}
 ```
 
-*Strategy 2: Reduce allocation rate*
-- Object pooling (reuse objects)
-- Primitive arrays (not wrapper objects)
-- StringBuilder (not String concat)
+*Move semantics:* Transfer resources instead of copying.
+```cpp
+class Buffer {
+    int* data_;
+    size_t size_;
+public:
+    // Move constructor: steal resources (O(1))
+    Buffer(Buffer&& other) noexcept
+        : data_(std::exchange(other.data_, nullptr))
+        , size_(std::exchange(other.size_, 0)) {}
 
-*Strategy 3: Promote less to old gen*
-- Increase young gen size
-- Reduce object lifespan (short-lived OK)
-- Avoid long-lived caches
+    // Copy constructor: deep copy (O(n))
+    Buffer(const Buffer& other)
+        : data_(new int[other.size_]), size_(other.size_) {
+        std::copy(other.data_, other.data_ + size_, data_);
+    }
+};
 
-*Strategy 4: Tune heap size*
-```bash
-# Set Xms == Xmx (avoid resize overhead)
--Xms8g -Xmx8g
-
-# Increase young gen (more minor GCs, fewer major)
--Xmn4g
+Buffer a(1000);
+Buffer b = std::move(a);  // O(1) move, not O(n) copy
 ```
 
-*Strategy 5: Off-heap memory*
-- DirectByteBuffer (no GC)
-- Memory-mapped files (OS manages)
-- Unsafe allocations (advanced)
-
-=== GC Logging & Analysis
-
-*Enable logging:*
-```bash
-java -Xlog:gc*:file=gc.log:time,uptime,level,tags \
-     -XX:+UseG1GC -Xmx4g MyApp
+*Performance impact:*
+```
+Operation              Cost
+Copy std::vector       O(n) -- allocate + copy all elements
+Move std::vector       O(1) -- swap 3 pointers
+RVO (guaranteed)       O(0) -- no copy or move at all
 ```
 
-*Key metrics:*
-- *Pause time*: Application stopped (minimize!)
-- *Throughput*: % time not in GC (maximize)
-- *Frequency*: How often GC runs
-- *Heap usage*: Live data size
+=== String Optimization: SSO and string_view
 
-*Example log:*
-```
-[0.234s][info][gc] GC(0) Pause Young (Normal) 24M->3M(256M) 2.345ms
-[0.456s][info][gc] GC(1) Pause Young (Normal) 27M->4M(256M) 2.891ms
-[5.123s][info][gc] GC(15) Pause Full (Ergonomics) 200M->100M(256M) 345.678ms
+*Small String Optimization (SSO):* Short strings stored inline (no heap).
+```cpp
+std::string s1 = "hi";           // SSO: stored in string object (no heap alloc)
+std::string s2 = "this is a longer string that exceeds SSO";  // Heap allocated
+// Typical SSO threshold: 15-22 bytes (implementation-dependent)
 ```
 
-*Analysis tools:*
-- GCViewer: Visual analysis (pause time, throughput)
-- GCeasy: Online analysis (upload log)
-- jstat: Real-time monitoring
+*`std::string_view`:* Non-owning reference to string data (zero-copy).
+```cpp
+void process(std::string_view sv) {  // No copy, no allocation
+    auto sub = sv.substr(0, 5);      // O(1), no allocation
+    // sv is valid as long as underlying data exists
+}
 
-```bash
-jstat -gcutil PID 1000  # GC stats every 1 second
+std::string data = "hello world";
+process(data);            // No copy
+process("literal");       // No copy (points to static storage)
 ```
 
-=== Interview Questions: GC
-
-*Q1: Explain how G1 GC works and when to use it.*
-
-A: G1 (Garbage-First) divides heap into regions (~2048 equal-sized).
-
-*Key features:*
-1. *Region-based*: Heap = young regions + old regions + humongous (large objects)
-2. *Incremental*: Collects regions with most garbage first
-3. *Concurrent marking*: Mark live objects while app runs
-4. *Predictable pauses*: Target pause time (`-XX:MaxGCPauseMillis=200`)
-
-*Algorithm:*
-1. Young GC: Evacuate young regions (stop-the-world, ~10-50ms)
-2. Concurrent marking: Mark live objects in old gen (concurrent)
-3. Mixed GC: Evacuate young + some old regions (incremental)
-4. Full GC: Fallback if heap exhausted (avoid!)
-
-*When to use:*
-- Large heaps (>4GB)
-- Predictable pause times required
-- Balanced latency and throughput
-
-*Configuration:*
-```bash
--XX:+UseG1GC -Xmx8g -XX:MaxGCPauseMillis=100
+*`constexpr` strings (C++20):*
+```cpp
+constexpr std::string_view greeting = "hello";
+static_assert(greeting.size() == 5);  // Compile-time string processing
 ```
 
-*Q2: When would you use ZGC over G1?*
+=== Placement New and Custom Construction
+
+*Placement new:* Construct object at specific memory address.
+```cpp
+alignas(Widget) char buffer[sizeof(Widget)];
+Widget* w = new (buffer) Widget(42);  // Construct in pre-allocated memory
+// Must manually destroy:
+w->~Widget();  // Explicit destructor call
+```
+
+*Use with allocators:*
+```cpp
+void* mem = arena.allocate(sizeof(Widget), alignof(Widget));
+Widget* w = new (mem) Widget(args...);  // Construct in arena memory
+// Arena reset destroys all objects at once
+```
+
+*`std::pmr` (Polymorphic Memory Resources, C++17):*
+```cpp
+#include <memory_resource>
+
+char buffer[4096];
+std::pmr::monotonic_buffer_resource pool(buffer, sizeof(buffer));
+std::pmr::vector<int> vec(&pool);  // Uses stack-backed allocator
+vec.push_back(42);                 // No heap allocation!
+```
+
+=== Interview Questions: Memory Management
+
+*Q1: Explain RAII and why it matters for C++ performance.*
+
+A: RAII = Resource Acquisition Is Initialization. Constructor acquires, destructor releases.
+
+*Key benefits:*
+1. *Deterministic cleanup*: Resources freed at scope exit (no GC pauses)
+2. *Exception safety*: Destructors always run (even on exception)
+3. *Zero overhead*: No runtime tracking (unlike reference counting)
+4. *Composability*: RAII objects nest and compose naturally
+
+*Performance implications:*
+- No garbage collector pauses (deterministic latency)
+- Destructor cost is paid at scope exit (predictable timing)
+- Smart pointers: `unique_ptr` has zero overhead vs raw pointer
+- `shared_ptr` has atomic refcount overhead (~10-20 ns per copy)
+
+*When RAII isn't enough:*
+- Shared ownership → `shared_ptr` (adds refcount cost)
+- Complex object graphs → consider arena allocator
+- Real-time systems → pre-allocate, use pool allocators
+
+*Q2: When would you use arena allocation over standard `new`/`delete`?*
 
 A:
 
-*ZGC:*
-- Ultra-low latency (`<10ms` pauses)
-- Scales to TB heaps
-- Concurrent (mark, relocate, compact)
-- Trade-off: Higher CPU usage (~15%)
+*Arena benefits:*
+- Bulk deallocation: Free thousands of objects in O(1)
+- Cache-friendly: Objects allocated contiguously
+- No fragmentation: Linear allocation, no free-list overhead
+- Thread-local: No lock contention (one arena per thread)
 
-*G1:*
-- Moderate latency (10-200ms pauses)
-- Good throughput
-- Simpler tuning
+*Use cases:*
+- *Request processing*: Allocate per-request, free all at request end
+- *Compilers/parsers*: AST nodes freed after compilation
+- *Game frames*: Per-frame allocations, reset each frame
+- *Protobuf/serialization*: Temporary message objects
 
-*Decision:*
-- *ZGC*: Latency critical (`<10ms` requirement), large heap
-  - Example: HFT, real-time pricing, online gaming
-- *G1*: General purpose, balanced requirements
+*Trade-offs:*
+- Cannot free individual objects (only bulk reset)
+- Memory not returned until arena reset
+- Must ensure no references survive arena reset
 
 *Performance:*
 ```
-Heap   G1 Pause    ZGC Pause
-4GB    10-50ms     <5ms
-16GB   50-100ms    <5ms
-64GB   100-200ms   <10ms
+Allocator          1M allocs    1M deallocs    Total
+std::allocator     ~80 ms       ~60 ms         ~140 ms
+Arena              ~5 ms        ~0.001 ms      ~5 ms (28x faster)
+Pool               ~10 ms       ~5 ms          ~15 ms
 ```
 
-*Q3: What is the generational hypothesis and how does it influence GC?*
+*Q3: What is the C++ equivalent of Java's garbage collection?*
 
-A: *Generational hypothesis*: Most objects die young (~90% within seconds).
+A: C++ uses deterministic destruction instead of garbage collection.
 
-*Evidence:*
-- Temporary objects (local variables, iterators)
-- Short request processing
-- Transient computation results
+*Mapping:*
+```
+Java (GC)                    C++ (RAII/Manual)
+Automatic GC                 RAII (destructors)
+GC pauses                    No pauses (deterministic)
+Heap-only objects             Stack + heap choice
+Finalize (deprecated)        Destructors (reliable)
+Weak references              std::weak_ptr
+Object pooling (GC tuning)   Arena/pool allocators
+-Xmx (heap size)             Virtual memory (OS managed)
+```
 
-*GC design:*
-1. *Separate young and old gen*
-   - Young: Small, frequently collected
-   - Old: Large, infrequently collected
+*Advantages of C++ approach:*
+- Predictable latency (no GC pauses)
+- Lower memory overhead (no GC metadata)
+- Cache-friendly layouts (value types, contiguous memory)
 
-2. *Minor GC (young):*
-   - Fast (copy live objects only)
-   - Frequent (Eden fills quickly)
-   - Most objects already dead (efficient)
+*Disadvantages:*
+- Manual lifetime management (mitigated by smart pointers)
+- Dangling pointer risk (mitigated by RAII, sanitizers)
+- No automatic cycle detection (use `weak_ptr`)
 
-3. *Major GC (old):*
-   - Slow (scan all live objects)
-   - Rare (only long-lived objects)
-   - Expensive but infrequent
+== Compiler Optimization and LTO
 
-*Performance benefit:*
-- Minor GC: 90% of objects dead → only copy 10%
-- Don't scan old gen frequently (expensive)
-- 10x faster than scanning entire heap
+=== Optimization Levels
 
-*Q4: How do you diagnose performance issues in production Java app?*
-
-A:
-
-*Step 1: Identify bottleneck*
+*Compiler flags (GCC/Clang):*
 ```bash
-# CPU profiling
-async-profiler -d 60 -f flamegraph.html PID
-
-# Heap analysis
-jmap -dump:live,format=b,file=heap.bin PID
-
-# GC analysis
-jstat -gcutil PID 1000
+-O0    # No optimization (debug, fast compile)
+-O1    # Basic optimizations (reduce size + time, no slow optimizations)
+-O2    # Standard optimization (recommended for production)
+-O3    # Aggressive (auto-vectorization, loop unrolling, function cloning)
+-Os    # Optimize for size (like -O2 but avoids size-increasing opts)
+-Ofast # -O3 + fast-math (breaks IEEE 754 -- use with caution)
 ```
 
-*Step 2: Analyze*
-
-*High CPU:*
-- Check flame graph (hot methods)
-- Look for inefficient algorithms, excessive allocations
-
-*High memory:*
-- Heap dump analysis (MAT, VisualVM)
-- Look for memory leaks (retained objects)
-
-*Frequent GC:*
-- GC logs (pause time, frequency)
-- Reduce allocation rate or increase heap
-
-*Long GC pauses:*
-- Switch to low-latency GC (ZGC)
-- Reduce live set (object pooling)
-
-*Step 3: Fix*
-- Optimize hot paths (inline, reduce allocations)
-- Cache expensive computations
-- Use primitives (not wrappers)
-- Tune GC (heap size, collector)
-
-*Tools:*
-- JFR (Java Flight Recorder): Low-overhead profiling
-- async-profiler: CPU/allocation profiling
-- jstack: Thread dumps (deadlocks)
-- MAT: Heap dump analysis (memory leaks)
-
-== JIT Compilation
-
-=== C1 vs C2 Compiler
-
-*C1 (Client compiler):*
-- Fast compilation (~10ms)
-- Basic optimizations
-- Lower peak performance
-- Use: Short-running apps, startup time critical
-
-*C2 (Server compiler):*
-- Slow compilation (~100-1000ms)
-- Aggressive optimizations
-- Higher peak performance
-- Use: Long-running apps, throughput critical
-
-*Tiered compilation (default):*
+*What each level enables:*
 ```
-Level 0: Interpreter
-Level 1: C1 (no profiling)
-Level 2: C1 (limited profiling)
-Level 3: C1 (full profiling)
-Level 4: C2 (optimized based on profiling)
+Level   Inlining  Vectorization  Unrolling  LTO   Typical Speedup
+-O0     No        No             No         No    1x (baseline)
+-O1     Basic     No             No         No    2-3x
+-O2     Yes       Basic          No         No    3-5x
+-O3     Aggressive Yes           Yes        No    4-8x
+-O3+LTO Aggressive Yes           Yes        Yes   5-10x
 ```
 
-*Flow:*
-1. Interpret method (collect profile data)
-2. Compile with C1 (fast, some optimizations)
-3. Profile compiled code
-4. Recompile with C2 (aggressive optimizations)
-
-*Flags:*
+*Architecture-specific flags:*
 ```bash
--XX:+TieredCompilation     # Enable (default)
--XX:TieredStopAtLevel=1    # Stop at C1 (fast startup)
--XX:TieredStopAtLevel=4    # Use C2 (default)
--XX:CompileThreshold=10000 # C2 after 10K invocations
+-march=native            # Optimize for current CPU (AVX, AVX2, etc.)
+-mtune=native            # Tune scheduling for current CPU
+-mavx2                   # Enable AVX2 instructions explicitly
+-mfma                    # Enable fused multiply-add
+-mbmi2                   # Enable BMI2 (bit manipulation)
 ```
 
-=== Inlining & Devirtualization
+=== Inlining and Devirtualization
 
-*Inlining:* Replace method call with method body
+*Inlining:* Replace function call with function body.
 
-```java
-// Before
-int add(int a, int b) { return a + b; }
+```cpp
+// Before inlining
+inline int add(int a, int b) { return a + b; }
 int result = add(x, y);
 
-// After inlining
-int result = x + y;  // No method call overhead!
+// After inlining (compiler does this automatically at -O2+)
+int result = x + y;  // No call overhead!
 ```
 
 *Benefits:*
-- Eliminate call overhead (~5-10ns)
-- Enable further optimizations (constant folding, etc.)
+- Eliminate call overhead (~2--5 ns per call)
+- Enable further optimizations (constant propagation, dead code elimination)
 
-*Limits:*
+*Controlling inlining:*
+```cpp
+// Hints (not guarantees)
+inline int fast_func(int x) { return x * 2; }           // Suggest inline
+[[gnu::always_inline]] int critical(int x) { return x; } // Force inline (GCC)
+__attribute__((noinline)) void debug_log(const char* msg); // Prevent inline
+```
+
+*Devirtualization:* Convert virtual call to direct call.
+
+```cpp
+class Animal {
+public:
+    virtual void speak() const = 0;
+};
+class Dog : public Animal {
+public:
+    void speak() const override { /* bark */ }
+};
+
+void make_noise(const Animal& a) {
+    a.speak();  // Virtual call (vtable lookup ~5 ns)
+}
+
+// If compiler proves a is always Dog:
+// Devirtualized to direct Dog::speak() call (can then inline!)
+```
+
+*Techniques for devirtualization:*
+```cpp
+// 1. final keyword (helps compiler devirtualize)
+class Dog final : public Animal {  // No further subclasses
+    void speak() const override { /* bark */ }
+};
+
+// 2. CRTP (Curiously Recurring Template Pattern) -- static polymorphism
+template <typename Derived>
+class AnimalCrtp {
+public:
+    void speak() const {
+        static_cast<const Derived*>(this)->speak_impl();  // No vtable!
+    }
+};
+class DogCrtp : public AnimalCrtp<DogCrtp> {
+public:
+    void speak_impl() const { /* bark */ }
+};
+
+// 3. std::variant (compile-time dispatch)
+using AnyAnimal = std::variant<Dog, Cat, Bird>;
+void make_noise(const AnyAnimal& a) {
+    std::visit([](const auto& animal) { animal.speak(); }, a);
+    // No virtual dispatch! Compiler generates switch/jump table.
+}
+```
+
+=== `constexpr` and Compile-Time Computation
+
+*`constexpr`:* Evaluate at compile time (zero runtime cost).
+
+```cpp
+constexpr int factorial(int n) {
+    int result = 1;
+    for (int i = 2; i <= n; ++i) result *= i;
+    return result;
+}
+constexpr int fact10 = factorial(10);  // Computed at compile time!
+
+// constexpr containers (C++20)
+constexpr auto make_lut() {
+    std::array<int, 256> lut{};
+    for (int i = 0; i < 256; ++i)
+        lut[i] = i * i;
+    return lut;
+}
+constexpr auto squares = make_lut();  // Lookup table at compile time
+```
+
+*`consteval` (C++20):* Must evaluate at compile time (error if not).
+```cpp
+consteval int compile_time_only(int x) { return x * x; }
+int val = compile_time_only(42);  // OK: computed at compile time
+// int rt = compile_time_only(runtime_var);  // ERROR: not compile-time
+```
+
+*`if constexpr` (C++17):* Compile-time branching (discard unused branches).
+```cpp
+template <typename T>
+auto serialize(const T& val) {
+    if constexpr (std::is_arithmetic_v<T>) {
+        return std::to_string(val);     // Arithmetic types
+    } else if constexpr (std::is_same_v<T, std::string>) {
+        return val;                      // Already a string
+    } else {
+        return val.to_string();          // Custom types
+    }
+}
+```
+
+=== Link-Time Optimization (LTO) and PGO
+
+*LTO:* Optimize across translation units (whole-program optimization).
+
 ```bash
--XX:MaxInlineSize=35         # Max method size to inline (bytes)
--XX:FreqInlineSize=325       # Hot method size limit
--XX:InlineSmallCode=1000     # Inline if compiled code < 1000 bytes
+# Enable LTO
+g++ -O3 -flto main.cpp utils.cpp -o app
+
+# Thin LTO (faster compile, similar optimization)
+clang++ -O3 -flto=thin main.cpp utils.cpp -o app
 ```
 
-*Devirtualization:* Convert virtual call to direct call (then inline)
+*LTO benefits:*
+- Cross-file inlining (inline functions from other `.cpp` files)
+- Dead code elimination (remove unused functions across files)
+- Interprocedural constant propagation
+- Devirtualization across translation units
+- Typical improvement: 5--20% over `-O3` alone
 
-```java
-Animal a = new Dog();  // Compiler proves a is always Dog
-a.speak();  // Virtual call
-
-// JIT sees only Dog instances
-// Devirtualizes to:
-Dog.speak();  // Direct call (can inline!)
-```
-
-*Speculative optimization:*
-- Assume one implementation (monomorphic)
-- Inline that implementation
-- Insert guard (check assumption)
-- Deoptimize if assumption breaks (bimorphic/polymorphic)
-
-```java
-// JIT sees only ArrayList so far
-List<String> list = ... ;  // Runtime type: ArrayList
-list.get(0);  // Inline ArrayList.get()
-
-// Guard: if (list.getClass() == ArrayList.class) { inlined code } else { slow path }
-```
-
-=== Escape Analysis & Scalar Replacement
-
-*Escape analysis:* Determine if object escapes method/thread.
-
-*Three cases:*
-1. *NoEscape:* Object local to method (optimize!)
-2. *ArgEscape:* Passed to other method, but doesn't escape caller
-3. *GlobalEscape:* Stored in field, returned, published
-
-*Optimizations:*
-
-*1. Scalar replacement:* Allocate object fields on stack (not heap)
-```java
-Point p = new Point(x, y);  // Object allocation
-int sum = p.x + p.y;
-
-// After scalar replacement (p doesn't escape):
-int p_x = x;  // Scalars on stack
-int p_y = y;
-int sum = p_x + p_y;  // No heap allocation!
-```
-
-*2. Lock elision:* Remove synchronization on thread-local object
-```java
-StringBuffer sb = new StringBuffer();  // Thread-local
-sb.append("a");  // synchronized
-sb.append("b");  // synchronized
-
-// After lock elision (sb doesn't escape):
-// Remove synchronization (no other thread can access)
-```
-
-*3. Stack allocation:* Allocate object on stack (not heap)
-- Avoided in HotSpot (scalar replacement instead)
-- C2 uses scalar replacement for better optimization
-
-*Enable:*
+*Profile-Guided Optimization (PGO):*
 ```bash
--XX:+DoEscapeAnalysis      # Enable (default)
--XX:+EliminateAllocations  # Scalar replacement (default)
--XX:+EliminateLocks        # Lock elision (default)
+# Step 1: Instrument
+g++ -O3 -fprofile-generate -o app main.cpp
+
+# Step 2: Run with representative workload
+./app < typical_input.txt
+
+# Step 3: Recompile with profile data
+g++ -O3 -fprofile-use -o app main.cpp
+```
+
+*PGO benefits:*
+- Branch prediction hints (layout hot paths)
+- Function ordering (co-locate hot functions)
+- Inline decisions based on actual call frequencies
+- Loop unrolling based on actual trip counts
+- Typical improvement: 10--30% over `-O3` alone
+
+*Combined (best performance):*
+```bash
+g++ -O3 -flto -fprofile-use -march=native -o app *.cpp
+# Maximum optimization: LTO + PGO + arch-specific
 ```
 
 === Loop Optimizations
 
-*Loop unrolling:* Repeat loop body to reduce overhead
+*Loop unrolling:* Repeat loop body to reduce branch overhead.
 
-```java
+```cpp
 // Before
 for (int i = 0; i < 100; i++) {
     sum += array[i];
 }
 
-// After unrolling (factor 4)
+// After unrolling (factor 4, compiler does this at -O3)
 for (int i = 0; i < 100; i += 4) {
     sum += array[i];
-    sum += array[i+1];
-    sum += array[i+2];
-    sum += array[i+3];
+    sum += array[i + 1];
+    sum += array[i + 2];
+    sum += array[i + 3];
 }
 // Benefits: Fewer branches, better instruction-level parallelism
 ```
 
-*Loop vectorization (auto-vectorization):* Use SIMD instructions
+*Loop vectorization (auto-vectorization):* Use SIMD instructions.
 
-```java
-// Before
-for (int i = 0; i < 1000; i++) {
-    c[i] = a[i] + b[i];
+```cpp
+// Scalar code (compiler auto-vectorizes at -O3 -march=native)
+void add_arrays(const float* a, const float* b, float* c, size_t n) {
+    for (size_t i = 0; i < n; ++i) {
+        c[i] = a[i] + b[i];
+    }
 }
 
-// After vectorization (AVX: 8 ints at once)
-for (int i = 0; i < 1000; i += 8) {
-    __m256i va = _mm256_loadu_si256(&a[i]);
-    __m256i vb = _mm256_loadu_si256(&b[i]);
-    __m256i vc = _mm256_add_epi32(va, vb);
-    _mm256_storeu_si256(&c[i], vc);
+// Explicit SIMD (AVX2: 8 floats at once)
+#include <immintrin.h>
+void add_arrays_avx(const float* a, const float* b, float* c, size_t n) {
+    size_t i = 0;
+    for (; i + 8 <= n; i += 8) {
+        __m256 va = _mm256_loadu_ps(&a[i]);
+        __m256 vb = _mm256_loadu_ps(&b[i]);
+        __m256 vc = _mm256_add_ps(va, vb);
+        _mm256_storeu_ps(&c[i], vc);
+    }
+    for (; i < n; ++i) c[i] = a[i] + b[i];  // Remainder
 }
-// 8x throughput!
+// 8x throughput for float operations!
 ```
 
-*Loop invariant code motion:* Move constant computation out of loop
+*Loop invariant code motion:* Compiler hoists constant computation.
 
-```java
+```cpp
 // Before
 for (int i = 0; i < n; i++) {
-    int x = a * b;  // Constant within loop
+    int x = a * b;       // Constant within loop
     array[i] = x + i;
 }
 
-// After
-int x = a * b;  // Moved outside loop
+// After (compiler does this at -O1+)
+int x = a * b;           // Hoisted outside loop
 for (int i = 0; i < n; i++) {
     array[i] = x + i;
 }
 ```
 
-=== Intrinsics & CPU-Specific Optimizations
-
-*Intrinsics:* JVM recognizes methods and replaces with optimized code
-
-*Examples:*
-```java
-System.arraycopy()      → memcpy (native)
-Math.sin/cos/sqrt()     → x87 FPU instructions
-String.equals()         → SSE4.2 string compare
-Arrays.equals()         → Vectorized compare
-Integer.bitCount()      → POPCNT instruction (x86)
-Long.numberOfLeadingZeros() → BSR instruction
+*Help the compiler vectorize:*
+```cpp
+// Use restrict-like semantics (no aliasing)
+void add(float* __restrict__ c, const float* __restrict__ a,
+         const float* __restrict__ b, size_t n) {
+    for (size_t i = 0; i < n; ++i) c[i] = a[i] + b[i];
+    // __restrict__ tells compiler a, b, c don't overlap → safe to vectorize
+}
 ```
 
-*String operations (SSE4.2):*
-```java
-// JVM intrinsic for String.equals()
-"hello".equals("world")  // Uses SSE4.2 PCMPESTRI (16 bytes at once)
+=== Intrinsics and CPU-Specific Operations
+
+*Compiler built-ins:* Map directly to CPU instructions.
+
+```cpp
+// Bit operations
+__builtin_popcount(x)           // POPCNT instruction
+__builtin_clz(x)                // Count leading zeros (BSR)
+__builtin_ctz(x)                // Count trailing zeros (BSF/TZCNT)
+__builtin_expect(x, 1)          // Branch prediction hint
+// C++20: std::popcount, std::countl_zero, std::countr_zero
+
+// Memory operations
+__builtin_prefetch(&array[i + 16]);  // Prefetch into cache
+std::memcpy(dst, src, n);            // Optimized to rep movsb or SIMD
+std::memset(buf, 0, n);             // Optimized to rep stosb or SIMD
 ```
 
-*AES encryption (AES-NI):*
-```java
-Cipher cipher = Cipher.getInstance("AES");  // Uses AES-NI instructions
-// 10x faster than software AES
+*SIMD intrinsics:*
+```cpp
+#include <immintrin.h>
+
+// SSE4.2 string comparison (16 bytes at once)
+int strcmp_fast(const char* a, const char* b) {
+    __m128i va = _mm_loadu_si128((__m128i*)a);
+    __m128i vb = _mm_loadu_si128((__m128i*)b);
+    // PCMPESTRI: parallel string compare
+    return _mm_cmpestri(va, 16, vb, 16, _SIDD_CMP_EQUAL_EACH);
+}
+
+// AES-NI: Hardware AES encryption
+__m128i aes_encrypt(__m128i data, __m128i key) {
+    return _mm_aesenc_si128(data, key);  // Single AES round (~1 cycle!)
+    // 10x faster than software AES
+}
 ```
 
-*SHA hashing:*
-```java
-MessageDigest.getInstance("SHA-256")  // Uses SHA extensions (Intel/AMD)
+*Checking CPU features at runtime:*
+```cpp
+#include <cpuid.h>
+bool has_avx2() {
+    unsigned eax, ebx, ecx, edx;
+    __cpuid_count(7, 0, eax, ebx, ecx, edx);
+    return ebx & (1 << 5);  // AVX2 bit
+}
 ```
 
-*BigInteger:*
-```java
-BigInteger.multiply()  // Uses CPU multiply instructions (optimized)
-```
-
-*Check intrinsics:*
+*Compiler diagnostics (check what was optimized):*
 ```bash
--XX:+PrintCompilation -XX:+PrintInlining
-# Look for "intrinsic" in output
+# Show optimization decisions
+g++ -O3 -fopt-info-vec-missed  # Show missed vectorizations
+g++ -O3 -fopt-info-inline      # Show inlining decisions
+g++ -O3 -S -o output.s         # Generate assembly (inspect)
+
+# Clang
+clang++ -O3 -Rpass=loop-vectorize       # Report vectorized loops
+clang++ -O3 -Rpass-missed=loop-vectorize # Report missed opportunities
 ```
 
-=== Interview Questions: JIT
+=== Interview Questions: Compiler Optimization
 
-*Q1: What is JIT compilation and how does it work?*
+*Q1: What is LTO and how does it improve performance?*
 
-A: JIT (Just-In-Time) = compile bytecode to native code at runtime.
+A: LTO (Link-Time Optimization) performs whole-program optimization across translation units at link time.
 
 *How it works:*
-1. *Interpreter*: Start with interpretation (collect profile data)
-2. *Profile*: Track hot methods (frequently executed)
-3. *Compile*: Compile hot methods to native code
-   - C1 (fast): Quick compilation, basic optimizations
-   - C2 (optimized): Aggressive optimizations
-4. *Execute*: Run native code (10-100x faster than interpreter)
-5. *Deoptimize*: Revert to interpreter if assumptions invalidated
+1. *Compile*: Generate intermediate representation (IR) instead of object code
+2. *Link*: Optimize entire program IR as a single unit
+3. *Codegen*: Generate optimized machine code
 
-*Tiered compilation:*
-```
-Interpreter → C1 (profile) → C2 (optimize)
-```
+*Optimizations enabled:*
+- Cross-file inlining (inline functions from other `.cpp` files)
+- Global dead code elimination (remove unused functions)
+- Interprocedural constant propagation
+- Cross-file devirtualization
 
-*Benefits:*
-- Fast startup (interpretation)
-- Peak performance (native code)
-- Profile-guided optimizations (runtime data)
-
-*Q2: Explain escape analysis and its optimizations.*
-
-A: Escape analysis = determine if object escapes method/thread.
-
-*Optimizations:*
-
-*1. Scalar replacement:* Object doesn't escape → fields on stack
-```java
-Point p = new Point(x, y);
-int sum = p.x + p.y;
-// Optimized to:
-int p_x = x;  // Stack (no heap allocation)
-int p_y = y;
-int sum = p_x + p_y;
+*Usage:*
+```bash
+g++ -O3 -flto *.cpp -o app    # Full LTO
+clang++ -O3 -flto=thin *.cpp  # Thin LTO (faster compile)
 ```
 
-*2. Lock elision:* Thread-local object → remove synchronization
-```java
-StringBuffer sb = new StringBuffer();  // Thread-local
-sb.append("a");  // synchronized (removed!)
-```
+*Trade-offs:*
+- Compile time: 2--5x longer (but faster runtime)
+- Memory usage: Higher at link time
+- Debugging: Harder (heavy transformations)
+- Typical speedup: 5--20%
 
-*3. Stack allocation:* Allocate on stack (not heap)
-- Faster allocation
-- No GC overhead
+*Q2: Explain C++ copy elision and how it differs from Java escape analysis.*
 
-*Impact:*
-- Eliminate allocation overhead
-- Reduce GC pressure
-- Remove synchronization cost
+A: Copy elision = compiler constructs return value directly in caller's memory.
 
-*Example:*
-```java
-public int compute() {
-    List<Integer> temp = new ArrayList<>();  // NoEscape
-    temp.add(1);
-    temp.add(2);
-    return temp.get(0) + temp.get(1);
-    // JIT: Scalar replace (no heap allocation!)
+*C++ (compile-time, guaranteed):*
+```cpp
+std::vector<int> make() {
+    return std::vector<int>{1, 2, 3};  // Guaranteed RVO (C++17)
+    // Zero copies, zero moves
 }
 ```
 
-*Q3: How does the JIT compiler optimize loops?*
+*Java escape analysis (runtime, JIT):*
+- JVM analyzes if object escapes method scope
+- May allocate on stack (scalar replacement)
+- Decided at runtime, may deoptimize
+
+*Key differences:*
+```
+Aspect                C++ Copy Elision      Java Escape Analysis
+When                  Compile time          Runtime (JIT)
+Guarantee             Mandatory (C++17)     Heuristic (may fail)
+Mechanism             Direct construction   Scalar replacement
+Cost                  Zero overhead         JIT analysis overhead
+Applicability         Return values         Any local object
+```
+
+*Q3: How do compiler optimization levels differ?*
 
 A:
 
-*1. Loop unrolling:* Reduce branch overhead
-```java
-// Before
-for (int i = 0; i < 100; i++) { sum += a[i]; }
+*`-O0`:* No optimization
+- Fastest compile, slowest runtime
+- All variables in memory (easy debugging)
+- Use: Development, debugging
 
-// After (unroll factor 4)
-for (int i = 0; i < 100; i += 4) {
-    sum += a[i] + a[i+1] + a[i+2] + a[i+3];
-}
+*`-O2`:* Standard optimization
+- Inlining, constant propagation, dead code elimination
+- Loop invariant code motion, strength reduction
+- Register allocation, instruction scheduling
+- Use: Production builds (safe, effective)
+
+*`-O3`:* Aggressive optimization
+- Everything in `-O2` plus:
+- Auto-vectorization (SIMD), loop unrolling
+- Function cloning (specialize for call sites)
+- Trade-off: Larger code (may hurt icache)
+- Use: Compute-intensive workloads
+
+*Impact:* 2--10x speedup from `-O0` to `-O3` depending on workload.
+
+== C++ Memory Model and Concurrency
+
+=== `std::atomic` and Memory Orders
+
+*Java `volatile` vs C++ `std::atomic`:*
+```
+Java volatile         →  std::atomic with std::memory_order_seq_cst
+Java non-volatile     →  Non-atomic access (undefined behavior if shared!)
 ```
 
-*2. Loop vectorization:* SIMD instructions
-```java
-for (int i = 0; i < 1000; i++) {
-    c[i] = a[i] + b[i];  // Processes 8 elements at once (AVX)
-}
+*Memory orders (weakest to strongest):*
+```cpp
+std::memory_order_relaxed   // No ordering guarantees (just atomicity)
+std::memory_order_acquire   // Reads after this see writes before release
+std::memory_order_release   // Writes before this visible after acquire
+std::memory_order_acq_rel   // Both acquire and release
+std::memory_order_seq_cst   // Total ordering (default, safest, slowest)
 ```
 
-*3. Loop invariant code motion:* Hoist constant computation
-```java
-for (int i = 0; i < n; i++) {
-    x = a * b;  // Move outside loop
-    array[i] = x + i;
-}
+*Example -- lock-free flag:*
+```cpp
+std::atomic<bool> ready{false};
+int data = 0;
+
+// Thread 1 (producer)
+data = 42;                                    // Write data
+ready.store(true, std::memory_order_release); // Publish
+
+// Thread 2 (consumer)
+while (!ready.load(std::memory_order_acquire)) {}  // Wait
+assert(data == 42);  // Guaranteed to see data = 42
 ```
 
-*4. Loop peeling:* Optimize first iteration separately
-```java
-// Handle first iteration (may eliminate null check in loop)
-if (n > 0) { process(array[0]); }
-for (int i = 1; i < n; i++) { process(array[i]); }
+*Example -- relaxed counter (fastest):*
+```cpp
+std::atomic<uint64_t> counter{0};
+counter.fetch_add(1, std::memory_order_relaxed);  // Just atomic increment
+// Use when ordering doesn't matter (statistics, counters)
 ```
 
-*Impact:* 2-10x speedup for loop-heavy code.
-
-== JVM Diagnostics & Profiling
-
-=== Critical JVM Flags
-
-*Performance flags:*
-```bash
-# GC
--XX:+UseZGC                 # Low-latency GC
--Xms8g -Xmx8g               # Heap size (min == max)
--XX:MaxGCPauseMillis=100    # GC pause target
-
-# JIT
--XX:+TieredCompilation      # C1 + C2 (default)
--XX:CompileThreshold=1500   # C2 threshold (lower = faster warmup)
--XX:+AggressiveOpts         # Experimental optimizations
-
-# Allocation
--XX:+AlwaysPreTouch         # Touch heap pages at startup (avoid page faults)
--XX:+UseLargePages          # Use huge pages (reduce TLB misses)
+*Performance:*
+```
+Operation                    x86 Cost      ARM Cost
+Relaxed load                 ~1 ns         ~1 ns
+Acquire load                 ~1 ns         ~1-5 ns (barrier)
+Seq-cst load                 ~1 ns         ~5-20 ns (full fence)
+Relaxed store                ~1 ns         ~1 ns
+Release store                ~1 ns         ~1-5 ns (barrier)
+Seq-cst store                ~10-20 ns     ~10-30 ns (full fence)
+fetch_add (relaxed)          ~5-10 ns      ~5-15 ns
+CAS (compare_exchange)       ~10-30 ns     ~10-40 ns
 ```
 
-*Diagnostic flags:*
-```bash
-# Unlock diagnostic options
--XX:+UnlockDiagnosticVMOptions
+=== False Sharing and Cache-Line Alignment
 
-# Print compilation
--XX:+PrintCompilation       # Print JIT compilation
--XX:+PrintInlining          # Print inlining decisions
+*False sharing:* Two threads modify different variables on the same cache line (64 bytes) causing invalidation ping-pong.
 
-# Print assembly
--XX:+PrintAssembly          # Print generated assembly (requires hsdis)
--XX:CompileCommand=print,*ClassName.methodName
+```cpp
+// BAD: False sharing (counters on same cache line)
+struct BadCounters {
+    std::atomic<int64_t> counter_a;  // Same cache line!
+    std::atomic<int64_t> counter_b;  // Invalidates counter_a on every write
+};
+
+// GOOD: Aligned to separate cache lines
+struct alignas(64) GoodCounters {
+    alignas(64) std::atomic<int64_t> counter_a;
+    alignas(64) std::atomic<int64_t> counter_b;
+};
+// C++17: std::hardware_destructive_interference_size (usually 64)
 ```
 
-*Monitoring:*
-```bash
-# GC logging
--Xlog:gc*:file=gc.log
-
-# JFR (low-overhead profiling)
--XX:+FlightRecorder
--XX:StartFlightRecording=duration=60s,filename=recording.jfr
+*Performance impact:*
+```
+Scenario                      Throughput
+No contention (1 thread)      ~300M ops/sec
+False sharing (2 threads)     ~10M ops/sec (30x slower!)
+Aligned (2 threads)           ~250M ops/sec per thread
 ```
 
-=== JFR (Java Flight Recorder)
+=== Thread Pool Pattern
 
-*Enable:*
-```bash
-java -XX:+FlightRecorder \
-     -XX:StartFlightRecording=duration=60s,filename=app.jfr \
-     MyApp
-```
+```cpp
+#include <thread>
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+#include <functional>
+#include <future>
 
-*Or runtime:*
-```bash
-jcmd PID JFR.start duration=60s filename=app.jfr
-jcmd PID JFR.dump filename=app.jfr
-jcmd PID JFR.stop
-```
+class ThreadPool {
+    std::vector<std::thread> workers_;
+    std::queue<std::function<void()>> tasks_;
+    std::mutex mutex_;
+    std::condition_variable cv_;
+    bool stop_ = false;
 
-*Analyze:*
-- JMC (JDK Mission Control): GUI for JFR files
-- jfr: CLI tool (Java 11+)
-
-*Data collected:*
-- CPU usage (methods, threads)
-- Allocations (where objects created)
-- GC events (pause times, heap usage)
-- Lock contention (synchronized blocks)
-- I/O operations (file, network)
-
-*Low overhead:* `<2%` typical (always-on in production)
-
-=== async-profiler (Flame Graphs)
-
-*CPU profiling:*
-```bash
-async-profiler -d 60 -f flamegraph.html PID
-# Profile for 60 seconds, generate flame graph
-```
-
-*Allocation profiling:*
-```bash
-async-profiler -d 60 -e alloc -f flamegraph.html PID
-# Where allocations happen
-```
-
-*Lock profiling:*
-```bash
-async-profiler -d 60 -e lock -f flamegraph.html PID
-# Lock contention
-```
-
-*Reading flame graph:*
-- X-axis: Proportion of samples (wider = more time)
-- Y-axis: Call stack depth
-- Color: Random (no meaning)
-- Hover: See method + percentage
-
-*Find hot spots:*
-- Wide bars at top = CPU-intensive methods
-- Optimize those first (biggest impact)
-
-=== JMH (Java Microbenchmark Harness)
-
-*Purpose:* Accurate microbenchmarking (avoids pitfalls)
-
-*Example:*
-```java
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@State(Scope.Thread)
-public class MyBenchmark {
-
-    @Param({"10", "100", "1000"})
-    int size;
-
-    int[] array;
-
-    @Setup
-    public void setup() {
-        array = new int[size];
-        for (int i = 0; i < size; i++) {
-            array[i] = i;
-        }
+public:
+    explicit ThreadPool(size_t num_threads) {
+        for (size_t i = 0; i < num_threads; ++i)
+            workers_.emplace_back([this] {
+                while (true) {
+                    std::function<void()> task;
+                    {
+                        std::unique_lock lock(mutex_);
+                        cv_.wait(lock, [this] { return stop_ || !tasks_.empty(); });
+                        if (stop_ && tasks_.empty()) return;
+                        task = std::move(tasks_.front());
+                        tasks_.pop();
+                    }
+                    task();
+                }
+            });
     }
 
-    @Benchmark
-    public int sumLoop() {
+    template <typename F, typename... Args>
+    auto submit(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>> {
+        using ReturnType = std::invoke_result_t<F, Args...>;
+        auto task = std::make_shared<std::packaged_task<ReturnType()>>(
+            std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+        auto result = task->get_future();
+        {
+            std::lock_guard lock(mutex_);
+            tasks_.emplace([task]() { (*task)(); });
+        }
+        cv_.notify_one();
+        return result;
+    }
+
+    ~ThreadPool() {
+        { std::lock_guard lock(mutex_); stop_ = true; }
+        cv_.notify_all();
+        for (auto& w : workers_) w.join();
+    }
+};
+```
+
+*Usage:*
+```cpp
+ThreadPool pool(std::thread::hardware_concurrency());
+auto future = pool.submit([](int x) { return x * x; }, 42);
+int result = future.get();  // 1764
+```
+
+=== Cache-Aware Programming
+
+*Cache hierarchy:*
+```
+Level    Size       Latency     Bandwidth
+L1       32-64 KB   ~1 ns       ~500 GB/s
+L2       256-512 KB ~3-5 ns     ~200 GB/s
+L3       8-64 MB    ~10-20 ns   ~100 GB/s
+DRAM     GB-TB      ~50-100 ns  ~50 GB/s
+```
+
+*Array of Structures (AoS) vs Structure of Arrays (SoA):*
+```cpp
+// AoS: Bad cache utilization if only accessing positions
+struct Particle { float x, y, z; float vx, vy, vz; float mass; };
+std::vector<Particle> particles(N);  // 28 bytes per particle
+for (auto& p : particles) p.x += p.vx;  // Loads 28 bytes, uses 8
+
+// SoA: Good cache utilization (contiguous access)
+struct Particles {
+    std::vector<float> x, y, z;
+    std::vector<float> vx, vy, vz;
+    std::vector<float> mass;
+};
+Particles p(N);
+for (size_t i = 0; i < N; ++i) p.x[i] += p.vx[i];  // Loads only needed data
+// 2-4x faster for position-only updates (cache-friendly, SIMD-friendly)
+```
+
+*Prefetching:*
+```cpp
+for (size_t i = 0; i < n; ++i) {
+    __builtin_prefetch(&data[i + 16], 0, 3);  // Prefetch 16 elements ahead
+    process(data[i]);
+}
+```
+
+*Cache-oblivious algorithms:*
+- Recursive blocking (work well for any cache size)
+- Example: Cache-oblivious matrix multiply, merge sort
+
+== Profiling and Performance Analysis
+
+=== Profiling Tools
+
+*Linux `perf`:*
+```bash
+# CPU profiling (sampling)
+perf record -g ./app          # Record call stacks
+perf report                   # Interactive analysis
+
+# Hardware counters
+perf stat ./app               # Cache misses, branch mispredictions, IPC
+perf stat -e cache-misses,branches,branch-misses ./app
+
+# Flame graphs
+perf record -g ./app
+perf script | stackcollapse-perf.pl | flamegraph.pl > flame.svg
+```
+
+*Valgrind suite:*
+```bash
+# Memory errors (use-after-free, buffer overflow)
+valgrind --tool=memcheck ./app
+
+# Cache simulation (cache miss analysis)
+valgrind --tool=cachegrind ./app
+cg_annotate cachegrind.out.<pid>
+
+# Call graph profiling
+valgrind --tool=callgrind ./app
+kcachegrind callgrind.out.<pid>  # GUI visualization
+
+# Heap profiling
+valgrind --tool=massif ./app
+ms_print massif.out.<pid>
+```
+
+*Sanitizers (compile-time instrumentation):*
+```bash
+# AddressSanitizer: buffer overflow, use-after-free, memory leaks
+g++ -O1 -fsanitize=address -fno-omit-frame-pointer -o app main.cpp
+
+# ThreadSanitizer: data races, deadlocks
+g++ -O1 -fsanitize=thread -o app main.cpp
+
+# UndefinedBehaviorSanitizer: UB detection
+g++ -O1 -fsanitize=undefined -o app main.cpp
+```
+
+*Heaptrack (heap profiling):*
+```bash
+heaptrack ./app
+heaptrack_gui heaptrack.app.<pid>.gz
+# Shows: allocation hotspots, memory leaks, peak usage
+```
+
+*Key metrics to monitor:*
+- *IPC (Instructions Per Cycle)*: $> 2.0$ good, $< 1.0$ memory-bound
+- *Cache miss rate*: L1 $< 5%$, L3 $< 1%$ ideal
+- *Branch misprediction*: $< 2%$ ideal
+- *Memory bandwidth*: Check if saturated
+
+=== Benchmarking with Google Benchmark
+
+*Purpose:* Accurate microbenchmarking (handles warmup, statistics, optimizer tricks).
+
+```cpp
+#include <benchmark/benchmark.h>
+
+static void bm_vector_push(benchmark::State& state) {
+    for (auto _ : state) {
+        std::vector<int> vec;
+        vec.reserve(state.range(0));
+        for (int i = 0; i < state.range(0); ++i)
+            vec.push_back(i);
+        benchmark::DoNotOptimize(vec.data());  // Prevent dead code elimination
+    }
+    state.SetComplexityN(state.range(0));
+}
+BENCHMARK(bm_vector_push)->Range(8, 1 << 20)->Complexity(benchmark::oN);
+
+static void bm_array_sum(benchmark::State& state) {
+    std::vector<int> data(state.range(0));
+    std::iota(data.begin(), data.end(), 0);
+    for (auto _ : state) {
         int sum = 0;
-        for (int i = 0; i < array.length; i++) {
-            sum += array[i];
-        }
-        return sum;
+        for (int x : data) sum += x;
+        benchmark::DoNotOptimize(sum);  // Prevent dead code elimination
     }
+    state.SetBytesProcessed(state.iterations() * state.range(0) * sizeof(int));
+}
+BENCHMARK(bm_array_sum)->Range(64, 1 << 20);
 
-    @Benchmark
-    public int sumStream() {
-        return Arrays.stream(array).sum();
-    }
+BENCHMARK_MAIN();
+```
+
+*Build and run:*
+```bash
+g++ -O3 -march=native bench.cpp -lbenchmark -lpthread -o bench
+./bench --benchmark_format=console
+```
+
+*Manual benchmarking with `<chrono>`:*
+```cpp
+#include <chrono>
+
+template <typename Func>
+double measure_ns(Func&& f, int iterations = 1000) {
+    // Warmup
+    for (int i = 0; i < 100; ++i) f();
+
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < iterations; ++i) f();
+    auto end = std::chrono::high_resolution_clock::now();
+
+    return std::chrono::duration<double, std::nano>(end - start).count() / iterations;
 }
 ```
 
-*Run:*
+*Google Benchmark handles:*
+- Warmup iterations (instruction cache, branch predictor)
+- `DoNotOptimize()` prevents dead code elimination
+- `ClobberMemory()` prevents reordering
+- Statistical analysis (mean, median, stddev)
+- Complexity analysis ($O(n)$, $O(n log n)$, etc.)
+
+=== Compiler Output Inspection
+
+*Generate assembly:*
 ```bash
-mvn clean install
-java -jar target/benchmarks.jar
+g++ -O3 -S -fverbose-asm -o output.s main.cpp
+# Annotated assembly with source references
 ```
 
-*JMH handles:*
-- Warmup (JIT compilation)
-- Dead code elimination
-- Constant folding
-- Statistical analysis
+*Compiler Explorer (godbolt.org):*
+- Paste code, see assembly in real-time
+- Compare compilers (GCC, Clang, MSVC)
+- Compare optimization levels
 
-=== PrintCompilation, PrintInlining, PrintAssembly
-
-*PrintCompilation:*
+*Check auto-vectorization:*
 ```bash
--XX:+PrintCompilation
+g++ -O3 -fopt-info-vec-optimized  # Show vectorized loops
+g++ -O3 -fopt-info-vec-missed     # Show missed vectorization opportunities
+
+# Clang
+clang++ -O3 -Rpass=loop-vectorize
+clang++ -O3 -Rpass-analysis=loop-vectorize  # Why vectorization failed
 ```
 
-*Output:*
+*Key assembly patterns to look for:*
 ```
-115   1       3       java.lang.String::charAt (29 bytes)
-120   2       3       java.lang.String::length (6 bytes)
-125   3       4       java.lang.String::charAt (29 bytes)  # C2 compilation
-```
-
-*Format:* `timestamp id tier method (size) status`
-
-*PrintInlining:*
-```bash
--XX:+PrintInlining -XX:+UnlockDiagnosticVMOptions
+vaddps    → AVX float add (vectorized!)
+vmovups   → AVX unaligned load/store
+vfmadd    → Fused multiply-add (FMA)
+call      → Function not inlined
+ret       → Function boundary
 ```
 
-*Output:*
-```
-@ 10   java.lang.String::length (6 bytes)   inline (hot)
-@ 15   java.lang.Math::min (10 bytes)       inline
-@ 20   com.example.Helper::compute (50 bytes)   too big
-```
+=== Interview Questions: Profiling
 
-*PrintAssembly:*
-```bash
--XX:+PrintAssembly -XX:CompileCommand=print,*MyClass.myMethod
-# Requires hsdis library
-```
-
-*Output:* Generated assembly code
-```assembly
-mov rax, [rbp+0x10]
-add rax, [rbp+0x18]
-ret
-```
-
-*Use:* Verify JIT optimizations (inlining, vectorization, etc.)
-
-=== Interview Questions: Diagnostics
-
-*Q1: How do you diagnose performance issues in production?*
+*Q1: How do you diagnose performance issues in a C++ application?*
 
 A:
 
 *Step-by-step:*
 
-*1. Identify symptoms:*
-- High CPU → CPU profiling
-- High memory → Heap dump
-- Slow response → Thread dumps
-- Frequent GC → GC logs
+*1. Identify bottleneck type:*
+- High CPU → `perf record` + flame graph
+- Memory issues → AddressSanitizer, heaptrack, valgrind
+- Cache misses → `perf stat`, cachegrind
+- Threading → ThreadSanitizer, `perf` lock analysis
 
-*2. Tools:*
+*2. Profile:*
 ```bash
-# CPU profiling
-async-profiler -d 60 -f flamegraph.html PID
+# CPU profiling (flame graph)
+perf record -g ./app && perf script | flamegraph.pl > flame.svg
 
-# Memory
-jmap -dump:live,format=b,file=heap.bin PID
-# Analyze with MAT (Eclipse Memory Analyzer)
+# Hardware counters (cache, branches)
+perf stat -e cache-misses,branch-misses,instructions,cycles ./app
 
-# Threads
-jstack PID > threads.txt
-
-# GC
-jstat -gcutil PID 1000  # Every 1 second
+# Memory profiling
+heaptrack ./app
 ```
 
 *3. Analyze:*
-- Flame graph → hot methods (optimize)
-- Heap dump → memory leaks (fix)
-- Thread dump → deadlocks, blocked threads
-- GC logs → pause times (tune GC)
+- Flame graph → hot functions (optimize these first)
+- IPC < 1.0 → memory-bound (improve cache usage)
+- High cache miss rate → restructure data layout (AoS → SoA)
+- Branch misprediction → use branchless code, `[[likely]]`/`[[unlikely]]`
 
-*4. Fix:*
-- Optimize hot paths (reduce allocations, cache)
-- Fix memory leaks (remove references)
-- Tune GC (collector, heap size)
-- Use profiler-guided optimization
+*4. Fix and verify:*
+- Benchmark before/after (Google Benchmark)
+- Check assembly output (Compiler Explorer)
+- Profile again to confirm improvement
 
-*Q2: What tools would you use to profile a Java application?*
-
-A:
-
-*Production (low overhead):*
-1. *JFR (Java Flight Recorder)*: ~1% overhead, always-on
-   - CPU, allocations, GC, locks, I/O
-   ```bash
-   jcmd PID JFR.start duration=60s filename=app.jfr
-   ```
-
-2. *async-profiler*: Sampling profiler, `<5%` overhead
-   - CPU flame graphs, allocation profiling
-   ```bash
-   async-profiler -d 60 -f flamegraph.html PID
-   ```
-
-3. *jstat*: GC monitoring, real-time
-   ```bash
-   jstat -gcutil PID 1000
-   ```
-
-*Development (higher overhead OK):*
-4. *VisualVM*: GUI, heap/thread dumps, sampling
-5. *YourKit*: Commercial, detailed profiling
-6. *JProfiler*: Commercial, CPU/memory/threads
-
-*Microbenchmarking:*
-7. *JMH*: Accurate microbenchmarks
-   - Avoids JIT pitfalls (warmup, dead code elimination)
-
-*Decision:*
-- Production → JFR, async-profiler (low overhead)
-- Development → VisualVM, YourKit (detailed)
-- Benchmarking → JMH (accurate)
-
-*Q3: How do you avoid microbenchmark pitfalls?*
+*Q2: How do you avoid microbenchmark pitfalls in C++?*
 
 A:
 
 *Common pitfalls:*
 
-*1. No warmup:*
-```java
-// Wrong: Cold start
-long start = System.nanoTime();
-method();  // Not JIT-compiled yet!
-long time = System.nanoTime() - start;
-```
-
-*2. Dead code elimination:*
-```java
-// Wrong: JIT removes entire benchmark!
+*1. Dead code elimination:*
+```cpp
+// Wrong: Compiler removes entire computation!
 int sum = 0;
-for (int i = 0; i < 1000; i++) {
-    sum += i;
-}
-// sum not used → JIT eliminates loop!
+for (int i = 0; i < 1000; ++i) sum += i;
+// sum never used → compiler eliminates loop
+
+// Fix: Use benchmark::DoNotOptimize or volatile sink
+benchmark::DoNotOptimize(sum);
 ```
 
-*3. Constant folding:*
-```java
-// Wrong: JIT computes at compile time
-int result = 2 + 3;  // Becomes: int result = 5;
+*2. Constant folding:*
+```cpp
+// Wrong: Compiler computes at compile time
+int result = factorial(10);  // Becomes: int result = 3628800;
+
+// Fix: Use runtime input
+int n = get_input();  // Opaque to compiler
+int result = factorial(n);
 ```
 
-*4. Non-steady state:*
-- JIT compilation during measurement
-- GC during measurement
+*3. No warmup:*
+```cpp
+// Wrong: First run fills instruction cache, branch predictor
+// Fix: Run warmup iterations before measuring
+```
 
-*Solution: Use JMH*
-```java
-@Benchmark
-public int sum(Blackhole bh) {  // Blackhole prevents DCE
-    int sum = 0;
-    for (int i = 0; i < 1000; i++) {
-        sum += i;
+*4. Measurement overhead:*
+```cpp
+// Wrong: chrono call inside tight loop
+// Fix: Measure many iterations, divide by count
+```
+
+*Solution: Use Google Benchmark*
+```cpp
+static void bm_compute(benchmark::State& state) {
+    for (auto _ : state) {
+        int result = compute(state.range(0));
+        benchmark::DoNotOptimize(result);  // Prevent DCE
     }
-    return sum;  // JMH consumes result (no DCE)
 }
+BENCHMARK(bm_compute)->Range(8, 1 << 16);
 ```
 
-*JMH handles:*
-- Warmup iterations (JIT warmup)
-- Blackhole (prevent dead code elimination)
-- State objects (prevent constant folding)
-- Statistical analysis (report p-values)
+*Q3: What is profile-guided optimization and when should you use it?*
+
+A: PGO = compile with runtime profile data to guide optimizations.
+
+*Process:*
+1. Instrument build (`-fprofile-generate`)
+2. Run representative workload (collect profile)
+3. Rebuild with profile data (`-fprofile-use`)
+
+*What PGO optimizes:*
+- *Branch layout*: Hot paths fall through (fewer jumps)
+- *Function ordering*: Hot functions co-located (fewer icache misses)
+- *Inlining*: Inline actually-hot functions (not just small ones)
+- *Loop unrolling*: Unroll based on actual trip counts
+- *Register allocation*: Prioritize hot variables
+
+*When to use:*
+- Large applications with many code paths (browsers, databases, compilers)
+- When `-O3` isn't enough (10--30% additional speedup)
+- Stable workload patterns (profile must be representative)
+
+*Real-world examples:*
+- Chromium: ~10% speedup with PGO
+- GCC itself: ~5--8% speedup when PGO'd
+- Databases: Significant query throughput improvement
+
+== Static and Dynamic Linking
+
+=== Static Linking
+
+```bash
+# Create static library
+g++ -c utils.cpp -o utils.o
+ar rcs libutils.a utils.o
+
+# Link statically
+g++ main.cpp -L. -lutils -static -o app
+# Entire library code embedded in executable
+```
+
+*Pros:* Single binary, no dependency issues, slightly faster (no PLT indirection).
+*Cons:* Larger binary, no shared memory across processes, must recompile to update library.
+
+=== Dynamic Linking and `dlopen`
+
+```cpp
+#include <dlfcn.h>
+
+// Load shared library at runtime
+void* handle = dlopen("./libplugin.so", RTLD_LAZY);
+if (!handle) { std::cerr << dlerror() << '\n'; return; }
+
+// Get function pointer
+using PluginFunc = int(*)(const char*);
+auto func = reinterpret_cast<PluginFunc>(dlsym(handle, "plugin_entry"));
+if (!func) { std::cerr << dlerror() << '\n'; return; }
+
+int result = func("hello");  // Call loaded function
+
+dlclose(handle);  // Unload library
+```
+
+*Build shared library:*
+```bash
+g++ -shared -fPIC -o libplugin.so plugin.cpp
+```
+
+*Pros:* Smaller executables, shared memory, hot-reload plugins.
+*Cons:* Runtime overhead (PLT/GOT), dependency management, versioning.
+
+=== RTTI and Alternatives
+
+*RTTI (`typeid`, `dynamic_cast`):* Runtime type information.
+```cpp
+Base* ptr = get_object();
+if (auto* derived = dynamic_cast<Derived*>(ptr)) {
+    derived->special_method();  // Safe downcast
+}
+std::cout << typeid(*ptr).name();  // Type name (mangled)
+```
+
+*Cost:*
+- `dynamic_cast`: ~50--100 ns (traverses class hierarchy)
+- `typeid`: ~5--10 ns (single vtable lookup)
+- Can disable with `-fno-rtti` (saves binary size, ~5--10%)
+
+*Alternatives to RTTI:*
+```cpp
+// 1. Enum-based type tag (fastest)
+enum class NodeType { Literal, BinaryOp, UnaryOp };
+struct Node { NodeType type; /* ... */ };
+
+// 2. Visitor pattern (compile-time dispatch)
+struct Visitor {
+    virtual void visit(Literal&) = 0;
+    virtual void visit(BinaryOp&) = 0;
+};
+
+// 3. std::variant (no virtual dispatch)
+using Expr = std::variant<Literal, BinaryOp, UnaryOp>;
+auto result = std::visit(evaluator, expr);  // Compiler-generated switch
+
+// 4. C++26 reflection (future): compile-time type introspection
+```
+
+_See also: CPU Architecture book, Chapter on Branch Prediction for cache and branch effects of virtual dispatch._

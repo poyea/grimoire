@@ -647,6 +647,24 @@ uint32_t murmur3_finalizer(uint32_t h) {
 
 Total: ~7-9 cycles, excellent avalanche, non-cryptographic.
 
+== Complexity Reference
+
+#table(
+  columns: (auto, auto, auto),
+  [*Algorithm / Operation*], [*Time*], [*Space*],
+  [Single Number (XOR)], [$O(n)$], [$O(1)$],
+  [Hamming Weight (popcount)], [$O(1)$ with intrinsic], [$O(1)$],
+  [Counting Bits (0 to $n$)], [$O(n)$], [$O(n)$],
+  [Reverse Bits], [$O(1)$ with intrinsic], [$O(1)$],
+  [Missing Number (XOR)], [$O(n)$], [$O(1)$],
+  [Sum Without Arithmetic], [$O(log n)$, $n$ = max value], [$O(1)$],
+  [Power of Two Check], [$O(1)$], [$O(1)$],
+  [Subset Generation], [$O(2^n dot n)$], [$O(n)$ per subset],
+  [Hamming Distance], [$O(1)$], [$O(1)$],
+  [Bitwise AND of Range], [$O(log n)$], [$O(1)$],
+  [Bit-packed boolean array], [$O(1)$ per op], [$O(n / 64)$],
+)
+
 == References
 
 *Primary Sources:*

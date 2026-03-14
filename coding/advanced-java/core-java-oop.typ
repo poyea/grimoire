@@ -1,253 +1,239 @@
-= Part 0: Core Java & Object-Oriented Programming
+= Part 0: Core C++ & Object-Oriented Programming
 
-== Java Fundamentals
+== C++ Fundamentals
 
-=== Primitive Types vs Reference Types
+=== Value Types vs Reference/Pointer Types
 
-*Primitives (8 types):* `byte`, `short`, `int`, `long`, `float`, `double`, `char`, `boolean`
-- Stored directly on stack (in method frames)
-- No object overhead (no header, no GC)
-- Pass by value (copy of value)
+*Fundamental types:* `bool`, `char`, `short`, `int`, `long`, `long long`, `float`, `double`
+- Stored directly on stack (in function frames)
+- No object overhead (no vtable pointer unless polymorphic)
+- Pass by value (copy of value) by default
 
-*Reference types:* Objects, arrays, interfaces
-- Reference stored on stack, object on heap
-- 12-16 byte object header (mark word + class pointer)
-- Pass by reference value (copy of reference)
+*Pointer/reference types:* Pointers (`T*`), references (`T&`), smart pointers (`unique_ptr`, `shared_ptr`)
+- Raw pointer: 8 bytes on 64-bit (stores address)
+- Reference: alias for existing object (no separate storage conceptually)
+- Objects can live on stack _or_ heap (programmer controls placement)
 
-```java
-int x = 42;              // Stack: 4 bytes
-Integer y = 42;          // Stack: 8 bytes (reference) + Heap: ~16 bytes (object)
+*Performance note:* Unlike Java, C++ gives full control over allocation. Stack allocation is essentially free (just a pointer bump), while heap allocation (`new`) costs ~50--100 ns due to allocator overhead.
+
+```cpp
+int x = 42;                          // Stack: 4 bytes, zero overhead
+auto y = std::make_unique<int>(42);  // Heap: 4 bytes + allocator metadata
+// No "boxing" concept -- int is always int
 ```
 
-*Autoboxing cost:*
-```java
-// Bad: creates 1,000,000 Integer objects
-Integer sum = 0;
-for (int i = 0; i < 1_000_000; i++) {
-    sum += i;  // Unbox, add, box for each iteration!
+*No autoboxing in C++:*
+```cpp
+// C++ has no wrapper classes -- primitives are always primitives
+// Templates work directly with fundamental types
+std::vector<int> nums;  // Stores int directly (no boxing!)
+nums.push_back(42);     // No object creation overhead
+
+// Unlike Java's ArrayList<Integer> which boxes every element,
+// std::vector<int> stores contiguous int values (cache-friendly)
+```
+
+*Integral promotions (analogous to Java's widening):*
+```cpp
+short a = 10;
+int b = a;       // Implicit widening -- safe
+double c = b;    // Implicit int to double
+int d = c;       // Warning: narrowing conversion (data loss possible)
+int e = static_cast<int>(c);  // Explicit cast -- suppresses warning
+```
+
+=== std::string and String Views
+
+*Why `std::string` is mutable (unlike Java's String):*
+1. Performance: In-place modification avoids allocation
+2. Small String Optimization (SSO): Strings up to ~22 chars stored inline (no heap)
+3. No string pool needed -- mutability means no shared references to worry about
+
+```cpp
+#include <string>
+
+// std::string is mutable
+std::string s = "hello";
+s[0] = 'H';       // Direct modification -- OK
+s += " world";    // Append in place
+```
+
+*`std::string_view` (C++17) -- non-owning, read-only view:*
+```cpp
+#include <string_view>
+
+void print_name(std::string_view name) {  // No copy!
+    std::cout << name << "\n";
 }
 
-// Good: primitive
-int sum = 0;
-for (int i = 0; i < 1_000_000; i++) {
-    sum += i;
-}
-```
-
-*Wrapper class caching:*
-```java
-Integer a = 127;
-Integer b = 127;
-System.out.println(a == b);  // true (cached)
-
-Integer c = 128;
-Integer d = 128;
-System.out.println(c == d);  // false (not cached)
-```
-
-*Cache ranges:*
-- `Integer`, `Byte`, `Short`, `Long`: -128 to 127
-- `Character`: 0 to 127
-- `Boolean`: true and false (always cached)
-
-=== String Immutability & String Pool
-
-*Why String is immutable:*
-1. Security: Can't change after creation (URLs, file paths, credentials)
-2. Thread-safety: No synchronization needed for read-only data
-3. String pooling: Safe to share references
-4. Hash code caching: Computed once, used for HashMap keys
-
-```java
-public final class String {
-    private final byte[] value;  // Java 9+: compact strings
-    private int hash;            // Cached hash code
-
-    // No setters - immutable!
-}
-```
-
-*String pool (interning):*
-```java
-String s1 = "hello";           // String literal → pool
-String s2 = "hello";           // Reuses from pool
-System.out.println(s1 == s2);  // true (same object)
-
-String s3 = new String("hello");  // Heap object (not pooled)
-System.out.println(s1 == s3);     // false
-
-String s4 = s3.intern();       // Add to pool, return pooled reference
-System.out.println(s1 == s4);  // true
+std::string full = "Hello, World";
+std::string_view sv = full;       // No allocation
+std::string_view sub = sv.substr(0, 5);  // "Hello" -- still no allocation!
 ```
 
 *String concatenation:*
-```java
-// Bad: Creates multiple intermediate String objects
-String result = "";
+```cpp
+// Bad: repeated allocations
+std::string result;
 for (int i = 0; i < 10000; i++) {
-    result += i;  // O(n²) time!
+    result += std::to_string(i);  // May reallocate each time
 }
 
-// Good: StringBuilder for mutable operations
-StringBuilder sb = new StringBuilder();
+// Better: reserve capacity upfront
+std::string result;
+result.reserve(50000);  // Pre-allocate
 for (int i = 0; i < 10000; i++) {
-    sb.append(i);  // O(n) time
+    result += std::to_string(i);  // No reallocation
 }
-String result = sb.toString();
+
+// Alternative: std::ostringstream
+std::ostringstream oss;
+for (int i = 0; i < 10000; i++) {
+    oss << i;
+}
+std::string result = oss.str();
+
+// C++20: std::format
+auto s = std::format("{} + {} = {}", 1, 2, 3);  // "1 + 2 = 3"
 ```
 
-*Compiler optimization (Java 9+):*
-```java
-String s = "a" + "b" + "c";
-// Compiled to:
-String s = "abc";  // Constant folding
+*Small String Optimization (SSO):*
+```cpp
+// Strings <= ~22 chars (implementation-defined) stored inline
+std::string short_str = "hello";    // No heap allocation (SSO)
+std::string long_str(100, 'x');     // Heap allocation required
 
-String x = s1 + s2 + s3;
-// Compiled to (Java 9+):
-String x = invokedynamic(s1, s2, s3);  // Uses StringConcatFactory
+// sizeof(std::string) is typically 32 bytes (stores inline buffer + metadata)
 ```
 
-=== equals() vs ==
+=== operator== and Comparison Operators
 
 *`==` operator:*
-- Primitives: Compare values
-- References: Compare memory addresses
+- Fundamental types: Compare values directly
+- Pointers: Compare addresses
+- Objects: Uses `operator==` (must be defined)
 
-*`equals()` method:*
-- Compare logical equality (content)
+*Defining equality:*
+```cpp
+#include <string>
+#include <functional>
 
-```java
-String s1 = new String("hello");
-String s2 = new String("hello");
-
-s1 == s2;        // false (different objects)
-s1.equals(s2);   // true (same content)
-```
-
-*equals() contract (must override together with hashCode):*
-1. Reflexive: `x.equals(x)` is `true`
-2. Symmetric: `x.equals(y)` ⟺ `y.equals(x)`
-3. Transitive: `x.equals(y) && y.equals(z)` ⟹ `x.equals(z)`
-4. Consistent: Multiple invocations return same result
-5. `x.equals(null)` is `false`
-
-*hashCode() contract:*
-1. Consistent: Same object → same hash code (during execution)
-2. Equal objects: `x.equals(y)` ⟹ `x.hashCode() == y.hashCode()`
-3. Unequal objects: Not required to have different hash codes (but better)
-
-```java
 class Person {
-    private String name;
-    private int age;
+    std::string name_;
+    int age_;
+public:
+    Person(std::string name, int age) : name_(std::move(name)), age_(age) {}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return age == person.age && Objects.equals(name, person.name);
+    // C++20 defaulted comparison
+    bool operator==(const Person&) const = default;
+
+    // Or manual definition:
+    // bool operator==(const Person& other) const {
+    //     return name_ == other.name_ && age_ == other.age_;
+    // }
+
+    // For use in unordered containers (equivalent to Java's hashCode)
+    friend struct std::hash<Person>;
+    const std::string& name() const { return name_; }
+    int age() const { return age_; }
+};
+
+// std::hash specialization (equivalent to Java's hashCode())
+template<>
+struct std::hash<Person> {
+    size_t operator()(const Person& p) const {
+        size_t h1 = std::hash<std::string>{}(p.name_);
+        size_t h2 = std::hash<int>{}(p.age_);
+        return h1 ^ (h2 << 1);  // Combine hashes
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, age);  // Combines hash codes
-    }
-}
+};
 ```
 
-*What happens if you don't override hashCode():*
-```java
-Person p1 = new Person("Alice", 30);
-Person p2 = new Person("Alice", 30);
+*The spaceship operator (C++20) -- three-way comparison:*
+```cpp
+#include <compare>
 
-p1.equals(p2);  // true (overridden equals)
+class Point {
+    int x_, y_;
+public:
+    Point(int x, int y) : x_(x), y_(y) {}
 
-Map<Person, String> map = new HashMap<>();
-map.put(p1, "Engineer");
-map.get(p2);  // null! (different hash codes → different buckets)
+    // Generates ==, !=, <, <=, >, >= automatically
+    auto operator<=>(const Point&) const = default;
+};
+
+Point a{1, 2}, b{3, 4};
+bool eq = (a == b);   // false
+bool lt = (a < b);    // true (lexicographic by x_, then y_)
 ```
 
-=== Interview Questions: Java Fundamentals
+*What happens without `std::hash` specialization:*
+```cpp
+Person p1{"Alice", 30};
+Person p2{"Alice", 30};
 
-*Q1: Why is String immutable in Java?*
+p1 == p2;  // true (if operator== defined)
 
-A: Multiple reasons:
-1. *Security*: String used for sensitive data (passwords, URLs, file paths). If mutable, could be changed after security check.
-2. *Thread-safety*: Immutable objects are inherently thread-safe. No synchronization needed.
-3. *String pool*: JVM maintains pool of string literals. Immutability allows safe sharing.
-4. *Hash code caching*: Hash computed once, safe to cache. Critical for HashMap performance.
-5. *Class loading*: Class names are strings. If mutable, could load wrong class.
-
-*Q2: What happens when you don't override hashCode() when overriding equals()?*
-
-A: Violates the hashCode-equals contract. Consequences:
-- Hash-based collections (HashMap, HashSet) won't work correctly
-- Equal objects may have different hash codes → stored in different buckets
-- `map.get(key)` may return null even if equal key exists
-
-Example:
-```java
-Set<Person> set = new HashSet<>();
-Person p1 = new Person("Alice", 30);
-set.add(p1);
-Person p2 = new Person("Alice", 30);
-set.contains(p2);  // false (should be true!)
+std::unordered_map<Person, std::string> map;
+// Compile error! No std::hash<Person> specialization
+// Must provide hash to use Person as key in unordered containers
 ```
 
-*Q3: Difference between String, StringBuilder, and StringBuffer?*
+=== Interview Questions: C++ Fundamentals
+
+*Q1: What is Small String Optimization (SSO)?*
+
+A: SSO stores short strings (typically up to 22 chars) directly inside the `std::string` object itself, avoiding heap allocation. This is possible because `std::string` is typically 32 bytes and has enough internal space. Benefits:
+1. *No heap allocation*: Short strings are stack-allocated
+2. *Cache-friendly*: Data is inline with the string object
+3. *No allocator overhead*: Avoids `malloc`/`free` cost
+
+*Q2: What is the difference between `std::string` and `std::string_view`?*
 
 A:
-- *String*: Immutable. Thread-safe. Use for small, read-only strings.
-- *StringBuilder*: Mutable. NOT thread-safe. Use for string manipulation in single thread. (Fastest)
-- *StringBuffer*: Mutable. Thread-safe (synchronized methods). Use for string manipulation in multi-threaded context. (Slower due to synchronization)
+- *`std::string`*: Owning, mutable, manages its own memory. Copies on assignment.
+- *`std::string_view`*: Non-owning, read-only view into existing string data. No allocation on construction or substr. Must ensure the underlying data outlives the view (dangling risk).
 
-Modern code: Prefer StringBuilder unless thread-safety needed.
-
-*Q4: What is autoboxing and what are its performance implications?*
-
-A: Autoboxing = automatic conversion between primitives and wrapper objects.
-
-```java
-Integer x = 42;  // Autoboxing: int → Integer
-int y = x;       // Unboxing: Integer → int
+```cpp
+std::string owned = "hello world";
+std::string_view view = owned;  // No copy
+// view is valid only as long as 'owned' is alive and unmodified
 ```
 
-Performance costs:
-1. Object creation overhead (heap allocation, GC)
-2. Memory overhead (16 bytes vs 4 bytes for int)
-3. Indirection (extra pointer dereference)
-4. NullPointerException risk (wrapper can be null)
+*Q3: How does C++ handle equality vs identity comparison?*
 
-Critical in tight loops:
-```java
-// Creates 1M objects!
-Integer sum = 0;
-for (int i = 0; i < 1_000_000; i++) {
-    sum += i;  // Unbox → add → box
-}
+A:
+- *Identity*: Compare addresses with `&a == &b` (like Java's `==` for references)
+- *Equality*: Use `operator==` (like Java's `equals()`)
+- C++20 `operator<=>` generates all comparison operators from a single definition
+- For hash containers, specialize `std::hash<T>` (like Java's `hashCode()`)
+
+*Q4: Stack vs heap allocation -- when to use which?*
+
+A:
+- *Stack*: Default choice. Automatic lifetime, zero allocation cost, cache-friendly. Limited by stack size (~1--8 MB).
+- *Heap*: For large objects, runtime-determined sizes, or objects that must outlive the current scope. Use `std::make_unique` / `std::make_shared` (never raw `new`).
+
+```cpp
+// Stack: fast, automatic cleanup
+Person p{"Alice", 30};
+
+// Heap: when needed for polymorphism or lifetime management
+auto p = std::make_unique<Person>("Alice", 30);
 ```
 
-*Q5: Explain the String pool. When does a String go into the pool?*
+Performance: Stack allocation is a single pointer decrement (~1 cycle). Heap allocation is ~50--100 ns (malloc + bookkeeping).
 
-A: String pool = special memory region in heap where JVM stores unique string literals.
+*Q5: What are the differences between `std::string` concatenation approaches?*
 
-*Enters pool:*
-1. String literals: `String s = "hello";`
-2. Compile-time constants: `String s = "hel" + "lo";`
-3. Explicit interning: `s.intern();`
+A:
+- *`operator+=`*: Good for appending. May reallocate if capacity exceeded.
+- *`reserve()` + `+=`*: Best for known-size loops. Pre-allocates capacity.
+- *`std::ostringstream`*: Good for complex formatting with mixed types.
+- *`std::format` (C++20)*: Type-safe, Python-style formatting. Best for readability.
+- *`std::string::append()`*: Equivalent to `+=`, can append substrings efficiently.
 
-*Does NOT enter pool:*
-1. `new String("hello")` - creates heap object
-2. Runtime concatenation: `s1 + s2`
-3. String from char array: `new String(chars)`
-
-Benefits:
-- Memory savings (one copy of each unique string)
-- Fast equality check with `==` for pooled strings
-- Reduces string duplication
-
-Tradeoff: Pool is permanent (can't be GC'd easily), so don't intern dynamic strings.
+Modern code: Prefer `std::format` (C++20) for readability, `reserve` + `+=` for performance.
 
 == Object-Oriented Principles
 
@@ -255,1518 +241,1459 @@ Tradeoff: Pool is permanent (can't be GC'd easily), so don't intern dynamic stri
 
 *1. Encapsulation:* Bundle data (fields) and methods that operate on data. Hide internal state.
 
-```java
-public class BankAccount {
-    private double balance;  // Hidden from outside
-
-    public void deposit(double amount) {
+```cpp
+class BankAccount {
+    double balance_ = 0.0;  // Private by default in class
+public:
+    void deposit(double amount) {
         if (amount > 0) {
-            balance += amount;  // Controlled access
+            balance_ += amount;  // Controlled access
         }
     }
 
-    public double getBalance() {
-        return balance;  // Read-only access
+    double balance() const {  // Read-only access (const method)
+        return balance_;
     }
-}
+};
 ```
 
 *Benefits:*
 - Data validation
 - Flexibility to change implementation
 - Reduced coupling
+- `const` methods enforce read-only access at compile time
 
-*2. Inheritance:* "Is-a" relationship. Subclass extends superclass.
+*2. Inheritance:* "Is-a" relationship. Derived class extends base class.
 
-```java
-public class Animal {
-    public void eat() { }
-}
+```cpp
+class Animal {
+public:
+    virtual void eat() { }         // virtual for polymorphism
+    virtual ~Animal() = default;   // Always virtual destructor in base class!
+};
 
-public class Dog extends Animal {
-    public void bark() { }  // Additional behavior
-}
+class Dog : public Animal {
+public:
+    void bark() { }  // Additional behavior
+};
 ```
+
+*Performance note:* Each class with virtual functions has a vtable pointer (8 bytes on 64-bit). Virtual dispatch costs ~2--5 ns per call due to indirect function call (pointer chase through vtable).
 
 *3. Polymorphism:* Many forms. Same interface, different implementations.
 
-```java
-Animal a1 = new Dog();
-Animal a2 = new Cat();
-a1.eat();  // Dog's eat()
-a2.eat();  // Cat's eat()
+```cpp
+Animal* a1 = new Dog();
+Animal* a2 = new Cat();
+a1->eat();  // Dog's eat() -- virtual dispatch at runtime
+a2->eat();  // Cat's eat() -- virtual dispatch at runtime
+
+// Prefer smart pointers:
+std::unique_ptr<Animal> a3 = std::make_unique<Dog>();
+a3->eat();
 ```
 
 *4. Abstraction:* Hide complexity, show only essential features.
 
-```java
-interface PaymentProcessor {
-    void processPayment(double amount);  // What, not how
-}
+```cpp
+// Abstract class (equivalent to Java interface)
+class PaymentProcessor {
+public:
+    virtual void process_payment(double amount) = 0;  // Pure virtual
+    virtual ~PaymentProcessor() = default;
+};
 
-class CreditCardProcessor implements PaymentProcessor {
-    public void processPayment(double amount) {
+class CreditCardProcessor : public PaymentProcessor {
+public:
+    void process_payment(double amount) override {
         // Implementation details hidden
     }
-}
+};
 ```
 
-=== Method Overloading vs Overriding
+=== Function Overloading vs Overriding
 
 *Overloading (compile-time polymorphism):*
-- Same method name, different parameters
+- Same function name, different parameters
 - Resolved at compile time (static binding)
 
-```java
+```cpp
 class Calculator {
+public:
     int add(int a, int b) { return a + b; }
     double add(double a, double b) { return a + b; }
     int add(int a, int b, int c) { return a + b + c; }
-}
+};
 ```
 
 *Overriding (runtime polymorphism):*
-- Subclass provides specific implementation of superclass method
+- Derived class provides specific implementation of base class virtual method
 - Same signature (name + parameters)
-- Resolved at runtime (dynamic binding)
+- Resolved at runtime (dynamic binding via vtable)
 
-```java
+```cpp
 class Animal {
-    void sound() { System.out.println("Animal sound"); }
-}
+public:
+    virtual void sound() { std::cout << "Animal sound\n"; }
+    virtual ~Animal() = default;
+};
 
-class Dog extends Animal {
-    @Override
-    void sound() { System.out.println("Bark"); }  // Override
-}
+class Dog : public Animal {
+public:
+    void sound() override { std::cout << "Bark\n"; }  // override keyword
+};
 
-Animal a = new Dog();
-a.sound();  // "Bark" (runtime decision)
+Animal* a = new Dog();
+a->sound();  // "Bark" (runtime decision via vtable)
+delete a;    // Virtual destructor ensures proper cleanup
 ```
 
 *Rules for overriding:*
-1. Same method signature
-2. Return type: Same or covariant (subtype)
-3. Access modifier: Same or more permissive
-4. Cannot override: `final`, `static`, `private` methods
-5. Can throw: Same or fewer checked exceptions
+1. Must be `virtual` in base class
+2. Same function signature
+3. Return type: Same or covariant (pointer/reference to derived)
+4. `override` keyword (C++11) catches errors at compile time
+5. Cannot override: non-virtual, `static`, or `final` methods
 
 *Covariant return types:*
-```java
+```cpp
 class Animal {
-    Animal reproduce() { return new Animal(); }
-}
+public:
+    virtual Animal* reproduce() { return new Animal(); }
+    virtual ~Animal() = default;
+};
 
-class Dog extends Animal {
-    @Override
-    Dog reproduce() { return new Dog(); }  // Covariant (Dog is subtype of Animal)
-}
+class Dog : public Animal {
+public:
+    Dog* reproduce() override { return new Dog(); }  // Covariant return
+};
 ```
 
 === Static vs Dynamic Binding
 
 *Static binding (early binding):*
 - Resolved at compile time
-- Applied to: `static`, `private`, `final` methods
-- Also: Method overloading
+- Applied to: non-virtual methods, `static` methods, overloaded functions
+- Also: templates (compile-time polymorphism)
 
-```java
+```cpp
 class Parent {
-    static void display() { System.out.println("Parent"); }
-}
+public:
+    void display() { std::cout << "Parent\n"; }  // Non-virtual!
+};
 
-class Child extends Parent {
-    static void display() { System.out.println("Child"); }
-}
+class Child : public Parent {
+public:
+    void display() { std::cout << "Child\n"; }  // Hides, not overrides
+};
 
-Parent p = new Child();
-p.display();  // "Parent" (resolved at compile time based on reference type)
+Parent* p = new Child();
+p->display();  // "Parent" (resolved at compile time -- not virtual)
+delete p;
 ```
 
 *Dynamic binding (late binding):*
 - Resolved at runtime
-- Applied to: Overridden instance methods
+- Applied to: virtual methods
 - Uses virtual method table (vtable)
 
-```java
+```cpp
 class Parent {
-    void display() { System.out.println("Parent"); }
-}
+public:
+    virtual void display() { std::cout << "Parent\n"; }
+    virtual ~Parent() = default;
+};
 
-class Child extends Parent {
-    @Override
-    void display() { System.out.println("Child"); }
-}
+class Child : public Parent {
+public:
+    void display() override { std::cout << "Child\n"; }
+};
 
-Parent p = new Child();
-p.display();  // "Child" (resolved at runtime based on actual object type)
+Parent* p = new Child();
+p->display();  // "Child" (resolved at runtime via vtable)
+delete p;
+```
+
+*CRTP -- Static polymorphism (compile-time, zero-cost):*
+```cpp
+template<typename Derived>
+class Base {
+public:
+    void interface_method() {
+        static_cast<Derived*>(this)->implementation();
+    }
+};
+
+class Concrete : public Base<Concrete> {
+public:
+    void implementation() { std::cout << "Concrete\n"; }
+};
+
+// No vtable, no virtual dispatch cost -- resolved at compile time
+Concrete c;
+c.interface_method();  // "Concrete"
 ```
 
 === Interview Questions: OOP
 
-*Q1: Can you override static methods? Why or why not?*
+*Q1: Why should base class destructors be virtual?*
 
-A: No, you cannot override static methods. You can *hide* them, but it's not true overriding.
+A: Without a virtual destructor, deleting a derived object through a base pointer causes undefined behavior (only base destructor runs, derived part leaked).
 
-Reason: Static methods belong to the class, not instances. They're resolved at compile time based on reference type (static binding), not runtime based on object type (dynamic binding).
+```cpp
+class Base {
+public:
+    ~Base() { std::cout << "~Base\n"; }  // Non-virtual!
+};
 
-```java
-class Parent {
-    static void display() { System.out.println("Parent"); }
-}
+class Derived : public Base {
+    int* data_ = new int[100];
+public:
+    ~Derived() { delete[] data_; std::cout << "~Derived\n"; }
+};
 
-class Child extends Parent {
-    static void display() { System.out.println("Child"); }  // Method hiding, not overriding
-}
-
-Parent p = new Child();
-p.display();  // "Parent" (compile-time resolution)
-
-Child c = new Child();
-c.display();  // "Child"
+Base* p = new Derived();
+delete p;  // Only ~Base runs! data_ leaked! Undefined behavior!
 ```
 
-This is method *hiding*, not *overriding*. Always use class name for static methods: `Parent.display()`.
+Fix: Always declare virtual destructor in polymorphic base classes: `virtual ~Base() = default;`
 
-*Q2: What's the difference between abstract class and interface? When to use which?*
+*Q2: What is the difference between abstract class and class with pure virtual functions?*
 
-A:
+A: In C++, an abstract class _is_ a class with at least one pure virtual function (`= 0`). There is no separate `interface` keyword.
 
-*Abstract class:*
-- Can have state (instance variables)
+*Abstract class (like Java abstract class):*
+- Can have data members (state)
 - Can have constructors
-- Can have concrete methods
-- Single inheritance only
-- Can have any access modifiers
+- Can have concrete (non-pure) methods
+- Can have pure virtual methods
 
-*Interface (Java 8+):*
-- No state (only `public static final` constants)
-- No constructors
-- Can have: abstract, default, static, private methods
-- Multiple inheritance supported
-- All methods implicitly `public`
+*Pure interface idiom (like Java interface):*
+- Only pure virtual methods + virtual destructor
+- No data members
+- Multiple inheritance supported (no diamond data problem)
 
-```java
-// Abstract class: Partial implementation + state
-abstract class Vehicle {
-    protected int speed;  // State
+```cpp
+// Pure interface (Java interface equivalent)
+class Drawable {
+public:
+    virtual void draw() const = 0;
+    virtual ~Drawable() = default;
+};
 
-    public Vehicle(int speed) { this.speed = speed; }  // Constructor
+// Abstract class with state (Java abstract class equivalent)
+class Shape : public Drawable {
+protected:
+    double x_, y_;
+public:
+    Shape(double x, double y) : x_(x), y_(y) {}
+    double x() const { return x_; }
+    // draw() still pure virtual -- Shape is abstract
+};
 
-    public abstract void start();  // Abstract
-    public void stop() { speed = 0; }  // Concrete
-}
-
-// Interface: Contract only (Java 8+: with default implementations)
-interface Flyable {
-    void fly();  // Abstract
-
-    default void land() {  // Default implementation
-        System.out.println("Landing...");
-    }
-}
+class Circle : public Shape {
+    double radius_;
+public:
+    Circle(double x, double y, double r) : Shape(x, y), radius_(r) {}
+    void draw() const override { /* ... */ }
+};
 ```
 
-*When to use:*
-- *Abstract class*: When subclasses share common state/behavior ("is-a" relationship)
-- *Interface*: When unrelated classes share common capability ("can-do" relationship)
+*Q3: Can you override non-virtual methods?*
 
-Example:
-- `Animal` (abstract class): `Dog`, `Cat` share common state (age, weight)
-- `Comparable` (interface): `String`, `Integer`, `Date` can all be compared
+A: No. Non-virtual methods use static binding (resolved by declared type at compile time). You can _hide_ them, but it is not true overriding. Always use `virtual` for polymorphic behavior, and `override` to catch mistakes.
 
-*Q3: Can interfaces have state in Java?*
+```cpp
+class Parent {
+public:
+    void display() { std::cout << "Parent\n"; }  // Non-virtual
+};
 
-A:
-- Pre-Java 8: No instance state. Only `public static final` constants.
-- Java 8+: Still no instance state, but can have `default` and `static` methods.
-- Java 9+: Can have `private` methods (for code reuse in default methods).
+class Child : public Parent {
+public:
+    void display() { std::cout << "Child\n"; }  // Hides, not overrides
+};
 
-```java
-interface MyInterface {
-    int CONSTANT = 42;  // public static final (implicit)
+Parent* p = new Child();
+p->display();  // "Parent" -- static binding
 
-    void abstractMethod();  // public abstract (implicit)
-
-    default void defaultMethod() {  // Java 8+
-        System.out.println(CONSTANT);
-    }
-
-    static void staticMethod() {  // Java 8+
-        System.out.println("Static");
-    }
-
-    private void helperMethod() {  // Java 9+
-        // Used by default methods
-    }
-}
+Child* c = new Child();
+c->display();  // "Child"
 ```
 
-Key: Interfaces define *behavior*, not state. For state, use abstract class.
+*Q4: Explain the diamond problem and how C++ resolves it.*
+
+A: Diamond problem occurs when a class inherits from two classes that share a common base.
+
+```cpp
+class Animal {
+public:
+    int age_ = 0;
+    virtual void speak() { std::cout << "...\n"; }
+    virtual ~Animal() = default;
+};
+
+class Dog : public Animal { };
+class Cat : public Animal { };
+class DogCat : public Dog, public Cat { };  // Two copies of Animal!
+```
+
+Resolution: *Virtual inheritance*
+```cpp
+class Dog : virtual public Animal { };
+class Cat : virtual public Animal { };
+class DogCat : public Dog, public Cat { };  // Single copy of Animal
+
+DogCat dc;
+dc.age_ = 5;  // Unambiguous -- single Animal subobject
+```
+
+Virtual inheritance has a cost: extra indirection through vbase pointer (~1--2 ns per access).
 
 == Classes & Interfaces
 
-=== Abstract Classes vs Interfaces (Deep Dive)
+=== Abstract Classes vs Pure Interfaces (Deep Dive)
 
-*Evolution of interfaces:*
+*C++ has no `interface` keyword -- use abstract classes:*
 
-```java
-// Pre-Java 8: Pure contract
-interface OldInterface {
-    void method1();
-    void method2();
-}
+```cpp
+// Pure interface: only pure virtual functions + virtual destructor
+class Printable {
+public:
+    virtual void print(std::ostream& os) const = 0;
+    virtual ~Printable() = default;
+};
 
-// Java 8+: Default methods (for API evolution)
-interface ModernInterface {
-    void method1();
+// Abstract class with default behavior:
+class Shape : public Printable {
+protected:
+    double x_, y_;
+public:
+    Shape(double x, double y) : x_(x), y_(y) {}
+    virtual double area() const = 0;  // Still abstract
 
-    default void method2() {  // New method without breaking existing implementations
-        System.out.println("Default implementation");
-    }
-
-    static void utility() {  // Static utility methods
-        System.out.println("Utility");
-    }
-}
-
-// Java 9+: Private methods (for code reuse)
-interface Java9Interface {
-    default void method1() {
-        commonLogic();  // Reuse private method
-    }
-
-    default void method2() {
-        commonLogic();
-    }
-
-    private void commonLogic() {  // Avoid duplication
-        System.out.println("Common logic");
-    }
-}
-```
-
-*Diamond problem resolution:*
-```java
-interface A {
-    default void method() { System.out.println("A"); }
-}
-
-interface B {
-    default void method() { System.out.println("B"); }
-}
-
-class C implements A, B {
-    @Override
-    public void method() {
-        A.super.method();  // Explicitly choose which default to use
-        // Or provide own implementation
-    }
-}
-```
-
-=== Marker Interfaces vs Annotations
-
-*Marker interface:* Empty interface to mark a class (e.g., `Serializable`, `Cloneable`, `Remote`)
-
-```java
-public interface Serializable {
-    // Empty - just marks the class
-}
-
-class Person implements Serializable {
-    // Now eligible for serialization
-}
-```
-
-*Annotation:* Modern alternative (more flexible)
-
-```java
-@Entity
-@Table(name = "users")
-class User {
-    @Id
-    @GeneratedValue
-    private Long id;
-}
-```
-
-*Marker interface advantages:*
-1. Type safety: `if (obj instanceof Serializable)` - compile-time check
-2. Part of type hierarchy
-
-*Annotation advantages:*
-1. Can have parameters: `@Table(name = "users")`
-2. Can be applied to methods, fields, parameters (not just classes)
-3. Retained at runtime: Reflection can read them
-4. No pollution of class hierarchy
-
-*Modern preference:* Annotations for new code. Marker interfaces for backward compatibility.
-
-=== Inner Classes
-
-*Four types:*
-
-*1. Static nested class:*
-```java
-class Outer {
-    private static int staticField = 10;
-
-    static class StaticNested {
-        void display() {
-            System.out.println(staticField);  // Can access static members
-        }
-    }
-}
-
-Outer.StaticNested obj = new Outer.StaticNested();  // No outer instance needed
-```
-
-*2. Non-static inner class:*
-```java
-class Outer {
-    private int instanceField = 20;
-
-    class Inner {
-        void display() {
-            System.out.println(instanceField);  // Can access instance members
-            System.out.println(Outer.this.instanceField);  // Explicit outer reference
-        }
-    }
-}
-
-Outer outer = new Outer();
-Outer.Inner inner = outer.new Inner();  // Needs outer instance
-```
-
-*3. Local inner class (inside method):*
-```java
-class Outer {
-    void method() {
-        final int localVar = 30;  // Must be effectively final
-
-        class LocalInner {
-            void display() {
-                System.out.println(localVar);  // Can access final local variables
-            }
-        }
-
-        LocalInner obj = new LocalInner();
-        obj.display();
-    }
-}
-```
-
-*4. Anonymous inner class:*
-```java
-Runnable r = new Runnable() {
-    @Override
-    public void run() {
-        System.out.println("Running");
+    void print(std::ostream& os) const override {
+        os << "Shape at (" << x_ << ", " << y_ << ")";
     }
 };
 
-// Modern alternative: Lambda
-Runnable r2 = () -> System.out.println("Running");
+// C++20 Concepts as interface constraints:
+template<typename T>
+concept Hashable = requires(T a) {
+    { std::hash<T>{}(a) } -> std::convertible_to<size_t>;
+};
+
+template<Hashable T>
+void use_in_hash_map(const T& key) {
+    // T must satisfy Hashable concept
+}
+```
+
+*Multiple inheritance (C++ supports it directly):*
+```cpp
+class Flyable {
+public:
+    virtual void fly() = 0;
+    virtual ~Flyable() = default;
+};
+
+class Swimmable {
+public:
+    virtual void swim() = 0;
+    virtual ~Swimmable() = default;
+};
+
+class Duck : public Flyable, public Swimmable {
+public:
+    void fly() override { std::cout << "Flying\n"; }
+    void swim() override { std::cout << "Swimming\n"; }
+};
+```
+
+*Mixin pattern using CRTP:*
+```cpp
+template<typename Derived>
+class Serializable {
+public:
+    std::string serialize() const {
+        return static_cast<const Derived*>(this)->to_string();
+    }
+};
+
+template<typename Derived>
+class Loggable {
+public:
+    void log() const {
+        std::cout << "[LOG] " << static_cast<const Derived*>(this)->to_string() << "\n";
+    }
+};
+
+class User : public Serializable<User>, public Loggable<User> {
+    std::string name_;
+public:
+    User(std::string name) : name_(std::move(name)) {}
+    std::string to_string() const { return "User: " + name_; }
+};
+```
+
+=== Tag Types and Type Traits (C++ Equivalent of Marker Interfaces)
+
+*Tag types (equivalent to Java marker interfaces):*
+
+```cpp
+// Tag struct (empty -- like Java's Serializable marker interface)
+struct SerializableTag {};
+
+class Person : public SerializableTag {
+    // Marked as serializable
+};
+
+// Check at compile time (like Java's instanceof)
+static_assert(std::is_base_of_v<SerializableTag, Person>);
+```
+
+*Modern alternative: Concepts (C++20) and type traits:*
+
+```cpp
+// Type trait
+template<typename T>
+struct is_serializable : std::false_type {};
+
+template<>
+struct is_serializable<Person> : std::true_type {};
+
+// C++20 Concept
+template<typename T>
+concept Serializable = requires(T t) {
+    { t.serialize() } -> std::convertible_to<std::string>;
+};
+
+// Use with constexpr if
+template<typename T>
+void maybe_serialize(const T& obj) {
+    if constexpr (Serializable<T>) {
+        auto data = obj.serialize();
+        // ...
+    }
+}
+```
+
+*Advantages of concepts over tag types:*
+1. Checked at compile time with clear error messages
+2. Can express requirements (methods, operators, expressions)
+3. No class hierarchy pollution
+4. Works with any type (including fundamental types)
+
+=== Nested Classes
+
+*Static nested class (most common in C++):*
+```cpp
+class Outer {
+    static inline int static_field = 10;
+public:
+    class Nested {  // Does NOT have implicit reference to Outer
+    public:
+        void display() {
+            std::cout << static_field << "\n";  // Can access private static
+        }
+    };
+};
+
+Outer::Nested obj;  // No outer instance needed
+```
+
+*Inner class pattern (holding reference to outer):*
+```cpp
+class Outer {
+    int instance_field_ = 20;
+public:
+    class Inner {
+        Outer& outer_;  // Explicit reference to outer (unlike Java's implicit)
+    public:
+        explicit Inner(Outer& outer) : outer_(outer) {}
+        void display() {
+            std::cout << outer_.instance_field_ << "\n";
+        }
+    };
+
+    Inner make_inner() { return Inner{*this}; }
+};
+
+Outer outer;
+Outer::Inner inner = outer.make_inner();
+```
+
+*Lambda as anonymous class replacement:*
+```cpp
+// Java anonymous inner class equivalent:
+auto task = []() {
+    std::cout << "Running\n";
+};
+std::thread t(task);
+t.join();
+
+// Capturing outer variables:
+int local_var = 30;
+auto lambda = [local_var]() {      // Capture by value
+    std::cout << local_var << "\n";
+};
+auto lambda2 = [&local_var]() {    // Capture by reference
+    std::cout << local_var << "\n";
+};
 ```
 
 *Memory implications:*
-- Non-static inner class holds reference to outer instance (potential memory leak!)
-- Static nested class: No outer reference (preferred for performance)
+- C++ nested classes do NOT implicitly capture outer instance (unlike Java inner classes)
+- No hidden reference means no memory leak risk from this pattern
+- Lambdas capture only what you specify (by value or reference)
 
-```java
-// Memory leak risk
-class Outer {
-    private byte[] data = new byte[1024 * 1024];  // 1 MB
-
-    class Inner {
-        // Implicitly holds reference to Outer (even if not used!)
-    }
-
-    Inner getInner() {
-        return new Inner();
-    }
-}
-
-Inner inner = new Outer().getInner();  // Outer can't be GC'd! (Inner holds reference)
-```
-
-*Best practice:* Use static nested class unless you need access to outer instance state.
+*Best practice:* Prefer nested classes without outer reference. Use lambdas for short-lived function objects.
 
 === Interview Questions: Classes & Interfaces
 
-*Q1: What's the difference between abstract class and interface? When would you use each?*
+*Q1: How does C++ achieve the equivalent of Java interfaces?*
 
-A: (See detailed answer in previous section)
+A: Abstract classes with only pure virtual functions and a virtual destructor serve as interfaces. C++20 concepts provide a compile-time alternative.
 
 Short version:
-- *Abstract class*: Shared state + partial implementation. Single inheritance. Use for "is-a" relationship.
-- *Interface*: Contract + optional default methods. Multiple inheritance. Use for "can-do" capability.
+- *Abstract class with pure virtuals*: Runtime polymorphism. Like Java interface with default methods.
+- *Concepts (C++20)*: Compile-time constraints. Like Java interface but resolved statically.
+- Multiple inheritance of pure interface classes is safe and common.
 
-*Q2: Can interfaces have constructors?*
+*Q2: Can abstract classes have constructors?*
 
-A: No. Interfaces cannot be instantiated, so constructors would serve no purpose. Only classes (including abstract classes) can have constructors.
+A: Yes. Abstract classes can have constructors (called by derived class constructors). They cannot be instantiated directly, but constructors initialize the base portion.
 
-*Q3: What's the difference between static nested class and inner class?*
+```cpp
+class Shape {
+protected:
+    double x_, y_;
+public:
+    Shape(double x, double y) : x_(x), y_(y) {}
+    virtual double area() const = 0;
+    virtual ~Shape() = default;
+};
 
-A:
-- *Static nested class*: No reference to outer instance. Can be instantiated without outer instance. More memory efficient.
-- *Inner class*: Holds implicit reference to outer instance. Requires outer instance to create. Can access outer instance members.
-
-```java
-Outer.StaticNested s = new Outer.StaticNested();  // OK
-
-Outer outer = new Outer();
-Outer.Inner i = outer.new Inner();  // Needs outer instance
+// Shape s(0, 0);  // Error: cannot instantiate abstract class
+class Circle : public Shape {
+    double r_;
+public:
+    Circle(double x, double y, double r) : Shape(x, y), r_(r) {}  // Calls Shape ctor
+    double area() const override { return 3.14159 * r_ * r_; }
+};
 ```
 
-Performance: Static nested class is preferred (no extra reference, no potential memory leak).
+*Q3: What is the difference between a nested class and an inner class in C++?*
 
-*Q4: Explain the diamond problem and how Java resolves it.*
+A: In C++, all nested classes are "static" by default (no implicit reference to enclosing instance). There is no Java-style "inner class" that automatically captures the enclosing `this`. To achieve that, explicitly store a reference.
 
-A: Diamond problem occurs when a class implements two interfaces with the same default method.
+Performance: No hidden outer reference means no accidental memory retention.
 
-```java
-interface A { default void m() { } }
-interface B { default void m() { } }
-class C implements A, B { }  // Compilation error!
-```
+*Q4: Explain the diamond problem and how C++ resolves it.*
+
+A: Diamond problem: Class D inherits from B and C, which both inherit from A. D gets two copies of A.
 
 Resolution:
-1. *Provide own implementation*: Override the method in class C
-2. *Explicitly choose*: Call `A.super.m()` or `B.super.m()`
+1. *Virtual inheritance*: `class B : virtual public A` ensures single A subobject
+2. *Explicit qualification*: `d.B::method()` to disambiguate
+3. *Override in D*: Provide D's own implementation
 
-```java
-class C implements A, B {
-    @Override
-    public void m() {
-        A.super.m();  // Explicitly choose A's implementation
-    }
-}
+```cpp
+class A { public: virtual void m() {} virtual ~A() = default; };
+class B : virtual public A { public: void m() override {} };
+class C : virtual public A { public: void m() override {} };
+class D : public B, public C {
+public:
+    void m() override { B::m(); }  // Explicitly choose
+};
 ```
-
-Why no problem with classes? Java doesn't support multiple inheritance of classes (only interfaces).
 
 == Exception Handling
 
-=== Checked vs Unchecked Exceptions
+=== C++ Exception Model
 
-*Checked exceptions (compile-time checking):*
-- Must be declared in `throws` clause or caught
-- Extend `Exception` (but not `RuntimeException`)
-- Examples: `IOException`, `SQLException`, `ClassNotFoundException`
+*C++ exceptions:*
+- Any type can be thrown (but prefer `std::exception` hierarchy)
+- No checked/unchecked distinction (all are "unchecked")
+- `noexcept` specifier declares functions that do not throw
+- Stack unwinding calls destructors (RAII ensures cleanup)
 
-```java
-// Must handle checked exception
-public void readFile(String path) throws IOException {
-    FileReader fr = new FileReader(path);  // Throws IOException
-}
+```cpp
+#include <stdexcept>
 
-// Or catch
-public void readFile(String path) {
-    try {
-        FileReader fr = new FileReader(path);
-    } catch (IOException e) {
-        // Handle
+void read_file(const std::string& path) {
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        throw std::runtime_error("Cannot open file: " + path);
     }
+    // Use file... destructor closes it automatically (RAII)
 }
-```
 
-*Unchecked exceptions (runtime checking):*
-- No compile-time enforcement
-- Extend `RuntimeException` or `Error`
-- Examples: `NullPointerException`, `ArrayIndexOutOfBoundsException`, `IllegalArgumentException`
-
-```java
-// No need to declare or catch
-public void divide(int a, int b) {
-    return a / b;  // May throw ArithmeticException (unchecked)
+void caller() {
+    try {
+        read_file("data.txt");
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Error: " << e.what() << "\n";
+    }
 }
 ```
 
 *Exception hierarchy:*
 ```
-Throwable
-├── Error (unchecked)
-│   ├── OutOfMemoryError
-│   ├── StackOverflowError
-│   └── ...
-└── Exception
-    ├── RuntimeException (unchecked)
-    │   ├── NullPointerException
-    │   ├── IllegalArgumentException
-    │   └── ...
-    ├── IOException (checked)
-    ├── SQLException (checked)
-    └── ...
+std::exception
+├── std::logic_error
+│   ├── std::invalid_argument
+│   ├── std::out_of_range
+│   ├── std::domain_error
+│   └── std::length_error
+├── std::runtime_error
+│   ├── std::overflow_error
+│   ├── std::underflow_error
+│   ├── std::range_error
+│   └── std::system_error
+└── std::bad_alloc
+    └── std::bad_array_new_length
 ```
 
 *When to use:*
-- *Checked*: Recoverable conditions caller can handle (file not found, network error)
-- *Unchecked*: Programming errors (null pointer, invalid argument) or unrecoverable conditions
+- *`std::logic_error`*: Programming errors (precondition violations)
+- *`std::runtime_error`*: Errors detectable only at runtime (file not found, network error)
+- *`std::invalid_argument`*: Bad function argument
+- *`noexcept`*: Mark functions that never throw (enables optimizations)
 
-=== Try-with-Resources & AutoCloseable
+=== RAII: The C++ Answer to try-with-resources
 
-*Old way (verbose):*
-```java
-FileReader fr = null;
-try {
-    fr = new FileReader("file.txt");
-    // Use fr
-} catch (IOException e) {
-    // Handle
-} finally {
-    if (fr != null) {
-        try {
-            fr.close();  // Must close manually
-        } catch (IOException e) {
-            // Handle close exception
+*RAII (Resource Acquisition Is Initialization):*
+- Resources tied to object lifetime
+- Constructor acquires, destructor releases
+- Stack unwinding guarantees cleanup
+- Superior to Java's try-with-resources (automatic, no special syntax)
+
+```cpp
+// RAII file handle (equivalent to Java's try-with-resources)
+{
+    std::ifstream file("data.txt");  // Opens file
+    if (!file) throw std::runtime_error("open failed");
+    std::string line;
+    while (std::getline(file, line)) {
+        // Process line
+    }
+}  // file destructor called automatically -- closes file
+
+// No need for try-with-resources syntax!
+```
+
+*Custom RAII wrapper:*
+```cpp
+class DatabaseConnection {
+    Connection* conn_;
+public:
+    explicit DatabaseConnection(const std::string& url)
+        : conn_(connect(url)) {
+        if (!conn_) throw std::runtime_error("Connection failed");
+    }
+
+    ~DatabaseConnection() {
+        if (conn_) disconnect(conn_);  // Always cleaned up
+    }
+
+    // Non-copyable, moveable
+    DatabaseConnection(const DatabaseConnection&) = delete;
+    DatabaseConnection& operator=(const DatabaseConnection&) = delete;
+    DatabaseConnection(DatabaseConnection&& other) noexcept
+        : conn_(std::exchange(other.conn_, nullptr)) {}
+    DatabaseConnection& operator=(DatabaseConnection&& other) noexcept {
+        if (this != &other) {
+            if (conn_) disconnect(conn_);
+            conn_ = std::exchange(other.conn_, nullptr);
         }
+        return *this;
     }
-}
+
+    void query(const std::string& sql) { /* ... */ }
+};
+
+// Usage: automatic cleanup
+{
+    DatabaseConnection db("localhost:5432");
+    db.query("SELECT * FROM users");
+}  // db destructor closes connection
 ```
 
-*New way (Java 7+):*
-```java
-try (FileReader fr = new FileReader("file.txt")) {
-    // Use fr
-} catch (IOException e) {
-    // Handle
-}
-// fr.close() called automatically (even if exception occurs)
-```
+*Smart pointers as RAII:*
+```cpp
+// unique_ptr: exclusive ownership
+auto ptr = std::make_unique<Widget>();
+// No need to delete -- cleaned up automatically
 
-*AutoCloseable interface:*
-```java
-public interface AutoCloseable {
-    void close() throws Exception;
-}
+// shared_ptr: shared ownership (reference counted)
+auto shared = std::make_shared<Widget>();
+auto copy = shared;  // Reference count = 2
+// Destroyed when last shared_ptr goes out of scope
 
-public class MyResource implements AutoCloseable {
-    @Override
-    public void close() throws Exception {
-        System.out.println("Closing resource");
-        // Cleanup logic
-    }
-}
-
-try (MyResource resource = new MyResource()) {
-    // Use resource
-}  // close() called automatically
-```
-
-*Multiple resources:*
-```java
-try (FileReader fr = new FileReader("input.txt");
-     FileWriter fw = new FileWriter("output.txt")) {
-    // Use both
-}  // Both closed in reverse order (fw first, then fr)
-```
-
-*Suppressed exceptions:*
-```java
-try (MyResource r = new MyResource()) {
-    throw new Exception("Primary");
-} catch (Exception e) {
-    System.out.println(e.getMessage());  // "Primary"
-
-    Throwable[] suppressed = e.getSuppressed();
-    // Contains exceptions from close() if any
-}
+// lock_guard: RAII mutex locking
+std::mutex mtx;
+{
+    std::lock_guard<std::mutex> lock(mtx);
+    // Critical section
+}  // Automatically unlocked
 ```
 
 === Exception Best Practices
 
-*1. Be specific:*
-```java
-// Bad
-public void processFile(String path) throws Exception { }
+*1. Catch by const reference:*
+```cpp
+// Bad: catches by value (slicing risk)
+try { /* ... */ } catch (std::exception e) { }
 
-// Good
-public void processFile(String path) throws IOException, FileNotFoundException { }
-```
-
-*2. Don't swallow exceptions:*
-```java
-// Bad
-try {
-    // ...
-} catch (Exception e) {
-    // Ignored - silently fails!
-}
-
-// Good
-try {
-    // ...
-} catch (IOException e) {
-    logger.error("Failed to process file", e);
-    throw new ProcessingException("Failed to process file", e);
+// Good: catch by const reference
+try { /* ... */ } catch (const std::exception& e) {
+    std::cerr << e.what() << "\n";
 }
 ```
 
-*3. Use unchecked for programming errors:*
-```java
-public void setAge(int age) {
+*2. Use noexcept for functions that cannot throw:*
+```cpp
+// Enables compiler optimizations (no unwind tables needed)
+void swap(int& a, int& b) noexcept {
+    int tmp = a;
+    a = b;
+    b = tmp;
+}
+
+// Move operations should be noexcept (enables optimizations in containers)
+class Widget {
+public:
+    Widget(Widget&& other) noexcept;
+    Widget& operator=(Widget&& other) noexcept;
+};
+```
+
+*3. Use RAII instead of try-finally:*
+```cpp
+// Bad: manual cleanup
+Widget* w = new Widget();
+try {
+    w->do_something();
+} catch (...) {
+    delete w;
+    throw;
+}
+delete w;
+
+// Good: RAII
+auto w = std::make_unique<Widget>();
+w->do_something();  // Automatically cleaned up on exception or normal exit
+```
+
+*4. Validate arguments with exceptions:*
+```cpp
+void set_age(int age) {
     if (age < 0) {
-        throw new IllegalArgumentException("Age cannot be negative");  // Unchecked
+        throw std::invalid_argument("Age cannot be negative");
     }
-    this.age = age;
-}
-```
-
-*4. Clean up resources:*
-```java
-// Always use try-with-resources for AutoCloseable
-try (Connection conn = getConnection()) {
-    // Use conn
+    age_ = age;
 }
 ```
 
 === Performance Cost of Exceptions
 
-*Exceptions are expensive:*
-1. Stack trace creation (walks call stack)
-2. Object creation (exception object)
-3. Control flow disruption
+*C++ exceptions use zero-cost model (when not thrown):*
+1. Normal path: Zero overhead (no try/catch cost)
+2. Throw path: Very expensive (stack unwinding, RTTI)
 
-*Benchmark:*
-```java
-// Normal flow: ~1 ns
+*Performance characteristics:*
+```cpp
+// Normal flow: 0 ns overhead (zero-cost exception model)
 int result = divide(10, 2);
 
-// Exception flow: ~1000 ns (1000x slower!)
+// Exception flow: ~1000-5000 ns (stack unwinding + RTTI)
 try {
     int result = divide(10, 0);
-} catch (ArithmeticException e) {
+} catch (const std::exception& e) {
     // ...
 }
 ```
 
-*Why expensive:*
-- `fillInStackTrace()` walks the entire call stack
-- Creates array of `StackTraceElement` objects
-- Disrupts JIT optimizations (exception paths not optimized)
+*Why throwing is expensive:*
+- Stack unwinding: Must call destructors for all stack objects
+- RTTI: Runtime type identification to match catch clauses
+- Memory allocation: Exception object typically heap-allocated
+- Binary size: Exception tables increase code size
 
-*Optimization (when stack trace not needed):*
-```java
-public class MyException extends Exception {
-    @Override
-    public synchronized Throwable fillInStackTrace() {
-        return this;  // Don't fill stack trace (10-100x faster)
+*Alternative: Error codes or `std::expected` (C++23):*
+```cpp
+// std::expected (C++23): value-or-error without exceptions
+std::expected<int, std::string> divide(int a, int b) {
+    if (b == 0) return std::unexpected("Division by zero");
+    return a / b;
+}
+
+auto result = divide(10, 0);
+if (result) {
+    std::cout << *result << "\n";
+} else {
+    std::cerr << result.error() << "\n";
+}
+
+// std::optional for "might not have a value"
+std::optional<int> find_index(const std::vector<int>& v, int val) {
+    for (size_t i = 0; i < v.size(); i++) {
+        if (v[i] == val) return static_cast<int>(i);
     }
+    return std::nullopt;
 }
 ```
 
-*Best practice:* Use exceptions for exceptional conditions only, not for control flow.
-
-```java
-// Bad: Exception for control flow
-try {
-    int i = 0;
-    while (true) {
-        array[i++];
-    }
-} catch (ArrayIndexOutOfBoundsException e) {
-    // End of array
-}
-
-// Good: Explicit condition
-for (int i = 0; i < array.length; i++) {
-    // Process array[i]
-}
-```
+*Best practice:* Use exceptions for truly exceptional conditions. Use return values (`std::optional`, `std::expected`, error codes) for expected failure cases.
 
 === Interview Questions: Exceptions
 
-*Q1: When should you use checked vs unchecked exceptions?*
+*Q1: How do C++ exceptions differ from Java exceptions?*
 
 A:
-- *Checked*: Recoverable conditions that caller can reasonably handle
-  - File not found → prompt user for different file
-  - Network timeout → retry
-  - Database connection failure → use fallback
+- *No checked exceptions*: C++ has no compile-time exception checking. Use `noexcept` to declare non-throwing functions.
+- *Zero-cost model*: Normal path has zero overhead (unlike Java where try blocks have some cost). Throw path is more expensive.
+- *RAII replaces finally*: Destructors guarantee cleanup. No `finally` block needed.
+- *Any type can be thrown*: Not just `std::exception` subclasses (though best practice is to use them).
 
-- *Unchecked*: Programming errors or unrecoverable conditions
-  - Null pointer → bug in code
-  - Invalid argument → caller violated contract
-  - Out of memory → can't recover
+*Q2: What is the performance impact of exception handling in C++?*
 
-Rule of thumb: If caller can do something about it → checked. If it's a bug → unchecked.
+A: C++ uses zero-cost exception handling:
+1. *Normal path*: Zero overhead -- no extra instructions
+2. *Throw path*: Very expensive (1000--5000 ns) due to stack unwinding and RTTI
+3. *Binary size*: Exception tables increase executable size
 
-*Q2: What's the performance impact of exception handling?*
+*When to avoid exceptions:*
+1. Hot paths where failures are expected (use error codes / `std::expected`)
+2. Real-time systems (unpredictable latency)
+3. Embedded systems (binary size constraints)
 
-A: Exceptions are expensive (~1000x slower than normal code) due to:
-1. Stack trace creation (walks entire call stack)
-2. Object allocation
-3. JIT optimization disruption
+*Q3: What is RAII and why is it better than Java's try-with-resources?*
 
-*Mitigation:*
-1. Use exceptions for exceptional conditions only (not control flow)
-2. Override `fillInStackTrace()` if stack trace not needed (rare)
-3. Catch specific exceptions (not generic `Exception`)
+A: RAII (Resource Acquisition Is Initialization) ties resource lifetime to object lifetime. Destructor releases the resource.
 
-*Anti-pattern:*
-```java
-// DON'T use exceptions for flow control!
-try {
-    while (true) {
-        process(iterator.next());
+Benefits over try-with-resources:
+1. *Automatic*: No special syntax needed -- just use objects on the stack
+2. *Composable*: Works with any resource (memory, files, locks, sockets)
+3. *Exception-safe*: Stack unwinding calls all destructors
+4. *No forget risk*: Cannot accidentally forget to close -- destructor always runs
+
+```cpp
+// C++ RAII: automatic, no special syntax
+{
+    std::lock_guard lock(mtx);
+    std::ifstream file("data.txt");
+    auto conn = std::make_unique<Connection>(url);
+    // All three resources released at scope exit
+}
+```
+
+*Q4: What is `noexcept` and when should you use it?*
+
+A: `noexcept` declares that a function does not throw exceptions. If it does throw, `std::terminate()` is called.
+
+When to use:
+1. *Move constructors/assignment*: Enables container optimizations (`vector::push_back` uses move if noexcept)
+2. *Destructors*: Implicitly noexcept (throwing from destructor is almost always wrong)
+3. *Swap functions*: Should never throw
+4. *Simple getters/setters*: Obvious non-throwing functions
+
+```cpp
+class Widget {
+public:
+    Widget(Widget&& other) noexcept;  // Enables vector optimization
+    ~Widget();                         // Implicitly noexcept
+    int value() const noexcept { return value_; }
+};
+```
+
+== Templates & Type System
+
+=== Class Templates and Function Templates
+
+*Class template:*
+```cpp
+template<typename T>
+class Box {
+    T value_;
+public:
+    void set(const T& value) { value_ = value; }
+    const T& get() const { return value_; }
+};
+
+Box<int> int_box;
+int_box.set(42);
+int value = int_box.get();  // No cast needed -- type safe
+```
+
+*Function template:*
+```cpp
+template<typename T>
+void swap_values(T* array, int i, int j) {
+    T temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+}
+
+std::string names[] = {"Alice", "Bob"};
+swap_values<std::string>(names, 0, 1);  // Explicit type
+swap_values(names, 0, 1);               // Type deduction
+```
+
+*Constrained templates (C++20 concepts):*
+```cpp
+// Upper bound equivalent: T must be arithmetic
+template<typename T>
+    requires std::is_arithmetic_v<T>
+class NumberBox {
+    T value_;
+public:
+    double double_value() const {
+        return static_cast<double>(value_);
     }
-} catch (NoSuchElementException e) {
-    // Done
+};
+
+NumberBox<int> box;      // OK
+// NumberBox<std::string> box;  // Compile error! string is not arithmetic
+
+// Multiple constraints
+template<typename T>
+    requires std::is_arithmetic_v<T> && std::totally_ordered<T>
+class ComparableNumber {
+    T value_;
+    // T must be arithmetic AND comparable
+};
+```
+
+*C++20 abbreviated function templates:*
+```cpp
+// Shorthand with auto
+void print(const auto& value) {
+    std::cout << value << "\n";
+}
+
+// Constrained with concept
+void print_number(const std::integral auto& value) {
+    std::cout << value << "\n";
 }
 ```
 
-*Q3: What is try-with-resources and why is it better than finally?*
+=== Template Specialization (vs Java's Type Erasure)
 
-A: Try-with-resources (Java 7+) automatically closes `AutoCloseable` resources.
+*C++ templates are NOT erased -- each instantiation is a separate type:*
 
-Benefits over `finally`:
-1. *Less boilerplate*: No manual close() calls
-2. *Exception safety*: Close called even if exception thrown
-3. *Suppressed exceptions*: Exceptions from close() preserved
-4. *Multiple resources*: Handles multiple resources correctly (closes in reverse order)
+```cpp
+Box<int> int_box;
+Box<std::string> str_box;
 
-```java
-// Old way: Verbose, error-prone
-finally {
-    if (resource != null) {
-        try {
-            resource.close();
-        } catch (Exception e) {
-            // Handle close exception
-        }
+// These are completely different types at runtime!
+// sizeof(Box<int>) may differ from sizeof(Box<std::string>)
+// typeid(int_box) != typeid(str_box)
+```
+
+*Unlike Java's type erasure:*
+1. Full type information available at runtime
+2. Each instantiation generates separate code (code bloat tradeoff)
+3. Can specialize for specific types
+4. Can use `sizeof(T)`, `new T()`, `T[]` -- all things Java can't do
+
+*Template specialization:*
+```cpp
+// Primary template
+template<typename T>
+class Serializer {
+public:
+    static std::string serialize(const T& value) {
+        return std::to_string(value);
     }
-}
+};
 
-// New way: Concise, safe
-try (Resource r = new Resource()) {
-    // Use r
-}  // close() called automatically
-```
-
-*Q4: Can you throw an exception from a finally block? What happens?*
-
-A: Yes, but it *shadows* the original exception!
-
-```java
-try {
-    throw new Exception("Original");
-} finally {
-    throw new Exception("Finally");  // Shadows original!
-}
-// Result: "Finally" exception propagates, "Original" is lost!
-```
-
-Best practice: *Never throw from finally*. If unavoidable, preserve original exception:
-
-```java
-Exception original = null;
-try {
-    // ...
-} catch (Exception e) {
-    original = e;
-} finally {
-    try {
-        // Cleanup
-    } catch (Exception e) {
-        if (original != null) {
-            e.addSuppressed(original);
-        }
-        throw e;
+// Full specialization for std::string
+template<>
+class Serializer<std::string> {
+public:
+    static std::string serialize(const std::string& value) {
+        return "\"" + value + "\"";
     }
-}
-```
+};
 
-Or better: Use try-with-resources (handles this automatically).
-
-== Generics & Type System
-
-=== Generic Classes and Methods
-
-*Generic class:*
-```java
-public class Box<T> {
-    private T value;
-
-    public void set(T value) { this.value = value; }
-    public T get() { return value; }
-}
-
-Box<Integer> intBox = new Box<>();
-intBox.set(42);
-Integer value = intBox.get();  // No cast needed!
-```
-
-*Generic method:*
-```java
-public class Utils {
-    public static <T> void swap(T[] array, int i, int j) {
-        T temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+// Partial specialization for pointers
+template<typename T>
+class Serializer<T*> {
+public:
+    static std::string serialize(T* value) {
+        if (!value) return "null";
+        return Serializer<T>::serialize(*value);
     }
-}
+};
 
-String[] names = {"Alice", "Bob"};
-Utils.<String>swap(names, 0, 1);  // Explicit type argument
-Utils.swap(names, 0, 1);          // Type inference
+Serializer<int>::serialize(42);          // "42"
+Serializer<std::string>::serialize("hi"); // "\"hi\""
 ```
 
-*Bounded type parameters:*
-```java
-// Upper bound: T must be Number or subclass
-public class NumberBox<T extends Number> {
-    private T value;
+*Compile-time capabilities (no Java equivalent):*
+```cpp
+// Can create arrays of template type
+template<typename T, size_t N>
+class FixedArray {
+    T data_[N];  // Stack-allocated array of T
+public:
+    T& operator[](size_t i) { return data_[i]; }
+    constexpr size_t size() const { return N; }
+};
 
-    public double doubleValue() {
-        return value.doubleValue();  // Can call Number methods
-    }
-}
-
-NumberBox<Integer> box = new NumberBox<>();  // OK
-NumberBox<String> box = new NumberBox<>();   // Compile error!
-
-// Multiple bounds
-public class MyClass<T extends Number & Comparable<T>> {
-    // T must be Number AND Comparable
-}
+FixedArray<int, 10> arr;  // 10 ints on the stack, zero heap allocation
 ```
 
-=== Type Erasure
+=== Concepts and Constraints (C++20)
 
-*Type erasure:* Generics are compile-time only. At runtime, generic type information is *erased*.
+*Concepts replace Java's bounded wildcards with compile-time constraints:*
 
-```java
-List<String> strings = new ArrayList<>();
-List<Integer> integers = new ArrayList<>();
+*Defining concepts:*
+```cpp
+// Equivalent to Java's <T extends Number>
+template<typename T>
+concept Numeric = std::is_arithmetic_v<T>;
 
-// At runtime, both are just List (type info erased)
-strings.getClass() == integers.getClass();  // true!
+// Equivalent to Java's <T extends Comparable<T>>
+template<typename T>
+concept Comparable = std::totally_ordered<T>;
+
+// Complex concept
+template<typename T>
+concept Printable = requires(T t, std::ostream& os) {
+    { os << t } -> std::same_as<std::ostream&>;
+};
 ```
 
-*Why type erasure:*
-1. Backward compatibility with pre-generics code (Java 5)
-2. Single class file works for all type parameters
-
-*Bridge methods:*
-```java
-class Node<T> {
-    public void setValue(T value) { }
-}
-
-class IntNode extends Node<Integer> {
-    @Override
-    public void setValue(Integer value) { }  // Overrides setValue(T)
-}
-
-// After type erasure:
-class Node {
-    public void setValue(Object value) { }  // T → Object
-}
-
-class IntNode extends Node {
-    public void setValue(Integer value) { }  // Doesn't override setValue(Object)!
-
-    // Compiler generates bridge method:
-    public void setValue(Object value) {
-        setValue((Integer) value);  // Delegates to setValue(Integer)
-    }
-}
-```
-
-*Limitations due to type erasure:*
-```java
-// Cannot create generic array
-T[] array = new T[10];  // Compile error!
-
-// Cannot use instanceof with type parameter
-if (obj instanceof T) { }  // Compile error!
-
-// Cannot create instance of type parameter
-T obj = new T();  // Compile error!
-
-// Cannot have static field of type parameter
-class MyClass<T> {
-    private static T value;  // Compile error!
-}
-```
-
-=== Wildcards
-
-*Three types:*
-
-*1. Unbounded wildcard: `?`*
-```java
-public void printList(List<?> list) {
-    for (Object item : list) {
-        System.out.println(item);
-    }
-}
-
-printList(List.of("a", "b"));  // OK
-printList(List.of(1, 2, 3));   // OK
-```
-
-*2. Upper bounded wildcard: `? extends T`*
-```java
-// Can read as T (or its subtypes)
-public double sum(List<? extends Number> list) {
-    double sum = 0;
-    for (Number n : list) {  // Can read as Number
-        sum += n.doubleValue();
-    }
-    return sum;
-}
-
-sum(List.of(1, 2, 3));           // List<Integer> OK
-sum(List.of(1.5, 2.5));          // List<Double> OK
-// list.add(42);                 // Compile error! Can't write
-```
-
-*3. Lower bounded wildcard: `? super T`*
-```java
-// Can write T (or its subtypes)
-public void addNumbers(List<? super Integer> list) {
-    list.add(42);        // Can write Integer
-    list.add(100);       // OK
-    // Integer x = list.get(0);  // Compile error! Can only read as Object
-}
-
-addNumbers(new ArrayList<Integer>());  // OK
-addNumbers(new ArrayList<Number>());   // OK
-addNumbers(new ArrayList<Object>());   // OK
-```
-
-=== PECS Principle
-
-*PECS: Producer Extends, Consumer Super*
-
-*Producer (you read from it):* Use `? extends T`
-```java
-public void processNumbers(List<? extends Number> numbers) {
-    for (Number n : numbers) {  // Read (produce) Number
-        System.out.println(n.doubleValue());
-    }
-}
-```
-
-*Consumer (you write to it):* Use `? super T`
-```java
-public void fillList(List<? super Integer> list) {
-    list.add(1);  // Write (consume) Integer
-    list.add(2);
-    list.add(3);
-}
-```
-
-*Real-world example (Collections.copy):*
-```java
-public static <T> void copy(
-    List<? super T> dest,      // Consumer: we write to it
-    List<? extends T> src      // Producer: we read from it
-) {
-    for (T item : src) {
-        dest.add(item);
-    }
-}
-
-List<Number> dest = new ArrayList<>();
-List<Integer> src = List.of(1, 2, 3);
-Collections.copy(dest, src);  // Works!
-```
-
-*Mnemonic:*
-- GET (read) → Extends
-- PUT (write) → Super
-
-=== Interview Questions: Generics
-
-*Q1: What is type erasure and why does Java use it?*
-
-A: Type erasure = generic type information removed at runtime. Compiler replaces type parameters with bounds (or Object) and inserts casts.
-
-```java
-// Before erasure
-List<String> list = new ArrayList<String>();
-list.add("hello");
-String s = list.get(0);
-
-// After erasure
-List list = new ArrayList();
-list.add("hello");
-String s = (String) list.get(0);  // Cast inserted by compiler
-```
-
-Why:
-1. *Backward compatibility*: Pre-Java 5 code works with generic collections
-2. *Single implementation*: One class file for all type arguments (not like C++ templates)
-
-Downside: Type info unavailable at runtime (can't do `new T[]`, `instanceof T`, etc.)
-
-*Q2: Why can't you create a generic array? `new T[10]`*
-
-A: Due to type erasure + array covariance, would break type safety.
-
-```java
-// If this were allowed:
-T[] array = new T[10];  // After erasure: Object[] array = new Object[10];
-
-// Then this would compile but fail at runtime:
-Box<String>[] boxes = new Box<String>[10];  // Suppose allowed
-Object[] objects = boxes;  // Array covariance
-objects[0] = new Box<Integer>();  // ArrayStoreException at runtime!
-// But compiler thinks boxes[0] is Box<String>!
-```
-
-Workaround:
-```java
-@SuppressWarnings("unchecked")
-T[] array = (T[]) new Object[10];  // Cast (unsafe but necessary)
-```
-
-Better: Use `ArrayList<T>` instead of `T[]`.
-
-*Q3: Explain PECS principle with examples.*
-
-A: PECS = Producer Extends, Consumer Super.
-
-- *Producer* (you read from): `? extends T`
-  - Can read as T
-  - Can't write (don't know exact type)
-
-- *Consumer* (you write to): `? super T`
-  - Can write T
-  - Can only read as Object (don't know exact type)
-
-Example:
-```java
-// Producer: Read numbers, compute sum
-public double sum(List<? extends Number> numbers) {
+*Using concepts:*
+```cpp
+// Constrained template (like Java's bounded type parameter)
+template<Numeric T>
+double sum(const std::vector<T>& numbers) {
     double total = 0;
-    for (Number n : numbers) {  // OK: read as Number
-        total += n.doubleValue();
+    for (const auto& n : numbers) {
+        total += static_cast<double>(n);
     }
-    // numbers.add(42);  // Error: can't write
     return total;
 }
 
-// Consumer: Write integers
-public void fill(List<? super Integer> list) {
-    list.add(42);   // OK: write Integer
-    list.add(100);
-    // Integer x = list.get(0);  // Error: can only read as Object
+sum(std::vector<int>{1, 2, 3});      // OK
+sum(std::vector<double>{1.5, 2.5});  // OK
+// sum(std::vector<std::string>{});  // Compile error! string is not Numeric
+```
+
+*No PECS needed in C++:*
+
+Java needs PECS (`? extends T`, `? super T`) because of type erasure and invariant generics. C++ templates are structurally typed -- if the operations compile, the type works.
+
+```cpp
+// C++ equivalent of Collections.copy -- no wildcards needed
+template<typename DestIter, typename SrcIter>
+void copy_range(DestIter dest, SrcIter src_begin, SrcIter src_end) {
+    while (src_begin != src_end) {
+        *dest++ = *src_begin++;
+    }
 }
+
+// Works as long as types are assignment-compatible
+std::vector<double> dest(3);
+std::vector<int> src = {1, 2, 3};
+copy_range(dest.begin(), src.begin(), src.end());  // int -> double: OK
 ```
 
-Real use: `Collections.copy(List<? super T> dest, List<? extends T> src)`
+=== Interview Questions: Templates
 
-*Q4: What's the difference between `List<?>` and `List<Object>`?*
+*Q1: How do C++ templates differ from Java generics?*
 
-A:
-- `List<?>`: Unknown type. Can read as `Object`, but can't write (except null).
-- `List<Object>`: Specifically a list of `Object`. Can read and write `Object`.
+A: Fundamental differences:
 
-```java
-// List<?>
-List<?> wildcardList = List.of("a", "b");
-Object obj = wildcardList.get(0);  // OK: read as Object
-wildcardList.add("c");  // Error: unknown type
-wildcardList.add(null); // OK: null is compatible with any type
+1. *No type erasure*: C++ generates separate code per instantiation. Full type info at runtime.
+2. *Can use value types*: `vector<int>` stores actual ints (no boxing).
+3. *Template specialization*: Can provide optimized implementations for specific types.
+4. *Compile-time computation*: `constexpr`, `if constexpr`, template metaprogramming.
+5. *Code bloat*: Each instantiation generates code (tradeoff for zero-cost abstraction).
 
-// List<Object>
-List<Object> objectList = new ArrayList<>();
-objectList.add("string");  // OK
-objectList.add(42);        // OK
-objectList.add(new Dog()); // OK
+```cpp
+// Things possible in C++ but not Java:
+template<typename T>
+T* create() { return new T(); }    // Can construct T
 
-// Assignment
-List<?> wc = objectList;       // OK
-List<Object> obj = wildcardList;  // Error: incompatible types
+template<typename T, size_t N>
+struct Array { T data[N]; };        // Can create arrays of T with size N
+
+template<typename T>
+constexpr size_t type_size = sizeof(T);  // Can get size of T
 ```
 
-Key: `List<String>` is NOT a subtype of `List<Object>`, but IS a subtype of `List<?>`.
+*Q2: What are concepts (C++20) and how do they improve templates?*
 
-== Collections Framework
+A: Concepts are named constraints on template parameters. They replace SFINAE and `enable_if` with readable syntax.
 
-=== List Implementations
+```cpp
+// Before C++20: SFINAE (ugly)
+template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
+T add(T a, T b) { return a + b; }
 
-*ArrayList:*
-- Backed by dynamic array
-- Random access: O(1)
-- Insert/delete at end: O(1) amortized
-- Insert/delete at middle: O(n)
+// C++20: Concepts (clean)
+template<std::integral T>
+T add(T a, T b) { return a + b; }
+```
+
+Benefits:
+1. *Readable error messages*: "T does not satisfy Integral" vs cryptic SFINAE errors
+2. *Self-documenting*: Concept name describes the requirement
+3. *Composable*: Combine with `&&`, `||`
+4. *Subsumption*: More constrained overloads are preferred
+
+*Q3: What is template specialization? When would you use it?*
+
+A: Template specialization provides a custom implementation for specific type arguments.
+
+Use cases:
+1. *Optimization*: `std::vector<bool>` is specialized to use 1 bit per element
+2. *Different algorithms*: Sort strings differently from integers
+3. *Type traits*: `is_integral<int>` is specialized to `true_type`
+
+```cpp
+// Primary template
+template<typename T>
+struct Hash {
+    size_t operator()(const T& v) const;
+};
+
+// Specialization for const char*
+template<>
+struct Hash<const char*> {
+    size_t operator()(const char* s) const {
+        size_t hash = 0;
+        while (*s) hash = hash * 31 + *s++;
+        return hash;
+    }
+};
+```
+
+*Q4: Why doesn't C++ need PECS (Producer Extends, Consumer Super)?*
+
+A: PECS is a Java workaround for invariant generics + type erasure. C++ templates use structural typing -- if the code compiles with a given type, it works. No variance annotations needed.
+
+```cpp
+// This just works -- no wildcards required
+template<typename T>
+void process(const std::vector<T>& input, std::vector<T>& output) {
+    for (const auto& item : input) {
+        output.push_back(item);
+    }
+}
+
+// Implicit conversions work naturally
+std::vector<int> ints = {1, 2, 3};
+std::vector<double> doubles;
+// Just use std::copy with appropriate iterators
+std::transform(ints.begin(), ints.end(), std::back_inserter(doubles),
+               [](int i) { return static_cast<double>(i); });
+```
+
+== STL Containers
+
+=== Sequence Containers
+
+*`std::vector` (equivalent to Java's ArrayList):*
+- Dynamic array, contiguous memory
+- Random access: $O(1)$
+- Insert/delete at end: $O(1)$ amortized
+- Insert/delete at middle: $O(n)$
 - Not thread-safe
 
-```java
-List<String> list = new ArrayList<>();
-list.add("a");          // O(1) amortized
-list.get(5);            // O(1)
-list.add(2, "x");       // O(n) - shift elements
-list.remove(2);         // O(n) - shift elements
+```cpp
+std::vector<std::string> vec;
+vec.push_back("a");         // O(1) amortized
+vec[5];                     // O(1) -- no bounds check
+vec.at(5);                  // O(1) -- bounds checked (throws std::out_of_range)
+vec.insert(vec.begin() + 2, "x");  // O(n) -- shift elements
+vec.erase(vec.begin() + 2);        // O(n) -- shift elements
 ```
 
-*LinkedList:*
+*Performance note:* `std::vector` stores elements contiguously in memory. This means excellent cache locality -- iterating a vector is ~10x faster than iterating a linked list due to CPU cache line prefetching.
+
+*`std::deque` (double-ended queue):*
+- Random access: $O(1)$
+- Insert/delete at both ends: $O(1)$
+- Insert/delete in middle: $O(n)$
+- Not contiguous memory (blocks of arrays)
+
+```cpp
+std::deque<std::string> dq;
+dq.push_front("x");     // O(1) -- unlike vector!
+dq.push_back("y");      // O(1)
+dq[100];                 // O(1)
+```
+
+*`std::list` (equivalent to Java's LinkedList):*
 - Doubly-linked list
-- Random access: O(n)
-- Insert/delete at ends: O(1)
-- Insert/delete in middle: O(n) to find + O(1) to modify
+- Random access: $O(n)$
+- Insert/delete anywhere (with iterator): $O(1)$
 - Not thread-safe
-- More memory per element (node overhead)
+- More memory per element (two pointers + node overhead)
 
-```java
-LinkedList<String> list = new LinkedList<>();
-list.addFirst("x");     // O(1)
-list.addLast("y");      // O(1)
-list.get(100);          // O(n) - traverse list
-list.add(50, "z");      // O(n) - find position
+```cpp
+std::list<std::string> lst;
+lst.push_front("x");    // O(1)
+lst.push_back("y");     // O(1)
+// No operator[] -- must iterate
+auto it = std::next(lst.begin(), 50);
+lst.insert(it, "z");    // O(1) insertion (but O(n) to find position)
+```
+
+*`std::array` (fixed-size, stack-allocated):*
+```cpp
+std::array<int, 5> arr = {1, 2, 3, 4, 5};
+arr[0];           // O(1)
+arr.size();       // constexpr 5
+// No push_back -- fixed size
 ```
 
 *When to use:*
-- *ArrayList*: Default choice. Random access, iterations, small modifications
-- *LinkedList*: Frequent insertions/deletions at ends (use as Deque), rarely used in practice
+- *`std::vector`*: Default choice (~99% of cases). Fast, cache-friendly, contiguous.
+- *`std::deque`*: Need fast push_front. Use as queue.
+- *`std::list`*: Need stable iterators during insertion/deletion. Rarely used.
+- *`std::array`*: Fixed size known at compile time. Zero overhead.
 
-*CopyOnWriteArrayList:*
-- Thread-safe variant
-- All modifications create new underlying array
-- Ideal for read-heavy workloads with rare writes
-- Iterators never throw `ConcurrentModificationException`
+=== Associative Containers (Sets)
 
-```java
-CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
-list.add("x");  // Creates new array (expensive!)
-
-// Safe concurrent iteration (no ConcurrentModificationException)
-for (String s : list) {
-    // Even if another thread modifies list
-}
-```
-
-=== Set Implementations
-
-*HashSet:*
-- Backed by HashMap
-- O(1) add, remove, contains (average)
+*`std::unordered_set` (equivalent to Java's HashSet):*
+- Hash table
+- $O(1)$ average insert, find, erase
 - No ordering guarantees
-- Allows one null element
+- Requires `std::hash<T>` and `operator==`
 
-```java
-Set<String> set = new HashSet<>();
-set.add("a");           // O(1) average
-set.contains("a");      // O(1) average
-set.remove("a");        // O(1) average
+```cpp
+std::unordered_set<std::string> set;
+set.insert("a");          // O(1) average
+set.count("a");           // O(1) average (0 or 1)
+set.contains("a");        // O(1) average (C++20)
+set.erase("a");           // O(1) average
 ```
 
-*LinkedHashSet:*
-- HashSet + doubly-linked list
-- Maintains insertion order
-- Slightly slower than HashSet (linked list overhead)
+*`std::set` (equivalent to Java's TreeSet):*
+- Red-Black tree (self-balancing BST)
+- $O(log n)$ insert, find, erase
+- Sorted order (uses `operator<` by default)
+- Requires `operator<` or custom comparator
 
-```java
-Set<String> set = new LinkedHashSet<>();
-set.add("c");
-set.add("a");
-set.add("b");
-// Iteration order: c, a, b (insertion order)
-```
-
-*TreeSet:*
-- Backed by TreeMap (Red-Black tree)
-- O(log n) add, remove, contains
-- Sorted order (natural or custom comparator)
-- No null elements
-
-```java
-Set<Integer> set = new TreeSet<>();
-set.add(5);
-set.add(1);
-set.add(3);
+```cpp
+std::set<int> sorted_set;
+sorted_set.insert(5);
+sorted_set.insert(1);
+sorted_set.insert(3);
 // Iteration order: 1, 3, 5 (sorted)
 
-set.first();  // 1
-set.last();   // 5
-set.headSet(3);  // [1]
-set.tailSet(3);  // [3, 5]
+auto it = sorted_set.begin();   // Points to 1 (smallest)
+auto rit = sorted_set.rbegin(); // Points to 5 (largest)
+auto lb = sorted_set.lower_bound(3);  // Iterator to 3
+auto ub = sorted_set.upper_bound(3);  // Iterator past 3 (to 5)
 ```
 
 *When to use:*
-- *HashSet*: Default. Fast, no ordering needed
-- *LinkedHashSet*: Need insertion order
-- *TreeSet*: Need sorted order, range queries
+- *`std::unordered_set`*: Default. Fast, no ordering needed.
+- *`std::set`*: Need sorted order, range queries, or ordered iteration.
 
-=== Map Implementations
+=== Associative Containers (Maps)
 
-*HashMap:*
+*`std::unordered_map` (equivalent to Java's HashMap):*
 - Hash table (array of buckets)
-- O(1) average put, get, remove
-- Since Java 8: Buckets become trees when too many collisions (8+ elements)
+- $O(1)$ average insert, find, erase
 - Not thread-safe
-- Allows one null key, multiple null values
+- Requires `std::hash<K>` and `operator==` for key type
 
-```java
-Map<String, Integer> map = new HashMap<>();
-map.put("Alice", 30);   // O(1) average
-map.get("Alice");       // O(1) average
-map.remove("Alice");    // O(1) average
+```cpp
+std::unordered_map<std::string, int> map;
+map["Alice"] = 30;           // O(1) average (insert or update)
+map.at("Alice");             // O(1) average (throws if not found)
+map.erase("Alice");          // O(1) average
+map.contains("Alice");       // O(1) average (C++20)
 ```
 
-*Internal structure:*
-```java
-// Simplified HashMap internals
-class HashMap<K, V> {
-    Node<K,V>[] table;  // Array of buckets (default size: 16)
-    int size;
-    float loadFactor = 0.75f;  // Resize when 75% full
-
-    static class Node<K,V> {
-        final int hash;
-        final K key;
+*Internal structure (simplified):*
+```cpp
+// Simplified unordered_map internals
+template<typename K, typename V>
+class UnorderedMap {
+    struct Node {
+        size_t hash;
+        K key;
         V value;
-        Node<K,V> next;  // Linked list for collisions
-    }
+        Node* next;  // Chaining for collisions
+    };
 
-    public V get(Object key) {
-        int hash = hash(key);
-        int bucket = hash & (table.length - 1);  // Modulo (fast bitwise)
-        Node<K,V> node = table[bucket];
+    Node** buckets_;       // Array of bucket pointers
+    size_t bucket_count_;  // Number of buckets
+    size_t size_;
+    float max_load_factor_ = 1.0f;  // Rehash threshold
 
-        // Search in bucket (linked list or tree)
-        while (node != null) {
-            if (node.hash == hash && Objects.equals(node.key, key)) {
-                return node.value;
-            }
-            node = node.next;
+    V& get(const K& key) {
+        size_t hash = std::hash<K>{}(key);
+        size_t bucket = hash % bucket_count_;
+        Node* node = buckets_[bucket];
+        while (node) {
+            if (node->hash == hash && node->key == key)
+                return node->value;
+            node = node->next;
         }
-        return null;
+        throw std::out_of_range("Key not found");
     }
-}
+};
 ```
 
-*Why capacity is power of 2:*
-- Fast modulo: `hash % capacity` → `hash & (capacity - 1)` (bitwise AND)
-- Example: `hash % 16` → `hash & 15`
+*Collision handling:*
+- Separate chaining (linked list per bucket)
+- Load factor threshold triggers rehash (default max_load_factor = 1.0)
+- Rehash doubles bucket count and redistributes elements
 
-*Hash collision handling (Java 8+):*
-- Bucket with < 8 entries: Linked list
-- Bucket with 8+ entries: Red-black tree (O(log n) worst case)
-- Converts back to list when size drops to 6
+*`std::map` (equivalent to Java's TreeMap):*
+- Red-Black tree
+- $O(log n)$ insert, find, erase
+- Sorted by keys (uses `operator<`)
 
-*LinkedHashMap:*
-- HashMap + doubly-linked list
-- Maintains insertion order (or access order)
-- Useful for LRU cache
+```cpp
+std::map<std::string, int> sorted_map;
+sorted_map["c"] = 3;
+sorted_map["a"] = 1;
+sorted_map["b"] = 2;
+// Iteration order: a, b, c (sorted by key)
 
-```java
-// Insertion order
-Map<String, Integer> map = new LinkedHashMap<>();
-map.put("c", 3);
-map.put("a", 1);
-// Iteration: c, a (insertion order)
-
-// Access order (for LRU cache)
-Map<String, Integer> lru = new LinkedHashMap<>(16, 0.75f, true);
-lru.put("a", 1);
-lru.put("b", 2);
-lru.get("a");  // Access "a"
-// Iteration: b, a (a moved to end)
-```
-
-*TreeMap:*
-- Red-black tree (self-balancing BST)
-- O(log n) put, get, remove
-- Sorted by keys (natural order or comparator)
-- No null keys (but null values OK)
-
-```java
-Map<String, Integer> map = new TreeMap<>();
-map.put("c", 3);
-map.put("a", 1);
-map.put("b", 2);
-// Iteration: a, b, c (sorted by key)
-
-map.firstKey();  // "a"
-map.lastKey();   // "c"
-map.headMap("b");  // {a=1}
-map.tailMap("b");  // {b=2, c=3}
+sorted_map.begin()->first;   // "a"
+sorted_map.rbegin()->first;  // "c"
+auto lb = sorted_map.lower_bound("b");  // Iterator to {"b", 2}
 ```
 
 *When to use:*
-- *HashMap*: Default. Fast, no ordering
-- *LinkedHashMap*: Need insertion/access order, LRU cache
-- *TreeMap*: Need sorted keys, range queries
-- *ConcurrentHashMap*: Thread-safe (see Part III)
+- *`std::unordered_map`*: Default. Fast $O(1)$ operations.
+- *`std::map`*: Need sorted keys, range queries, ordered iteration.
+- Thread-safe map: Use `std::shared_mutex` + `std::map`, or a concurrent hash map library.
 
-=== Queue & Deque
+=== Queue, Stack, and Priority Queue
 
-*Queue interface:*
-```java
-Queue<String> queue = new LinkedList<>();
-queue.offer("a");  // Add (returns false if fails)
-queue.poll();      // Remove and return head (null if empty)
-queue.peek();      // Return head without removing (null if empty)
-
-queue.add("b");    // Add (throws exception if fails)
-queue.remove();    // Remove head (throws exception if empty)
-queue.element();   // Return head (throws exception if empty)
+*`std::queue` (adapter over deque):*
+```cpp
+std::queue<std::string> queue;
+queue.push("a");       // Enqueue
+queue.front();         // Peek front (no remove)
+queue.pop();           // Dequeue (void return!)
+queue.empty();         // Check if empty
 ```
 
-*Deque (double-ended queue):*
-```java
-Deque<String> deque = new ArrayDeque<>();
-
-// Queue operations
-deque.offer("a");
-deque.poll();
-
-// Stack operations
-deque.push("b");  // Add to front
-deque.pop();      // Remove from front
-
-// Both ends
-deque.offerFirst("x");
-deque.offerLast("y");
-deque.pollFirst();
-deque.pollLast();
+*`std::stack` (adapter over deque):*
+```cpp
+std::stack<std::string> stack;
+stack.push("a");       // Push
+stack.top();           // Peek top (no remove)
+stack.pop();           // Pop (void return!)
 ```
 
-*PriorityQueue:*
-- Min-heap (by default)
-- O(log n) insert, remove
-- O(1) peek
+*`std::priority_queue` (max-heap by default):*
+- $O(log n)$ push, pop
+- $O(1)$ top
 - Not thread-safe
 
-```java
-PriorityQueue<Integer> pq = new PriorityQueue<>();
-pq.offer(5);
-pq.offer(1);
-pq.offer(3);
-pq.poll();  // 1 (min element)
-pq.poll();  // 3
-pq.poll();  // 5
+```cpp
+// Max-heap (default)
+std::priority_queue<int> max_pq;
+max_pq.push(5);
+max_pq.push(1);
+max_pq.push(3);
+max_pq.top();   // 5 (max element) -- NOTE: opposite of Java (min-heap)
+max_pq.pop();   // Remove 5
 
-// Custom comparator (max-heap)
-PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
+// Min-heap (like Java's default PriorityQueue)
+std::priority_queue<int, std::vector<int>, std::greater<int>> min_pq;
+min_pq.push(5);
+min_pq.push(1);
+min_pq.push(3);
+min_pq.top();   // 1 (min element)
+
+// Custom comparator
+auto cmp = [](const auto& a, const auto& b) { return a.priority < b.priority; };
+std::priority_queue<Task, std::vector<Task>, decltype(cmp)> task_pq(cmp);
 ```
 
-=== Interview Questions: Collections
+=== Interview Questions: Containers
 
-*Q1: How does HashMap work internally?*
+*Q1: How does `std::unordered_map` work internally?*
 
-A: HashMap uses array of buckets (default 16). Each bucket is linked list (or tree if 8+ collisions).
+A: `std::unordered_map` uses a hash table with separate chaining (linked list per bucket).
 
 Steps:
-1. *Hash key*: `hash = key.hashCode()` (then rehash for better distribution)
-2. *Find bucket*: `index = hash & (capacity - 1)` (fast modulo using power-of-2 capacity)
-3. *Search bucket*: Traverse linked list/tree, compare hash and equals()
+1. *Hash key*: `std::hash<K>{}(key)`
+2. *Find bucket*: `hash % bucket_count`
+3. *Search bucket*: Traverse linked list, compare hash and `operator==`
 4. *Insert/update*: Add to bucket or update value
 
 *Collision handling:*
-- Java 7: Linked list (O(n) worst case)
-- Java 8+: Tree when 8+ entries (O(log n) worst case)
-
-*Resizing:*
-- When `size > capacity * loadFactor` (0.75), double capacity
-- Rehash all entries (expensive!)
+- Separate chaining with linked lists
+- Rehash when `size > bucket_count * max_load_factor` (default 1.0)
+- Rehash is $O(n)$
 
 Key requirements:
-- Override `equals()` AND `hashCode()`
-- Immutable keys (don't change after inserting)
+- `std::hash<K>` specialization must exist
+- `operator==` must be defined for key type
+- Keys should be effectively immutable after insertion
 
-*Q2: What happens on hash collision in HashMap?*
-
-A: Multiple strategies:
-
-*Java 7 and earlier:* Linked list in bucket
-- Insert: O(1) (add to front)
-- Search: O(n) (traverse list)
-- Worst case: All keys in one bucket → O(n) lookup
-
-*Java 8+:* Tree-ification when too many collisions
-- Bucket with < 8 entries: Linked list
-- Bucket with 8+ entries: Convert to Red-Black tree → O(log n)
-- Convert back to list when drops to 6 entries
-
-Why 8? Balance between memory (tree uses more) and performance.
-
-*Q3: Why is HashMap capacity always a power of 2?*
-
-A: Fast modulo operation using bitwise AND.
-
-```java
-// Slow: Modulo operation
-int bucket = hash % capacity;
-
-// Fast: Bitwise AND (when capacity is power of 2)
-int bucket = hash & (capacity - 1);
-```
-
-Example (capacity = 16):
-- `hash % 16` → `hash & 15`
-- `15 = 0b1111` → keeps last 4 bits → same result as modulo
-- Bitwise AND is much faster than division
-
-Also ensures good distribution of keys across buckets.
-
-*Q4: What's the difference between ArrayList and LinkedList? When would you use each?*
+*Q2: What is the difference between `std::map` and `std::unordered_map`?*
 
 A:
 
-*ArrayList:*
-- Backed by array
-- Random access: O(1)
-- Insert/remove at end: O(1) amortized
-- Insert/remove in middle: O(n) (shift elements)
-- Memory: Compact (just array + small overhead)
+*`std::unordered_map`:*
+- Hash table
+- $O(1)$ average, $O(n)$ worst case
+- No ordering
+- Requires hash + equality
+- Better for most use cases
 
-*LinkedList:*
-- Doubly-linked list
-- Random access: O(n) (must traverse)
-- Insert/remove at ends: O(1)
-- Insert/remove in middle: O(n) to find, O(1) to modify
-- Memory: Higher overhead (node objects, pointers)
+*`std::map`:*
+- Red-Black tree
+- $O(log n)$ guaranteed
+- Sorted by key
+- Requires `operator<`
+- Better for ordered iteration, range queries
 
-*When to use:*
-- *ArrayList*: 99% of the time. Default choice. Fast iteration and random access.
-- *LinkedList*: Frequent insertions/deletions at ends (better use ArrayDeque). Rarely used in practice.
+*Q3: Why is `std::vector` almost always preferred over `std::list`?*
 
-Myth: "Use LinkedList for frequent insertions" → Usually false! ArrayList is faster due to cache locality.
+A: Cache locality. `std::vector` stores elements contiguously in memory, which means:
+1. CPU cache prefetching works perfectly
+2. Iteration is ~10x faster than linked list
+3. Less memory overhead (no per-node pointers)
+4. Even insertion in the middle is often faster than list due to cache effects
 
-*Q5: Explain the internal structure of HashMap in Java 8+.*
+Only use `std::list` when you need stable iterators (iterators remain valid after insertion/deletion elsewhere) or guaranteed $O(1)$ splice operations.
 
-A: HashMap = array of buckets + collision handling.
+Myth: "Use linked list for frequent insertions" -- Usually false due to cache effects.
 
-*Structure:*
-```java
-Node<K,V>[] table;  // Array (default size 16)
+*Q4: What is the difference between `std::set` and `std::unordered_set`?*
 
-static class Node<K,V> {
-    int hash;
-    K key;
-    V value;
-    Node<K,V> next;  // For linked list
-}
+A:
+- *`std::unordered_set`*: Hash table. $O(1)$ average. No ordering. Default choice.
+- *`std::set`*: Red-Black tree. $O(log n)$ guaranteed. Sorted. Use for range queries.
+
+*Q5: How does `std::unordered_map` handle collisions and resizing?*
+
+A:
+*Collisions:* Separate chaining -- each bucket contains a linked list of key-value pairs with the same hash bucket index.
+
+*Resizing:*
+- When `size() > bucket_count() * max_load_factor()`, triggers rehash
+- All elements re-bucketed into new, larger table
+- Rehash is $O(n)$ -- use `reserve()` to avoid rehashes if size is known
+
+```cpp
+std::unordered_map<std::string, int> map;
+map.reserve(1000);  // Pre-allocate buckets for 1000 elements
+// No rehash until 1000+ elements inserted
 ```
 
-*Bucket contents:*
-- 0 entries: null
-- 1 entry: Single node
-- 2-7 entries: Linked list
-- 8+ entries: Red-Black tree (TreeNode)
-
-*Why tree-ification?*
-- Defense against poor hash functions or malicious input
-- Worst case: O(log n) instead of O(n)
-
-*Process:*
-1. Compute hash: `hash(key.hashCode())`
-2. Find bucket: `table[hash & (table.length - 1)]`
-3. Search bucket:
-   - If list: Traverse, compare hash + equals()
-   - If tree: Binary search in tree
-4. Resize if needed: When `size > capacity * 0.75`
-
-*Load factor (0.75):*
+*Load factor:*
 - Trade-off between space and time
-- Higher load → less space, more collisions
-- Lower load → more space, fewer collisions
-- 0.75 is empirically optimal
+- Higher load factor: less space, more collisions
+- Lower load factor: more space, fewer collisions
+- Default max_load_factor is 1.0

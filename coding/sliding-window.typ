@@ -414,3 +414,44 @@ bool isValidWindow(const unordered_map<char,int>& window,
 Benchmark (1M char string):
 - array: 15ms
 - unordered_map: 75ms (5x slower)
+
+== When to Use Sliding Window
+
+*Use fixed-size window when:*
+- Problem specifies exact window size $k$
+- Maximum/minimum of all subarrays of size $k$
+- Moving average or rolling statistics
+
+*Use variable-size (shrinkable) window when:*
+- "Longest substring with at most $k$ distinct characters"
+- "Minimum window containing all target elements"
+- Constraint can be checked incrementally (add right, shrink left)
+
+*Use variable-size (non-shrinkable) window when:*
+- "Longest substring without repeating characters"
+- Window only grows or slides (never shrinks past previous best)
+- Optimization: avoids unnecessary shrinking, same $O(n)$ but fewer operations
+
+*Sliding window vs two pointers:*
+- Sliding window: contiguous subarray/substring, window state maintained
+- Two pointers: sorted arrays, pair finding, convergence from both ends
+- Key difference: sliding window tracks aggregate state (counts, sums); two pointers compare element values
+
+*Sliding window vs prefix sum:*
+- Prefix sum: any subarray sum query in $O(1)$ after $O(n)$ preprocessing
+- Sliding window: streaming, $O(1)$ space, handles non-numeric constraints
+- Use prefix sum when you need random-access subarray queries; use sliding window when processing sequentially
+
+== Complexity Reference
+
+#table(
+  columns: (auto, auto, auto),
+  [*Algorithm / Operation*], [*Time*], [*Space*],
+  [Fixed-size window (max/sum)], [$O(n)$], [$O(1)$ or $O(k)$],
+  [Best Time to Buy and Sell Stock], [$O(n)$], [$O(1)$],
+  [Longest Substring Without Repeating], [$O(n)$], [$O(min(n, sigma))$, $sigma$ = alphabet],
+  [Longest Repeating Character Replacement], [$O(n)$], [$O(26)$],
+  [Minimum Window Substring], [$O(n + m)$], [$O(m)$, $m$ = pattern length],
+  [Sliding window deque (min/max)], [$O(n)$], [$O(k)$],
+  [SIMD character counting], [$O(n / 16)$ effective], [$O(1)$],
+)

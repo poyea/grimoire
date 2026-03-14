@@ -371,6 +371,37 @@ SSL_CTX* create_tls13_context() {
 }
 ```
 
+== TLS Version Comparison
+
+#table(
+  columns: (auto, auto, auto, auto, auto),
+  [*Feature*], [*TLS 1.0*], [*TLS 1.1*], [*TLS 1.2*], [*TLS 1.3*],
+  [Year], [1999], [2006], [2008], [2018],
+  [Handshake RTTs], [2], [2], [2], [1 (0 with PSK)],
+  [Key Exchange], [RSA, DHE], [RSA, DHE], [RSA, DHE, ECDHE], [ECDHE, PSK only],
+  [Cipher Mode], [CBC, RC4], [CBC, RC4], [CBC, GCM, CCM], [AEAD only (GCM, ChaCha20)],
+  [Hash], [MD5/SHA-1], [MD5/SHA-1], [SHA-256+], [SHA-256+],
+  [Forward Secrecy], [Optional (DHE)], [Optional (DHE)], [Optional (ECDHE)], [Mandatory],
+  [0-RTT Resumption], [No], [No], [No], [Yes (with replay risk)],
+  [Compression], [Yes (CRIME vuln)], [Yes], [Optional], [Removed],
+  [Renegotiation], [Vulnerable], [Patched], [Secure], [Removed (replaced by post-handshake auth)],
+  [Status], [Deprecated (RFC 8996)], [Deprecated (RFC 8996)], [Active], [Current standard],
+)
+
+=== Cipher Suite Performance Comparison
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*Cipher Suite*], [*Handshake Cost*], [*Bulk Throughput*], [*Notes*],
+  [RSA + AES-128-CBC + SHA-256], [~1ms RSA-2048], [~3 GB/s (AES-NI)], [No forward secrecy],
+  [ECDHE-RSA + AES-128-GCM], [~0.5ms ECDHE P-256], [~5 GB/s (AES-NI + GHASH)], [TLS 1.2 recommended],
+  [ECDHE-ECDSA + AES-256-GCM], [~0.3ms ECDSA P-256], [~4.5 GB/s], [Fastest handshake with ECC certs],
+  [ECDHE + ChaCha20-Poly1305], [~0.5ms], [~2 GB/s (no HW accel)], [Better on mobile/ARM without AES-NI],
+  [X25519 + AES-256-GCM], [~0.15ms X25519], [~4.5 GB/s], [TLS 1.3 default on most servers],
+)
+
+_Note: throughput measured on Xeon Skylake with AES-NI. ARM devices without hardware AES see ChaCha20 outperform AES-GCM by 2-3x._
+
 == References
 
 *Primary sources:*

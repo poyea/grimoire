@@ -400,6 +400,44 @@ modprobe nf_nat_ftp
 iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -d 192.168.1.10 -p tcp --dport 80 -j MASQUERADE
 ```
 
+== NAT Strategy Comparison
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*NAT Type*], [*Mapping*], [*Filtering*], [*P2P Compatibility*],
+  [Full Cone], [Endpoint-independent], [Endpoint-independent], [Excellent — any external host can reach mapped port],
+  [Restricted Cone], [Endpoint-independent], [Address-restricted], [Good — must send outbound first],
+  [Port Restricted Cone], [Endpoint-independent], [Address + port restricted], [Moderate — STUN usually works],
+  [Symmetric], [Endpoint-dependent], [Endpoint-dependent], [Poor — requires TURN relay],
+)
+
+=== NAT Traversal Technique Comparison
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*Technique*], [*Success Rate*], [*Latency Overhead*], [*Notes*],
+  [STUN], [~85% (fails symmetric)], [1 RTT discovery], [Lightweight, UDP only],
+  [TURN], [~100%], [+2-5ms relay hop], [Fallback relay, bandwidth cost],
+  [ICE], [~95%+], [~100-500ms negotiation], [Combines STUN + TURN, used by WebRTC],
+  [UPnP/NAT-PMP], [~60% (home routers)], [None after setup], [Not available on enterprise/carrier NAT],
+  [UDP hole punching], [~80%], [1-2 RTT coordination], [Requires rendezvous server],
+  [TCP hole punching], [~50%], [2-3 RTT], [Harder due to SYN filtering],
+)
+
+=== Firewall Rule Processing Performance
+
+#table(
+  columns: (auto, auto, auto),
+  [*Framework*], [*Rule Lookup*], [*Performance at Scale*],
+  [iptables (linear)], [$O(n)$ per packet], [Degrades >5000 rules; ~10% throughput loss per 1000 rules],
+  [iptables + ipset], [$O(1)$ hash / $O(log n)$ tree], [Handles 100K+ entries efficiently],
+  [nftables (sets)], [$O(1)$ hash lookup], [Native set support, better than iptables at scale],
+  [nftables (maps)], [$O(1)$ verdict maps], [Single rule replaces many; 2-5x fewer rules needed],
+  [eBPF/XDP], [$O(1)$ hash maps], [Line-rate processing, bypass kernel stack],
+)
+
+_Modern deployments: prefer nftables over iptables. For >10 Gbps, consider XDP for stateless filtering._
+
 == References
 
 RFC 3022: Traditional IP Network Address Translator. Srisuresh, P. & Egevang, K. (2001).

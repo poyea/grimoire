@@ -1,1003 +1,1037 @@
-= Part III: java.util.concurrent - Building Blocks
+= Part III: C++ Concurrency - std::thread, Mutex, Atomics & C++20 Synchronization
 
 == Atomic Variables
 
-=== AtomicInteger, AtomicLong, AtomicReference
+=== std::atomic\<T\>
 
-*Problem with volatile:*
-```java
-volatile int count = 0;
+*Problem with plain variables:*
+```cpp
+int count = 0;
 count++;  // NOT atomic! (read-modify-write race condition)
+// Even volatile int does NOT help in C++ — volatile ≠ atomic
 ```
 
-*Solution: Atomic classes*
-```java
-AtomicInteger count = new AtomicInteger(0);
-count.incrementAndGet();  // Atomic increment, returns new value
-count.getAndIncrement();  // Atomic increment, returns old value
-count.addAndGet(5);       // Atomic add 5
-count.compareAndSet(10, 20);  // CAS: if count == 10, set to 20
+*Solution: std::atomic*
+```cpp
+#include <atomic>
+
+std::atomic<int> count{0};
+count.fetch_add(1);                    // Atomic increment, returns old value
+count.fetch_add(1) + 1;               // Equivalent to Java incrementAndGet
+count.fetch_add(5);                    // Atomic add 5
+int expected = 10;
+count.compare_exchange_strong(expected, 20);  // CAS: if count == 10, set to 20
 ```
 
-*Common methods:*
-```java
-AtomicInteger ai = new AtomicInteger(0);
+*Common operations:*
+```cpp
+std::atomic<int> ai{0};
 
-ai.get();                    // Read current value
-ai.set(10);                  // Set value
-ai.getAndSet(20);            // Set and return old value
+ai.load();                             // Read current value
+ai.store(10);                          // Set value
+ai.exchange(20);                       // Set and return old value
 
-ai.incrementAndGet();        // ++i (atomic)
-ai.getAndIncrement();        // i++ (atomic)
-ai.decrementAndGet();        // --i (atomic)
-ai.getAndDecrement();        // i-- (atomic)
+++ai;                                  // Atomic pre-increment
+ai++;                                  // Atomic post-increment
+--ai;                                  // Atomic pre-decrement
+ai--;                                  // Atomic post-decrement
 
-ai.addAndGet(5);             // i += 5
-ai.getAndAdd(5);             // returns old, then adds
+ai.fetch_add(5);                       // Returns old, then adds
+ai.fetch_sub(3);                       // Returns old, then subtracts
 
-ai.compareAndSet(10, 20);    // CAS operation
-ai.getAndUpdate(x -> x * 2); // Atomic functional update
-ai.updateAndGet(x -> x * 2);
+int expected = 10;
+ai.compare_exchange_strong(expected, 20);  // CAS operation
+// If ai == 10: sets to 20, returns true
+// If ai != 10: expected updated to actual, returns false
 ```
 
-*AtomicReference for objects:*
-```java
-class Node {
+*std::atomic for pointers (lock-free stack):*
+```cpp
+struct Node {
     int value;
-    Node next;
-}
+    Node* next;
+};
 
-AtomicReference<Node> head = new AtomicReference<>();
+std::atomic<Node*> head{nullptr};
 
 // Lock-free stack push
 void push(int value) {
-    Node newNode = new Node(value);
-    Node oldHead;
+    auto* new_node = new Node{value, nullptr};
+    Node* old_head;
     do {
-        oldHead = head.get();
-        newNode.next = oldHead;
-    } while (!head.compareAndSet(oldHead, newNode));
-    // CAS: if head still == oldHead, set to newNode
-    // Retry if another thread changed head
+        old_head = head.load(std::memory_order_relaxed);
+        new_node->next = old_head;
+    } while (!head.compare_exchange_weak(
+        old_head, new_node,
+        std::memory_order_release,   // Success: publish new_node
+        std::memory_order_relaxed    // Failure: just retry
+    ));
 }
 ```
+
+*Note on memory orders:* C++ exposes the hardware memory model directly. Key orderings: `memory_order_relaxed` (no ordering), `memory_order_acquire` (loads after this see prior stores), `memory_order_release` (stores before this are visible), `memory_order_seq_cst` (default, total order — safest but slowest). On x86, acquire/release is essentially free (strong memory model), but matters on ARM/RISC-V.
 
 === Compare-And-Swap (CAS)
 
 *CAS semantics:*
-```java
-boolean compareAndSet(int expect, int update) {
+```cpp
+// Pseudocode for compare_exchange_strong:
+bool compare_exchange_strong(T& expected, T desired) {
     // Atomically:
-    if (this.value == expect) {
-        this.value = update;
+    if (this->value == expected) {
+        this->value = desired;
         return true;
     } else {
-        return false;  // Another thread changed it
+        expected = this->value;  // C++ updates expected!
+        return false;
     }
 }
 ```
 
+*compare_exchange_weak vs compare_exchange_strong:*
+- `compare_exchange_weak`: May spuriously fail (even if value == expected). Cheaper on LL/SC architectures (ARM, RISC-V). Use in loops.
+- `compare_exchange_strong`: Never spuriously fails. Slightly more expensive on LL/SC. Use for single-shot CAS.
+
 *Hardware support:*
-- x86: `CMPXCHG` instruction
-- ARM: `LDREX`/`STREX` (load-link/store-conditional)
-- Atomic at CPU level (memory controller)
+- x86: `CMPXCHG` instruction (with `LOCK` prefix)
+- ARM: `LDXR`/`STXR` (load-exclusive/store-exclusive, LL/SC)
+- Atomic at CPU level (cache coherence protocol: MESI/MOESI)
 
 *Lock-free counter:*
-```java
-AtomicInteger counter = new AtomicInteger(0);
+```cpp
+std::atomic<int> counter{0};
 
 void increment() {
-    int oldValue, newValue;
-    do {
-        oldValue = counter.get();
-        newValue = oldValue + 1;
-    } while (!counter.compareAndSet(oldValue, newValue));
-    // Retry if CAS fails (another thread modified counter)
+    int old_value = counter.load(std::memory_order_relaxed);
+    while (!counter.compare_exchange_weak(
+        old_value, old_value + 1,
+        std::memory_order_relaxed)) {
+        // old_value is automatically updated on failure
+    }
+    // Or simply: counter.fetch_add(1, std::memory_order_relaxed);
 }
 ```
 
 *ABA problem:*
-```java
+```cpp
 // Thread 1: Reads A
-head.get();  // A
+Node* old = head.load();  // A
 
 // Thread 2: Changes A → B → A
-head.set(B);
-head.set(A);
+head.store(B);
+head.store(A);  // Same pointer value!
 
 // Thread 1: CAS succeeds (head == A)
-head.compareAndSet(A, C);  // Succeeds! But state changed through B
+head.compare_exchange_strong(old, C);  // Succeeds! But state changed through B
 ```
 
-*ABA solution:* Use `AtomicStampedReference` (value + version stamp)
-```java
-AtomicStampedReference<Node> head = new AtomicStampedReference<>(null, 0);
+*ABA solution:* Tagged pointer (value + version counter packed together)
+```cpp
+// Pack version counter into unused pointer bits or use double-width CAS
+struct TaggedPointer {
+    Node* ptr;
+    uintptr_t tag;  // Version counter
+};
 
-int[] stampHolder = new int[1];
-Node current = head.get(stampHolder);
-int stamp = stampHolder[0];
+std::atomic<TaggedPointer> head;
 
-head.compareAndSet(current, newNode, stamp, stamp + 1);
-// CAS succeeds only if value AND stamp match
+// On x86-64: Use DWCAS (double-word compare-and-swap)
+// via std::atomic with 128-bit struct (compiler-specific support)
+// Or use the top 16 bits of 64-bit pointers (only 48 bits used on x86-64)
+
+// Simpler approach: hazard pointers or epoch-based reclamation
+// (avoids ABA by deferring memory reclamation)
 ```
 
-=== AtomicFieldUpdater & VarHandle
+*Alternative ABA solutions:*
+1. *Hazard pointers:* Threads publish pointers they are using; reclamation deferred
+2. *Epoch-based reclamation (RCU-style):* Defer freeing until all readers finish
+3. *Avoid ABA:* Use indices into an array instead of raw pointers
 
-*AtomicFieldUpdater:* Atomic operations on regular (volatile) fields
+=== Memory Orders & Cache Effects
 
-```java
-class Counter {
-    private volatile int count = 0;  // Must be volatile
+*C++ memory order summary:*
 
-    private static final AtomicIntegerFieldUpdater<Counter> updater =
-        AtomicIntegerFieldUpdater.newUpdater(Counter.class, "count");
+#table(
+  columns: (auto, auto, auto),
+  [*Memory Order*], [*Guarantee*], [*x86 Cost*],
+  [`relaxed`], [Atomicity only, no ordering], [Free (MOV)],
+  [`acquire`], [Reads after this see prior stores], [Free (x86 TSO)],
+  [`release`], [Stores before this visible to acquirers], [Free (x86 TSO)],
+  [`acq_rel`], [Both acquire and release], [Free (x86 TSO)],
+  [`seq_cst`], [Total order across all threads], [MFENCE or XCHG],
+)
 
-    public void increment() {
-        updater.incrementAndGet(this);
-    }
-}
+*False sharing:* When two atomic variables share a cache line (64 bytes), updates by different threads cause expensive cache line bouncing (MESI invalidations).
 
-// Why use? Saves memory (no AtomicInteger object overhead per instance)
-// When to use? Many instances, few atomic updates
+```cpp
+// BAD: False sharing — counters on same cache line
+struct Counters {
+    std::atomic<int> counter_a;  // Same cache line!
+    std::atomic<int> counter_b;  // Bounces on every update
+};
+
+// GOOD: Pad to separate cache lines
+struct alignas(64) PaddedCounter {
+    std::atomic<int> value;
+};
+
+PaddedCounter counter_a;
+PaddedCounter counter_b;
+
+// C++17: std::hardware_destructive_interference_size
+// (gives the cache line size at compile time, if available)
 ```
 
-*VarHandle (Java 9+):* More powerful, flexible, faster
+=== Distributed Counter (LongAdder equivalent)
 
-```java
-class Counter {
-    private volatile int count = 0;
+*std::atomic:* Single variable, CAS for updates — high contention degrades
 
-    private static final VarHandle COUNT;
-    static {
-        try {
-            COUNT = MethodHandles.lookup()
-                .findVarHandle(Counter.class, "count", int.class);
-        } catch (ReflectiveOperationException e) {
-            throw new Error(e);
-        }
-    }
-
-    public void increment() {
-        COUNT.getAndAdd(this, 1);
-    }
-}
+```cpp
+std::atomic<long> counter{0};
+counter.fetch_add(1);  // CAS loop under the hood
 ```
 
-*VarHandle benefits:*
-- Faster than FieldUpdater
-- More operations (plain, opaque, release/acquire, volatile)
-- Fine-grained memory ordering control
+*Sharded counter:* Multiple cells, reduces contention (C++ equivalent of Java's LongAdder)
 
-=== LongAdder vs AtomicLong
+```cpp
+#include <atomic>
+#include <thread>
+#include <numeric>
+#include <array>
 
-*AtomicLong:* Single variable, CAS for updates
+// Pad each cell to its own cache line to avoid false sharing
+struct alignas(64) Cell {
+    std::atomic<long> value{0};
+};
 
-```java
-AtomicLong counter = new AtomicLong();
-counter.incrementAndGet();  // CAS loop
-```
+class ShardedCounter {
+    static constexpr int NUM_CELLS = 16;
+    std::array<Cell, NUM_CELLS> cells_;
+    std::atomic<long> base_{0};
 
-*LongAdder:* Multiple cells, reduces contention
-
-```java
-LongAdder counter = new LongAdder();
-counter.increment();  // Updates one of many cells (less contention)
-long sum = counter.sum();  // Sum all cells
-```
-
-*How LongAdder works:*
-- Maintains array of cells (one per thread, approximately)
-- Each thread increments its own cell (no contention)
-- `sum()` adds all cells
-
-```java
-// Simplified LongAdder
-class LongAdder {
-    Cell[] cells;  // Array of cells
-    long base;     // Base value
-
+public:
     void increment() {
-        Cell c = cells[hash(Thread.currentThread())];
-        if (c != null) {
-            c.value++;  // Update thread-local cell (low contention)
-        } else {
-            base++;  // Fallback to base
-        }
+        // Hash thread ID to pick a cell
+        auto idx = std::hash<std::thread::id>{}(
+            std::this_thread::get_id()) % NUM_CELLS;
+        cells_[idx].value.fetch_add(1, std::memory_order_relaxed);
     }
 
-    long sum() {
-        long sum = base;
-        for (Cell c : cells) {
-            sum += c.value;
+    long sum() const {
+        long total = base_.load(std::memory_order_relaxed);
+        for (auto& cell : cells_) {
+            total += cell.value.load(std::memory_order_relaxed);
         }
-        return sum;
+        return total;
     }
-}
+};
 ```
 
 *When to use:*
-- *AtomicLong*: Need exact value frequently, low contention
-- *LongAdder*: High contention, only need sum occasionally (e.g., statistics)
+- *std::atomic\<long\>*: Need exact value frequently, low contention
+- *ShardedCounter*: High contention, only need sum occasionally (e.g., statistics)
 
-*Benchmark:*
+*Benchmark (approximate):*
 ```
-Threads    AtomicLong    LongAdder
-1          10M ops/s     10M ops/s
-2          8M ops/s      18M ops/s  (2x faster)
-4          4M ops/s      35M ops/s  (8x faster)
-8          2M ops/s      60M ops/s  (30x faster!)
+Threads    std::atomic    ShardedCounter
+1          10M ops/s      10M ops/s
+2          8M ops/s       18M ops/s  (2x faster)
+4          4M ops/s       35M ops/s  (8x faster)
+8          2M ops/s       60M ops/s  (30x faster!)
 ```
 
 === Interview Questions: Atomics
 
 *Q1: How does CAS work and what are its advantages?*
 
-A: CAS (Compare-And-Swap) is atomic operation: `compareAndSet(expected, new)`
+A: CAS (Compare-And-Swap) is an atomic operation: `compare_exchange_strong(expected, desired)`
 
 *Semantics:*
-```java
+```cpp
 // Atomically (hardware-level):
 if (value == expected) {
-    value = new;
+    value = desired;
     return true;
 } else {
+    expected = value;  // C++ updates expected on failure
     return false;
 }
 ```
 
 *Implementation:*
-- x86: `CMPXCHG` instruction (lock prefix for atomicity)
-- ARM: Load-Link/Store-Conditional
+- x86: `LOCK CMPXCHG` instruction
+- ARM: Load-Exclusive/Store-Exclusive (LL/SC)
 
 *Advantages:*
 1. *Lock-free*: No OS-level blocking (no context switches)
 2. *Wait-free progress*: At least one thread always makes progress
 3. *No deadlock*: No locks to acquire
-4. *Low latency*: ~1-10ns vs ~100-1000ns for locks
+4. *Low latency*: ~1--10ns vs ~100--1000ns for locks
 
 *Usage pattern:*
-```java
-AtomicInteger counter = new AtomicInteger(0);
+```cpp
+std::atomic<int> counter{0};
 
 void increment() {
-    int oldValue, newValue;
-    do {
-        oldValue = counter.get();
-        newValue = oldValue + 1;
-    } while (!counter.compareAndSet(oldValue, newValue));
-    // Retry if CAS fails (optimistic concurrency)
+    int old_value = counter.load();
+    while (!counter.compare_exchange_weak(old_value, old_value + 1)) {
+        // old_value auto-updated; retry (optimistic concurrency)
+    }
 }
 ```
 
 *Trade-off:* CAS can livelock under extreme contention (retry loops). Use locks for very high contention.
 
-*Q2: When would you use LongAdder instead of AtomicLong?*
+*Q2: When would you use a sharded counter instead of std::atomic\<long\>?*
 
 A:
 
-*AtomicLong:*
+*std::atomic\<long\>:*
 - Single variable with CAS updates
-- *High contention* → performance degrades (CAS retry loops)
+- *High contention* → performance degrades (cache line bouncing)
 - Use when: Exact value needed frequently, low contention
 
-*LongAdder:*
-- Multiple cells (per-thread), reduces contention
-- `sum()` adds cells (slower than `get()`)
+*ShardedCounter:*
+- Per-thread cells (each on its own cache line), reduces contention
+- `sum()` traverses all cells (slower than single `load()`)
 - Use when: High contention, sum needed occasionally
 
 *Benchmark (8 threads):*
 ```
-AtomicLong: 2M ops/s (contention overhead)
-LongAdder:  60M ops/s (30x faster!)
+std::atomic:      2M ops/s  (cache line bouncing)
+ShardedCounter:   60M ops/s (30x faster!)
 ```
 
 *Decision:*
-- Metrics/counters (high write, rare read) → LongAdder
-- Sequence numbers (frequent read) → AtomicLong
-- Low contention → AtomicLong (simpler)
+- Metrics/counters (high write, rare read) → ShardedCounter
+- Sequence numbers (frequent read) → std::atomic
+- Low contention → std::atomic (simpler)
 
 *Q3: What is the ABA problem and how do you solve it?*
 
 A: ABA problem: Value changes A → B → A, CAS succeeds but state changed.
 
 *Example:*
-```java
+```cpp
 // Lock-free stack
-AtomicReference<Node> head = new AtomicReference<>(A);
+std::atomic<Node*> head;  // Initially points to A
 
 // Thread 1
-Node oldHead = head.get();  // A
-// ... compute ...
+Node* old_head = head.load();  // A
+// ... preempted ...
 
 // Thread 2 (interleaved)
-head.set(B);  // A → B
-head.set(A);  // B → A (same A node!)
+// Pops A, pushes B, pushes A back
+// head == A again, but stack structure changed!
 
 // Thread 1
-head.compareAndSet(oldHead, newNode);  // Succeeds! But missed B state
+head.compare_exchange_strong(old_head, new_node);
+// Succeeds! But missed that B was in between
 ```
-
-*Problem:* Stack went A → B → A, but Thread 1 thinks nothing changed.
 
 *Solutions:*
 
-1. *AtomicStampedReference:* Add version stamp
-```java
-AtomicStampedReference<Node> head = new AtomicStampedReference<>(A, 0);
-
-int[] stamp = new int[1];
-Node old = head.get(stamp);  // Read value + stamp
-
-head.compareAndSet(old, newNode, stamp[0], stamp[0] + 1);
-// CAS succeeds only if value AND stamp unchanged
+1. *Tagged pointer (double-width CAS):*
+```cpp
+struct TaggedPtr {
+    Node* ptr;
+    uint64_t tag;  // Version counter
+};
+// Increment tag on every modification
+// CAS succeeds only if both pointer AND tag match
 ```
 
-2. *AtomicMarkableReference:* Boolean mark (single bit)
-```java
-AtomicMarkableReference<Node> ref = new AtomicMarkableReference<>(node, false);
+2. *Hazard pointers:* Publish pointers in use; defer reclamation
+3. *Epoch-based reclamation:* Readers register epochs; freed only when safe
+4. *Avoid ABA:* Use array indices instead of pointers; use immutable data
 
-boolean[] markHolder = new boolean[1];
-Node n = ref.get(markHolder);
-ref.compareAndSet(n, newNode, markHolder[0], true);
+*Q4: Explain C++ memory orders and when to use each.*
+
+A: C++ exposes hardware memory ordering, unlike Java's simpler happens-before model.
+
+*Memory orders:*
+- `memory_order_relaxed`: Atomicity only. Use for counters where ordering does not matter.
+- `memory_order_acquire`: On loads — subsequent reads/writes cannot be reordered before this. Use when reading a flag that guards data.
+- `memory_order_release`: On stores — preceding reads/writes cannot be reordered after this. Use when publishing data via a flag.
+- `memory_order_acq_rel`: Both acquire and release. Use for read-modify-write that both reads and publishes.
+- `memory_order_seq_cst`: Total order. Default. Use when reasoning about ordering is hard.
+
+*Pattern: release/acquire pair*
+```cpp
+std::atomic<bool> ready{false};
+int data = 0;
+
+// Thread 1 (producer)
+data = 42;                                      // Non-atomic write
+ready.store(true, std::memory_order_release);   // Publish
+
+// Thread 2 (consumer)
+while (!ready.load(std::memory_order_acquire))  // Synchronize
+    ;
+assert(data == 42);  // Guaranteed! Release-acquire establishes happens-before
 ```
-
-3. *Avoid ABA:* Use immutable data structures (functional approach)
-
-*Q4: Explain AtomicInteger internal implementation.*
-
-A: AtomicInteger uses `Unsafe` class for CAS operations.
-
-*Structure:*
-```java
-public class AtomicInteger {
-    private static final Unsafe unsafe = Unsafe.getUnsafe();
-    private static final long valueOffset;
-
-    static {
-        // Get memory offset of 'value' field
-        valueOffset = unsafe.objectFieldOffset
-            (AtomicInteger.class.getDeclaredField("value"));
-    }
-
-    private volatile int value;  // Volatile for visibility
-
-    public final boolean compareAndSet(int expect, int update) {
-        return unsafe.compareAndSwapInt(this, valueOffset, expect, update);
-        // Native method: x86 CMPXCHG instruction
-    }
-
-    public final int incrementAndGet() {
-        int oldValue, newValue;
-        do {
-            oldValue = value;
-            newValue = oldValue + 1;
-        } while (!compareAndSet(oldValue, newValue));
-        // Retry until CAS succeeds
-        return newValue;
-    }
-}
-```
-
-*Key points:*
-1. `volatile int value` → memory visibility
-2. `Unsafe.compareAndSwapInt` → hardware CAS (x86: `LOCK CMPXCHG`)
-3. Retry loop in `incrementAndGet()` → optimistic concurrency
 
 == Explicit Locks
 
-=== ReentrantLock
+=== std::mutex and std::unique_lock
 
-*Why ReentrantLock when we have synchronized?*
+*Why std::unique_lock when we have std::lock_guard?*
 
-*synchronized limitations:*
-- Can't interrupt thread waiting for lock
-- Can't try lock with timeout
-- Can't try lock without blocking
-- No fair/unfair control
+*std::lock_guard limitations:*
+- Cannot unlock and re-lock
+- Cannot transfer ownership
+- Cannot use with condition variables (need unlock during wait)
+- Cannot try-lock
 
-*ReentrantLock benefits:*
-- `tryLock()`: Non-blocking attempt
-- `tryLock(timeout)`: Timed attempt
-- `lockInterruptibly()`: Can be interrupted
-- Fairness control
-- Multiple `Condition` objects
+*std::unique_lock benefits:*
+- `try_lock()`: Non-blocking attempt
+- `try_lock_for(duration)`: Timed attempt (with `std::timed_mutex`)
+- Can unlock and re-lock
+- Works with `std::condition_variable`
+- Movable (can transfer ownership)
 
-```java
-ReentrantLock lock = new ReentrantLock();
+```cpp
+#include <mutex>
 
-// Basic usage (similar to synchronized)
-lock.lock();
-try {
+std::mutex mtx;
+
+// Basic usage with lock_guard (RAII, simplest)
+{
+    std::lock_guard<std::mutex> lock(mtx);
+    // Critical section — automatically unlocked at scope end
+}
+
+// unique_lock: More flexible
+{
+    std::unique_lock<std::mutex> lock(mtx);
     // Critical section
-} finally {
-    lock.unlock();  // Must unlock in finally!
+    lock.unlock();  // Can manually unlock
+    // ... do non-critical work ...
+    lock.lock();    // Re-lock
 }
 
 // Try lock without blocking
-if (lock.tryLock()) {
-    try {
+{
+    std::unique_lock<std::mutex> lock(mtx, std::try_to_lock);
+    if (lock.owns_lock()) {
         // Got lock
-    } finally {
-        lock.unlock();
+    } else {
+        // Couldn't acquire lock
     }
-} else {
-    // Couldn't acquire lock
 }
 
-// Try lock with timeout
-if (lock.tryLock(1, TimeUnit.SECONDS)) {
-    try {
+// Try lock with timeout (requires timed_mutex)
+std::timed_mutex timed_mtx;
+{
+    std::unique_lock<std::timed_mutex> lock(
+        timed_mtx, std::chrono::seconds(1));
+    if (lock.owns_lock()) {
         // Got lock within 1 second
-    } finally {
-        lock.unlock();
+    } else {
+        // Timeout
     }
-} else {
-    // Timeout
 }
 
-// Interruptible lock
-try {
-    lock.lockInterruptibly();  // Throws InterruptedException
-    try {
-        // Critical section
-    } finally {
-        lock.unlock();
-    }
-} catch (InterruptedException e) {
-    // Thread interrupted while waiting
+// scoped_lock (C++17): Lock multiple mutexes, deadlock-free
+std::mutex mtx_a, mtx_b;
+{
+    std::scoped_lock lock(mtx_a, mtx_b);  // Acquires both, avoids deadlock
+    // Critical section
 }
 ```
 
-*Fairness:*
-```java
-// Unfair (default): Better throughput, may starve threads
-ReentrantLock unfair = new ReentrantLock(false);
+*Fairness note:* C++ mutexes provide no fairness guarantees by default. Threads are woken in OS-dependent order (typically unfair for performance). For FIFO fairness, you must implement a ticket lock or use a fair queue.
 
-// Fair: FIFO order, no starvation, lower throughput
-ReentrantLock fair = new ReentrantLock(true);
+```cpp
+// Simple ticket lock for fairness
+class TicketLock {
+    std::atomic<uint64_t> next_ticket_{0};
+    std::atomic<uint64_t> now_serving_{0};
+public:
+    void lock() {
+        uint64_t my_ticket = next_ticket_.fetch_add(1);
+        while (now_serving_.load(std::memory_order_acquire) != my_ticket) {
+            // Spin (could add pause/yield)
+        }
+    }
+    void unlock() {
+        now_serving_.fetch_add(1, std::memory_order_release);
+    }
+};
 ```
 
-*Fairness tradeoff:*
-- Unfair: 10-100x higher throughput (threads can "barge" ahead)
-- Fair: Predictable latency (no starvation)
-
-=== ReadWriteLock
+=== std::shared_mutex (ReadWriteLock)
 
 *Problem:* Multiple readers OK, but writer needs exclusive access.
 
-```java
-// With synchronized: Only one reader at a time (inefficient!)
-synchronized (lock) {
-    int value = map.get(key);  // Read
+```cpp
+// With plain mutex: Only one reader at a time (inefficient!)
+{
+    std::lock_guard<std::mutex> lock(mtx);
+    auto value = map[key];  // Read — but blocks all others!
 }
 ```
 
-*Solution: ReadWriteLock*
-```java
-ReadWriteLock rwLock = new ReentrantReadWriteLock();
-Lock readLock = rwLock.readLock();
-Lock writeLock = rwLock.writeLock();
+*Solution: std::shared_mutex (C++17)*
+```cpp
+#include <shared_mutex>
 
-// Multiple readers allowed simultaneously
-readLock.lock();
-try {
-    int value = map.get(key);  // Read
-} finally {
-    readLock.unlock();
+std::shared_mutex rw_mutex;
+
+// Multiple readers allowed simultaneously (shared lock)
+{
+    std::shared_lock<std::shared_mutex> lock(rw_mutex);
+    auto value = map[key];  // Read
 }
 
-// Writer has exclusive access (no readers, no other writers)
-writeLock.lock();
-try {
-    map.put(key, value);  // Write
-} finally {
-    writeLock.unlock();
+// Writer has exclusive access (unique lock)
+{
+    std::unique_lock<std::shared_mutex> lock(rw_mutex);
+    map[key] = value;  // Write
 }
 ```
 
 *Lock states:*
 - No lock: Readers and writers can acquire
-- Read lock held: More readers can acquire, writers blocked
-- Write lock held: All readers and writers blocked
+- Shared lock held: More readers can acquire, writers blocked
+- Exclusive lock held: All readers and writers blocked
 
 *Use case:* Read-heavy workloads (cache, configuration)
 
 *Example: Read-heavy cache*
-```java
+```cpp
+#include <shared_mutex>
+#include <unordered_map>
+#include <string>
+
 class Cache {
-    private final Map<String, Object> map = new HashMap<>();
-    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+    std::unordered_map<std::string, std::string> map_;
+    mutable std::shared_mutex rw_mutex_;
 
-    public Object get(String key) {
-        rwLock.readLock().lock();
-        try {
-            return map.get(key);  // Many readers simultaneously
-        } finally {
-            rwLock.readLock().unlock();
-        }
+public:
+    std::string get(const std::string& key) const {
+        std::shared_lock lock(rw_mutex_);
+        auto it = map_.find(key);
+        return it != map_.end() ? it->second : "";
     }
 
-    public void put(String key, Object value) {
-        rwLock.writeLock().lock();
-        try {
-            map.put(key, value);  // Exclusive access
-        } finally {
-            rwLock.writeLock().unlock();
-        }
+    void put(const std::string& key, const std::string& value) {
+        std::unique_lock lock(rw_mutex_);
+        map_[key] = value;
     }
-}
+};
 ```
 
-=== StampedLock
+=== Optimistic Locking with Sequence Counters (SeqLock)
 
-*Problem with ReadWriteLock:* Writers can starve if readers keep coming.
+*Problem with shared_mutex:* Writers can starve if readers keep coming. Also, shared_lock still has overhead (atomic increment on the lock itself).
 
-*StampedLock (Java 8+):* Three modes
+*SeqLock (optimistic read):* Writer increments a sequence counter; readers check if counter changed.
 
-1. *Write lock:* Exclusive (like writeLock)
-2. *Read lock:* Shared (like readLock)
-3. *Optimistic read:* No lock! Just check version stamp
+```cpp
+class SeqLock {
+    std::atomic<uint64_t> seq_{0};  // Even = no writer, odd = writer active
 
-```java
-StampedLock sl = new StampedLock();
-
-// Optimistic read (fastest, no lock!)
-long stamp = sl.tryOptimisticRead();  // Get current stamp
-int value = this.value;  // Read data
-if (sl.validate(stamp)) {  // Check if no write occurred
-    // Success: Use value (no lock held!)
-} else {
-    // Failed: Acquire read lock
-    stamp = sl.readLock();
-    try {
-        value = this.value;
-    } finally {
-        sl.unlockRead(stamp);
+public:
+    uint64_t read_begin() const {
+        uint64_t s;
+        do {
+            s = seq_.load(std::memory_order_acquire);
+        } while (s & 1);  // Wait while writer active (odd)
+        return s;
     }
-}
 
-// Read lock
-long stamp = sl.readLock();
-try {
-    // Read data
-} finally {
-    sl.unlockRead(stamp);
-}
+    bool read_validate(uint64_t start_seq) const {
+        std::atomic_thread_fence(std::memory_order_acquire);
+        return seq_.load(std::memory_order_relaxed) == start_seq;
+    }
 
-// Write lock
-long stamp = sl.writeLock();
-try {
-    // Write data
-} finally {
-    sl.unlockWrite(stamp);
-}
+    void write_lock() {
+        seq_.fetch_add(1, std::memory_order_acquire);  // Odd → writing
+    }
+
+    void write_unlock() {
+        seq_.fetch_add(1, std::memory_order_release);  // Even → done
+    }
+};
 ```
 
 *Optimistic read pattern:*
-```java
+```cpp
 class Point {
-    private int x, y;
-    private final StampedLock sl = new StampedLock();
+    double x_, y_;
+    SeqLock seq_;
 
-    public double distanceFromOrigin() {
-        long stamp = sl.tryOptimisticRead();  // No lock
-        int currentX = x;  // Read
-        int currentY = y;  // Read
-        if (!sl.validate(stamp)) {  // Validate (check no write)
-            stamp = sl.readLock();  // Fallback to read lock
-            try {
-                currentX = x;
-                currentY = y;
-            } finally {
-                sl.unlockRead(stamp);
-            }
-        }
-        return Math.sqrt(currentX * currentX + currentY * currentY);
+public:
+    double distance_from_origin() const {
+        double cur_x, cur_y;
+        uint64_t seq;
+        do {
+            seq = seq_.read_begin();       // Get sequence
+            cur_x = x_;                    // Read (no lock!)
+            cur_y = y_;                    // Read (no lock!)
+        } while (!seq_.read_validate(seq)); // Retry if writer intervened
+        return std::sqrt(cur_x * cur_x + cur_y * cur_y);
     }
 
-    public void move(int deltaX, int deltaY) {
-        long stamp = sl.writeLock();
-        try {
-            x += deltaX;
-            y += deltaY;
-        } finally {
-            sl.unlockWrite(stamp);
-        }
+    void move(double delta_x, double delta_y) {
+        seq_.write_lock();
+        x_ += delta_x;
+        y_ += delta_y;
+        seq_.write_unlock();
     }
-}
+};
 ```
 
 *When to use:*
 - Read-heavy workloads (90%+ reads)
-- Reads very short (optimistic read overhead matters)
+- Reads very short (retry overhead small)
+- Readers never block writers (unlike shared_mutex)
 
-*Warning:* StampedLock NOT reentrant (unlike ReentrantReadWriteLock)!
+*Warning:* SeqLock reads may see torn values — only safe for trivially-copyable types (POD). Not safe for `std::string` or complex objects.
 
 === Condition Variables
 
-*Problem with wait/notify:* Only one condition per object.
+*std::condition_variable:* Used with std::mutex for producer-consumer, signals.
 
-*Solution: Multiple Condition objects*
+```cpp
+#include <mutex>
+#include <condition_variable>
 
-```java
-Lock lock = new ReentrantLock();
-Condition notFull = lock.newCondition();
-Condition notEmpty = lock.newCondition();
+std::mutex mtx;
+std::condition_variable not_full;
+std::condition_variable not_empty;
 
 // Producer
-lock.lock();
-try {
-    while (isFull()) {
-        notFull.await();  // Wait for not full
-    }
+{
+    std::unique_lock<std::mutex> lock(mtx);
+    not_full.wait(lock, [&]{ return !is_full(); });  // Wait until not full
     // Add item
-    notEmpty.signal();  // Signal not empty
-} finally {
-    lock.unlock();
+    not_empty.notify_one();  // Signal not empty
 }
 
 // Consumer
-lock.lock();
-try {
-    while (isEmpty()) {
-        notEmpty.await();  // Wait for not empty
-    }
+{
+    std::unique_lock<std::mutex> lock(mtx);
+    not_empty.wait(lock, [&]{ return !is_empty(); }); // Wait until not empty
     // Remove item
-    notFull.signal();  // Signal not full
-} finally {
-    lock.unlock();
+    not_full.notify_one();  // Signal not full
 }
 ```
 
-*Bounded buffer with Condition:*
-```java
-class BoundedBuffer<T> {
-    private final T[] buffer;
-    private int putIndex, takeIndex, count;
-    private final Lock lock = new ReentrantLock();
-    private final Condition notFull = lock.newCondition();
-    private final Condition notEmpty = lock.newCondition();
+*Important:* Always use the predicate overload of `wait()` to guard against spurious wakeups. The condition variable atomically releases the mutex and suspends the thread; on wakeup it re-acquires the mutex and checks the predicate.
 
-    public void put(T item) throws InterruptedException {
-        lock.lock();
-        try {
-            while (count == buffer.length) {
-                notFull.await();  // Wait for space
-            }
-            buffer[putIndex] = item;
-            putIndex = (putIndex + 1) % buffer.length;
-            count++;
-            notEmpty.signal();  // Wake one consumer
-        } finally {
-            lock.unlock();
-        }
+*Bounded buffer with condition variables:*
+```cpp
+#include <mutex>
+#include <condition_variable>
+#include <vector>
+#include <optional>
+
+template <typename T>
+class BoundedBuffer {
+    std::vector<T> buffer_;
+    size_t capacity_, count_{0}, put_idx_{0}, take_idx_{0};
+    std::mutex mtx_;
+    std::condition_variable not_full_;
+    std::condition_variable not_empty_;
+
+public:
+    explicit BoundedBuffer(size_t capacity)
+        : buffer_(capacity), capacity_(capacity) {}
+
+    void put(T item) {
+        std::unique_lock<std::mutex> lock(mtx_);
+        not_full_.wait(lock, [&]{ return count_ < capacity_; });
+        buffer_[put_idx_] = std::move(item);
+        put_idx_ = (put_idx_ + 1) % capacity_;
+        ++count_;
+        not_empty_.notify_one();
     }
 
-    public T take() throws InterruptedException {
-        lock.lock();
-        try {
-            while (count == 0) {
-                notEmpty.await();  // Wait for item
-            }
-            T item = buffer[takeIndex];
-            takeIndex = (takeIndex + 1) % buffer.length;
-            count--;
-            notFull.signal();  // Wake one producer
-            return item;
-        } finally {
-            lock.unlock();
-        }
+    T take() {
+        std::unique_lock<std::mutex> lock(mtx_);
+        not_empty_.wait(lock, [&]{ return count_ > 0; });
+        T item = std::move(buffer_[take_idx_]);
+        take_idx_ = (take_idx_ + 1) % capacity_;
+        --count_;
+        not_full_.notify_one();
+        return item;
     }
-}
+};
 ```
 
 === Interview Questions: Locks
 
-*Q1: ReentrantLock vs synchronized - when to use which?*
+*Q1: std::mutex vs std::shared_mutex — when to use which?*
 
 A:
 
-*synchronized:*
-- Simpler syntax (no finally needed)
-- JVM optimizations (biased locking)
-- Automatic release (even if exception)
-- Cannot interrupt waiting thread
-- No tryLock without blocking
+*std::mutex:*
+- Exclusive access only
+- Simpler, lower overhead per lock/unlock
+- Use for short critical sections
+- No reader parallelism
 
-*ReentrantLock:*
-- Advanced features:
-  - `tryLock()`: Non-blocking attempt
-  - `tryLock(timeout)`: Timed wait
-  - `lockInterruptibly()`: Can interrupt
-  - Fairness control
-  - Multiple conditions
-- Manually unlock (must use finally!)
+*std::shared_mutex:*
+- Shared (read) + exclusive (write) modes
+- Multiple readers can proceed in parallel
+- Higher per-lock overhead (atomic counter for reader count)
+- Use for read-heavy workloads
 
 *When to use:*
-- *synchronized*: Default choice (99% of cases)
-- *ReentrantLock*: When you need advanced features
-  - Timeout on lock acquisition
-  - Try lock without blocking
-  - Fair lock (prevent starvation)
-  - Multiple condition variables
+- *std::mutex*: Default choice. Short critical sections, balanced read/write.
+- *std::shared_mutex*: Read-heavy (10:1+ read-to-write ratio), long reads.
 
-*Performance:* Similar (synchronized slightly faster in Java 6+)
+*Performance note:* On x86, `std::shared_mutex` shared lock/unlock does atomic increment/decrement — this bounces a cache line. For very short reads, plain `std::mutex` can be faster even with readers blocking each other.
 
-*Q2: What is a fair lock and when would you use it?*
+*Q2: Explain RAII locking in C++ (lock_guard, unique_lock, scoped_lock).*
 
-A: Fair lock: Threads acquire lock in FIFO order (request order).
+A:
 
-```java
-// Unfair (default)
-ReentrantLock unfair = new ReentrantLock(false);
-// Thread can "barge" ahead (better throughput)
+*std::lock_guard (C++11):*
+- Simplest RAII wrapper. Locks on construction, unlocks on destruction.
+- Cannot unlock early, cannot use with condition variables.
 
-// Fair
-ReentrantLock fair = new ReentrantLock(true);
-// FIFO order (predictable latency, no starvation)
+*std::unique_lock (C++11):*
+- Flexible: deferred locking, try-lock, timed lock, manual unlock/relock.
+- Required for `std::condition_variable::wait()`.
+- Movable (can transfer lock ownership).
+
+*std::scoped_lock (C++17):*
+- Locks multiple mutexes simultaneously without deadlock (uses `std::lock` internally).
+- Replaces manual `std::lock()` + `std::lock_guard(adopt_lock)` pattern.
+
+```cpp
+// Deadlock-prone:
+std::lock_guard<std::mutex> lock_a(mtx_a);
+std::lock_guard<std::mutex> lock_b(mtx_b);  // If another thread locks b then a → deadlock!
+
+// Deadlock-free (C++17):
+std::scoped_lock lock(mtx_a, mtx_b);  // Acquires in consistent order
 ```
 
-*Trade-off:*
-- *Unfair*: 10-100x higher throughput (less context switches)
-- *Fair*: Bounded wait time (no starvation)
+*Q3: Explain optimistic locking with sequence counters (SeqLock).*
 
-*When to use fair:*
-- Starvation is unacceptable
-- Predictable latency required (real-time systems)
-- Example: Order processing (FIFO order matters)
-
-*Default:* Unfair (better performance)
-
-*Q3: Explain optimistic locking in StampedLock.*
-
-A: Optimistic locking: Assume no conflicts, validate later.
+A: Optimistic locking: Assume no conflicts, validate afterward.
 
 *Pattern:*
-1. Read stamp (version)
+1. Read sequence counter (must be even — no writer active)
 2. Read data (NO lock held!)
-3. Validate stamp (check no write happened)
-4. If valid: Success (fast path)
-5. If invalid: Acquire read lock (slow path)
+3. Re-read sequence counter and compare
+4. If unchanged: Success (fast path, no lock overhead)
+5. If changed: Retry (writer intervened)
 
-```java
-StampedLock sl = new StampedLock();
-
-long stamp = sl.tryOptimisticRead();  // Get stamp (no lock)
-int value = this.value;  // Read (no lock!)
-if (sl.validate(stamp)) {  // Validate
-    return value;  // Fast path (no lock held!)
-} else {
-    // Slow path: Acquire read lock
-    stamp = sl.readLock();
-    try {
-        return this.value;
-    } finally {
-        sl.unlockRead(stamp);
-    }
-}
+```cpp
+uint64_t seq;
+double x, y;
+do {
+    seq = seq_lock.read_begin();   // Read sequence (no lock)
+    x = this->x_;                  // Read data (no lock!)
+    y = this->y_;
+} while (!seq_lock.read_validate(seq));  // Validate
 ```
 
 *When to use:*
 - Read-heavy (90%+ reads)
-- Short reads (optimistic overhead small)
-- Low write contention (validations usually succeed)
+- Short reads (retry overhead small)
+- Readers never block writers
 
-*Benefit:* Readers don't block writers (no lock held during read)
+*Benefit:* Readers hold no lock — writers are never blocked by readers.
 
-*Downside:* Retry overhead if validation fails
+*Downside:* Retry overhead if validation fails; only safe for trivially-copyable types.
 
-== Concurrent Collections
+== Concurrent Data Structures
 
-=== ConcurrentHashMap
+=== Thread-Safe Hash Map
 
-*Evolution:*
-
-*Java 7:* Segmented locking
-- 16 segments (default)
-- Lock per segment (fine-grained)
-- Throughput: O(1) with low contention
-
-*Java 8+:* CAS + synchronized
-- No segments (buckets like HashMap)
-- CAS for single-element buckets
-- synchronized for collisions (tree nodes)
-- Lock-free reads
-
-*Internal structure (Java 8+):*
-```java
-// Simplified ConcurrentHashMap
-class ConcurrentHashMap<K, V> {
-    Node<K,V>[] table;  // Array of buckets
-
-    static class Node<K,V> {
-        final int hash;
-        final K key;
-        volatile V value;  // Volatile for visibility
-        volatile Node<K,V> next;  // Volatile
+*Approach 1: Global lock (coarse-grained)*
+```cpp
+// Simple but poor concurrency
+template <typename K, typename V>
+class LockedMap {
+    std::unordered_map<K, V> map_;
+    mutable std::shared_mutex mtx_;
+public:
+    V get(const K& key) const {
+        std::shared_lock lock(mtx_);    // Shared for reads
+        auto it = map_.find(key);
+        return it != map_.end() ? it->second : V{};
     }
-
-    public V get(Object key) {
-        // Lock-free read
-        Node<K,V> node = table[hash(key) & (table.length - 1)];
-        while (node != null) {
-            if (node.key.equals(key)) {
-                return node.value;  // Volatile read
-            }
-            node = node.next;
-        }
-        return null;
+    void put(const K& key, const V& value) {
+        std::unique_lock lock(mtx_);    // Exclusive for writes
+        map_[key] = value;
     }
-
-    public V put(K key, V value) {
-        int hash = hash(key);
-        int bucket = hash & (table.length - 1);
-
-        if (table[bucket] == null) {
-            // CAS to add first node (lock-free)
-            if (casTabAt(table, bucket, null, newNode)) {
-                return null;
-            }
-        }
-
-        // Collision: Lock bucket
-        synchronized (table[bucket]) {
-            // Insert in linked list or tree
-        }
-    }
-}
+};
 ```
 
-*Compute methods (Java 8+):*
-```java
-ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+*Approach 2: Striped locking (fine-grained, higher concurrency)*
+```cpp
+template <typename K, typename V, size_t NUM_STRIPES = 16>
+class StripedMap {
+    struct Stripe {
+        std::unordered_map<K, V> map;
+        mutable std::shared_mutex mtx;
+    };
+    std::array<Stripe, NUM_STRIPES> stripes_;
 
-// Atomic compute: mapping = function(key, oldValue)
-map.compute("key", (k, oldV) -> oldV == null ? 1 : oldV + 1);
+    Stripe& get_stripe(const K& key) {
+        return stripes_[std::hash<K>{}(key) % NUM_STRIPES];
+    }
+    const Stripe& get_stripe(const K& key) const {
+        return stripes_[std::hash<K>{}(key) % NUM_STRIPES];
+    }
 
-// Atomic computeIfAbsent: add if missing
-map.computeIfAbsent("key", k -> expensiveComputation(k));
+public:
+    std::optional<V> get(const K& key) const {
+        auto& stripe = get_stripe(key);
+        std::shared_lock lock(stripe.mtx);
+        auto it = stripe.map.find(key);
+        if (it != stripe.map.end()) return it->second;
+        return std::nullopt;
+    }
 
-// Atomic computeIfPresent: update if exists
-map.computeIfPresent("key", (k, oldV) -> oldV + 1);
+    void put(const K& key, const V& value) {
+        auto& stripe = get_stripe(key);
+        std::unique_lock lock(stripe.mtx);
+        stripe.map[key] = value;
+    }
 
-// Atomic merge: combine old and new
-map.merge("key", 1, (oldV, newV) -> oldV + newV);  // Increment by 1
+    // Atomic compute-if-absent (equivalent to Java's computeIfAbsent)
+    V compute_if_absent(const K& key, std::function<V(const K&)> factory) {
+        auto& stripe = get_stripe(key);
+        std::unique_lock lock(stripe.mtx);
+        auto [it, inserted] = stripe.map.try_emplace(key);
+        if (inserted) {
+            it->second = factory(key);
+        }
+        return it->second;
+    }
+};
 ```
 
-*Why compute methods:*
-```java
-// Wrong: Race condition
-if (!map.containsKey(key)) {
-    map.put(key, value);  // Another thread may have put between check and put!
+*Why compute-style methods matter:*
+```cpp
+// Wrong: Race condition (check-then-act)
+if (map.get(key) == std::nullopt) {
+    map.put(key, value);  // Another thread may have inserted between check and put!
 }
 
 // Right: Atomic
-map.computeIfAbsent(key, k -> value);
+map.compute_if_absent(key, [](auto& k) { return expensive_computation(k); });
 ```
 
-=== CopyOnWriteArrayList
+*Approach 3: Lock-free (advanced)*
+- Use Intel TBB `tbb::concurrent_hash_map` or `folly::ConcurrentHashMap`
+- Lock-free reads, fine-grained locking for writes
+- Best for high-throughput systems
 
-*Strategy:* Every modification creates new array copy.
+=== Copy-On-Write Vector
 
-```java
-public class CopyOnWriteArrayList<E> {
-    private volatile Object[] array;  // Volatile array reference
+*Strategy:* Every modification creates a new copy. Reads are lock-free.
 
-    public boolean add(E e) {
-        synchronized (lock) {
-            Object[] oldArray = array;
-            int len = oldArray.length;
-            Object[] newArray = Arrays.copyOf(oldArray, len + 1);  // Copy!
-            newArray[len] = e;
-            array = newArray;  // Atomic switch
-        }
-        return true;
+```cpp
+#include <shared_mutex>
+#include <memory>
+#include <vector>
+
+template <typename T>
+class CowVector {
+    std::shared_ptr<const std::vector<T>> data_;
+    mutable std::mutex write_mtx_;
+
+public:
+    CowVector() : data_(std::make_shared<const std::vector<T>>()) {}
+
+    // Lock-free read (shared_ptr copy is thread-safe)
+    std::shared_ptr<const std::vector<T>> snapshot() const {
+        return std::atomic_load(&data_);
     }
 
-    public E get(int index) {
-        return array[index];  // No lock! Read from current snapshot
+    void push_back(const T& value) {
+        std::lock_guard lock(write_mtx_);
+        auto new_data = std::make_shared<std::vector<T>>(*data_);
+        new_data->push_back(value);
+        std::atomic_store(&data_,
+            std::shared_ptr<const std::vector<T>>(std::move(new_data)));
     }
-}
+};
 ```
 
-*Iterator:* Snapshot at creation, never throws ConcurrentModificationException
+*Iterator:* Snapshot at creation, never invalidated
 
-```java
-CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
-list.add("a");
-list.add("b");
+```cpp
+CowVector<std::string> list;
+list.push_back("a");
+list.push_back("b");
 
-Iterator<String> it = list.iterator();  // Snapshot of current state
+auto snap = list.snapshot();  // Snapshot of current state
 
 // Another thread modifies list
-list.add("c");
+list.push_back("c");
 
-// Iterator sees old snapshot
-while (it.hasNext()) {
-    System.out.println(it.next());  // Prints: a, b (not c)
+// snap sees old data
+for (const auto& s : *snap) {
+    std::cout << s << "\n";  // Prints: a, b (not c)
 }
 ```
 
 *When to use:*
 - Read-heavy (99%+ reads)
-- Small lists (copy overhead acceptable)
+- Small containers (copy overhead acceptable)
 - Iteration >> modification
 
-*Anti-pattern:* Frequent modifications (O(n) copy for each!)
+*Anti-pattern:* Frequent modifications ($O(n)$ copy for each!)
 
-=== ConcurrentLinkedQueue / ConcurrentLinkedDeque
+=== Lock-Free Queue (Michael-Scott)
 
-*Lock-free queue:* Based on Michael-Scott algorithm (CAS-based)
+*Lock-free MPMC queue:* Based on Michael-Scott algorithm (CAS-based)
 
-```java
-ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>();
+```cpp
+#include <atomic>
+#include <optional>
 
-queue.offer("a");  // Lock-free enqueue
-String item = queue.poll();  // Lock-free dequeue
+template <typename T>
+class LockFreeQueue {
+    struct Node {
+        T data;
+        std::atomic<Node*> next{nullptr};
+        Node() = default;
+        explicit Node(T val) : data(std::move(val)) {}
+    };
 
-// Safe for multiple producers and consumers
+    std::atomic<Node*> head_;
+    std::atomic<Node*> tail_;
+
+public:
+    LockFreeQueue() {
+        auto* sentinel = new Node();
+        head_.store(sentinel);
+        tail_.store(sentinel);
+    }
+
+    void enqueue(T value) {
+        auto* new_node = new Node(std::move(value));
+        while (true) {
+            Node* tail = tail_.load(std::memory_order_acquire);
+            Node* next = tail->next.load(std::memory_order_acquire);
+            if (next == nullptr) {
+                if (tail->next.compare_exchange_weak(
+                        next, new_node, std::memory_order_release)) {
+                    tail_.compare_exchange_strong(
+                        tail, new_node, std::memory_order_release);
+                    return;
+                }
+            } else {
+                // Tail fell behind; advance it
+                tail_.compare_exchange_weak(
+                    tail, next, std::memory_order_release);
+            }
+        }
+    }
+
+    std::optional<T> dequeue() {
+        while (true) {
+            Node* head = head_.load(std::memory_order_acquire);
+            Node* tail = tail_.load(std::memory_order_acquire);
+            Node* next = head->next.load(std::memory_order_acquire);
+            if (next == nullptr) return std::nullopt;  // Empty
+            if (head == tail) {
+                tail_.compare_exchange_weak(
+                    tail, next, std::memory_order_release);
+                continue;
+            }
+            T value = next->data;
+            if (head_.compare_exchange_weak(
+                    head, next, std::memory_order_release)) {
+                delete head;  // Caution: ABA — use hazard pointers in production
+                return value;
+            }
+        }
+    }
+
+    ~LockFreeQueue() {
+        while (dequeue().has_value()) {}
+        delete head_.load();
+    }
+};
 ```
 
-*Weakly consistent iterator:* May not reflect recent modifications
+=== Blocking Queue
 
-```java
-queue.offer("a");
-Iterator<String> it = queue.iterator();
-queue.offer("b");  // May or may not appear in iterator
+*BlockingQueue:* Queue with blocking operations — the workhorse of producer-consumer.
+
+```cpp
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+#include <optional>
+#include <chrono>
+
+template <typename T>
+class BlockingQueue {
+    std::queue<T> queue_;
+    size_t capacity_;
+    std::mutex mtx_;
+    std::condition_variable not_full_;
+    std::condition_variable not_empty_;
+
+public:
+    explicit BlockingQueue(size_t capacity) : capacity_(capacity) {}
+
+    // Blocks if full
+    void put(T item) {
+        std::unique_lock lock(mtx_);
+        not_full_.wait(lock, [&]{ return queue_.size() < capacity_; });
+        queue_.push(std::move(item));
+        not_empty_.notify_one();
+    }
+
+    // Blocks if empty
+    T take() {
+        std::unique_lock lock(mtx_);
+        not_empty_.wait(lock, [&]{ return !queue_.empty(); });
+        T item = std::move(queue_.front());
+        queue_.pop();
+        not_full_.notify_one();
+        return item;
+    }
+
+    // Try with timeout
+    std::optional<T> poll(std::chrono::milliseconds timeout) {
+        std::unique_lock lock(mtx_);
+        if (!not_empty_.wait_for(lock, timeout,
+                [&]{ return !queue_.empty(); })) {
+            return std::nullopt;  // Timeout
+        }
+        T item = std::move(queue_.front());
+        queue_.pop();
+        not_full_.notify_one();
+        return item;
+    }
+};
 ```
 
-=== BlockingQueue Implementations
+*Variant implementations:*
 
-*BlockingQueue:* Queue with blocking operations
+*1. Bounded queue (above):* Fixed capacity, blocks producers when full.
 
-```java
-BlockingQueue<String> queue = new ArrayBlockingQueue<>(10);
+*2. Unbounded queue:* No capacity limit (just remove the `not_full_` condition). Beware of memory growth.
 
-// Producer
-queue.put("item");  // Blocks if full
+*3. Priority queue:* Replace `std::queue` with `std::priority_queue`. Elements dequeued by priority, not FIFO.
 
-// Consumer
-String item = queue.take();  // Blocks if empty
-
-// Timeout versions
-boolean added = queue.offer("item", 1, TimeUnit.SECONDS);
-String item = queue.poll(1, TimeUnit.SECONDS);
-```
-
-*Implementations:*
-
-*1. ArrayBlockingQueue:*
-- Bounded, array-backed
-- FIFO order
-- Single lock (putLock + takeLock in LinkedBlockingQueue)
-
-*2. LinkedBlockingQueue:*
-- Optionally bounded, linked nodes
-- Two locks (putLock, takeLock) → better concurrency
-- FIFO order
-
-*3. PriorityBlockingQueue:*
-- Unbounded, heap-backed
-- Priority order (not FIFO)
-- Lock for modifications
-
-*4. SynchronousQueue:*
-- No capacity (rendezvous)
-- Producer blocks until consumer takes (and vice versa)
-
-*5. DelayQueue:*
-- Unbounded, elements delayed
-- Element available after delay expires
+*4. Synchronous handoff:* Capacity = 0. Producer blocks until a consumer takes. Useful for direct thread-to-thread handoff.
 
 *Producer-Consumer with BlockingQueue:*
-```java
-BlockingQueue<Task> queue = new ArrayBlockingQueue<>(100);
+```cpp
+BlockingQueue<Task> queue(100);
 
 // Producer thread
 void produce() {
     while (running) {
-        Task task = createTask();
-        queue.put(task);  // Blocks if queue full
+        Task task = create_task();
+        queue.put(std::move(task));  // Blocks if queue full
     }
 }
 
@@ -1010,98 +1044,78 @@ void consume() {
 }
 ```
 
-=== Interview Questions: Concurrent Collections
+=== Interview Questions: Concurrent Data Structures
 
-*Q1: How does ConcurrentHashMap achieve thread-safety without locking entire map?*
+*Q1: How would you build a thread-safe hash map in C++ with high concurrency?*
 
 A:
 
-*Java 7:* Segmented locking
-- 16 segments (default), each with own lock
-- Lock only one segment at a time
-- Concurrency level = 16 readers + 16 writers
+*Approach 1: Coarse-grained (std::shared_mutex)*
+- Single shared_mutex for entire map
+- Readers share lock, writers exclusive
+- Simple but limited concurrency
 
-*Java 8+:* CAS + fine-grained locking
-- No segments (buckets like HashMap)
-- *Reads*: Lock-free (volatile reads)
-- *Writes*:
-  - Empty bucket → CAS (lock-free)
-  - Collision → Lock only that bucket (synchronized)
+*Approach 2: Striped locking*
+- N stripes, each with own shared_mutex
+- Hash key to stripe → only lock one stripe
+- Concurrency level = N (typically 16--64)
 
-*Benefit:*
-- Reads never block
-- Writes lock only one bucket
-- High concurrency (thousands of threads)
+*Approach 3: Lock-free (production)*
+- Use `tbb::concurrent_hash_map` or `folly::ConcurrentHashMap`
+- Lock-free reads, fine-grained write locking
+- Best for extreme throughput
 
-*Compare to Hashtable:*
-```java
-// Hashtable: Lock entire map
-synchronized (map) {
-    map.get(key);  // Blocks all other threads!
-}
+*Key insight:* Reads should never block. Use `std::shared_mutex` (shared lock for reads) or lock-free reads (`std::atomic` + careful memory ordering).
 
-// ConcurrentHashMap: Lock-free reads
-map.get(key);  // Never blocks
-```
-
-*Q2: When would you use CopyOnWriteArrayList?*
+*Q2: When would you use a copy-on-write container?*
 
 A: Use when:
 1. *Read-heavy*: 99%+ reads, rare writes
-2. *Small list*: Copy overhead acceptable
+2. *Small container*: Copy overhead acceptable
 3. *Iteration >> modification*: Frequently iterate, rarely modify
 
-*Example:* Event listeners
-```java
-CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList<>();
+*Example:* Observer/listener lists
+```cpp
+CowVector<std::function<void()>> listeners;
 
 // Rare: Add listener
-listeners.add(listener);  // O(n) copy (rare, acceptable)
+listeners.push_back(callback);  // O(n) copy (rare, acceptable)
 
-// Frequent: Notify all
-for (Listener l : listeners) {  // Lock-free, no ConcurrentModificationException
-    l.onEvent(event);
+// Frequent: Notify all (lock-free!)
+auto snap = listeners.snapshot();
+for (auto& fn : *snap) {
+    fn();  // No locks held, no invalidation
 }
 ```
 
 *Anti-pattern:* Frequent modifications
-```java
+```cpp
 // BAD: O(n²) for n additions!
 for (int i = 0; i < 1000; i++) {
-    list.add(i);  // Each add copies entire array!
+    list.push_back(i);  // Each push copies entire vector!
 }
 ```
 
-*Alternative:* Use `ConcurrentHashMap.newKeySet()` for thread-safe set with better write performance.
-
-*Q3: What's the difference between ArrayBlockingQueue and LinkedBlockingQueue?*
+*Q3: Compare mutex-based blocking queue vs lock-free queue.*
 
 A:
 
-*ArrayBlockingQueue:*
-- Fixed capacity (bounded)
-- Array-backed (contiguous memory)
-- Single lock (both put and take)
-- Better cache locality
+*Blocking queue (mutex + condition_variable):*
+- Simple, correct, well-understood
+- Blocks threads when empty/full (saves CPU)
+- Single lock can be bottleneck at high throughput
+- Dual-lock variant (separate put/take locks) improves concurrency
 
-*LinkedBlockingQueue:*
-- Optional capacity (unbounded by default)
-- Linked nodes (scattered memory)
-- Two locks (putLock + takeLock) → better concurrency
-- Higher throughput (producers and consumers don't block each other)
-
-```java
-ArrayBlockingQueue<String> abq = new ArrayBlockingQueue<>(100);
-// put() and take() share same lock
-
-LinkedBlockingQueue<String> lbq = new LinkedBlockingQueue<>();
-// put() and take() use separate locks → higher concurrency
-```
+*Lock-free queue (CAS-based, Michael-Scott):*
+- No blocking — threads spin-retry on CAS failure
+- Higher throughput under moderate contention
+- Complex to implement correctly (ABA, memory reclamation)
+- Wastes CPU when queue empty (spinning)
 
 *When to use:*
-- *ArrayBlockingQueue*: Bounded size required, lower memory overhead
-- *LinkedBlockingQueue*: High throughput, unbounded OK
+- *Blocking queue*: Default choice. Simpler. Good when threads should sleep when idle.
+- *Lock-free queue*: Latency-critical systems (trading, gaming). High throughput needed. Threads should not sleep.
 
 *Performance:*
-- ArrayBlockingQueue: Better for low contention
-- LinkedBlockingQueue: Better for high contention (separate locks)
+- Blocking: Better for bursty workloads (threads sleep during idle)
+- Lock-free: Better for sustained high throughput (no OS scheduler overhead)

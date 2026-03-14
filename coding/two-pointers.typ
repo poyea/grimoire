@@ -11,7 +11,7 @@
 *Two Pointers:* $O(n)$ time, $O(1)$ space
 
 ```cpp
-bool isPalindrome(string s) {
+bool is_palindrome(string s) {
     int l = 0, r = s.length() - 1;
 
     while (l < r) {
@@ -31,7 +31,7 @@ bool isPalindrome(string s) {
 *Two Pointers:* $O(n)$ time, $O(1)$ space
 
 ```cpp
-vector<int> twoSum(vector<int>& nums, int target) {
+vector<int> two_sum(vector<int>& nums, int target) {
     int l = 0, r = nums.size() - 1;
 
     while (l < r) {
@@ -113,7 +113,7 @@ int maxArea(vector<int>& height) {
 *Prefetching:*
 ```cpp
 // Manual prefetch hints for large arrays
-int twoSum(vector<int>& nums, int target) {
+int two_sum(vector<int>& nums, int target) {
     int l = 0, r = nums.size() - 1;
 
     while (l < r) {
@@ -199,7 +199,7 @@ bool isPalindromeSIMD(const string& s) {
 
 *CMOV-based comparison:*
 ```cpp
-vector<int> twoSumBranchless(vector<int>& nums, int target) {
+vector<int> two_sum_branchless(vector<int>& nums, int target) {
     int l = 0, r = nums.size() - 1;
 
     while (l < r) {
@@ -402,3 +402,46 @@ vector<vector<int>> threeSumParallel(vector<int>& nums, int num_threads = 4) {
 ```
 
 *Speedup:* 3-4x on 4 cores (not perfect due to synchronization overhead and uneven work distribution).
+
+== When to Use Two Pointers
+
+*Use left/right convergence when:*
+- Input array is sorted
+- Finding pairs with a target sum (Two Sum II)
+- Maximizing area / distance-based problems (Container With Most Water)
+- Palindrome verification
+
+*Use fast/slow pointers when:*
+- Cycle detection in linked lists (Floyd's algorithm)
+- Finding middle of linked list
+- Detecting duplicates in sequences
+
+*Use same-direction pointers when:*
+- Merging sorted arrays
+- Removing duplicates in-place
+- Partitioning (Dutch National Flag)
+
+*Two pointers vs sliding window:*
+- Two pointers: compare/combine values at pointer positions, typically sorted input
+- Sliding window: maintain aggregate state over contiguous range, unsorted input OK
+- Two pointers converge or chase; sliding window expands and contracts
+
+*Two pointers vs binary search:*
+- Both work on sorted data
+- Two pointers: $O(n)$ for pair problems, processes all elements
+- Binary search: $O(log n)$ for single target, but $O(n log n)$ for pair problems
+- Use two pointers when you need to examine relationships between elements
+
+== Complexity Reference
+
+#table(
+  columns: (auto, auto, auto),
+  [*Algorithm / Operation*], [*Time*], [*Space*],
+  [Valid Palindrome], [$O(n)$], [$O(1)$],
+  [Two Sum II (sorted)], [$O(n)$], [$O(1)$],
+  [3Sum], [$O(n^2)$], [$O(1)$ excl. output],
+  [Container With Most Water], [$O(n)$], [$O(1)$],
+  [Branchless two pointers (CMOV)], [$O(n)$], [$O(1)$],
+  [SIMD palindrome check], [$O(n / 16)$ effective], [$O(1)$],
+  [Parallel two pointers (4 cores)], [$O(n / p)$, $p$ = cores], [$O(p)$],
+)
