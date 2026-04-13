@@ -146,9 +146,8 @@ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 *Throughput comparison (modern x86-64 with AES-NI):*
 
 #table(
-  columns: 4,
-  align: (left, right, right, left),
-  table.header([Cipher], [Encrypt], [Decrypt], [Notes]),
+  columns: (auto, auto, auto, auto),
+  [*Cipher*], [*Encrypt*], [*Decrypt*], [*Notes*],
   [AES-128-GCM], [~6 GB/s], [~6 GB/s], [Hardware accelerated],
   [AES-256-GCM], [~5 GB/s], [~5 GB/s], [Hardware accelerated],
   [ChaCha20-Poly1305], [~2 GB/s], [~2 GB/s], [Better without AES-NI],
@@ -157,9 +156,8 @@ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 *Key exchange performance (operations per second, single core):*
 
 #table(
-  columns: 3,
-  align: (left, right, right),
-  table.header([Algorithm], [Key Gen], [Shared Secret]),
+  columns: (auto, auto, auto),
+  [*Algorithm*], [*Key Gen*], [*Shared Secret*],
   [ECDHE P-256], [~40,000/s], [~15,000/s],
   [ECDHE X25519], [~70,000/s], [~25,000/s],
   [RSA-2048 sign], [~1,500/s], [N/A],
@@ -239,9 +237,8 @@ struct SessionCache {
 *Total connection time = TCP handshake + TLS handshake:*
 
 #table(
-  columns: 4,
-  align: (left, right, right, right),
-  table.header([Scenario], [TCP], [TLS 1.2], [TLS 1.3]),
+  columns: (auto, auto, auto, auto),
+  [*Scenario*], [*TCP*], [*TLS 1.2*], [*TLS 1.3*],
   [Localhost], [\<1ms], [~2ms], [~1ms],
   [Datacenter (1ms RTT)], [1ms], [4ms], [2ms],
   [Regional (20ms RTT)], [20ms], [80ms], [40ms],

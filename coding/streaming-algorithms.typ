@@ -697,9 +697,8 @@ public:
 == Performance Comparison
 
 #table(
-  columns: 4,
-  align: (left, center, center, left),
-  table.header([Algorithm], [Space], [Update], [Problem]),
+  columns: (auto, auto, auto, auto),
+  [*Algorithm*], [*Space*], [*Update*], [*Problem*],
   [Reservoir Sampling], [$O(k)$], [$O(1)$], [Uniform sampling],
   [Morris Counting], [$O(log log n)$], [$O(1)$], [Approximate count],
   [Misra-Gries], [$O(k)$], [$O(k)$], [Heavy hitters],

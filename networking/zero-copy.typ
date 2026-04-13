@@ -256,9 +256,8 @@ struct sg_desc {
 == Practical Recommendations
 
 #table(
-  columns: 3,
-  align: (left, left, left),
-  table.header([Scenario], [Technique], [Rationale]),
+  columns: (auto, auto, auto),
+  [*Scenario*], [*Technique*], [*Rationale*],
   [Static file serving], [sendfile()], [Simple, kernel-optimized],
   [Large bulk transfer], [MSG_ZEROCOPY], [CPU savings > complexity cost],
   [High-throughput server], [io_uring], [Batching + zero-copy],

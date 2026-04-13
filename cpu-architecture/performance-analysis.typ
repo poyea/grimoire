@@ -457,9 +457,8 @@ BENCHMARK(BM_Operation);
 == Tools Summary
 
 #table(
-  columns: 3,
-  align: (left, left, left),
-  table.header([Tool], [Purpose], [Platform]),
+  columns: (auto, auto, auto),
+  [*Tool*], [*Purpose*], [*Platform*],
   [perf], [General profiling, counters], [Linux],
   [Intel VTune], [Advanced profiling, TMAM], [Linux, Windows],
   [AMD uProf], [AMD-specific profiling], [Linux, Windows],

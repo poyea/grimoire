@@ -210,9 +210,8 @@ BBR cwnd evolution (same scenario):
 *Summary comparison:*
 
 #table(
-  columns: 5,
-  align: (left, right, right, right, right),
-  table.header([Metric], [CUBIC (100M)], [BBR (100M)], [CUBIC (10G)], [BBR (10G)]),
+  columns: (auto, auto, auto, auto, auto),
+  [*Metric*], [*CUBIC (100M)*], [*BBR (100M)*], [*CUBIC (10G)*], [*BBR (10G)*],
   [Avg Throughput], [~85 Mbps], [~98 Mbps], [~6.5 Gbps], [~9.5 Gbps],
   [Avg RTT], [60-100ms], [50-55ms], [120-200ms], [100-105ms],
   [Recovery Time], [~700ms], [N/A], [~4s], [~800ms],

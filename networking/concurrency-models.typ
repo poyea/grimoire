@@ -152,9 +152,8 @@ Context* ctx = io_uring_cqe_get_data(cqe);
 == Comparison
 
 #table(
-  columns: 5,
-  align: (left, right, right, left, right),
-  table.header([Model], [Connections], [CPU Cores], [Complexity], [Memory]),
+  columns: (auto, auto, auto, auto, auto),
+  [*Model*], [*Connections*], [*CPU Cores*], [*Complexity*], [*Memory*],
   [Thread-per-connection], [10K], [Full], [Low], [High (8GB)],
   [Thread pool], [10K], [Full], [Low], [Medium (64MB)],
   [Reactor (epoll)], [100K+], [Single], [High], [Low (8MB)],

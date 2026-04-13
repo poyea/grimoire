@@ -108,9 +108,8 @@ next_index = (index + 1) % SIZE;  // Division (~10-40 cycles on older CPUs)
 *Benchmark setup:* Producer thread sends 100M messages, consumer receives.
 
 #table(
-  columns: 3,
-  align: (left, right, right),
-  table.header([Configuration], [Latency (ns)], [Throughput (msgs/sec)]),
+  columns: (auto, auto, auto),
+  [*Configuration*], [*Latency (ns)*], [*Throughput (msgs/sec)*],
   [Mutex-based queue], [200-500], [5M],
   [SPSC (relaxed)], [40-80], [25M],
   [SPSC (acquire/release)], [20-40], [50M],

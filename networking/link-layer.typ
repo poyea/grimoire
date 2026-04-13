@@ -308,9 +308,8 @@ echo <cpu_mask> > /sys/class/net/eth0/queues/tx-0/xps_cpus
 *Packet receive path latency breakdown (modern hardware):*
 
 #table(
-  columns: 3,
-  align: (left, right, left),
-  table.header([Stage], [Latency], [Notes]),
+  columns: (auto, auto, auto),
+  [*Stage*], [*Latency*], [*Notes*],
   [Wire propagation], [\~5ns/m], [Speed of light in copper/fiber],
   [NIC PHY processing], [\~200-500ns], [Signal decoding, clock recovery],
   [DMA to RAM], [\~150-300ns], [PCIe transfer, DRAM write],

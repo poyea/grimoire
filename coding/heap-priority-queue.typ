@@ -373,11 +373,7 @@ public:
 
 #table(
   columns: (auto, auto, auto),
-  inset: 5pt,
-  align: left,
-  table.header(
-    [*Operation*], [*Binary Heap*], [*Notes*],
-  ),
+  [*Operation*], [*Binary Heap*], [*Notes*],
   [Insert], [$O(log n)$, avg $O(1)$], [Sift-up; most elements near bottom],
   [Extract-min/max], [$O(log n)$], [Swap root with last, sift-down],
   [Peek (min/max)], [$O(1)$], [Root element],

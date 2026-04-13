@@ -9,9 +9,8 @@ Connection pooling amortizes the cost of establishing connections across multipl
 *Connection establishment costs:*
 
 #table(
-  columns: 3,
-  align: (left, right, left),
-  table.header([Phase], [Latency], [Notes]),
+  columns: (auto, auto, auto),
+  [*Phase*], [*Latency*], [*Notes*],
   [TCP handshake], [1 RTT (20-100ms)], [SYN → SYN-ACK → ACK],
   [TLS 1.3 handshake], [1 RTT (20-100ms)], [ClientHello → ServerHello + encrypted],
   [TLS 1.2 handshake], [2 RTT (40-200ms)], [Additional round-trip for key exchange],
@@ -140,9 +139,8 @@ setsockopt(sock, IPPROTO_TCP, TCP_KEEPCNT, &count, sizeof(count));
 *Pool-level timeouts:*
 
 #table(
-  columns: 3,
-  align: (left, right, left),
-  table.header([Setting], [Typical Value], [Purpose]),
+  columns: (auto, auto, auto),
+  [*Setting*], [*Typical Value*], [*Purpose*],
   [idleTimeout], [10 min], [Close unused connections to free resources],
   [maxLifetime], [30 min], [Prevent stale connections, force refresh],
   [connectionTimeout], [30 sec], [Max wait for available connection],
@@ -495,9 +493,8 @@ class ThrottledPool {
 *Key metrics to monitor:*
 
 #table(
-  columns: 3,
-  align: (left, left, left),
-  table.header([Metric], [Healthy Range], [Action if Exceeded]),
+  columns: (auto, auto, auto),
+  [*Metric*], [*Healthy Range*], [*Action if Exceeded*],
   [Pool utilization], [50-80%], [Scale pool or optimize queries],
   [Wait time for connection], [< 10ms], [Increase pool size],
   [Connection creation rate], [< 1/sec], [Check for leaks],

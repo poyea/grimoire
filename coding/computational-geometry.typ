@@ -651,9 +651,8 @@ vector<Point> halfPlaneIntersection(vector<HalfPlane> planes) {
 == Performance Summary
 
 #table(
-  columns: 4,
-  align: (left, center, center, left),
-  table.header([Algorithm], [Time], [Space], [Problem]),
+  columns: (auto, auto, auto, auto),
+  [*Algorithm*], [*Time*], [*Space*], [*Problem*],
   [Convex Hull], [$O(n log n)$], [$O(n)$], [Smallest enclosing polygon],
   [Line Intersection], [$O(1)$], [$O(1)$], [Two segments],
   [Sweep Line], [$O((n+k) log n)$], [$O(n)$], [All intersections],

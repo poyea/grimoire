@@ -695,9 +695,8 @@ string minRotation(const string& s) {
 == Performance Comparison
 
 #table(
-  columns: 4,
-  align: (left, center, center, left),
-  table.header([Algorithm], [Build], [Query], [Use Case]),
+  columns: (auto, auto, auto, auto),
+  [*Algorithm*], [*Build*], [*Query*], [*Use Case*],
   [Suffix Array], [$O(n log n)$], [$O(m log n)$], [Pattern search, LCP queries],
   [Suffix Automaton], [$O(n)$], [$O(m)$], [Substring check, counting],
   [Aho-Corasick], [$O(sum |p|)$], [$O(n + z)$], [Multiple pattern matching],

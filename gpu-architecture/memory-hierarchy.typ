@@ -414,9 +414,8 @@ __global__ void histogram_private(int* data, int* bins, int n, int num_bins) {
 *Access pattern benchmark summary (RTX 4090):*
 
 #table(
-  columns: 4,
-  align: (left, right, right, left),
-  table.header([Pattern], [Naive BW], [Optimized BW], [Technique]),
+  columns: (auto, auto, auto, auto),
+  [*Pattern*], [*Naive BW*], [*Optimized BW*], [*Technique*],
   [Matrix multiply], [~200 GB/s], [~900 GB/s], [Shared memory tiling],
   [Reduction], [~400 GB/s], [~850 GB/s], [Sequential addressing],
   [Histogram], [~20 GB/s], [~300 GB/s], [Privatized shared memory],

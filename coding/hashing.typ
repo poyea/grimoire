@@ -325,9 +325,8 @@ public:
 == Complexity Reference
 
 #table(
-  columns: 5,
-  align: (left, center, center, center, left),
-  table.header([Structure], [Insert], [Lookup], [Delete], [Notes]),
+  columns: (auto, auto, auto, auto, auto),
+  [*Structure*], [*Insert*], [*Lookup*], [*Delete*], [*Notes*],
   [std::unordered_map], [$O(1)$ avg], [$O(1)$ avg], [$O(1)$ avg], [Chaining, $O(n)$ worst],
   [std::unordered_set], [$O(1)$ avg], [$O(1)$ avg], [$O(1)$ avg], [Same as map, no values],
   [Robin Hood Map], [$O(1)$ avg], [$O(1)$ avg], [$O(1)$ avg], [Better cache, bounded probe],
@@ -552,9 +551,8 @@ Traditional chaining would require following pointers and loading entire entries
 
 *Performance comparison (1M inserts, random int keys):*
 #table(
-  columns: 4,
-  align: (left, right, right, right),
-  table.header([Hash Table Type], [Insert (ms)], [Lookup (ms)], [Memory (MB)]),
+  columns: (auto, auto, auto, auto),
+  [*Hash Table Type*], [*Insert (ms)*], [*Lookup (ms)*], [*Memory (MB)*],
   [std::unordered_map], [450], [380], [48],
   [Robin Hood (custom)], [180], [120], [32],
   [absl::flat_hash_map], [150], [100], [28],

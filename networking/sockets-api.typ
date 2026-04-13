@@ -194,9 +194,8 @@ netstat -an | grep TIME_WAIT | wc -l
 *System call overhead [Linux 5.x, x86-64]:*
 
 #table(
-  columns: 3,
-  align: (left, right, left),
-  table.header([Operation], [Latency], [Notes]),
+  columns: (auto, auto, auto),
+  [*Operation*], [*Latency*], [*Notes*],
   [socket()], [~1-2μs], [Allocate fd, socket structure],
   [bind()], [~500ns], [Update kernel tables],
   [connect() (localhost)], [~30-50μs], [Full 3-way handshake],
@@ -323,9 +322,8 @@ int main() {
 *Performance comparison:*
 
 #table(
-  columns: 3,
-  align: (left, right, left),
-  table.header([Model], [10K Connections], [Notes]),
+  columns: (auto, auto, auto),
+  [*Model*], [*10K Connections*], [*Notes*],
   [Thread-per-client], [~80 MB RAM], [8 KB stack each + context switches],
   [`select()`], [$O(n)$ per call], [Scans entire fd set; limit 1024 fds],
   [`poll()`], [$O(n)$ per call], [No fd limit but still linear scan],
@@ -378,9 +376,8 @@ int main() {
 *TCP vs UDP socket differences:*
 
 #table(
-  columns: 3,
-  align: (left, left, left),
-  table.header([Aspect], [TCP (`SOCK_STREAM`)], [UDP (`SOCK_DGRAM`)]),
+  columns: (auto, auto, auto),
+  [*Aspect*], [*TCP (`SOCK_STREAM`)*], [*UDP (`SOCK_DGRAM`)*],
   [Setup], [`listen` + `accept`], [`bind` only],
   [Transfer], [`send` / `recv`], [`sendto` / `recvfrom`],
   [State], [Per-connection fd], [Single fd for all clients],
@@ -395,9 +392,8 @@ int main() {
 *Common socket error codes:*
 
 #table(
-  columns: 3,
-  align: (left, left, left),
-  table.header([Error], [Cause], [Strategy]),
+  columns: (auto, auto, auto),
+  [*Error*], [*Cause*], [*Strategy*],
   [`ECONNRESET`], [Peer sent RST (crashed or aborted)], [Close fd, clean up session],
   [`EPIPE`], [Write to closed connection], [Close fd; suppress `SIGPIPE` with `MSG_NOSIGNAL`],
   [`ETIMEDOUT`], [Connection timed out (peer unreachable)], [Retry with backoff or fail],

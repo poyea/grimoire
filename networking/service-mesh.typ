@@ -365,9 +365,8 @@ Listener → Network Filters → HTTP Connection Manager → HTTP Filters → Ro
 *Latency impact (measured per hop):*
 
 #table(
-  columns: 4,
-  align: (left, right, right, left),
-  table.header([Scenario], [P50], [P99], [Notes]),
+  columns: (auto, auto, auto, auto),
+  [*Scenario*], [*P50*], [*P99*], [*Notes*],
   [Direct (no mesh)], [baseline], [baseline], [Application-to-application],
   [Istio (HTTP)], [+2-3ms], [+5-8ms], [Two proxy hops + mTLS],
   [Istio (gRPC)], [+1-2ms], [+3-5ms], [HTTP/2 multiplexing helps],
@@ -415,9 +414,8 @@ Listener → Network Filters → HTTP Connection Manager → HTTP Filters → Ro
 *Decision matrix:*
 
 #table(
-  columns: 4,
-  align: (left, left, left, left),
-  table.header([Requirement], [Service Mesh], [Library], [Gateway-only]),
+  columns: (auto, auto, auto, auto),
+  [*Requirement*], [*Service Mesh*], [*Library*], [*Gateway-only*],
   [mTLS everywhere], [Yes], [Manual], [Edge only],
   [Observability], [Automatic], [Code changes], [Edge only],
   [Traffic splitting], [Yes], [Code changes], [Edge only],

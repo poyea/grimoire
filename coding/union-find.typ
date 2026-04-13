@@ -79,9 +79,8 @@ int find_path_splitting(int x) {
 *Performance comparison:*
 
 #table(
-  columns: 4,
-  align: (left, left, left, left),
-  table.header([Variant], [Amortized Time], [Recursion], [Cache Behavior]),
+  columns: (auto, auto, auto, auto),
+  [*Variant*], [*Amortized Time*], [*Recursion*], [*Cache Behavior*],
   [Full compression], [$O(alpha(n))$], [Yes], [Poor (recursion)],
   [Path halving], [$O(alpha(n))$], [No], [Better (iterative)],
   [Path splitting], [$O(alpha(n))$], [No], [Better (iterative)],

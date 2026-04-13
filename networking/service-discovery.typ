@@ -347,9 +347,8 @@ api.default.svc.cluster.local.  30  IN  A  10.0.0.7
 *Caching strategies:*
 
 #table(
-  columns: 4,
-  align: (left, left, left, left),
-  table.header([Strategy], [Freshness], [Latency], [Use Case]),
+  columns: (auto, auto, auto, auto),
+  [*Strategy*], [*Freshness*], [*Latency*], [*Use Case*],
   [No cache], [Real-time], [High (network RTT)], [Critical routing],
   [TTL-based], [Seconds-stale], [Low (local)], [General services],
   [Watch-based], [Near real-time], [Low (push updates)], [Dynamic environments],
@@ -396,9 +395,8 @@ api.default.svc.cluster.local.  30  IN  A  10.0.0.7
 == Comparison
 
 #table(
-  columns: 5,
-  align: (left, left, left, left, left),
-  table.header([System], [Consistency], [Health Checks], [DNS Interface], [Use Case]),
+  columns: (auto, auto, auto, auto, auto),
+  [*System*], [*Consistency*], [*Health Checks*], [*DNS Interface*], [*Use Case*],
   [Consul], [CP (Raft)], [Built-in], [Yes], [Service mesh],
   [etcd], [CP (Raft)], [TTL leases], [No], [Kubernetes, config],
   [ZooKeeper], [CP (ZAB)], [Ephemeral nodes], [No], [Hadoop, Kafka],

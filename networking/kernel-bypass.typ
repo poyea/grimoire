@@ -241,9 +241,8 @@ ibv_post_send(qp, &wr, &bad_wr);  // Async, returns immediately
 == Comparison
 
 #table(
-  columns: 6,
-  align: (left, right, right, right, left, left),
-  table.header([Technique], [Latency], [Throughput], [CPU], [Kernel Integration], [Complexity]),
+  columns: (auto, auto, auto, auto, auto, auto),
+  [*Technique*], [*Latency*], [*Throughput*], [*CPU*], [*Kernel Integration*], [*Complexity*],
   [Kernel (epoll)], [10-30μs], [1-3M PPS], [20%], [Full], [Low],
   [XDP], [1-3μs], [24M PPS], [100%], [Partial], [Medium],
   [AF_XDP], [2-5μs], [10-20M PPS], [100%], [Partial], [Medium],

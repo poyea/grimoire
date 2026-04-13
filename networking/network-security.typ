@@ -354,9 +354,8 @@ ChaCha20-Poly1305: ~6 GB/s  (ARM with crypto extensions)
 *VPN throughput comparison (typical benchmarks):*
 
 #table(
-  columns: 5,
-  align: (left, right, right, right, left),
-  table.header([Protocol], [Throughput], [Latency], [CPU], [Notes]),
+  columns: (auto, auto, auto, auto, auto),
+  [*Protocol*], [*Throughput*], [*Latency*], [*CPU*], [*Notes*],
   [IPSec (AES-GCM)], [5-10 Gbps], [+0.5ms], [10-20%], [Hardware offload common],
   [OpenVPN (UDP)], [200-500 Mbps], [+2-5ms], [50-100%], [Userspace, single-threaded],
   [WireGuard], [3-5 Gbps], [+0.3ms], [5-15%], [Kernel-space, modern crypto],

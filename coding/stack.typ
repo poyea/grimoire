@@ -338,9 +338,8 @@ int calculate(string s) {
 
 *`std::stack` vs `vector` as stack:*
 #table(
-  columns: 4,
-  align: (left, right, right, right),
-  table.header([Implementation], [Push (ns)], [Pop (ns)], [Memory Overhead]),
+  columns: (auto, auto, auto, auto),
+  [*Implementation*], [*Push (ns)*], [*Pop (ns)*], [*Memory Overhead*],
   [std::stack\<int\> (deque)], [15-25], [10-15], [$#sym.tilde.op$64 bytes/chunk metadata],
   [vector\<int\>], [5-10], [3-5], [1.5x capacity on average],
   [static array], [2-3], [1-2], [fixed allocation],
@@ -359,9 +358,8 @@ int calculate(string s) {
 
 *Monotonic stack applications summary:*
 #table(
-  columns: 3,
-  align: (left, left, left),
-  table.header([Problem Type], [Stack Order], [Lookup Direction]),
+  columns: (auto, auto, auto),
+  [*Problem Type*], [*Stack Order*], [*Lookup Direction*],
   [Next greater element], [Decreasing], [Forward],
   [Next smaller element], [Increasing], [Forward],
   [Previous greater element], [Decreasing], [Backward],

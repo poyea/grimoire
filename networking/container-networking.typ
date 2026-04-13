@@ -155,9 +155,8 @@ docker run --network my_overlay nginx
 *Performance comparison:*
 
 #table(
-  columns: 4,
-  align: (left, right, right, left),
-  table.header([Mode], [Latency], [Throughput], [Use Case]),
+  columns: (auto, auto, auto, auto),
+  [*Mode*], [*Latency*], [*Throughput*], [*Use Case*],
   [Host], [Native], [100%], [Maximum performance, trusted workloads],
   [Bridge], [+5-15μs], [90-95%], [Single-host isolation (default)],
   [Overlay], [+20-50μs], [70-85%], [Multi-host, Swarm/Compose],
@@ -268,9 +267,8 @@ spec:
 *Popular CNI plugins:*
 
 #table(
-  columns: 4,
-  align: (left, left, left, left),
-  table.header([Plugin], [Encapsulation], [Network Policy], [Performance]),
+  columns: (auto, auto, auto, auto),
+  [*Plugin*], [*Encapsulation*], [*Network Policy*], [*Performance*],
   [Flannel], [VXLAN/host-gw], [No (basic)], [Good (host-gw native)],
   [Calico], [VXLAN/BGP/eBPF], [Yes (rich)], [Excellent (eBPF mode)],
   [Cilium], [VXLAN/eBPF], [Yes (L7 aware)], [Excellent (eBPF)],
@@ -335,9 +333,8 @@ Node A (10.0.0.1)                     Node B (10.0.0.2)
 *Latency overhead [Amaral et al. 2021, Suo et al. 2018]:*
 
 #table(
-  columns: 3,
-  align: (left, right, left),
-  table.header([Configuration], [Added Latency], [Notes]),
+  columns: (auto, auto, auto),
+  [*Configuration*], [*Added Latency*], [*Notes*],
   [Native (host network)], [0], [Baseline],
   [Bridge (Docker default)], [5-15μs], [veth + bridge + iptables],
   [Calico BGP], [2-5μs], [Native routing, no encap],

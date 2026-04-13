@@ -41,9 +41,8 @@ Load balancers distribute traffic across multiple servers to improve availabilit
 *Decision matrix:*
 
 #table(
-  columns: 4,
-  align: (left, center, center, center),
-  table.header([Requirement], [L4], [L7], [Notes]),
+  columns: (auto, auto, auto, auto),
+  [*Requirement*], [*L4*], [*L7*], [*Notes*],
   [URL-based routing], [-], [+], [L7 required],
   [SSL/TLS termination], [-], [+], [Offload crypto from backends],
   [HTTP header manipulation], [-], [+], [Add X-Forwarded-For, etc.],
@@ -213,9 +212,8 @@ public:
 *Health check types:*
 
 #table(
-  columns: 3,
-  align: (left, left, left),
-  table.header([Type], [Method], [Use Case]),
+  columns: (auto, auto, auto),
+  [*Type*], [*Method*], [*Use Case*],
   [TCP], [SYN → SYN-ACK], [Basic connectivity],
   [HTTP], [GET /health → 200], [Application liveness],
   [gRPC], [grpc.health.v1], [gRPC services],
@@ -480,9 +478,8 @@ stream {
 *Benchmarks (typical modern hardware, 2023):*
 
 #table(
-  columns: 5,
-  align: (left, right, right, right, left),
-  table.header([Load Balancer], [L4 PPS], [L7 RPS], [Latency], [Notes]),
+  columns: (auto, auto, auto, auto, auto),
+  [*Load Balancer*], [*L4 PPS*], [*L7 RPS*], [*Latency*], [*Notes*],
   [HAProxy], [1-2M], [200K-500K], [50-200μs], [Single-threaded, nbproc for scaling],
   [NGINX], [1-2M], [100K-300K], [100-300μs], [Worker processes],
   [Envoy], [500K-1M], [50K-200K], [200-500μs], [Full observability],

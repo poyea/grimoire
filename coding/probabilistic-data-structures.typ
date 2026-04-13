@@ -253,9 +253,8 @@ public:
 
 *Comparison with Bloom filter:*
 #table(
-  columns: 4,
-  align: (left, center, center, center),
-  table.header([Property], [Bloom Filter], [Counting Bloom], [Cuckoo Filter]),
+  columns: (auto, auto, auto, auto),
+  [*Property*], [*Bloom Filter*], [*Counting Bloom*], [*Cuckoo Filter*],
   [Deletion], [No], [Yes], [Yes],
   [Space (1% FP)], [9.6 bits/elem], [38.4 bits/elem], [12 bits/elem],
   [Lookup time], [$O(k)$], [$O(k)$], [$O(1)$],
@@ -626,9 +625,8 @@ public:
 == Performance Comparison
 
 #table(
-  columns: 5,
-  align: (left, center, center, center, center),
-  table.header([Structure], [Space], [Insert], [Query], [Use Case]),
+  columns: (auto, auto, auto, auto, auto),
+  [*Structure*], [*Space*], [*Insert*], [*Query*], [*Use Case*],
   [Bloom Filter], [$O(n)$ bits], [$O(k)$], [$O(k)$], [Membership test],
   [Cuckoo Filter], [$O(n)$ bits], [$O(1)$ amort], [$O(1)$], [Membership + delete],
   [HyperLogLog], [$O(log log n)$], [$O(1)$], [$O(m)$], [Cardinality],

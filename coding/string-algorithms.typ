@@ -491,9 +491,8 @@ vector<int> avx2_search(const string& text, const string& pattern) {
 *Test: Find pattern "algorithm" in 1MB text (English):*
 
 #table(
-  columns: 3,
-  align: (left, right, left),
-  table.header([Algorithm], [Time (μs)], [Notes]),
+  columns: (auto, auto, auto),
+  [*Algorithm*], [*Time (μs)*], [*Notes*],
   [Naive (substr)], [12000], [Worst case O(nm), poor branch prediction],
   [KMP], [2500], [Linear time, good cache locality],
   [Z-algorithm], [2800], [Similar to KMP, simpler code],

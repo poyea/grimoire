@@ -356,9 +356,8 @@ int sliding_window_check(Window* w, int limit, int window_sec) {
 *Production-ready implementations:*
 
 #table(
-  columns: 3,
-  align: (left, left, left),
-  table.header([Library], [Language], [Features]),
+  columns: (auto, auto, auto),
+  [*Library*], [*Language*], [*Features*],
   [resilience4j], [Java], [Circuit breaker, retry, bulkhead, rate limiter],
   [Polly], [.NET], [Retry, circuit breaker, timeout, bulkhead],
   [go-resiliency], [Go], [Circuit breaker, deadline, retrier, semaphore],

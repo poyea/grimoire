@@ -220,9 +220,8 @@ Initiator                        Responder
 == Comparison with Alternatives
 
 #table(
-  columns: 5,
-  align: (left, left, left, left, left),
-  table.header([Feature], [WebSocket], [SSE], [Long Polling], [HTTP/2 Push]),
+  columns: (auto, auto, auto, auto, auto),
+  [*Feature*], [*WebSocket*], [*SSE*], [*Long Polling*], [*HTTP/2 Push*],
   [Direction], [Bidirectional], [Server-to-client], [Bidirectional\*], [Server-to-client],
   [Connection], [Persistent], [Persistent], [Reconnects], [Persistent],
   [Overhead], [2-14 bytes], [~50 bytes], [~800 bytes], [9 bytes],

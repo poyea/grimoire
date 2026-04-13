@@ -169,9 +169,8 @@ Latency measures the cycles from when operands are ready until the result become
 Modern CPUs like Zen 3 and Skylake exhibit varying latency and throughput characteristics across different instruction types:
 
 #table(
-  columns: 4,
-  align: (left, center, center, left),
-  table.header([Instruction], [Latency (cycles)], [Throughput (CPI)], [Execution Units]),
+  columns: (auto, auto, auto, auto),
+  [*Instruction*], [*Latency (cycles)*], [*Throughput (CPI)*], [*Execution Units*],
   [mov r, r], [0-1], [0.25], [Renamed away or ALU],
   [add r, r], [1], [0.25], [4 ALU ports],
   [imul r, r], [3], [1], [1 multiplier],

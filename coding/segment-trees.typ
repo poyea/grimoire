@@ -632,9 +632,8 @@ public:
 == Comparison of Range Query Structures
 
 #table(
-  columns: 5,
-  align: (left, center, center, center, left),
-  table.header([Structure], [Build], [Point Update], [Range Query], [Features]),
+  columns: (auto, auto, auto, auto, auto),
+  [*Structure*], [*Build*], [*Point Update*], [*Range Query*], [*Features*],
   [Prefix Sum], [$O(n)$], [$O(n)$], [$O(1)$], [Static only],
   [Segment Tree], [$O(n)$], [$O(log n)$], [$O(log n)$], [General purpose],
   [Lazy Seg Tree], [$O(n)$], [$O(log n)$], [$O(log n)$], [Range updates],
