@@ -124,6 +124,194 @@ Time-division (sequential)       Frequency-division (parallel)
 - Restricted TWT for time-sensitive apps
 - Multi-link low latency: \< 2ms (gaming, AR/VR)
 
+== 3G UMTS / HSPA Architecture
+
+*3G* (UMTS — Universal Mobile Telecommunications System, 3GPP Release 99, 2000) was the first fully packet-switched mobile data standard.
+
+*Air interface: W-CDMA (Wideband CDMA)*
+- 5 MHz channel; all users share the same frequency, separated by orthogonal spreading codes (factor 4–512)
+- Rake receiver: coherently combines up to N multipath copies
+- Closed-loop power control at 1500 Hz — essential to counter the near-far problem
+
+*Architecture:*
+
+```
+UE ──── UTRAN ───────────────────────── CN (Core Network)
+        ┌──────────┐                    ┌──────────────────────────┐
+        │  Node B  │                    │ MSC  (circuit-switched)  │──▶ PSTN
+        │(base stn)│──── RNC ──────────│ SGSN (packet-switched)   │
+        └──────────┘  (radio network   │ GGSN (internet gateway)  │──▶ IP
+                       controller)     └──────────────────────────┘
+```
+
+*HSPA evolution (3.5G → 3.75G):*
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*Standard*], [*3GPP Rel.*], [*Peak DL*], [*Key Innovation*],
+  [UMTS R99], [Rel. 99], [384 kbps], [W-CDMA, dedicated channels],
+  [HSDPA], [Rel. 5 (2002)], [14.4 Mbps], [AMC + HARQ + 2ms TTI scheduling at Node B],
+  [HSUPA], [Rel. 6 (2004)], [5.76 Mbps UL], [Enhanced uplink dedicated channel],
+  [HSPA+], [Rel. 7/8 (2008)], [42 Mbps / 84 Mbps], [64-QAM, 2×2 MIMO, dual-carrier],
+)
+
+*HSDPA key innovations (why it was fast for its era):*
+- *AMC:* Node B selects modulation/coding scheme per-UE every 2ms based on CQI feedback
+- *HARQ (chase combining):* failed transmissions are stored and soft-combined, not discarded — effective SNR accumulates across retransmits
+- *Moved scheduler to Node B:* 3G RNC was too far (80-100ms RTT) to react to fast channel changes; 2ms TTI at Node B enabled channel-aware scheduling
+
+== 4G LTE / LTE-Advanced Architecture
+
+*LTE* (Long Term Evolution, 3GPP Rel. 8, 2008) is a clean-break architecture from 3G:
+
+- All-IP: voice over LTE (VoLTE) via SIP/RTP, no circuit-switched fallback
+- Flat RAN: eNodeB handles RRC, PDCP, RLC, MAC, PHY — RNC eliminated
+- Air interface: OFDMA (DL) / SC-FDMA (UL) — replaced CDMA entirely
+- Round-trip latency: ~10ms (vs 80-100ms UMTS)
+
+*LTE network architecture (EPC + E-UTRAN):*
+
+```
+┌───────────────────────────────────────────────────────────────┐
+│                   EPC (Evolved Packet Core)                    │
+│  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────────────┐   │
+│  │ MME  │  │  SGW │  │  PGW │  │ HSS  │  │ PCRF (QoS)   │   │
+│  └──┬───┘  └──┬───┘  └──┬───┘  └──────┘  └──────────────┘   │
+│     │S1-MME   │S1-U      │SGi (internet)                      │
+└─────┼─────────┼──────────┼────────────────────────────────────┘
+      │         │          │
+      └────┬────┘          │
+           │ S1 interface  │
+┌──────────┴───────────────────────────────────────────────────┐
+│                       E-UTRAN                                  │
+│  ┌──────────────────┐  X2  ┌──────────────────┐              │
+│  │    eNodeB        │──────│    eNodeB        │              │
+│  │  RRC, PDCP, RLC  │      │  RRC, PDCP, RLC  │              │
+│  │  MAC, PHY        │      │  MAC, PHY        │              │
+│  └────────┬─────────┘      └──────────────────┘              │
+└───────────┼──────────────────────────────────────────────────┘
+            │ LTE-Uu air interface
+       ┌────┴────┐
+       │   UE   │
+       └─────────┘
+```
+
+*Core functions:*
+- *MME:* Authentication (AKA protocol), attach/detach, handover signaling, paging
+- *SGW:* User-plane mobility anchor during intra-LTE handover; per-UE bearer tunnels (GTP-U)
+- *PGW:* IP address assignment, internet access, DPI, policy enforcement
+- *HSS:* Subscriber database (IMSI, encryption keys, service profiles — equivalent to HLR+AuC)
+
+*LTE air interface — OFDMA resource grid:*
+
+```
+Frequency
+  ▲
+  │  RB  RB  RB  RB  ...
+  │ ┌──┬──┬──┬──┬──┐
+  │ │  │  │  │  │  │  ← 12 subcarriers × 15 kHz = 180 kHz per RB
+  │ │  │  │  │  │  │
+  │ └──┴──┴──┴──┴──┘
+  │   ←── 0.5 ms slot ──→     2 slots = 1 TTI (1 ms subframe)
+  └──────────────────────────▶ Time
+
+Channel BW:  1.4   3    5   10   15   20  MHz
+# of RBs:     6   15   25   50   75  100
+Peak DL:   ~10  ~21  ~37  ~75 ~112 ~150 Mbps  (SISO, 64-QAM, R=1)
+```
+
+*Downlink scheduler (runs every 1ms TTI at eNodeB):*
+```cpp
+// Proportional Fair scheduler — balance throughput and fairness
+// CQI = channel quality indicator reported by UE every 5ms (1–15)
+void schedule_tti(vector<UE>& active_ues) {
+    for (UE& ue : active_ues) {
+        // Metric = instantaneous rate / average throughput
+        // → favors UEs with good channel AND starved UEs
+        ue.pf_metric = (double)cqi_to_mbps(ue.cqi)
+                       / ue.avg_throughput_mbps;
+    }
+    sort(active_ues, [](auto& a, auto& b) {
+        return a.pf_metric > b.pf_metric;
+    });
+    assign_resource_blocks(active_ues);
+}
+```
+
+*HARQ (Hybrid ARQ) in LTE:*
+- 8 parallel HARQ processes (hide 8ms HARQ RTT with pipelining)
+- *Chase combining:* retransmit same bits, combine soft values → +3 dB per retransmit
+- *Incremental Redundancy (IR):* retransmit different parity bits → each retransmit adds coding gain
+
+*LTE-Advanced (Rel. 10, 2011) enhancements:*
+
+#table(
+  columns: (auto, auto, auto),
+  [*Feature*], [*Peak Gain*], [*Mechanism*],
+  [Carrier Aggregation (CA)], [Up to 5×20 MHz = 1 Gbps DL], [Combine up to 5 component carriers (CC)],
+  [DL MIMO 8×8], [8x spatial streams], [8 TX antennas at eNodeB, codebook precoding],
+  [Heterogeneous Networks (HetNet)], [10x area capacity], [Macro + small cells + femtocells],
+  [eICIC], [30-40% cell-edge gain], [Almost Blank Subframes reduce macro interference on small cells],
+  [Relay nodes], [Coverage extension], [Wireless backhaul relay, no fibre needed],
+)
+
+*VoLTE (Voice over LTE, IMS-based):*
+- Dedicated GBR bearer (QCI 1): guaranteed bit rate, max 100ms one-way delay
+- Codec: AMR-WB (50–7000 Hz, 23.85 kbps) — wideband "HD Voice"
+- Setup: SIP INVITE over LTE → ~2s (vs 7s circuit-switched 3G)
+
+*Hands-on: LTE signal analysis:*
+
+```bash
+# ModemManager — check signal quality
+mmcli -m 0 --signal-get
+# Output:
+#   rsrp: -85.00 dBm    (> -90 good,  < -110 poor)
+#   rsrq: -12.00 dB     (> -10 good,  < -20 poor)
+#   sinr:  22.00 dB     (> 20 excellent)
+#   rssi: -65.00 dBm    (total received power)
+
+# Current access tech and band
+mmcli -m 0 | grep "access tech"
+
+# Force 4G-only (useful for testing)
+mmcli -m 0 --set-allowed-modes=4G
+
+# AT commands (raw modem, e.g. Qualcomm/Sierra)
+picocom -b 115200 /dev/ttyUSB2
+AT+CEREG?       # registration state (0,1 = registered home)
+AT+QNWINFO      # tech, band, ARFCN (e.g. LTE BAND 3, 1600)
+AT+QRSRP        # RSRP per carrier
+AT+QCAINFO      # carrier aggregation: PCC + SCCs
+```
+
+*LTE signal parameters guide:*
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*Metric*], [*Excellent*], [*Good*], [*Poor (edge)*],
+  [RSRP], [$>$ -80 dBm], [-80 to -100 dBm], [$<$ -110 dBm],
+  [RSRQ], [$>$ -10 dB], [-10 to -15 dB], [$<$ -20 dB],
+  [SINR], [$>$ 20 dB], [10 to 20 dB], [$<$ 0 dB],
+  [CQI], [12–15], [7–11], [1–6],
+)
+
+*LTE → 5G comparison:*
+
+#table(
+  columns: (auto, auto, auto),
+  [*Parameter*], [*LTE-A (Rel. 13)*], [*5G NR (Rel. 16)*],
+  [Peak DL], [1 Gbps], [20 Gbps],
+  [User-plane latency], [10-30 ms], [1-4 ms (URLLC: $<$ 1 ms)],
+  [Spectrum], [Sub-6 GHz], [Sub-6 GHz + mmWave (24-52 GHz)],
+  [Channel BW], [Up to 100 MHz (5-CC CA)], [Up to 400 MHz (mmWave)],
+  [MIMO], [8×8 DL], [Massive MIMO 32×32 to 64×64+],
+  [Subcarrier spacing], [Fixed 15 kHz], [Flexible: 15/30/60/120/240 kHz],
+  [Core], [EPC (monolithic, per-function VMs)], [5GC (service-based, cloud-native microservices)],
+  [Network slicing], [No], [Yes — E2E QoS slices per tenant/service],
+  [Device density], [~10K/km²], [1M/km² (mMTC)],
+)
+
 == 5G Architecture
 
 *5G (NR - New Radio) provides [3GPP Release 15+]:*
