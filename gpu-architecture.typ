@@ -131,6 +131,12 @@ Each section includes practical code examples, specific hardware numbers, and re
 #include "gpu-architecture/performance-optimization.typ"
 #pagebreak()
 
+#include "gpu-architecture/multi-gpu.typ"
+#pagebreak()
+
+#include "gpu-architecture/ml-workloads.typ"
+#pagebreak()
+
 #include "gpu-architecture/profiling.typ"
 #pagebreak()
 
