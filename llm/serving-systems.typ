@@ -496,7 +496,7 @@ For an 8k prompt: $0.5 times 8192 = 4096 "MB" slash 900 "GB/s" approx 4.5 "ms"$ 
 
 == Multi-LoRA Serving
 
-LoRA (Low-Rank Adaptation) adds small adapter matrices $A in RR^(r times d)$, $B in RR^(d times r)$ to each linear layer, where $r ll d$ (typically $r = 8$ to $64$). Fine-tuning only $A$ and $B$ while freezing base weights produces task-specific models with adapter size of ~10–50 MB vs 16 GB for the full model.
+LoRA (Low-Rank Adaptation) adds small adapter matrices $A in RR^(r times d)$, $B in RR^(d times r)$ to each linear layer, where $r lt.double d$ (typically $r = 8$ to $64$). Fine-tuning only $A$ and $B$ while freezing base weights produces task-specific models with adapter size of ~10–50 MB vs 16 GB for the full model.
 
 === Serving Multiple LoRA Adapters
 

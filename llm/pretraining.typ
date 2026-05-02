@@ -199,7 +199,7 @@ where $bold(q)$ is the one-hot target (all mass on $x_t$) and $bold(p) = "softma
 
 Perplexity is the standard intrinsic evaluation metric for language models. It measures how "surprised" the model is by held-out text:
 
-$ "PPL"(theta, cal(D)) = exp left( - 1/T sum_(t=1)^T log p_theta (x_t | x_{<t}) right) $
+$ "PPL"(theta, cal(D)) = exp(- 1/T sum_(t=1)^T log p_theta (x_t | x_(t-1))) $
 
 A model assigning uniform probability over $V$ tokens has perplexity $V$. Good models achieve single-digit perplexity on in-distribution text (LLaMA 3 70B: PPL $approx$ 2.85 on Wikitext-103). Lower is better.
 
@@ -448,7 +448,7 @@ The last term $eta lambda theta_t$ is the decoupled weight decay. Standard hyper
   [Weight decay],     [$lambda$],       [0.1],
   [Gradient clip],    [$g_"max"$],      [1.0],
   [Warmup steps],     [—],              [2000 (7B–70B)],
-  [Total steps],      [—],              [$sim 10^6$ for 1T tokens, batch 2048],
+  [Total steps],      [—],              [$tilde 10^6$ for 1T tokens, batch 2048],
 )
 
 === Learning Rate Schedule: Cosine with Warmup
@@ -611,10 +611,10 @@ ZeRO (Zero Redundancy Optimizer, Rajbhandari et al., 2020) eliminates the memory
 #table(
   columns: (auto, auto, auto, auto),
   [*Stage*], [*What is sharded*], [*Memory per GPU (70B)*], [*Extra communication*],
-  [DDP (stage 0)], [Nothing], [$sim 560$ GB], [All-reduce gradients],
-  [ZeRO-1],        [Optimizer states], [$sim 280$ GB], [All-reduce gradients],
-  [ZeRO-2],        [Optimizer states + gradients], [$sim 140$ GB], [Reduce-scatter grads],
-  [ZeRO-3 / FSDP], [Optimizer states + gradients + parameters], [$sim 20$ GB], [All-gather params + reduce-scatter grads],
+  [DDP (stage 0)], [Nothing], [$tilde 560$ GB], [All-reduce gradients],
+  [ZeRO-1],        [Optimizer states], [$tilde 280$ GB], [All-reduce gradients],
+  [ZeRO-2],        [Optimizer states + gradients], [$tilde 140$ GB], [Reduce-scatter grads],
+  [ZeRO-3 / FSDP], [Optimizer states + gradients + parameters], [$tilde 20$ GB], [All-gather params + reduce-scatter grads],
 )
 
 With ZeRO-3 / FSDP, each GPU holds $1/K$ of every tensor. Before a forward or backward pass through a given layer, the full layer weights are reconstructed via an _all-gather_; they are discarded immediately after use. Gradients are aggregated via _reduce-scatter_ (each rank keeps its shard of the reduced gradients).
@@ -785,9 +785,9 @@ Standard initialization (e.g., Kaiming normal) causes feature scale to change wi
 
 µP (Yang et al., 2022) parametrizes weights so that the _feature update scale_ is $O(1)$ independent of width. Key changes relative to standard parametrization:
 
-+ *Input weights:* $W_"in" sim cal(N)(0, 1)$ (no $1/d$ factor) — input embeddings and first-layer weights.
-+ *Hidden weights:* $W_"hidden" sim cal(N)(0, 1/d)$ and *learning rate scaled by $1/d$*: $eta_"hidden" = eta_"base" / d$.
-+ *Output weights:* $W_"out" sim cal(N)(0, 1/d)$ with learning rate $eta_"out" = eta_"base"$.
++ *Input weights:* $W_"in" tilde cal(N)(0, 1)$ (no $1/d$ factor) — input embeddings and first-layer weights.
++ *Hidden weights:* $W_"hidden" tilde cal(N)(0, 1/d)$ and *learning rate scaled by $1/d$*: $eta_"hidden" = eta_"base" / d$.
++ *Output weights:* $W_"out" tilde cal(N)(0, 1/d)$ with learning rate $eta_"out" = eta_"base"$.
 + *Attention logit scale:* use $1/d_k$ instead of $1/sqrt(d_k)$ (absorb into output projection scaling).
 
 *Why it matters:* with µP, you can tune hyperparameters on a small proxy model (e.g., 40M params) and transfer them to the large model (7B, 70B) without re-tuning. Microsoft's Cerebras-GPT and phi-2 use µP.

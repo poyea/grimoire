@@ -289,7 +289,7 @@ The autoregressive bottleneck is _latency_, not compute: each decode step requir
 2. Run the target model $p$ once on the $k$-token continuation. This single forward pass yields $p(x_t | "context")$ for all $k$ positions simultaneously.
 3. Accept token $x_i$ with probability:
 
-$ alpha_i = min left( 1, frac(p(x_i | x_1,...,x_(i-1)), q(x_i | x_1,...,x_(i-1))) right) $
+$ alpha_i = min(1, frac(p(x_i | x_1,...,x_(i-1)), q(x_i | x_1,...,x_(i-1)))) $
 
 4. If $x_i$ is rejected, sample a _correction token_ from:
 

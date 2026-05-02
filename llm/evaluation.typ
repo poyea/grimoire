@@ -138,7 +138,7 @@ Models are evaluated by selecting the answer token (A/B/C/D) with the highest pr
 
 #table(
   columns: (auto, auto, auto, auto),
-  [*Model*], [*0-shot*], [*5-shot*], [*\Delta*],
+  [*Model*], [*0-shot*], [*5-shot*], [*Delta*],
   [LLaMA 2 7B],      [45.3], [48.6], [+3.3],
   [LLaMA 3 8B],      [65.3], [68.4], [+3.1],
   [Mistral 7B v0.3], [59.7], [62.5], [+2.8],
@@ -211,7 +211,7 @@ The harness handles prompt construction, batching, and aggregation. Always pin t
 
 Running a single generation and checking correctness (Pass\@1) underestimates a model's true capability. Pass\@k measures whether _any_ of $k$ independent samples solves the problem.
 
-*Definition.* Let $n geq k$ total samples be drawn for a problem, of which $c$ are correct. The unbiased estimator of Pass\@k is:
+*Definition.* Let $n gt.eq k$ total samples be drawn for a problem, of which $c$ are correct. The unbiased estimator of Pass\@k is:
 
 $
 "Pass@"k = 1 - binom(n-c, k) / binom(n, k)

@@ -15,7 +15,7 @@ Full fine-tuning updates every parameter. For a 7B model at BF16 that is 14 GB o
 #table(
   columns: (auto, auto, auto, auto, auto),
   [*Method*], [*Trainable params*], [*7B GPU RAM*], [*70B GPU RAM*], [*Notes*],
-  [Full FT (BF16)],    [100%],        [$gt.eq$ 56 GB],  [$gt.eq$ 560 GB],  [Weights + grad + Adam states],
+  [Full FT (BF16)],    [100%],        [$>=$ 56 GB],  [$>=$ 560 GB],  [Weights + grad + Adam states],
   [LoRA (r=16)],       [~0.1–0.5%],   [~18 GB],         [~160 GB],         [Base frozen in BF16; LoRA in BF16],
   [QLoRA (r=16, NF4)], [~0.1–0.5%],   [~6–8 GB],        [~48 GB (2×24 GB)],[Base in 4-bit NF4; LoRA in BF16],
 )
@@ -30,7 +30,7 @@ Hu et al. (2022) observed that the weight updates $Delta W$ during fine-tuning h
 
 $ W' = W + (alpha / r) dot B A $
 
-where $A in RR^(r times k)$, $B in RR^(d times r)$, rank $r lt.lt min(d, k)$, and $alpha$ is a scaling hyperparameter. $A$ is initialized with random Gaussian, $B$ with zeros, so $Delta W = 0$ at initialization and training starts from the original model output.
+where $A in RR^(r times k)$, $B in RR^(d times r)$, rank $r lt.double min(d, k)$, and $alpha$ is a scaling hyperparameter. $A$ is initialized with random Gaussian, $B$ with zeros, so $Delta W = 0$ at initialization and training starts from the original model output.
 
 During forward pass the computation is:
 
@@ -222,7 +222,7 @@ $
 "LoRA grads:"               & quad 0.6 "GB" \
 "Adam states (LoRA only):"  & quad 0.6 times 2 = 1.2 "GB" \
 "Activations (2K ctx, ckpt):",&quad ~3 "GB per GPU" \
-"Total:"                    & quad ~38 "GB per GPU" quad (fits 2 times 48 "GB")
+"Total:"                    & quad ~38 "GB per GPU" quad ("fits" 2 times 48 "GB")
 $
 
 Without QLoRA the same job at BF16 would require $65 times 2 + 65 times 2 times 3 approx 520$ GB of GPU memory — eight 80 GB A100s minimum.

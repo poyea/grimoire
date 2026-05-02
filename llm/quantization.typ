@@ -55,11 +55,11 @@ which is bounded by $|epsilon| lt.eq s/2$.
 
 *Symmetric quantization* forces $z = 0$, mapping zero exactly and simplifying kernels:
 
-$ s = frac(max(|X|))(2^(b-1) - 1) $
+$ s = frac(max(|X|), 2^(b-1) - 1) $
 
 *Asymmetric quantization* uses the full integer range by centering on the actual data range $[x_"min", x_"max"]$:
 
-$ s = frac(x_"max" - x_"min")(2^b - 1), quad z = round(-x_"min" / s) $
+$ s = frac(x_"max" - x_"min", 2^b - 1), quad z = round(-x_"min" / s) $
 
 Asymmetric is more accurate when distributions are skewed (e.g., ReLU activations are non-negative). Symmetric is preferred for weights and for hardware that fuses zero-point subtraction.
 
@@ -147,13 +147,13 @@ where $X$ is the calibration input to that layer (collected in one forward pass)
 
 GPTQ builds on the Optimal Brain Surgeon (OBS) framework (Hassibi & Stork, 1993). For a full-precision weight matrix, the increase in loss from quantizing a single weight $w_q$ is approximated using the inverse Hessian:
 
-$ delta L = frac(1, 2) frac((w_q - "quant"(w_q))^2)([H_F^(-1)]_(q q)) $
+$ delta L = frac(1, 2) frac((w_q - "quant"(w_q))^2, [H_F^(-1)]_(q q)) $
 
 where $H_F = 2 X X^top$ is the layer Hessian (factor of 2 from the squared Frobenius loss) and $[H_F^(-1)]_(q q)$ is the $q$-th diagonal entry of its inverse.
 
 After quantizing weight $w_q$, the *OBS weight update* adjusts the remaining unquantized weights to compensate for the introduced error:
 
-$ delta w = - frac(w_q - "quant"(w_q))([H_F^(-1)]_(q q)) dot [H_F^(-1)]_(q, :) $
+$ delta w = - frac(w_q - "quant"(w_q), [H_F^(-1)]_(q q)) dot [H_F^(-1)]_(q, :) $
 
 This update is the key insight: quantizing in isolation produces irreversible error, but OBS lets each subsequent weight absorb the accumulated quantization error of all prior weights.
 
@@ -276,7 +276,7 @@ $ Y = X W = underbrace((X dot "diag"(s)^(-1)))_("easy to quantize") dot underbra
 
 The scale $s_j$ is set to balance quantization difficulty between $X$ and $W$:
 
-$ s_j = frac(max(|X_{:,j}|)^alpha)(max(|W_{j,:}|)^(1-alpha)) $
+$ s_j = frac(max(|X_{:,j}|)^alpha, max(|W_{j,:}|)^(1-alpha)) $
 
 The migration strength $alpha in [0, 1]$ controls the tradeoff. $alpha = 0.5$ works well empirically; $alpha = 1$ moves all difficulty to the weights (AWQ limit).
 
@@ -404,11 +404,11 @@ FP8 training achieves parity with BF16 on LLaMA-scale models with 1.5--2x throug
 
 === NormalFloat4 (NF4)
 
-Standard INT4 uniform quantization assumes a uniform distribution of weights. LLM weights, after pretraining, follow an approximately *normal distribution* $w sim cal(N)(0, sigma^2)$. NF4 (Dettmers et al., 2023) exploits this by mapping the 16 INT4 values to the quantile boundaries of a standard normal:
+Standard INT4 uniform quantization assumes a uniform distribution of weights. LLM weights, after pretraining, follow an approximately *normal distribution* $w tilde cal(N)(0, sigma^2)$. NF4 (Dettmers et al., 2023) exploits this by mapping the 16 INT4 values to the quantile boundaries of a standard normal:
 
-$ q_i = Phi^(-1)left(frac(i + 0.5)(16)right), quad i in {0, ..., 15} $
+$ q_i = Phi^(-1)(frac(i + 0.5, 16)), quad i in {0, ..., 15} $
 
-where $\Phi^(-1)$ is the normal quantile function (probit). Each weight is mapped to its nearest quantile value, producing a *minimum expected quantization error* for normally distributed weights. This is information-theoretically optimal for the assumed distribution.
+where $Phi^(-1)$ is the normal quantile function (probit). Each weight is mapped to its nearest quantile value, producing a *minimum expected quantization error* for normally distributed weights. This is information-theoretically optimal for the assumed distribution.
 
 The 16 NF4 quantile values (normalized to $[-1, 1]$) are stored as a lookup table; dequantization is a table lookup rather than a multiply, which is faster on CPU.
 
