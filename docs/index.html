@@ -107,14 +107,14 @@
 
     .status-bar span { color: var(--accent-dim); }
 
-    .ascii-title {
-      font-size: clamp(0.5rem, 1.4vw, 0.85rem);
-      color: var(--accent);
-      line-height: 1.2;
-      white-space: pre;
-      text-shadow: 0 0 8px rgba(74,255,106,0.5);
+    .logo-svg {
+      width: 100%;
+      max-width: 640px;
+      height: auto;
       margin-bottom: 1rem;
-      overflow-x: auto;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .tagline {
@@ -340,8 +340,7 @@
     .footer-right { text-align: right; }
 
     @media (max-width: 600px) {
-      .ascii-title { font-size: 0.45rem; }
-      .container { padding: 1.5rem 1rem 4rem; }
+.container { padding: 1.5rem 1rem 4rem; }
       footer { flex-direction: column; text-align: center; }
       .footer-right { text-align: center; }
     }
@@ -358,13 +357,34 @@
       <span>TERM:<span>VT220</span> &nbsp; ENC:<span>UTF-8</span> &nbsp; COL:<span>80</span></span>
     </div>
 
-    <pre class="ascii-title">
-  ██████╗ ██████╗ ██╗███╗   ███╗ ██████╗ ██╗██████╗ ███████╗
- ██╔════╝ ██╔══██╗██║████╗ ████║██╔═══██╗██║██╔══██╗██╔════╝
- ██║  ███╗██████╔╝██║██╔████╔██║██║   ██║██║██████╔╝█████╗
- ██║   ██║██╔══██╗██║██║╚██╔╝██║██║   ██║██║██╔══██╗██╔══╝
- ╚██████╔╝██║  ██║██║██║ ╚═╝ ██║╚██████╔╝██║██║  ██║███████╗
-  ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝     ╚═╝ ╚═════╝ ╚═╝╚═╝  ╚═╝╚══════╝</pre>
+    <svg class="logo-svg" viewBox="0 0 640 90" xmlns="http://www.w3.org/2000/svg" aria-label="GRIMOIRE">
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="letterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#a0ffb8"/>
+          <stop offset="100%" stop-color="#2a9a3a"/>
+        </linearGradient>
+      </defs>
+      <!-- Thin horizontal rule above -->
+      <line x1="0" y1="6" x2="640" y2="6" stroke="#1a2a1a" stroke-width="1"/>
+      <!-- Main letters -->
+      <text
+        x="50%"
+        y="68"
+        text-anchor="middle"
+        font-family="'Share Tech Mono', 'Courier New', monospace"
+        font-size="72"
+        font-weight="700"
+        letter-spacing="12"
+        fill="url(#letterGrad)"
+        filter="url(#glow)"
+      >GRIMOIRE</text>
+      <!-- Thin rule below -->
+      <line x1="0" y1="84" x2="640" y2="84" stroke="#1a2a1a" stroke-width="1"/>
+    </svg>
 
     <p class="tagline">Textbooks of magic for computer scientists. Permanently free. &nbsp;<span class="cursor"></span></p>
   </header>
