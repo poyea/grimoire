@@ -78,6 +78,8 @@ print(enc.decode(ids))  # round-trip
 
 A larger vocabulary reduces sequence length (lower compute) but increases the embedding matrix size and makes rare tokens harder to learn.
 
+*SentencePiece and Unigram LM.* SentencePiece (Kudo & Richardson, 2018 — used by LLaMA 1/2, Gemma, T5, mT5) is a tokenizer _framework_ that operates directly on raw Unicode strings (treating whitespace as a regular symbol, prefixed `▁`), so detokenization is fully reversible and language-agnostic. It supports both BPE and the _Unigram language model_ algorithm (Kudo, 2018) as alternatives. Unigram starts from a large seed vocabulary and iteratively prunes tokens that least increase the corpus likelihood under a unigram LM, yielding probabilistic segmentations (useful for subword regularization at training time). SentencePiece additionally enables _byte-fallback_: any token that fails to encode is decomposed into raw UTF-8 bytes (256 reserved ids), guaranteeing zero out-of-vocabulary tokens even on unseen scripts or emoji — the same property tiktoken achieves by starting from a byte-level base vocabulary.
+
 === Deduplication with MinHash
 
 Web-crawled data has massive duplication: the same news article, StackOverflow answer, or GitHub file appears hundreds of times. Training on duplicates wastes compute and causes memorization. MinHash LSH (Locality-Sensitive Hashing) deduplicates at scale.
@@ -262,15 +264,17 @@ with fitted constants $E = 1.61$, $A = 406.4$, $B = 410.7$, $alpha = 0.34$, $bet
 Compute $C$ is measured in FLOPs. For a dense transformer, $C approx 6 N D$ (forward + backward, ignoring attention and activations for simplicity).
 
 #table(
-  columns: (auto, auto, auto, auto, auto),
-  [*Compute budget C (FLOPs)*], [*Optimal N*], [*Optimal D (tokens)*], [*GPU-days (A100)*], [*Example*],
-  [$10^(21)$], [$1.3$ B],   [$26$ B],   [$2$],       [Small experiment],
-  [$10^(22)$], [$4$ B],    [$82$ B],   [$20$],      [—],
-  [$10^(23)$], [$12$ B],   [$260$ B],  [$200$],     [LLaMA 1 13B (approx)],
-  [$10^(24)$], [$37$ B],   [$820$ B],  [$2{,}000$], [Chinchilla 70B],
-  [$3 times 10^(24)$], [$67$ B], [$1.5$ T],  [$6{,}000$], [LLaMA 2 70B (approx)],
-  [$10^(25)$], [$120$ B],  [$2.6$ T],  [$20{,}000$],[LLaMA 3 70B (approx)],
+  columns: (auto, auto, auto, auto, auto, auto),
+  [*Compute budget C (FLOPs)*], [*Optimal N*], [*Optimal D (tokens)*], [*GPU-days (A100, 312 TF)*], [*GPU-days (H100, 989 TF)*], [*Example*],
+  [$10^(21)$], [$1.3$ B],   [$26$ B],   [$2$],       [$0.6$],    [Small experiment],
+  [$10^(22)$], [$4$ B],    [$82$ B],   [$20$],      [$6$],      [—],
+  [$10^(23)$], [$12$ B],   [$260$ B],  [$200$],     [$63$],     [LLaMA 1 13B (approx)],
+  [$10^(24)$], [$37$ B],   [$820$ B],  [$2{,}000$], [$630$],    [Chinchilla 70B],
+  [$3 times 10^(24)$], [$67$ B], [$1.5$ T],  [$6{,}000$], [$1{,}900$], [LLaMA 2 70B (approx)],
+  [$10^(25)$], [$120$ B],  [$2.6$ T],  [$20{,}000$],[$6{,}300$], [LLaMA 3 70B (approx)],
 )
+
+_Note:_ A100 numbers (312 TFLOPS BF16 dense) are kept for historical reference; H100 figures use 989 TFLOPS BF16 dense (1979 TFLOPS with 2:4 sparsity, roughly halving the H100 column when applicable). Real wall-clock days are 1.5–2$times$ these ideal-MFU numbers.
 
 _Note:_ LLaMA 3 8B trains on 15T tokens — deliberately far past Chinchilla-optimal for a small model, optimizing _inference_ cost at a fixed serving budget rather than training cost. This "overtrain small models" strategy is practical when models are deployed at scale.
 
@@ -374,7 +378,7 @@ $ 32 times 4 times 8192 times 4096 times 2 " bytes" approx 8 " GB " $
 
 just for the residual stream — before attention matrices. Full activation memory for a forward pass is $O(B S d_"ffn") times L approx 60$–$80$ GB.
 
-*Gradient checkpointing* (Chen et al., 2016) reduces this to $O(sqrt(L))$ by storing only a subset of layer outputs (the _checkpoints_) and recomputing the others during the backward pass. The tradeoff: recomputation adds approximately 33% to total FLOPs.
+*Gradient checkpointing* (Chen et al., 2016) reduces the per-activation layer-count factor from $O(L)$ to $O(sqrt(L))$ by storing only a subset of layer outputs (the _checkpoints_) and recomputing the others during the backward pass. The full activation memory therefore scales as $O(sqrt(L) dot B dot S dot d)$ — the $sqrt(L)$ is the layer-axis savings, while batch size $B$, sequence length $S$, and hidden width $d$ still enter linearly. The tradeoff: recomputation adds approximately 33% to total FLOPs.
 
 === PyTorch Example
 
@@ -790,7 +794,7 @@ Standard initialization (e.g., Kaiming normal) causes feature scale to change wi
 + *Output weights:* $W_"out" tilde cal(N)(0, 1/d)$ with learning rate $eta_"out" = eta_"base"$.
 + *Attention logit scale:* use $1/d_k$ instead of $1/sqrt(d_k)$ (absorb into output projection scaling).
 
-*Why it matters:* with µP, you can tune hyperparameters on a small proxy model (e.g., 40M params) and transfer them to the large model (7B, 70B) without re-tuning. Microsoft's Cerebras-GPT and phi-2 use µP.
+*Why it matters:* with µP, you can tune hyperparameters on a small proxy model (e.g., 40M params) and transfer them to the large model (7B, 70B) without re-tuning. Most production open-weights models (LLaMA, Mistral) do not use µP publicly; phi-2 and phi-3 explicitly use it, as does Cerebras-GPT.
 
 ```python
 # mup library (Yang et al.) — drop-in replacement for nn.Linear

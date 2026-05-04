@@ -342,7 +342,7 @@ E4M3 provides finer resolution near zero at the cost of smaller dynamic range �
 
 === H100 Transformer Engine
 
-NVIDIA's Transformer Engine (TE) on H100 and later hardware executes FP8 GEMM in hardware at up to 4 PFLOPS (2x BF16 throughput). TE uses *dynamic per-tensor scaling*: a delayed scaling mechanism maintains a history of activation maximums and selects the scale factor to maximize FP8 dynamic range utilization without overflow.
+NVIDIA's Transformer Engine (TE) on H100 and later hardware executes FP8 GEMM in hardware. The H100 SXM achieves approximately 1979 TFLOPS dense / 3958 TFLOPS sparse (roughly 2 PFLOPS dense, 4 PFLOPS with 2:4 structured sparsity) at FP8 — about 2x BF16 throughput. TE uses *dynamic per-tensor scaling*: a delayed scaling mechanism maintains a history of activation maximums and selects the scale factor to maximize FP8 dynamic range utilization without overflow.
 
 Per-tensor scaling is the default; per-channel (per-row) scaling trades a small kernel overhead for higher accuracy on outlier-heavy activations.
 
@@ -397,6 +397,8 @@ w_fp8  = (w_fp32 / scale).to(torch.float8_e4m3fn)
 w_dq   = w_fp8.to(torch.float32) * scale
 print(f"Max abs error: {(w_fp32 - w_dq).abs().max():.6f}")
 ```
+
+_Note:_ For training, prefer `transformer_engine.pytorch` autocast — it handles delayed scaling and amax history. Raw `to(torch.float8_e4m3fn)` is only safe for inference weight storage.
 
 FP8 training achieves parity with BF16 on LLaMA-scale models with 1.5--2x throughput gain on H100.
 
@@ -481,7 +483,7 @@ KV activations exhibit different outlier structure than weight matrices:
 - *Per-token scaling:* one scale per token position. Captures temporal outliers (e.g., the first token "attention sink" phenomenon). Low metadata overhead.
 - *Per-channel scaling:* one scale per head-dimension channel. Captures the spatial channel outliers dominant in keys. Higher accuracy but requires storing $d_"head"$ scales per layer.
 
-Recent work (Kang et al., 2024) shows per-channel KV scaling recovers 90% of the FP16 accuracy gap at INT4 vs. FP8, making INT4 KV cache viable for long-context deployment.
+Recent work — KIVI (Liu et al., 2024, ICML) for 2-bit KV with per-channel keys and per-token values — shows per-channel KV scaling recovers most of the FP16 accuracy gap at low bit-widths, making sub-INT4 KV cache viable for long-context deployment. FP8 KV cache is supported in TensorRT-LLM and vLLM.
 
 === KV Cache Quantization Impact
 

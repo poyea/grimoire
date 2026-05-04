@@ -225,6 +225,8 @@ $
 "Total:"                    & quad ~38 "GB per GPU" quad ("fits" 2 times 48 "GB")
 $
 
+_Headroom note:_ peak memory can exceed the static estimate when paged optimizer states spill to CPU under fragmentation, when activation checkpointing is partially disabled, or when sequence length exceeds 2K. Budget +15–20% headroom per GPU to avoid OOM on long-context batches.
+
 Without QLoRA the same job at BF16 would require $65 times 2 + 65 times 2 times 3 approx 520$ GB of GPU memory — eight 80 GB A100s minimum.
 
 === bitsandbytes QLoRA Setup
@@ -469,7 +471,9 @@ This is the entire loss: two forward passes (on winner and loser), no reward mod
 
 The key insight is that the optimal reward $r^*(x,y)$ under the RLHF objective is a deterministic function of the optimal policy $pi^*$ and the reference policy $pi_"ref"$. DPO directly optimizes $pi_theta$ to be this optimal policy, bypassing the intermediate reward model entirely. The reference policy $pi_"ref"$ (kept frozen) serves as a regularizer that prevents the trained policy from degenerating to out-of-distribution text.
 
-$beta$ controls the strength of the KL constraint: small $beta$ (e.g. 0.01–0.1) allows large deviation from $pi_"ref"$, large $beta$ keeps the model close to SFT. Typical values are $beta in [0.01, 0.5]$.
+$beta$ controls the strength of the KL constraint: small $beta$ allows large deviation from $pi_"ref"$, large $beta$ keeps the model close to SFT. Practical range: $beta in [0.1, 0.5]$. Values $beta < 0.05$ risk mode collapse (the policy drifts far from the reference and produces degenerate, overconfident outputs); values $beta > 1.0$ underfit the preference signal because the KL term dominates the gradient.
+
+*Common failure mode.* If the reference model $pi_"ref"$ is weak or undertrained (e.g., SFT did not converge, or the reference is a base model rather than an SFT model), DPO can train an _overconfident_ policy whose probability mass diverges sharply from the reference distribution: the implicit reward $beta log(pi_theta / pi_"ref")$ grows without a useful regularization anchor. Always validate with held-out preference accuracy (the `accuracy` diagnostic returned in the training step below); if it climbs to 100% on the train set while held-out accuracy regresses, the policy is overfitting the preference noise.
 
 === PyTorch DPO Training Step
 

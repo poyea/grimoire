@@ -153,10 +153,10 @@ for chunk in stream:
 #table(
   columns: (auto, auto, auto, auto),
   [*Workload*], [*Batch size*], [*Throughput (tok/s)*], [*Notes*],
-  [Offline (ShareGPT)], [256], [~18,000], [vLLM benchmark, max throughput],
+  [Offline (ShareGPT)], [256], [~18,000], [LLaMA 3 8B, A100 80GB, in=128/out=128, vLLM v0.6+],
   [Online (TTFT \u{2264} 500 ms)], [32–64], [~8,000–11,000], [SLA-constrained],
   [Long context (8k prompt)], [16], [~5,000], [prefill dominates],
-  [TensorRT-LLM (same HW)], [256], [~24,000], [compiled graph + FP8],
+  [TensorRT-LLM (same HW)], [256], [~24,000], [LLaMA 3 8B FP8, H100 80GB, in=128/out=128, batch=256],
 )
 
 Numbers from vLLM benchmark suite (v0.4.x) and NVIDIA NIM documentation. Throughput scales roughly linearly with GPU count for tensor-parallel up to 8× H100.
@@ -234,7 +234,7 @@ outputs = runner.generate(
 print(outputs.output_ids)
 ```
 
-The compiled FP8 engine on a single H100 achieves approximately 24,000 tokens/s output throughput for LLaMA 3 8B at batch size 256, versus ~18,000 for vLLM BF16 — a ~1.3× gain from quantization and kernel fusion combined.
+The compiled FP8 engine on a single H100 80GB achieves approximately 24,000 tokens/s output throughput for LLaMA 3 8B at batch size 256 (input=128/output=128, FP8 weights+activations), versus ~18,000 for vLLM BF16 under comparable conditions — a ~1.3× gain from quantization and kernel fusion combined.
 
 == TGI (Text Generation Inference)
 
@@ -488,7 +488,7 @@ For an 8k prompt: $0.5 times 8192 = 4096 "MB" slash 900 "GB/s" approx 4.5 "ms"$ 
 
 === System Examples
 
-*Mooncake* (Moonshot AI, 2024): disaggregated architecture deployed in production. Prefill and decode pools scale independently; the router directs requests based on prompt length. Reports 2–5× improvement in decode throughput vs. co-located serving.
+*Mooncake* (Moonshot AI, 2024): disaggregated architecture deployed in production. Prefill and decode pools scale independently; the router directs requests based on prompt length. Reports 2–5× improvement (prefill throughput on long-context workloads, vs. colocated prefill+decode; Qin et al. 2024).
 
 *DistServe* (Peking University, 2024): formal analysis of P/D disaggregation showing that optimal GPU ratio (prefill:decode) depends on the prompt-to-output length ratio of the workload. For chatbot workloads (short prompt, long output): 1:3 ratio is typical.
 
@@ -546,7 +546,7 @@ void batched_lora_forward(
 }
 ```
 
-*Throughput:* S-LoRA on a single A100 80 GB serves up to 2,000 distinct LoRA adapters concurrently, achieving throughput within 10% of serving a single adapter (no LoRA). Adapter switching latency (CPU-to-GPU transfer for a cold adapter) is ~5–20 ms for a 30 MB adapter over PCIe 4.0.
+*Throughput:* S-LoRA on a single A100 80 GB serves up to 2,000 distinct LoRA adapters concurrently, with $lt.eq$10% throughput drop vs. single-adapter serving at batch=64; degrades further at higher rank or with many concurrent adapters (Sheng et al., 2023). Adapter switching latency (CPU-to-GPU transfer for a cold 30 MB adapter over PCIe 4.0) is ~5–15 ms (theoretical 3.75 ms at 8 GB/s + driver/launch overhead).
 
 == SLA-Aware Scheduling
 

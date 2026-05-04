@@ -131,7 +131,7 @@ def reward_model_step(
 *Practical notes:*
 - Reward models are sensitive to prompt/response formatting; use identical tokenization as SFT.
 - Add a mean-zero regularization term $lambda dot bb(E)[r^2]$ to prevent reward scale drift.
-- Typical accuracy on held-out preference pairs: 65–75\% for human-level annotators; 70–80\% for a well-trained reward model.
+- Typical accuracy on held-out preference pairs: 65–75\% for human-level annotators; 70–80\% for a well-trained reward model on Anthropic HH-style data. Harder reasoning preferences (math correctness, code) reach 85–90\%, while subjective helpfulness can drop to ~65\%. See Bai et al. (2022) and Stiennon et al. (2020) for representative numbers.
 
 == PPO in the LLM Context
 
@@ -336,8 +336,7 @@ def sequence_log_prob(model, input_ids, attention_mask, response_mask):
     response_mask: 1 for response tokens, 0 for prompt tokens.
     Returns: (batch,) tensor of sum log-probs.
     """
-    with torch.no_grad() if not model.training else torch.enable_grad():
-        logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
+    logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
     # Shift: predict token t from tokens 0..t-1
     log_probs = F.log_softmax(logits[:, :-1, :], dim=-1)  # (B, T-1, V)
     target_ids = input_ids[:, 1:]                          # (B, T-1)
@@ -513,9 +512,17 @@ def grpo_step(
 
 *GRPO in DeepSeek-R1:* Uses verifiable rewards (math/code correctness), which are binary (0 or 1). The group normalization is particularly effective here: within a group of 8 rollouts, correct solutions get advantage $approx +1$ and incorrect solutions get $approx -1$, naturally calibrating the update magnitude.
 
+*Continuous rewards:* GRPO works with continuous rewards too — the group-normalized advantage $(r - "mean") / "std"$ handles any reward scale; binary 0/1 is just the common RLVR (reinforcement learning from verifiable rewards) case. Continuous reward signals (e.g., partial credit on math, graded code quality scores, learned preference rewards) plug in unchanged.
+
 == Constitutional AI and RLAIF
 
-Constitutional AI (Anthropic, 2022) addresses a bottleneck in RLHF: the cost of collecting human preference labels at scale. Two key ideas:
+Constitutional AI (Anthropic, 2022) addresses a bottleneck in RLHF: the cost of collecting human preference labels at scale. The full pipeline has three stages:
+
+1. *SFT with critique-revise self-improvement:* Start from a helpful-only model. For each prompt, the model produces a response, then critiques it against a constitutional principle and revises. The (prompt, revised response) pairs form the SFT dataset.
+2. *AI preference labeling:* Sample pairs of responses and prompt the (helpful-only) feedback model to choose the one that better satisfies the constitution, generating a preference dataset without human raters.
+3. *Reward model + RLAIF:* Train a reward model on the AI-generated preferences and run RLHF as usual — but with AI-labeled rewards (RLAIF) instead of human-labeled ones.
+
+The key idea underlying the pipeline is replacing human raters with AI-generated preferences (RLAIF), guided by an explicit list of principles ("constitution").
 
 === RLAIF: AI-Generated Preference Labels
 

@@ -424,7 +424,7 @@ def elo_update(
 
 In practice, Arena uses maximum-likelihood estimation over the entire battle history rather than incremental updates, which gives more stable rankings. Bootstrap resampling provides confidence intervals.
 
-=== Chatbot Arena Leaderboard (Approximate, Early 2025)
+=== Chatbot Arena Leaderboard (snapshot as of 2025-03; live leaderboard at lmarena.ai)
 
 #table(
   columns: (auto, auto, auto),
@@ -647,7 +647,7 @@ def ngram_overlap(text: str, corpus_ngrams: set, n: int = 13) -> float:
 
 === Min-k% Probability Method
 
-*Min-k% Prob* (Shi et al., 2024) does not require access to training data. Instead, it exploits the observation that memorized text has uniformly high token probabilities, while novel text has some low-probability tokens. The score is the mean log-probability of the bottom $k$% of tokens in the sequence:
+*Min-k% Prob* (Shi et al., 2024 — _Detecting Pretraining Data from Large Language Models_) does not require access to training data. Instead, it exploits the observation that memorized text has uniformly high token probabilities, while novel text has some low-probability tokens. The score is the mean log-probability of the bottom $k$% of tokens in the sequence:
 
 ```python
 def min_k_prob(

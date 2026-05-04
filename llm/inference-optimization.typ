@@ -385,7 +385,7 @@ def speculative_step(
 *Practical notes:*
 - Draft and target must share the same tokenizer.
 - The draft model should be 5–10x smaller (e.g., Llama 3 8B drafts for Llama 3 70B).
-- Acceptance rate depends on task: $alpha approx 0.7$–$0.9$ for typical chat, lower for creative writing.
+- Acceptance rate depends strongly on task: chat/general $alpha approx 0.6$–$0.8$; code completion $approx 0.75$–$0.9$; reasoning/math $approx 0.5$–$0.7$; highly structured generation (JSON, fixed templates) can exceed $0.9$. Creative writing sits at the low end.
 - Batched speculative decoding requires rejecting differently across batch elements; implementations maintain per-sequence state.
 
 == Continuous Batching
@@ -418,7 +418,7 @@ New requests undergo prefill (which is compute-bound) interleaved with decode st
 #table(
   columns: (auto, auto, auto),
   [*Metric*], [*Static batching*], [*Continuous batching*],
-  [GPU utilization],    [40–60\%], [80–95\%],
+  [GPU utilization],    [30–50\% (variable seq lengths, padding waste)], [70–90\%],
   [Padding overhead],   [20–50\%], [~0\%],
   [Throughput (tok/s)], [baseline], [2–4x higher],
   [Scheduling unit],    [request], [iteration],
@@ -744,6 +744,8 @@ def init_tp(tp_size: int = 8) -> dist.ProcessGroup:
 
 *NVLink bandwidth:* A100/H100 NVLink provides 600 GB/s bidirectional bandwidth. An all-reduce for a 4096-dimensional vector at bf16 across 8 GPUs transfers $2 times (8-1)/8 times 4096 times 2 approx 14$ KiB — well under 10 µs, negligible relative to the GEMM itself.
 
+*Practical scaling limits:* Real NVLink all-reduce achieves only $approx 80%$ of theoretical bandwidth due to protocol overhead and ring/tree algorithm inefficiencies. TP $> 8$ typically requires NVSwitch (within an HGX node) or crosses node boundaries onto InfiniBand, where latency is 5–10$times$ higher and per-step all-reduce cost can dominate the GEMM. Most production deployments cap TP at 8 and combine with pipeline or expert parallelism beyond that.
+
 == Metrics and Measurement
 
 === Definitions
@@ -790,23 +792,44 @@ class LatencyMeter:
     def measure_itl(self, model,
                     input_ids: torch.Tensor,
                     n_tokens: int = 50) -> tuple[float, float]:
-        """Returns (mean_itl_ms, throughput_tok_per_sec)."""
-        token_times = []
+        """
+        ITL = (T_total - TTFT) / (n_output_tokens - 1).
+
+        We time the prefill (TTFT) and the full generation of n_tokens output
+        tokens, then derive ITL as the average inter-token gap across the
+        n_tokens-1 transitions between consecutive output tokens. This matches
+        how online serving systems report ITL — it is *not* simply the time of
+        the last decode step.
+        """
         ctx = input_ids
+        # --- TTFT: prefill timing ---
+        t_prefill_start = torch.cuda.Event(enable_timing=True)
+        t_prefill_end   = torch.cuda.Event(enable_timing=True)
+        torch.cuda.synchronize()
         with torch.no_grad():
-            _ = model(ctx)   # prefill
+            t_prefill_start.record()
+            _ = model(ctx)
+            t_prefill_end.record()
+            torch.cuda.synchronize()
+        ttft_ms = t_prefill_start.elapsed_time(t_prefill_end)
+
+        # --- Total decode timing for n_tokens output tokens ---
+        t_total_start = torch.cuda.Event(enable_timing=True)
+        t_total_end   = torch.cuda.Event(enable_timing=True)
+        with torch.no_grad():
+            t_total_start.record()
             for _ in range(n_tokens):
-                t0 = torch.cuda.Event(enable_timing=True)
-                t1 = torch.cuda.Event(enable_timing=True)
-                t0.record()
                 logits = model(ctx[:, -1:])
                 next_tok = logits[:, -1, :].argmax(-1, keepdim=True)
                 ctx = torch.cat([ctx, next_tok], dim=1)
-                t1.record()
-                torch.cuda.synchronize()
-                token_times.append(t0.elapsed_time(t1))
+            t_total_end.record()
+            torch.cuda.synchronize()
+        decode_total_ms = t_total_start.elapsed_time(t_total_end)
 
-        mean_itl = sum(token_times) / len(token_times)
+        # ITL is the mean inter-token gap: there are (n_tokens - 1) gaps
+        # between n_tokens output tokens.
+        assert n_tokens >= 2
+        mean_itl = decode_total_ms / (n_tokens - 1)
         throughput = 1000.0 / mean_itl   # tokens/sec
         return mean_itl, throughput
 ```
@@ -816,10 +839,10 @@ class LatencyMeter:
 #table(
   columns: (auto, auto, auto, auto, auto),
   [*System*], [*Model*], [*Hardware*], [*Throughput (tok/s/GPU)*], [*TTFT (ms)*],
-  [vLLM 0.4], [LLaMA 3 70B], [8x H100], [2 800], [60–120],
+  [vLLM 0.6+], [LLaMA 3 70B], [8x H100], [2 800], [60–120],
   [TensorRT-LLM], [LLaMA 3 70B], [8x H100], [3 400], [40–80],
   [naive static], [LLaMA 3 70B], [8x H100], [900], [200–600],
-  [vLLM 0.4], [LLaMA 3 8B], [1x H100], [4 200], [15–40],
+  [vLLM 0.6+], [LLaMA 3 8B], [1x H100], [4 200], [15–40],
 )
 
 Numbers are approximate; vary with batch size, sequence length, and prefill ratio.

@@ -58,7 +58,7 @@ total = sum(p.numel() for p in model.parameters())
 print(f"{total/1e9:.2f}B params")   # → 8.03B params
 ```
 
-*FLOPs conventions:* one MAC = 2 FLOPs. Training FLOPs $approx 6 N T$ where $N$ = params, $T$ = tokens.
+*FLOPs conventions:* one MAC = 2 FLOPs (by convention; tensor cores fuse MAC and report differently — NVIDIA marketing FLOPS counts one MAC as 2 FLOPs). Training FLOPs $approx 6 N T$ where $N$ = params, $T$ = tokens.
 
 *Token conventions:*
 - 1 token $approx$ 0.75 English words

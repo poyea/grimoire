@@ -79,7 +79,7 @@ Output proj:      2 × L × d_model²             FLOPs
 
 The $O(L^2)$ term dominates for long contexts. Flash Attention avoids materializing the $L times L$ matrix in HBM — see _gpu-architecture/ml-workloads.typ_.
 
-*PyTorch 2.0+ dispatches to Flash Attention automatically:*
+*PyTorch 2.0+ dispatches to Flash Attention automatically* (Flash Attention 2 backend: PyTorch ≥ 2.2, CUDA, fp16/bf16, head_dim ≤ 256):
 ```python
 import torch.nn.functional as F
 
@@ -128,7 +128,7 @@ Each head learns different patterns: local context, syntactic dependencies, core
 
 == Grouped Query Attention (GQA) and Multi-Query Attention (MQA)
 
-*Problem:* MHA KV cache size = $2 times n_"heads" times L times d_"head"$ floats per layer. LLaMA 2 70B at $L=4096$: 2 × 64 × 4096 × 128 × 2B ≈ 8.6 GB/layer — unacceptable.
+*Problem:* MHA KV cache size per layer = $2 times n_"heads" times L times d_"head" times "batch" times "bytes"$. LLaMA 2 70B (n_layers=80, n_heads=64, d_head=128) at $L=4096$, batch=1, fp16 (2 B): per layer $= 2 times 64 times 4096 times 128 times 1 times 2 = 134,217,728$ B $approx 128$ MB; across 80 layers $approx 10.0$ GB. With GQA ($n_"kv"=8$): per layer $= 2 times 8 times 4096 times 128 times 1 times 2 approx 16$ MB; total $approx 1.25$ GB (8× reduction). At batch=2 the GQA total is $approx 2.68$ GB ($approx 34$ MB/layer).
 
 *MQA* (Shazeer 2019): single K and V head shared by all Q heads. KV cache ÷ $n_"heads"$.
 
@@ -192,7 +192,7 @@ Only the difference $n - m$ appears — true relative encoding with no explicit 
 def build_rope_cache(max_len: int, d_head: int,
                      theta_base: float = 500_000.0,
                      device=None):
-    # LLaMA 3 uses theta_base=500000 (vs original 10000)
+    # original RoPE uses 10000; LLaMA 3 uses 500000
     i = torch.arange(0, d_head, 2, device=device).float()
     inv_freq = 1.0 / (theta_base ** (i / d_head))        # [d_head/2]
     t = torch.arange(max_len, device=device).float()
@@ -439,7 +439,7 @@ Compresses the KV cache via low-rank projection. Instead of caching $n_"kv" time
 
 $ c_t = W^(D K V) h_t, quad K_t = W^(U K) c_t, quad V_t = W^(U V) c_t $
 
-93% KV cache reduction vs MHA at similar quality. Trade-off: additional matrix multiplies per decode step.
+DeepSeek-V2 uses $d_c = 512$ for the KV-compression latent and $d_c' = 1536$ for a separate query-compression latent (with $d_"model" = 5120$, $n_"heads" = 128$, $d_"head" = 128$). Per-token cache comparison: standard MHA stores $2 times n_"heads" times d_"head" = 2 times 128 times 128 = 32,768$ values; MLA stores $d_c + d_"head"^R = 512 + 64 = 576$ values (the $d_"head"^R = 64$ is the decoupled RoPE key) — roughly a 57× reduction, i.e. ~93% KV cache savings vs MHA at similar quality. Trade-off: additional matrix multiplies per decode step.
 
 ```python
 class MultiHeadLatentAttention(nn.Module):
