@@ -30,8 +30,11 @@ int main() {
         int client = accept(server, NULL, NULL);
 
         pthread_t thread;
-        pthread_create(&thread, NULL, handle_client, &client);
+        int* client_arg = malloc(sizeof(int));  // heap-allocate; pass &client would dangle
+        *client_arg = client;
+        pthread_create(&thread, NULL, handle_client, client_arg);
         pthread_detach(thread);
+        // handle_client must free(client_arg) after copying out the fd
     }
 }
 ```

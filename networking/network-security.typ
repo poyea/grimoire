@@ -412,7 +412,7 @@ Cipher:    chacha20-poly1305@openssh.com       ← preferred (AEAD, no IV reuse 
 MAC:       (unused when AEAD cipher selected)
 ```
 
-*sntrup761x25519* is a hybrid: NIST-curve ECDH combined with NTRU Prime lattice KEM. Provides post-quantum security — a future quantum computer cannot retroactively decrypt sessions (harvest-now-decrypt-later attack mitigated).
+*sntrup761x25519* is a hybrid KEM: classical X25519 ECDH (Curve25519, non-NIST) combined with NTRU Prime lattice KEM (sntrup761). The post-quantum resistance comes from NTRU Prime; X25519 provides classical fallback so the hybrid is at least as secure as today's X25519 even if the lattice scheme is broken. Mitigates harvest-now-decrypt-later attacks.
 
 *Disable legacy algorithms in `sshd_config`:*
 ```

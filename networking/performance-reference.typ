@@ -39,7 +39,7 @@ Quick reference for network latency, throughput, and CPU costs.
 
 *Single TCP connection theoretical max:*
 ```
-Throughput = WindowSize / RTT
+Throughput = WindowSize / RTT  // window-limited regime, no loss, no slow-start
 
 Example: 10MB window, 50ms RTT
 = 10 × 8 Mbit / 0.05s = 1.6 Gbps
@@ -106,11 +106,13 @@ Example: 10MB window, 50ms RTT
 #table(
   columns: (auto, auto, auto, auto),
   [*Coalesce Time*], [*Latency*], [*PPS*], [*CPU % (10G)*],
-  [0 (no coalesce)], [2-3 μs], [14.88M], [40-50%],
+  [0 (no coalesce)], [2-3 μs], [14.88M (line rate)], [40-50%],
   [10 μs], [10-15 μs], [100K], [5-10%],
   [50 μs], [50-70 μs], [20K], [1-3%],
   [100 μs], [100-150 μs], [10K], [\<1%],
 )
+
+_PPS column is the *line rate* the NIC can deliver at the given coalesce setting; the kernel's actual per-packet handling cost (~1–2 µs per packet via the link layer's softirq path) caps a single core well below 14.88M PPS in practice. To approach line rate, use kernel bypass (DPDK, XDP) — see the kernel-bypass chapter._
 
 *Tradeoff:* Low latency requires high CPU. Tune based on workload.
 

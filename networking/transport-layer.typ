@@ -219,6 +219,8 @@ BBR cwnd evolution (same scenario):
   [Loss Sensitivity], [High], [Low], [Very High], [Low],
 )
 
+_Throughput numbers are time-averages over the loss-recovery cycle (assumed ~1% periodic loss). CUBIC peaks near link rate just before loss but spends most of its time in the slow cubic-regrowth region; the 65% utilization at 10G corresponds to recovery taking ~40 RTTs (the K inflection point) at the BDP cwnd above. BBR ignores loss as a congestion signal and stays near max-bandwidth probe._
+
 *Fairness note:* BBRv1 can starve CUBIC flows on shared bottlenecks (BBR claims ~40% more bandwidth). BBRv2 [2019] adds explicit loss reaction and ECN support to coexist fairly with loss-based algorithms.
 
 *Enable BBR:*

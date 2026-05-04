@@ -30,7 +30,7 @@ example   google   wikipedia  apache   cloudflare ...  (Second-level domains)
 www  mail                                              (Subdomains)
 ```
 
-*13 root server clusters:* A through M (anycast, hundreds of physical servers globally).
+*13 root server identities (A–M letters):* each letter is a *cluster*, served by hundreds of anycast instances — ~1900+ physical instances worldwide as of 2024 (root-servers.org). The "13 servers" framing reflects the original IPv4 UDP 512-byte response constraint, not the actual server count.
 
 == DNS Resolution Process
 

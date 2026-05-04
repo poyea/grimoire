@@ -210,7 +210,7 @@ io_uring_cqe_seen(&ring, cqe);
 
 == Hardware Support - DMA
 
-*Direct Memory Access:* NIC transfers data directly to/from RAM, bypassing CPU.
+*Direct Memory Access:* NIC transfers data directly to/from RAM, bypassing the CPU on the *data path*. The CPU still programs DMA descriptors (ring entries pointing at physical buffers) and handles the completion interrupt — only the byte-by-byte data movement is offloaded.
 
 ```cpp
 // Kernel allocates DMA-capable memory (physically contiguous)

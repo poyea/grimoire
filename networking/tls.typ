@@ -340,6 +340,7 @@ struct TicketStore {
 SSL_CTX* create_tls13_context() {
     // Create TLS 1.3 context
     SSL_CTX* ctx = SSL_CTX_new(TLS_server_method());
+    if (!ctx) { ERR_print_errors_fp(stderr); return NULL; }
 
     // Set minimum version to TLS 1.2, prefer TLS 1.3
     SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
@@ -391,10 +392,10 @@ SSL_CTX* create_tls13_context() {
   columns: (auto, auto, auto, auto),
   [*Cipher Suite*], [*Handshake Cost*], [*Bulk Throughput*], [*Notes*],
   [RSA + AES-128-CBC + SHA-256], [~1ms RSA-2048], [~3 GB/s (AES-NI)], [No forward secrecy],
-  [ECDHE-RSA + AES-128-GCM], [~0.5ms ECDHE P-256], [~5 GB/s (AES-NI + GHASH)], [TLS 1.2 recommended],
+  [ECDHE-RSA + AES-128-GCM (TLS 1.2)], [~0.5ms ECDHE P-256], [~5 GB/s (AES-NI + GHASH)], [Legacy interop only],
   [ECDHE-ECDSA + AES-256-GCM], [~0.3ms ECDSA P-256], [~4.5 GB/s], [Fastest handshake with ECC certs],
   [ECDHE + ChaCha20-Poly1305], [~0.5ms], [~2 GB/s (no HW accel)], [Better on mobile/ARM without AES-NI],
-  [X25519 + AES-256-GCM], [~0.15ms X25519], [~4.5 GB/s], [TLS 1.3 default on most servers],
+  [X25519 + AES-256-GCM (TLS 1.3)], [~0.15ms X25519], [~4.5 GB/s], [Modern default],
 )
 
 _Note: throughput measured on Xeon Skylake with AES-NI. ARM devices without hardware AES see ChaCha20 outperform AES-GCM by 2-3x._
