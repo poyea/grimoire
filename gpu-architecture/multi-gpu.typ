@@ -42,7 +42,7 @@ Each GPU gets 18 NVLink lanes at 50 GB/s = 900 GB/s total. NVSwitch provides non
 - 72 Blackwell GPUs + 36 Grace CPUs in a single liquid-cooled rack
 - NVLink 5 switch fabric provides 1800 GB/s per GPU, all-to-all bisection bandwidth
 - Presents as a single logical accelerator domain for CUDA; 30 TB unified HBM
-- 1.4 exaFLOPS FP4 dense (NVIDIA claim)
+- 1.44 exaFLOPS FP4 *sparse* (NVIDIA marketing); ~1.3 EFLOPS FP4 sparse / 648 PFLOPS FP4 dense computed from per-GPU B200 specs in the compute-architecture chapter
 
 *Hands-on — inspect topology:*
 ```bash

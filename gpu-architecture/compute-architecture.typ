@@ -631,7 +631,7 @@ The flagship Blackwell platform:
 - 72 B200 GPUs + 36 Grace CPUs (72 ARM Neoverse V2 cores each)
 - Single NVLink 5 fabric: 130 TB/s aggregate bisection bandwidth, 1800 GB/s per GPU, all-to-all non-blocking
 - 13.4 TB HBM3e (total GPU memory) + 17 TB LPDDR5X (Grace CPU memory) — all cache-coherent via NVLink-C2C
-- Peak 720 PFLOPS FP8 / 1.4 EFLOPS FP4 (dense) per rack
+- Peak per rack (sparse 2:4, NVIDIA marketing): 720 PFLOPS FP8 / 1.44 EFLOPS FP4. Computed from book's per-GPU spec (4.5 PFLOPS FP8 dense / 9 PFLOPS FP8 sparse; 9 PFLOPS FP4 dense / 18 PFLOPS FP4 sparse): 72 GPUs $times$ sparse throughput $=$ 648 PFLOPS FP8 / 1.30 EFLOPS FP4. The marketing 720 / 1.44 figures assume slightly higher per-GPU sparse throughput (10 / 20 PFLOPS) than the conservative table above. Dense throughput is half: 324 PFLOPS FP8 / 648 PFLOPS FP4.
 - Programming model: presents as an extended single node; cross-GPU NVSHMEM at near-single-GPU latencies
 
 === MIG v2 (Multi-Instance GPU)
