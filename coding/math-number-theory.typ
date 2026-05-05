@@ -42,6 +42,7 @@ vector<bool> segmented_sieve(int n) {
 
     vector<bool> is_prime(n + 1, true);
     is_prime[0] = is_prime[1] = false;
+    vector<bool> segment(SEG_SIZE);
 
     for (int low = 0; low <= n; low += SEG_SIZE) {
         fill(segment.begin(), segment.end(), true);
@@ -50,8 +51,13 @@ vector<bool> segmented_sieve(int n) {
         for (int p : primes) {
             int start = max(p * p, (low + p - 1) / p * p);
             for (int j = start; j <= high; j += p) {
-                is_prime[j] = false;
+                segment[j - low] = false;
             }
+        }
+
+        for (int i = low; i <= high; i++) {
+            if (i < 2) continue;
+            is_prime[i] = segment[i - low];
         }
     }
 

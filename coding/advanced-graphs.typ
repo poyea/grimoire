@@ -6,7 +6,7 @@
 
 *Problem:* Find shortest paths from source to all vertices in weighted graph (non-negative weights).
 
-*Priority Queue Implementation:* $O((V + E) log V)$
+*Priority Queue Implementation:* $O((V + E) log V)$ — using a binary heap and the lazy-deletion technique below (skip popped entries with `d > dist[u]`). Without lazy deletion the queue can hold up to $E$ stale entries and the bound becomes $O((V + E) log E) = O((V + E) log V)$ anyway since $log E <= 2 log V$.
 
 ```cpp
 vector<int> dijkstra(int n, const vector<vector<pair<int,int>>>& adj, int src) {

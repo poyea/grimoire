@@ -68,10 +68,10 @@ Decode stages:
 2. Instruction decode (identify opcode)
 3. Micro-op translation (CISC → RISC-like μops)
 
-Intel Skylake: 16+ stage pipeline
-AMD Zen 3: 19 stage pipeline
-Intel Raptor Lake: 14-18 stages (reduced vs Skylake)
-AMD Zen 4: 19 stages (similar to Zen 3)
+Intel Skylake: 14-19 stages (varies with µop-cache hits — front-end is bypassed)
+AMD Zen 3: ~19 stages
+Intel Raptor Lake: ~15-17 stages on P-cores (E-cores ~12)
+AMD Zen 4: ~19 stages (similar to Zen 3)
 Apple M3: ~16 stages (estimated)
 ```
 
@@ -89,7 +89,8 @@ Pipeline width (decode):
 - Apple M3: 16-wide (!!)
 
 Branch misprediction recovery:
-- ~15-20 cycles typical
+- Zen 4: ~13 cycles, Raptor Lake P-cores: ~12-15 cycles
+- Older Skylake / Zen 3: ~16-20 cycles
 - Determines acceptable misprediction rate (<5%)
 ```
 

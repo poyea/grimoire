@@ -112,7 +112,7 @@ string longestPalindrome(string s) {
 
 *Problem:* Find minimum coins needed to make amount (infinite supply of each coin).
 
-*Approach - DP:* $O(op("amount") × op("coins"))$ time, $O(op("amount"))$ space
+*Approach - DP:* $O("amount" times "coins")$ time, $O("amount")$ space
 
 ```cpp
 int coinChange(vector<int>& coins, int amount) {

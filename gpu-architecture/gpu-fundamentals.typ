@@ -70,7 +70,10 @@ Year  Architecture       Key Features
 2017  Volta             Tensor Cores, independent thread scheduling
 2020  Ampere            3rd gen Tensor Cores, sparsity, 6912 cores
 2022  Hopper            Transformer Engine, 18,432 cores
-2024  Blackwell         2nd gen Transformer Engine, 21,760 cores
+2024  Blackwell         2nd gen Transformer Engine, FP4 microscaling
+                        B200 = dual-die package (~208 SMs total, 2 dies × NV-HBI)
+                        ~20,480 CUDA cores active per package
+                        5th-gen Tensor Cores; 192 GB HBM3e @ 8 TB/s
 ```
 
 == GPU Architecture Overview

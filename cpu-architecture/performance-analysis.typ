@@ -69,7 +69,7 @@ Overhead  Command  Shared Object  Symbol
 
 == Top-Down Microarchitecture Analysis (TMAM)
 
-*Intel Top-Down method [Yasin 2014]:* Categorize performance bottlenecks.
+*Intel Top-Down method [Yasin 2014]:* Categorize performance bottlenecks. The hierarchy and counter names (`UOPS_ISSUED.ANY`, `UOPS_RETIRED.RETIRE_SLOTS`, etc.) are *Intel-specific*; AMD exposes analogous events under different names and through AMD uProf's own top-down view, which is not numerically comparable to Intel's percentages.
 
 ```
 Level 1:
@@ -127,8 +127,9 @@ perf c2c report
 *Interpreting results:*
 
 ```
-L1 miss rate < 5%: Good
-L1 miss rate > 10%: Cache optimization needed
+L1 miss rate < 5%: Good (rule of thumb for memory-traversing workloads)
+L1 miss rate > 10%: Cache optimization usually warranted
+Caveat: workload-dependent — pointer-chasing benchmarks with no temporal reuse can sit at >50% L1 miss and still be fundamentally memory-latency-bound, not "fixable" by cache optimization. Always combine miss-rate with the top-down "Memory Bound" %.
 
 LLC miss rate < 10%: Good
 LLC miss rate > 30%: Memory-bound, consider:

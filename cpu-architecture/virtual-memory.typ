@@ -99,7 +99,7 @@ VA: 0000 0000 0000 0000 0111 1111 1000 1010 1011 0000 0000 0001 0010 0011 0100
 
 Page table walks are prohibitively expensive at 800 cycles, making caching essential. The Translation Lookaside Buffer (TLB) caches virtual to physical address translations, dramatically reducing translation overhead.
 
-The TLB structure on x86-64 processors like Intel Skylake includes specialized components. The L1 Data TLB (DTLB) holds 64 entries in a 4-way associative organization for 4 KB pages, with an additional 32 entries for larger 2 MB/4 MB/1 GB pages. The L1 Instruction TLB (ITLB) provides 128 entries in an 8-way associative structure for 4 KB instruction pages. The shared L2 TLB contains 1536 entries in a 12-way associative organization, supporting all page sizes.
+The TLB structure varies by microarchitecture. *Intel Skylake* L1 DTLB: 64 entries (4-way) for 4 KB pages + 32 entries for 2 MB/1 GB pages; L1 ITLB: 128 entries (8-way); L2 TLB: 1536 entries (12-way), all page sizes. *AMD Zen 4* enlarges L1 DTLB to 96 entries (fully associative) and L2 TLB to 3072 entries. *Intel Raptor Lake* P-cores hold 96 L1 DTLB entries and a 2048-entry L2.
 
 ```
 L1 DTLB (Data):     64 entries, 4-way associative, 4 KB pages
@@ -124,7 +124,7 @@ L2 TLB (Shared):    1536 entries, 12-way associative, all page sizes
 *TLB coverage:*
 
 ```
-4 KB pages:   64 entries × 4 KB = 256 KB coverage (L1 DTLB)
+4 KB pages:   64-96 entries × 4 KB = 256-384 KB coverage (L1 DTLB; arch-dependent)
 2 MB pages:   32 entries × 2 MB = 64 MB coverage
 1 GB pages:   32 entries × 1 GB = 32 GB coverage
 
@@ -138,7 +138,9 @@ For 8 GB working set:
 
 ```
 TLB hit:  0 cycles (translation cached)
-TLB miss: 20-100 cycles (page walk latency)
+TLB miss: 10-100 cycles depending on microarch and where page tables live
+          - Modern Zen 4 / Raptor Lake L2-TLB hit + cached page tables: ~10-20 cycles
+          - Older Skylake / cold tables: 20-100 cycles
           - 4-level walk: 4 DRAM accesses
           - If page tables cached in L3: ~40-80 cycles
           - If page tables in DRAM: ~200 cycles per level = 800 cycles

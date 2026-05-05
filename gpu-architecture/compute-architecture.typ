@@ -608,7 +608,7 @@ Blackwell (B100, B200, GB200) is NVIDIA's 2024 architecture, purpose-designed fo
 
 Blackwell introduces hardware FP4 (E2M1) for inference and training of quantization-tolerant models. Combined with *microscaling (MX) formats* (OCP 2024): each 32-element block shares an 8-bit exponent scale (MXFP4, MXFP6, MXFP8).
 
-Effect: accuracy competitive with FP8 at half the memory and nearly 2$times$ the throughput. Used for inference and for training with careful loss scaling.
+Effect: accuracy competitive with FP8 at half the memory and nearly 2$times$ the throughput. Used for inference and for training with careful loss scaling. *Concretely:* B200 dense FP4 = 9 PFLOPS vs H100 dense FP8 = 1.98 PFLOPS — roughly 4.5$times$ raw throughput per GPU; sparse 2:4 doubles both columns. The marketing "7$times$ inference" figure compares B200 FP4 sparse (18 PFLOPS) against H100 FP8 dense (1.98 PFLOPS) end-to-end including memory-bandwidth gains.
 
 *2nd-gen Transformer Engine:* per-group microscaling handled in hardware; no per-tensor amax tracking overhead. Critical for making FP4 usable in practice.
 
@@ -616,7 +616,7 @@ Effect: accuracy competitive with FP8 at half the memory and nearly 2$times$ the
 
 Blackwell adds a dedicated hardware unit for LZ4 / Snappy / Deflate decompression directly into GPU memory. Use case: database/analytics workloads (Spark, dbt) where data on disk is compressed — avoid CPU decompression bottleneck.
 
-Throughput: up to 800 GB/s of decompressed output per GPU.
+Throughput: up to 800 GB/s of decompressed output per GPU [NVIDIA Blackwell Architecture Whitepaper, 2024]. Real throughput depends on codec and compression ratio — Snappy/LZ4 (byte-level) approach peak; Deflate is several × slower because of its bit-level Huffman stage.
 
 === RAS (Reliability, Availability, Serviceability)
 
@@ -636,7 +636,7 @@ The flagship Blackwell platform:
 
 === MIG v2 (Multi-Instance GPU)
 
-Blackwell refines MIG (introduced on A100): finer partition granularity (7 slices on H100 → up to 7 on B200 with per-slice HBM3e + NVLink partitioning). Better for multi-tenant inference serving.
+Blackwell refines MIG (introduced on A100): same maximum slice count (7) as H100, but each slice now gets a private partition of HBM3e bandwidth and a dedicated NVLink share — H100 partitioned compute and memory capacity but shared the NVLink interface across slices. Better isolation for multi-tenant inference serving where one slice's collective traffic used to interfere with another's.
 
 === Compiling for Blackwell
 

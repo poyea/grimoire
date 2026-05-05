@@ -42,7 +42,7 @@ The row buffer acts as a cache for one row per bank, typically holding 8 KB. The
 3. Precharge: Close row, prepare for next activate
    - Latency: ~15-20 ns (tRP = row precharge time)
 
-Total random access latency: tRP + tRCD + CAS = 40-55 ns
+Total random access latency: tRP + tRCD + CAS = 40-55 ns (DRAM-only). Adding memory-controller queueing, address decode, and on-die fabric crossing brings the *system-visible* DRAM latency seen at the LLC miss to ~50-70 ns on modern desktops/servers.
 ```
 
 A row buffer hit occurs when accessing the same row during sequential access. The first access requires Activate + CAS = 25-35 ns, while subsequent accesses to the same row require only CAS = 10-15 ns, providing a 2-3x speedup.
@@ -301,8 +301,8 @@ DDR5-4800:
 - Lower voltage: 1.1V (vs 1.2V for DDR4)
 
 Latency comparison:
-DDR4-3200 CL16: ~50ns
-DDR5-4800 CL40: ~50ns (similar despite higher absolute latency)
+DDR4-3200 CL16: ~50 ns total (CAS = 10 ns)
+DDR5-4800 CL40: ~55-65 ns total — *slightly higher* absolute latency despite the same CAS-in-cycles, because DDR5's faster clock means each cycle covers less time. DDR5 wins on bandwidth and bank parallelism, not raw access latency.
 ```
 
 == References

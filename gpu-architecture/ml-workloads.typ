@@ -35,14 +35,17 @@ __global__ void gemm_tiled(const float* A, const float* B, float* C,
     int col = blockIdx.x*T + threadIdx.x;
     float acc = 0.0f;
     for (int k0 = 0; k0 < K; k0 += T) {
-        As[threadIdx.y][threadIdx.x] = A[row*K + k0 + threadIdx.x];
-        Bs[threadIdx.y][threadIdx.x] = B[(k0+threadIdx.y)*N + col];
+        // Guard partial tiles when M, N, K are not multiples of T
+        As[threadIdx.y][threadIdx.x] = (row < M && k0 + threadIdx.x < K)
+            ? A[row*K + k0 + threadIdx.x] : 0.0f;
+        Bs[threadIdx.y][threadIdx.x] = (k0 + threadIdx.y < K && col < N)
+            ? B[(k0+threadIdx.y)*N + col] : 0.0f;
         __syncthreads();
         for (int k = 0; k < T; k++)
             acc += As[threadIdx.y][k] * Bs[k][threadIdx.x];
         __syncthreads();
     }
-    C[row*N + col] = acc;
+    if (row < M && col < N) C[row*N + col] = acc;
 }
 ```
 Reuses each loaded tile $T$ times. $approx$ 2-5 TFLOPS.

@@ -493,7 +493,7 @@ size_t probe_index(size_t hash, size_t i) {
 // Quadratic probing using triangular numbers (0, 1, 3, 6, 10...) spreads out probes more evenly,
 // reducing clustering. The triangular number formula i(i+1)/2 is the sum 1+2+3+...+i, which grows
 // quadratically but maintains the property that all slots are eventually visited when the table
-// size is a power of 2.#footnote[The mathematical proof relies on the fact that for power-of-2 table sizes, the sequence i(i+1)/2 mod 2ⁿ generates a permutation of all odd offsets, ensuring complete coverage when combined with any hash value.]
+// size is a power of 2.#footnote[For a power-of-2 table size $2^n$, the sequence ${i(i+1)/2 mod 2^n : i = 0, 1, ..., 2^n - 1}$ is a permutation of $ZZ_(2^n)$ — i.e. it visits *every* slot exactly once, not just odd offsets. Knuth, *TAOCP* Vol. 3 §6.4 ex. 20, attributes this to the fact that $i(i+1)/2$ is a quadratic residue construction modulo $2^n$.]
 
 // SIMD lookup in group of 16 slots
 __m128i ctrl_vec = _mm_loadu_si128((__m128i*)ctrl);
@@ -512,7 +512,7 @@ while (mask != 0) {
 *Key innovations:*
 1. *Metadata separation:* Control bytes separate from data = better cache usage
 2. *SIMD probing:* Check 16 slots simultaneously with SSE2
-3. *H2 hash filtering:* 7-bit secondary hash reduces false positives
+3. *H2 hash filtering:* 7-bit secondary hash makes false positives *cheap to dismiss* (single-byte compare in the SIMD register instead of a full key compare). The false-positive *rate* per probed slot is still $approx 1/128$ — what changes is the cost of each false positive.
 4. *Quadratic probing:* Better distribution than linear, avoids clustering
 
 *Memory layout example:*

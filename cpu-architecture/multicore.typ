@@ -50,6 +50,8 @@ Cache coherence protocols solve this problem by ensuring all cores see consisten
 
 == MESI Protocol
 
+MESI is the canonical four-state cache-coherence protocol; real CPUs use extended variants (MESIF on Intel, MOESI on AMD — covered in the next section). The state semantics below are the common core.
+
 *Cache line states [Papamarcos & Patel 1984]:*
 
 ```

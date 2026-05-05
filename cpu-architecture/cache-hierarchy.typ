@@ -32,7 +32,7 @@ Without caches, every memory access would incur a 200-cycle stall, causing the C
 │        │        │
 │  ┌─────┴─────┐  │
 │  │ L1 Cache  │  │  32-64 KB per core, split I/D
-│  └─────┬─────┘  │  Latency: 4-5 cycles
+│  └─────┬─────┘  │  Latency: 4 cycles (Zen 4) — 5 cycles (Raptor Lake P-core)
 │        │        │  Bandwidth: ~100 GB/s
 │  ┌─────┴─────┐  │
 │  │ L2 Cache  │  │  256-512 KB per core
@@ -49,7 +49,7 @@ Without caches, every memory access would incur a 200-cycle stall, causing the C
                       Bandwidth: ~20-50 GB/s (per channel)
 ```
 
-The cache line is the fundamental unit of transfer between cache levels, with a standard size of 64 bytes across all modern CPUs. This size was chosen for several reasons: spatial locality means adjacent data is often accessed together, bus efficiency benefits from amortizing the address transfer overhead across 64 bytes of data, and it represents an optimal tradeoff where larger sizes would waste bandwidth on unused data while smaller sizes would require more frequent transfers.
+The cache line is the fundamental unit of transfer between cache levels, with a standard size of 64 bytes across all modern x86 and Apple Silicon CPUs (some IBM POWER and experimental designs use 128 B). This size was chosen for several reasons: spatial locality means adjacent data is often accessed together, bus efficiency benefits from amortizing the address transfer overhead across 64 bytes of data, and it represents an optimal tradeoff where larger sizes would waste bandwidth on unused data while smaller sizes would require more frequent transfers.
 
 == Cache Organization
 
@@ -304,9 +304,9 @@ AMD Zen 4 (Ryzen 7000):
 - L3: 32 MB shared per CCD (exclusive)
 - Effective capacity: L2 + L3 = 40 MB (due to exclusivity)
 
-Apple M3:
-- L1: 192 KB I-cache + 128 KB D-cache per P-core
-- L2: 16 MB shared per core cluster
+Apple M3 (estimated; Apple does not officially publish):
+- L1: ~192 KB I-cache + ~128 KB D-cache per P-core (estimated by Anandtech / Geekerwan microbenchmarks)
+- L2: 16 MB shared per P-core cluster
 - L3 (System Level Cache): 24-32 MB
 ```
 

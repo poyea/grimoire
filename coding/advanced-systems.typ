@@ -10,7 +10,7 @@
 
 === Branch Prediction & Speculative Execution
 
-*Modern CPUs predict branches:* Skylake/Zen have $#sym.tilde.op$93-95% accuracy [Agner Fog 2023]. Algorithms affect prediction quality.
+*Modern CPUs predict branches:* Skylake/Zen 3 reach $#sym.tilde.op$93-95% accuracy on SPEC-style workloads [Agner Fog, *Microarchitecture* 2023]; Raptor Lake P-cores and Zen 4 use TAGE-style predictors that reach 97-99% on the same suites [Seznec 2016, AMD/Intel optimization guides]. Algorithms still affect prediction quality — adversarial branch patterns (random data, hash-table chasing) drop accuracy to 50-70% on every microarch.
 
 *Branch predictor types:*
 
@@ -112,7 +112,9 @@ int sum = 0;
 for (int x : data) {
     sum += x;  // sum depends on previous sum
 }
-// IPC ~1.0: next iteration waits for ADD to complete
+// IPC ~1.0: a single sum-carrying dependency chain serialises through the
+// adder's latency every iteration — register renaming can't help because
+// each ADD's input *is* the previous ADD's output.
 
 // REDUCED dependency (loop unrolling + multiple accumulators)
 int sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
@@ -613,18 +615,25 @@ Tensor flash_attention(Tensor Q, Tensor K, Tensor V) {
 *Paged Attention (vLLM):* Virtual memory for KV cache.
 
 ```cpp
+using seq_id = uint64_t;
+struct kv_page;  // PAGE_SIZE tokens worth of K and V tensors
+bool is_page_full(int page_id);
+void evict_lru_page(struct kv_cache* cache);
+void write_to_page(kv_page* page, Tensor k, Tensor v);
+
 struct kv_cache {
-    vector<kv_page*> physical_pages;  // Page pool
-    unordered_map<seq_id, vector<int>> logical_to_physical;  // Page table
+    vector<kv_page*> physical_pages;                         // Page pool
+    vector<int> free_pages;                                  // Free list (page indices)
+    unordered_map<seq_id, vector<int>> logical_to_physical;  // Per-sequence page table
 };
 
-kv_page* allocate_page(kv_cache* cache) {
+int allocate_page(kv_cache* cache) {
     if (cache->free_pages.empty()) {
         evict_lru_page(cache);
     }
-
-    kv_page* page = cache->free_pages.pop();
-    return page;
+    int page_id = cache->free_pages.back();
+    cache->free_pages.pop_back();
+    return page_id;
 }
 
 void append_kv(kv_cache* cache, seq_id id, Tensor k, Tensor v) {

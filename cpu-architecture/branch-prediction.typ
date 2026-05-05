@@ -90,7 +90,7 @@ Lookup (parallel with instruction fetch):
 4. If miss: Predict not taken (fetch sequentially)
 ```
 
-Typical BTB sizes range from 4096 to 8192 entries, with Intel Skylake featuring 4K entries. When a branch is encountered for the first time and causes a BTB miss, the predictor assumes it is not taken, which results in a misprediction if the branch is actually taken.
+Typical BTB sizes vary widely by microarchitecture: Intel Skylake ~4K entries, Golden Cove (Alder/Raptor Lake P-core) ~12K entries, AMD Zen 4 ~12K entries, Apple M-series estimated ~12-16K. When a branch is encountered for the first time and causes a BTB miss, the predictor assumes it is not taken, which results in a misprediction if the branch is actually taken.
 
 == Two-Level Adaptive Predictors
 
@@ -151,7 +151,7 @@ The TAGE predictor achieves 97-99% accuracy. Intel uses variants of TAGE in mode
 
 The `ret` instruction presents a prediction problem because its target depends on the call chain and is therefore unpredictable using standard techniques. The solution is a hardware stack that tracks return addresses.
 
-When a `call` instruction executes, the return address is pushed onto the RAS before jumping to the function. When a `ret` instruction executes, the return address is popped from the RAS, and the CPU predicts a return to that popped address. Typical RAS sizes range from 16 to 32 entries.
+When a `call` instruction executes, the return address is pushed onto the RAS before jumping to the function. When a `ret` instruction executes, the return address is popped from the RAS, and the CPU predicts a return to that popped address. Modern x86/ARM CPUs use 32-64-entry RAS (older Skylake/Zen 2: 16); deeper than ~32 frames of recursion may overflow.
 
 ```
 call func:
@@ -162,7 +162,7 @@ ret:
 1. Pop return address from RAS
 2. Predict return to popped address
 
-RAS size: 16-32 entries typical
+RAS size: modern CPUs use 32-64 entries (Zen 4: 32, Golden Cove: 32, Apple M-series: ~50-64). Earlier x86 (Skylake, Zen 2) used 16.
 ```
 
 RAS overflow occurs when deep recursion exceeds the RAS capacity, causing the stack to wrap around and resulting in mispredictions. For example, with a 40-level recursion and a 32-entry RAS, overflows occur at depths greater than 32, and returns at depth 33 and beyond will mispredict due to RAS wraparound:

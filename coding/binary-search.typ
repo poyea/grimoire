@@ -301,9 +301,11 @@ int exponential_search(const vector<int>& arr, int target) {
     }
 
     // Binary search in range [bound/2, min(bound, size-1)]
-    return binary_search(arr.begin() + bound / 2,
-                        arr.begin() + min(bound + 1, (int)arr.size()),
-                        target);
+    int lo = bound / 2;
+    int hi = min(bound + 1, (int)arr.size());
+    auto it = lower_bound(arr.begin() + lo, arr.begin() + hi, target);
+    if (it != arr.begin() + hi && *it == target) return it - arr.begin();
+    return -1;
 }
 ```
 

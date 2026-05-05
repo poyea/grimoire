@@ -78,7 +78,7 @@ The intrinsic naming convention encodes critical semantic information. The prefi
 ```c
 // Load/store - syntax distinguishes alignment semantics
 __m256i _mm256_load_si256(__m256i* addr);     // Aligned (32-byte)
-__m256i _mm256_loadu_si256(__m256i* addr);    // Unaligned (+1-2 cycle penalty)
+__m256i _mm256_loadu_si256(__m256i* addr);    // Unaligned (0 cycles when access is naturally aligned in practice; +1-2 cycles only on cache-line crossings on older microarchs)
 void _mm256_store_si256(__m256i* addr, __m256i val);
 
 // Arithmetic - suffix encodes element type and operation semantics
@@ -155,7 +155,7 @@ When profiling with performance counters, look for the specific SIMD instruction
 
 ```c
 // 8 floats per cycle
-__m256 add = _mm256_add_ps(a, b);  // Latency: 4 cycles, Throughput: 0.5 CPI
+__m256 add = _mm256_add_ps(a, b);  // Skylake: 4c lat, 0.5 CPI; Zen 4: 3c lat, 0.33 CPI
 // 2 ports can execute → 2 adds per cycle → 16 floats/cycle!
 ```
 
@@ -191,12 +191,13 @@ AVX-512 (512-bit): 16× float operations
 Power: 2× AVX2 power draw
 Clock throttling: CPU may reduce frequency under AVX-512 load
 
-Intel Turbo Boost:
+Intel Turbo Boost (Skylake-X server SKU example — varies widely by SKU and generation):
 - Scalar code: 4.5 GHz
 - AVX2 code: 4.0 GHz
 - AVX-512 code: 3.5 GHz
 
 Effective speedup: 16 ops × 3.5 GHz / (8 ops × 4.0 GHz) = 1.75× (not 2×!)
+Sapphire Rapids (2023+) and Ice Lake-SP greatly reduce this throttling for "light" AVX-512 (no FMA/VL3); modern client CPUs (Alder/Raptor Lake) ship without server AVX-512 entirely.
 ```
 
 When profiling SIMD code, frequency scaling creates measurement challenges. Cycle counters continue at the reduced frequency, making direct comparisons misleading. Profilers should monitor the `CPU_CLK_UNHALTED.THREAD` and `CPU_CLK_UNHALTED.REF_TSC` counters to detect frequency changes. Additionally, the `CORE_POWER.LICENSE` events on Intel CPUs indicate when the processor enters different power states that affect instruction throughput.

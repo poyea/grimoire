@@ -88,7 +88,7 @@ v.push_back(5);  // capacity = 8 (reallocate + copy)
 *Growth factor tradeoffs:*
 - Factor 2.0 (typical): fast growth, wastes ~50% memory on average
 - Factor 1.5 (MSVC): slower growth, wastes ~33% memory
-- Factor φ ≈ 1.618 (golden ratio): theoretical optimal for memory reuse. This growth factor allows previously freed memory blocks to be reused more efficiently because the sum of all previous allocations (φ⁰ + φ¹ + φ² + ... + φⁿ⁻¹) equals φⁿ, enabling perfect memory recycling in some allocator implementations.#footnote[The golden ratio property stems from the Fibonacci sequence relationship: F(n) = F(n-1) + F(n-2). When resizing by φ, the new allocation can potentially reuse all previous deallocated space.]
+- Factor φ ≈ 1.618 (golden ratio): theoretically the largest growth factor for which the sum of previous allocations (φ⁰ + φ¹ + … + φⁿ⁻¹ = φⁿ⁺¹/(φ−1)) catches up to the new request, so the next allocation could in principle reuse the just-freed contiguous run. *Caveat:* this only translates into actual reuse with a *bump/arena allocator* (or coalescing free-list); standard `malloc` (ptmalloc, tcmalloc, mimalloc) places successive allocations at unrelated addresses, so the "perfect recycling" property does not hold in practice on glibc/MSVC.#footnote[The golden ratio property stems from the Fibonacci sequence relationship: F(n) = F(n-1) + F(n-2). The reuse argument is allocator-specific.]
 
 *Pre-allocation eliminates copies:*
 ```cpp

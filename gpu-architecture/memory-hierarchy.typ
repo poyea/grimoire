@@ -21,7 +21,7 @@ GPU memory hierarchy differs fundamentally from CPU caches. Understanding the di
 │    ┌─────────────────────────────────────────────────────────────┐  │
 │    │                    Per-Block                                 │  │
 │    │  ┌───────────────────────────────┐                          │  │
-│    │  │    Shared Memory (SMEM)       │  Up to 164 KB per SM    │  │
+│    │  │    Shared Memory (SMEM)       │  Up to 100 KB per SM    │  │
 │    │  │       ~20-30 cycles           │  User-managed cache      │  │
 │    │  └───────────────────────────────┘                          │  │
 │    └─────────────────────────────────────────────────────────────┘  │
@@ -688,6 +688,27 @@ Bandwidth: 3.35 TB/s
 Stacks: 5 or 6 HBM3 stacks
 Improvement: 1.5× bandwidth over HBM2e
 ```
+
+*HBM3e (H200, B100/B200 — 2024):*
+
+```
+Capacity:   141 GB (H200), 192 GB (B100/B200)
+Bandwidth:  4.8 TB/s (H200), 8.0 TB/s (B200, dual-die package)
+Stacks:     6 HBM3e stacks (8-Hi, 24 GB per stack on B-series)
+Improvement: ~1.4× bandwidth vs HBM3 (H100); 2.4× capacity vs H100 80 GB
+```
+
+*Coalesced vs strided bandwidth (per-arch microbenchmark, contiguous 4-byte loads):*
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*GPU*], [*Peak*], [*Coalesced (warp 32×4 B)*], [*Stride-32 (1 elem / cache line)*],
+  [RTX 4090 (GDDR6X)], [1008 GB/s], [~950 GB/s (94%)], [~30 GB/s (3%)],
+  [H100 SXM (HBM3)], [3.35 TB/s], [~3.2 TB/s (95%)], [~100 GB/s (3%)],
+  [B200 (HBM3e)], [8.0 TB/s], [~7.6 TB/s (95%)], [~240 GB/s (3%)],
+)
+
+The strided columns degrade in proportion to peak — the underlying ratio is fixed by cache-line granularity (32 B on NVIDIA L1, 128 B on L2) and is independent of memory technology. Use SoA layouts and coalesced indexing to recover the 30× gap.
 
 == Memory Access Optimization Patterns
 

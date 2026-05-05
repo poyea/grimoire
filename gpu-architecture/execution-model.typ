@@ -522,7 +522,7 @@ Ballot             __ballot_sync    __ballot
 #endif
 ```
 
-*Wave32 vs Wave64:* RDNA architecture supports both 32 and 64-thread wavefronts, selectable at compile time.
+*Wave32 vs Wave64:* RDNA (1-4) supports both 32- and 64-thread wavefronts, selectable per-kernel at compile time. Wave32 is the default on RDNA 3/4 for graphics and most compute; Wave64 is preferred for memory-bound kernels where larger waves better hide latency. CDNA (MI200/MI300) remains Wave64-only.
 
 ```bash
 # AMD compile for Wave32
