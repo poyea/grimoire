@@ -130,8 +130,7 @@ Small-step semantics is well-suited to concurrent languages (interleaving), lazy
 
 === Big-Step (Natural) Semantics
 
-The *big-step* relation $e arrow.b.double v$ (also written $e arrow.b.double v$) relates an
-expression directly to its final value, skipping intermediate steps:
+The *big-step* relation $e arrow.b.double v$ (also written $angle.l e, sigma angle.r arrow.b.double v$ when threading a store) relates an expression directly to its final value, skipping intermediate steps:
 
 ```
 [B-Int]       n => n

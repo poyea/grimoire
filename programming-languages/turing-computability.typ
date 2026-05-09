@@ -49,9 +49,10 @@ A $k$-tape TM has $k$ independent tapes and heads, with $delta : Q times Gamma^k
 - *Space:* the single tape interleaves $k$ tracks (one per original tape) plus $k$
   marker bits indicating head positions.
 - *Time:* simulating one step of the $k$-tape machine costs $O(s)$ sweeps over the
-  single tape where $s$ is the used tape length. If the original computation uses time
-  $T(n)$ and space $S(n)$, the simulation costs $O(T(n)^2)$ time and $O(k \cdot S(n))$
-  space.
+  single tape where $s$ is the used tape length. Since $s <= T(n)$ after $T(n)$ steps,
+  the total cost is $sum_(i=1)^(T(n)) O(i) = O(T(n)^2)$. So if the original computation
+  uses time $T(n)$ and space $S(n)$, the simulation costs $O(T(n)^2)$ time and
+  $O(k dot S(n))$ space.
 
 Multi-tape TMs are exponentially more convenient to program but only polynomially slower
 when simulated -- this is why they do not change the class of *decidable* languages, only
