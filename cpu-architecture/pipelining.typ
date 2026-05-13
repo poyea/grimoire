@@ -325,6 +325,8 @@ Cost breakdown (Skylake, ~16 stage pipeline):
   [Intel Skylake], [2015], [14-19], [Variable depth, $mu$op cache shortcut],
   [Apple M1 (Firestorm)], [2020], [~16], [Wide 8-issue OoO],
   [AMD Zen 4], [2022], [~19], [Simultaneous multithreading],
+  [AMD Zen 5], [2024], [~19], [8-wide decode, full 512-bit AVX-512 datapath],
+  [Intel Lion Cove (Arrow Lake P-core)], [2024], [~17], [8-wide decode, HT removed],
 )
 
 *Trend:* Ultra-deep pipelines (Pentium 4 era, 20-31 stages) increased frequency but suffered severe branch misprediction penalties. Modern designs favor moderate depth (14-19) with wider issue and better predictors.

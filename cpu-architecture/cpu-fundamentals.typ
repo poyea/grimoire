@@ -30,25 +30,36 @@ RISC (ARM, RISC-V):
 
 Historically, the CISC versus RISC debate dominated the 1980s and 1990s, but has since been largely resolved. Modern CISC implementations like x86 internally translate instructions to RISC-like micro-ops [Intel SDM].
 
-*Modern implementations (2023-2024):*
+*Modern implementations (2023-2025):*
 
 ```
-Intel Raptor Lake (13th/14th gen):
+Intel Raptor Lake (13th/14th gen, 2023):
 - 8 P-cores (Performance) + 16 E-cores (Efficiency)
-- P-cores: 6-wide decode, 512-entry ROB
-- E-cores: 4-wide decode, smaller structures
+- P-cores (Golden/Raptor Cove): 6-wide decode, 512-entry ROB
+- E-cores (Gracemont): 4-wide decode, smaller structures
 - Hybrid architecture optimized by OS scheduler
 
-AMD Zen 4 (Ryzen 7000):
-- 4-way decode, 256-entry ROB
-- Unified scheduler with 6 ALU ports
-- Improved branch predictor (12K BTB entries)
-- DDR5 support, up to 5.7 GHz boost
+Intel Arrow Lake (Core Ultra 200S, late 2024):
+- P-cores (Lion Cove): 8-wide decode, 576-entry ROB, no HyperThreading
+- E-cores (Skymont): 9-wide decode (3×3 clusters), ~416-entry ROB
+- Tile-based disaggregated design on TSMC N3B
+- ~9% single-thread IPC over Raptor Lake; HT removed entirely
 
-Apple M3:
-- ARM-based, 16-wide decode (widest in industry!)
-- Massive reorder buffer (600+ entries estimated)
-- 3nm process, excellent performance-per-watt
+AMD Zen 4 (Ryzen 7000, 2022):
+- 4-way decode, 320-entry ROB
+- Unified scheduler with 6 ALU ports
+- 12K-entry L1 BTB; DDR5; up to 5.7 GHz boost
+
+AMD Zen 5 (Ryzen 9000 / EPYC Turin, 2024):
+- 8-wide decode (dual 4-wide clusters), 448-entry ROB
+- 6 ALU + 4 AGU; full-width 512-bit AVX-512 datapath (vs Zen 4's double-pumped 256-bit)
+- ~16% IPC over Zen 4 (AMD claim, geomean across SPEC + apps)
+
+Apple M3 (2023) / M4 (2024):
+- ARM-based, 9-wide decode on M3 P-cores (not 16 — fetch is wider than decode)
+- Reorder buffer ~600+ entries
+- M4 adds SME (Scalable Matrix Extension) and on-die AMX matrix unit exposed to user code
+- 3nm process, industry-leading performance-per-watt
 ```
 
 == x86-64 Registers

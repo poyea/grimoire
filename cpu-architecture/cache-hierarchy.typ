@@ -290,23 +290,33 @@ for (int ii = 0; ii < N; ii += B)
 // Speedup: 5-10x for large N (cache misses reduced dramatically)
 ```
 
-*Modern CPU cache sizes (2023-2024):*
+*Modern CPU cache sizes (2023-2025):*
 
 ```
-Intel Raptor Lake (13th gen):
+Intel Raptor Lake (13th gen, 2023):
 - L1: 48 KB I-cache + 32 KB D-cache per P-core
 - L2: 2 MB per P-core, 4 MB shared per E-core cluster
 - L3: 36 MB shared (inclusive)
 
-AMD Zen 4 (Ryzen 7000):
+Intel Arrow Lake (Core Ultra 200S, 2024) — Lion Cove P-core:
+- L1: 64 KB I-cache + 48 KB D-cache per P-core (data cache split into 48 KB L1.0 + 192 KB L1.5)
+- L2: 3 MB per P-core (up from 2 MB)
+- L3: 36 MB shared
+
+AMD Zen 4 (Ryzen 7000, 2022):
 - L1: 32 KB I-cache + 32 KB D-cache per core
 - L2: 1 MB per core (exclusive)
 - L3: 32 MB shared per CCD (exclusive)
 - Effective capacity: L2 + L3 = 40 MB (due to exclusivity)
 
-Apple M3 (estimated; Apple does not officially publish):
-- L1: ~192 KB I-cache + ~128 KB D-cache per P-core (estimated by Anandtech / Geekerwan microbenchmarks)
-- L2: 16 MB shared per P-core cluster
+AMD Zen 5 (Ryzen 9000 / EPYC Turin, 2024):
+- L1: 32 KB I-cache + 48 KB D-cache per core (D$ grew to 48 KB, 12-way)
+- L2: 1 MB per core (exclusive)
+- L3: 32 MB shared per CCD; up to 128 MB with 3D V-Cache (X3D parts)
+
+Apple M3 (2023) / M4 (2024) (estimated; Apple does not officially publish):
+- L1: ~192 KB I-cache + ~128 KB D-cache per P-core (Anandtech / Geekerwan microbenchmarks)
+- L2: 16 MB shared per P-core cluster (M3); M4 retains the same configuration
 - L3 (System Level Cache): 24-32 MB
 ```
 
