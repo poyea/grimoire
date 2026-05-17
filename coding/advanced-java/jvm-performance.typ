@@ -913,11 +913,11 @@ int result = future.get();  // 1764
 
 *Cache hierarchy:*
 ```
-Level    Size       Latency     Bandwidth
-L1       32-64 KB   ~1 ns       ~500 GB/s
-L2       256-512 KB ~3-5 ns     ~200 GB/s
-L3       8-64 MB    ~10-20 ns   ~100 GB/s
-DRAM     GB-TB      ~50-100 ns  ~50 GB/s
+Level    Size       Latency     Bandwidth (per core, Skylake-class @ 4 GHz)
+L1       32-64 KB   ~1 ns       ~400 GB/s   (96 B/cycle: 2×32 B load + 1×32 B store)
+L2       256-512 KB ~3-5 ns     ~115 GB/s   (sustained ~29 B/cycle, peak 64 B/cycle)
+L3       8-64 MB    ~10-20 ns   ~60 GB/s    (ring bus ~15 B/cycle/core sustained)
+DRAM     GB-TB      ~50-100 ns  ~38 GB/s    (DDR4-2400 dual-channel; ~100 GB/s for DDR5-6400)
 ```
 
 *Array of Structures (AoS) vs Structure of Arrays (SoA):*

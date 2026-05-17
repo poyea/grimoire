@@ -33,20 +33,20 @@ Without caches, every memory access would incur a 200-cycle stall, causing the C
 │  ┌─────┴─────┐  │
 │  │ L1 Cache  │  │  32-64 KB per core, split I/D
 │  └─────┬─────┘  │  Latency: 4 cycles (Zen 4) — 5 cycles (Raptor Lake P-core)
-│        │        │  Bandwidth: ~100 GB/s
+│        │        │  Bandwidth: ~100 GB/s (Skylake: 2×32 B loads + 1×32 B store per cycle ≈ 96 B/cycle at 4 GHz)
 │  ┌─────┴─────┐  │
 │  │ L2 Cache  │  │  256-512 KB per core
 │  └─────┬─────┘  │  Latency: 12-15 cycles
-└────────┼────────┘  Bandwidth: ~50 GB/s
+└────────┼────────┘  Bandwidth: ~50 GB/s (Skylake L2→L1: peak 64 B/cycle, sustained ~29 B/cycle ≈ 116 GB/s at 4 GHz)
          │
     ┌────┴────┐
     │L3 Cache │       8-64 MB shared
     └────┬────┘       Latency: 40-80 cycles
-         │            Bandwidth: ~20-30 GB/s
+         │            Bandwidth: ~20-30 GB/s (Skylake ring bus: 32 B/cycle per stop, sustained ~15 B/cycle per core ≈ 60 GB/s at 4 GHz)
     ┌────┴────┐
     │  DRAM   │       8-128 GB
     └─────────┘       Latency: ~200 cycles (60-100 ns)
-                      Bandwidth: ~20-50 GB/s (per channel)
+                      Bandwidth: ~20-50 GB/s (per channel; DDR4-2400: 8 B × 2400 MT/s = 19.2 GB/s/ch, dual-channel ≈ 38 GB/s; DDR5-6400 dual ≈ 102 GB/s)
 ```
 
 The cache line is the fundamental unit of transfer between cache levels, with a standard size of 64 bytes across all modern x86 and Apple Silicon CPUs (some IBM POWER and experimental designs use 128 B). This size was chosen for several reasons: spatial locality means adjacent data is often accessed together, bus efficiency benefits from amortizing the address transfer overhead across 64 bytes of data, and it represents an optimal tradeoff where larger sizes would waste bandwidth on unused data while smaller sizes would require more frequent transfers.
