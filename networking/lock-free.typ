@@ -245,6 +245,80 @@ private:
 
 *Performance:* MPSC throughput = 10-20M msgs/sec (2-5x slower than SPSC).
 
+== SPMC (Single Producer Multiple Consumer) Queue
+
+*Use case:* One ingest thread fans out work to a pool of workers — packet steering, task distribution, log dispatch.
+
+*Two design choices*, depending on whether consumers should *compete* for items or *all see every item*:
+
+*1. Work-stealing (competing consumers — each item delivered once):*
+
+```cpp
+template<typename T, size_t SIZE>
+class SPMCQueue {
+    alignas(64) std::atomic<size_t> head_{0};   // Producer-only writes
+    alignas(64) std::atomic<size_t> tail_{0};   // Consumers CAS to claim
+    T buffer[SIZE];
+
+public:
+    bool try_push(const T& item) {                   // Single producer
+        size_t h = head_.load(std::memory_order_relaxed);
+        if (h - tail_.load(std::memory_order_acquire) >= SIZE) return false;
+        buffer[h & (SIZE - 1)] = item;
+        head_.store(h + 1, std::memory_order_release);
+        return true;
+    }
+
+    bool try_pop(T& item) {                          // Multiple consumers
+        size_t t = tail_.load(std::memory_order_relaxed);
+        while (t < head_.load(std::memory_order_acquire)) {
+            item = buffer[t & (SIZE - 1)];           // Speculative read
+            if (tail_.compare_exchange_weak(t, t + 1,
+                    std::memory_order_release,
+                    std::memory_order_relaxed)) {
+                return true;                          // Won the race
+            }
+            // Lost — `t` was reloaded by CAS, retry
+        }
+        return false;
+    }
+};
+```
+
+The speculative read before the CAS is *unsafe in general* because the producer could overwrite that slot. Safe only when `SIZE` is much larger than max in-flight (the producer can't lap the slowest consumer) or when the read is a trivially-copyable type and a stale value is acceptable.
+
+*2. Broadcast / multicast (every consumer sees every item):*
+
+Each consumer maintains its *own* `tail` cursor; the producer's `head` is shared. Slot can only be overwritten when the slowest consumer has passed it.
+
+```
+Producer head ──┐
+                ▼
+   [ slot0 ][ slot1 ][ slot2 ][ slot3 ][ slot4 ][ slot5 ]
+      ▲                  ▲              ▲
+      │                  │              │
+   consumer_C         consumer_A     consumer_B
+   (slowest — bounds producer)
+```
+
+This is the LMAX Disruptor model: producer publishes a sequence number per slot; each consumer spins on `seq[i & mask] >= my_cursor`. Tradeoff: producer stalls if any consumer falls behind.
+
+*SPMC vs MPSC — symmetry is not free.*
+
+The two are *not* mirror images. The hard side is whichever end has *multiple* threads contending:
+
+#table(
+  columns: (auto, auto, auto),
+  [*Property*], [*MPSC*], [*SPMC*],
+  [Contended end], [Producer (`fetch_add` on head)], [Consumer (CAS on tail)],
+  [Producer cost], [10-50 cycles (atomic RMW)], [~5 cycles (relaxed store, no contention)],
+  [Consumer cost], [~5 cycles (single reader)], [10-50 cycles (CAS, may retry)],
+  [Typical use], [Per-thread event collection → 1 handler], [1 NIC RX thread → N workers],
+  [Backpressure], [Producers retry/drop on full], [Consumers idle when empty],
+)
+
+If you find yourself wanting MPMC, prefer N independent SPSC queues (one per producer-consumer pair, or a sharded array) — MPMC ring buffers exist (e.g. `moodycamel::ConcurrentQueue`) but cost 3-5× SPSC even uncontended.
+
 == Wait-Free vs Lock-Free
 
 *Definitions [Herlihy & Shavit 2008]:*
@@ -276,6 +350,41 @@ bool push(const T& item) {
 ```
 
 *Tradeoff:* Wait-free but loses messages under sustained overload.
+
+== compare_exchange_weak vs compare_exchange_strong
+
+Both forms of CAS take `(T& expected, T desired)` and atomically swap `desired` into the atomic if its current value equals `expected`, returning success. They differ in *spurious failure*:
+
+- `compare_exchange_strong` only fails if the actual value differs from `expected`.
+- `compare_exchange_weak` may *additionally* fail spuriously even when the value matches.
+
+The reason is architecture, not whim. On x86-64, both compile to `LOCK CMPXCHG` — there is no spurious-failure mode, so `weak` and `strong` produce identical code. On ARM/POWER, atomic RMW is implemented with *load-linked / store-conditional* (`LDXR`/`STXR` on ARMv8, `LWARX`/`STWCX` on POWER). The store-conditional can fail for *any* reason that broke the reservation — interrupt, context switch, neighbor core's store to the same cache line, even unrelated loads on some microarchs. `weak` exposes that; `strong` hides it by retrying in a generated loop.
+
+*Rule of thumb:*
+
+```cpp
+// Use weak when you're already in a CAS loop — the outer loop absorbs spurious failure
+T old = atomic.load(std::memory_order_relaxed);
+T desired;
+do {
+    desired = transform(old);
+} while (!atomic.compare_exchange_weak(old, desired,
+            std::memory_order_acq_rel,
+            std::memory_order_relaxed));
+
+// Use strong for one-shot CAS where retry isn't free / isn't expected
+if (state.compare_exchange_strong(expected_idle, busy)) {
+    // Took ownership — no retry path here
+}
+```
+
+*Common mistakes:*
+
+- `compare_exchange_weak` *outside* a loop. A spurious failure is then a *bug*, not a retry.
+- Forgetting that `expected` is *updated by reference* on failure to the current value. The second iteration of a CAS loop should re-derive `desired` from the new `old`, not from the previous attempt.
+- Mixing memory orders carelessly. The two-argument form takes one order for both success and failure; the four-argument form takes them separately, and the failure order must not be stronger than the success order (and must not be `release`/`acq_rel`).
+
+*Cost on contention:* CAS doesn't queue — failed CAS retries hammer the same cache line, causing classic *thundering herd*. Under sustained contention, a CAS loop can scale negatively (more threads → lower throughput). Mitigations: backoff (`_mm_pause()`, exponential delay), or a queue-based lock (MCS lock) that linearizes the contenders.
 
 == ABA Problem
 
