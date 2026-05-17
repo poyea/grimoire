@@ -153,6 +153,28 @@ struct Counter {
 // Now each variable on separate cache line → no false sharing
 ```
 
+*Detecting false sharing in production:*
+
+The classic signature is *high IPC drop + high HITM events*. Modern Intel (Haswell+) exposes precise hooks via PEBS:
+
+```
+# Per-line cache-to-cache analysis (Intel, Linux)
+perf c2c record -a -- ./app
+perf c2c report
+
+# Look for:
+#   - HITM rate > a few % of remote loads → likely false sharing
+#   - "Cacheline" column shows the offending 64 B line
+#   - "Data address" + "Offset" identify the contending fields
+
+# AMD equivalent (Zen 3+): IBS
+perf record -e ibs_op//p -- ./app
+```
+
+`perf stat -e cache-misses,cycle_activity.stalls_l3_miss,mem_load_l3_hit_retired.xsnp_hitm` gives a quick contention proxy without recording. The `HITM` (hit modified) event is the smoking gun: a load that finds the line in another core's L1/L2 in *Modified* state — i.e. someone is writing what you're reading.
+
+*`std::hardware_destructive_interference_size` (C++17):* the language's answer to "what's the cache-line size for `alignas`?" Sounds clean; is messy. Implementations must pick a *single compile-time constant* that's an ABA-stable part of the platform target, so GCC reports 64 on most x86 targets while Apple Silicon would want 128 (M1's L2 line). Worse, changing the value breaks ABI for any class that embeds it as a layout choice. GCC emits a `-Winterference-size` warning if you use it across translation units. The Standard Library Working Group has discussed deprecation; in practice, hard-code 64 (or 128 for Apple Silicon / IBM POWER) and document it.
+
 == Atomic Operations
 
 *Hardware support:* Atomically read-modify-write.
@@ -231,6 +253,18 @@ Effect: Acquire/release are nearly free on x86 (no extra barriers needed)
 ARM: Weaker model, acquire/release require explicit barriers (~5 cycles)
 ```
 
+*`memory_order_consume` — the order you shouldn't use.*
+
+The C++ standard defines a fifth order, `consume`, intended as a *cheaper acquire* for data-dependency-based synchronization: a load that orders only those subsequent accesses that *carry a dependency* from the loaded value (typical case: pointer-chasing where the loaded pointer is dereferenced). On DEC Alpha — the only mainstream architecture that reordered dependent loads — `consume` would require a fence; on ARM/POWER/x86, the hardware already preserves data-dependency ordering for free.
+
+In practice:
+
+- *Every major compiler implements `consume` as `acquire`.* GCC, Clang, MSVC have not shipped a real implementation since the order was introduced in C++11. P0190 proposed a redesign; P0750 proposed deprecation; the order remains in the standard but unimplemented.
+- *Why it failed:* tracking "dependency chains" across optimization passes turned out to be intractable — the compiler routinely breaks dependencies it can't recognize as such (`if (p == known_const) use(known_const);` substitutes the constant, dropping the dependency on `p`).
+- *Linux kernel uses it anyway,* via `rcu_dereference()` macros that hand-roll dependency preservation with `volatile` casts and `READ_ONCE`. This works only because the kernel is built with specific compilers and flags it controls.
+
+*Recommendation:* use `acquire`. The notional performance win of `consume` doesn't materialize on real compilers, and writing portable code that relies on dependency ordering is currently impossible. Revisit if P2643 or a successor ever lands.
+
 == Memory Barriers
 
 *Fence instructions:*
@@ -247,6 +281,64 @@ std::atomic_thread_fence(std::memory_order_release);
 
 Cost: ~10-20 cycles (serialize pipeline, flush store buffer)
 ```
+
+== Producer-Consumer: Where Atomics and Barriers Are Required
+
+The canonical pattern: thread A *produces* a payload, then signals "ready"; thread B *waits* for the signal, then *reads* the payload. Correctness rests on the acquire/release rule from #emph[Memory Ordering] above — the release store on the flag synchronizes-with the acquire load on the same flag, making all prior producer writes visible to the consumer.
+
+```cpp
+// Shared
+struct Message { int x, y; };
+Message msg;                              // Plain (non-atomic) data
+std::atomic<bool> ready{false};           // Synchronization flag
+
+// Producer (thread A)
+void produce() {
+    msg.x = 42;                           // (1) plain write
+    msg.y = 99;                           // (2) plain write
+    ready.store(true,
+        std::memory_order_release);       // (3) release: (1)(2) happen-before this
+}
+
+// Consumer (thread B)
+void consume() {
+    while (!ready.load(
+        std::memory_order_acquire)) {     // (4) acquire: matches (3)
+        _mm_pause();
+    }
+    assert(msg.x == 42 && msg.y == 99);   // Guaranteed if (4) saw (3)
+}
+```
+
+*What goes wrong without correct ordering:*
+
+#table(
+  columns: (auto, auto),
+  [*Mistake*], [*Failure mode*],
+  [Both ops `relaxed`], [Consumer can read `ready==true` but `msg.x==0` — the producer's plain writes to `msg` may not be visible. On ARM/POWER this happens frequently; on x86 the hardware TSO usually hides it, masking the bug until you port.],
+  [`msg` is a plain non-atomic but read concurrently], [Data race → UB. Even with correct ordering on `ready`, reading `msg` *before* `ready` was observed is a race.],
+  [Release without matching acquire (or vice versa)], [No synchronizes-with edge. Compiler/CPU is free to reorder reads of `msg` before the load of `ready`.],
+  [`seq_cst` everywhere "to be safe"], [Correct, but on x86 the release store now compiles to `XCHG`/`mfence` instead of a plain `mov` — ~20× slower. Acquire/release is sufficient here.],
+)
+
+*When you can downgrade to `relaxed`:*
+
+- Counters that no one *synchronizes on* (e.g. statistics increments).
+- The data side of an SPSC ring buffer when the head/tail pointers carry the acquire/release.
+
+*Fence form:* a standalone `atomic_thread_fence(release)` (see #emph[Memory Barriers] above) lets many independent relaxed writes share one fence instead of attaching `release` to each.
+
+*Architecture cheat sheet:*
+
+#table(
+  columns: (auto, auto, auto, auto),
+  [*Model*], [*Acquire load*], [*Release store*], [*seq_cst store*],
+  [x86-64 (TSO)], [plain `mov`], [plain `mov`], [`mov; mfence` or `xchg`],
+  [ARMv8], [`ldar`], [`stlr`], [`stlr; dmb ish` (or `ldar` + `dmb`)],
+  [POWER], [`ld; isync`], [`lwsync; st`], [`hwsync` on both sides],
+)
+
+This is why "it works on my x86 laptop, breaks on Graviton" is the canonical concurrency bug.
 
 == Scaling and Amdahl's Law
 

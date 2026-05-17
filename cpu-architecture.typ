@@ -89,6 +89,9 @@ Modern computer architecture represents decades of optimization at every level: 
 #include "cpu-architecture/multicore.typ"
 #pagebreak()
 
+#include "cpu-architecture/synchronization.typ"
+#pagebreak()
+
 #include "cpu-architecture/performance-analysis.typ"
 #pagebreak()
 
