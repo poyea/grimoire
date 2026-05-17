@@ -4,6 +4,109 @@
 
 *See also:* Arrays (for cache-friendly alternatives to hash sets), Two Pointers (for $O(1)$ space solutions on sorted data)
 
+== Hashing in std::unordered_map
+
+`std::unordered_map<K, V>` is a *separately-chained* hash table — the standard mandates this (#emph[`[unord.req]`] requires reference stability across rehash and iterators that survive insertion). That dictates the implementation: an array of buckets, each holding a linked list of nodes. Every entry is a heap allocation; iteration chases pointers.
+
+*The pipeline of a single lookup:*
+
+```
+key ──► std::hash<K>{}(key) ──► size_t h
+                                  │
+                                  ▼
+                          h % bucket_count()         ◄── bucket index
+                                  │
+                                  ▼
+                  walk the chain at that bucket
+                  for each node: KeyEqual{}(k, node.key)
+```
+
+Three things determine performance:
+
+1. *Quality of the hash function* — does it spread keys uniformly across `[0, 2^64)`?
+2. *Bucket-count reduction* — how the 64-bit hash is folded into a bucket index.
+3. *Load factor* — average chain length is `size() / bucket_count()`. The default `max_load_factor` is 1.0.
+
+=== What `std::hash<K>` actually does
+
+The standard guarantees *only* that equal keys hash to the same value. It does *not* require good distribution. In practice:
+
+- `std::hash<int>`, `std::hash<long>`: *identity function* on every major libstdc++/libc++/MSVC implementation. `hash(42) == 42`. This is fast but pathological for sequential or strided keys combined with power-of-two bucket counts.
+- `std::hash<std::string>`: libstdc++ uses MurmurHash2 (good); libc++ uses CityHash variants (good); MSVC uses FNV-1a (decent). All are non-cryptographic but well-distributed.
+- `std::hash<T*>`: typically shifts off the low alignment bits (which are always 0), then identity.
+
+The identity-hash-on-integers case is the classic footgun:
+
+```cpp
+std::unordered_map<int, int> m;
+for (int i = 0; i < 1'000'000; ++i) m[i << 16] = i;
+// libstdc++ uses prime bucket counts → tolerable
+// libc++/MSVC use power-of-two → all keys collide in a few buckets
+// Lookup degrades from O(1) → O(n)
+```
+
+=== Bucket-count reduction: prime vs power-of-two
+
+After hashing, the table maps `h` to a bucket. Two strategies:
+
+- *Prime bucket counts (libstdc++):* `h % prime`. The modulus *re-mixes* the high bits of `h` into the low bits, so even identity hashes spread out. Cost: integer division (`div` instruction, ~20 cycles) on every lookup.
+- *Power-of-two (libc++, MSVC, all "fast" hash maps):* `h & (n - 1)`. One AND instruction, but *only the low bits of `h` matter*. A bad hash that varies only in high bits will collapse to a single bucket. These implementations therefore *finalize-mix* the hash internally (e.g. `h ^= h >> 33; h *= 0xff51...`) or document that users provide good hashes.
+
+This is why the same `std::unordered_map<int>` benchmark gives wildly different numbers across compilers — they're not the same data structure under the hood.
+
+=== What makes a hash function "good"
+
+For a hash table (not crypto), three properties matter, in decreasing order of importance:
+
+1. *Avalanche.* Flipping any input bit flips ~50% of output bits. Without avalanche, similar keys hit similar buckets and chains pile up. Test with SMHasher's avalanche metric.
+2. *Uniformity.* Output values are evenly distributed across `[0, 2^64)`. A biased hash wastes buckets even if avalanche is perfect.
+3. *Speed.* Per-key hashing cost has to be small relative to the chain walk it avoids. For short keys, ~1 ns/key (a few multiplies + shifts) is the target.
+
+Things that *don't* matter for hash tables: cryptographic strength, collision resistance against adversaries (unless you're DoS-exposed — see HashDoS below), produce-the-same-value-across-runs (libstdc++ randomizes `std::hash<std::string>` per process to defend against HashDoS).
+
+*Diagnosing a bad custom hash:*
+
+```cpp
+template <typename K, typename V, typename H>
+double avg_chain_length(const std::unordered_map<K, V, H>& m) {
+    return double(m.size()) / m.bucket_count();
+}
+size_t longest_chain(const auto& m) {
+    size_t worst = 0;
+    for (size_t b = 0; b < m.bucket_count(); ++b)
+        worst = std::max(worst, m.bucket_size(b));
+    return worst;
+}
+```
+
+With a good hash and `max_load_factor = 1.0`, `longest_chain` should be ~`O(log n / log log n)` (Poisson tail). If you see chains of length 100+ on 1M items, your hash is broken.
+
+*Combining hashes (custom structs):*
+
+```cpp
+struct Key { int a; std::string b; };
+
+// WRONG — xor of equal-typed values cancels out (hash(x,x) == 0)
+struct BadHash { size_t operator()(const Key& k) const {
+    return std::hash<int>{}(k.a) ^ std::hash<std::string>{}(k.b);
+}};
+
+// OK — boost::hash_combine pattern (golden ratio + shifts)
+inline void hash_combine(size_t& seed, size_t v) {
+    seed ^= v + 0x9e3779b97f4a7c15ULL + (seed << 12) + (seed >> 4);
+}
+struct GoodHash { size_t operator()(const Key& k) const {
+    size_t h = 0;
+    hash_combine(h, std::hash<int>{}(k.a));
+    hash_combine(h, std::hash<std::string>{}(k.b));
+    return h;
+}};
+```
+
+*HashDoS:* If keys come from untrusted input (HTTP headers, JSON keys), an attacker who knows your hash can craft colliding keys to push insertion to $O(n^2)$. Defenses: seeded hashes per process (Python/Ruby/Go do this; libstdc++ does for strings, not for integers), or use a keyed hash like SipHash-1-3 (~1.5 ns/byte, what Rust's `HashMap` uses by default).
+
+*Why fast hash maps replace it:* `absl::flat_hash_map` and Swiss-Tables variants ditch chaining entirely (open addressing + SIMD probing) AND use a strong finalizer over `std::hash`. The 2-3× speedup comes from cache locality (no pointer chase) more than from hashing itself.
+
 == Contains Duplicate
 
 *Problem:* Check if array has duplicates.

@@ -107,6 +107,177 @@ struct Foo {
 alignas(32) int data[8];  // Aligned for _mm256 operations
 ```
 
+*Misaligned access — architecture differences:*
+
+- *x86/x86-64:* Tolerates misaligned scalar loads/stores. Cost is "free" if access stays within a cache line (64 B); crossing a cache line costs ~1-2 extra cycles (a *split load*). Crossing a 4 KB page is far worse (~100+ cycles on older microarchs; mostly absorbed by the LSU on Skylake+).
+- *ARMv7/older ARM:* Trap on misaligned access unless `SCTLR.A=0` enables hardware fixup. With fixup the CPU silently does two aligned accesses — slow but works.
+- *ARMv8 (AArch64):* Allows misaligned accesses to normal memory, but Device memory still faults. Atomics and exclusives (`LDXR`/`STXR`) require natural alignment — misaligned faults.
+- *SPARC, MIPS, RISC-V (default):* Bus error / `SIGBUS` on misaligned access. Compiler-emitted `memcpy` is the portable escape hatch.
+
+```cpp
+// Always-safe misaligned read (compiler emits the right thing per target):
+uint32_t value;
+std::memcpy(&value, ptr, sizeof(value));   // No UB even if ptr misaligned
+```
+
+The standard says reading through a misaligned `T*` is *undefined behavior* regardless of architecture — the runtime cost above only applies to UB that happens to work in practice. UBSan with `-fsanitize=alignment` will flag it.
+
+== Negative Zero
+
+C++ inherits IEEE 754: `float`, `double`, and `long double` have two zero representations — `+0.0` and `-0.0`. Integer types do not (two's complement has a single zero).
+
+```cpp
+double a = -0.0;
+double b =  0.0;
+
+a == b;                   // true  (compares as equal)
+std::signbit(a);          // true
+std::signbit(b);          // false
+1.0 / a;                  // -inf
+1.0 / b;                  // +inf
+a + b;                    //  0.0  (positive — IEEE 754 default rounding rule)
+a * b;                    // -0.0
+std::memcmp(&a, &b, 8);   // != 0 (bit patterns differ: sign bit)
+```
+
+*Where it bites:*
+- Hash maps keyed on `double` — `std::hash` typically hashes the bit pattern, so `+0.0` and `-0.0` end up in *different buckets* despite `==`. Either normalize (`x + 0.0`) or use a custom hash.
+- `std::set`/`std::map` with default `operator<` are fine (`+0.0` and `-0.0` are equivalent under `<`).
+- Branch on `signbit` rather than `x < 0` if you need to distinguish them.
+
+== std::tie
+
+`std::tie(a, b, ...)` returns a `std::tuple<T&...>` of *lvalue references* to its arguments. Three common uses:
+
+```cpp
+// 1. Unpack a tuple/pair return value (pre-C++17, before structured bindings)
+int x, y;
+std::tie(x, y) = compute_pair();   // assigns into x and y
+
+// 2. Ignore parts of a tuple
+std::tie(x, std::ignore) = compute_pair();
+
+// 3. Lexicographic comparison without writing it out
+struct Date { int year, month, day; };
+bool operator<(const Date& a, const Date& b) {
+    return std::tie(a.year, a.month, a.day) < std::tie(b.year, b.month, b.day);
+}
+```
+
+C++17 structured bindings (`auto [x, y] = compute_pair();`) replace use case (1). `std::tie` is still the idiomatic choice for (3) — it builds the comparison from member references with zero copies. Note: `std::tie` cannot bind to rvalues, so it can't be used on temporaries that need lifetime extension.
+
+== std::shared_ptr Thread-Safety
+
+The C++ standard (`[util.smartptr.shared]`) gives `std::shared_ptr` a *split* thread-safety guarantee that surprises almost everyone:
+
+- The *control block* (reference counts, deleter, weak count) is *internally synchronized*. Multiple threads can copy, destroy, and move *distinct `shared_ptr` instances* that share the same control block without external locking.
+- The *managed object* is *not* synchronized. Accessing `*p` or `p->x` from multiple threads follows the normal data-race rules for `T`.
+- A *single `shared_ptr` object* (the same instance, not a copy) accessed from multiple threads — one reads it, another reassigns it — is a data race on the pointer + control-block pointer pair, unless every access goes through `std::atomic<std::shared_ptr<T>>` (C++20) or the now-deprecated free-function `std::atomic_load(&sp)` family.
+
+```cpp
+std::shared_ptr<Widget> global = std::make_shared<Widget>();
+
+// SAFE: distinct shared_ptr instances, shared control block
+void thread_a() { auto local = global; use(*local); }   // copy ctor → atomic inc
+void thread_b() { auto local = global; use(*local); }
+
+// UNSAFE: same shared_ptr instance read + written concurrently
+void writer() { global = std::make_shared<Widget>(); }   // copy-assign
+void reader() { auto local = global; }                   // copy ctor — races with writer
+
+// SAFE (C++20): atomic shared_ptr
+std::atomic<std::shared_ptr<Widget>> atomic_global;
+void writer() { atomic_global.store(std::make_shared<Widget>()); }
+void reader() { auto local = atomic_global.load(); use(*local); }
+```
+
+*Why this matters:*
+
+The mental model "shared_ptr is thread-safe" is wrong in *both* directions. People assume too much (sharing the same `shared_ptr` instance is unsafe) and too little (copying through it doesn't need a lock — the refcount is atomic).
+
+*Performance:* the atomic refcount increment on copy costs ~20 cycles uncontended and turns into cache-line ping-pong under contention. Hot paths that copy `shared_ptr` per access — common in DI/framework code — can scale *worse* than the raw work because every copy invalidates the control block's cache line across cores. Mitigations: pass `const shared_ptr&` (no refcount touch), `std::shared_ptr<const T>` with `make_shared` (control block adjacent to object → one cache line instead of two), or switch to `intrusive_ptr` with a thread-local cache.
+
+*`weak_ptr::lock()`:* atomic CAS on the strong count. Same cost profile as a copy. Returns empty `shared_ptr` if the strong count is already zero.
+
+*Aliasing constructor pitfall:* `shared_ptr<U>(other_sp, raw_u_ptr)` shares `other_sp`'s control block but exposes a different pointer. The control block still owns the original; lifetime is correct. Confusing in debuggers but thread-safe to the same rules above.
+
+== volatile vs std::atomic
+
+`volatile` and `std::atomic` solve unrelated problems. Using `volatile` for concurrency is the single most common C++ bug pattern.
+
+#table(
+  columns: (auto, auto, auto),
+  [*Property*], [*`volatile T`*], [*`std::atomic<T>`*],
+  [Prevents compiler from caching value in a register], [Yes], [Yes],
+  [Prevents compiler from reordering across the access], [No (only volatile↔volatile is ordered)], [Yes (per memory_order)],
+  [Atomic read-modify-write (`++`, CAS)], [No — `v++` is load+add+store, racy], [Yes],
+  [Inter-thread synchronization / publication], [No], [Yes],
+  [Tearing on word-sized reads/writes], [Implementation-defined (typically untorn on aligned word; *not guaranteed*)], [Never (standard guarantee)],
+  [Use case], [MMIO registers, `setjmp/longjmp`-modified locals, signal handler ↔ main flag], [Inter-thread communication],
+)
+
+```cpp
+// WRONG — volatile gives no ordering, no atomicity for RMW
+volatile bool ready = false;
+volatile int data = 0;
+// Thread A
+data = 42; ready = true;            // CPU may reorder; thread B may see ready=true with data=0
+// Thread B
+while (!ready) {}
+assert(data == 42);                  // May fire on ARM/POWER; usually "works" on x86 by luck
+
+// CORRECT
+std::atomic<bool> ready{false};
+int data = 0;
+// Thread A
+data = 42;
+ready.store(true, std::memory_order_release);
+// Thread B
+while (!ready.load(std::memory_order_acquire)) {}
+assert(data == 42);                  // Guaranteed
+```
+
+*Legitimate uses of `volatile`:*
+
+- MMIO: `volatile uint32_t* reg = (uint32_t*)0xFEE00000;` — every read/write goes to the bus, no caching in registers.
+- A flag set by an asynchronous signal handler and read by the same thread: `volatile sig_atomic_t flag;` (signal handlers can use `std::atomic` with `is_lock_free` in C++20, but `volatile sig_atomic_t` is the historical idiom).
+- Defeating compiler optimizations in benchmarks: `volatile T sink = expr;`.
+
+*Java's `volatile` is `std::atomic` with `seq_cst`. C and C++'s `volatile` is not.* Programmers crossing from Java carry this misconception in.
+
+== Floating-Point Hazards Beyond Negative Zero
+
+A companion to #emph[Negative Zero]: the rest of the IEEE 754 footguns.
+
+*NaN propagation and comparison:*
+
+```cpp
+double n = std::nan("");
+n == n;                      // false  (only value where x == x is false)
+n != n;                      // true   (idiomatic NaN check pre-C++11)
+std::isnan(n);               // true   (preferred)
+n < 1.0;  n > 1.0;  n == 1.0;// all false  (unordered comparison)
+std::sort(v.begin(), v.end()); // UB if v contains NaN — strict weak order violated
+```
+
+`std::sort` and `std::map` require a strict weak order. NaN's `<` returns false in both directions, breaking the contract — sort can read out of bounds or loop. Always strip NaNs before sorting FP arrays.
+
+*Subnormals (denormals):* values smaller than `~2.2e-308` (double) lose precision and *on x86 trap into microcode*. A loop that drifts into subnormals can slow down 10-100× silently. Diagnose with `perf stat -e fp_assist.any` (Intel). Fixes: `_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON)` + `_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON)`, or compile with `-ffast-math` (see caveat below). Audio/DSP code routinely needs this.
+
+*`-ffast-math` (`/fp:fast`):* aggressive umbrella flag that enables roughly:
+- `-fno-honor-nans` (assume operands are not NaN)
+- `-fno-honor-infinities` (assume no inf)
+- `-fno-signed-zeros` (treat `+0.0 == -0.0` even for `1/x` sign)
+- `-fassociative-math` (allow reassociation: `(a+b)+c → a+(b+c)`, breaks Kahan summation)
+- `-freciprocal-math` (`a/b → a * (1/b)`)
+- `-ffinite-math-only` (makes `isnan(x)` constant-fold to `false`)
+
+The last one is the classic production bug: a library compiled with `-ffast-math` has all its `isnan` checks compile away to `false`. Worse, on GCC `-ffast-math` sets `MXCSR.FTZ`/`DAZ` *process-wide* via a constructor in `crtfastmath.o` — linking a single TU with `-ffast-math` changes FP behavior for every other TU in the binary. Prefer `-fno-math-errno -fno-trapping-math` (the safe subset) or use `[[gnu::optimize("fast-math")]]` per-function.
+
+*Compiler reordering of FP ops is normally forbidden.* `a + b + c` is `(a+b)+c`, not `a+(b+c)`, because FP addition is not associative. Reassociation is only allowed under `-ffast-math` / `#pragma STDC FP_CONTRACT`. This is why naive parallel reduction gives different results from serial reduction on the same data.
+
+*Comparison and equality:* never compare FP for equality after arithmetic. Use a relative tolerance: `std::abs(a - b) <= eps * std::max(std::abs(a), std::abs(b))`. Absolute tolerance fails near zero; relative tolerance fails at zero — combine both for robustness. `std::numeric_limits<double>::epsilon()` is the gap at 1.0, *not* a universal "small number."
+
 == Bit Manipulation
 
 ```cpp
