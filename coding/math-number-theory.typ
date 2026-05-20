@@ -199,16 +199,19 @@ uint64_t barrett_reduce(uint64_t a, uint64_t mod, uint64_t mu) {
 
 ```cpp
 int64_t power_mod(int64_t a, int64_t b, int64_t m) {
-    int64_t res = 1;
+    // Use __int128 for the multiplications: when m approaches 2^63, the
+    // product (res * a) overflows signed int64 (UB). __int128 is enough
+    // because the operands are bounded by m < 2^63.
+    __int128 res = 1;
     a %= m;
 
     while (b > 0) {
         if (b & 1) res = (res * a) % m;
-        a = (a * a) % m;
+        a = (int64_t)(((__int128)a * a) % m);
         b >>= 1;
     }
 
-    return res;
+    return (int64_t)res;
 }
 ```
 
@@ -276,7 +279,7 @@ bool miller_rabin(int64_t n, int iterations = 5) {
 
         bool composite = true;
         for (int j = 0; j < r - 1; j++) {
-            x = (x * x) % n;
+            x = (int64_t)(((__int128)x * x) % n);  // avoid signed overflow when n > 2^31
             if (x == n - 1) {
                 composite = false;
                 break;

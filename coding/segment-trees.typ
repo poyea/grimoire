@@ -172,7 +172,10 @@ class LazySegmentTree {
 
         if (l <= start && end <= r) {
             lazy[node] += val;
-            push(node, start, end);
+            // Apply to this node's stored value immediately; do NOT propagate to
+            // children — that happens lazily on the next visit via push().
+            tree[node] += (end - start + 1) * lazy[node];
+            lazy[node] = 0;
             return;
         }
 
@@ -637,7 +640,7 @@ public:
   [Prefix Sum], [$O(n)$], [$O(n)$], [$O(1)$], [Static only],
   [Segment Tree], [$O(n)$], [$O(log n)$], [$O(log n)$], [General purpose],
   [Lazy Seg Tree], [$O(n)$], [$O(log n)$], [$O(log n)$], [Range updates],
-  [Fenwick Tree], [$O(n log n)$], [$O(log n)$], [$O(log n)$], [Lower constant],
+  [Fenwick Tree], [$O(n)$ / $O(n log n)$], [$O(log n)$], [$O(log n)$], [Lower constant; $O(n)$ build via direct propagation, $O(n log n)$ via repeated `add`],
   [Sparse Table], [$O(n log n)$], [N/A], [$O(1)$], [Static, min/max/gcd],
 )
 

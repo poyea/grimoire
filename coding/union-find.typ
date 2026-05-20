@@ -363,9 +363,23 @@ public:
 
     // Returns new version ID
     int unite(int version, int x, int y) {
-        // Copy nodes along path to preserve old version
-        // Update copied nodes
-        // Return new version ID
+        auto base = roots[version];
+        int rx = find(base, x), ry = find(base, y);
+        if (rx == ry) {
+            roots.push_back(base);   // no structural change; share the old tree
+            return (int)roots.size() - 1;
+        }
+        // Path-copying: clone the two roots and link by rank.
+        auto new_root = make_shared<Node>(*base);
+        auto nx = make_shared<Node>(*base->get(rx));
+        auto ny = make_shared<Node>(*base->get(ry));
+        if (nx->rank < ny->rank) std::swap(nx, ny);
+        ny->parent = nx->id;
+        if (nx->rank == ny->rank) nx->rank++;
+        new_root->set(rx, nx);
+        new_root->set(ry, ny);
+        roots.push_back(new_root);
+        return (int)roots.size() - 1;
     }
 };
 ```

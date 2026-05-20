@@ -367,7 +367,7 @@ alignas(32) vector<int> dp(n + 1);
 
 *Memory considerations:*
 - 3D array: $O(n × m × k)$ space can quickly exceed cache
-- Flatten to 1D: `dp[i][j][k]` → `dp[i*m*k + j*k + k]` for better locality
+- Flatten to 1D: `dp[i][j][k_idx]` → `dp[i*(m*p) + j*p + k_idx]` where `m`, `p` are the bounds and `i, j, k_idx` are the loop indices (use distinct names for bound vs index to avoid confusion)
 - Space optimization: often can reduce one dimension using rolling arrays
 
 === Example: 3D DP - Longest Common Subsequence of 3 Strings

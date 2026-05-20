@@ -216,7 +216,7 @@ public:
 ```
 
 *Complexity:*
-- Construction: $O(n log n)$ with comparison sort, $O(n log n)$ or $O(n)$ with radix sort
+- Construction (prefix doubling): $O(n log^2 n)$ with comparison sort per round, $O(n log n)$ with radix sort per round
 - Pattern search: $O(m log n)$ where m = pattern length
 - LCP construction (Kasai): $O(n)$
 

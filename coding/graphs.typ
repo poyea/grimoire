@@ -223,7 +223,7 @@ Faster bitwise AND for intersection.
   [*Algorithm*], [*Time*], [*Space*],
   [BFS], [$O(V + E)$], [$O(V)$],
   [DFS], [$O(V + E)$], [$O(V)$],
-  [Dijkstra (min-heap)], [$O((V + E) log V)$], [$O(V)$],
+  [Dijkstra (min-heap)], [$O((V + E) log V)$], [$O(V + E)$],
   [Bellman-Ford], [$O(V E)$], [$O(V)$],
   [Topological sort (Kahn / DFS)], [$O(V + E)$], [$O(V)$],
   [Floyd-Warshall], [$O(V^3)$], [$O(V^2)$],
