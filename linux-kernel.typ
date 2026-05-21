@@ -44,6 +44,9 @@
 #include "linux-kernel/interrupts.typ"
 #pagebreak()
 
+#include "linux-kernel/io-uring.typ"
+#pagebreak()
+
 #include "linux-kernel/kernel-tracing.typ"
 #pagebreak()
 
