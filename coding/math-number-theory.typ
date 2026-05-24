@@ -32,7 +32,10 @@ const int L1_CACHE_SIZE = 32768;  // 32KB typical
 const int SEG_SIZE = L1_CACHE_SIZE * 8;  // 256K bits = 32KB
 
 vector<bool> segmented_sieve(int n) {
-    int limit = sqrt(n);
+    // sqrt() can round down by one in floating-point; bump until correct.
+    int limit = (int)sqrt((double)n);
+    while ((long long)(limit + 1) * (limit + 1) <= n) limit++;
+    while ((long long)limit * limit > n) limit--;
     vector<bool> small_primes = sieve(limit);
     vector<int> primes;
 
@@ -155,26 +158,28 @@ int binary_gcd(int a, int b) {
 *Montgomery Multiplication:* Efficient modular reduction for repeated operations.
 
 ```cpp
+// Schematic — `mod_inverse_mod_2_64` here is the multiplicative inverse of
+// `mod` modulo $2^64$, computed by Hensel lifting.
 class Montgomery {
-    uint64_t mod, r, r2, mask, inv;
+    uint64_t mod, r2, inv;  // inv = -mod^{-1} mod 2^64
 
-    uint64_t reduce(uint128_t t) {
-        uint64_t m = (uint64_t(t) * inv) & mask;
-        uint64_t u = (t + uint128_t(m) * mod) >> 64;
+    uint64_t reduce(__uint128_t t) {
+        // R = 2^64 conceptually; mask-by-64-bits is implicit in uint64_t cast.
+        uint64_t m = (uint64_t)t * inv;
+        uint64_t u = (uint64_t)((t + (__uint128_t)m * mod) >> 64);
         return u >= mod ? u - mod : u;
     }
 
 public:
     Montgomery(uint64_t m) : mod(m) {
-        // Precompute constants
-        r = 1ULL << 64;  // Conceptual
-        mask = ~0ULL;
-        inv = modInverse(mod);
-        r2 = (uint128_t(r) % mod * r) % mod;
+        inv = mod_inverse_mod_2_64(mod);
+        // r2 = R^2 mod m = (2^64)^2 mod m, computed without literal 2^64:
+        __uint128_t r_mod = ((__uint128_t)1 << 64) % mod;
+        r2 = (uint64_t)((r_mod * r_mod) % mod);
     }
 
     uint64_t mul(uint64_t a, uint64_t b) {
-        return reduce(uint128_t(a) * b);
+        return reduce((__uint128_t)a * b);
     }
 };
 ```
@@ -224,9 +229,10 @@ int64_t power_mod_branchless(int64_t a, int64_t b, int64_t m) {
 
     while (b > 0) {
         int64_t mask = -(b & 1);  // -1 if bit set, 0 otherwise
-        res = (res * ((a & mask) | (1 & ~mask))) % m;
-
-        a = (a * a) % m;
+        int64_t mul = (a & mask) | (1 & ~mask);
+        // __int128 widen: int64 product overflows when m > 2^32.
+        res = (int64_t)(((__int128)res * mul) % m);
+        a = (int64_t)(((__int128)a * a) % m);
         b >>= 1;
     }
 
@@ -270,9 +276,12 @@ bool miller_rabin(int64_t n, int iterations = 5) {
         r++;
     }
 
-    // Witness loop
+    // Witness loop. Use mt19937_64 so the witness range covers full n;
+    // rand() is bounded by RAND_MAX (often 2^15) and samples only a tiny prefix.
+    static std::mt19937_64 rng{std::random_device{}()};
+    std::uniform_int_distribution<int64_t> dist(2, n - 2);
     for (int i = 0; i < iterations; i++) {
-        int64_t a = 2 + rand() % (n - 3);
+        int64_t a = dist(rng);
         int64_t x = power_mod(a, d, n);
 
         if (x == 1 || x == n - 1) continue;
@@ -310,7 +319,8 @@ Matrix multiply(const Matrix& A, const Matrix& B, int64_t mod) {
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 2; k++) {
-                C[i][j] = (C[i][j] + A[i][k] * B[k][j]) % mod;
+                // __int128: A[i][k] * B[k][j] overflows int64 when mod ≈ 2^63.
+                C[i][j] = (int64_t)((C[i][j] + (__int128)A[i][k] * B[k][j]) % mod);
             }
         }
     }

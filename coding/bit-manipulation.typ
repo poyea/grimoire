@@ -461,6 +461,7 @@ Converges faster for small ranges.
 ```cpp
 int rangeBitwiseAnd(int left, int right) {
     if (left == 0) return 0;
+    if (left == right) return left;  // __builtin_clz(0) is UB
     int shift = __builtin_clz(left) - __builtin_clz(right);
     if (shift > 0) return 0;  // Different MSB positions
 
@@ -558,7 +559,8 @@ x &= x - 1;  // Brian Kernighan's trick
 
 *Round up to next power of 2:*
 ```cpp
-int nextPowerOf2(int n) {
+unsigned nextPowerOf2(unsigned n) {
+    if (n <= 1) return 1;  // n=0 would otherwise underflow to ~0u and wrap to 0
     n--;
     n |= n >> 1;
     n |= n >> 2;
@@ -572,9 +574,11 @@ int nextPowerOf2(int n) {
 
 Or using CLZ:
 ```cpp
-int nextPowerOf2(int n) {
+unsigned nextPowerOf2(unsigned n) {
     if (n <= 1) return 1;
-    return 1 << (32 - __builtin_clz(n - 1));
+    // Use 1u and guard: shift width must be < 32 for `unsigned`.
+    unsigned k = 32u - (unsigned)__builtin_clz(n - 1);
+    return k == 32u ? 0u : (1u << k);  // returns 0 on overflow (n > 2^31)
 }
 ```
 

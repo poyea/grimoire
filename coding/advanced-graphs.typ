@@ -472,10 +472,14 @@ class TarjanSCC {
 
         for (int neighbor : adj[node]) {
             if (!visited[neighbor]) {
+                // Tree edge: recurse, then take the child's low.
                 dfs(neighbor);
-            }
-            if (on_stack[neighbor]) {
                 low[node] = min(low[node], low[neighbor]);
+            } else if (on_stack[neighbor]) {
+                // Back/cross edge to a node still on the SCC stack:
+                // must use that node's *id*, not its low, otherwise
+                // SCCs can be merged incorrectly.
+                low[node] = min(low[node], ids[neighbor]);
             }
         }
 

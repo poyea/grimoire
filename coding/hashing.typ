@@ -338,7 +338,7 @@ class RobinHoodMap {
     struct Entry {
         K key;
         V val;
-        uint8_t psl;  // Probe sequence length
+        uint16_t psl;  // Probe sequence length; uint8_t silently wraps on degenerate hashes
         bool occupied;
     };
 

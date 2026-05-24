@@ -315,9 +315,12 @@ for (const auto& x : vec) { ... }
 // Division by compile-time constant: optimized automatically
 int half = n / 2;  // Compiler converts to n >> 1 automatically
 
-// Variable division: slower on some CPUs
-int result = n / divisor;  // Modern x86 (Skylake+): ~3-6 cycles [Intel Opt. Manual 2023, Table C-16]
-                           // Older CPUs (pre-Skylake): ~10-40 cycles
+// Variable division: slow even on modern x86. Per Agner Fog's tables,
+// 32-bit `idiv` is ~21-26 cycles latency on Skylake+ (64-bit ~40-90).
+// The ~3-6 cycle figure refers to division by a compile-time constant
+// (which the compiler converts to a multiply-and-shift) or to special
+// short-divisor fast paths.
+int result = n / divisor;  // ~21-26 cycles for 32-bit idiv [Agner Fog instruction tables]
 
 // Modulo by power-of-2: optimized automatically
 int rem = n % 8;  // Compiler converts to n & 7 automatically
@@ -521,10 +524,19 @@ if (x > 0) [[likely]] {
 for (int i = 0; i < n; i++) {
     sum += arr[i];
 }
-// Becomes (4x unroll):
+// Naive 4x unroll — same single accumulator, same one-add-deep dependency
+// chain. Reduces loop overhead but not arithmetic latency.
 for (int i = 0; i < n; i += 4) {
     sum += arr[i] + arr[i+1] + arr[i+2] + arr[i+3];
 }
+// Real throughput win: multiple accumulators break the dependency chain,
+// letting the OoO core run 2-4 adds in parallel.
+int s0 = 0, s1 = 0, s2 = 0, s3 = 0;
+for (int i = 0; i < n; i += 4) {
+    s0 += arr[i];   s1 += arr[i+1];
+    s2 += arr[i+2]; s3 += arr[i+3];
+}
+sum = s0 + s1 + s2 + s3;
 
 // Manual unroll for specific count:
 #pragma unroll 8

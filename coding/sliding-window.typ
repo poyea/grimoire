@@ -41,12 +41,15 @@ int lengthOfLongestSubstring(string s) {
     int maxLen = 0;
     int left = 0;
 
-    for (int right = 0; right < s.length(); right++) {
-        // If char seen in current window, shrink from left
-        if (lastSeen[s[right]] >= left) {
-            left = lastSeen[s[right]] + 1;
+    for (int right = 0; right < (int)s.length(); right++) {
+        // If char seen in current window, shrink from left.
+        // Cast to unsigned char: signed `char` with non-ASCII bytes would give
+        // a negative index and OOB the 128-entry table.
+        unsigned char c = (unsigned char)s[right];
+        if (lastSeen[c] >= left) {
+            left = lastSeen[c] + 1;
         }
-        lastSeen[s[right]] = right;
+        lastSeen[c] = right;
         maxLen = max(maxLen, right - left + 1);
     }
     return maxLen;

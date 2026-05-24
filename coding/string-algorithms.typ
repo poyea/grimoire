@@ -118,10 +118,12 @@ public:
             }
 
             if (i < n - m) {
-                // Roll hash: remove leftmost, add rightmost
-                text_hash = (text_hash - (text[i] - 'a' + 1)) % MOD;
+                // Roll hash: H' = (H - c_old * BASE^{m-1}) * BASE + c_new.
+                // Using the leading-coefficient convention H = Σ c_j · BASE^{m-1-j}
+                // so c_old occupies the BASE^{m-1} slot at slide time.
+                int64_t old_term = (int64_t)(text[i] - 'a' + 1) * pow_m % MOD;
+                text_hash = (text_hash - old_term) % MOD;
                 if (text_hash < 0) text_hash += MOD;
-
                 text_hash = text_hash * BASE % MOD;
                 text_hash = (text_hash + (text[i + m] - 'a' + 1)) % MOD;
             }
@@ -159,7 +161,7 @@ struct DoubleHash {
 };
 ```
 
-Collision probability: $approx 1 / (op("MOD1") times op("MOD2")) approx 10^(-18)$ for 64-bit moduli.
+Per-comparison collision probability is $approx 1/(op("MOD1") times op("MOD2")) approx 10^(-18)$ if both moduli are full 64-bit primes. With ~$10^9$ moduli (as in the example above) the per-comparison rate is closer to $10^(-18)$ only after the birthday correction $k^2/(2 op("MOD"))$, so plan for $approx 10^(-12)$ in practice over a stream of $10^6$ comparisons.
 
 == Z-Algorithm
 
@@ -457,7 +459,10 @@ vector<int> avx2_search(const string& text, const string& pattern) {
 
     __m256i first_char = _mm256_set1_epi8(pattern[0]);
 
-    for (int i = 0; i <= n - m; i += 32) {
+    // Main loop processes 32-byte blocks but only when a full 32 bytes
+    // remain within bounds; the tail is handled by the scalar loop below.
+    int main_end = n >= 31 ? n - 31 : 0;
+    for (int i = 0; i < main_end; i += 32) {
         __m256i txt = _mm256_loadu_si256((__m256i*)&text[i]);
         __m256i cmp = _mm256_cmpeq_epi8(txt, first_char);
         int mask = _mm256_movemask_epi8(cmp);
@@ -472,6 +477,13 @@ vector<int> avx2_search(const string& text, const string& pattern) {
             }
 
             mask &= mask - 1;  // Clear lowest bit
+        }
+    }
+
+    // Scalar tail covering positions [main_end, n - m].
+    for (int i = main_end; i <= n - m; i++) {
+        if (text[i] == pattern[0] && text.compare(i, m, pattern) == 0) {
+            matches.push_back(i);
         }
     }
 

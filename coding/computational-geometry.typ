@@ -33,7 +33,11 @@ struct Point {
     }
 
     bool operator<(const Point& p) const {
-        if (!equal(x, p.x)) return x < p.x;
+        // Use exact `<` for the ordering predicate. Epsilon-equality
+        // breaks transitivity (`a == b` and `b == c` does not imply
+        // `a == c`), which makes this not a strict weak order — UB
+        // for std::sort / std::set.
+        if (x != p.x) return x < p.x;
         return y < p.y;
     }
 
@@ -189,14 +193,14 @@ bool segmentsIntersect(const Point& a, const Point& b,
     return false;
 }
 
-// Find intersection point (assumes segments intersect)
-Point lineIntersection(const Point& a, const Point& b,
-                       const Point& c, const Point& d) {
+// Returns intersection point, or nullopt for parallel/coincident lines.
+optional<Point> lineIntersection(const Point& a, const Point& b,
+                                 const Point& c, const Point& d) {
     double a1 = b.y - a.y, b1 = a.x - b.x, c1 = a1 * a.x + b1 * a.y;
     double a2 = d.y - c.y, b2 = c.x - d.x, c2 = a2 * c.x + b2 * c.y;
     double det = a1 * b2 - a2 * b1;
-
-    return {(b2 * c1 - b1 * c2) / det, (a1 * c2 - a2 * c1) / det};
+    if (fabs(det) < EPS) return nullopt;  // parallel
+    return Point{(b2 * c1 - b1 * c2) / det, (a1 * c2 - a2 * c1) / det};
 }
 ```
 

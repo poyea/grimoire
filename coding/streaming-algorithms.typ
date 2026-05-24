@@ -57,19 +57,16 @@ class WeightedReservoirSampler {
         double key;  // Random key for comparison
     };
 
-    priority_queue<Item, vector<Item>, function<bool(Item, Item)>> heap;
+    using Cmp = function<bool(Item, Item)>;
+    priority_queue<Item, vector<Item>, Cmp> heap;
     int k;
     mt19937 rng;
     uniform_real_distribution<double> dist;
 
 public:
     WeightedReservoirSampler(int sampleSize, int seed = 42)
-        : k(sampleSize), rng(seed), dist(0.0, 1.0) {
-        auto cmp = [](const Item& a, const Item& b) {
-            return a.key > b.key;  // Min-heap by key
-        };
-        heap = priority_queue<Item, vector<Item>, decltype(cmp)>(cmp);
-    }
+        : heap(Cmp([](const Item& a, const Item& b) { return a.key > b.key; })),
+          k(sampleSize), rng(seed), dist(0.0, 1.0) {}
 
     void add(int item, double weight) {
         // Key = random^(1/weight) - higher weight = higher key on average

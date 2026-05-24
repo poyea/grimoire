@@ -361,7 +361,10 @@ public:
         roots.push_back(root);
     }
 
-    // Returns new version ID
+    // Returns new version ID. Pseudocode — `Node` here stands in for a
+    // persistent map (e.g., balanced BST or persistent radix trie keyed by
+    // element index) with `Slot get(int i)` and `Node* set(int i, Slot s)`
+    // returning a new root that shares structure with the old one.
     int unite(int version, int x, int y) {
         auto base = roots[version];
         int rx = find(base, x), ry = find(base, y);
@@ -369,15 +372,13 @@ public:
             roots.push_back(base);   // no structural change; share the old tree
             return (int)roots.size() - 1;
         }
-        // Path-copying: clone the two roots and link by rank.
-        auto new_root = make_shared<Node>(*base);
-        auto nx = make_shared<Node>(*base->get(rx));
-        auto ny = make_shared<Node>(*base->get(ry));
-        if (nx->rank < ny->rank) std::swap(nx, ny);
-        ny->parent = nx->id;
-        if (nx->rank == ny->rank) nx->rank++;
-        new_root->set(rx, nx);
-        new_root->set(ry, ny);
+        // Path-copying: clone the two affected slots and link by rank.
+        Slot sx = base->get(rx);
+        Slot sy = base->get(ry);
+        if (sx.rank < sy.rank) std::swap(rx, ry), std::swap(sx, sy);
+        sy.parent = rx;
+        if (sx.rank == sy.rank) sx.rank++;
+        auto new_root = base->set(rx, sx)->set(ry, sy);
         roots.push_back(new_root);
         return (int)roots.size() - 1;
     }
@@ -429,12 +430,12 @@ public:
         return true;
     }
 
-    int distance(int x, int y) {  // Distance from x to y
+    // Distance from x to y, i.e. value(y) - value(x), under the convention
+    // that unite(x, y, w) asserts value(y) - value(x) == w.
+    int distance(int x, int y) {
         auto [px, wx] = find(x);
         auto [py, wy] = find(y);
-
         if (px != py) return -1;  // Not connected
-
         return wy - wx;
     }
 };

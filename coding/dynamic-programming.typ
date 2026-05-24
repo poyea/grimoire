@@ -152,21 +152,25 @@ __m256i results = _mm256_min_epi32(dp_vec, candidate_vec);
 ```cpp
 int maxProduct(vector<int>& nums) {
     int result = nums[0];
-    int currMin = 1, currMax = 1;
+    // Use long long throughout: int*int can overflow before the max/min runs.
+    long long currMin = 1, currMax = 1;
+    long long best = nums.empty() ? 0 : nums[0];
 
-    for (int num : nums) {
+    for (int v : nums) {
+        long long num = v;
         if (num == 0) {
             currMin = currMax = 1;
-            result = max(result, 0);
+            best = max(best, 0LL);
             continue;
         }
 
-        int temp = currMax * num;
+        long long temp = currMax * num;
         currMax = max({num, currMax * num, currMin * num});
         currMin = min({num, temp, currMin * num});
 
-        result = max(result, currMax);
+        best = max(best, currMax);
     }
+    int result = (int)best;
     return result;
 }
 ```
@@ -484,25 +488,25 @@ for (int i = 0; i < coords.size(); i++) {
 *Digit DP:* For counting numbers with specific digit properties.
 
 ```cpp
-// Example: Count numbers ≤ N with sum of digits = target
-int digitDP(string num, int pos, int sum, int tight,
-            vector<vector<vector<int>>>& memo) {
-    if (pos == num.length()) {
-        return sum == target ? 1 : 0;
-    }
-    if (memo[pos][sum][tight] != -1) {
-        return memo[pos][sum][tight];
-    }
+// Example: Count numbers ≤ N with sum of digits = target.
+int count_with_digit_sum(const string& num, int target) {
+    int n = num.size();
+    // memo[pos][sum][tight] = count from this state; -1 = uncomputed.
+    vector<vector<vector<int>>> memo(
+        n + 1, vector<vector<int>>(target + 1, vector<int>(2, -1)));
 
-    int limit = tight ? (num[pos] - '0') : 9;
-    int result = 0;
+    function<int(int,int,int)> dp = [&](int pos, int sum, int tight) -> int {
+        if (pos == n) return sum == target ? 1 : 0;
+        if (memo[pos][sum][tight] != -1) return memo[pos][sum][tight];
 
-    for (int digit = 0; digit <= limit; digit++) {
-        result += digitDP(num, pos + 1, sum + digit,
-                          tight && (digit == limit), memo);
-    }
-
-    return memo[pos][sum][tight] = result;
+        int limit = tight ? (num[pos] - '0') : 9;
+        int result = 0;
+        for (int digit = 0; digit <= limit && sum + digit <= target; digit++) {
+            result += dp(pos + 1, sum + digit, tight && (digit == limit));
+        }
+        return memo[pos][sum][tight] = result;
+    };
+    return dp(0, 0, 1);
 }
 ```
 

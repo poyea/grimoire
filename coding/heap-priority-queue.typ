@@ -288,7 +288,8 @@ public:
         if (max_heap.size() > min_heap.size()) {
             return max_heap.top();
         }
-        return (max_heap.top() + min_heap.top()) / 2.0;
+        // Cast first operand to avoid int+int overflow before the divide.
+        return ((double)max_heap.top() + min_heap.top()) / 2.0;
     }
 };
 ```

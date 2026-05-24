@@ -95,7 +95,7 @@ For optimal k: $P approx (0.6185)^(m\/n)$
 
 ```cpp
 class CountingBloomFilter {
-    vector<uint8_t> counters;  // 4-bit counters (can pack 2 per byte)
+    vector<uint8_t> counters;  // 8-bit counters; pack into nibbles if memory is tight
     size_t num_counters;
     size_t num_hashes;
 
@@ -137,9 +137,9 @@ public:
 };
 ```
 
-*Space tradeoff:* 4x more memory than standard Bloom filter (4-bit counters vs 1-bit).
+*Space tradeoff:* with the 8-bit counters shown, 8× a standard Bloom filter; if you pack 4-bit nibbles (two per byte) the overhead drops to 4×.
 
-*Counter overflow:* 4 bits sufficient for most cases. Probability of overflow to 16 is negligible for properly sized filters [Fan et al. 2000].
+*Counter overflow:* 4 bits suffice in most workloads; the saturating increment caps at the counter width and the probability of saturating to 15 (or 255) is negligible for properly sized filters [Fan et al. 2000].
 
 == Cuckoo Filters
 
@@ -166,18 +166,26 @@ class CuckooFilter {
     size_t hash1(const string& item) const {
         uint64_t h = 0;
         for (char c : item) h = h * 37 + c;
-        return h % num_buckets;
+        return h & (num_buckets - 1);  // num_buckets is a power of 2
     }
 
     size_t altIndex(size_t i, uint8_t fp) const {
-        // i XOR hash(fingerprint)
-        return (i ^ (fp * 0x5bd1e995)) % num_buckets;
+        // i XOR hash(fingerprint). The XOR-partner involution
+        // altIndex(altIndex(i, fp), fp) == i holds only when num_buckets
+        // is a power of 2 (so XOR commutes with mask).
+        return (i ^ (fp * 0x5bd1e995)) & (num_buckets - 1);
+    }
+
+    static size_t round_up_pow2(size_t n) {
+        size_t p = 1;
+        while (p < n) p <<= 1;
+        return p;
     }
 
 public:
     CuckooFilter(size_t capacity) {
-        num_buckets = (capacity + BUCKET_SIZE - 1) / BUCKET_SIZE;
-        num_buckets = max(num_buckets, 1UL);
+        size_t raw = (capacity + BUCKET_SIZE - 1) / BUCKET_SIZE;
+        num_buckets = round_up_pow2(max<size_t>(raw, 1));
         buckets.resize(num_buckets);
         for (auto& b : buckets) b.fill(0);
     }

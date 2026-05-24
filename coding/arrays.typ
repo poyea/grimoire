@@ -140,11 +140,12 @@ struct Counters {
 // Aligned allocation for SIMD
 alignas(32) int data[8];  // Stack allocation, aligned
 
-// Heap allocation (aligned_alloc C++17)
-int* data = (int*)aligned_alloc(32, 1000 * sizeof(int));
-// Or use _mm_malloc (compiler intrinsic)
-int* data = (int*)_mm_malloc(1000 * sizeof(int), 32);
-_mm_free(data);
+// Heap allocation (aligned_alloc, C11/C++17): size MUST be a multiple of alignment
+int* data = (int*)aligned_alloc(32, 1024 * sizeof(int));  // 4096 bytes = 128 * 32
+free(data);
+// Or use _mm_malloc (intrinsic, no multiple-of-alignment requirement)
+int* data2 = (int*)_mm_malloc(1000 * sizeof(int), 32);
+_mm_free(data2);
 
 // Aligned load (faster than unaligned)
 __m256i v = _mm256_load_si256((__m256i*)data);  // Requires 32-byte alignment

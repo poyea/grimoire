@@ -298,7 +298,10 @@ int calculate(string s) {
             case '+': nums.push_back(a + b); break;
             case '-': nums.push_back(a - b); break;
             case '*': nums.push_back(a * b); break;
-            case '/': nums.push_back(a / b); break;
+            case '/':
+                if (b == 0) throw std::runtime_error("division by zero");
+                nums.push_back(a / b);
+                break;
         }
     };
 

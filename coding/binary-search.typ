@@ -252,8 +252,9 @@ int interpolation_search(const vector<int>& arr, int target) {
             return arr[lo] == target ? lo : -1;
         }
 
-        // Interpolate position
-        int pos = lo + ((target - arr[lo]) * (hi - lo)) / (arr[hi] - arr[lo]);
+        // Interpolate position. Use long long: int*int can overflow even when
+        // individual operands fit in int.
+        int pos = lo + (int)(((long long)(target - arr[lo]) * (hi - lo)) / (arr[hi] - arr[lo]));
 
         if (arr[pos] == target) return pos;
         else if (arr[pos] < target) lo = pos + 1;

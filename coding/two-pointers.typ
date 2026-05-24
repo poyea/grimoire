@@ -364,7 +364,9 @@ vector<vector<int>> threeSumParallel(vector<int>& nums, int num_threads = 4) {
         vector<vector<int>> local_result;
 
         for (int i = start; i < end; i++) {
-            if (i > start && nums[i] == nums[i-1]) continue;
+            // Dedupe against the *global* previous element, not the chunk
+            // start, otherwise triplets at chunk boundaries get duplicated.
+            if (i > 0 && nums[i] == nums[i-1]) continue;
 
             int l = i + 1, r = nums.size() - 1;
             while (l < r) {
@@ -442,6 +444,6 @@ vector<vector<int>> threeSumParallel(vector<int>& nums, int num_threads = 4) {
   [3Sum], [$O(n^2)$], [$O(1)$ excl. output],
   [Container With Most Water], [$O(n)$], [$O(1)$],
   [Branchless two pointers (CMOV)], [$O(n)$], [$O(1)$],
-  [SIMD palindrome check], [$O(n / 16)$ effective], [$O(1)$],
+  [SIMD palindrome check (AVX2, 32 B/iter)], [$O(n / 32)$ effective], [$O(1)$],
   [Parallel two pointers (4 cores)], [$O(n / p)$, $p$ = cores], [$O(p)$],
 )

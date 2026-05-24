@@ -109,8 +109,10 @@ ListNode* remove_nth_from_end(ListNode* head, int n) {
     ListNode* fast = head;
     ListNode* slow = &dummy;
 
-    // Move fast n steps ahead
+    // Move fast n steps ahead. Guard against n > length so we don't
+    // dereference past the tail.
     for (int i = 0; i < n; i++) {
+        if (!fast) return head;  // n exceeds list length; no-op
         fast = fast->next;
     }
 

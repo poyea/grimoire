@@ -576,30 +576,37 @@ Tensor attention_naive(Tensor Q, Tensor K, Tensor V) {
 *Flash Attention:* Fused kernel + tiling for reduced memory I/O.
 
 ```cpp
-// Flash Attention: O(n^2 d) time, O(n) memory
+// Flash Attention: O(n^2 d) time, O(n) memory.
+// Naive per-block softmax + sum is WRONG (softmax doesn't decompose over
+// key blocks). Real Flash Attention uses an *online softmax*: per query
+// block, track running row max m and denom l, and rescale the partial
+// output when a new block raises the max. See Dao et al. (2022) §3.
 Tensor flash_attention(Tensor Q, Tensor K, Tensor V) {
     const int block_size = 128;  // Tile size (fits in SRAM)
-
     Tensor output = zeros_like(Q);
 
     for (int i = 0; i < n; i += block_size) {
-        // Load Q block into SRAM
-        Tensor Q_block = Q.slice(i, i + block_size);
+        Tensor Q_block = Q.slice(i, i + block_size);     // [B, d]
+        Vector m = full(block_size, -INFINITY);          // running row-max
+        Vector l = zeros(block_size);                    // running row-denom
+        Tensor O = zeros({block_size, d_model});         // partial output
 
         for (int j = 0; j < n; j += block_size) {
-            // Load K, V blocks into SRAM
             Tensor K_block = K.slice(j, j + block_size);
             Tensor V_block = V.slice(j, j + block_size);
 
-            // Compute attention in SRAM (no HBM writes)
-            Tensor scores = matmul(Q_block, K_block.T()) / sqrt(d_model);
-            scores = softmax(scores);
-            Tensor block_output = matmul(scores, V_block);
+            Tensor S = matmul(Q_block, K_block.T()) / sqrt(d_model);  // [B, B]
+            Vector m_new = max(m, rowmax(S));                          // [B]
+            Tensor P = exp(S - m_new.unsqueeze(1));                    // [B, B]
+            Vector alpha = exp(m - m_new);                             // rescale factor
+            Vector l_new = alpha * l + rowsum(P);                      // [B]
 
-            output.slice(i, i + block_size) += block_output;
+            O = O * alpha.unsqueeze(1) + matmul(P, V_block);           // rescale + accumulate
+            m = m_new;
+            l = l_new;
         }
+        output.slice(i, i + block_size) = O / l.unsqueeze(1);
     }
-
     return output;
 }
 ```
@@ -659,39 +666,38 @@ void append_kv(kv_cache* cache, seq_id id, Tensor k, Tensor v) {
 *INT8 quantization:* Reduce 32-bit floats to 8-bit integers.
 
 ```cpp
+// Asymmetric uint8 quantization. zero_point must be in [0, 255], so
+// store it as uint8 — int8 would overflow for any range where -min/scale
+// falls outside [-128, 127].
 struct quantization_params {
     float scale;
-    int8_t zero_point;
+    uint8_t zero_point;
 };
 
 quantization_params compute_params(Tensor weights) {
     float min_val = weights.min();
     float max_val = weights.max();
 
-    float scale = (max_val - min_val) / 255.0;
-    int8_t zero_point = round(-min_val / scale);
-
+    float scale = (max_val - min_val) / 255.0f;
+    int zp = (int)round(-min_val / scale);
+    uint8_t zero_point = (uint8_t)clamp(zp, 0, 255);
     return {scale, zero_point};
 }
 
 Tensor quantize(Tensor weights, quantization_params params) {
-    Tensor quantized = empty_like(weights, dtype=INT8);
-
+    Tensor quantized = empty_like(weights, dtype=UINT8);
     for (int i = 0; i < weights.size(); i++) {
-        int q = round(weights[i] / params.scale) + params.zero_point;
-        quantized[i] = clamp(q, -128, 127);
+        int q = (int)round(weights[i] / params.scale) + params.zero_point;
+        quantized[i] = (uint8_t)clamp(q, 0, 255);
     }
-
     return quantized;
 }
 
 Tensor dequantize(Tensor quantized, quantization_params params) {
     Tensor weights = empty_like(quantized, dtype=FLOAT32);
-
     for (int i = 0; i < quantized.size(); i++) {
-        weights[i] = (quantized[i] - params.zero_point) * params.scale;
+        weights[i] = ((int)quantized[i] - params.zero_point) * params.scale;
     }
-
     return weights;
 }
 ```
@@ -719,24 +725,33 @@ void distributed_sgd_step(model& local_model, Tensor batch, int world_size) {
 }
 
 Tensor allreduce_sum(Tensor local_grad) {
-    // Ring all-reduce algorithm: O(α + β * N / P)
-    // α = latency, β = per-byte transfer time, N = data size, P = num GPUs
-
+    // Ring all-reduce: reduce-scatter then all-gather, each in P-1 steps.
+    // Per-step send/recv chunk index depends on rank and iteration —
+    // sending the same chunk every step (as a naive sketch does) doesn't
+    // propagate the sum.
     int rank = get_rank();
     int size = get_world_size();
+    int send_to = (rank + 1) % size;
+    int recv_from = (rank - 1 + size) % size;
 
-    Tensor result = copy(local_grad);
+    Tensor result = copy(local_grad);  // chunked into `size` shards
 
+    // Phase 1 — reduce-scatter: after P-1 steps, rank r holds the sum
+    // of shard (r + 1) mod P across all ranks.
     for (int i = 0; i < size - 1; i++) {
-        int send_to = (rank + 1) % size;
-        int recv_from = (rank - 1 + size) % size;
-
-        send_async(result.slice(i), send_to);
-        Tensor recv_chunk = recv_async(recv_from);
-
-        result.slice(i) += recv_chunk;
+        int send_idx = (rank - i + size) % size;
+        int recv_idx = (rank - i - 1 + size) % size;
+        send_async(result.shard(send_idx), send_to);
+        Tensor in = recv_async(recv_from);
+        result.shard(recv_idx) += in;
     }
-
+    // Phase 2 — all-gather: each rank's complete shard rotates around.
+    for (int i = 0; i < size - 1; i++) {
+        int send_idx = (rank - i + 1 + size) % size;
+        int recv_idx = (rank - i + size) % size;
+        send_async(result.shard(send_idx), send_to);
+        result.shard(recv_idx) = recv_async(recv_from);
+    }
     return result;
 }
 ```

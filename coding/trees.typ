@@ -114,7 +114,7 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 *Approach - Recursive with Bounds:* $O(n)$ time, $O(h)$ space
 
 ```cpp
-bool isValidBST(TreeNode* root, long minVal = LONG_MIN, long maxVal = LONG_MAX) {
+bool isValidBST(TreeNode* root, long long minVal = LLONG_MIN, long long maxVal = LLONG_MAX) {
     if (!root) return true;
 
     if (root->val <= minVal || root->val >= maxVal) {
@@ -126,7 +126,7 @@ bool isValidBST(TreeNode* root, long minVal = LONG_MIN, long maxVal = LONG_MAX) 
 }
 ```
 
-*Integer overflow:* Use `long` for bounds to handle INT_MIN/INT_MAX node values. Alternative: use `optional<int>` or nullptr for infinity.
+*Integer overflow:* Use `long long` (not `long`, which is 32-bit on Windows LLP64) for bounds so the comparison still excludes nodes with `INT_MIN` / `INT_MAX` values. Alternative: use `optional<int>` or nullptr sentinels for infinity.
 
 == Kth Smallest in BST
 
