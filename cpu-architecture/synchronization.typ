@@ -137,6 +137,193 @@ A modern `parking_lot::Mutex` lock under contention executes *all three* in sequ
 
 So the question "where does the slow path live?" is really "at what level does this primitive give up and ask the next layer down?" The fast path is *always* userspace; the slow path is a stack — spin, runtime, kernel — and each layer is a hedge against the cost of the next.
 
+== Concrete Branches: Where Fast Becomes Slow
+
+Abstract descriptions hide where the branch *actually is* in the code. Two canonical examples — the Linux kernel `struct mutex` and glibc `pthread_mutex_t` — show the exact CAS, the exact transition criterion, and what each layer does before giving up.
+
+*Linux kernel `struct mutex` (`kernel/locking/mutex.c`).*
+
+The mutex is a single 64-bit atomic, `atomic_long_t owner`, whose top bits hold the owning `task_struct *` and bottom 3 bits hold flags (`MUTEX_FLAG_WAITERS`, `MUTEX_FLAG_HANDOFF`, `MUTEX_FLAG_PICKUP`). Unlocked ⇔ `owner == 0`.
+
+```c
+// Fast path — kernel/locking/mutex.c, simplified
+static __always_inline bool __mutex_trylock_fast(struct mutex *lock)
+{
+    unsigned long curr = (unsigned long)current;
+    unsigned long zero = 0UL;
+    return atomic_long_try_cmpxchg_acquire(&lock->owner, &zero, curr);
+}
+
+void __sched mutex_lock(struct mutex *lock)
+{
+    might_sleep();
+    if (!__mutex_trylock_fast(lock))             // <-- the branch
+        __mutex_lock_slowpath(lock);
+}
+```
+
+*Criterion for fast path:* `owner == 0` at the moment of CAS. One acquire-ordered `cmpxchg`. ~15-25 cycles, no function call beyond the inlined trylock.
+
+The slow path is *not* an immediate sleep. It's a three-stage cascade:
+
+```c
+// __mutex_lock_common — simplified control flow
+static int __mutex_lock_common(struct mutex *lock, unsigned state, ...)
+{
+    // Stage A: try one more time inline (the holder may have released
+    //          between our failed fast CAS and entering the slowpath)
+    if (__mutex_trylock(lock)) goto acquired;
+
+    // Stage B: OPTIMISTIC SPIN, gated by mutex_can_spin_on_owner()
+    if (mutex_optimistic_spin(lock, ww_ctx, NULL))
+        goto acquired;                           // got it by spinning
+
+    // Stage C: enter the wait list, mark MUTEX_FLAG_WAITERS, sleep
+    spin_lock(&lock->wait_lock);
+    __mutex_add_waiter(lock, &waiter, ...);
+    for (;;) {
+        if (__mutex_trylock_or_handoff(lock, ...)) break;
+        set_current_state(state);                // TASK_UNINTERRUPTIBLE etc.
+        spin_unlock(&lock->wait_lock);
+        schedule_preempt_disabled();             // <-- actually sleep
+        spin_lock(&lock->wait_lock);
+    }
+acquired:
+    ...
+}
+```
+
+The *transition criterion* between spinning and sleeping is `mutex_can_spin_on_owner()`:
+
+```c
+static inline int mutex_can_spin_on_owner(struct mutex *lock)
+{
+    struct task_struct *owner;
+    int retval = 1;
+    if (need_resched()) return 0;                // (1) someone else needs CPU
+    rcu_read_lock();
+    owner = __mutex_owner(lock);
+    if (owner) retval = owner->on_cpu;           // (2) owner is RUNNING NOW
+    rcu_read_unlock();
+    return retval;
+}
+```
+
+Two conditions, and they are the entire reason kernel mutexes don't always go straight to `schedule()`:
+
++ *`!need_resched()`* — no higher-priority task is waiting to run on *this* CPU. If the scheduler has flagged us, spinning is theft.
++ *`owner->on_cpu`* — the lock holder is *currently executing on some other CPU*. If true, the holder will release "soon" (microseconds), and a context-switch round-trip (~10 µs) costs more than spinning through it. If false (holder is itself blocked or preempted), spinning is hopeless and we must sleep.
+
+Inside `mutex_optimistic_spin` the waiter joins an *MCS queue* (`osq_lock` — optimistic spin queue), so only the queue head actually polls `owner`; others spin on their own cache line. The spin loop also re-checks both conditions every iteration and bails to the sleep path the moment `owner` changes to someone not running, or `need_resched()` fires:
+
+```c
+// inside mutex_optimistic_spin loop
+for (;;) {
+    struct task_struct *owner = __mutex_trylock_or_owner(lock);
+    if (!owner) break;                           // acquired
+    if (!owner->on_cpu || need_resched()) {      // criterion failed
+        ret = false; break;                      // -> fall through to schedule()
+    }
+    cpu_relax();                                 // PAUSE
+}
+```
+
+So the kernel's layering, in one mutex, is exactly the three cases from the previous section:
+
+#table(
+  columns: (auto, auto, auto),
+  [*Stage*], [*Where*], [*Exit criterion*],
+  [Fast CAS], [`__mutex_trylock_fast`], [`owner == 0`],
+  [Optimistic spin], [`mutex_optimistic_spin` + `osq_lock`], [`owner->on_cpu && !need_resched()`],
+  [Sleep], [`schedule_preempt_disabled`], [waiter at queue head, woken by `__mutex_unlock_slowpath`],
+)
+
+A few related primitives differ in exactly *which* of these stages they include:
+
+- *`spinlock_t`* (qspinlock) — stage 2 only. No fast/slow split because there *is* no sleep path; spinlock holders cannot block, so callers cannot block waiting for one. Used in IRQ context, scheduler internals, anywhere `schedule()` is illegal.
+- *`rwsem`* (`struct rw_semaphore`) — same three-stage shape, separate reader/writer paths. Readers fast-path via `atomic_long_add_return_acquire(RWSEM_READER_BIAS, ...)` with a single increment.
+- *`rt_mutex`* (PREEMPT_RT, `FUTEX_LOCK_PI`) — *no* optimistic spin; goes straight from fast CAS to a priority-inheritance-aware sleep, because the whole point of RT is bounded latency and unbounded spinning breaks that.
+
+*glibc `pthread_mutex_t` (NPTL, `nptl/pthread_mutex_lock.c`).*
+
+The userspace equivalent. The mutex is a 32-bit `int __lock` with three meaningful states:
+
+```
+0 — unlocked
+1 — locked, no waiters
+2 — locked, MAYBE waiters present (set by any contender before sleeping)
+```
+
+```c
+// Fast path — LLL_MUTEX_LOCK in lowlevellock.h, expanded
+#define lll_trylock(lock) \
+    atomic_compare_and_exchange_bool_acq(&(lock), 1, 0)
+                                       // returns 0 on success (0 -> 1)
+
+int __pthread_mutex_lock (pthread_mutex_t *mutex)
+{
+    int oldval = atomic_compare_and_exchange_val_acq(&mutex->__lock, 1, 0);
+    if (__glibc_likely(oldval == 0))             // <-- fast path
+        return 0;                                // got it, ~10-20 cycles
+    return __lll_lock_wait(&mutex->__lock, ...);
+}
+```
+
+*Criterion for fast path:* identical to the kernel — `lock == 0` at the CAS. One acquire-ordered `cmpxchg`. No syscall.
+
+The slow path does *not* spin by default for a plain `PTHREAD_MUTEX_NORMAL`. It transitions the state to "maybe-waiters" and futexes:
+
+```c
+// __lll_lock_wait — simplified
+void __lll_lock_wait (int *futex, int private)
+{
+    if (atomic_load_relaxed(futex) == 2) goto futex_wait;
+    while (atomic_exchange_acq(futex, 2) != 0) {  // 0/1 -> 2 atomically
+futex_wait:
+        futex_wait(futex, 2, private);            // <-- syscall, sleeps
+        // returns when somebody FUTEX_WAKE'd us; loop and retry
+    }
+}
+```
+
+The critical detail is the `atomic_exchange_acq(..., 2)`: any contender unconditionally writes `2` *before* calling `FUTEX_WAIT`. That way `pthread_mutex_unlock` knows whether to issue a wake:
+
+```c
+int __pthread_mutex_unlock (pthread_mutex_t *mutex)
+{
+    int oldval = atomic_exchange_rel(&mutex->__lock, 0);
+    if (__glibc_unlikely(oldval > 1))             // was state 2?
+        lll_futex_wake(&mutex->__lock, 1, private); // only then syscall
+    return 0;
+}
+```
+
+So the *unlock* fast/slow criterion is `oldval == 1` (no waiters) vs `oldval == 2` (waiters present, must wake). This is the entire futex protocol in three lines: the userspace word distinguishes "nobody waiting" from "somebody waiting," and only the latter pays for a syscall.
+
+Mutex types layer extra stages on top:
+
+- *`PTHREAD_MUTEX_ADAPTIVE_NP`* — inserts a spin prelude before the `exchange(2)`, bounded by `MAX_ADAPTIVE_COUNT` (~100 iterations). Same criterion as kernel optimistic spin in spirit, but glibc cannot read `owner->on_cpu`, so it spins blindly for a fixed count.
+- *`PTHREAD_MUTEX_ERRORCHECK` / `RECURSIVE`* — fast path additionally compares `__owner == self`; cannot use the bare CAS because they need the owner TID.
+- *`PTHREAD_MUTEX_PI_*` (priority inheritance)* — uses `FUTEX_LOCK_PI` / `FUTEX_UNLOCK_PI`, which routes through the kernel's `rt_mutex` and donates priority. The fast path becomes `cmpxchg(0, gettid())` (TID-valued, not 0/1/2).
+- *`PTHREAD_MUTEX_ROBUST`* — adds a per-thread "robust list" so the kernel can mark the futex `FUTEX_OWNER_DIED` if the holder exits without unlocking.
+
+*The summary criterion table.*
+
+#table(
+  columns: (auto, auto, auto),
+  [*Primitive*], [*Fast-path test*], [*Slow-path trigger*],
+  [Linux `mutex`], [`cmpxchg(owner, 0, current)`], [CAS fails → spin if `owner->on_cpu`, else sleep],
+  [Linux `spinlock`], [queued `cmpxchg` on lock word], [CAS fails → MCS-queue spin (no sleep)],
+  [Linux `rt_mutex`], [`cmpxchg(owner, 0, current)`], [CAS fails → PI-boost + sleep (no spin)],
+  [glibc `pthread_mutex`], [`cmpxchg(lock, 0, 1)`], [CAS fails → `exchange(lock, 2)` + `FUTEX_WAIT`],
+  [glibc adaptive], [same CAS], [CAS fails → spin N then futex],
+  [`parking_lot::Mutex`], [`cmpxchg(state, 0, LOCKED)`], [fail → ~10 µs spin → park-table queue → `futex`],
+  [Go `sync.Mutex`], [`cmpxchg(state, 0, mutexLocked)`], [fail → `procyield(30)` spin → `semacquire` → `gopark`],
+  [`tokio::Mutex`], [`cmpxchg(state, 0, 1)`], [fail → waker list + `Poll::Pending` (no syscall)],
+)
+
+The pattern is identical across all of them: the fast path is *one CAS on a userspace (or kernel-memory) word*, and the slow-path entry point is the failure return of that CAS. Everything else — spin or not, queue where, syscall or not — is policy on top of the same branch.
+
 == Reducing Mutex Contention
 
 Once a mutex *does* contend (multiple threads spend non-trivial time queued behind it), the kernel-park overhead and lost parallelism dominate. Common techniques, in increasing order of complexity:
