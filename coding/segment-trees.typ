@@ -171,11 +171,10 @@ class LazySegmentTree {
         if (r < start || end < l) return;
 
         if (l <= start && end <= r) {
+            tree[node] += (int64_t)(end - start + 1) * val;
+            // Accumulate lazy for children; push() on the next visit propagates it.
+            // Do NOT reset lazy[node] here — that would destroy the pending update.
             lazy[node] += val;
-            // Apply to this node's stored value immediately; do NOT propagate to
-            // children — that happens lazily on the next visit via push().
-            tree[node] += (end - start + 1) * lazy[node];
-            lazy[node] = 0;
             return;
         }
 
