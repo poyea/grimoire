@@ -212,6 +212,71 @@ def bfs(graph: dict, start: str, end: str) -> list[str] | None:
 # RETURN p
 ```
 
+=== Weighted Shortest Path: Dijkstra and Bellman-Ford
+
+BFS gives the fewest-hops path; weighted edges (latency, distance, cost) require Dijkstra (non-negative weights) or Bellman-Ford (allows negatives, detects negative cycles). Both are first-class operations in graph DBs: Neo4j's GDS library exposes `gds.shortestPath.dijkstra.stream`, and pgRouting in PostgreSQL ships both.
+
+*Dijkstra* — $O((V + E) log V)$ with a binary heap:
+
+```cpp
+#include <limits>
+#include <queue>
+#include <utility>
+#include <vector>
+
+using NodeId = std::uint32_t;
+using Weight = double;
+struct Edge { NodeId to; Weight w; };
+
+std::vector<Weight> dijkstra(const std::vector<std::vector<Edge>>& adj,
+                             NodeId src) {
+    std::vector<Weight> dist(adj.size(), std::numeric_limits<Weight>::infinity());
+    using PQE = std::pair<Weight, NodeId>;
+    std::priority_queue<PQE, std::vector<PQE>, std::greater<>> pq;
+    dist[src] = 0.0;
+    pq.emplace(0.0, src);
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d > dist[u]) continue;                  // stale entry
+        for (const auto& e : adj[u]) {
+            Weight nd = d + e.w;
+            if (nd < dist[e.to]) {
+                dist[e.to] = nd;
+                pq.emplace(nd, e.to);
+            }
+        }
+    }
+    return dist;
+}
+```
+
+*Bellman-Ford* — $O(V dot E)$, tolerates negative weights, detects negative cycles in one extra pass. Foundational for distance-vector routing protocols (RIP) and for arbitrage detection in financial graphs.
+
+```cpp
+struct WEdge { NodeId from, to; Weight w; };
+
+// Returns true if no negative cycle reachable from src.
+bool bellman_ford(const std::vector<WEdge>& edges, std::size_t n,
+                  NodeId src, std::vector<Weight>& dist) {
+    dist.assign(n, std::numeric_limits<Weight>::infinity());
+    dist[src] = 0.0;
+    for (std::size_t i = 0; i + 1 < n; ++i) {
+        bool relaxed = false;
+        for (const auto& e : edges)
+            if (dist[e.from] + e.w < dist[e.to]) {
+                dist[e.to] = dist[e.from] + e.w;
+                relaxed = true;
+            }
+        if (!relaxed) return true;                  // converged early
+    }
+    for (const auto& e : edges)                     // negative-cycle check
+        if (dist[e.from] + e.w < dist[e.to]) return false;
+    return true;
+}
+```
+
+*A\** improves on Dijkstra when an admissible heuristic $h(v) <= d(v, "goal")$ exists (e.g., great-circle distance in road networks); the priority key becomes $g(v) + h(v)$.
+
 === PageRank (Iterative Graph Algorithm)
 
 ```python
