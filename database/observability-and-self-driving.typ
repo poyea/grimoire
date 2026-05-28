@@ -166,15 +166,16 @@ def recommend_indexes(workload: list[str], db) -> list[str]:
             if node.filter_cols:
                 candidates.append(node.filter_cols)
 
-    # Evaluate each candidate: cost before vs cost with hypothetical index
+    # Baseline cost without any hypothetical index, then per-candidate diff.
     recommendations = []
+    total_cost_before = sum(db.explain_cost(q) for q in workload)
     for cols in set(map(tuple, candidates)):
         hyp_idx = db.create_hypopg_index(cols)
-        total_cost_before = sum(db.explain_cost(q) for q in workload)
-        total_cost_after  = sum(db.explain_cost(q) for q in workload)  # with hypopg
+        # EXPLAIN now considers the hypothetical index in plan selection.
+        total_cost_after = sum(db.explain_cost(q) for q in workload)
+        db.drop_hypopg_index(hyp_idx)
         if total_cost_before - total_cost_after > THRESHOLD:
             recommendations.append(f"CREATE INDEX ON table({', '.join(cols)})")
-        db.drop_hypopg_index(hyp_idx)
     return recommendations
 ```
 
