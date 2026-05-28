@@ -46,35 +46,59 @@ When the buffer pool is full and a new page is needed, a *victim* frame must be 
 
 The classic policy: evict the frame that was last accessed longest ago.
 
-```python
-from collections import OrderedDict
+```cpp
+#include <list>
+#include <stdexcept>
+#include <unordered_map>
+#include <vector>
 
-class LRUBufferPool:
-    def __init__(self, capacity: int):
-        self.capacity = capacity
-        self.cache    = OrderedDict()   # page_id → (data, pin_count, dirty)
+class LRUBufferPool {
+public:
+    using PageID = std::uint64_t;
 
-    def fix(self, page_id: int) -> dict:
-        if page_id in self.cache:
-            self.cache.move_to_end(page_id)   # most recently used
-            entry = self.cache[page_id]
-            entry["pin"] += 1
-            return entry
-        data = self._read_from_disk(page_id)
-        entry = {"data": data, "pin": 1, "dirty": False}
-        if len(self.cache) >= self.capacity:
-            self._evict()
-        self.cache[page_id] = entry
-        return entry
+    explicit LRUBufferPool(std::size_t capacity) : capacity_(capacity) {}
 
-    def _evict(self):
-        for pid, entry in self.cache.items():
-            if entry["pin"] == 0:
-                if entry["dirty"]:
-                    self._write_to_disk(pid, entry["data"])
-                del self.cache[pid]
-                return
-        raise RuntimeError("All frames pinned — buffer pool exhausted")
+    Frame* fix(PageID pid) {
+        auto it = index_.find(pid);
+        if (it != index_.end()) {
+            lru_.splice(lru_.begin(), lru_, it->second);   // mark MRU
+            it->second->pin_count++;
+            return &it->second->frame;
+        }
+        if (index_.size() >= capacity_) evict_one();
+        lru_.push_front(Entry{pid, /*pin*/1, /*dirty*/false, read_from_disk(pid)});
+        index_[pid] = lru_.begin();
+        return &lru_.front().frame;
+    }
+
+    void unfix(PageID pid, bool dirty) {
+        auto it = index_.find(pid);
+        it->second->pin_count--;
+        it->second->dirty |= dirty;
+    }
+
+private:
+    struct Entry { PageID pid; int pin_count; bool dirty; Frame frame; };
+
+    void evict_one() {
+        for (auto it = lru_.rbegin(); it != lru_.rend(); ++it) {
+            if (it->pin_count == 0) {
+                if (it->dirty) write_to_disk(it->pid, it->frame);
+                index_.erase(it->pid);
+                lru_.erase(std::next(it).base());
+                return;
+            }
+        }
+        throw std::runtime_error("All frames pinned — buffer pool exhausted");
+    }
+
+    std::size_t capacity_;
+    std::list<Entry> lru_;                              // MRU at front
+    std::unordered_map<PageID, std::list<Entry>::iterator> index_;
+
+    Frame read_from_disk(PageID);
+    void  write_to_disk(PageID, const Frame&);
+};
 ```
 
 *LRU failure case — sequential scan:* scanning a 10 GB table with a 1 GB buffer pool will evict pages that will never be reused, thrashing the cache.
