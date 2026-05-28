@@ -145,7 +145,7 @@ $ |R join S join T| <= sqrt(|R| dot |S| dot |T|) $
 
 For a triangle on 3 relations each of size $N$: output $<= N^(3\/2)$, but binary joins produce intermediate results of size up to $N^2$.
 
-*Generic Join / Leapfrog Triejoin* (Veldhuizen 2014) achieves $O(N^(rho^*))$ time where $rho^*$ is the fractional edge cover number — matching the AGM bound.
+*Generic Join / Leapfrog Triejoin* (Veldhuizen 2014) achieves $O(N^(rho^*))$ time where $rho^*$ is the *fractional edge cover number* of the query hypergraph — the optimum of the LP that assigns weights $x_e in [0,1]$ to each relation such that every attribute is covered ($sum_(e in.rev v) x_e >= 1$), minimizing $sum_e x_e$. For a 3-cycle (triangle), $rho^* = 3/2$, recovering the $N^(3/2)$ bound above.
 
 ```python
 # Generic Join for triangle query R(a,b) ⋈ S(b,c) ⋈ T(a,c)
