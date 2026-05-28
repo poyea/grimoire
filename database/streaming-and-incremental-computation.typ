@@ -90,7 +90,7 @@ class WatermarkTracker:
 
 == Apache Kafka Streams
 
-Kafka Streams is a JVM library for building stateful stream processors. State is stored in RocksDB (local) + changelog topic (replicated).
+Kafka Streams is a JVM library for building stateful stream processors. State is stored in RocksDB (local) + changelog topic (replicated). The canonical API is JVM-only, so the example below is in Java — non-JVM clients use the lower-level `librdkafka` consumer/producer in C++.
 
 ```java
 // Kafka Streams: count events per user per 1-minute tumbling window
