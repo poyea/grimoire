@@ -114,34 +114,39 @@ SSTable layout:
 
 *Leveled compaction* (RocksDB default): each level has a size budget; when L_i exceeds its budget, one SSTable is compacted into L\_{i+1}. Keeps read amplification bounded at $O(L)$ levels.
 
-```python
-# RocksDB Python (rocksdb3) — LSM in action
-import rocksdb
+```cpp
+// RocksDB C++ — LSM in action
+#include <rocksdb/db.h>
+#include <rocksdb/options.h>
+#include <rocksdb/write_batch.h>
 
-opts = rocksdb.Options()
-opts.create_if_missing = True
-opts.compression = rocksdb.CompressionType.lz4_compression
-opts.max_write_buffer_number = 3        # MemTable count before stall
-opts.level0_file_num_compaction_trigger = 4
+rocksdb::Options opts;
+opts.create_if_missing = true;
+opts.compression = rocksdb::kLZ4Compression;
+opts.max_write_buffer_number = 3;                 // MemTable count before stall
+opts.level0_file_num_compaction_trigger = 4;
 
-db = rocksdb.DB("/tmp/mydb", opts)
+rocksdb::DB* db = nullptr;
+rocksdb::DB::Open(opts, "/tmp/mydb", &db);
 
-# Write batch (atomic, bypasses individual WAL syncs)
-batch = rocksdb.WriteBatch()
-for i in range(1000):
-    batch.put(f"key:{i:06d}".encode(), f"value:{i}".encode())
-db.write(batch)
+// Write batch (atomic, single WAL sync)
+rocksdb::WriteBatch batch;
+char key_buf[16];
+for (int i = 0; i < 1000; ++i) {
+    std::snprintf(key_buf, sizeof(key_buf), "key:%06d", i);
+    batch.Put(key_buf, "value:" + std::to_string(i));
+}
+db->Write(rocksdb::WriteOptions(), &batch);
 
-# Point lookup: check MemTable → L0 Bloom → L0 data → L1...
-val = db.get(b"key:000042")
+// Point lookup: check MemTable -> L0 Bloom -> L0 data -> L1 ...
+std::string val;
+db->Get(rocksdb::ReadOptions(), "key:000042", &val);
 
-# Range scan: merge iterators across all levels
-it = db.iterkeys()
-it.seek(b"key:000100")
-for key in it:
-    if key > b"key:000200":
-        break
-    print(key)
+// Range scan: merge iterators across all levels
+std::unique_ptr<rocksdb::Iterator> it(db->NewIterator(rocksdb::ReadOptions()));
+for (it->Seek("key:000100"); it->Valid() && it->key().ToString() <= "key:000200"; it->Next()) {
+    // process it->key(), it->value()
+}
 ```
 
 === Read Path and Bloom Filters
@@ -152,36 +157,48 @@ $ P("false positive") approx (1 - e^(-k n / m))^k $
 
 At $k = 10$, $m/n = 14.4$ bits/element, FPR $approx 0.1%$ — so 99.9% of non-existent key lookups skip the SSTable entirely.
 
-```python
-# Simple Bloom filter implementation
-import hashlib
-import math
+```cpp
+// Simple Bloom filter (double-hashing: h_i(x) = h1(x) + i*h2(x))
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <string_view>
+#include <vector>
 
-class BloomFilter:
-    def __init__(self, n: int, fpr: float = 0.001):
-        m = -n * math.log(fpr) / (math.log(2) ** 2)
-        self.m = int(m)
-        self.k = int(self.m / n * math.log(2))
-        self.bits = bytearray(self.m // 8 + 1)
+class BloomFilter {
+public:
+    BloomFilter(std::size_t n, double fpr = 0.001) {
+        double m_d = -static_cast<double>(n) * std::log(fpr)
+                   / (std::log(2.0) * std::log(2.0));
+        m_ = static_cast<std::size_t>(m_d);
+        k_ = static_cast<std::size_t>(m_d / n * std::log(2.0));
+        bits_.assign(m_ / 8 + 1, 0);
+    }
 
-    def _hashes(self, key: bytes):
-        h1 = int(hashlib.md5(key).hexdigest(),  16)
-        h2 = int(hashlib.sha1(key).hexdigest(), 16)
-        for i in range(self.k):
-            yield (h1 + i * h2) % self.m
+    void add(std::string_view key) {
+        auto [h1, h2] = hashes(key);
+        for (std::size_t i = 0; i < k_; ++i) {
+            std::size_t idx = (h1 + i * h2) % m_;
+            bits_[idx >> 3] |= static_cast<std::uint8_t>(1u << (idx & 7));
+        }
+    }
 
-    def add(self, key: bytes):
-        for idx in self._hashes(key):
-            self.bits[idx // 8] |= 1 << (idx % 8)
+    bool contains(std::string_view key) const {
+        auto [h1, h2] = hashes(key);
+        for (std::size_t i = 0; i < k_; ++i) {
+            std::size_t idx = (h1 + i * h2) % m_;
+            if (!((bits_[idx >> 3] >> (idx & 7)) & 1u)) return false;
+        }
+        return true;
+    }
 
-    def __contains__(self, key: bytes) -> bool:
-        return all((self.bits[i // 8] >> (i % 8)) & 1
-                   for i in self._hashes(key))
+private:
+    std::size_t m_, k_;
+    std::vector<std::uint8_t> bits_;
 
-bf = BloomFilter(n=1_000_000, fpr=0.001)
-bf.add(b"user:42")
-assert b"user:42" in bf
-assert b"user:99" not in bf  # (with high probability)
+    static std::pair<std::uint64_t, std::uint64_t> hashes(std::string_view key);
+    // Implement with e.g. XXH3_128bits split into two 64-bit halves.
+};
 ```
 
 == B-Tree vs LSM-Tree Comparison
@@ -230,26 +247,39 @@ A recursive model index (RMI) uses two-stage linear regression: a top model pick
 
 *Limitation:* inserts require re-training; current production use is mostly read-heavy immutable datasets (e.g., ClickHouse SortedIndexes, CockroachDB experiments).
 
-```python
-# Toy linear learned index (1-level, sorted keys)
-import numpy as np
+```cpp
+// Toy linear learned index (1-level, sorted keys).
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <vector>
 
-keys   = np.sort(np.random.randint(0, 10**9, size=10**6))
-N      = len(keys)
+struct LinearLearnedIndex {
+    const std::vector<std::int64_t>& keys;
+    double slope;
+    double intercept;
+    std::size_t max_err;
 
-# "Model": linear fit key → position
-m      = N / (keys[-1] - keys[0] + 1)
-b      = -m * keys[0]
+    LinearLearnedIndex(const std::vector<std::int64_t>& sorted_keys,
+                       std::size_t err_bound = 1000)
+        : keys(sorted_keys), max_err(err_bound) {
+        std::size_t n = keys.size();
+        slope     = static_cast<double>(n) / (keys.back() - keys.front() + 1);
+        intercept = -slope * keys.front();
+    }
 
-def lookup(key: int, max_err: int = 1000) -> int:
-    pred = int(m * key + b)
-    pred = max(0, min(N - 1, pred))
-    # binary search within error window
-    lo, hi = max(0, pred - max_err), min(N - 1, pred + max_err)
-    idx = np.searchsorted(keys[lo:hi+1], key)
-    return lo + idx
-
-print(keys[lookup(keys[42])])  # == keys[42]
+    // Returns the position of `key` in `keys` (or where it would be inserted).
+    std::size_t lookup(std::int64_t key) const {
+        std::size_t n = keys.size();
+        long long pred_signed = static_cast<long long>(slope * key + intercept);
+        std::size_t pred = static_cast<std::size_t>(
+            std::clamp<long long>(pred_signed, 0, static_cast<long long>(n - 1)));
+        std::size_t lo = pred > max_err ? pred - max_err : 0;
+        std::size_t hi = std::min(n, pred + max_err + 1);
+        auto it = std::lower_bound(keys.begin() + lo, keys.begin() + hi, key);
+        return static_cast<std::size_t>(it - keys.begin());
+    }
+};
 ```
 
 == References
