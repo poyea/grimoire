@@ -63,7 +63,7 @@ numa_bitmask_setbit(mask, 0);   // socket 0, CPU 0
 numa_sched_setaffinity(0, mask);
 ```
 
-*Morsel-driven parallelism* (see query-compilation.typ) assigns morsels to threads on the socket that owns the memory — avoiding NUMA remote accesses.
+*Morsel-driven parallelism* (see _database/query-compilation.typ_) assigns morsels to threads on the socket that owns the memory — avoiding NUMA remote accesses.
 
 == NVMe SSDs
 

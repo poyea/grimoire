@@ -238,7 +238,7 @@ HLC (Kulkarni et al. 2014) combines physical time with a logical counter, provid
 Used by: CockroachDB, YugabyteDB for causal ordering without GPS.
 
 ```python
-# See transactions-distributed.typ for HLC implementation
+# See database/transactions-distributed.typ for HLC implementation
 # Key property: HLC.now() is always ≥ wall_clock.now()
 #               HLC.recv(msg_ts) > msg_ts → preserves causality
 ```
