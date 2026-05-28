@@ -2,7 +2,7 @@
 
 Databases manage persistent, shared, and reliable data. The field rests on three pillars: the relational model (Codd 1970), transaction theory (ACID), and the architecture of a DBMS. Every modern system — from SQLite to Spanner — can be analyzed through these lenses.
 
-*See also:* _database/concurrency-control.typ_, _database/storage-engines.typ_, _database/isolation-and-consistency-models.typ_
+*See also:* _database/concurrency-control.typ_, _database/storage-engines.typ_, _database/isolation-and-consistency-models.typ_, _database/hardware-aware-design.typ_
 
 == The Relational Model
 
@@ -44,22 +44,40 @@ A *functional dependency* (FD) $X -> Y$ holds on $R$ when any two tuples that ag
 - *Augmentation:* If $X -> Y$, then $X Z -> Y Z$
 - *Transitivity:* If $X -> Y$ and $Y -> Z$, then $X -> Z$
 
-```python
-# Check if FD set implies X -> Y (closure algorithm)
-def closure(fds: list[tuple], x: set) -> set:
-    cl = set(x)
-    changed = True
-    while changed:
-        changed = False
-        for lhs, rhs in fds:
-            if lhs <= cl and not rhs <= cl:
-                cl |= rhs
-                changed = True
-    return cl
+```cpp
+// Check if FD set implies X -> Y (closure algorithm)
+#include <string>
+#include <unordered_set>
+#include <utility>
+#include <vector>
 
-fds = [({'A'}, {'B'}), ({'B'}, {'C'}), ({'A','D'}, {'E'})]
-print(closure(fds, {'A'}))   # {'A', 'B', 'C'}
-print(closure(fds, {'A','D'}))  # {'A', 'B', 'C', 'D', 'E'}
+using Attr   = std::string;
+using AttrSet = std::unordered_set<Attr>;
+using FD     = std::pair<AttrSet, AttrSet>;
+
+bool is_subset(const AttrSet& a, const AttrSet& b) {
+    for (const auto& x : a)
+        if (!b.count(x)) return false;
+    return true;
+}
+
+AttrSet closure(const std::vector<FD>& fds, const AttrSet& x) {
+    AttrSet cl = x;
+    bool changed = true;
+    while (changed) {
+        changed = false;
+        for (const auto& [lhs, rhs] : fds) {
+            if (is_subset(lhs, cl) && !is_subset(rhs, cl)) {
+                cl.insert(rhs.begin(), rhs.end());
+                changed = true;
+            }
+        }
+    }
+    return cl;
+}
+
+// closure(fds, {"A"})      -> {"A","B","C"}
+// closure(fds, {"A","D"})  -> {"A","B","C","D","E"}
 ```
 
 *Normal forms:*
