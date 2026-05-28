@@ -2,7 +2,7 @@
 
 Database performance is ultimately constrained by hardware: DRAM bandwidth, NVMe latency, cache hierarchy, RDMA, and GPU compute. Modern systems are redesigned for each generation of hardware — NVMe SSDs, CXL memory pooling, and GPU OLAP represent the current frontier.
 
-*See also:* _database/buffer-pool-and-io.typ_, _database/column-stores-and-vectorized-execution.typ_, _database/storage-engines.typ_
+*See also:* _database/buffer-pool-and-io.typ_, _database/column-stores-and-vectorized-execution.typ_, _database/storage-engines.typ_, _database/query-compilation.typ_ (codegen + SIMD), _CPU Architecture volume_ (pipelines, NUMA, cache hierarchy), _GPU Architecture volume_ (SIMT, memory hierarchy for GPU OLAP)
 
 == CPU and Cache Hierarchy
 
