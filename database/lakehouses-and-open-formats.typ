@@ -231,7 +231,7 @@ for rg in range(meta.num_row_groups):
   [ACID],             [✓], [✓], [✓],
   [Time travel],      [✓], [✓], [✓],
   [Streaming upserts],[✓], [✓ (MERGE)], [✓ (native)],
-  [Partition evolution],[✓ (hidden)],[✗ (rewrite needed)],[limited],
+  [Partition evolution],[✓ (hidden)],[✓ (Delta 3.0+; older versions require rewrite)],[limited],
   [Incremental reads],[via snapshots],[via change data feed],[native],
   [Multi-engine],     [Best (open spec)], [Good (open spec since 2023)], [Good],
   [Used by],          [Netflix, Apple, AWS],     [Databricks, Meta], [Uber, ByteDance],
