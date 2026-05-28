@@ -2,7 +2,7 @@
 
 Database performance is ultimately constrained by hardware: DRAM bandwidth, NVMe latency, cache hierarchy, RDMA, and GPU compute. Modern systems are redesigned for each generation of hardware — NVMe SSDs, CXL memory pooling, and GPU OLAP represent the current frontier.
 
-*See also:* _database/buffer-pool-and-io.typ_, _database/column-stores-and-vectorized-execution.typ_, _database/storage-engines.typ_, _database/query-compilation.typ_ (codegen + SIMD), _CPU Architecture volume_ (pipelines, NUMA, cache hierarchy), _GPU Architecture volume_ (SIMT, memory hierarchy for GPU OLAP)
+*See also:* _Buffer Pool and I/O_, _Column Stores and Vectorized Execution_, _Storage Engines_, _Query Compilation_ (codegen + SIMD), _CPU Architecture volume_ (pipelines, NUMA, cache hierarchy), _GPU Architecture volume_ (SIMT, memory hierarchy for GPU OLAP)
 
 == CPU and Cache Hierarchy
 
@@ -63,7 +63,7 @@ numa_bitmask_setbit(mask, 0);   // socket 0, CPU 0
 numa_sched_setaffinity(0, mask);
 ```
 
-*Morsel-driven parallelism* (see _database/query-compilation.typ_) assigns morsels to threads on the socket that owns the memory — avoiding NUMA remote accesses.
+*Morsel-driven parallelism* (see _Query Compilation_) assigns morsels to threads on the socket that owns the memory — avoiding NUMA remote accesses.
 
 == NVMe SSDs
 

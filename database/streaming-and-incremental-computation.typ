@@ -2,7 +2,7 @@
 
 Stream processing maintains continuously updated query results as new data arrives, without re-running the full query. *Differential dataflow* and *DBSP* provide formal foundations; Kafka Streams, Flink, and Spark Structured Streaming are industrial implementations.
 
-*See also:* _database/lakehouses-and-open-formats.typ_, _database/weakly-consistent-systems.typ_, _database/time-series-and-graph.typ_
+*See also:* _Lakehouses and Open Table Formats_, _Weakly Consistent Systems_, _Time-Series and Graph Databases_
 
 == The Streaming Model
 

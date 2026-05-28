@@ -2,7 +2,7 @@
 
 The execution engine translates a physical query plan into CPU instructions. The traditional *Volcano* (iterator) model is simple but slow — one virtual function call per row per operator. Modern systems use *vectorized execution* or *code generation* (compiling plans to machine code) to close the gap to hand-written C.
 
-*See also:* _database/query-optimization.typ_, _database/joins-and-aggregation.typ_, _database/column-stores-and-vectorized-execution.typ_
+*See also:* _Query Optimization_, _Joins and Aggregation_, _Column Stores and Vectorized Execution_
 
 == Volcano Iterator Model
 

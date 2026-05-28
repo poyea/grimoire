@@ -2,7 +2,7 @@
 
 Benchmarking measures database performance under controlled conditions. Bad benchmarks produce misleading results — and the database field has a long history of systems being published with cherry-picked workloads. Understanding benchmark design, statistical analysis, and how to read research papers critically is as important as knowing the systems themselves.
 
-*See also:* _database/observability-and-self-driving.typ_, _database/query-optimization.typ_
+*See also:* _Observability and Self-Driving Databases_, _Query Optimization_
 
 == Standard Benchmarks
 

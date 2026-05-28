@@ -2,7 +2,7 @@
 
 Time-series and graph data have access patterns that don't fit relational models well. Specialized engines exploit domain structure for 10–100× better performance on their target workloads.
 
-*See also:* _database/storage-engines.typ_, _database/column-stores-and-vectorized-execution.typ_, _database/streaming-and-incremental-computation.typ_
+*See also:* _Storage Engines_, _Column Stores and Vectorized Execution_, _Streaming and Incremental Computation_
 
 == Time-Series Data
 

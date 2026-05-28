@@ -2,7 +2,7 @@
 
 Database security must be designed in — SQL injection, privilege escalation, and data leakage are the most common causes of data breaches. Privacy-preserving computation (differential privacy, encryption in use) adds a layer beyond access control.
 
-*See also:* _database/foundations.typ_, _database/observability-and-self-driving.typ_
+*See also:* _Database Foundations_, _Observability and Self-Driving Databases_
 
 == SQL Injection
 
@@ -138,7 +138,7 @@ FROM users;
 
 === Encryption in Transit
 
-Always use TLS for client-server connections and replication. See _networking/tls.typ_ for protocol details.
+Always use TLS for client-server connections and replication. See _TLS_ (Networking volume) for protocol details.
 
 ```sql
 -- Force SSL in PostgreSQL (postgresql.conf)

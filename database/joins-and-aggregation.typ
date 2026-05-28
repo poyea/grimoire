@@ -2,7 +2,7 @@
 
 Join algorithms are the performance-critical core of relational query processing. The right algorithm depends on input sizes, available memory, sort order, and key distribution. Aggregation is deeply intertwined with join order and physical layout.
 
-*See also:* _database/query-optimization.typ_, _database/query-compilation.typ_, _database/column-stores-and-vectorized-execution.typ_
+*See also:* _Query Optimization_, _Query Compilation_, _Column Stores and Vectorized Execution_
 
 == Nested Loop Join (NLJ)
 

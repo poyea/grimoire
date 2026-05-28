@@ -2,7 +2,7 @@
 
 Partitioning (sharding) distributes data across multiple nodes to scale beyond a single machine's capacity. Elasticity means the cluster can grow and shrink while continuing to serve traffic. The key challenge: minimize data movement when rebalancing while maintaining even load.
 
-*See also:* _database/consensus-and-replication.typ_, _database/transactions-distributed.typ_, _database/weakly-consistent-systems.typ_
+*See also:* _Consensus and Replication_, _Distributed Transactions_, _Weakly Consistent Systems_
 
 == Partitioning Strategies
 

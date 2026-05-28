@@ -2,7 +2,7 @@
 
 Replication makes data available despite node failures. Consensus protocols coordinate replicas so they agree on a single log of operations. The FLP impossibility result bounds what is achievable; Paxos and Raft define the practical design space.
 
-*See also:* _database/transactions-distributed.typ_, _database/weakly-consistent-systems.typ_, _database/partitioning-and-elasticity.typ_, _Networking volume_ (reliable transport, leader-election timeouts, message reordering)
+*See also:* _Distributed Transactions_, _Weakly Consistent Systems_, _Partitioning and Elasticity_, _Networking volume_ (reliable transport, leader-election timeouts, message reordering)
 
 == FLP Impossibility
 

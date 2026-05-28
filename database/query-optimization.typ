@@ -2,7 +2,7 @@
 
 The query optimizer transforms a declarative SQL query into an efficient physical execution plan. This is the hardest engineering problem in databases: the search space of plans grows super-exponentially with the number of joins, cardinality estimation is error-prone, and cost models are approximations. Modern optimizers combine dynamic programming, heuristics, and increasingly, learned components.
 
-*See also:* _database/query-compilation.typ_, _database/joins-and-aggregation.typ_, _database/storage-engines.typ_
+*See also:* _Query Compilation_, _Joins and Aggregation_, _Storage Engines_
 
 == Optimization Pipeline
 

@@ -2,7 +2,7 @@
 
 Concurrency control ensures that concurrent transactions produce results consistent with some serial execution. The two dominant paradigms are *pessimistic* (two-phase locking) and *optimistic* (OCC / MVCC). Modern OLTP systems have converged on MVCC with serial validation.
 
-*See also:* _database/isolation-and-consistency-models.typ_, _database/recovery-and-logging.typ_, _database/transactions-distributed.typ_
+*See also:* _Isolation and Consistency Models_, _Recovery and Logging_, _Distributed Transactions_
 
 == Two-Phase Locking (2PL)
 

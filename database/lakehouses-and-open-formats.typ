@@ -2,7 +2,7 @@
 
 A *data lakehouse* combines the cost-efficiency of object storage (S3, GCS, Azure Blob) with ACID semantics, schema enforcement, and SQL query support previously found only in data warehouses. Apache Iceberg, Delta Lake, and Apache Hudi are the three dominant open table formats.
 
-*See also:* _database/column-stores-and-vectorized-execution.typ_, _database/storage-engines.typ_, _database/streaming-and-incremental-computation.typ_
+*See also:* _Column Stores and Vectorized Execution_, _Storage Engines_, _Streaming and Incremental Computation_
 
 == The Problem with Raw Data Lakes
 

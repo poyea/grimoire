@@ -2,7 +2,7 @@
 
 A database that cannot be observed cannot be tuned. Observability (metrics, logs, traces) is the prerequisite for self-driving capabilities — automated index selection, knob tuning, query plan selection, and anomaly detection.
 
-*See also:* _database/query-optimization.typ_, _database/security-and-privacy.typ_, _database/benchmarking-and-research-methods.typ_
+*See also:* _Query Optimization_, _Database Security and Privacy_, _Benchmarking and Research Methods_
 
 == Three Pillars of Database Observability
 
@@ -216,7 +216,7 @@ class KnobTuner:
         self.y.append(throughput)
 ```
 
-*Bao (query-level tuning):* see _database/query-optimization.typ_ for Bao's learned query plan selection.
+*Bao (query-level tuning):* see _Query Optimization_ for Bao's learned query plan selection.
 
 == Anomaly Detection
 

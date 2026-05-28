@@ -2,7 +2,7 @@
 
 A database must survive crashes: power loss, kernel panics, storage errors. Recovery ensures that committed transactions are durable (Durability) and uncommitted transactions are rolled back (Atomicity). ARIES (1992) is the definitive algorithm; every major RDBMS implements a variant.
 
-*See also:* _database/buffer-pool-and-io.typ_, _database/storage-engines.typ_, _database/concurrency-control.typ_
+*See also:* _Buffer Pool and I/O_, _Storage Engines_, _Concurrency Control_
 
 == Write-Ahead Logging (WAL)
 

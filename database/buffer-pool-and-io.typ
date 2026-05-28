@@ -2,7 +2,7 @@
 
 The buffer pool is the database's in-process page cache. It decouples the query engine (which works on in-memory page pointers) from the storage device (which is orders of magnitude slower). Understanding the buffer pool is prerequisite to reasoning about I/O costs, dirty page management, and performance tuning.
 
-*See also:* _database/storage-engines.typ_, _database/recovery-and-logging.typ_, _database/hardware-aware-design.typ_
+*See also:* _Storage Engines_, _Recovery and Logging_, _Hardware-Aware Database Design_
 
 == Buffer Pool Structure
 

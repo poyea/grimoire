@@ -2,7 +2,7 @@
 
 Many distributed databases sacrifice strong consistency for availability and performance. Understanding the formal models — CRDT, causal consistency, eventual consistency, CALM — allows engineers to reason about what guarantees an application actually needs.
 
-*See also:* _database/isolation-and-consistency-models.typ_, _database/consensus-and-replication.typ_, _database/transactions-distributed.typ_
+*See also:* _Isolation and Consistency Models_, _Consensus and Replication_, _Distributed Transactions_
 
 == CAP Theorem
 
@@ -238,7 +238,7 @@ HLC (Kulkarni et al. 2014) combines physical time with a logical counter, provid
 Used by: CockroachDB, YugabyteDB for causal ordering without GPS.
 
 ```python
-# See database/transactions-distributed.typ for HLC implementation
+# See chapter "Distributed Transactions" for HLC implementation
 # Key property: HLC.now() is always ≥ wall_clock.now()
 #               HLC.recv(msg_ts) > msg_ts → preserves causality
 ```

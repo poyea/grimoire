@@ -2,7 +2,7 @@
 
 Column-oriented storage (C-Store, MonetDB, Vertica, ClickHouse, DuckDB) achieves 10–100× better OLAP performance than row stores by exploiting column locality, compression, and SIMD vectorization. The key insight: analytical queries typically read a few columns from millions of rows — column storage eliminates reading irrelevant columns entirely.
 
-*See also:* _database/query-compilation.typ_, _database/hardware-aware-design.typ_, _database/lakehouses-and-open-formats.typ_
+*See also:* _Query Compilation_, _Hardware-Aware Database Design_, _Lakehouses and Open Table Formats_
 
 == Row Store vs Column Store
 

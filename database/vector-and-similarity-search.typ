@@ -2,7 +2,7 @@
 
 Embedding models (BERT, CLIP, text-embedding-3) map text, images, and other data into dense vectors in $RR^d$ (typically $d$ = 768–3072). *Nearest-neighbor search* — finding the $k$ vectors closest to a query vector — is the performance-critical operation in retrieval-augmented generation, semantic search, and recommendation systems.
 
-*See also:* _database/query-optimization.typ_, _database/hardware-aware-design.typ_, _LLM volume_ (retrieval-augmented generation — ANN is the inner loop of RAG)
+*See also:* _Query Optimization_, _Hardware-Aware Database Design_, _LLM volume_ (retrieval-augmented generation — ANN is the inner loop of RAG)
 
 == Distance Metrics
 

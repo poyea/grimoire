@@ -2,7 +2,7 @@
 
 Databases manage persistent, shared, and reliable data. The field rests on three pillars: the relational model (Codd 1970), transaction theory (ACID), and the architecture of a DBMS. Every modern system — from SQLite to Spanner — can be analyzed through these lenses.
 
-*See also:* _database/concurrency-control.typ_, _database/storage-engines.typ_, _database/isolation-and-consistency-models.typ_, _database/hardware-aware-design.typ_
+*See also:* _Concurrency Control_, _Storage Engines_, _Isolation and Consistency Models_, _Hardware-Aware Database Design_
 
 == The Relational Model
 

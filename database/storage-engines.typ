@@ -2,7 +2,7 @@
 
 A storage engine maps the logical data model (tables, rows, columns) onto persistent bytes on disk or flash. The two dominant families are *B-Tree* (update-in-place) and *LSM-Tree* (log-structured merge). The right choice depends on the read/write ratio, key distribution, and hardware.
 
-*See also:* _database/buffer-pool-and-io.typ_, _database/recovery-and-logging.typ_, _database/hardware-aware-design.typ_
+*See also:* _Buffer Pool and I/O_, _Recovery and Logging_, _Hardware-Aware Database Design_
 
 == B-Tree
 

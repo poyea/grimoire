@@ -2,7 +2,7 @@
 
 The ANSI SQL standard defines four isolation levels by the anomalies they permit. Adya (1999) formalized this with a graph-based framework that precisely characterizes each level and exposes gaps in the ANSI specification. Understanding this framework is essential for reasoning about correctness in real systems.
 
-*See also:* _database/concurrency-control.typ_, _database/transactions-distributed.typ_, _database/weakly-consistent-systems.typ_
+*See also:* _Concurrency Control_, _Distributed Transactions_, _Weakly Consistent Systems_
 
 == ANSI SQL Isolation Levels
 
