@@ -170,6 +170,9 @@ class ORSet:
             self.removed.setdefault(v, set()).update(tags)
 ```
 
+_Note: the canonical OR-Set keeps `elements` as a monotone-growing add-tag set and only filters by `removed` at read time. The in-place subtraction in `remove()` above is a local optimization; with it, `contains()` should rely on the tag-difference computation rather than on `elements` alone, and `merge()` must be the only path that grows either set to remain join-commutative._
+
+
 == Causal Consistency
 
 *Causal consistency* ensures that if event A causally precedes event B, all nodes see A before B. Concurrent events (neither precedes the other) may be seen in any order.
