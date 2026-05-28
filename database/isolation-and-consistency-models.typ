@@ -57,6 +57,8 @@ Adya models isolation as constraints on the *dependency graph* between transacti
 
 *G1a (dirty read):* T2 reads a version of X written by an aborted T1.
 
+*G1b (intermediate read):* T2 reads an intermediate (not final) version of X written by T1 — i.e., T1 later overwrites X again before commit.
+
 *G1c (circular information flow):* a cycle consisting of WR and WW edges only.
 
 *G2 (anti-dependency cycle):* a cycle that involves at least one RW anti-dependency edge. This is write skew.
