@@ -259,6 +259,9 @@ def bench(fn, n_warmup=100, n_measure=1000):
 
 == Flamegraphs for Database Profiling
 
+_See also:_ _CPU Architecture volume_ for performance-counter background (IPC, branch mispredictions, cache-miss attribution) that gives flamegraph nodes their cost interpretation.
+
+
 ```bash
 # Profile PostgreSQL backend for 30 seconds
 sudo perf record -g -p $(pg_ctl -D /var/lib/pgsql/data status | grep PID | awk '{print $3}') -- sleep 30
