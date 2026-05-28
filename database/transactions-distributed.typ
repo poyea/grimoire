@@ -92,7 +92,7 @@ Key insight: if all shards agree on the input order, they will arrive at
 the same output state independently. Coordination happens at sequencing, not execution.
 ```
 
-*Throughput:* Calvin achieves ~670K txns/sec on a 3-node cluster (CRDT-free) — no distributed lock contention.
+*Throughput:* Calvin achieves ~670K txns/sec on a 3-node cluster — no distributed lock contention, since the global order pre-resolves all conflicts before execution begins.
 
 *Limitation:* transactions must declare their read/write sets upfront (deterministic). Cannot handle "read-then-decide-what-to-write" patterns without a round-trip to the sequencer.
 
