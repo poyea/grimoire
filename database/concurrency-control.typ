@@ -68,33 +68,49 @@ T2 holds lock(B), waiting for lock(A)
 → cycle: T1 → T2 → T1  (deadlock)
 ```
 
-```python
-# Waits-for graph cycle detection (Kahn's algorithm)
-from collections import defaultdict, deque
+```cpp
+// Waits-for graph cycle detection (Kahn's algorithm).
+// Returns transactions on a cycle (deadlock victims to consider), empty if none.
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
-def detect_deadlock(waits_for: dict[int, list[int]]) -> list[int] | None:
-    """Returns a transaction in a cycle, or None if no deadlock."""
-    in_degree = defaultdict(int)
-    for txn, waitees in waits_for.items():
-        for w in waitees:
-            in_degree[w] += 1
-    queue = deque(t for t in waits_for if in_degree[t] == 0)
-    visited = 0
-    while queue:
-        t = queue.popleft()
-        visited += 1
-        for w in waits_for.get(t, []):
-            in_degree[w] -= 1
-            if in_degree[w] == 0:
-                queue.append(w)
-    all_txns = set(waits_for) | {w for ws in waits_for.values() for w in ws}
-    if visited < len(all_txns):
-        # Find a node in a cycle
-        return [t for t in all_txns if in_degree[t] > 0]
-    return None
+using TxnId = std::uint64_t;
+using WaitsFor = std::unordered_map<TxnId, std::vector<TxnId>>;
 
-# PostgreSQL runs deadlock detection every deadlock_timeout (default 1s)
-# Victim selection: abort the transaction with the lowest cost (fewest locks)
+std::vector<TxnId> detect_deadlock(const WaitsFor& waits_for) {
+    std::unordered_map<TxnId, int> in_degree;
+    std::unordered_set<TxnId> all_txns;
+    for (const auto& [t, waitees] : waits_for) {
+        all_txns.insert(t);
+        in_degree.try_emplace(t, 0);
+        for (TxnId w : waitees) {
+            in_degree[w]++;
+            all_txns.insert(w);
+        }
+    }
+    std::queue<TxnId> q;
+    for (TxnId t : all_txns)
+        if (in_degree[t] == 0) q.push(t);
+    std::size_t visited = 0;
+    while (!q.empty()) {
+        TxnId t = q.front(); q.pop();
+        ++visited;
+        auto it = waits_for.find(t);
+        if (it == waits_for.end()) continue;
+        for (TxnId w : it->second)
+            if (--in_degree[w] == 0) q.push(w);
+    }
+    std::vector<TxnId> cycle;
+    if (visited < all_txns.size())
+        for (TxnId t : all_txns)
+            if (in_degree[t] > 0) cycle.push_back(t);
+    return cycle;
+}
+
+// PostgreSQL runs deadlock detection every deadlock_timeout (default 1s).
+// Victim selection: abort the transaction with the lowest cost (fewest locks).
 ```
 
 == Optimistic Concurrency Control (OCC)
@@ -172,7 +188,7 @@ bool heap_tuple_visible(HeapTuple tuple, Snapshot snap) {
     if (TransactionIdPrecedes(snap->xmin, xmin)) return false;
     if (xmax == InvalidTransactionId) return true;   // not deleted
     if (!TransactionIdDidCommit(xmax)) return true;  // deleter aborted
-    if (!TransactionIdPrecedes(xmax, snap->xmin)) return true; // deleter visible
+    if (!TransactionIdPrecedes(xmax, snap->xmin)) return true; // deleter not yet visible in this snapshot
     return false;
 }
 ```
