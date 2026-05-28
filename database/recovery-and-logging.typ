@@ -57,26 +57,34 @@ Phase 3: Undo
 
 *Compensation Log Records (CLRs):* when undoing log record with LSN $L$, write a CLR with `undoNextLSN` pointing to the predecessor of $L$ in that txn's chain. If we crash again during undo, we restart at the CLR and skip already-undone records.
 
-```python
-# Simplified ARIES redo phase
-def redo_phase(log: list[LogRecord], dpt: dict, disk_pages: dict):
-    redo_lsn = min(r["recLSN"] for r in dpt.values())
-    for rec in log:
-        if rec["lsn"] < redo_lsn:
-            continue
-        if rec["type"] != "UPDATE":
-            continue
-        pid = rec["page_id"]
-        if pid not in dpt:
-            continue                 # page already stable on disk
-        if dpt[pid]["recLSN"] > rec["lsn"]:
-            continue
-        page_lsn = disk_pages[pid]["pageLSN"]
-        if page_lsn >= rec["lsn"]:
-            continue                 # idempotent check
-        # apply redo
-        disk_pages[pid]["data"]    = rec["after"]
-        disk_pages[pid]["pageLSN"] = rec["lsn"]
+```cpp
+// Simplified ARIES redo phase.
+#include <algorithm>
+#include <unordered_map>
+#include <vector>
+
+struct LogRecord { Lsn lsn; LogType type; PageId page_id; Bytes after; };
+struct DptEntry  { Lsn rec_lsn; };
+struct DiskPage  { Lsn page_lsn; Bytes data; };
+
+void redo_phase(const std::vector<LogRecord>& log,
+                const std::unordered_map<PageId, DptEntry>& dpt,
+                std::unordered_map<PageId, DiskPage>& disk_pages) {
+    Lsn redo_lsn = Lsn::max();
+    for (const auto& [_, e] : dpt) redo_lsn = std::min(redo_lsn, e.rec_lsn);
+
+    for (const auto& rec : log) {
+        if (rec.lsn < redo_lsn)              continue;
+        if (rec.type != LogType::Update)     continue;
+        auto dit = dpt.find(rec.page_id);
+        if (dit == dpt.end())                continue;  // page stable on disk
+        if (dit->second.rec_lsn > rec.lsn)   continue;
+        auto& page = disk_pages[rec.page_id];
+        if (page.page_lsn >= rec.lsn)        continue;  // idempotent check
+        page.data     = rec.after;
+        page.page_lsn = rec.lsn;
+    }
+}
 ```
 
 == Checkpointing
