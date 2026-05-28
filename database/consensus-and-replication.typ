@@ -2,7 +2,7 @@
 
 Replication makes data available despite node failures. Consensus protocols coordinate replicas so they agree on a single log of operations. The FLP impossibility result bounds what is achievable; Paxos and Raft define the practical design space.
 
-*See also:* _database/transactions-distributed.typ_, _database/weakly-consistent-systems.typ_, _database/partitioning-and-elasticity.typ_
+*See also:* _database/transactions-distributed.typ_, _database/weakly-consistent-systems.typ_, _database/partitioning-and-elasticity.typ_, _Networking volume_ (reliable transport, leader-election timeouts, message reordering)
 
 == FLP Impossibility
 
@@ -131,7 +131,8 @@ class RaftLeader:
             if success:
                 acks += 1
 
-        if acks > len(followers) // 2 + 1:
+        # Majority of the full cluster (leader + followers); leader's ack already counted.
+        if acks * 2 > len(followers) + 1:
             self.commit_index = entry.index    # majority replicated → committed
             return True
         return False  # retry with backoff
