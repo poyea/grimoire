@@ -2,7 +2,7 @@
 
 Inference serving bridges the gap between a trained model checkpoint and a production HTTP endpoint. A serving system must handle concurrent requests, manage GPU memory for KV caches, enforce latency SLAs, and sustain throughput measured in millions of tokens per second. This chapter covers the full stack: from request lifecycle to scheduler internals, with concrete numbers on H100 80 GB hardware running LLaMA 3 8B in BF16.
 
-*See also:* _gpu-architecture/ml-workloads.typ_ (Flash Attention, KV cache layout), _gpu-architecture/memory-hierarchy.typ_ (HBM bandwidth, coalescing), _llm/transformer-architecture.typ_ (attention internals).
+*See also:* _ML Workload Optimization on GPUs (GPU Architecture volume)_ (Flash Attention, KV cache layout), _GPU Memory Hierarchy (GPU Architecture volume)_ (HBM bandwidth, coalescing), _Transformer Architecture_ (attention internals).
 
 == Serving Stack Overview
 
