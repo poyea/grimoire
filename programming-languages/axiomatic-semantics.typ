@@ -6,15 +6,15 @@ Axiomatic semantics describes program meaning by what programs *prove*. Where op
 
 == Floyd: Assertions on Flowcharts
 
-Floyd (1967) annotated flowchart programs with *assertions*: predicates over program variables attached to edges. A program is correct if, for every edge $e$ "with assertion $P_e$, executing the basic block on the incoming edge $e'$ with assertion $P_(e')$ holding establishes $P_e$. The *verification condition* at edge $e$ is a logical implication.
+Floyd (1967) annotated flowchart programs with *assertions*: predicates over program variables attached to edges. A program is correct if, for every edge $e$ with assertion $P_e$, executing the basic block on the incoming edge $e'$ with assertion $P_(e')$ holding establishes $P_e$. The *verification condition* at edge $e$ is a logical implication.
 
-Floyd's framework already contains the central ideas: "the loop *invariant* ("an assertion attached to the back-edge of a loop), "the proof obligation at each transition, and the reduction of *program correctness* "to a finite collection of *logical* implications -- formulae in arithmetic with free variables denoting program state.
+Floyd's framework already contains the central ideas: the loop *invariant* (an assertion attached to the back-edge of a loop), the proof obligation at each transition, and the reduction of *program correctness* to a finite collection of *logical* implications -- formulae in arithmetic with free variables denoting program state.
 
-The shift from flowcharts to structured programs (Dijkstra 1968) made the assertions follow "the syntax of the program rather than the" topology of a flowchart. This shift, formalized by Hoare, is the basis of every modern program logic.
+The shift from flowcharts to structured programs (Dijkstra 1968) made the assertions follow the syntax of the program rather than the topology of a flowchart. This shift, formalized by Hoare, is the basis of every modern program logic.
 
 == Hoare Triples for IMP
 
-A *Hoare triple* ${P} c {Q}$ asserts: if "the precondition $P$ holds before executing command $c$ and $c$ *terminates*, then the postcondition $Q$ holds afterwards. This is *partial correctness*; we discuss total correctness below.
+A *Hoare triple* ${P} c {Q}$ asserts: if the precondition $P$ holds before executing command $c$ and $c$ *terminates*, then the postcondition $Q$ holds afterwards. This is *partial correctness*; we discuss total correctness below.
 
 Assertions $P$, $Q$ range over a first-order language with arithmetic that mentions program variables and (typically) logical variables. We assume an assertion language rich enough to express all relevant invariants -- specifically, *expressive* in the sense of Cook (1978).
 
@@ -50,9 +50,9 @@ Assertions $P$, $Q$ range over a first-order language with arithmetic that menti
     {P'}  c  {Q'}
 ```
 
-The assignment rule looks *backwards* -- "the precondition is computed from the postcondition "by substitution. This is the right direction logically: to ensure $P$ holds after `x := e`, demand that $P[e/x]$ holds before. Forward-style assignment ("$x := e$ from precondition $P$ yields postcondition $exists x_0. x = e[x_0 /x] and P[x_0 / x]$") is logically equivalent but harder to use mechanically.
+The assignment rule looks *backwards* -- the precondition is computed from the postcondition by substitution. This is the right direction logically: to ensure $P$ holds after `x := e`, demand that $P[e/x]$ holds before. Forward-style assignment ("$x := e$ from precondition $P$ yields postcondition $exists x_0. x = e[x_0 /x] and P[x_0 / x]$") is logically equivalent but harder to use mechanically.
 
-*Loop invariants* are the creative core. Finding $I$ is undecidable in general; verification *given* $I$ "is mechanical (modulo the assertion-language oracle).
+*Loop invariants* are the creative core. Finding $I$ is undecidable in general; verification *given* $I$ is mechanical (modulo the assertion-language oracle).
 
 === Example: Sum to N
 
@@ -68,17 +68,17 @@ while i < n do
 
 Invariant: $I equiv s = i (i+1)/2 and i <= n$.
 
-*Verification.* (1) Establishment: after `i := 0; s := 0`, $s = 0 = 0 dot 1 / 2$ "and $0 <= n$. (2) Preservation: assume $I and i < n$; after `i := i+1`, the predicate $s = (i-1)i/2$ holds (since the new $i$ is "the old $i$ plus one), then after `s := s + i`, $s = (i-1)i/2 + i = i(i+1)/2$, and $i <= n$ since old $i < n$. (3) On loop exit: $I and "not" (i < n)$ gives $i = n$ and $s = i(i+1)/2 = n(n+1)/2$.
+*Verification.* (1) Establishment: after `i := 0; s := 0`, $s = 0 = 0 dot 1 / 2$ and $0 <= n$. (2) Preservation: assume $I and i < n$; after `i := i+1`, the predicate $s = (i-1)i/2$ holds (since the new $i$ is the old $i$ plus one), then after `s := s + i`, $s = (i-1)i/2 + i = i(i+1)/2$, and $i <= n$ since old $i < n$. (3) On loop exit: $I and "not" (i < n)$ gives $i = n$ and $s = i(i+1)/2 = n(n+1)/2$.
 
 The verification reduces to *three logical implications* over arithmetic. A theorem prover discharges them; the human discovers $I$.
 
 == Partial vs. Total Correctness
 
-*Partial correctness*: ${P} c {Q}$ holds <==> for every state $sigma$ with $sigma tack.r P$ and every $sigma'$ "with $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$, $sigma' tack.r Q$. Divergence is permitted.
+*Partial correctness*: ${P} c {Q}$ holds <==> for every state $sigma$ with $sigma tack.r P$ and every $sigma'$ with $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$, $sigma' tack.r Q$. Divergence is permitted.
 
-*Total correctness*: $[P] c [Q]$ holds <==> additionally $c$ terminates from every state in which $P$ holds".
+*Total correctness*: $[P] c [Q]$ holds <==> additionally $c$ terminates from every state in which $P$ holds.
 
-To prove termination of a loop, augment the invariant with a *variant* ("or *ranking function*) $V$ -- an expression whose value lies in a well-founded order (typically $NN$) and strictly decreases each iteration.
+To prove termination of a loop, augment the invariant with a *variant* (or *ranking function*) $V$ -- an expression whose value lies in a well-founded order (typically $NN$) and strictly decreases each iteration.
 
 ```text
 [H-While-Total]
@@ -95,7 +95,7 @@ The boundary between partial and total correctness is the boundary between *live
 
 Hoare logic is *sound* with respect to the operational semantics:
 
-*Theorem (Soundness).* If $tack.r {P} c {Q}$ then for every $sigma$ "with $sigma tack.r P$ and every $sigma'$ with $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$, $sigma' tack.r Q$.
+*Theorem (Soundness).* If $tack.r {P} c {Q}$ then for every $sigma$ with $sigma tack.r P$ and every $sigma'$ with $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$, $sigma' tack.r Q$.
 
 *Proof sketch.* Induction on the derivation of the triple, using the standard operational rules of IMP. The `H-While` case requires induction on the number of loop iterations, using the invariant. $square$
 
@@ -127,27 +127,27 @@ where $H_0(Q) = Q and "not" b$, $H_(k+1)(Q) = H_0(Q) or (b and "wp"(c, H_k(Q)))$
 
 *Healthiness conditions* (Dijkstra). A predicate transformer $T : "Pred" arrow.r "Pred"$ is a $"wp"$ of some command <==> it satisfies:
 
-1. *Law "of Excluded Miracle*: $T("false") = "false"$ -- no command can establish the impossible.
+1. *Law of Excluded Miracle*: $T("false") = "false"$ -- no command can establish the impossible.
 2. *Monotonicity*: $Q_1 => Q_2$ => $T(Q_1) => T(Q_2)$.
 3. *Conjunctivity*: $T(Q_1 and Q_2) = T(Q_1) "and" T(Q_2)$ -- for *deterministic* commands.
 4. *Continuity*: $T(limits(exists)_i Q_i) = limits(exists)_i T(Q_i)$ for increasing chains.
 
-Conjunctivity is "the deterministic case; *demonic* nondeterminism ("the" adversary picks the branch) is captured by weaker conjunctivity ("only on $forall$); *angelic* nondeterminism (the program picks) by disjunctivity.
+Conjunctivity is the deterministic case; *demonic* nondeterminism (the adversary picks the branch) is captured by weaker conjunctivity (only on $forall$); *angelic* nondeterminism (the program picks) by disjunctivity.
 
-*Program derivation.* Dijkstra's research programme was to *derive* programs from specifications by manipulating $"wp"$ equations: start with the postcondition, fix "the invariant, compute $"wp"$ of a candidate program, and let the algebra suggest "the program text. The methodology underlies the *refinement calculus*.
+*Program derivation.* Dijkstra's research programme was to *derive* programs from specifications by manipulating $"wp"$ equations: start with the postcondition, fix the invariant, compute $"wp"$ of a candidate program, and let the algebra suggest the program text. The methodology underlies the *refinement calculus*.
 
 == Predicate Transformers, Demonic and Angelic
 
-Nondeterminism splits the" calculus.
+Nondeterminism splits the calculus.
 
 - *Demonic*: $"wp"(c_1 [] c_2, Q) = "wp"(c_1, Q) and "wp"(c_2, Q)$. Both branches must establish $Q$ because the adversary chooses.
 - *Angelic*: $"wp"^"A"(c_1 [] c_2, Q) = "wp"^"A"(c_1, Q) or "wp"^"A"(c_2, Q)$. Some branch must establish $Q$ because the program chooses.
 
-The two are dual under De Morgan. The *refinement order* on commands is $c_1 subset.eq c_2$ <==> $"wp"(c_2, Q) => "wp"(c_1, Q)$ for all $Q$ -- $c_2$ refines $c_1$ if every postcondition guaranteed by $c_1$ is guaranteed "by $c_2$. Refinement is reflexive and transitive; specifications are simply non-deterministic programs.
+The two are dual under De Morgan. The *refinement order* on commands is $c_1 subset.eq c_2$ <==> $"wp"(c_2, Q) => "wp"(c_1, Q)$ for all $Q$ -- $c_2$ refines $c_1$ if every postcondition guaranteed by $c_1$ is guaranteed by $c_2$. Refinement is reflexive and transitive; specifications are simply non-deterministic programs.
 
 == The Refinement Calculus
 
-Back's *refinement calculus* (1978, monograph 1998 with von Wright) and Morgan's *Programming from Specifications* (1990) made program derivation a formal activity. A *specification statement* $[P, Q]$ denotes any command that", from $P$, establishes $Q$. Refinement rules transform specifications into executable code:
+Back's *refinement calculus* (1978, monograph 1998 with von Wright) and Morgan's *Programming from Specifications* (1990) made program derivation a formal activity. A *specification statement* $[P, Q]$ denotes any command that, from $P$, establishes $Q$. Refinement rules transform specifications into executable code:
 
 ```text
 {P, Q}   sqsubseteq   if b then {P /\ b, Q} else {P /\ ~b, Q}    (case split)
@@ -181,13 +181,13 @@ The triumph of separation logic is *local reasoning* through the *frame rule*:
     {P * R}  c  {Q * R}
 ```
 
-A command $c$ that *operates* on the part of "the heap described by $P$ leaves any disjoint frame $R$ untouched. The side condition is a syntactic check "on free variables -- the *modifies* clause -- and is automatic.
+A command $c$ that *operates* on the part of the heap described by $P$ leaves any disjoint frame $R$ untouched. The side condition is a syntactic check on free variables -- the *modifies* clause -- and is automatic.
 
 The frame rule replaces page-long aliasing arguments with a single hypothesis: $R$ is disjoint, hence preserved. Verifications of linked-list manipulation that took dozens of pages in Hoare logic shrink to a single page in separation logic.
 
 === Example: List Reversal
 
-The predicate $"list"(x, l)$ (defined inductively) says "from address $x$ the heap contains a null-terminated linked list whose values are "the sequence $l$."
+The predicate $"list"(x, l)$ (defined inductively) says "from address $x$ the heap contains a null-terminated linked list whose values are the sequence $l$.
 
 ```text
 {list(x, l)}
@@ -200,17 +200,17 @@ while x != null do
 {list(y, reverse(l))}
 ```
 
-Loop invariant: $exists l_1, l_2. l = "reverse"(l_1) ++ l_2 and "list"(y, l_1) * "list"(x, l_2)$. The $*$ between the two list predicates is "the key: it asserts the two list segments are disjoint in memory. The loop body manipulates only the head cell of "the second segment, transferring it to the first; "the frame rule lets us ignore the (potentially unbounded) rest.
+Loop invariant: $exists l_1, l_2. l = "reverse"(l_1) ++ l_2 and "list"(y, l_1) * "list"(x, l_2)$. The $*$ between the two list predicates is the key: it asserts the two list segments are disjoint in memory. The loop body manipulates only the head cell of the second segment, transferring it to the first; the frame rule lets us ignore the (potentially unbounded) rest.
 
 === Ramification and Hypothetical Frame
 
 *Ramification*: a command operating on a *substructure* (a sublist, a subtree) of a larger structure can be verified locally, with the surrounding structure as a frame. The wand $"-*"$ encodes the *ramification operator*: $(P "-*" Q)$ specifies "what we promise to restore after running."
 
-*Hypothetical frame*: in concurrent settings, the frame may not be physically separate but rather *protected by an invariant* held "by the environment. This generalizes "the frame rule to *resource invariants*.
+*Hypothetical frame*: in concurrent settings, the frame may not be physically separate but rather *protected by an invariant* held by the environment. This generalizes the frame rule to *resource invariants*.
 
 == Concurrent Separation Logic
 
-O'Hearn (2007, _Resources, Concurrency, and Local Reasoning_) extended separation logic "to shared-memory concurrency. Each *resource* (a lock, a channel) is associated with a *resource invariant* $R$: a heap assertion that holds whenever the resource is *free*.
+O'Hearn (2007, _Resources, Concurrency, and Local Reasoning_) extended separation logic to shared-memory concurrency. Each *resource* (a lock, a channel) is associated with a *resource invariant* $R$: a heap assertion that holds whenever the resource is *free*.
 
 ```text
 [Par-Disjoint]
@@ -238,7 +238,7 @@ CSL handles bounded fine-grained synchronization (locks, semaphores) cleanly. *H
 Key constructs:
 
 - *Ghost state*. Auxiliary state not present in the program, used to track logical history. Resource algebras (PCMs, *partial commutative monoids*) provide a vocabulary for ghost state: counting permissions, fractional ownership, history tokens.
-- *Invariants* $"Inv"(N)(I)$. An assertion $I$ shared by all threads, "named" by $N$, openable for a single atomic step.
+- *Invariants* $"Inv"(N)(I)$. An assertion $I$ shared by all threads, named by $N$, openable for a single atomic step.
 - *View shifts* $P => ? Q$ ("or $|=> $). Logical updates that change ghost state without affecting the physical heap; analogous to weakening in classical logic but with resource-algebra structure.
 - *Atomic triples* $angle.l P angle.r c angle.l Q angle.r$ (Svendsen-Birkedal). The pre and postcondition hold *atomically* around the linearization point of a concurrent operation.
 
@@ -246,7 +246,7 @@ Iris is fully formalized in Coq, with the *Iris Proof Mode* providing an interac
 
 == Verifying Linked Lists and Concurrent Stacks
 
-A *concurrent stack* using compare-"and"-swap:
+A *concurrent stack* using compare-and-swap:
 
 ```text
 push(x):
@@ -257,11 +257,11 @@ push(x):
     else goto loop
 ```
 
-The linearization point is the successful CAS. In Iris, "the resource algebra is the *authoritative-fragmental* construction `Auth(List(Val))`: the" authority holds the true list, fragments hold ownership claims. The invariant says "the heap representation matches "the authoritative list." `push` proceeds by": (i) opening the invariant before CAS to access `head`; (ii) on success, atomically updating the ghost authoritative list and closing "the invariant; (iii) "on failure, retrying.
+The linearization point is the successful CAS. In Iris, the resource algebra is the *authoritative-fragmental* construction `Auth(List(Val))`: the authority holds the true list, fragments hold ownership claims. The invariant says the heap representation matches the authoritative list. `push` proceeds by: (i) opening the invariant before CAS to access `head`; (ii) on success, atomically updating the ghost authoritative list and closing the invariant; (iii) on failure, retrying.
 
-Iris formalizes such proofs to the point of machine-checked completeness; "the same pattern verifies Treiber stacks, Michael-Scott queues, and hazard-pointer-based reclamation.
+Iris formalizes such proofs to the point of machine-checked completeness; the same pattern verifies Treiber stacks, Michael-Scott queues, and hazard-pointer-based reclamation.
 
-== Connection "to Type Systems
+== Connection to Type Systems
 
 Hoare logic and type systems are different presentations of *static reasoning*. Two convergence points:
 
@@ -274,9 +274,9 @@ Verification tools have moved from research artifact to industrial deployment.
 
 - *Why3* (Bobot, Filliâtre et al.). A platform that translates first-order specifications to dozens of SMT solvers and proof assistants. Used as a back-end for many front-ends.
 - *Dafny* (Leino, Microsoft Research). An imperative language with built-in pre/postcondition annotations, loop invariants, and an SMT-backed verifier. Used in production at AWS and Microsoft.
-- *VeriFast* (Jacobs et al.). Separation-logic-based verifier for C "and Java; used "to verify embedded systems and Linux kernel modules.
-- *F\** (FStarLang). Dependent types with a refinement-type sub-language, an effects system, and SMT-backed proof. Used in HACL\* ("the verified cryptographic library powering Mozilla NSS and Linux kernel).
-- *CN* (Pulte et al., Cambridge). Separation logic for C, "with a focus on systems code; in active development for OpenSSL and PKVM ("the hypervisor used in Android Pixel).
+- *VeriFast* (Jacobs et al.). Separation-logic-based verifier for C and Java; used to verify embedded systems and Linux kernel modules.
+- *F\** (FStarLang). Dependent types with a refinement-type sub-language, an effects system, and SMT-backed proof. Used in HACL\* (the verified cryptographic library powering Mozilla NSS and Linux kernel).
+- *CN* (Pulte et al., Cambridge). Separation logic for C, with a focus on systems code; in active development for OpenSSL and PKVM (the hypervisor used in Android Pixel).
 - *Steel* (Microsoft Research). Concurrent separation logic embedded in $F^*$, verifies concurrent data structures and lock-free algorithms.
 
 == Beyond Functional Correctness
