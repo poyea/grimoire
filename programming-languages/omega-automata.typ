@@ -1,6 +1,6 @@
 = Omega-Automata
 
-Finite automata read finite words and accept by halting in a designated state. Real systems -- operating system kernels, reactive controllers, communication protocols, hardware pipelines -- do not halt. Their executions are *infinite* sequences of states, and the questions we ask about them (does every request eventually receive a response?", is the bus never granted to two masters simultaneously?") are properties of those infinite sequences. To check such properties algorithmically we need automata that read infinite inputs and accept by the *limiting behaviour* of the run. That is the subject of $omega$-automata.
+Finite automata read finite words and accept by halting in a designated state. Real systems -- operating system kernels, reactive controllers, communication protocols, hardware pipelines -- do not halt. Their executions are *infinite* sequences of states, and the questions we ask about them (does every request eventually receive a response?, is the bus never granted to two masters simultaneously?) are properties of those infinite sequences. To check such properties algorithmically we need automata that read infinite inputs and accept by the *limiting behaviour* of the run. That is the subject of $omega$-automata.
 
 *See also:* _Infinite Trees and Games_, _Tree Automata_, _Turing Machines and Computability_
 
@@ -16,7 +16,7 @@ The fundamental theorem of $omega$-regular languages (Büchi) is that this class
 
 A *nondeterministic transition system* over $Sigma$ is a tuple $cal(A) = (Q, Sigma, q_0, delta)$ where $Q$ is a finite set of states, $q_0 in Q$ is the initial state, and $delta subset.eq Q times Sigma times Q$ is the transition relation. A *run* of $cal(A)$ on $alpha in Sigma^omega$ is an infinite sequence $rho = q_0 q_1 q_2 dots in Q^omega$ such that $(q_i, alpha(i), q_(i+1)) in delta$ for every $i in "Nat"$.
 
-Define $"Occ"(rho) = { q in Q | exists i. q_i = q }$ and $"Inf"(rho) = { q in Q | forall^oo i. exists j > i. q_j = q } = { q in Q | exists^oo i. q_i = q }$. The set $"Inf"(rho)$ is the *limit set"* -- exactly "the states visited infinitely often. Because $Q$ is finite, $"Inf"(rho)$ is nonempty for every run.
+Define $"Occ"(rho) = { q in Q | exists i. q_i = q }$ and $"Inf"(rho) = { q in Q | forall^oo i. exists j > i. q_j = q } = { q in Q | exists^oo i. q_i = q }$. The set $"Inf"(rho)$ is the *limit set* -- exactly the states visited infinitely often. Because $Q$ is finite, $"Inf"(rho)$ is nonempty for every run.
 
 An *$omega$-automaton* is a transition system together with an *acceptance condition* -- a predicate over $"Inf"(rho)$ (or, in some formulations, over the whole sequence $rho$) that selects the runs deemed accepting. Different acceptance conditions give rise to different classes of automata.
 
@@ -117,7 +117,7 @@ The transition on input $a in Sigma$ from a Safra tree $T$ is:
   1. (Branch creation) For each node v whose label L meets F, attach
      a new rightmost child to v with label L inter F and a star.op name.
 
-  2. (Powerset step) Replace every label L by delta(L, a) (image under the"
+  2. (Powerset step) Replace every label L by delta(L, a) (image under the
      transition relation on input a).
 
   3. (Horizontal merge) Within each node, for any state q appearing in
@@ -166,7 +166,7 @@ $L(cal(A)) != emptyset$ <==> there exists a *non-trivial* strongly connected com
 
 === Nested Depth-First Search
 
-For *"on"-"the"-fly* model checking we cannot afford to build the full SCC graph. Courcoubetis, Vardi, Wolper, and Yannakakis (1991) gave the *nested DFS* algorithm: run an outer DFS from $q_0$, and at every post-order visit to an accepting state $f in F$, launch an inner DFS from $f$ searching for a back-edge to $f$ itself (a cycle through $f$). Total cost: $O(|Q| + |delta|)$, with only two bits per state (visited-by-outer, visited-by-inner). Modern variants (Holzmann--Peled--Yannakakis, Schwoon--Esparza) extend the algorithm to handle partial-order reduction and counterexample generation.
+For *on-the-fly* model checking we cannot afford to build the full SCC graph. Courcoubetis, Vardi, Wolper, and Yannakakis (1991) gave the *nested DFS* algorithm: run an outer DFS from $q_0$, and at every post-order visit to an accepting state $f in F$, launch an inner DFS from $f$ searching for a back-edge to $f$ itself (a cycle through $f$). Total cost: $O(|Q| + |delta|)$, with only two bits per state (visited-by-outer, visited-by-inner). Modern variants (Holzmann--Peled--Yannakakis, Schwoon--Esparza) extend the algorithm to handle partial-order reduction and counterexample generation.
 
 ```text
   procedure dfs1(s):
@@ -202,13 +202,13 @@ Positional determinacy means the winner of a parity game is decidable -- enumera
 ```text
   Algorithm (Small Progress Measures, Jurdziński 2000).
     Let M = {0, 1, ..., n_1} x {0, ..., n_3} x ... x {0, ..., n_{d-1}}
-    where n_i is "the number of positions with priority i (odd i only").
+    where n_i is the number of positions with priority i (odd i only).
     Initialise rho(v) := (0, ..., 0) for all v in V_0 union V_1.
     Repeat until rho stable:
       for each v in V_0:
         rho(v) := min over successors u of lift(rho(u), v)
       for each v in V_1:
-        rho(v) := max over successors u "of lift(rho(u), v)
+        rho(v) := max over successors u of lift(rho(u), v)
     Even wins from v <==> rho(v) != T (top).
 ```
 
@@ -226,13 +226,13 @@ of $L_mu$-fragments of bounded alternation depth.
 
 *Theorem (Bradfield 1998).* The alternation hierarchy of the modal $mu$-calculus is strict: for every $n$, there is a formula in $Sigma_(n+1)^mu$ not equivalent to any formula in $Pi_n^mu union Sigma_n^mu$.
 
-Bradfield's proof uses the *parity game characterisation* of $L_mu$ model checking: $[| phi |]^cal(K)$ is decided by a parity game whose index equals the alternation depth of $phi$. A strict hierarchy of $L_mu$ corresponds to a strict hierarchy in the index of parity games needed "to express them, witnessed "by graph-theoretic separations. Arnold (1999) gave a substantially simpler proof using tree automata.
+Bradfield's proof uses the *parity game characterisation* of $L_mu$ model checking: $[| phi |]^cal(K)$ is decided by a parity game whose index equals the alternation depth of $phi$. A strict hierarchy of $L_mu$ corresponds to a strict hierarchy in the index of parity games needed to express them, witnessed by graph-theoretic separations. Arnold (1999) gave a substantially simpler proof using tree automata.
 
 The $mu$-calculus subsumes CTL, CTL\*, and LTL (in the sense that every formula of these logics translates to $L_mu$ with bounded alternation), and provides the canonical *uniform fixed-point logic* for branching-time properties. Its model-checking problem on a Kripke structure $cal(K)$ and a formula $phi$ of alternation depth $d$ is in $"NP" inter "co-NP"$ (via reduction to parity games), and quasi-polynomial in the size of $cal(K) times phi$ since 2017.
 
 == Equivalences and Reductions
 
-The following equivalences hold up "to language; bracketed exponents indicate the state blow-up of "the standard translation.
+The following equivalences hold up to language; bracketed exponents indicate the state blow-up of the standard translation.
 
 ```text
   LTL ----[2^O(|phi|)]----> GBA ----[k|Q|]----> NBA
@@ -300,10 +300,10 @@ Given an LTL formula $phi$ over atomic propositions $"AP"$, the *closure* $"cl"(
 ```text
   Consistency requirements on s subset cl(phi):
   - for each psi in cl(phi), exactly one of psi, not psi is in s
-  - psi1 and psi2 in s   <==>   psi1 in s "and psi2 in s
-  - psi1 or  psi2 in s   <==>   psi1 in s "or  psi2 in s
+  - psi1 and psi2 in s   <==>   psi1 in s and psi2 in s
+  - psi1 or  psi2 in s   <==>   psi1 in s or  psi2 in s
   - psi1 U   psi2 in s   <==>   psi2 in s or (psi1 in s and X(psi1 U psi2) in s)
-  - psi1 R   psi2 in s   <==>   psi2 in s "and (psi1 in s "or X(psi1 R psi2) in s)
+  - psi1 R   psi2 in s   <==>   psi2 in s and (psi1 in s or X(psi1 R psi2) in s)
 ```
 
 The GBA $cal(A)_phi = (Q, 2^"AP", Q_0, delta, cal(F))$ has:
@@ -329,10 +329,10 @@ Processing rules:
 
 ```text
   expand(Old, {psi1 and psi2} cup New, Next)
-    --> expand(Old cup {psi1 "and psi2}, {psi1, psi2} cup New, Next)
+    --> expand(Old cup {psi1 and psi2}, {psi1, psi2} cup New, Next)
 
   expand(Old, {psi1 or psi2} cup New, Next)
-    --> expand(Old cup {psi1 "or psi2}, {psi1} cup New, Next)
+    --> expand(Old cup {psi1 or psi2}, {psi1} cup New, Next)
         AND
         expand(Old cup {psi1 or psi2}, {psi2} cup New, Next)
 
@@ -361,7 +361,7 @@ The invariants:
 
 Initial tree: single node, name $1$, label ${q_0}$, mark $0$. The transition on $a in Sigma$ proceeds in five phases (as listed earlier). After the transition, the *star.op-name supply* is replenished from names of deleted nodes.
 
-The Rabin pairs $(E_i, F_i)$ for $i in {1, dots, 2n}$ then capture: name $i$ survives forever (i.e. eventually appears in every reached tree) *"and"* is marked infinitely often, witnessing an accepting infinite branch in the original NBA. The proof of correctness rests on a delicate argument that the youngest surviving accepting branch of an accepting NBA run corresponds to exactly one Safra-tree node that is eventually never deleted.
+The Rabin pairs $(E_i, F_i)$ for $i in {1, dots, 2n}$ then capture: name $i$ survives forever (i.e. eventually appears in every reached tree) *and* is marked infinitely often, witnessing an accepting infinite branch in the original NBA. The proof of correctness rests on a delicate argument that the youngest surviving accepting branch of an accepting NBA run corresponds to exactly one Safra-tree node that is eventually never deleted.
 
 *Theorem (Optimality).* For every $n$, there exists an NBA with $n$ states whose minimal deterministic Rabin equivalent has at least $2^(Omega(n log n))$ states (Michel 1988, refined by Yan 2008). Hence Safra is asymptotically optimal.
 
@@ -373,11 +373,11 @@ Piterman (2006) shaves a factor and re-derives the construction targeting determ
 - priorities are assigned in $[1, 2n]$, with *even* priorities meaning accepting and *odd* meaning "live";
 - the priority of a tree is determined by the youngest dying node (odd) or the youngest marked-but-not-dying node (even).
 
-The state space remains $2^(O(n log n))$ but the resulting automaton plugs directly into parity-game solvers, saving "the Rabin-"to"-parity conversion. Schewe (2009) and Schewe--Varghese (2014) provide further constant-factor improvements through *history trees* "and *ordered Safra trees*.
+The state space remains $2^(O(n log n))$ but the resulting automaton plugs directly into parity-game solvers, saving the Rabin-to-parity conversion. Schewe (2009) and Schewe--Varghese (2014) provide further constant-factor improvements through *history trees* and *ordered Safra trees*.
 
 === Complementation via Ranking Functions
 
-An alternative to Safra-based complementation: *rank-based complementation* (Kupferman--Vardi 2001). The complement of an NBA is recognised by an NBA whose states are *level rankings* $f : Q arrow.r {0, dots, 2n}$ with $f(q)$ odd for $q in F$; the run tracks how *close* each state of the NBA is to its "last accepting visit". This yields a *direct* $2^(O(n log n))$ construction, avoiding deterministic intermediate.
+An alternative to Safra-based complementation: *rank-based complementation* (Kupferman--Vardi 2001). The complement of an NBA is recognised by an NBA whose states are *level rankings* $f : Q arrow.r {0, dots, 2n}$ with $f(q)$ odd for $q in F$; the run tracks how *close* each state of the NBA is to its last accepting visit. This yields a *direct* $2^(O(n log n))$ construction, avoiding deterministic intermediate.
 
 *Theorem (Kupferman--Vardi 2001).* For every NBA $cal(A)$ with $n$ states there is an NBA $cal(B)$ with $2^(O(n log n))$ states such that $L(cal(B)) = Sigma^omega \\ L(cal(A))$.
 
