@@ -6,7 +6,7 @@ different behaviors depending on the values of variables, the order of effects, 
 scoping rules in force. Semantics formalizes meaning; without it, a compiler writer has
 only intuition, and a type-safety proof has no theorem to prove.
 
-_See also: programming-languages/type-systems.typ for how operational semantics provides
+_See also: Type Systems for how operational semantics provides
 the substrate for the type-soundness theorem (progress + preservation)._
 
 == Why Syntax Is Not Enough
@@ -281,6 +281,6 @@ Together these guarantee that a well-typed program never reaches a *stuck* confi
 (no applicable rule, not a value) -- which is the formal definition of "no runtime type
 errors".
 
-_See also: programming-languages/type-systems.typ for the full Progress + Preservation
+_See also: Type Systems for the full Progress + Preservation
 proof for the simply-typed lambda calculus and the statement of type-soundness for
 Hindley-Milner._
