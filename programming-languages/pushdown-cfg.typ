@@ -6,7 +6,7 @@ exceptions (indentation-sensitive Python, C++ template instantiation depth) are 
 by ad-hoc means layered on top of a CF core. Understanding PDAs and CFGs is prerequisite
 to understanding every parser in chapter 5.
 
-_See also: programming-languages/parsing.typ for LL(k), LR(k), Earley, and GLL parsers
+_See also: Parsing for LL(k), LR(k), Earley, and GLL parsers
 that implement the PDA model in practice._
 
 == Pushdown Automata
@@ -212,5 +212,5 @@ The PDA model underlies two engineering families:
 The full treatment -- FIRST/FOLLOW sets, item sets, conflict resolution, error recovery --
 appears in the companion chapter.
 
-_See also: programming-languages/parsing.typ for the complete construction of LL(1) parse
+_See also: Parsing for the complete construction of LL(1) parse
 tables, LR(1) and LALR(1) automata, and Earley parsing for arbitrary CFGs._
