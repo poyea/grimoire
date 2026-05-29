@@ -252,4 +252,4 @@ perf stat -e migrations,context-switches ./prog              # how much the kern
 
 If `migrations` is non-zero on a pinned task, your affinity is broken. If `context-switches` is high on an isolated core, something else is running there.
 
-*See also:* _cpu-architecture/multicore.typ_ (NUMA architecture and cache coherence at the hardware level), _scheduler.typ_ (RT scheduling classes that complement isolation), _interrupts.typ_ (IRQ infrastructure beneath `smp_affinity`).
+*See also:* _Multicore and Cache Coherence (CPU Architecture volume)_ (NUMA architecture and cache coherence at the hardware level), _scheduler.typ_ (RT scheduling classes that complement isolation), _interrupts.typ_ (IRQ infrastructure beneath `smp_affinity`).
