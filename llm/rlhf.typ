@@ -11,7 +11,7 @@ Reinforcement Learning from Human Feedback (RLHF) is the dominant technique for 
 - *Safety mismatch:* The model may reproduce harmful content that appears in the training corpus.
 - *Sycophancy and verbosity:* Without explicit feedback, models tend toward superficially plausible rather than correct answers.
 
-_See also: llm/introduction.typ (pretraining objectives and data pipelines)._
+_See also: Introduction (pretraining objectives and data pipelines)._
 
 == The RLHF Pipeline
 
@@ -709,4 +709,4 @@ Balancing the alignment tax against safety improvements is an active area of res
 
 10. Williams, R. J. (1992). _Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning._ Machine Learning, 8(3-4):229–256.
 
-_See also: llm/transformer-architecture.typ (LLM internals), gpu-architecture/ml-workloads.typ (training infrastructure), gpu-architecture/multi-gpu.typ (distributed training for RL)._
+_See also: Transformer Architecture (LLM internals), ML Workload Optimization on GPUs (GPU Architecture volume) (training infrastructure), Multi-GPU Communication and Scaling (GPU Architecture volume) (distributed training for RL)._
