@@ -1,12 +1,12 @@
 = Dependent Types
 
-A *dependent type* is a type that may depend on a *term*. The function type $A arrow.r B$ becomes "the *dependent function type* $Pi x : A . B(x)$ where the codomain $B$ may mention $x$; the product $A times B$ becomes $Sigma x : A . B(x)$ where the" second component's type depends on the first. With this single move, types acquire "the full expressive power of a logic: $Pi$ encodes universal quantification, $Sigma$ encodes existence with a witness, and the *Curry–Howard correspondence* extends to predicate logic. This is the foundation of Martin-Löf Type Theory (Martin-Löf 1972, 1975, 1984), "the Calculus of Constructions (Coquand–Huet 1988), and modern proof assistants Coq/Rocq, Agda, Lean, Idris, "and F\*.
+A *dependent type* is a type that may depend on a *term*. The function type $A arrow.r B$ becomes the *dependent function type* $Pi x : A . B(x)$ where the codomain $B$ may mention $x$; the product $A times B$ becomes $Sigma x : A . B(x)$ where the second component's type depends on the first. With this single move, types acquire the full expressive power of a logic: $Pi$ encodes universal quantification, $Sigma$ encodes existence with a witness, and the *Curry–Howard correspondence* extends to predicate logic. This is the foundation of Martin-Löf Type Theory (Martin-Löf 1972, 1975, 1984), the Calculus of Constructions (Coquand–Huet 1988), and modern proof assistants Coq/Rocq, Agda, Lean, Idris, and F\*.
 
 *See also:* _Simply-Typed Lambda Calculus_, _System F and Parametricity_, _Type Systems_, _Homotopy Type Theory_
 
-This chapter develops dependent type theory from the ground up. We give "the syntax and rules of $lambda P$ / LF; the predicative universe hierarchy and Girard's paradox at $cal(U) : cal(U)$; W-types and inductive families; intensional vs extensional MLTT; the $J$-eliminator and the (in)derivability of function extensionality; the Calculus of Inductive Constructions (CIC) underpinning Coq; sized types and well-founded recursion; universe polymorphism; worked examples in Coq, Agda, and Lean; the Curry–Howard reading for first-order predicate logic; and program extraction.
+This chapter develops dependent type theory from the ground up. We give the syntax and rules of $lambda P$ / LF; the predicative universe hierarchy and Girard's paradox at $cal(U) : cal(U)$; W-types and inductive families; intensional vs extensional MLTT; the $J$-eliminator and the (in)derivability of function extensionality; the Calculus of Inductive Constructions (CIC) underpinning Coq; sized types and well-founded recursion; universe polymorphism; worked examples in Coq, Agda, and Lean; the Curry–Howard reading for first-order predicate logic; and program extraction.
 
-== From STLC to $Pi$ "and $Sigma$
+== From STLC to $Pi$ and $Sigma$
 
 In STLC, $tau_1 arrow.r tau_2$ means a function from $tau_1$-things to $tau_2$-things. Both $tau_1, tau_2$ are *closed* types — no term-level data on them. The dependent generalisation:
 
@@ -18,7 +18,7 @@ In STLC, $tau_1 arrow.r tau_2$ means a function from $tau_1$-things to $tau_2$-t
 $ Pi x : A . B(x) &= forall x : A . space B(x) \
 Sigma x : A . B(x) &= exists x : A . space B(x) $
 
-The constructive reading: a proof of $forall x : A . B(x)$ is a *function* delivering for every witness $a$ a proof of $B(a)$. A proof of $exists x : A . B(x)$ "is a *pair* of a witness $a$ "and a proof of $B(a)$.
+The constructive reading: a proof of $forall x : A . B(x)$ is a *function* delivering for every witness $a$ a proof of $B(a)$. A proof of $exists x : A . B(x)$ is a *pair* of a witness $a$ and a proof of $B(a)$.
 
 == $lambda P$ / LF: The Edinburgh Logical Framework
 
@@ -33,7 +33,7 @@ We have type-level $lambda$ (for forming type families) and type-level applicati
 
 *Judgments.* Four:
 + $tack.r Gamma$  ($Gamma$ is a well-formed context)
-+ $Gamma tack.r K$  ($K$ "is a well-formed kind)
++ $Gamma tack.r K$  ($K$ is a well-formed kind)
 + $Gamma tack.r A : K$  ($A$ has kind $K$)
 + $Gamma tack.r e : A$  ($e$ has type $A$)
 
@@ -84,28 +84,28 @@ $ (lambda x : A . e) space e' arrow.r_beta [x |-> e'] e $
 
 *$beta eta$-rules for $Sigma$.* $"fst" (e, e') arrow.r e$, $"snd" (e, e') arrow.r e'$, and (surjective pairing) $("fst" p, "snd" p) =_eta p$.
 
-*Theorem.* $lambda P$ is strongly normalising. Type checking "is decidable.
+*Theorem.* $lambda P$ is strongly normalising. Type checking is decidable.
 
 The first dependent example: the type family $"Vec"$ of length-indexed lists. Given $A : *$ and a term $n : "Nat"$, we form $"Vec" A space n : *$. Then $"append" : Pi A : * . Pi m n : "Nat" . "Vec" A space m arrow.r "Vec" A space n arrow.r "Vec" A space (m + n)$ — the *type* of $"append"$ guarantees the length arithmetic.
 
 == Universes
 
-In STLC "the type $tau$ is just a syntactic category; there "is no question "what is the type of `Int`?" In dependent type theory, types are *also* terms — they live in a *universe*. A naïve approach $cal(U) : cal(U)$ courts paradox (see below); the standard solution is a hierarchy:
+In STLC the type $tau$ is just a syntactic category; there is no question "what is the type of `Int`?" In dependent type theory, types are *also* terms — they live in a *universe*. A naïve approach $cal(U) : cal(U)$ courts paradox (see below); the standard solution is a hierarchy:
 $ cal(U)_0 : cal(U)_1 : cal(U)_2 : cal(U)_3 : ... $
 
 with the *cumulativity* rule $cal(U)_i subset.eq cal(U)_(i+1)$ — every type in level $i$ is also in level $i+1$.
 
 *Russell vs Tarski style.*
-- *Russell-style* (Martin-Löf 1984, Coq, Lean): membership in a universe *is* being a type. Write $A : cal(U)_i$ and use $A$ directly as "the type. Simpler, but blurs the distinction between code and type.
+- *Russell-style* (Martin-Löf 1984, Coq, Lean): membership in a universe *is* being a type. Write $A : cal(U)_i$ and use $A$ directly as the type. Simpler, but blurs the distinction between code and type.
 - *Tarski-style* (Agda's mode): universes are *codes*, with a decoding operator $"El" : cal(U)_i arrow.r "Type"_(i+1)$. Cleaner semantically; clunkier syntactically.
 
 Most production proof assistants use a hybrid: Russell-style at the surface, Tarski-style in the kernel.
 
 === Predicative vs Impredicative
 
-A universe is *predicative* if $Pi x : A . B$ lives at the maximum of "the levels of $A$ and $B$. *Impredicative* if $Pi x : A . B$ can "and in a *fixed* universe regardless of $A$'s level — typically because $Pi$ is allowed to quantify over the universe itself.
+A universe is *predicative* if $Pi x : A . B$ lives at the maximum of the levels of $A$ and $B$. *Impredicative* if $Pi x : A . B$ can live in a *fixed* universe regardless of $A$'s level — typically because $Pi$ is allowed to quantify over the universe itself.
 
-Coq has a special *impredicative* universe $"Prop"$: $Pi A : "Type" . A arrow.r A : "Prop"$ even though "Type" is a larger universe. This "is logically delicate: it works for $"Prop"$ but would be inconsistent for $"Type"$.
+Coq has a special *impredicative* universe $"Prop"$: $Pi A : "Type" . A arrow.r A : "Prop"$ even though "Type" is a larger universe. This is logically delicate: it works for $"Prop"$ but would be inconsistent for $"Type"$.
 
 === Girard's Paradox
 
@@ -163,13 +163,13 @@ Other examples:
 
 === Strict Positivity
 
-For an inductive declaration to be *consistent*, the type being defined must occur only *strictly positively* in the constructor argument types. The type $T$ occurs *positively* in $X$ if it never appears to the left of an arrow in $X$ (no contravariance). *Strictly* positively if it appears "only at the head of a positive position (not nested inside another type-level computation that might fold it back).
+For an inductive declaration to be *consistent*, the type being defined must occur only *strictly positively* in the constructor argument types. The type $T$ occurs *positively* in $X$ if it never appears to the left of an arrow in $X$ (no contravariance). *Strictly* positively if it appears only at the head of a positive position (not nested inside another type-level computation that might fold it back).
 
 *Why?* Consider the (non-strictly-positive) declaration:
 ```coq
 Inductive Bad : Type := bad : (Bad -> Bad) -> Bad.   (* REJECTED *)
 ```
-From this one can encode "the untyped $lambda$-calculus, derive a fixed-point combinator, and inhabit $bot$. Coq's positivity checker rejects this.
+From this one can encode the untyped $lambda$-calculus, derive a fixed-point combinator, and inhabit $bot$. Coq's positivity checker rejects this.
 
 === Inductive Recursion (Dybjer 1994, 2000)
 
@@ -195,7 +195,7 @@ Per Martin-Löf's intuitionistic type theory (1972, revised 1975, definitive 198
 
 === Identity Types
 
-Given $A : cal(U)$ "and $a, b : A$, the *identity type* $"Id"_A (a, b)$ — also written $a =_A b$ or $"Eq" A space a space b$ — is the *proposition* that $a$ and $b$ are equal. Introduction:
+Given $A : cal(U)$ and $a, b : A$, the *identity type* $"Id"_A (a, b)$ — also written $a =_A b$ or $"Eq" A space a space b$ — is the *proposition* that $a$ and $b$ are equal. Introduction:
 $ "refl"_a : "Id"_A (a, a) $
 
 Elimination — the *$J$-eliminator* (path induction):
@@ -229,7 +229,7 @@ Consequences of ETT:
 
 === The Hofmann–Streicher Groupoid Model
 
-*Theorem (Hofmann–Streicher 1995).* There is a model of ITT in which types are *groupoids* (categories where every morphism "is invertible), terms are objects, and propositional equality is *isomorphism*. In this model, UIP fails: two different isomorphisms can yield two different "proofs" of an equality.
+*Theorem (Hofmann–Streicher 1995).* There is a model of ITT in which types are *groupoids* (categories where every morphism is invertible), terms are objects, and propositional equality is *isomorphism*. In this model, UIP fails: two different isomorphisms can yield two different "proofs" of an equality.
 
 *Consequence.* UIP is not derivable from $J$ alone — only an additional axiom (Streicher's K-rule, or equivalently UIP itself) makes it provable. This insight is the seed of *Homotopy Type Theory* (Voevodsky et al., 2009): treat types as $oo$-groupoids and add the *univalence axiom* $("Id"_(cal(U)) A space B) tilde.equiv (A tilde.equiv B)$ — equality of types *"is"* equivalence of types. See _Homotopy Type Theory_ for the full development.
 
@@ -320,7 +320,7 @@ Inductive Acc {A} (R : A -> A -> Prop) (x : A) : Prop :=
   Acc_intro : (forall y, R y x -> Acc R y) -> Acc R x.
 ```
 
-A relation $R$ is well-founded <==> every $x : A$ "is accessible. Well-founded recursion: given $"wf" : forall x, "Acc" R space x$ and a step function, recursion peels off `Acc_intro` constructors.
+A relation $R$ is well-founded <==> every $x : A$ is accessible. Well-founded recursion: given $"wf" : forall x, "Acc" R space x$ and a step function, recursion peels off `Acc_intro` constructors.
 
 This *encodes* well-foundedness in the type system: even non-structural recursions can be implemented if you provide an accessibility proof.
 
@@ -423,7 +423,7 @@ A classical proof might say "either $r$ is rational or irrational, so one of $sq
 
 === Why $Sigma$ for $exists$
 
-A $Sigma x : A . P(x)$ inhabitant is a pair $(a, p)$ "with $a : A$ and $p : P(a)$. First-projection gives the witness; second-projection the property. Hence constructive logic *forces* us to produce witnesses.
+A $Sigma x : A . P(x)$ inhabitant is a pair $(a, p)$ with $a : A$ and $p : P(a)$. First-projection gives the witness; second-projection the property. Hence constructive logic *forces* us to produce witnesses.
 
 == Tools
 
@@ -505,7 +505,7 @@ match v in Vec _ k return P k -> Q k with"
 end
 ```
 
-The `in` and `return` clauses tell Coq how the result type varies with the constructor. This is "the workhorse of dependent pattern matching; almost every nontrivial dependent function uses it.
+The `in` and `return` clauses tell Coq how the result type varies with the constructor. This is the workhorse of dependent pattern matching; almost every nontrivial dependent function uses it.
 
 == Definitional vs Propositional Equality
 
@@ -515,7 +515,7 @@ In CIC, *some* equalities provable propositionally are *not* definitional: e.g.,
 
 == Subject Reduction Caveats
 
-In ITT + axioms (e.g., univalence as a postulate), subject reduction can *fail*: a term might step "to one whose type is provably equal but not definitionally equal. Cubical type theory (Cohen–Coquand–Huber–Mörtberg 2018) repairs this by giving univalence *computational* content — the postulate is replaced "by a definitional rule.
+In ITT + axioms (e.g., univalence as a postulate), subject reduction can *fail*: a term might step to one whose type is provably equal but not definitionally equal. Cubical type theory (Cohen–Coquand–Huber–Mörtberg 2018) repairs this by giving univalence *computational* content — the postulate is replaced by a definitional rule.
 
 In Coq with `Axiom`-postulated equalities, conversion becomes incomplete; tools like `rewrite` use propositional equality and pay the price.
 
@@ -527,7 +527,7 @@ Even outside Girard's paradox, dependent type theories have subtle inconsistency
 - *Non-strictly-positive inductive types* (rejected by Coq, but in toy theories without the check, $bot$ is inhabited).
 - *Definitional UIP + Streicher's K + univalence* — pairwise consistent, but enabling all three is contradictory.
 
-Coq's kernel "is small (~10kloc OCaml) and carefully audited; the *de Bruijn criterion* says only this kernel needs to be trusted, no matter how elaborate the surface tactic language.
+Coq's kernel is small (~10kloc OCaml) and carefully audited; the *de Bruijn criterion* says only this kernel needs to be trusted, no matter how elaborate the surface tactic language.
 
 == Further Worked Examples
 
@@ -539,7 +539,7 @@ map f []        = []
 map f (x ∷ xs)  = f x ∷ map f xs
 ```
 
-The output vector has *"the same length* as the input — guaranteed by the type. No off-"by"-one possible.
+The output vector has *the same length* as the input — guaranteed by the type. No off-by-one possible.
 
 === Safe Head
 
@@ -548,7 +548,7 @@ head : {A : Set} {n : ℕ} → Vec A (suc n) → A
 head (x ∷ _) = x
 ```
 
-The type `Vec A (suc n)` rules out `[]` at the pattern level — "the type checker observes `[] : Vec A 0` cannot unify with `Vec A (suc n)`, so the `[]` case is *impossible* and need not be written. This is *"the"* dependent-types selling point: invariant-violating cases are unrepresentable.
+The type `Vec A (suc n)` rules out `[]` at the pattern level — the type checker observes `[] : Vec A 0` cannot unify with `Vec A (suc n)`, so the `[]` case is *impossible* and need not be written. This is *the* dependent-types selling point: invariant-violating cases are unrepresentable.
 
 === Indexed Insertion in a BST
 
@@ -574,7 +574,7 @@ toNat SZ      = Z
 toNat (SS n _) = S n
 ```
 
-Singletons bridge between *static* and *runtime* values. The pattern is heavily used in Haskell via the `singletons` library "to simulate dependency.
+Singletons bridge between *static* and *runtime* values. The pattern is heavily used in Haskell via the `singletons` library to simulate dependency.
 
 == Tactics and Proof Engineering
 
@@ -594,11 +594,11 @@ In Coq/Lean, a proof is produced by *tactics* — a script of commands that incr
   [`omega` / `lia`], [linear arithmetic decision procedure],
 )
 
-The *elaboration* of a tactic script into a proof term is the work of "the *tactic engine*; the *kernel* re-checks the" resulting term independently. This division — large untrusted elaboration, small trusted kernel — is the *de Bruijn criterion* and is "the architectural reason proof assistants can be trusted at all".
+The *elaboration* of a tactic script into a proof term is the work of the *tactic engine*; the *kernel* re-checks the resulting term independently. This division — large untrusted elaboration, small trusted kernel — is the *de Bruijn criterion* and is the architectural reason proof assistants can be trusted at all.
 
 == Definitional Equality, $eta$, and Surprises
 
-A standard surprise: in pure ITT, $f$ and $lambda x . f space x$ are not definitionally equal unless $eta$ is part of conversion. Modern Coq enables $eta$ for functions; for inductives, $eta$ for $Sigma$ "is enabled (surjective pairing); for general inductives, $eta$ would be unsound in general.
+A standard surprise: in pure ITT, $f$ and $lambda x . f space x$ are not definitionally equal unless $eta$ is part of conversion. Modern Coq enables $eta$ for functions; for inductives, $eta$ for $Sigma$ is enabled (surjective pairing); for general inductives, $eta$ would be unsound in general.
 
 Another: in CIC, `match` on a $"Prop"$-typed value (a proof of equality, say) is restricted — the *singleton elimination* rule says you can only eliminate into $"Prop"$, not into $"Type"$, except for very specific cases (`False`, `And`, `Eq` on decidable types). This prevents leaking proof structure into computational types — preserving proof irrelevance.
 
@@ -655,7 +655,7 @@ QTT is the foundation of Idris 2 and informs the design of *linear Haskell* and 
 
 == Cubical Type Theory (Cohen–Coquand–Huber–Mörtberg 2018)
 
-Univalence as a postulate breaks computation. Cubical type theory adds an *interval* primitive $bb(I)$ with endpoints $0, 1 : bb(I)$, and *paths* — functions $bb(I) arrow.r A$ — replacing the identity type. Univalence then becomes a *theorem* "with computational rules. Cubical Agda and the experimental cubical mode of Coq implement this.
+Univalence as a postulate breaks computation. Cubical type theory adds an *interval* primitive $bb(I)$ with endpoints $0, 1 : bb(I)$, and *paths* — functions $bb(I) arrow.r A$ — replacing the identity type. Univalence then becomes a *theorem* with computational rules. Cubical Agda and the experimental cubical mode of Coq implement this.
 
 ```agda
 -- Path type
@@ -695,7 +695,7 @@ $ K : Pi A . Pi a : A . Pi P : "Id"_A (a, a) arrow.r cal(U) . space P space "ref
 
 K says every loop in $"Id"$ is "refl"; equivalently, UIP. It is *not* derivable from $J$ in ITT — the Hofmann–Streicher groupoid model refutes it. Coq formerly bundled K (via `Match` on `eq`) but modern Coq isolates it: `Axiom K : ...` is necessary to use.
 
-Agda has a `--without-K` flag (default for HoTT-style development) "to prevent inadvertent K use.
+Agda has a `--without-K` flag (default for HoTT-style development) to prevent inadvertent K use.
 
 == Pattern Matching as Coq Definitions
 
@@ -707,12 +707,12 @@ Fixpoint length {A} (l : list A) : nat :=
   | cons _ xs => S (length xs)
   end.
 ```
-desugars "to roughly
+desugars to roughly
 ```coq
 Definition length {A} := list_rect (fun _ => nat) 0 (fun _ _ ih => S ih).
 ```
 
-The pattern-matching machinery in Coq's elaborator is itself nontrivial: handling *dependent* matches ("where return types vary) requires the convoy pattern; *deep* patterns desugar to nested matches; *"with"-clauses* in Agda give yet finer control.
+The pattern-matching machinery in Coq's elaborator is itself nontrivial: handling *dependent* matches (where return types vary) requires the convoy pattern; *deep* patterns desugar to nested matches; *with-clauses* in Agda give yet finer control.
 
 == Inductive Definitions vs Records
 
@@ -849,9 +849,9 @@ The cost: more programmer effort, slower compilation, smaller libraries (mathlib
 
 Dependent types entered logic with *de Bruijn's* *Automath* system (1968), the first computer-checked formal mathematics — used by van Benthem Jutting (1977) to verify Landau's *Grundlagen der Analysis*. Automath had dependent function types but no inductive types.
 
-*Per Martin-Löf* developed his *Intuitionistic Type Theory* in three papers/books (1972 preprint, 1975 published, 1984 *Notes by Sambin*). The 1972 version had $cal(U) : cal(U)$ and was inconsistent (Girard's paradox); the 1975 revision introduced "the predicative hierarchy. Martin-Löf was motivated philosophically by Brouwer's *intuitionism* and meaning-as-use semantics.
+*Per Martin-Löf* developed his *Intuitionistic Type Theory* in three papers/books (1972 preprint, 1975 published, 1984 *Notes by Sambin*). The 1972 version had $cal(U) : cal(U)$ and was inconsistent (Girard's paradox); the 1975 revision introduced the predicative hierarchy. Martin-Löf was motivated philosophically by Brouwer's *intuitionism* and meaning-as-use semantics.
 
-*Thierry Coquand "and Gérard Huet* introduced the *Calculus of Constructions* in 1988 — an impredicative dependent calculus unifying System F with $lambda P$. The first Coq implementation followed in 1989.
+*Thierry Coquand and Gérard Huet* introduced the *Calculus of Constructions* in 1988 — an impredicative dependent calculus unifying System F with $lambda P$. The first Coq implementation followed in 1989.
 
 *Christine Paulin-Mohring* extended CoC with primitive inductive types (1989, 1993), yielding CIC — the kernel of Coq from version 5.10 onward.
 
@@ -861,4 +861,4 @@ Dependent types entered logic with *de Bruijn's* *Automath* system (1968), the f
 
 The *Mathematical Components* library (Coq, Gonthier et al.) and *mathlib* (Lean, the community) have demonstrated that production formalisation of nontrivial mathematics — Four-Color Theorem (Gonthier 2005), Feit–Thompson Odd Order Theorem (Gonthier et al. 2012), Liquid Tensor Experiment (Scholze–Commelin–Massot 2022) — is possible at scale.
 
-Today dependent types power both *proof assistants* (Coq/Rocq, Agda, Lean, Isabelle/HOL — though Isabelle is not properly dependent — Mizar, NuPRL) and *production languages* (Idris 2, F\*, ATS, Dependent Haskell via singletons). The convergence with mainstream programming continues: Rust's `const generics`, Swift's `parameterized protocols`, Scala 3's *match types* all reach toward fragments of dependent typing without committing to the full system. The historical arc — from STLC's three rules to CIC's full kernel — runs through System F (polymorphism), $F_omega$ (type operators), $lambda P$ (term dependency), and the" apex $lambda C$ where all three meet.
+Today dependent types power both *proof assistants* (Coq/Rocq, Agda, Lean, Isabelle/HOL — though Isabelle is not properly dependent — Mizar, NuPRL) and *production languages* (Idris 2, F\*, ATS, Dependent Haskell via singletons). The convergence with mainstream programming continues: Rust's `const generics`, Swift's `parameterized protocols`, Scala 3's *match types* all reach toward fragments of dependent typing without committing to the full system. The historical arc — from STLC's three rules to CIC's full kernel — runs through System F (polymorphism), $F_omega$ (type operators), $lambda P$ (term dependency), and the apex $lambda C$ where all three meet.
