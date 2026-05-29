@@ -2,7 +2,7 @@
 
 Training a language model is a one-time cost; _inference_ runs continuously in production. Inference efficiency determines cost per query, latency, and how many users a single GPU cluster can serve. This chapter covers the full stack: KV cache mechanics, decoding strategies, speculative decoding, continuous batching, paged memory management, prefix reuse, chunked prefill, tensor parallelism, and how to measure what matters.
 
-*See also:* _llm/transformer-architecture.typ_ (attention internals), _gpu-architecture/ml-workloads.typ_ (Flash Attention, GEMM kernels), _gpu-architecture/memory-hierarchy.typ_ (HBM bandwidth, cache hierarchy).
+*See also:* _Transformer Architecture_ (attention internals), _ML Workload Optimization on GPUs (GPU Architecture volume)_ (Flash Attention, GEMM kernels), _GPU Memory Hierarchy (GPU Architecture volume)_ (HBM bandwidth, cache hierarchy).
 
 == KV Cache
 
