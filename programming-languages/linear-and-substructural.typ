@@ -92,11 +92,11 @@ Sequents are $Gamma tack.r tau$ where $Gamma$ is a *multiset* of formulae (excha
   Gamma, A (x) B |- C
 
   Gamma |- A     Gamma |- B
-  ----------------------------- ("with R)
+  ----------------------------- (with R)
   Gamma |- A & B
 
   Gamma, A |- C
-  --------------------- ("with" L1)
+  --------------------- (with L1)
   Gamma, A & B |- C
 ```
 
@@ -397,7 +397,7 @@ The handle `h` has linear type `Handle`; the only operations on it return a *new
 
 == Theoretical Coda: What Substructurality Buys
 
-The discipline of dropping structural rules is not free — it makes the typing context heavier and the" rules subtler. What is gained:
+The discipline of dropping structural rules is not free — it makes the typing context heavier and the rules subtler. What is gained:
 
 1. *Resource tracking* without runtime reference counting or GC pauses.
 2. *Protocol enforcement* — the type system understands "must be done in order".
