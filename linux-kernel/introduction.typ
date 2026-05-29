@@ -19,7 +19,7 @@ The Linux kernel is the most-deployed software artifact on Earth: it runs on the
 
 *Code conventions:* C is the kernel's native language. User-space examples are C unless a particular tool is more idiomatic in another form (`bpftrace` scripts, shell). All examples target x86-64 Linux 6.x; ARM64 differences are flagged where relevant.
 
-*See also:* _cpu-architecture/multicore.typ_ (NUMA, cache coherence), _cpu-architecture/virtual-memory.typ_ (TLB, page tables), _networking/kernel-bypass.typ_ (DPDK, AF_XDP), _coding/advanced-systems.typ_ (scheduler algorithms, lock-free data structures).
+*See also:* _Multicore and Cache Coherence (CPU Architecture volume)_ (NUMA, cache coherence), _Virtual Memory (CPU Architecture volume)_ (TLB, page tables), _Kernel Bypass (Networking volume)_ (DPDK, AF_XDP), _Advanced Algorithms in Modern Systems (Coding volume)_ (scheduler algorithms, lock-free data structures).
 
 == Why Kernel Internals Matter
 
