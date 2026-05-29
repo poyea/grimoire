@@ -2,7 +2,7 @@
 
 Pre-trained LLMs encode vast world knowledge but respond poorly to instructions and specific task formats out of the box. Fine-tuning adapts the model's behavior — teaching it to follow instructions, hold multi-turn conversations, or specialize in a domain — without relearning language from scratch. This chapter covers the full spectrum from expensive full fine-tuning to the parameter-efficient methods (LoRA, QLoRA) that dominate production work, plus the data formats, alignment algorithms, and practical recipes needed to run a real training job.
 
-*See also:* _llm/pretraining.typ_ (how base weights are obtained), _gpu-architecture/ml-workloads.typ_ (GEMM kernels, mixed-precision training), _gpu-architecture/memory-hierarchy.typ_ (HBM bandwidth and capacity constraints).
+*See also:* _Pretraining_ (how base weights are obtained), _ML Workload Optimization on GPUs (GPU Architecture volume)_ (GEMM kernels, mixed-precision training), _GPU Memory Hierarchy (GPU Architecture volume)_ (HBM bandwidth and capacity constraints).
 
 *Code note:* PyTorch is used for all runnable examples. C++ (libtorch) is shown for inference-time weight merging. bitsandbytes and HuggingFace `transformers` / `trl` are referenced as the standard production stack.
 
