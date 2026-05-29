@@ -2,7 +2,7 @@
 
 Classical finite automata are blind to time: they observe the order of events but not the intervals between them. Real systems -- communication protocols with retransmission timers, controllers governed by sample-and-hold loops, embedded software interacting with continuous physics -- have correctness properties that depend on quantitative timing. A railway interlocking that lowers the barrier in $30 s$ is correct; one that lowers it in $30$ minutes is not. The framework of *timed automata* (Alur--Dill 1994) extends finite automata with real-valued clocks and clock constraints, retaining decidable reachability while modelling dense time directly. *Hybrid automata* (Alur--Courcoubetis--Henzinger--Ho 1992; Henzinger 1996) generalize further to continuous variables governed by differential equations, exchanging decidability for expressiveness.
 
-*See also:* _Omega-Automata_, _Weighted and Probabilistic Automata_, _Turing Machines and Computability_, _Semantics_
+*See also:* _Omega-Automata_, _Weighted and Probabilistic Automata_, _Turing Machines and Computability_, _Program Semantics_
 
 == Motivation: From Untimed to Timed Behaviour
 
