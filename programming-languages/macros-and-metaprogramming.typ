@@ -108,16 +108,16 @@ The idea is brutally simple:
 
 The expander's job is then to *add scopes* to the identifiers it traverses:
 
-- When the expander enters a `(lambda (x) e)` form, it creates a fresh scope $s$, adds $s$ to $x$, adds $s$ "to every identifier in $e$, and recursively expands $e$.
-- When the expander expands a macro use, it creates a fresh scope $s_"macro"$ for the macro's introduced bindings, adds $s_"macro"$ to identifiers that come *"from the macro template*, and leaves identifiers "that come *"from the macro's arguments* untouched (those keep their original scope set from the *use* site).
+- When the expander enters a `(lambda (x) e)` form, it creates a fresh scope $s$, adds $s$ to $x$, adds $s$ to every identifier in $e$, and recursively expands $e$.
+- When the expander expands a macro use, it creates a fresh scope $s_"macro"$ for the macro's introduced bindings, adds $s_"macro"$ to identifiers that come *from the macro template*, and leaves identifiers that come *from the macro's arguments* untouched (those keep their original scope set from the *use* site).
 
-The result: an identifier introduced by the macro has $s_"macro"$ in its scope set"; the user's identifier of "the same name does not. A binding of the user's identifier is *outside* the" macro's introduced binding (it has a *different* scope set"), so the two do not capture each other.
+The result: an identifier introduced by the macro has $s_"macro"$ in its scope set; the user's identifier of the same name does not. A binding of the user's identifier is *outside* the macro's introduced binding (it has a *different* scope set), so the two do not capture each other.
 
-The set"-"of"-scopes model is *equational*: two identifiers are *"the same* <==> they have the same name and the" same scope set". There is no painting, no marking, no renaming — just set membership. The model handles macros, modules, separately compiled code, and recursive expansion uniformly, "and it is the basis of "the current Racket macro expander.
+The set-of-scopes model is *equational*: two identifiers are *the same* <==> they have the same name and the same scope set. There is no painting, no marking, no renaming — just set membership. The model handles macros, modules, separately compiled code, and recursive expansion uniformly, and it is the basis of the current Racket macro expander.
 
-*Theorem (Hygiene, Flatt 2016).* In the set"-"of"-scopes model, a macro's expansion never causes an identifier from the macro template to capture an identifier from the macro's use site, and never causes an identifier "from the use site "to capture an identifier from the template.
+*Theorem (Hygiene, Flatt 2016).* In the set-of-scopes model, a macro's expansion never causes an identifier from the macro template to capture an identifier from the macro's use site, and never causes an identifier from the use site to capture an identifier from the template.
 
-*Proof sketch.* The macro template's identifiers acquire $s_"macro"$ on expansion; the use-site identifiers do not. A binding introduced by the template binds only identifiers with $s_"macro"$ in their scope set"; a use-site reference (without $s_"macro"$) cannot resolve to it. Symmetrically, a use-site binding cannot capture a template reference, because the template reference has $s_"macro"$ extra. $square$
+*Proof sketch.* The macro template's identifiers acquire $s_"macro"$ on expansion; the use-site identifiers do not. A binding introduced by the template binds only identifiers with $s_"macro"$ in their scope set; a use-site reference (without $s_"macro"$) cannot resolve to it. Symmetrically, a use-site binding cannot capture a template reference, because the template reference has $s_"macro"$ extra. $square$
 
 == Phase Separation and Modules
 
@@ -130,14 +130,14 @@ Macros run *before* runtime, but a macro's expansion may itself contain macro us
 
 A module imports definitions *for a particular phase*. `(require racket/list)` imports at phase 0; `(require (for-syntax racket/list))` imports the same module *at phase 1*, making `racket/list`'s functions available *inside* macro implementations. The two imports are *independent* — phase 0 and phase 1 of `racket/list` are different instantiations of the module.
 
-The phase structure makes *separate compilation* of macro-using modules possible: when compiling module $A$ that uses a macro from module $B$, the compiler must instantiate $B$ at phase 1 *"only"*; it does not need $B$'s phase-0 code. This is the engineering breakthrough that lets Racket's macros scale to large programs.
+The phase structure makes *separate compilation* of macro-using modules possible: when compiling module $A$ that uses a macro from module $B$, the compiler must instantiate $B$ at phase 1 *only*; it does not need $B$'s phase-0 code. This is the engineering breakthrough that lets Racket's macros scale to large programs.
 
 == MetaML and Multi-Stage Programming
 
 A radically different tradition is *multi-stage programming* (MSP), founded by (Taha–Sheard 1997, 2000) with the language *MetaML*. MSP adds three syntactic constructs:
 
 - *Brackets* `<. e .>` (or `.<e>.`): produce a *code value* representing the expression $e$ without evaluating it. Type: $angle.l tau angle.r$ if $e : tau$.
-- *Escape* `~e` (or `.~e`): inside brackets, insert a code value computed by $e$ into the surrounding code. Type: $angle.l tau angle.r$ produces $tau$ in "the brackets.
+- *Escape* `~e` (or `.~e`): inside brackets, insert a code value computed by $e$ into the surrounding code. Type: $angle.l tau angle.r$ produces $tau$ in the brackets.
 - *Run* `!e` (`.! e`): take a code value and execute it. Type: $angle.l tau angle.r arrow.r tau$.
 
 The classical example is the *power* function staged on its exponent:
@@ -193,7 +193,7 @@ inline eq.def power(inline n: Int, x: Double): Double =
   else x * power(n - 1, x)
 ```
 
-The `inline` keyword instructs the compiler to *inline* the body at "the use site; `inline if"` and `inline match` are reduced at compile time when the scrutinee is a compile-time constant. The result "is a *macro* expressed in ordinary Scala syntax, with the compiler responsible for "the staging.
+The `inline` keyword instructs the compiler to *inline* the body at the use site; `inline if` and `inline match` are reduced at compile time when the scrutinee is a compile-time constant. The result is a *macro* expressed in ordinary Scala syntax, with the compiler responsible for the staging.
 
 For more sophisticated needs, Scala 3's `quoted` API gives full multi-stage programming:
 
@@ -339,11 +339,11 @@ The convergence point of macros and PE is *typed metaprogramming with reflection
 
 == Multi-Stage Programming: Soundness
 
-The type system of MetaML guarantees that staged code is *well-typed at every stage*. A staged expression that produces a value of type $angle.l "int" angle.r$ can be *run* to produce an `int`; the operational semantics of `.!` is "to take a code value and run it in the next stage, and "the type system's *staging invariants* ensure the code value is closed and type-correct.
+The type system of MetaML guarantees that staged code is *well-typed at every stage*. A staged expression that produces a value of type $angle.l "int" angle.r$ can be *run* to produce an `int`; the operational semantics of `.!` is to take a code value and run it in the next stage, and the type system's *staging invariants* ensure the code value is closed and type-correct.
 
 *Theorem (Type Safety for MetaML, Taha 2000).* Well-typed MetaML programs do not produce ill-typed code values or unbound-variable errors when run.
 
-*Proof sketch.* By a strengthened progress-"and"-preservation argument that tracks the *level* of each subexpression ("the stage at which it will run). At each stage, the standard arguments apply; the" cross-stage operations preserve well-typedness because the type of brackets explicitly records "the stage. $square$
+*Proof sketch.* By a strengthened progress-and-preservation argument that tracks the *level* of each subexpression (the stage at which it will run). At each stage, the standard arguments apply; the cross-stage operations preserve well-typedness because the type of brackets explicitly records the stage. $square$
 
 The result is *macro hygiene* in a typed setting: capture is impossible because the type system tracks free variables, and ill-typed expansions are caught at the meta-stage rather than at the object stage. This is, in a sense, the *promised land* of macros — a hygienic, typed, expressive metaprogramming facility — and it is realised in MetaOCaml and Scala 3's quoted API.
 
