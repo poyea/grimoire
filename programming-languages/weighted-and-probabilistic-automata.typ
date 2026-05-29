@@ -330,7 +330,7 @@ This mirrors the (un)decidability of inclusion for tropical weighted automata: i
    equivalence of WA                             field                P (Tzeng 1992)
    equivalence of WA                             (N, +, *)            decidable
    equivalence of WA                             tropical             undecidable (Krob)
-   determinizability of" WA                       tropical             decidable (twins)
+   determinizability of WA                       tropical             decidable (twins)
    PA emptiness (cut-point)                      [0,1]                undecidable (Paz)
    PA equivalence                                [0,1]                P (via Tzeng)
    PA value-1                                    [0,1]                undecidable (GO 2010)
