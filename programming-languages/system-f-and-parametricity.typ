@@ -2,7 +2,7 @@
 
 System F — the *polymorphic $lambda$-calculus*, or second-order $lambda$-calculus — extends the simply-typed $lambda$-calculus with quantification over types. Discovered independently by Jean-Yves Girard (1971, thesis 1972) as a tool to prove the consistency of second-order Peano arithmetic, and rediscovered by John Reynolds (1974) as the type system underlying polymorphic programming, System F is the bridge between proof theory and modern functional language design.
 
-*See also:* _Simply-Typed Lambda Calculus_, _Type Systems_, _Dependent Types_, _Category Theory and Functional Programming_
+*See also:* _Simply-Typed Lambda Calculus_, _Type Systems_, _Dependent Types_, _Categorical Semantics_
 
 This chapter develops System F in full. We give the syntax, typing rules with T-TABS and T-TAPP, and worked Church encodings of $"Bool"$, $"Nat"$, $"Pair"$, and $"List"$ as polymorphic types. We show why the $Y$-combinator is not typable. We sketch Girard's strong-normalization proof via *reducibility candidates*, the genuine innovation over Tait's plain reducibility predicates. We develop Reynolds' *abstraction theorem* (parametricity) and Wadler's "theorems for free", deriving in detail the free theorems for the polymorphic identity, swap, and map types. We treat existential types and Mitchell–Plotkin abstract data types. We climb to System $F_omega$ and the Barendregt cube. We close with Wells' undecidability of System F type inference and Pierce's undecidability of full $F_{<:}$.
 
