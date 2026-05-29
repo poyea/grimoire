@@ -4,7 +4,7 @@
 that can be solved with a finite automaton is solved in $O(n)$ time and $O(1)$ space (the
 state). Lexers, log scanners, packet classifiers, and configuration validators all live here.
 
-_See also: coding/string-algorithms.typ for KMP, Aho-Corasick, and other pattern-matching
+_See also: String Algorithms (Coding volume) for KMP, Aho-Corasick, and other pattern-matching
 algorithms that exploit the structure of regular languages at the implementation level._
 
 == Deterministic Finite Automata
@@ -210,5 +210,5 @@ subset "RE"$. The important engineering boundary is between Type 3 and Type 2: l
 in Type 3; parsers live at Type 2. Type 1 grammars (context-sensitive) require a
 linear-bounded automaton and membership is PSPACE-complete — unusable for syntax.
 
-_See also: programming-languages/pushdown-cfg.typ for the full treatment of context-free
+_See also: Pushdown Automata and Context-Free Grammars for the full treatment of context-free
 grammars, pushdown automata, and why ${ a^n b^n c^n }$ is not context-free._
