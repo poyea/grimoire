@@ -2,7 +2,7 @@
 
 When a program runs on more than one thread of control, the question "what does this program mean?" is no longer answered by a single trace of states. Concurrent execution multiplies the possible behaviours combinatorially; weak memory hardware multiplies them again; failures multiply them still further. The discipline of *concurrency semantics* is the study of which behaviours are admitted, which are excluded, and what guarantees the programmer may rely on.
 
-*See also:* _Process Calculi_, _Semantics_
+*See also:* _Process Calculi_, _Program Semantics_
 
 The previous chapter studied algebraic theories — CCS, CSP, the $pi$-calculus — that take *interaction* as primitive. This chapter takes a different vantage: rather than designing a calculus, we ask how the operational semantics of an existing programming language is to be extended when multiple threads execute concurrently, what mathematical structures underlie the resulting behaviours, and how the dominant programming models — actors, channels, transactions, async/await, dataflow — fit into the semantic picture. The treatment is deliberately language-pluralist: Erlang, Go, Rust, Haskell, OCaml 5, and Scala each embody a distinct point in the design space.
 
