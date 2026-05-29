@@ -2,7 +2,7 @@
 
 Static and dynamic typing are usually presented as a binary choice: a language commits to one discipline and pays the corresponding price. Static languages catch errors early but reject programs the programmer knows are correct, demand annotations on prototypes, and complicate exploratory programming. Dynamic languages accept anything until the moment of execution, at which point an unrelated error message materializes deep inside a stack of library code. The discipline of *gradual typing* (Siek–Taha 2006) refuses the dichotomy: it lets a single program contain both statically typed and dynamically typed fragments, with the two communicating through *casts* whose run-time checks are derived mechanically from the type structure. *Hybrid type checking* (Flanagan 2006) generalises the idea to refinement types: the checker proves what it can statically and inserts residual checks where decidability fails.
 
-*See also:* _Type Systems_, _Effects and Algebraic Effect Handlers_
+*See also:* _Type Systems_, _Effects and Handlers_
 
 The two ideas are descendants of the older program of *soft typing* (Cartwright–Fagan 1991), which built a type-inference procedure that *never* rejects a program: type errors are recorded as warnings together with set-based abstract values, and the run-time inserts checks where soundness cannot be proved. Gradual typing inverts the polarity by making the *programmer*, not the inferencer, choose where to add types; hybrid typing keeps the inferencer in charge but allows it to admit defeat by emitting a check.
 
