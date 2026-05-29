@@ -2,7 +2,7 @@
 
 Process calculi are algebraic theories of concurrent computation. Where the $lambda$-calculus reduces all computation to function application, a process calculus takes *interaction* — the synchronised exchange of signals between independent agents — as primitive. The objects of study are not values produced by a terminating computation but *behaviours*: possibly infinite, possibly nondeterministic, possibly nonterminating patterns of observable action.
 
-*See also:* _Semantics_, _Type Systems_
+*See also:* _Program Semantics_, _Type Systems_
 
 A process calculus is judged by three criteria. First, *compositionality*: the meaning of $P | Q$ should be derivable "from the meanings of $P$ and $Q$, otherwise the algebra has no predictive power. Second, *expressiveness*: can the calculus represent the concurrency phenomena one cares about — synchronisation, choice, name passing, mobility, security, locality? Third, *equational reasoning*: when can we substitute $P$ for $Q$ inside a context $C[dot]$ "and preserve behaviour? The latter is "the deepest question, and it is the question that the theory of behavioural equivalences was invented to answer.
 
