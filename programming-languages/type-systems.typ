@@ -9,7 +9,7 @@ Why bother? Four concrete payoffs:
 3. *Optimization.* Knowing a value is a 32-bit integer lets the compiler choose a register and a machine instruction without a runtime tag check. Devirtualization, escape analysis, and loop vectorization all rely on type information.
 4. *Safer refactoring.* Change a type; let the type checker enumerate everywhere the change must propagate. In large codebases this is the difference between a 30-minute and a 3-day refactor.
 
-_See also: programming-languages/semantics.typ for the operational semantics that type soundness theorems are stated over._
+_See also: Program Semantics for the operational semantics that type soundness theorems are stated over._
 
 == Simply-Typed Lambda Calculus
 
@@ -53,7 +53,7 @@ Together, these guarantee that a well-typed program never gets *stuck* — it ne
 
 The proofs proceed by induction on typing derivations. The critical supporting lemma is spelled out below, followed by the T-APP cases of both theorems — the cases cited in the computability and semantics chapters.
 
-_See also: programming-languages/turing-computability.typ for Rice's theorem and undecidability of type inference for unrestricted systems. programming-languages/semantics.typ for the operational semantics ($arrow.r$, $arrow.r^*$) used in the statement of these theorems._
+_See also: Turing Machines and Computability for Rice's theorem and undecidability of type inference for unrestricted systems. Program Semantics for the operational semantics ($arrow.r$, $arrow.r^*$) used in the statement of these theorems._
 
 === Substitution Lemma
 
