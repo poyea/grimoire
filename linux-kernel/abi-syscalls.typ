@@ -197,4 +197,4 @@ seccomp_load(ctx);
 - *Minimizing syscalls:* `io_uring` (5.1+) batches submission and completion across many operations. `sendmmsg`/`recvmmsg` batch network IO. `readv`/`writev` batch buffer-list IO. `MAP_POPULATE` mmap avoids page-fault syscalls later.
 - *vDSO troubleshooting:* If `clock_gettime` is suddenly slow, check the clocksource (`/sys/devices/system/clocksource/clocksource0/current_clocksource`) and `dmesg | grep -i tsc`. A clocksource fallback to `hpet` or `acpi_pm` will tank vDSO performance.
 
-*See also:* _networking/kernel-bypass.typ_ — DPDK and AF_XDP avoid the syscall path entirely for packet IO. _kernel-tracing.typ_ — eBPF tracepoints on `raw_syscalls:sys_enter` give per-syscall observability.
+*See also:* _Kernel Bypass (Networking volume)_ — DPDK and AF_XDP avoid the syscall path entirely for packet IO. _kernel-tracing.typ_ — eBPF tracepoints on `raw_syscalls:sys_enter` give per-syscall observability.
