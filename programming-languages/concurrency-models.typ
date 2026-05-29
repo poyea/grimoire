@@ -17,34 +17,34 @@ The simplest model of concurrency takes a multi-threaded program to be a set of 
             --> <T_1, ..., T_i', ..., T_n; sigma'>
 ```
 
-The premise uses "the single-thread small-step relation $arrow.r_"seq"$ inherited from the sequential semantics of "the host language. The scheduler is *demonic*: it chooses any thread that can take a step, and the program must be correct under every choice.
+The premise uses the single-thread small-step relation $arrow.r_"seq"$ inherited from the sequential semantics of the host language. The scheduler is *demonic*: it chooses any thread that can take a step, and the program must be correct under every choice.
 
-This *interleaving model* is "the implicit semantics of all introductory concurrent-programming texts. It is also the precise content of *sequential consistency*.
+This *interleaving model* is the implicit semantics of all introductory concurrent-programming texts. It is also the precise content of *sequential consistency*.
 
 === Sequential Consistency
 
-*Definition (Lamport 1979).* A multiprocessor is *sequentially consistent* if the" result of any execution is the same as if "the operations of all processors were executed in some sequential order, and the operations of each processor appear in that sequence in the order specified by its program.
+*Definition (Lamport 1979).* A multiprocessor is *sequentially consistent* if the result of any execution is the same as if the operations of all processors were executed in some sequential order, and the operations of each processor appear in that sequence in the order specified by its program.
 
-Equivalently: there exists a total order on memory operations such that (i) each processor's operations appear in program order, and (ii) every read returns the value written by the most recent write in "the total order.
+Equivalently: there exists a total order on memory operations such that (i) each processor's operations appear in program order, and (ii) every read returns the value written by the most recent write in the total order.
 
-SC is the strongest reasonable concurrency model and the" one most programmers intuit. It is also unachievable on modern hardware without prohibitive cost: store buffers, write-back caches, speculative execution, and instruction reordering all violate SC. The PL semantics community responded by building weaker models — and then attempting to recover SC for *well-behaved* programs ("the data-race-freedom theorem below).
+SC is the strongest reasonable concurrency model and the one most programmers intuit. It is also unachievable on modern hardware without prohibitive cost: store buffers, write-back caches, speculative execution, and instruction reordering all violate SC. The PL semantics community responded by building weaker models — and then attempting to recover SC for *well-behaved* programs (the data-race-freedom theorem below).
 
 == True Concurrency: Event Structures
 
 Interleaving identifies two concurrent actions $a$ and $b$ with the two-element set ${a b, b a}$ of interleavings. A *true-concurrency* semantics records that $a$ and $b$ were *concurrent* — neither preceded the other — without flattening to a choice between orders.
 
-*Event structures* (Winskel 1986) are the canonical such model. A *prime event structure* is a triple $cal(E) = (E, lt.eq, sharp)$ where":
+*Event structures* (Winskel 1986) are the canonical such model. A *prime event structure* is a triple $cal(E) = (E, lt.eq, sharp)$ where:
 
-- $E$ "is a set of *events*.
+- $E$ is a set of *events*.
 - $lt.eq subset.eq E times E$ is a partial order — the *causality* relation.
-- $sharp subset.eq E times E$ is a symmetric irreflexive relation — "the *conflict* relation.
+- $sharp subset.eq E times E$ is a symmetric irreflexive relation — the *conflict* relation.
 
-"with two axioms:
+with two axioms:
 
 1. *Finite causes:* for every $e in E$, the down-set $arrow.b e = { e' : e' lt.eq e }$ is finite.
 2. *Conflict heredity:* if $e_1 sharp e_2$ and $e_2 lt.eq e_3$, then $e_1 sharp e_3$.
 
-A *configuration* of $cal(E)$ is a subset $X subset.eq E$ that is"
+A *configuration* of $cal(E)$ is a subset $X subset.eq E$ that is
 
 - *causally closed:* $e in X and e' lt.eq e => e' in X$;
 - *conflict-free:* $forall e_1, e_2 in X. "not" (e_1 sharp e_2)$.
@@ -57,17 +57,17 @@ Event structures are the canonical semantic universe for processes whose concurr
 
 == Pomsets
 
-*Partial-order multisets* (pomsets; Pratt 1986, Gischer 1988) take a complementary view: a single execution is a *labelled partial order* of events. A pomset is a tuple $p = (E, lt.eq, lambda)$ with $E$ an event set", $lt.eq$ a partial order, $lambda : E arrow.r Sigma$ a labelling. Pomsets are taken up to label-preserving order-isomorphism.
+*Partial-order multisets* (pomsets; Pratt 1986, Gischer 1988) take a complementary view: a single execution is a *labelled partial order* of events. A pomset is a tuple $p = (E, lt.eq, lambda)$ with $E$ an event set, $lt.eq$ a partial order, $lambda : E arrow.r Sigma$ a labelling. Pomsets are taken up to label-preserving order-isomorphism.
 
-The pomset language of a program is the set of pomsets it can perform. Pomset *prefix*, *concatenation*, and *parallel composition* generalise their string analogues; pomset languages form a closed algebraic structure (Gischer's *concurrent semiring*). Pomsets are weaker than event structures (they do not record conflict) "and incomparable with traces (they record concurrency but flatten internal nondeterminism).
+The pomset language of a program is the set of pomsets it can perform. Pomset *prefix*, *concatenation*, and *parallel composition* generalise their string analogues; pomset languages form a closed algebraic structure (Gischer's *concurrent semiring*). Pomsets are weaker than event structures (they do not record conflict) and incomparable with traces (they record concurrency but flatten internal nondeterminism).
 
-Pomsets enjoy a revival in the analysis of *weak memory*: they form "the substrate of the *promising semantics* (Kang et al. 2017) and several axiomatic memory models, because the" partial order naturally expresses happens-before without committing to an interleaving.
+Pomsets enjoy a revival in the analysis of *weak memory*: they form the substrate of the *promising semantics* (Kang et al. 2017) and several axiomatic memory models, because the partial order naturally expresses happens-before without committing to an interleaving.
 
 == Petri Nets
 
-*Petri nets* (Petri 1962) are perhaps the oldest formal model of concurrency. A net is a tuple $N = (P, T, F, M_0)$ with $P$ a finite set of *places*, $T$ a finite set "of *transitions*, $F subset.eq (P times T) union (T times P)$ the flow relation, and $M_0 : P arrow.r NN$ "the initial *marking* (tokens per place).
+*Petri nets* (Petri 1962) are perhaps the oldest formal model of concurrency. A net is a tuple $N = (P, T, F, M_0)$ with $P$ a finite set of *places*, $T$ a finite set of *transitions*, $F subset.eq (P times T) union (T times P)$ the flow relation, and $M_0 : P arrow.r NN$ the initial *marking* (tokens per place).
 
-A transition $t$ is *enabled* at marking $M$ if every input place $p$ ("with $(p, t) in F$) holds at least one token: $M(p) gt.eq 1$. Firing $t$ removes one token from each input place and adds one to each output place. The reachable markings form a transition system; the *reachability set"* $cal(R)(N) = { M : M_0 arrow.r^* M }$ is "the central object of analysis.
+A transition $t$ is *enabled* at marking $M$ if every input place $p$ (with $(p, t) in F$) holds at least one token: $M(p) gt.eq 1$. Firing $t$ removes one token from each input place and adds one to each output place. The reachable markings form a transition system; the *reachability set* $cal(R)(N) = { M : M_0 arrow.r^* M }$ is the central object of analysis.
 
 === Decidability and Complexity
 
@@ -77,19 +77,19 @@ The proof — a multi-decade effort — uses the *Karp–Miller tree* generalise
 
 *Theorem (Czerwiński–Orlikowski 2021, Leroux 2021).* Reachability for Petri nets is Ackermann-complete.
 
-*Theorem (Lipton 1976).* Reachability requires at least $2^(Omega(sqrt(n)))$ space — i.e., "is EXPSPACE-hard.
+*Theorem (Lipton 1976).* Reachability requires at least $2^(Omega(sqrt(n)))$ space — i.e., is EXPSPACE-hard.
 
 *Theorem (Rackoff 1978).* *Coverability* (given $M$, is some $M' gt.eq M$ reachable?) is EXPSPACE-complete.
 
-The gap between coverability (EXPSPACE) and reachability (Ackermann) is one of the most dramatic in computational complexity. Coverability suffices for *safety* properties phrased as "a bad marking is never reached", which "is why most Petri-net model checkers analyse coverability rather than full reachability.
+The gap between coverability (EXPSPACE) and reachability (Ackermann) is one of the most dramatic in computational complexity. Coverability suffices for *safety* properties phrased as "a bad marking is never reached", which is why most Petri-net model checkers analyse coverability rather than full reachability.
 
 === Workflow Nets
 
-A *workflow net* (van der Aalst 1997) is a Petri net with a designated source place, a designated sink place, and the property that every node lies on some path from source to sink. Soundness of a workflow net — every reachable marking can reach the terminal marking with exactly one token "on the sink — is decidable in polynomial time, and is "the standard correctness criterion for business-process models.
+A *workflow net* (van der Aalst 1997) is a Petri net with a designated source place, a designated sink place, and the property that every node lies on some path from source to sink. Soundness of a workflow net — every reachable marking can reach the terminal marking with exactly one token on the sink — is decidable in polynomial time, and is the standard correctness criterion for business-process models.
 
 === Coloured and High-Level Nets
 
-*Coloured Petri nets* (Jensen 1981) attach data values ("colours") to tokens and arc inscriptions that determine which tokens flow where". They are not more expressive than ordinary nets ("any coloured net unfolds to an ordinary net, possibly infinite) but are exponentially more concise. Coloured nets are the basis of "the CPN Tools verification environment.
+*Coloured Petri nets* (Jensen 1981) attach data values ("colours") to tokens and arc inscriptions that determine which tokens flow where. They are not more expressive than ordinary nets (any coloured net unfolds to an ordinary net, possibly infinite) but are exponentially more concise. Coloured nets are the basis of the CPN Tools verification environment.
 
 == Mazurkiewicz Traces
 
@@ -128,15 +128,15 @@ A *configuration* is a multiset of actors and undelivered messages. Each actor i
 
 The semantics is *asynchronous* (sends do not block), *fair* (every message is eventually delivered — usually formalised as a fairness constraint on the scheduler), and *location-transparent* (the address $a$ uniquely identifies an actor regardless of physical location).
 
-Address creation gives the actor model dynamic topology equivalent to the $pi$-calculus's name passing. The faithful encoding of asynchronous $pi$ into actors and vice versa (Agha–Mason–Smith–Talcott 1997) makes "the two models intertranslatable as theories of concurrency, though the engineering tradeoffs differ: actors emphasise *locality* (one mailbox per actor, scheduled by one thread) while asynchronous $pi$ is symmetric in inputs and outputs.
+Address creation gives the actor model dynamic topology equivalent to the $pi$-calculus's name passing. The faithful encoding of asynchronous $pi$ into actors and vice versa (Agha–Mason–Smith–Talcott 1997) makes the two models intertranslatable as theories of concurrency, though the engineering tradeoffs differ: actors emphasise *locality* (one mailbox per actor, scheduled by one thread) while asynchronous $pi$ is symmetric in inputs and outputs.
 
 === Type Systems for Actors
 
-Agha–Mason–Smith–Talcott (1997) developed a process algebra-style semantics for actors "and proved equational properties. Type systems for actors (Colaço–Pantel–Sallé 2000, He–Pradat-Peyre–Salaün 2008) typically combine a mailbox protocol ("the types of messages an actor accepts) with a behaviour signature ("the message types each behaviour handles), giving the actor analogue of session types.
+Agha–Mason–Smith–Talcott (1997) developed a process algebra-style semantics for actors and proved equational properties. Type systems for actors (Colaço–Pantel–Sallé 2000, He–Pradat-Peyre–Salaün 2008) typically combine a mailbox protocol (the types of messages an actor accepts) with a behaviour signature (the message types each behaviour handles), giving the actor analogue of session types.
 
 === Erlang
 
-Erlang (Armstrong et al. 1986, OTP 1998) is the" canonical actor-model language: lightweight processes (each with its own heap), asynchronous message passing, no shared memory, supervision trees for fault tolerance. A minimal example:
+Erlang (Armstrong et al. 1986, OTP 1998) is the canonical actor-model language: lightweight processes (each with its own heap), asynchronous message passing, no shared memory, supervision trees for fault tolerance. A minimal example:
 
 ```erlang
 -module(counter).
@@ -158,7 +158,7 @@ loop(N) ->
     end.
 ```
 
-The `receive` construct is selective: an Erlang process inspects its mailbox for a message matching any of the patterns, and "the first matching message is consumed (in mailbox order among matching messages). Selective receive substantially complicates the semantics (a star.op message may not be the" head of the queue when consumed) but is essential for "the protocol patterns common in OTP applications.
+The `receive` construct is selective: an Erlang process inspects its mailbox for a message matching any of the patterns, and the first matching message is consumed (in mailbox order among matching messages). Selective receive substantially complicates the semantics (a star.op message may not be the head of the queue when consumed) but is essential for the protocol patterns common in OTP applications.
 
 === Akka, Pony, Orleans
 
@@ -166,7 +166,7 @@ The `receive` construct is selective: an Erlang process inspects its mailbox for
 
 == Channels: Go and CSP-Style Concurrency
 
-Go's concurrency primitives are *goroutines* (lightweight threads scheduled by a runtime, typically tens of kilobytes "of stack each) and *channels* (typed synchronisation/communication conduits). The design follows the CSP tradition: communicate "by sharing memory, not the converse.
+Go's concurrency primitives are *goroutines* (lightweight threads scheduled by a runtime, typically tens of kilobytes of stack each) and *channels* (typed synchronisation/communication conduits). The design follows the CSP tradition: communicate by sharing memory, not the converse.
 
 ```go
 func producer(ch chan<- int) {
@@ -205,15 +205,15 @@ case <-time.After(time.Second):
 }
 ```
 
-Go's channels are *bounded* ("the buffer size is fixed at creation; unbuffered channels enforce rendezvous). The semantics "is *synchronous* for unbuffered channels (matching CSP) and *asynchronous-"with"-bound* for buffered ones. Go's `chan` types $T arrow.l$, $arrow.l T$ encode IO capabilities in a manner reminiscent of Pierce–Sangiorgi IO subtyping, though without the variance subtyping.
+Go's channels are *bounded* (the buffer size is fixed at creation; unbuffered channels enforce rendezvous). The semantics is *synchronous* for unbuffered channels (matching CSP) and *asynchronous-with-bound* for buffered ones. Go's `chan` types $T arrow.l$, $arrow.l T$ encode IO capabilities in a manner reminiscent of Pierce–Sangiorgi IO subtyping, though without the variance subtyping.
 
 === Pitfalls
 
-Go's concurrency is widely loved but "the operational semantics has sharp edges. Sending on a closed channel panics. Receiving from a closed channel yields the zero value (silently). Goroutine leaks (a goroutine blocked forever "on a channel that no one will send to") are a frequent source of memory leaks in long-running systems. The race detector (Vyukov 2013, based on Eraser-style happens-before tracking) is essential.
+Go's concurrency is widely loved but the operational semantics has sharp edges. Sending on a closed channel panics. Receiving from a closed channel yields the zero value (silently). Goroutine leaks (a goroutine blocked forever on a channel that no one will send to) are a frequent source of memory leaks in long-running systems. The race detector (Vyukov 2013, based on Eraser-style happens-before tracking) is essential.
 
 == Rust: Ownership for Concurrency
 
-Rust's contribution to the concurrency landscape is "the use of an affine type system — *ownership* — "to statically eliminate data races. The two marker traits `Send` (a type whose values may safely transfer between threads) and `Sync` (a type whose `&T` references may safely be shared between threads) are auto-derived for all types whose fields are themselves `Send`/`Sync`. Primitive types are `Send + Sync`; `Rc<T>` (non-atomic reference counting) is neither"; `Arc<T>` is `Send + Sync` when $T$ is".
+Rust's contribution to the concurrency landscape is the use of an affine type system — *ownership* — to statically eliminate data races. The two marker traits `Send` (a type whose values may safely transfer between threads) and `Sync` (a type whose `&T` references may safely be shared between threads) are auto-derived for all types whose fields are themselves `Send`/`Sync`. Primitive types are `Send + Sync`; `Rc<T>` (non-atomic reference counting) is neither; `Arc<T>` is `Send + Sync` when $T$ is.
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -240,13 +240,13 @@ fn main() {
 }
 ```
 
-The type checker enforces that the closure passed to `thread::spawn` captures only `Send` values, that `Mutex<T>` requires `T: Send`, and "that the lock guard's lifetime statically prevents use of "the protected data outside the critical section. The *soundness* theorem — well-typed Rust programs are data-race-free — is non-trivial because the" type system is enforced over a language with mutable references and unsafe escape hatches. *RustBelt* (Jung–Jourdan–Krebbers–Dreyer 2018) gives a machine-checked semantic safety proof using the Iris separation logic.
+The type checker enforces that the closure passed to `thread::spawn` captures only `Send` values, that `Mutex<T>` requires `T: Send`, and that the lock guard's lifetime statically prevents use of the protected data outside the critical section. The *soundness* theorem — well-typed Rust programs are data-race-free — is non-trivial because the type system is enforced over a language with mutable references and unsafe escape hatches. *RustBelt* (Jung–Jourdan–Krebbers–Dreyer 2018) gives a machine-checked semantic safety proof using the Iris separation logic.
 
 == Software Transactional Memory
 
-*Software Transactional Memory* (STM; Shavit–Touitou 1995, Herlihy–Moss 1993 for hardware) replaces locking "with a transactional model: a block of code marked `atomic` executes as if instantaneous, with the runtime detecting conflicts and retrying.
+*Software Transactional Memory* (STM; Shavit–Touitou 1995, Herlihy–Moss 1993 for hardware) replaces locking with a transactional model: a block of code marked `atomic` executes as if instantaneous, with the runtime detecting conflicts and retrying.
 
-Harris–Marlow–Peyton Jones–Herlihy (2005) gave STM a uniquely clean design in Haskell, using "the type system to enforce that transactional code may only invoke transactional operations:
+Harris–Marlow–Peyton Jones–Herlihy (2005) gave STM a uniquely clean design in Haskell, using the type system to enforce that transactional code may only invoke transactional operations:
 
 ```haskell
 import Control.Concurrent.STM
@@ -265,13 +265,13 @@ main = do
     atomically (transfer a b 30)
 ```
 
-The `STM` monad type prevents arbitrary IO from leaking into a transaction ("an aborted IO action would be impossible "to roll back). The `retry` combinator blocks the current transaction until at least one of "the `TVar`s read so far has been modified — implementing *condition synchronisation* without explicit wait queues. `orElse` composes two alternatives: `t1 ` then `t2` runs $t_1$ and", if it retries, runs $t_2$ instead.
+The `STM` monad type prevents arbitrary IO from leaking into a transaction (an aborted IO action would be impossible to roll back). The `retry` combinator blocks the current transaction until at least one of the `TVar`s read so far has been modified — implementing *condition synchronisation* without explicit wait queues. `orElse` composes two alternatives: `t1 ` then `t2` runs $t_1$ and, if it retries, runs $t_2$ instead.
 
 === Opacity
 
 A correctness condition for STM, finer than serialisability:
 
-*Definition (Guerraoui–Kapalka 2008).* A history of an STM is *opaque* <==> there "is "an equivalent serial history $S$ such that (i) committed transactions appear in $S$ in real-time order, and (ii) every aborted transaction in the original history reads values consistent with some prefix of $S$.
+*Definition (Guerraoui–Kapalka 2008).* A history of an STM is *opaque* <==> there is an equivalent serial history $S$ such that (i) committed transactions appear in $S$ in real-time order, and (ii) every aborted transaction in the original history reads values consistent with some prefix of $S$.
 
 The second clause is the strengthening over serialisability: aborted transactions must not observe inconsistent states. Without opacity, an aborted transaction may, e.g., divide by zero or enter an infinite loop because it observed an impossible combination of values. Most production STM implementations are opaque.
 
@@ -279,17 +279,17 @@ The second clause is the strengthening over serialisability: aborted transaction
 
 The strongest argument for STM is *composability*. Locks do not compose: combining two thread-safe APIs may produce code that is not thread-safe (the two locks may be acquired in inconsistent orders, deadlocking). Transactions compose trivially: $"atomically"(t_1 ; t_2)$ is well-defined whenever $t_1$ and $t_2$ are. The Haskell `STM` monad makes this composability a static guarantee.
 
-The connection to database concurrency control is direct: STM "is *optimistic concurrency control* (OCC) for in-memory data, and the read/write set tracking, validation, and abort/retry pattern matches "the OCC theory in databases. See the chapter on database concurrency control in the systems volume.
+The connection to database concurrency control is direct: STM is *optimistic concurrency control* (OCC) for in-memory data, and the read/write set tracking, validation, and abort/retry pattern matches the OCC theory in databases. See the chapter on database concurrency control in the systems volume.
 
 == Monitors
 
-The classical *monitor* (Hoare 1974; Lampson–Redell 1980) is a synchronisation construct combining mutual exclusion with condition variables: a procedure of a monitor holds the monitor's lock for "the duration of its execution, and condition variables (`wait`, `signal`, `broadcast`) allow threads to suspend within the monitor and be resumed.
+The classical *monitor* (Hoare 1974; Lampson–Redell 1980) is a synchronisation construct combining mutual exclusion with condition variables: a procedure of a monitor holds the monitor's lock for the duration of its execution, and condition variables (`wait`, `signal`, `broadcast`) allow threads to suspend within the monitor and be resumed.
 
-A subtlety: Hoare's original semantics has `signal` *immediately* transfer "the lock "to the signalled thread, requiring "the signaller to be in a state where the monitor's invariant holds". The Lampson–Redell variant (used by Java, POSIX condition variables, and most production systems) has `signal` merely *enqueue* the signalled thread; "the signaller continues holding the lock until it exits the" procedure. The semantic consequence is that signalled threads must *recheck* the condition ("the canonical `while (!cond) cond.wait();` idiom), because the state may have changed between the" signal and the wakeup.
+A subtlety: Hoare's original semantics has `signal` *immediately* transfer the lock to the signalled thread, requiring the signaller to be in a state where the monitor's invariant holds. The Lampson–Redell variant (used by Java, POSIX condition variables, and most production systems) has `signal` merely *enqueue* the signalled thread; the signaller continues holding the lock until it exits the procedure. The semantic consequence is that signalled threads must *recheck* the condition (the canonical `while (!cond) cond.wait();` idiom), because the state may have changed between the signal and the wakeup.
 
 == Reactive Programming and Dataflow
 
-A separate concurrency tradition treats time as "the primitive and computation as the propagation of values through a network "of operators. *Synchronous dataflow* languages — Lustre (Halbwachs–Caspi–Raymond–Pilaud 1991), Esterel (Berry–Gonthier 1992), Signal — model a system as a network of operators that fire in lock-step with a global clock. Each tick, every operator consumes one value on each input and produces one "on each output. The semantics is deterministic and verifiable; Lustre/SCADE is certified for use in avionics (Airbus fly-"by"-wire).
+A separate concurrency tradition treats time as the primitive and computation as the propagation of values through a network of operators. *Synchronous dataflow* languages — Lustre (Halbwachs–Caspi–Raymond–Pilaud 1991), Esterel (Berry–Gonthier 1992), Signal — model a system as a network of operators that fire in lock-step with a global clock. Each tick, every operator consumes one value on each input and produces one on each output. The semantics is deterministic and verifiable; Lustre/SCADE is certified for use in avionics (Airbus fly-by-wire).
 
 *Functional Reactive Programming* (Elliott–Hudak 1997) treats time-varying values (*signals*) and discrete events as first-cal(C). A signal $s : "Time" arrow.r alpha$ models a continuously varying quantity; an event $e : "Time" arrow.r "Maybe" alpha$ models a sporadic occurrence. Combinators such as `lift`, `integral`, and `accumulate` build complex behaviours from primitive signals. The pure-functional version of FRP suffers from the *space leak* problem (retaining histories that are never used); push–pull FRP (Elliott 2009) and the more recent *arrowised FRP* (Yampa) ameliorate this.
 
