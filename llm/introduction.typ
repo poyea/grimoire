@@ -19,7 +19,7 @@ Large Language Models (LLMs) are the defining systems of modern AI. A single mod
 
 *Code conventions:* Examples use PyTorch as the primary framework (industry standard for research and production). JAX/Flax is shown where it meaningfully differs. All examples assume CUDA availability.
 
-*See also:* _gpu-architecture/ml-workloads.typ_ (Flash Attention, GEMM kernels, KV cache hardware), _gpu-architecture/multi-gpu.typ_ (distributed training topology).
+*See also:* _ML Workload Optimization on GPUs (GPU Architecture volume)_ (Flash Attention, GEMM kernels, KV cache hardware), _Multi-GPU Communication and Scaling (GPU Architecture volume)_ (distributed training topology).
 
 == Notation and Conventions
 
