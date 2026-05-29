@@ -11,19 +11,19 @@ This chapter develops System F in full. We give the syntax, typing rules with T-
 *Types.*
 $ tau ::= alpha | tau_1 arrow.r tau_2 | forall alpha. tau $
 
-where $alpha, beta, gamma, ...$ range over a countably infinite set "of *type variables*. The quantifier $forall alpha. tau$ binds $alpha$ in $tau$. We work up to $alpha$-equivalence of bound type variables.
+where $alpha, beta, gamma, ...$ range over a countably infinite set of *type variables*. The quantifier $forall alpha. tau$ binds $alpha$ in $tau$. We work up to $alpha$-equivalence of bound type variables.
 
 *Terms* (Church presentation).
 $ e ::= x | lambda x : tau . e | e_1 space e_2 | Lambda alpha . e | e [tau] $
 
-Two new term-formers: the *type abstraction* $Lambda alpha . e$ (binds the type variable $alpha$ in "the body $e$) and *type application* $e[tau]$ (instantiates the type variable bound by $Lambda$ at $tau$). Greek capital $Lambda$ is used at the term level; lowercase $lambda$ remains for ordinary abstraction.
+Two new term-formers: the *type abstraction* $Lambda alpha . e$ (binds the type variable $alpha$ in the body $e$) and *type application* $e[tau]$ (instantiates the type variable bound by $Lambda$ at $tau$). Greek capital $Lambda$ is used at the term level; lowercase $lambda$ remains for ordinary abstraction.
 
-*Free type variables.* Defined "by mutual recursion with free term variables. Notation $"FTV"(tau)$ and $"FTV"(e)$:
+*Free type variables.* Defined by mutual recursion with free term variables. Notation $"FTV"(tau)$ and $"FTV"(e)$:
 $ "FTV"(alpha) &= {alpha} \
 "FTV"(tau_1 arrow.r tau_2) &= "FTV"(tau_1) union "FTV"(tau_2) \
 "FTV"(forall alpha. tau) &= "FTV"(tau) \\ {alpha} $
 
-A *kinding judgment* $Delta tack.r tau$ ("where $Delta$ is a finite set of type variables) certifies that $"FTV"(tau) subset.eq Delta$. In $F_omega$ this becomes a richer judgment $Delta tack.r tau : kappa$ where $kappa$ is a *kind* (see below).
+A *kinding judgment* $Delta tack.r tau$ (where $Delta$ is a finite set of type variables) certifies that $"FTV"(tau) subset.eq Delta$. In $F_omega$ this becomes a richer judgment $Delta tack.r tau : kappa$ where $kappa$ is a *kind* (see below).
 
 *Capture-avoiding type substitution.* $[alpha |-> sigma] tau$ behaves exactly like term substitution, $alpha$-renaming bound type variables as needed.
 
@@ -53,11 +53,11 @@ The typing judgment is $Delta; Gamma tack.r e : tau$, where $Delta$ tracks type 
   Delta; Gamma |- e [sigma] : [alpha |-> sigma] tau
 ```
 
-The side condition in T-TABS — that $alpha$ does not occur in $Gamma$ — is the analogue of "the universal-introduction *eigenvariable* condition in natural deduction. Without it, one could derive $x : alpha tack.r Lambda alpha . x : forall alpha . alpha$, a contradiction in the Curry–Howard reading.
+The side condition in T-TABS — that $alpha$ does not occur in $Gamma$ — is the analogue of the universal-introduction *eigenvariable* condition in natural deduction. Without it, one could derive $x : alpha tack.r Lambda alpha . x : forall alpha . alpha$, a contradiction in the Curry–Howard reading.
 
 *Lemma (Type Substitution).* If $Delta, alpha; Gamma tack.r e : tau$ and $Delta tack.r sigma$, then $Delta; [alpha |-> sigma] Gamma tack.r [alpha |-> sigma] e : [alpha |-> sigma] tau$.
 
-*Lemma (Inversion).* If $Delta; Gamma tack.r Lambda alpha . e : rho$, then $rho = forall alpha. tau$ with $Delta, alpha; Gamma tack.r e : tau$. If $Delta; Gamma tack.r e [sigma] : rho$, then $Delta; Gamma tack.r e : forall alpha. tau$ "with $rho = [alpha |-> sigma] tau$ for some $tau$.
+*Lemma (Inversion).* If $Delta; Gamma tack.r Lambda alpha . e : rho$, then $rho = forall alpha. tau$ with $Delta, alpha; Gamma tack.r e : tau$. If $Delta; Gamma tack.r e [sigma] : rho$, then $Delta; Gamma tack.r e : forall alpha. tau$ with $rho = [alpha |-> sigma] tau$ for some $tau$.
 
 == Dynamic Semantics
 
@@ -127,29 +127,29 @@ Church-encoded $exists alpha . tau$ as $forall beta . (forall alpha . tau arrow.
 
 *Theorem (Girard 1972).* Every well-typed term of System F is strongly normalising.
 
-This "is *substantially* harder than "the STLC case. The naïve attempt — define $cal(R)_tau$ by induction on $tau$, with $cal(R)_(forall alpha . tau) = sect.big_(sigma) [alpha |-> ?] cal(R)_(tau)$ — fails because the type $sigma$ may be larger than $forall alpha . tau$ itself (impredicativity!), so no structural induction "on types is available. Tait's plain reducibility works for STLC but breaks here.
+This is *substantially* harder than the STLC case. The naïve attempt — define $cal(R)_tau$ by induction on $tau$, with $cal(R)_(forall alpha . tau) = sect.big_(sigma) [alpha |-> ?] cal(R)_(tau)$ — fails because the type $sigma$ may be larger than $forall alpha . tau$ itself (impredicativity!), so no structural induction on types is available. Tait's plain reducibility works for STLC but breaks here.
 
-Girard's solution: *reducibility candidates*. The idea "is to *give up* on defining $cal(R)$ directly and instead axiomatize a *family* of acceptable interpretations. A type variable $alpha$ is interpreted by *"any"* candidate satisfying the closure conditions; $forall alpha . tau$ then quantifies semantically over all candidates.
+Girard's solution: *reducibility candidates*. The idea is to *give up* on defining $cal(R)$ directly and instead axiomatize a *family* of acceptable interpretations. A type variable $alpha$ is interpreted by *any* candidate satisfying the closure conditions; $forall alpha . tau$ then quantifies semantically over all candidates.
 
 === Reducibility Candidates
 
-A set $cal(C)$ of closed terms "of a given type is a *candidate* (write $cal(C) in "CR"_tau$) iff:
+A set $cal(C)$ of closed terms of a given type is a *candidate* (write $cal(C) in "CR"_tau$) iff:
 - *(CR1)* Every $e in cal(C)$ is strongly normalising.
 - *(CR2)* If $e in cal(C)$ and $e arrow.r e'$, then $e' in cal(C)$.
 - *(CR3)* If $e$ is *neutral* (not a $lambda$- or $Lambda$-abstraction) and every $e'$ with $e arrow.r e'$ lies in $cal(C)$, then $e in cal(C)$.
 
 *Note.* CR3 implies that every candidate contains all *strongly-neutral normal forms* (variables, applications to normal forms with neutral head). In particular candidates are nonempty.
 
-*Notational difference from STLC.* In Girard's framework, the *interpretation* $[| tau |]_eta in "CR"$ is parameterised by an *environment* $eta$ assigning to each free type variable a candidate. Define it "by recursion on $tau$:
+*Notational difference from STLC.* In Girard's framework, the *interpretation* $[| tau |]_eta in "CR"$ is parameterised by an *environment* $eta$ assigning to each free type variable a candidate. Define it by recursion on $tau$:
 $ [| alpha |]_eta &= eta(alpha) \
 [| tau_1 arrow.r tau_2 |]_eta &= {e : forall e' in [| tau_1 |]_eta . space e space e' in [| tau_2 |]_eta} \
 [| forall alpha . tau |]_eta &= sect.big_(cal(C) in "CR") space [| tau |]_(eta, alpha |-> cal(C)) $
 
-The big intersection is the crux. Because we range over the *abstract* class of candidates rather than concrete types, the recursion is on $tau$ rather than on the (semantic) type of "the interpretation.
+The big intersection is the crux. Because we range over the *abstract* class of candidates rather than concrete types, the recursion is on $tau$ rather than on the (semantic) type of the interpretation.
 
 *Lemma.* For every type $tau$ and environment $eta$, $[| tau |]_eta in "CR"$.
 
-*Proof.* Induction on $tau$. Variables: by assumption $eta(alpha) in "CR"$. Arrow: verify CR1, CR2, CR3 directly; CR3 uses that $e space e'$ is neutral when $e$ is", plus IH. Universal: an intersection of candidates is a candidate (intersect the closure conditions pointwise). $square$
+*Proof.* Induction on $tau$. Variables: by assumption $eta(alpha) in "CR"$. Arrow: verify CR1, CR2, CR3 directly; CR3 uses that $e space e'$ is neutral when $e$ is, plus IH. Universal: an intersection of candidates is a candidate (intersect the closure conditions pointwise). $square$
 
 *Substitution Lemma.* $[| [alpha |-> sigma] tau |]_eta = [| tau |]_(eta, alpha |-> [| sigma |]_eta)$.
 
@@ -160,9 +160,9 @@ The big intersection is the crux. Because we range over the *abstract* class of 
 - T-APP: by definition of arrow candidate.
 - T-ABS: analogue of the STLC Abstraction Lemma, using CR3 to handle the redex case; $beta$-step reaches the IH.
 - T-TAPP: by Substitution Lemma, $gamma(e)[sigma] in [| forall alpha . tau' |]_eta subset.eq [| tau' |]_(eta, alpha |-> [| sigma |]_eta) = [| [alpha |-> sigma] tau' |]_eta$, modulo the fact that type application is itself neutral and reduces via $beta_2$ — handled by CR3.
-- T-TABS: for every candidate $cal(C)$ and the extended environment, show $gamma(e) in [| tau |]_(eta, alpha |-> cal(C))$ "by IH; conclude $Lambda alpha . gamma(e) in [| forall alpha . tau |]_eta$. The reduction $(Lambda alpha . gamma(e)) [sigma] arrow.r [alpha |-> sigma] gamma(e)$ is the $beta_2$-redex, handled by an analogue of the Abstraction Lemma. $square$
+- T-TABS: for every candidate $cal(C)$ and the extended environment, show $gamma(e) in [| tau |]_(eta, alpha |-> cal(C))$ by IH; conclude $Lambda alpha . gamma(e) in [| forall alpha . tau |]_eta$. The reduction $(Lambda alpha . gamma(e)) [sigma] arrow.r [alpha |-> sigma] gamma(e)$ is the $beta_2$-redex, handled by an analogue of the Abstraction Lemma. $square$
 
-*Corollary.* Take $eta(alpha) = "SN"_alpha$ and $gamma(x_i) = x_i$ (variables are in every candidate by CR3). Then $e in [| tau |]_eta$, hence $e$ is SN "by CR1. $square$
+*Corollary.* Take $eta(alpha) = "SN"_alpha$ and $gamma(x_i) = x_i$ (variables are in every candidate by CR3). Then $e in [| tau |]_eta$, hence $e$ is SN by CR1. $square$
 
 === Why Plain Reducibility Fails
 
@@ -172,11 +172,11 @@ In STLC, $cal(R)_tau$ was defined by induction on $tau$. In System F we cannot d
 
 The untyped fixed-point combinator
 $ Y = lambda f . (lambda x . f (x space x)) (lambda x . f (x space x)) $
-satisfies $Y space f arrow.r^* f (Y space f)$ and produces non-terminating reductions. If $Y$ were typable at some type $tau = (alpha arrow.r alpha) arrow.r alpha$ in System F, then for $f : alpha arrow.r alpha$, $Y space f$ would be a closed well-typed term of type $alpha$. By Strong Normalization, $Y space f$ is SN. But $Y space f$ reduces to $f (Y space f)$ which reduces "to $f (f (Y space f))$ etc., infinite reduction — contradiction. Hence no fixed-point combinator is typable in System F. Adding $"fix"$ as a primitive ("with its own typing rule $forall alpha . (alpha arrow.r alpha) arrow.r alpha$ and reduction rule) makes the system Turing-complete but destroys SN and logical consistency.
+satisfies $Y space f arrow.r^* f (Y space f)$ and produces non-terminating reductions. If $Y$ were typable at some type $tau = (alpha arrow.r alpha) arrow.r alpha$ in System F, then for $f : alpha arrow.r alpha$, $Y space f$ would be a closed well-typed term of type $alpha$. By Strong Normalization, $Y space f$ is SN. But $Y space f$ reduces to $f (Y space f)$ which reduces to $f (f (Y space f))$ etc., infinite reduction — contradiction. Hence no fixed-point combinator is typable in System F. Adding $"fix"$ as a primitive (with its own typing rule $forall alpha . (alpha arrow.r alpha) arrow.r alpha$ and reduction rule) makes the system Turing-complete but destroys SN and logical consistency.
 
 == Reynolds' Parametricity
 
-*The intuition.* A function of type $forall alpha . alpha arrow.r alpha$ "knows nothing" about $alpha$; the only thing it can do with its argument is return it. Hence the only inhabitant is (up to $beta eta$) the identity. Reynolds (1983) formalised this slogan via a relational interpretation, generalising the candidate construction.
+*The intuition.* A function of type $forall alpha . alpha arrow.r alpha$ knows nothing about $alpha$; the only thing it can do with its argument is return it. Hence the only inhabitant is (up to $beta eta$) the identity. Reynolds (1983) formalised this slogan via a relational interpretation, generalising the candidate construction.
 
 === The Relational Interpretation
 
@@ -188,13 +188,13 @@ $ [| alpha |]_rho &= rho(alpha) \
 
 The first projection $rho_1(alpha) = A_alpha$, second $rho_2(alpha) = B_alpha$; for $tau_1 arrow.r tau_2$, $[| tau_1 arrow.r tau_2 |]_(rho_1) = [| tau_1 |]_(rho_1) arrow.r [| tau_2 |]_(rho_1)$.
 
-*Theorem (Reynolds 1983, Abstraction).* For every closed term $emptyset tack.r e : tau$ and every relation environment $rho$, the pair $([| e |]_(rho_1), [| e |]_(rho_2)) in [| tau |]_rho$. In particular if $e$ is closed "and $rho$ has all $rho(alpha) = $ identity, the theorem says $e$ is related "to itself — *every term respects every parametric relation*.
+*Theorem (Reynolds 1983, Abstraction).* For every closed term $emptyset tack.r e : tau$ and every relation environment $rho$, the pair $([| e |]_(rho_1), [| e |]_(rho_2)) in [| tau |]_rho$. In particular if $e$ is closed and $rho$ has all $rho(alpha) = $ identity, the theorem says $e$ is related to itself — *every term respects every parametric relation*.
 
-*Proof.* Induction on the typing derivation, exactly mirroring "the SN proof but with binary relations in place of candidates. $square$
+*Proof.* Induction on the typing derivation, exactly mirroring the SN proof but with binary relations in place of candidates. $square$
 
 == Theorems for Free (Wadler 1989)
 
-Reynolds' abstraction theorem yields immediate "free theorems" derivable from the type alone, without inspecting the implementation.
+Reynolds' abstraction theorem yields immediate free theorems derivable from the type alone, without inspecting the implementation.
 
 === Free Theorem for $forall alpha . alpha arrow.r alpha$
 
@@ -213,15 +213,15 @@ So $r$ *commutes with $"map"$*. This holds for *every* function $r$ of that type
 
 === Free Theorem for $forall alpha . alpha times alpha arrow.r alpha$
 
-Take $f : forall alpha . alpha times alpha arrow.r alpha$. Specialising at $R = {((a_1, a_2), b) : b = a_1} union {((a_1, a_2), b) : b = a_2}$ ("the disjoint-union relation): by parametricity, $f[B] (b, b) = b$ — diagonal. More carefully, take $R$ to be the graph of $h$ as before; then $f[B] (h space a_1, h space a_2) = h (f[A] (a_1, a_2))$.
+Take $f : forall alpha . alpha times alpha arrow.r alpha$. Specialising at $R = {((a_1, a_2), b) : b = a_1} union {((a_1, a_2), b) : b = a_2}$ (the disjoint-union relation): by parametricity, $f[B] (b, b) = b$ — diagonal. More carefully, take $R$ to be the graph of $h$ as before; then $f[B] (h space a_1, h space a_2) = h (f[A] (a_1, a_2))$.
 
-Now pick $A = "Bool"$, $a_1 = "true"$, $a_2 = "false"$, $B = "Bool"$, $h = "id"$: $f["Bool"] ("true", "false") in {"true", "false"}$. By a case analysis using $h = $ constant function, we can show $f$ is *"either"* uniformly $pi_1$ *"or"* uniformly $pi_2$. (Detailed argument: define $h_1 (x) = "true"$ when $x = a_1$ else "false"; the naturality square forces a binary choice.)
+Now pick $A = "Bool"$, $a_1 = "true"$, $a_2 = "false"$, $B = "Bool"$, $h = "id"$: $f["Bool"] ("true", "false") in {"true", "false"}$. By a case analysis using $h = $ constant function, we can show $f$ is *either* uniformly $pi_1$ *or* uniformly $pi_2$. (Detailed argument: define $h_1 (x) = "true"$ when $x = a_1$ else "false"; the naturality square forces a binary choice.)
 
 *Conclusion.* The only inhabitants of $forall alpha . alpha times alpha arrow.r alpha$ are $pi_1$ and $pi_2$.
 
 === Free Theorem for $forall alpha beta . (alpha arrow.r beta) arrow.r "List" alpha arrow.r "List" beta$
 
-Take such a $m$. The free theorem says: for every $f : A_1 arrow.r B_1$, $g : A_2 arrow.r B_2$, $h_alpha : A_1 arrow.r A_2$, $h_beta : B_1 arrow.r B_2$ with $h_beta circle.small f = g circle.small h_alpha$, we have $"map" h_beta circle.small m[A_1, B_1] f = m[A_2, B_2] g circle.small "map" h_alpha$. Setting $h_alpha = "id"$, $g = h_beta circle.small f$ yields $"map" (h_beta circle.small f) space "xs" = "map" h_beta (m[A_1, B_1] f space "xs")$, i.e., $m$ is *functorial* (preserves identity "is similar). Wadler's slogan: *every polymorphic list-mapping function is up to $beta eta$ equal "to $"map" f$ followed by some permutation/dropping that is independent of $f$* — but for the type $forall alpha beta . (alpha arrow.r beta) arrow.r "List" alpha arrow.r "List" beta$ specifically, by also requiring the relational input $f$ to vary, we get that $m = "map"$ (up to $beta eta$).
+Take such a $m$. The free theorem says: for every $f : A_1 arrow.r B_1$, $g : A_2 arrow.r B_2$, $h_alpha : A_1 arrow.r A_2$, $h_beta : B_1 arrow.r B_2$ with $h_beta circle.small f = g circle.small h_alpha$, we have $"map" h_beta circle.small m[A_1, B_1] f = m[A_2, B_2] g circle.small "map" h_alpha$. Setting $h_alpha = "id"$, $g = h_beta circle.small f$ yields $"map" (h_beta circle.small f) space "xs" = "map" h_beta (m[A_1, B_1] f space "xs")$, i.e., $m$ is *functorial* (preserves identity is similar). Wadler's slogan: *every polymorphic list-mapping function is up to $beta eta$ equal to $"map" f$ followed by some permutation/dropping that is independent of $f$* — but for the type $forall alpha beta . (alpha arrow.r beta) arrow.r "List" alpha arrow.r "List" beta$ specifically, by also requiring the relational input $f$ to vary, we get that $m = "map"$ (up to $beta eta$).
 
 === Implications
 
@@ -234,7 +234,7 @@ $ exists alpha . tau &:= forall beta . (forall alpha . tau arrow.r beta) arrow.r
 "pack" tau "with" e "as" exists alpha . tau' &:= Lambda beta . lambda k : forall alpha . tau' arrow.r beta . k [tau] space e \
 "unpack" angle.l alpha, x angle.r = e "in" e' &:= e [tau_("answer")] (Lambda alpha . lambda x : tau' . e') $
 
-The introduction $"pack"$ packages a *concrete* witness $tau$ together with a value $e : [alpha |-> tau] tau'$, hiding the witness behind the existential. The elimination $"unpack"$ binds a *star.op* type variable $alpha$ ("the abstract type) and a term variable $x$ of representation type $tau'$. Crucially, the eliminator's body $e'$ may not mention $alpha$ in its result type — this is *information hiding*.
+The introduction $"pack"$ packages a *concrete* witness $tau$ together with a value $e : [alpha |-> tau] tau'$, hiding the witness behind the existential. The elimination $"unpack"$ binds a *star.op* type variable $alpha$ (the abstract type) and a term variable $x$ of representation type $tau'$. Crucially, the eliminator's body $e'$ may not mention $alpha$ in its result type — this is *information hiding*.
 
 *Example.* A counter ADT:
 $ "Counter" &:= exists alpha . alpha times (alpha arrow.r alpha) times (alpha arrow.r "Int") \
@@ -252,7 +252,7 @@ System $F_omega$ adds *type-level functions*. The grammar becomes layered:
 
 *Type constructors.* $tau ::= alpha | tau_1 arrow.r tau_2 | forall alpha : kappa . tau | lambda alpha : kappa . tau | tau_1 space tau_2$.
 
-The two new type-formers $lambda alpha : kappa . tau$ and $tau_1 space tau_2$ allow type-level abstraction "and application. A *type-level* $beta$-conversion is added:
+The two new type-formers $lambda alpha : kappa . tau$ and $tau_1 space tau_2$ allow type-level abstraction and application. A *type-level* $beta$-conversion is added:
 $ (lambda alpha : kappa . tau) space sigma arrow.r_beta [alpha |-> sigma] tau $
 
 A *kind judgment* $Delta tack.r tau : kappa$ ensures well-formedness:
@@ -271,7 +271,7 @@ A *kind judgment* $Delta tack.r tau : kappa$ ensures well-formedness:
   Delta |- tau_1 tau_2 : kappa
 ```
 
-Types of kind $*$ are *proper* types (inhabited "by terms). Types of higher kinds are *type operators* — type-level functions.
+Types of kind $*$ are *proper* types (inhabited by terms). Types of higher kinds are *type operators* — type-level functions.
 
 *Examples.*
 - $"List" : * arrow.r *$ — a type operator taking a type to a type.
@@ -299,11 +299,11 @@ Barendregt (1991) organised the family of pure type systems into a *cube* indexe
   [$lambda C$ = CoC], [*yes*], [*yes*], [*yes*],
 )
 
-Terms depending on terms (ordinary $lambda$) is always present. The three axes correspond to three of the four corners of the *Pure Type System* (PTS) classification. The apex $lambda C$ — the *Calculus of Constructions* (Coquand–Huet 1988) — is "the foundation of Coq (see _Dependent Types_).
+Terms depending on terms (ordinary $lambda$) is always present. The three axes correspond to three of the four corners of the *Pure Type System* (PTS) classification. The apex $lambda C$ — the *Calculus of Constructions* (Coquand–Huet 1988) — is the foundation of Coq (see _Dependent Types_).
 
 *Geometric picture.* Visualise as a cube with $lambda^arrow.r$ at the origin and $lambda C$ at the diagonally opposite corner; each axis is one dependency. F sits adjacent to STLC by one edge; $F_omega$ two edges; CoC three.
 
-== Decidability "and Type Inference
+== Decidability and Type Inference
 
 === Hindley–Milner Decidability
 
@@ -313,7 +313,7 @@ The *let-polymorphic* restriction of System F (no first-cal(C) $forall$ in argum
 
 *Theorem (Wells 1999).* Type inference for full (Curry-style) System F is undecidable. Type *checking* with annotations on all $Lambda$ and $[tau]$ is decidable (just walk the tree); but inferring a type for an unannotated term is undecidable.
 
-*Proof sketch.* Wells gave a reduction from *semi-unification* — given a system of equations $tau_i = tau'_i$ and inequations $tau_j lt.eq.eq tau'_j$ ("where $lt.eq.eq$ is "is a substitution instance of"), decide solvability. Semi-unification is undecidable (Kfoury–Tiuryn–Urzyczyn 1990). Wells encoded an arbitrary semi-unification problem as a System F typability problem: each inequation becomes a quantifier instantiation. $square$
+*Proof sketch.* Wells gave a reduction from *semi-unification* — given a system of equations $tau_i = tau'_i$ and inequations $tau_j lt.eq.eq tau'_j$ (where $lt.eq.eq$ is "is a substitution instance of"), decide solvability. Semi-unification is undecidable (Kfoury–Tiuryn–Urzyczyn 1990). Wells encoded an arbitrary semi-unification problem as a System F typability problem: each inequation becomes a quantifier instantiation. $square$
 
 === System $F_omega$ Type Checking is Decidable but Expensive
 
@@ -321,7 +321,7 @@ Type checking $F_omega$ is *decidable* — type equality requires deciding $beta
 
 *Theorem (Henglein–Mairson 1991, Statman 1979).* Deciding $beta$-equality in $F_omega$ is *not* elementary recursive: the worst-case time is a tower of exponentials whose height depends on the term.
 
-Practical type checkers (Haskell's GHC, OCaml) restrict to fragments where this blow-up does not arise; full $F_omega$ as a *type system* "is rarely directly exposed.
+Practical type checkers (Haskell's GHC, OCaml) restrict to fragments where this blow-up does not arise; full $F_omega$ as a *type system* is rarely directly exposed.
 
 == Bounded Quantification: $F_(<:)$
 
@@ -332,11 +332,11 @@ The bounded universal $forall alpha <: sigma . tau$ ranges only over subtypes of
 
 Two variants:
 - *Kernel $F_(<:)$* (Curien–Ghelli 1992): subtyping of $forall alpha <: sigma . tau$ requires *equal* bounds. Decidable.
-- *Full $F_(<:)$*: subtyping of $forall alpha <: sigma_1 . tau_1 <: forall alpha <: sigma_2 . tau_2$ requires $sigma_2 <: sigma_1$ (contravariance in "the bound). This is the natural reading; this is what programmers want.
+- *Full $F_(<:)$*: subtyping of $forall alpha <: sigma_1 . tau_1 <: forall alpha <: sigma_2 . tau_2$ requires $sigma_2 <: sigma_1$ (contravariance in the bound). This is the natural reading; this is what programmers want.
 
-*Theorem (Pierce 1994).* Subtype-checking in full $F_(<:)$ "is *undecidable*.
+*Theorem (Pierce 1994).* Subtype-checking in full $F_(<:)$ is *undecidable*.
 
-*Proof sketch.* Pierce reduced "the halting problem for *two-counter Minsky machines* to $F_(<:)$ subtype-checking. The trick: encode the configuration $(q, c_1, c_2)$ of a counter machine as a type; "the subtyping query $tau_q <: tau_(q')$ holds <==> the machine, starting from $q$, eventually reaches a state included in $q'$. Counter increment is encoded by wrapping in a $forall$; counter decrement uses the contravariance of bounds. Each subtyping step in the recursion mimics one machine step. Termination of subtype-checking would decide halting — impossible.
+*Proof sketch.* Pierce reduced the halting problem for *two-counter Minsky machines* to $F_(<:)$ subtype-checking. The trick: encode the configuration $(q, c_1, c_2)$ of a counter machine as a type; the subtyping query $tau_q <: tau_(q')$ holds <==> the machine, starting from $q$, eventually reaches a state included in $q'$. Counter increment is encoded by wrapping in a $forall$; counter decrement uses the contravariance of bounds. Each subtyping step in the recursion mimics one machine step. Termination of subtype-checking would decide halting — impossible.
 
 Hence Pierce's recommendation: stick to *kernel* $F_(<:)$ or impose a syntactic restriction. The languages Java and C\# face similar issues with bounded generics: Java's wildcard subtyping is, technically, undecidable as well (Grigore 2017 showed Java generic subtype-checking is Turing-complete).
 
@@ -417,9 +417,9 @@ The fact that System F is SN is exactly the *Hauptsatz* (cut-elimination theorem
 
 == Categorical Models of System F
 
-The naïve set-theoretic interpretation does *not* work for System F: if $alpha$ ranges over all sets and $forall alpha . tau$ is interpreted as the product over all sets, "the resulting set is too large to be a set". Reynolds (1984) proved:
+The naïve set-theoretic interpretation does *not* work for System F: if $alpha$ ranges over all sets and $forall alpha . tau$ is interpreted as the product over all sets, the resulting set is too large to be a set. Reynolds (1984) proved:
 
-*Theorem (Reynolds 1984).* There is no set"-theoretic model of polymorphism — no model in which $forall alpha . tau$ "is interpreted as the set"-theoretic product over all sets and $Lambda$-abstraction by ordinary function-formation.
+*Theorem (Reynolds 1984).* There is no set-theoretic model of polymorphism — no model in which $forall alpha . tau$ is interpreted as the set-theoretic product over all sets and $Lambda$-abstraction by ordinary function-formation.
 
 The standard models of System F therefore work in restricted categories:
 - *PER models* (Bruce–Longo 1990): partial equivalence relations on a fixed combinatory algebra.
@@ -432,7 +432,7 @@ In every case, the semantic universe of "types" is a small object in some catego
 == Practical Languages and System F
 
 - *Haskell*: GHC's intermediate language `System FC` is System $F_omega$ plus *coercions* (witnesses for type equalities arising from GADTs and type families).
-- *OCaml*: surface ML is Hindley–Milner, but `let` polymorphism, first-cal(C) modules (`module type of"`), "and GADTs push toward System F.
+- *OCaml*: surface ML is Hindley–Milner, but `let` polymorphism, first-cal(C) modules (`module type of`), and GADTs push toward System F.
 - *Scala*: subtyping + higher kinds = essentially $F_(<:)^omega$. Decidability is precarious (Scala type-checking can loop).
 - *Rust*: traits and lifetimes are an HM-like fragment with subtype-like coercions.
 - *Java/C\#*: F-bounded generics. Subtype-checking undecidable in the limit (Grigore 2017 for Java).
@@ -467,7 +467,7 @@ mapC :: (a -> b) -> CList a -> CList b
 mapC f xs = CList (\c n -> unCL xs (c . f) n)
 ```
 
-The fact that `mapC` "just works" by composition with `f` is *parametricity in action*. No pattern matching "is needed because the data structure carries its own eliminator.
+The fact that `mapC` just works by composition with `f` is *parametricity in action*. No pattern matching is needed because the data structure carries its own eliminator.
 
 == Equational Theory
 
@@ -479,7 +479,7 @@ System F enjoys $beta eta$-conversion at both term and type levels:
 
 *Theorem.* $beta eta$-equality is *decidable* in System F (because SN + confluence).
 
-In contrast: *contextual* equivalence (Mason–Talcott 1991) is decidable for STLC but undecidable for System F — even though *syntactic* $beta eta$ is decidable, the question "are $e_1$ and $e_2$ indistinguishable in *every* context" is harder, because contexts include type instantiations at types that may have rich inhabitants. Parametricity is a *partial* characterisation: contextual equivalence "is at least as strong as parametric equivalence and conjecturally — but not provably in general — equal.
+In contrast: *contextual* equivalence (Mason–Talcott 1991) is decidable for STLC but undecidable for System F — even though *syntactic* $beta eta$ is decidable, the question "are $e_1$ and $e_2$ indistinguishable in *every* context" is harder, because contexts include type instantiations at types that may have rich inhabitants. Parametricity is a *partial* characterisation: contextual equivalence is at least as strong as parametric equivalence and conjecturally — but not provably in general — equal.
 
 == More Free Theorems Worked in Detail
 
@@ -499,7 +499,7 @@ In words: filtering commutes with $"map"$ provided the predicate is appropriatel
 
 === Continuation-Passing Types
 
-The type $forall alpha . (A arrow.r alpha) arrow.r alpha$ for a fixed type $A$ "is "the *continuation* / *Yoneda* encoding. Parametricity says: every $k : forall alpha . (A arrow.r alpha) arrow.r alpha$ is of the form $Lambda alpha . lambda c : A arrow.r alpha . c space a$ for a unique $a : A$. The map $k |-> k[A] space "id"_A$ is a bijection between $forall alpha . (A arrow.r alpha) arrow.r alpha$ and $A$ — this is the *Yoneda lemma* in functor-free disguise.
+The type $forall alpha . (A arrow.r alpha) arrow.r alpha$ for a fixed type $A$ is the *continuation* / *Yoneda* encoding. Parametricity says: every $k : forall alpha . (A arrow.r alpha) arrow.r alpha$ is of the form $Lambda alpha . lambda c : A arrow.r alpha . c space a$ for a unique $a : A$. The map $k |-> k[A] space "id"_A$ is a bijection between $forall alpha . (A arrow.r alpha) arrow.r alpha$ and $A$ — this is the *Yoneda lemma* in functor-free disguise.
 
 Generalisation: $forall alpha . (A arrow.r alpha) arrow.r F alpha tilde.equiv F A$ for any *functor* $F$.
 
@@ -507,13 +507,13 @@ Generalisation: $forall alpha . (A arrow.r alpha) arrow.r F alpha tilde.equiv F 
 
 Parametricity is the *binary* logical-relation construction. *Unary* logical relations are exactly Tait/Girard reducibility for SN. *Step-indexed* logical relations (Appel–McAllester 2001, Ahmed 2004) handle recursive types and mutable state by indexing relations by a *step count* — a relation $R_k$ guarantees behaviour up to $k$ reduction steps. Step-indexing is the bedrock of modern soundness proofs for ML-"with"-references (e.g., Iris, RustBelt).
 
-A unifying meta-theorem: for any *open* term $Gamma tack.r e : tau$ and "any logical relation $cal(L)$, if $cal(L)$ is closed under the typing rules, then $e$ respects $cal(L)$. This is the *fundamental lemma* of logical relations. SN, parametricity, contextual equivalence, type abstraction — all are instances.
+A unifying meta-theorem: for any *open* term $Gamma tack.r e : tau$ and any logical relation $cal(L)$, if $cal(L)$ is closed under the typing rules, then $e$ respects $cal(L)$. This is the *fundamental lemma* of logical relations. SN, parametricity, contextual equivalence, type abstraction — all are instances.
 
 == Operational Semantics Variants
 
 === CBV vs CBN in System F
 
-The polymorphic identity $"id" = Lambda alpha . lambda x : alpha . x$ behaves identically under CBV and CBN: $"id" ["Int"] space (3 + 4)$ reduces to $3 + 4$ then $7$ (CBV) or "to $3 + 4$ then $7$ (CBN). Type abstraction is *always* a value — $Lambda alpha . e$ does not evaluate $e$, by analogy with $lambda x . e$.
+The polymorphic identity $"id" = Lambda alpha . lambda x : alpha . x$ behaves identically under CBV and CBN: $"id" ["Int"] space (3 + 4)$ reduces to $3 + 4$ then $7$ (CBV) or to $3 + 4$ then $7$ (CBN). Type abstraction is *always* a value — $Lambda alpha . e$ does not evaluate $e$, by analogy with $lambda x . e$.
 
 A subtle point in *predicative* extensions: when type instantiation triggers further reduction inside $e$, evaluation strategies matter. Practical systems (Haskell, OCaml) treat $Lambda alpha$ as type-erasable — it disappears at runtime.
 
@@ -521,7 +521,7 @@ A subtle point in *predicative* extensions: when type instantiation triggers fur
 
 *Theorem (Mitchell, Girard, others).* A typed System F term $e$ and its *type-erasure* $|e|$ (delete all $Lambda$ and $[tau]$) have the same untyped reduction behaviour on the corresponding term-level redexes.
 
-So a System F program *runs* like an untyped $lambda$ program — types are computationally inert. This justifies *type erasure* in compilers: GHC erases types between Core "and STG/Cmm; OCaml erases at the back end. The exception: features like Haskell's `Typeable` or polymorphic recursion with type-cal(C) dictionaries pass *runtime representations*, breaking pure erasure.
+So a System F program *runs* like an untyped $lambda$ program — types are computationally inert. This justifies *type erasure* in compilers: GHC erases types between Core and STG/Cmm; OCaml erases at the back end. The exception: features like Haskell's `Typeable` or polymorphic recursion with type-cal(C) dictionaries pass *runtime representations*, breaking pure erasure.
 
 == Predicative vs Impredicative System F
 
@@ -537,13 +537,13 @@ rank2 f = (f 3, f True)
 -- Cannot be written in rank-1 ML/HM
 ```
 
-Rank-1 inference is decidable (HM); rank-$k$ inference for $k gt.eq 3$ "is undecidable (Kfoury–Wells 1994); rank-2 is decidable but exponential in the worst case.
+Rank-1 inference is decidable (HM); rank-$k$ inference for $k gt.eq 3$ is undecidable (Kfoury–Wells 1994); rank-2 is decidable but exponential in the worst case.
 
 == Implementation: From System F to GHC Core
 
-GHC's intermediate language *System FC* (Sulzmann–Chakravarty–Peyton Jones–Donnelly 2007) extends System F with *coercion variables* — runtime-free witnesses of type equalities arising from GADTs and type families. A term may carry a coercion $gamma : tau_1 tilde.eq tau_2$ "and *cast* a value $e : tau_1$ "to $e |> gamma : tau_2$. Coercions are themselves typed, with their own kind of arrow ($tilde.eq$), introduction (`refl`), and elimination (`sym`, `trans`, `nth`, `inst`).
+GHC's intermediate language *System FC* (Sulzmann–Chakravarty–Peyton Jones–Donnelly 2007) extends System F with *coercion variables* — runtime-free witnesses of type equalities arising from GADTs and type families. A term may carry a coercion $gamma : tau_1 tilde.eq tau_2$ and *cast* a value $e : tau_1$ to $e |> gamma : tau_2$. Coercions are themselves typed, with their own kind of arrow ($tilde.eq$), introduction (`refl`), and elimination (`sym`, `trans`, `nth`, `inst`).
 
-System FC is *just* expressive enough to type-check what GHC's source can produce, and *just* simple enough to admit a reliable type checker. It is essentially System $F_omega$ + axioms; the type system itself is decidable (GHC's core type-checker "is "the *one* part of the compiler that is meant to be correctness-critical).
+System FC is *just* expressive enough to type-check what GHC's source can produce, and *just* simple enough to admit a reliable type checker. It is essentially System $F_omega$ + axioms; the type system itself is decidable (GHC's core type-checker is the *one* part of the compiler that is meant to be correctness-critical).
 
 ```haskell
 -- GADT in source
@@ -570,7 +570,7 @@ zoo :: [Showable]
 zoo = [MkShowable 42, MkShowable "hi", MkShowable True]
 ```
 
-Here `Showable` is essentially `exists a. (Show a, a)`. The constraint `Show a` "is part of the existential package — packed in, opened out. Such *heterogeneous lists* are a typical use of Haskell existentials.
+Here `Showable` is essentially `exists a. (Show a, a)`. The constraint `Show a` is part of the existential package — packed in, opened out. Such *heterogeneous lists* are a typical use of Haskell existentials.
 
 In OCaml, *first-cal(C) modules* play a similar role:
 
@@ -591,7 +591,7 @@ The module type *"is"* the existential; module values pack a concrete type with 
 
 == Connection to Category Theory
 
-System F has a beautiful interpretation in terms of *dinatural transformations*. A polymorphic function $f : forall alpha . F(alpha) arrow.r G(alpha)$, where $F, G$ are functors, corresponds "to a *dinatural transformation* from $F$ to $G$. Parametricity is the statement that polymorphic terms are *automatically* dinatural — naturality holds for *free*.
+System F has a beautiful interpretation in terms of *dinatural transformations*. A polymorphic function $f : forall alpha . F(alpha) arrow.r G(alpha)$, where $F, G$ are functors, corresponds to a *dinatural transformation* from $F$ to $G$. Parametricity is the statement that polymorphic terms are *automatically* dinatural — naturality holds for *free*.
 
 Wadler's free theorems are dinaturality squares:
 ```text
@@ -619,7 +619,7 @@ Take $"id" = Lambda alpha . lambda x : alpha . x$ and the term
 $ e = "id" [forall beta . beta arrow.r beta] space "id" $
 
 By T-TAPP: $"id" [forall beta . beta arrow.r beta] : (forall beta . beta arrow.r beta) arrow.r (forall beta . beta arrow.r beta)$.
-By T-APP applied to $"id" : forall beta . beta arrow.r beta$ ("the second occurrence): well-typed.
+By T-APP applied to $"id" : forall beta . beta arrow.r beta$ (the second occurrence): well-typed.
 
 Reduction:
 + $beta_2$: $"id" [forall beta . beta arrow.r beta] = lambda x : (forall beta . beta arrow.r beta) . x$.
@@ -639,10 +639,10 @@ Erasure relies on parametricity: by Reynolds, a polymorphic function cannot insp
 
 == Inductive Types via System F
 
-Despite lacking inductive primitives, System F can *encode* arbitrary strictly-positive inductive types via Church / Böhm–Berarducci encodings. The recipe: an inductive type "with constructors $c_1 : A_1 arrow.r ... arrow.r T$, ..., $c_n : B_1 arrow.r ... arrow.r T$ is encoded as
+Despite lacking inductive primitives, System F can *encode* arbitrary strictly-positive inductive types via Church / Böhm–Berarducci encodings. The recipe: an inductive type with constructors $c_1 : A_1 arrow.r ... arrow.r T$, ..., $c_n : B_1 arrow.r ... arrow.r T$ is encoded as
 $ T = forall alpha . (A_1 arrow.r ... arrow.r alpha) arrow.r ... arrow.r (B_1 arrow.r ... arrow.r alpha) arrow.r alpha $
 
-with recursive references to $T$ in argument types replaced "by $alpha$. A value is its own *fold*.
+with recursive references to $T$ in argument types replaced by $alpha$. A value is its own *fold*.
 
 *Theorem (Geuvers 2001).* The *full induction principle* — yielding *dependent* eliminators — is *not* derivable in System F from Church encodings. Only the *non-dependent* recursor is.
 
@@ -659,7 +659,7 @@ Tree-fold is *built in*: applying a tree to $(l, n)$ folds it.
 == Recursive Types via Newtype + Fix
 
 System F does not directly include *recursive types* $mu alpha . tau$ (e.g., for streams or non-Church-encoded data). Languages add them separately:
-- *Iso-recursive* types (ML-style): $mu alpha . tau$ is *different from"* $[alpha |-> mu alpha . tau] tau$; explicit `roll`/`unroll` coercions.
+- *Iso-recursive* types (ML-style): $mu alpha . tau$ is *different from* $[alpha |-> mu alpha . tau] tau$; explicit `roll`/`unroll` coercions.
 - *Equi-recursive* types (some experimental systems): identified up to the obvious infinite unfolding.
 
 Adding *iso-recursive* types to System F preserves SN as long as recursion is restricted to *positive* occurrences. Adding *unrestricted* recursion (negative occurrences, like $mu alpha . alpha arrow.r alpha$) yields untyped $lambda$ embeddability and destroys SN.
@@ -690,7 +690,7 @@ Parametricity holds in *pure* System F but breaks under common extensions:
 - *Exceptions* (in some forms) — observing a thrown exception reveals control flow.
 - *`seq`* in Haskell — observing whether a value is bottom breaks the "free" naturality.
 - *`unsafeCoerce`* — patently breaks everything.
-- *Typecase* / *Typeable* — runtime type inspection contradicts the assumption that "the type is unknown to the function".
+- *Typecase* / *Typeable* — runtime type inspection contradicts the assumption that the type is unknown to the function.
 - *Non-termination* — even pure non-termination weakens parametricity to a *step-indexed* analogue.
 
 This is one of the reasons functional programmers value purity: *pure* polymorphic types come with strong free theorems; *impure* ones do not.
@@ -699,7 +699,7 @@ This is one of the reasons functional programmers value purity: *pure* polymorph
 
 In a categorical model, types split into *positive* (sums, products with $beta$) and *negative* (products with $eta$, exponentials). System F's $forall$ is *negative*; its existentials and inductives (when encoded) inherit positivity.
 
-*Focusing* "and *polarised* type systems (Andreoli 1992 for linear logic; Zeilberger 2008 for polarised intuitionistic logic) make this distinction explicit. The Church encoding $exists alpha . tau = forall beta . (forall alpha . tau arrow.r beta) arrow.r beta$ is exactly the *negative shift* of a positive existential: a CPS-style encoding.
+*Focusing* and *polarised* type systems (Andreoli 1992 for linear logic; Zeilberger 2008 for polarised intuitionistic logic) make this distinction explicit. The Church encoding $exists alpha . tau = forall beta . (forall alpha . tau arrow.r beta) arrow.r beta$ is exactly the *negative shift* of a positive existential: a CPS-style encoding.
 
 == System F-omega and Type Constructors
 
@@ -733,7 +733,7 @@ Worked example: $"State" : * arrow.r * arrow.r *$, defined as $"State" = lambda 
 
 == Existential Quantification in Logic
 
-Under Curry–Howard, $exists alpha . P(alpha)$ corresponds to $exists$ at the propositional level (second-order). The Church encoding's *unpack* matches "the elimination rule of $exists$:
+Under Curry–Howard, $exists alpha . P(alpha)$ corresponds to $exists$ at the propositional level (second-order). The Church encoding's *unpack* matches the elimination rule of $exists$:
 
 If $exists alpha . P(alpha)$ and from any $alpha$ together with a proof of $P(alpha)$ one can derive $Q$, then $Q$ — provided $alpha$ does not appear in $Q$.
 
@@ -741,15 +741,15 @@ This is the *eigenvariable* condition in disguise, mirroring T-TABS.
 
 == The $forall$/$exists$ Duality
 
-A polymorphism deeply rooted in System F: every $exists$ encoding is a CPS-transform of a $forall$. Dually, $forall alpha . F alpha tilde.equiv$ ? — well, there's no clean dual; the asymmetry reflects "the *intuitionistic* nature (no double-negation elimination).
+A polymorphism deeply rooted in System F: every $exists$ encoding is a CPS-transform of a $forall$. Dually, $forall alpha . F alpha tilde.equiv$ ? — well, there's no clean dual; the asymmetry reflects the *intuitionistic* nature (no double-negation elimination).
 
 But adding *delimited control* or *call/cc* — equivalently, allowing classical reasoning — yields a richer story. *Parigot's* $lambda mu$-calculus (1992) adds named continuations and *names* $alpha, beta, ...$ at a separate level; its types are the *classical* second-order propositional formulas. SN holds (Parigot 1997, David–Nour 2003).
 
 == Conservativity Results
 
-*Theorem (Reynolds 1984, Mitchell 1986).* System F is *conservative* over STLC: a term not mentioning $forall$ "is typable in F <==> it is typable in STLC.
+*Theorem (Reynolds 1984, Mitchell 1986).* System F is *conservative* over STLC: a term not mentioning $forall$ is typable in F <==> it is typable in STLC.
 
-*Theorem.* HM is" *conservative* over its predicative System F fragment.
+*Theorem.* HM is *conservative* over its predicative System F fragment.
 
 *Non-conservativity:* adding *type families* or *GADTs* to Haskell adds equations that are not derivable from system FC alone — they require the equation axioms.
 
@@ -772,7 +772,7 @@ module ListStack : STACK = struct
 end
 ```
 
-By parametricity, *no* client of `STACK` can distinguish `ListStack` "from any other implementation respecting the spec. This is *representation independence* — "the cornerstone of modular programming.
+By parametricity, *no* client of `STACK` can distinguish `ListStack` from any other implementation respecting the spec. This is *representation independence* — the cornerstone of modular programming.
 
 == Worked Example: Existential Counters
 
@@ -796,17 +796,17 @@ let pairC : (module COUNTER) =
    end)
 ```
 
-Both `intC` and `pairC` have type `(module COUNTER)`. Any client function `f : (module COUNTER) -> int` cannot distinguish them by *behavioural observation* — "by parametricity. This is *representation independence* in action.
+Both `intC` and `pairC` have type `(module COUNTER)`. Any client function `f : (module COUNTER) -> int` cannot distinguish them by *behavioural observation* — by parametricity. This is *representation independence* in action.
 
 == Historical Notes
 
-Jean-Yves Girard discovered System F in 1971, presented in his thesis (1972) as *Système F*, in the context of proving "the *Takeuti conjecture* — the cut-elimination theorem ("and hence consistency) for second-order arithmetic. Girard's main technical contribution was "the *reducibility candidates* method, generalising Tait's reducibility from STLC to handle impredicative quantification.
+Jean-Yves Girard discovered System F in 1971, presented in his thesis (1972) as *Système F*, in the context of proving the *Takeuti conjecture* — the cut-elimination theorem (and hence consistency) for second-order arithmetic. Girard's main technical contribution was the *reducibility candidates* method, generalising Tait's reducibility from STLC to handle impredicative quantification.
 
-John Reynolds, working independently in the programming-languages tradition, arrived at "the same calculus in 1974 as the type-theoretic foundation of *parametric polymorphism* in his paper "Towards a Theory "of Type Structure". Reynolds' (1983) *abstraction theorem* — relational parametricity — provided the semantic justification for "the slogan "polymorphic functions don't inspect their arguments".
+John Reynolds, working independently in the programming-languages tradition, arrived at the same calculus in 1974 as the type-theoretic foundation of *parametric polymorphism* in his paper "Towards a Theory of Type Structure". Reynolds' (1983) *abstraction theorem* — relational parametricity — provided the semantic justification for the slogan "polymorphic functions don't inspect their arguments".
 
 Philip Wadler's 1989 paper "Theorems for Free!" popularised parametricity among programmers, deriving practical equations from polymorphic types alone.
 
-The undecidability of" $F_(<:)$ subtyping was a surprise: Pierce (1994) found the encoding of two-counter machines that finally proved the long-standing open question. The undecidability of System F type inference (Wells 1994; published 1999) closed another open problem with a beautiful reduction to semi-unification.
+The undecidability of $F_(<:)$ subtyping was a surprise: Pierce (1994) found the encoding of two-counter machines that finally proved the long-standing open question. The undecidability of System F type inference (Wells 1994; published 1999) closed another open problem with a beautiful reduction to semi-unification.
 
 System $F_omega$ — adding type operators — was already present in Girard's thesis. The Barendregt cube was introduced by Barendregt (1991) as a unifying framework for the pure type systems (Berardi–Terlouw 1989).
 
