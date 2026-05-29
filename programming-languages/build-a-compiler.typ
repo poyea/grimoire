@@ -2,7 +2,7 @@
 
 This chapter is the constructive proof of the book's thesis. We build a complete, working compiler for a small language called muC ("micro-C") — from raw source text to executable bytecode running on a stack VM. Every phase corresponds to a concept developed in previous chapters. By the end, the abstraction stack is fully concrete.
 
-_See also: programming-languages/lexing.typ (ch. 4), programming-languages/parsing.typ (ch. 5), programming-languages/type-systems.typ (ch. 7) for the theory behind each phase._
+_See also: Lexing (ch. 4), Parsing (ch. 5), Type Systems (ch. 7) for the theory behind each phase._
 
 == The muC Language
 
