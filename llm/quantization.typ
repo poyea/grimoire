@@ -2,7 +2,7 @@
 
 Quantization reduces the numerical precision of a model's weights and activations, shrinking memory footprint and accelerating matrix operations. For large language models the payoff is asymmetric: a 70B-parameter model at FP16 requires 140 GB of GPU memory — impossible on a single 80 GB A100 — while INT4 brings it to roughly 35 GB. This chapter covers the math, the algorithms that achieve near-lossless compression, and the file formats that ship quantized models to end users.
 
-*See also:* _gpu-architecture/compute-architecture.typ_ (Tensor Core precision modes, H100 FP8 support), _gpu-architecture/memory-hierarchy.typ_ (memory bandwidth arithmetic), _llm/transformer-architecture.typ_ (layer shapes used throughout the examples).
+*See also:* _Compute Units and Specialized Cores (GPU Architecture volume)_ (Tensor Core precision modes, H100 FP8 support), _GPU Memory Hierarchy (GPU Architecture volume)_ (memory bandwidth arithmetic), _Transformer Architecture_ (layer shapes used throughout the examples).
 
 == Why Quantize: Memory Bandwidth Is the Bottleneck
 
@@ -346,7 +346,7 @@ NVIDIA's Transformer Engine (TE) on H100 and later hardware executes FP8 GEMM in
 
 Per-tensor scaling is the default; per-channel (per-row) scaling trades a small kernel overhead for higher accuracy on outlier-heavy activations.
 
-*See also:* _gpu-architecture/compute-architecture.typ_ for H100 Tensor Core precision modes and the wgmma instruction.
+*See also:* _Compute Units and Specialized Cores (GPU Architecture volume)_ for H100 Tensor Core precision modes and the wgmma instruction.
 
 === PyTorch FP8 Training Example
 
