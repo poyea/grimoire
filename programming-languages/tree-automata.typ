@@ -127,7 +127,7 @@ The most important characterisation of regular tree languages connects them to l
 
 *Theorem (Thatcher--Wright 1968; Doner 1970).* A tree language $L subset.eq T_Sigma$ is regular <==> it is definable by a sentence of monadic second-order logic over the structure $(T_Sigma; "child"_1, dots, "child"_k, ("label"_f)_(f in Sigma))$.
 
-MSO over trees has first-order variables ranging over positions, second-order variables ranging over sets of positions, and predicates for $y$ is the $i$-th child of $x$" and "the symbol at position $x$ is $f$. The theorem is the *tree-automaton analogue of Büchi's theorem* for words, established the same year.
+MSO over trees has first-order variables ranging over positions, second-order variables ranging over sets of positions, and predicates for $y$ is the $i$-th child of $x$ and the symbol at position $x$ is $f$. The theorem is the *tree-automaton analogue of Büchi's theorem* for words, established the same year.
 
 *Proof sketch (regular $arrow.r$ MSO).* Existential quantification over runs: let $X_q$ for each state $q$ be the set of positions where the run is in state $q$. The formula asserts that the $X_q$ partition $"Pos"(t)$, the root lies in some $X_q$ with $q in Q_F$, and the local rules are obeyed at every position.
 
@@ -151,7 +151,7 @@ A computation rewrites $q_0(t)$ to a tree over $Omega$ by repeatedly applying ru
 
 *Theorem.* The cal(C) of *top-down tree transductions* is properly contained in the cal(C) of *bottom-up tree transductions* (BUTT, Engelfriet 1975). The two classes are *incomparable* on the deterministic level.
 
-The key difference: a BUTT can *inspect* a subterm and *"then"* decide what to output (the input is processed before the output is committed), whereas a TDTT commits "to output structure at each step and then recurses; this lets BUTT realise transductions like "if the input is $f(a, a)$ output $g$, else output $h$ that TDTT cannot.
+The key difference: a BUTT can *inspect* a subterm and *"then"* decide what to output (the input is processed before the output is committed), whereas a TDTT commits to output structure at each step and then recurses; this lets BUTT realise transductions like if the input is $f(a, a)$ output $g$, else output $h$ that TDTT cannot.
 
 === Macro Tree Transducers
 
@@ -210,7 +210,7 @@ Static analysis of XPath queries (containment, equivalence, satisfiability) redu
 
 The deepest application of tree automata in algorithmics:
 
-*Theorem (Courcelle 1990).* Every property of finite graphs expressible in monadic second-order logic "with edge-"set quantification (MSO_2) is decidable in *linear time* on graphs of bounded *tree-width*.
+*Theorem (Courcelle 1990).* Every property of finite graphs expressible in monadic second-order logic with edge-set quantification (MSO_2) is decidable in *linear time* on graphs of bounded *tree-width*.
 
 *Tree-width* measures how tree-like a graph is. A *tree decomposition* of a graph $G = (V, E)$ is a tree $T$ whose nodes are labelled by *bags* $X_t subset.eq V$ such that (i) every vertex of $G$ is in some bag; (ii) every edge has both endpoints in some bag; (iii) for every vertex $v$, the set of bags containing $v$ forms a connected subtree of $T$. The *width* is $max_t |X_t| - 1$, and $"tw"(G)$ is the minimum width over all tree decompositions.
 
@@ -244,7 +244,7 @@ Pattern-match exhaustiveness checking for ML / Haskell / Rust reduces to tree-au
     Node (Node _, _, Node _)
 ```
 
-This is the algorithm behind GHC's `-Wincomplete-patterns` and OCaml's `Match_failure` exhaustiveness checker (Maranget 2007 -- "Warnings for pattern matching").
+This is the algorithm behind GHC's `-Wincomplete-patterns` and OCaml's `Match_failure` exhaustiveness checker (Maranget 2007 -- Warnings for pattern matching).
 
 === Term Rewriting
 
@@ -293,7 +293,7 @@ Each rule fires at most once, giving total time $O(|Delta|)$. Witness extraction
 
 Three large patterns unify the tree-automaton landscape and connect it to the rest of the volume.
 
-1. *MSO is the right logic.* For finite trees (Thatcher--Wright / Doner), infinite trees (Rabin), bounded-tree-width graphs (Courcelle), and unranked trees / XML (Brüggemann-Klein--Murata--Wood), MSO matches finite-state recognisability *exactly*. The unifying explanation -- Eilenberg's theorem and its generalisations -- relates each algebraic class of "recognisers to a logical class of "specifications.
+1. *MSO is the right logic.* For finite trees (Thatcher--Wright / Doner), infinite trees (Rabin), bounded-tree-width graphs (Courcelle), and unranked trees / XML (Brüggemann-Klein--Murata--Wood), MSO matches finite-state recognisability *exactly*. The unifying explanation -- Eilenberg's theorem and its generalisations -- relates each algebraic class of recognisers to a logical class of specifications.
 
 2. *Top-down vs bottom-up.* Bottom-up determinism is closed under all the operations one would want; top-down determinism is fragile. This same asymmetry resurfaces at every generalisation: in attribute grammars, in tree transducers (BUTT vs TDTT), in macro tree transducers, in tree-walking automata.
 
@@ -307,9 +307,9 @@ A more abstract view of regular tree languages goes via *$Sigma$-algebras*. A $S
 
 A subset $L subset.eq T_Sigma$ is *recognised by $A$* (with $A$ finite) <==> $L = "eval"_A^(-1)(F)$ for some $F subset.eq A$.
 
-*Theorem.* $L$ is recognised by some finite $Sigma$-algebra iff $L$ is regular. Moreover, the *syntactic algebra* $A_L$ -- the quotient of $T_Sigma$ by the largest congruence saturating $L$ -- is "the minimal recognising algebra, and is isomorphic to the state algebra of "the minimal DFTA.
+*Theorem.* $L$ is recognised by some finite $Sigma$-algebra iff $L$ is regular. Moreover, the *syntactic algebra* $A_L$ -- the quotient of $T_Sigma$ by the largest congruence saturating $L$ -- is the minimal recognising algebra, and is isomorphic to the state algebra of the minimal DFTA.
 
-The algebraic perspective generalises smoothly "to *tree algebras with extra structure* (Bojańczyk--Walukiewicz), which capture richer logical fragments (FO "with successor, FO with $<$, etc.) via varieties of finite tree algebras -- the tree analogue of Eilenberg's variety theorem.
+The algebraic perspective generalises smoothly to *tree algebras with extra structure* (Bojańczyk--Walukiewicz), which capture richer logical fragments (FO with successor, FO with $<$, etc.) via varieties of finite tree algebras -- the tree analogue of Eilenberg's variety theorem.
 
 === Forest Algebras
 
@@ -331,7 +331,7 @@ The reachability algorithm given earlier computes, for each $q in "Reach"$, the 
 
 $L(cal(A)_1) subset.eq L(cal(A)_2)$ <==> $L(cal(A)_1) inter overline(L(cal(A)_2)) = emptyset$ <==> $cal(A)_1 times cal(A)_2^c$ has no accepting run. The complementation $cal(A)_2^c$ requires determinisation; the naive algorithm is exponential in $|cal(A)_2|$.
 
-*Antichain-based inclusion checking* (de Wulf--Doyen--Maquet--Raskin 2008) avoids explicit complementation by maintaining an *antichain* of maximal failed subset states. The order is reverse subset; an antichain element is a $(q, S)$ pair where $q in cal(A)_1$ and $S subset.eq cal(A)_2$ is a candidate counterexample state-"set", with the antichain saving only $subset.eq$-incomparable pairs. Membership checks become antichain insertions; the algorithm is exponential worst-case but practically efficient.
+*Antichain-based inclusion checking* (de Wulf--Doyen--Maquet--Raskin 2008) avoids explicit complementation by maintaining an *antichain* of maximal failed subset states. The order is reverse subset; an antichain element is a $(q, S)$ pair where $q in cal(A)_1$ and $S subset.eq cal(A)_2$ is a candidate counterexample state-set, with the antichain saving only $subset.eq$-incomparable pairs. Membership checks become antichain insertions; the algorithm is exponential worst-case but practically efficient.
 
 === Minimisation
 
@@ -421,11 +421,11 @@ For *GADTs* (generalised algebraic data types) and *dependent pattern matching*,
 
 == Tree Automata and Type Soundness
 
-Many *type-soundness* arguments in language design come down to *regular invariants "on syntax trees* -- e.g. "every well-typed term in normal form is in the syntactic cal(C) of values. These invariants are typically expressed as regular tree languages and verified by tree-automaton emptiness / inclusion:
+Many *type-soundness* arguments in language design come down to *regular invariants on syntax trees* -- e.g. every well-typed term in normal form is in the syntactic cal(C) of values. These invariants are typically expressed as regular tree languages and verified by tree-automaton emptiness / inclusion:
 
-- *Progress* (well-typed normal forms are values") reduces to "the tree language of well-typed non-value normal forms is empty" -- a tree-automaton emptiness check on the cross product of "the typing automaton and the non-value automaton.
+- *Progress* (well-typed normal forms are values) reduces to the tree language of well-typed non-value normal forms is empty -- a tree-automaton emptiness check on the cross product of the typing automaton and the non-value automaton.
 
-- *Preservation* (well-typed terms remain well-typed after a step") reduces to "the small-step relation $arrow.r$ preserves the typing tree language -- a closure check under tree transduction.
+- *Preservation* (well-typed terms remain well-typed after a step) reduces to the small-step relation $arrow.r$ preserves the typing tree language -- a closure check under tree transduction.
 
 These observations underlie *type-system synthesis tools* (Bezem--Coquand; Klin--Salamanca) which generate type-soundness proofs from type-system specifications by reduction to tree-automaton decision procedures.
 
