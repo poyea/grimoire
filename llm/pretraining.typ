@@ -2,7 +2,7 @@
 
 Pretraining is the process of learning a general-purpose language model from raw text by predicting the next token at scale. Every capability a model has — reasoning, code generation, factual recall — is acquired here, before any fine-tuning. This chapter covers the full stack: data pipelines, the training objective, scaling laws, numerical precision, memory management, optimizers, distributed training, and stability.
 
-*See also:* _llm/transformer-architecture.typ_ (model internals), _gpu-architecture/multi-gpu.typ_ (hardware communication primitives used in distributed training), _gpu-architecture/ml-workloads.typ_ (GEMM kernels, Flash Attention).
+*See also:* _Transformer Architecture_ (model internals), _Multi-GPU Communication and Scaling (GPU Architecture volume)_ (hardware communication primitives used in distributed training), _ML Workload Optimization on GPUs (GPU Architecture volume)_ (GEMM kernels, Flash Attention).
 
 == Data Pipeline
 
@@ -561,7 +561,7 @@ optimizer.zero_grad(set_to_none=True)   # free gradient memory immediately
 
 == Distributed Training
 
-*Cross-reference:* _gpu-architecture/multi-gpu.typ_ covers the underlying communication primitives (NCCL all-reduce, all-gather, reduce-scatter, NVLink/InfiniBand bandwidth).
+*Cross-reference:* _Multi-GPU Communication and Scaling (GPU Architecture volume)_ covers the underlying communication primitives (NCCL all-reduce, all-gather, reduce-scatter, NVLink/InfiniBand bandwidth).
 
 Large language models require distributing computation across tens to thousands of GPUs. Three orthogonal parallelism strategies are combined in practice.
 
