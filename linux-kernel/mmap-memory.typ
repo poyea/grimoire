@@ -258,4 +258,4 @@ cat /proc/buddyinfo              # free-page fragmentation per order
 
 `pmap -X <pid>` is a friendlier `smaps`. `/proc/<pid>/pagemap` lets you decode physical addresses if you have root.
 
-*See also:* _cpu-architecture/virtual-memory.typ_ (TLB, page tables, address translation hardware), _networking/zero-copy.typ_ (mmap-based zero-copy I/O patterns), _coding/advanced-systems.typ_ (custom allocators on top of mmap).
+*See also:* _Virtual Memory (CPU Architecture volume)_ (TLB, page tables, address translation hardware), _Zero-Copy Networking (Networking volume)_ (mmap-based zero-copy I/O patterns), _Advanced Algorithms in Modern Systems (Coding volume)_ (custom allocators on top of mmap).
