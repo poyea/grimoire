@@ -8,7 +8,7 @@ The pushdown automaton is the operational counterpart of the context-free gramma
 
 A *pushdown automaton* (PDA) is a 7-tuple $M = (Q, Sigma, Gamma, delta, q_0, Z_0, F)$:
 
-- $Q$ — finite "set of states,
+- $Q$ — finite set of states,
 - $Sigma$ — input alphabet,
 - $Gamma$ — stack alphabet,
 - $delta : Q times (Sigma union { epsilon }) times Gamma arrow.r cal(P)_"fin" (Q times Gamma^*)$ — transition function (nondeterministic, with $epsilon$-moves),
@@ -23,9 +23,9 @@ The PDA accepts $w$ in one of two equivalent modes:
 - *Acceptance by final state:* $L_F (M) = { w | (q_0, w, Z_0) tack.r_M^* (q, epsilon, gamma) "for some" q in F, gamma in Gamma^* }$.
 - *Acceptance by empty stack:* $L_E (M) = { w | (q_0, w, Z_0) tack.r_M^* (q, epsilon, epsilon) "for some" q in Q }$.
 
-*Theorem (Equivalence of acceptance modes).* For every PDA $M$ accepting by final state there is a PDA $M'$ accepting "by empty stack with $L_E (M') = L_F (M)$, and vice versa.
+*Theorem (Equivalence of acceptance modes).* For every PDA $M$ accepting by final state there is a PDA $M'$ accepting by empty stack with $L_E (M') = L_F (M)$, and vice versa.
 
-*Proof.* (*Final $arrow.r$ empty.*) Add a star.op bottom marker $X_0 in."not" Gamma$; $M'$ first pushes $X_0$ below $Z_0$. When $M$ reaches an accepting state, $M'$ enters a new "drain" state that pops everything; otherwise the marker prevents $M'$ from accidentally emptying via $M$'s normal moves. (*Empty $arrow.r$ final.*) Similarly add a marker $X_0$ and a star.op accept state $q_F$; the only transition into $q_F$ is on seeing $X_0$ alone "on the stack. $square$
+*Proof.* (*Final $arrow.r$ empty.*) Add a star.op bottom marker $X_0 in."not" Gamma$; $M'$ first pushes $X_0$ below $Z_0$. When $M$ reaches an accepting state, $M'$ enters a new "drain" state that pops everything; otherwise the marker prevents $M'$ from accidentally emptying via $M$'s normal moves. (*Empty $arrow.r$ final.*) Similarly add a marker $X_0$ and a star.op accept state $q_F$; the only transition into $q_F$ is on seeing $X_0$ alone on the stack. $square$
 
 The two modes are *not* equivalent for *deterministic* PDAs — empty-stack DPDAs are *strictly less expressive* than final-state DPDAs because empty-stack acceptance forces the language to be *prefix-free*.
 
@@ -37,9 +37,9 @@ The two modes are *not* equivalent for *deterministic* PDAs — empty-stack DPDA
 
 - For each $A arrow.r a alpha in P$ ($a in Sigma$, $alpha in V^*$): $delta(q, a, A) in.rev (q, alpha)$ (pop $A$, consume $a$, push $alpha$).
 
-A leftmost derivation $S =>^* w_1 w_2 dots w_n$ corresponds to a PDA computation "that reads $w_i$ on the $i$-th step, with the stack always holding the *tail* of the current sentential form. Acceptance by empty stack corresponds to completing the derivation.
+A leftmost derivation $S =>^* w_1 w_2 dots w_n$ corresponds to a PDA computation that reads $w_i$ on the $i$-th step, with the stack always holding the *tail* of the current sentential form. Acceptance by empty stack corresponds to completing the derivation.
 
-*Proof (PDA $arrow.r.long$ CFG).* The classical triple-construction (Hopcroft–Ullman). Given PDA $M = (Q, Sigma, Gamma, delta, q_0, Z_0, F)$ accepting by empty stack, build a CFG with nonterminals $[p X q]$ for $p, q in Q$, $X in Gamma$, intended to derive "all $w$ such that $M$, starting in state $p$ with $X$ on top, ends in state $q$ with $X$ ("and everything pushed "on top of it) popped." Productions:
+*Proof (PDA $arrow.r.long$ CFG).* The classical triple-construction (Hopcroft–Ullman). Given PDA $M = (Q, Sigma, Gamma, delta, q_0, Z_0, F)$ accepting by empty stack, build a CFG with nonterminals $[p X q]$ for $p, q in Q$, $X in Gamma$, intended to derive all $w$ such that $M$, starting in state $p$ with $X$ on top, ends in state $q$ with $X$ (and everything pushed on top of it) popped. Productions:
 
 - For each $(q', X_1 X_2 dots X_k) in delta(p, a, X)$ with $k >= 1$ and $a in Sigma union { epsilon }$, and for each tuple $(q_1, q_2, dots, q_k) in Q^k$, add the production $[p X q_k] arrow.r a [q' X_1 q_1] [q_1 X_2 q_2] dots [q_(k-1) X_k q_k]$.
 - For each $(q', epsilon) in delta(p, a, X)$, add $[p X q'] arrow.r a$.
@@ -64,7 +64,7 @@ The witness is the even-length palindromes $L = { w w^R | w in { a, b }^* }$. An
 
 *Theorem (DCFL closed under complement; Schützenberger 1963; Hopcroft–Ullman §10.6).* The complement of every DCFL is a DCFL.
 
-*Proof sketch.* The challenge "is handling $epsilon$-loops and configurations that "die" by failing to consume input. Convert the DPDA into an equivalent *loop-free* DPDA whose every configuration is either accepting, rejecting, or has a defined next move on every input symbol — by careful introduction of a "dead" state. Then swap accepting and non-accepting states. The technical heart is showing that the loop-elimination preserves acceptance. $square$
+*Proof sketch.* The challenge is handling $epsilon$-loops and configurations that "die" by failing to consume input. Convert the DPDA into an equivalent *loop-free* DPDA whose every configuration is either accepting, rejecting, or has a defined next move on every input symbol — by careful introduction of a "dead" state. Then swap accepting and non-accepting states. The technical heart is showing that the loop-elimination preserves acceptance. $square$
 
 DCFLs are *not* closed under union, intersection, reversal, concatenation, Kleene star, or homomorphism — these failures motivate the search for richer deterministic classes such as the visibly pushdown languages.
 
@@ -80,7 +80,7 @@ The class of languages accepted is the *visibly pushdown languages* (VPL).
 
 *Theorem (Alur–Madhusudan 2004).* VPLs are *closed under union, intersection, complement, concatenation, Kleene star, reversal*, prefix-closure, homomorphism, and inverse homomorphism. Universality, inclusion, and equivalence are *all decidable in EXPTIME*.
 
-*Proof sketch of closure under intersection.* For VPAs $M_1, M_2$ over "the same partitioned alphabet, the product construction works *because* both push and pop simultaneously on the same letters: their stacks evolve in lockstep, and "the product state $(q_1, q_2)$ together with paired stack symbols $(X_1, X_2)$ suffices to track both". This is precisely what fails for general PDAs (whose stack behaviours need not synchronise).
+*Proof sketch of closure under intersection.* For VPAs $M_1, M_2$ over the same partitioned alphabet, the product construction works *because* both push and pop simultaneously on the same letters: their stacks evolve in lockstep, and the product state $(q_1, q_2)$ together with paired stack symbols $(X_1, X_2)$ suffices to track both. This is precisely what fails for general PDAs (whose stack behaviours need not synchronise).
 
 *Closure under complement.* VPLs are recognised by *visibly deterministic* PDAs (after Safra-style determinisation, an exponential blow-up), and complement is swapping accept states in the deterministic version. $square$
 
@@ -98,7 +98,7 @@ VPLs are the formal foundation of *static analysis of programs with procedure ca
 
 Maslov (1976) introduced the *higher-order pushdown automata* (HOPDA), generalising ordinary pushdown automata by replacing the single stack with a *stack of stacks of stacks ...* nested to level $k$.
 
-A *level-$k$ stack* over $Gamma$ is defined recursively: a level-1 stack "is an ordinary stack of $Gamma$-symbols; a level-$k$ stack ($k >= 2$) is a stack of level-$(k-1)$ stacks. Operations at level $k$ include:
+A *level-$k$ stack* over $Gamma$ is defined recursively: a level-1 stack is an ordinary stack of $Gamma$-symbols; a level-$k$ stack ($k >= 2$) is a stack of level-$(k-1)$ stacks. Operations at level $k$ include:
 
 - $"push"_k$, $"pop"_k$ — duplicate or remove the top level-$(k-1)$ substack.
 - $"push"_i$, $"pop"_i$ for $i < k$ — apply level-$i$ operations to the innermost level-1 substack.
@@ -113,7 +113,7 @@ For each $k$ the membership problem for $L_k$ is decidable in $k$-fold exponenti
 
 The level-2 languages are exactly Aho's *indexed languages*; level-$k$ languages match *level-$k$ recursion schemes* (Knapik–Niwiński–Urzyczyn 2002), and the *Caucal hierarchy* of infinite graphs is generated by the level-$k$ PDAs via prefix-rewriting interpretations.
 
-*Theorem (Ong 2006).* The *modal $mu$-calculus* model-checking problem on the configuration graph of a level-$k$ PDA "is *decidable*, in $k$-fold exponential time. This is the foundation of *higher-order model checking* and underlies the verification of programs in higher-order functional languages (OCaml, Haskell) with arbitrary recursion.
+*Theorem (Ong 2006).* The *modal $mu$-calculus* model-checking problem on the configuration graph of a level-$k$ PDA is *decidable*, in $k$-fold exponential time. This is the foundation of *higher-order model checking* and underlies the verification of programs in higher-order functional languages (OCaml, Haskell) with arbitrary recursion.
 
 == Indexed Grammars
 
@@ -130,13 +130,13 @@ intuitively: each nonterminal carries a *stack* of indices $phi in F^*$; product
 - $L = { a^(2^n) | n >= 0 }$ — double-exponential growth.
 - $L = { w \# w | w in { a, b }^* }$ — the *copy* language.
 
-The copy language is not even an indexed language in all formulations; it lies in "the slightly larger cal(C) of *linear indexed languages*.
+The copy language is not even an indexed language in all formulations; it lies in the slightly larger cal(C) of *linear indexed languages*.
 
 == Tree-Adjoining Grammars
 
 Joshi (1985) introduced *tree-adjoining grammars* (TAGs), motivated by linguistic phenomena (cross-serial dependencies in Dutch, scrambling in German) that are demonstrably non-CFL but felt to be "only mildly more complex" than context-free.
 
-A TAG is a pair $(I, A)$ of finite sets "of *elementary trees*:
+A TAG is a pair $(I, A)$ of finite sets of *elementary trees*:
 
 - $I$ — *initial trees*, whose leaves are terminals or *substitution nodes* (nonterminals marked $arrow.b$).
 - $A$ — *auxiliary trees*, with a designated *foot node* (a leaf marked $*$) sharing its label with the root.
@@ -144,13 +144,13 @@ A TAG is a pair $(I, A)$ of finite sets "of *elementary trees*:
 The two operations:
 
 - *Substitution.* Replace a substitution-marked leaf in some tree by an initial tree with matching root label.
-- *Adjunction.* Splice an auxiliary tree into an internal node $n$ of an existing tree: the auxiliary tree's root replaces $n$; the subtree previously rooted at $n$ is reattached at "the auxiliary's foot.
+- *Adjunction.* Splice an auxiliary tree into an internal node $n$ of an existing tree: the auxiliary tree's root replaces $n$; the subtree previously rooted at $n$ is reattached at the auxiliary's foot.
 
-*Theorem (Joshi–Levy–Takahashi 1975; Vijay-Shanker 1987).* TAGs generate exactly the cal(C) *TAL* of *tree-adjoining languages*, which strictly contains CFLs, includes the" copy language and $a^n b^n c^n d^n$, and is properly contained in the *indexed languages*. TAL is recognised in $O(n^6)$ time.
+*Theorem (Joshi–Levy–Takahashi 1975; Vijay-Shanker 1987).* TAGs generate exactly the cal(C) *TAL* of *tree-adjoining languages*, which strictly contains CFLs, includes the copy language and $a^n b^n c^n d^n$, and is properly contained in the *indexed languages*. TAL is recognised in $O(n^6)$ time.
 
 TAGs are weakly equivalent to several formalisms (Vijay-Shanker, Weir, Joshi 1987):
 
-- *Linear indexed grammars* ("where push-index productions are *linear* — only one daughter carries the new index).
+- *Linear indexed grammars* (where push-index productions are *linear* — only one daughter carries the new index).
 - *Head grammars* (Pollard 1984), using a head-distinguishing combination operation.
 - *Combinatory categorial grammars* (CCG; Steedman 1996), which build expressions via combinators applied to typed lexical entries.
 
@@ -164,7 +164,7 @@ Joshi's *mildly context-sensitive* desiderata for a language cal(C) $cal(C)$:
 
 (MC2) $cal(C)$ contains $a^n b^n c^n d^n$, the copy language, and other limited cross-serial dependencies.
 
-(MC3) Languages in $cal(C)$ have *constant growth*: there is $c$ such that for all $w in L$ with $|w| >= c$, there is $w' in L$ "with $|w| < |w'| <= |w| + c$.
+(MC3) Languages in $cal(C)$ have *constant growth*: there is $c$ such that for all $w in L$ with $|w| >= c$, there is $w' in L$ with $|w| < |w'| <= |w| + c$.
 
 (MC4) Polynomial-time recognition.
 
@@ -176,7 +176,7 @@ These hierarchies are the active area of research for *natural language syntax* 
 
 == Linear Bounded Automata and Context-Sensitive Languages
 
-A *linear bounded automaton* (LBA) is a nondeterministic Turing machine whose tape is bounded to *exactly the input length* (with endmarkers): the machine cannot use more cells than the input occupies. Formally, $delta : Q times Gamma arrow.r 2^(Q times Gamma times { L, R })$ with the constraint that the head never moves left of "the left endmarker or right of the right endmarker.
+A *linear bounded automaton* (LBA) is a nondeterministic Turing machine whose tape is bounded to *exactly the input length* (with endmarkers): the machine cannot use more cells than the input occupies. Formally, $delta : Q times Gamma arrow.r 2^(Q times Gamma times { L, R })$ with the constraint that the head never moves left of the left endmarker or right of the right endmarker.
 
 A language is *context-sensitive* (CSL) if it is generated by a *context-sensitive grammar* — productions of the form $alpha A beta arrow.r alpha gamma beta$ with $gamma eq."not" epsilon$. Equivalently, type-1 grammars in the Chomsky hierarchy.
 
@@ -190,7 +190,7 @@ A language is *context-sensitive* (CSL) if it is generated by a *context-sensiti
 
 *Theorem (Immerman–Szelepcsényi 1987).* $"NSPACE"(s(n))$ is closed under complement for every space-constructible $s(n) >= log n$. In particular $"NSPACE"(n) = "co-NSPACE"(n)$, hence the *context-sensitive languages are closed under complement*.
 
-*Proof sketch (inductive counting).* To complement a nondeterministic machine $M$ working in space $s(n)$: count the *exact* number of configurations reachable from the initial configuration in $k$ steps, for $k = 1, 2, dots$. The count can be maintained nondeterministically in space $s(n)$ via an inductive bootstrap: given the count $N_k$ for step $k$, the machine guesses for each potential configuration $C$ whether $C$ is reachable in $k+1$ steps, verifies "the guess by guessing a predecessor in $k$ steps, and checks that exactly $N_k$ predecessors verify. Then non-acceptance means: the final reachable set contains *no* accepting configuration, which is verifiable in $"NSPACE"(s(n))$. $square$
+*Proof sketch (inductive counting).* To complement a nondeterministic machine $M$ working in space $s(n)$: count the *exact* number of configurations reachable from the initial configuration in $k$ steps, for $k = 1, 2, dots$. The count can be maintained nondeterministically in space $s(n)$ via an inductive bootstrap: given the count $N_k$ for step $k$, the machine guesses for each potential configuration $C$ whether $C$ is reachable in $k+1$ steps, verifies the guess by guessing a predecessor in $k$ steps, and checks that exactly $N_k$ predecessors verify. Then non-acceptance means: the final reachable set contains *no* accepting configuration, which is verifiable in $"NSPACE"(s(n))$. $square$
 
 The *second LBA problem* — whether $"NLBA" = "DLBA"$ (equivalently $"NSPACE"(n) = "DSPACE"(n)$) — *remains open* and is the LBA-scale analogue of $"L"$ vs $"NL"$ (which Immerman–Szelepcsényi tells us is *not* the obvious obstruction).
 
@@ -204,7 +204,7 @@ A *type-0* grammar (or *unrestricted* grammar) has productions $alpha arrow.r be
 
 *Proof sketch.* (Type-0 $arrow.r.long$ TM.) A TM systematically enumerates all derivations from $S$ (in lexicographic order of production-sequence) and halts <==> some derivation yields the input.
 
-(TM $arrow.r.long$ type-0.) Encode TM configurations as strings; for each TM transition write a string-rewriting rule "on configurations; arrange productions so that the grammar derivation starts from $S$, generates an arbitrary "input guess" $w$, simulates the TM on $w$, and accepts (rewrites to $w$) iff the simulation enters $q_"accept"$. $square$
+(TM $arrow.r.long$ type-0.) Encode TM configurations as strings; for each TM transition write a string-rewriting rule on configurations; arrange productions so that the grammar derivation starts from $S$, generates an arbitrary "input guess" $w$, simulates the TM on $w$, and accepts (rewrites to $w$) iff the simulation enters $q_"accept"$. $square$
 
 This places the Chomsky hierarchy in its final form:
 
@@ -254,7 +254,7 @@ PDA D = ({q}, {(, )}, {Z, X}, δ, q, Z, {q})
 δ(q, ε, Z) = {(q, Z)}       -- accept (empty input or balanced)
 ```
 
-Acceptance by final state with $F = { q }$ and the additional check that the stack contains only $Z$ — implemented by transitioning to a separate accept state "only when $Z$ is on top.
+Acceptance by final state with $F = { q }$ and the additional check that the stack contains only $Z$ — implemented by transitioning to a separate accept state only when $Z$ is on top.
 
 === VPA for Well-Nested XML
 
@@ -293,11 +293,11 @@ pop_2:     remove the topmost level-1 stack
 top:       read the topmost symbol of the topmost level-1 stack
 ```
 
-A canonical level-2 PDA generates $L = { a^(2^n) | n >= 0 }$ by using $"push"_2$ to *double* the stack content ("the "a" markers), then a counting phase consumes the doubled markers.
+A canonical level-2 PDA generates $L = { a^(2^n) | n >= 0 }$ by using $"push"_2$ to *double* the stack content (the "a" markers), then a counting phase consumes the doubled markers.
 
 == Connections to Verification and Programming Languages
 
-The hierarchy of automata above the PDA is not academic — it "is "the foundation of modern *interprocedural program analysis*.
+The hierarchy of automata above the PDA is not academic — it is the foundation of modern *interprocedural program analysis*.
 
 - *Reachability in PDAs* (Bouajjani–Esparza–Maler 1997, Schwoon 2002) is *polynomial* and provides the algorithmic core of *summary-based interprocedural dataflow analysis*: programs with procedure calls and a regular abstraction of the data become PDAs; reachability of a "bad" configuration is the verification question.
 
@@ -315,7 +315,7 @@ The pumping lemma generalises through the hierarchy with increasing decompositio
 
 - *Regular:* $w = x y z$ — *one* pump position.
 - *CFL:* $w = u v x y z$ — *two* paired pump positions (Bar-Hillel et al.).
-- *TAL:* $w = u_1 v_1 u_2 v_2 u_3 v_3 u_4 v_4 u_5$ — *four* paired pumps (Vijay-Shanker 1987); witnesses non-TAL-ness of", e.g., $w w w$ for arbitrary $w$.
+- *TAL:* $w = u_1 v_1 u_2 v_2 u_3 v_3 u_4 v_4 u_5$ — *four* paired pumps (Vijay-Shanker 1987); witnesses non-TAL-ness of, e.g., $w w w$ for arbitrary $w$.
 - *MCFG of dimension $m$:* $2m$ paired pump positions (Seki et al. 1991).
 
 In every case the pumping argument follows from *path repetition in the derivation tree (or DAG)*: by pigeonhole, a long enough derivation must reuse the same nonterminal in nested form, and the cycle can be iterated.
