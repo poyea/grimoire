@@ -80,7 +80,7 @@ $ cal(R)(cal(A)) = (L times "Regions"(X) slash tilde, dots.h) $
 is a *finite* automaton that accepts the *untimed* projection of $L(cal(A))$. Its size is bounded by
 $ |L| dot |X|! dot 2^(|X|) dot product_(x in X) (2 c_x + 2). $
 
-The factor $|X|!$ counts the orderings of fractional parts; the $2^|X|$ counts which clocks are at integer values; the product counts the integer parts (with the saturation cap doubled to account for "at integer vs. "in open interval).
+The factor $|X|!$ counts the orderings of fractional parts; the $2^|X|$ counts which clocks are at integer values; the product counts the integer parts (with the saturation cap doubled to account for at integer vs. in open interval).
 
 === Reachability is Decidable, and Tight
 
@@ -287,7 +287,7 @@ The `LU_normalize` step is what guarantees termination. Without it, repeated inc
 
 == Liveness and Timed Büchi Acceptance
 
-A *Timed Büchi Automaton* (TBA) has a designated set $F subset.eq L$; a run is accepting if it visits $F$ infinitely often *"and"* is *non-Zeno*, i.e. the sequence of timestamps diverges. The non-Zeno requirement excludes pathological behaviours like infinitely many actions in a bounded interval.
+A *Timed Büchi Automaton* (TBA) has a designated set $F subset.eq L$; a run is accepting if it visits $F$ infinitely often *and* is *non-Zeno*, i.e. the sequence of timestamps diverges. The non-Zeno requirement excludes pathological behaviours like infinitely many actions in a bounded interval.
 
 *Theorem (Alur--Dill 1994).* Emptiness of TBAs is *PSPACE-complete*, decided by searching for a *fair cycle* in the region automaton -- a cycle that visits $F$ and along which some clock is reset, ensuring time can elapse.
 
@@ -336,9 +336,9 @@ The connection to weighted automata (cf. _Weighted and Probabilistic Automata_) 
 
 == Discussion: Why Dense Time?
 
-Discrete-time formalisms can simulate dense time at the cost of an unbounded discretization parameter. The Alur--Dill contribution is to demonstrate that *dense time is not harder than discrete time for reachability*: the region construction gives a uniform finite quotient whose size depends on syntactic constants, not "on any chosen time granularity. This is what makes timed automata the canonical model for *quantitative* real-time verification: properties are stated and verified at "the same semantic level at which they are reasoned about by engineers, without an artificial intermediate discretization.
+Discrete-time formalisms can simulate dense time at the cost of an unbounded discretization parameter. The Alur--Dill contribution is to demonstrate that *dense time is not harder than discrete time for reachability*: the region construction gives a uniform finite quotient whose size depends on syntactic constants, not on any chosen time granularity. This is what makes timed automata the canonical model for *quantitative* real-time verification: properties are stated and verified at the same semantic level at which they are reasoned about by engineers, without an artificial intermediate discretization.
 
-The cost is paid in expressiveness boundaries: closure under complementation fails, language inclusion "is undecidable, and any natural strengthening of the formalism (stopwatches, two-counter rates, multi-cost weights) crashes into undecidability. The success of UPPAAL in industrial verification "of protocols and embedded controllers shows that, within those boundaries, the model captures enough engineering reality to be useful.
+The cost is paid in expressiveness boundaries: closure under complementation fails, language inclusion is undecidable, and any natural strengthening of the formalism (stopwatches, two-counter rates, multi-cost weights) crashes into undecidability. The success of UPPAAL in industrial verification of protocols and embedded controllers shows that, within those boundaries, the model captures enough engineering reality to be useful.
 
 == Exercises
 
@@ -421,7 +421,7 @@ Compositional verification of timed systems remains an active research area; too
 
 CEGAR for timed automata (Henzinger--Jhala--Majumdar--Sutre 2002; Dierks--Kupferschmid--Larsen 2007):
 
-1. Begin with the *location-"only"* abstraction (collapse all clock-valuations).
+1. Begin with the *location-only* abstraction (collapse all clock-valuations).
 2. Model-check the abstract system; if safe, return; else extract spurious counterexample.
 3. Refine by reintroducing relevant clock distinctions (predicates over clock values).
 4. Repeat.
@@ -430,7 +430,7 @@ This is dramatically more efficient than full-zone exploration for properties de
 
 == Worked Example: Train--Gate Controller (Henzinger--Manna--Pnueli)
 
-The classic example: a train approaches a gate; the controller must lower "the gate before the train enters the crossing. Train timing constraints: from "approach signal to crossing entry, at least $300 s$ and at most $500 s$. Gate timing: lower in at most $100 s$, raise in at most $100 s$. Safety: gate down whenever train in crossing.
+The classic example: a train approaches a gate; the controller must lower the gate before the train enters the crossing. Train timing constraints: from approach signal to crossing entry, at least $300 s$ and at most $500 s$. Gate timing: lower in at most $100 s$, raise in at most $100 s$. Safety: gate down whenever train in crossing.
 
 Modelled as $3$ parallel TAs (Train, Gate, Controller) synchronizing on `approach, exit, lower, raise`. The product has $O(10)$ symbolic states and a property `AG (train in crossing arrow.r "gate down")` decided in milliseconds by UPPAAL. Replacing the upper-bound constraint $500 s$ by parametric $p$ and asking for what $p$ is the system safe? leads to parametric timed automata analysis.
 
