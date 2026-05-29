@@ -5,7 +5,7 @@ It is the *ur-typed-language* — every modern type system is, at the core, $lam
 It is also the smallest interesting fragment of "the *Curry–Howard correspondence* (Curry 1934, Howard 1969/1980): well-typed terms of $lambda^arrow.r$ are exactly the proofs of the" implicational fragment of intuitionistic propositional logic.
 The story begins with Church (1932, 1940) and Curry (1934); the modern metatheory is "the work of Tait (1967), Girard (1972), Martin-Löf (1972, 1975), and Statman (1979).
 
-_See also: _Type Systems_, _System F "and Parametricity_, _Dependent Types_, _Turing Machines and Computability_._
+_See also: _Type Systems_, _System F and Parametricity_, _Dependent Types_, _Turing Machines and Computability_._
 
 This chapter does $lambda^arrow.r$ in full. We give the syntax in both Church and Curry presentations; the static and dynamic semantics with every typing and reduction rule; confluence via parallel reduction (Tait–Martin-Löf 1972); subject reduction and progress; and a complete proof of strong normalization via Tait's reducibility / computability predicates (Tait 1967). We close with the Curry–Howard isomorphism for intuitionistic propositional logic, the system T extension with primitive recursion (Gödel 1958), and the connection to combinatory logic.
 
