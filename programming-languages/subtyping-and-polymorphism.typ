@@ -14,9 +14,9 @@ The defining feature of a subtyping system is a single inference rule:
    Gamma |- e : tau_2
 ```
 
-If $tau_1$ "is a subtype of $tau_2$, then any term of type $tau_1$ may be promoted to type $tau_2$. The *subtype relation* $lt.tri$ is required "to be a preorder (reflexive and transitive) on types; it may or may not be antisymmetric depending "on whether types are considered up to alpha-equivalence and unfolding.
+If $tau_1$ is a subtype of $tau_2$, then any term of type $tau_1$ may be promoted to type $tau_2$. The *subtype relation* $lt.tri$ is required to be a preorder (reflexive and transitive) on types; it may or may not be antisymmetric depending on whether types are considered up to alpha-equivalence and unfolding.
 
-The slogan attributed "to Liskov (1987): *whenever an instance of $tau_1$ is expected, "an instance of $tau_2$ may be supplied*. The reverse reading — *subtyping is implicit coercion* — leads to the *coercive* interpretation: subsumption is a logically silent insertion of a function $tau_1 arrow.r tau_2$. The *subset* interpretation, in contrast, treats subtypes as honest set inclusions on the semantic interpretation of types.
+The slogan attributed to Liskov (1987): *whenever an instance of $tau_1$ is expected, an instance of $tau_2$ may be supplied*. The reverse reading — *subtyping is implicit coercion* — leads to the *coercive* interpretation: subsumption is a logically silent insertion of a function $tau_1 arrow.r tau_2$. The *subset* interpretation, in contrast, treats subtypes as honest set inclusions on the semantic interpretation of types.
 
 #table(
   columns: (auto, auto),
@@ -25,7 +25,7 @@ The slogan attributed "to Liskov (1987): *whenever an instance of $tau_1$ is exp
   [Coercive semantics], [there is a canonical coercion $c : tau_1 arrow.r tau_2$ inserted by elaboration],
 )
 
-The interpretations agree on simple data but diverge "on function types: in the coercive view, $tau_1 arrow.r tau_2 lt.tri tau_1' arrow.r tau_2'$ is mediated by composition with explicit coercions.
+The interpretations agree on simple data but diverge on function types: in the coercive view, $tau_1 arrow.r tau_2 lt.tri tau_1' arrow.r tau_2'$ is mediated by composition with explicit coercions.
 
 == Record Subtyping: Width and Depth
 
@@ -140,9 +140,9 @@ The subtyping rule for bounded universals is *itself* contravariant in the bound
 
 *Theorem (Pierce 1992, 1994).* Subtyping for full System F$(lt.tri)$ is undecidable.
 
-Pierce reduces from the halting problem for two-counter machines, encoding counter states as deeply-nested bounded universals and counter operations as subtyping derivations. The non-termination of subtyping checks tracks "the non-termination of the encoded machine.
+Pierce reduces from the halting problem for two-counter machines, encoding counter states as deeply-nested bounded universals and counter operations as subtyping derivations. The non-termination of subtyping checks tracks the non-termination of the encoded machine.
 
-The diagnosis: the" *bound* of a quantifier $forall alpha lt.tri tau_1 . dots$ may itself be a universal $forall beta lt.tri tau . dots$; nesting these triggers the unbounded recursion. The *kernel* F$(lt.tri)$ (Cardelli–Martini–Mitchell–Scedrov) requires the bound to remain the *same* in the rule S-All — which sacrifices some expressiveness but restores decidability.
+The diagnosis: the *bound* of a quantifier $forall alpha lt.tri tau_1 . dots$ may itself be a universal $forall beta lt.tri tau . dots$; nesting these triggers the unbounded recursion. The *kernel* F$(lt.tri)$ (Cardelli–Martini–Mitchell–Scedrov) requires the bound to remain the *same* in the rule S-All — which sacrifices some expressiveness but restores decidability.
 
 *Kernel F$(lt.tri)$* (Curien–Ghelli) modifies the S-All rule:
 
@@ -167,27 +167,27 @@ Adding *type operators* (functions on types, kind $* arrow.r *$) gives System $F
 A *recursive type* $mu alpha . tau$ binds $alpha$ in $tau$, satisfying the fixed-point equation $mu alpha . tau = [alpha |-> mu alpha . tau] tau$. There are two semantics:
 
 - *Isorecursive*: $mu alpha . tau$ and its unfolding are *isomorphic* but not equal. Conversion requires explicit `fold` / `unfold`. OCaml uses isorecursive types.
-- *Equirecursive*: $mu alpha . tau$ "and its unfolding are *literally equal* — types are infinite (regular) trees. Type unification must handle cyclic structures.
+- *Equirecursive*: $mu alpha . tau$ and its unfolding are *literally equal* — types are infinite (regular) trees. Type unification must handle cyclic structures.
 
 For subtyping, the *coinductive* characterisation is fundamental. Define a relation $cal(R)$ to be a *simulation* if whenever $sigma cal(R) tau$:
 
-- if $sigma = sigma_1 arrow.r sigma_2$ and $tau = tau_1 arrow.r tau_2$, then $tau_1 cal(R) sigma_1$ "and $sigma_2 cal(R) tau_2$;
+- if $sigma = sigma_1 arrow.r sigma_2$ and $tau = tau_1 arrow.r tau_2$, then $tau_1 cal(R) sigma_1$ and $sigma_2 cal(R) tau_2$;
 - if $sigma = {ell_i : sigma_i}_(i in I)$ and $tau = {ell_j : tau_j}_(j in J)$ with $J subset.eq I$, then $sigma_j cal(R) tau_j$ for each $j in J$;
 - $dots$ (clauses for each connective).
 
 *Theorem (Amadio–Cardelli 1993).* The greatest simulation is the subtype relation on the infinite-tree unfoldings of recursive types.
 
-The algorithmic content: subtyping is checked by *coinduction* — the algorithm maintains an *assumption set"* of pairs known to be in $cal(R)$ and adds new pairs as it descends, succeeding when it would infinite-loop. Brandt "and Henglein (1997) refined this "to an efficient algorithm running in $O(n^2)$ on the size of "the input types.
+The algorithmic content: subtyping is checked by *coinduction* — the algorithm maintains an *assumption set* of pairs known to be in $cal(R)$ and adds new pairs as it descends, succeeding when it would infinite-loop. Brandt and Henglein (1997) refined this to an efficient algorithm running in $O(n^2)$ on the size of the input types.
 
 ```text
 ALGORITHM subtype(sigma, tau, A):
     if (sigma, tau) in A: return true                -- coinductive hypothesis
     A' := A union {(sigma, tau)}
-    case (unfold sigma, unfold tau) of"
+    case (unfold sigma, unfold tau) of
       (sigma_1 -> sigma_2, tau_1 -> tau_2):
           return subtype(tau_1, sigma_1, A') and subtype(sigma_2, tau_2, A')
       ({l_i : sigma_i}, {l_j : tau_j}):
-          return J subset I "and forall j. subtype(sigma_j, tau_j, A')
+          return J subset I and forall j. subtype(sigma_j, tau_j, A')
       ...
       otherwise: return false
 ```
@@ -280,13 +280,13 @@ Rémy's *scoped labels* (1989; Leijen 2005 for effects) order the labels in a ro
 
 Categorical semantics of subtyping (Reynolds 1980, Mitchell 1988, Breazu-Tannen–Coquand–Gunter–Scedrov 1991): the subtype relation is interpreted by *faithful functors* between categories of types-as-objects. The subsumption rule becomes the action of a *coherence* requirement: two derivations of the same typing judgement, possibly using different chains of subsumptions, must yield *equal* terms after coercion insertion.
 
-*Theorem (coherence, Breazu-Tannen et al. 1991).* For F$(lt.tri)$ with kernel rule, the coercion semantics is coherent: "the meaning of a term is independent of the derivation chosen.
+*Theorem (coherence, Breazu-Tannen et al. 1991).* For F$(lt.tri)$ with kernel rule, the coercion semantics is coherent: the meaning of a term is independent of the derivation chosen.
 
-Without coherence, the" *meaning* of a program would depend on which derivation the type-checker happened to find — a disaster for predictability. Languages with non-coherent subtype systems (Scala 2's implicit conversions, early TypeScript) have suffered the resulting confusion.
+Without coherence, the *meaning* of a program would depend on which derivation the type-checker happened to find — a disaster for predictability. Languages with non-coherent subtype systems (Scala 2's implicit conversions, early TypeScript) have suffered the resulting confusion.
 
 == Variance Polymorphism
 
-Modern type systems allow *quantifying over variances*. TypeScript 4.7 introduced `in` and `out` declaration-site modifiers; Scala 3 generalises further "with abstract *type members* whose variance can be declared per-member.
+Modern type systems allow *quantifying over variances*. TypeScript 4.7 introduced `in` and `out` declaration-site modifiers; Scala 3 generalises further with abstract *type members* whose variance can be declared per-member.
 
 A *use-site variance annotation* in Java:
 
@@ -296,7 +296,7 @@ void copy(List<? extends T> src, List<? super T> dst) {
 }
 ```
 
-`? extends T` is the *covariant* view of `List<T>` (read-"only"); `? super T` is the *contravariant* view (write-"only"). This is precisely Kennedy–Pierce's *use-site variance* (2007), proven sound and decidable.
+`? extends T` is the *covariant* view of `List<T>` (read-only); `? super T` is the *contravariant* view (write-only). This is precisely Kennedy–Pierce's *use-site variance* (2007), proven sound and decidable.
 
 *Kennedy–Pierce theorem (2007).* Subtyping for Java generics with use-site variance is decidable; declaration-site variance with F-bounded polymorphism is *undecidable* in the full Java generics system.
 
