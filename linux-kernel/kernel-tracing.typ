@@ -152,7 +152,7 @@ LLC miss rate:                  LLC-load-misses / LLC-loads
 Frontend stall:                 cycle_activity.stalls_total / cycles  (TMAM)
 ```
 
-For deeper PMU work see _cpu-architecture/performance-analysis.typ_ — TMAM, top-down methodology, microarchitectural stalls.
+For deeper PMU work see _Performance Analysis and Measurement (CPU Architecture volume)_ — TMAM, top-down methodology, microarchitectural stalls.
 
 == eBPF: The Modern Tracing Substrate
 
@@ -276,4 +276,4 @@ cat /sys/kernel/debug/tracing/available_filter_functions | wc -l   # kprobeable 
 
 If `bpftrace` complains about kheaders or BTF, install `linux-headers-$(uname -r)` and `linux-image-$(uname -r)-dbg` (or distro equivalent). Most modern kernels (5.4+) embed BTF and don't require headers.
 
-*See also:* _cpu-architecture/performance-analysis.typ_ (PMU counters, TMAM), _networking/nat-firewalls.typ_ (eBPF/XDP packet filtering — the original BPF use case), _scheduler.typ_ (sched_ext lets eBPF *implement* the scheduler, not just observe it).
+*See also:* _Performance Analysis and Measurement (CPU Architecture volume)_ (PMU counters, TMAM), _NAT & Firewalls (Networking volume)_ (eBPF/XDP packet filtering — the original BPF use case), _scheduler.typ_ (sched_ext lets eBPF *implement* the scheduler, not just observe it).
