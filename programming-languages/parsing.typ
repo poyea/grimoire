@@ -4,7 +4,7 @@ The parser turns a flat token stream into a tree. That tree — the *abstract sy
 
 Parsing is the pushdown automaton in practice: the call stack of a recursive-descent parser *is* the PDA stack. Understanding parsing algorithms means understanding what kind of grammar they accept, what conflicts they cannot resolve, and what the trade-offs are for your use case.
 
-_See also: programming-languages/pushdown-cfg.typ for context-free grammars, pushdown automata, and the Chomsky normal form._
+_See also: Pushdown Automata and Context-Free Grammars for context-free grammars, pushdown automata, and the Chomsky normal form._
 
 == Recursive Descent
 
@@ -284,4 +284,4 @@ A hybrid: use `std::variant` for expression nodes (frequently visited, closed se
   [Pratt],   [1 token],        [Exprs: none; stmts: manual], [Excellent], [Hand-written (rustc)],
 )
 
-_See also: coding/advanced-string-algorithms.typ for related string-matching structures._
+_See also: Advanced String Algorithms (Coding volume) for related string-matching structures._
