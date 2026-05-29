@@ -2,7 +2,7 @@
 
 A macro is a program that runs at compile time and emits source code. The idea is older than the high-level languages: assembler macros expanded mnemonic sequences before the assembler proper saw them. McCarthy's Lisp made the macro a *first-class* facility by making program text and runtime data the same type — *s-expressions* — so that a program that produces programs is just a program that produces lists. Three generations of language designers have since shown that this simple idea, when combined with a serious binding theory, gives a discipline that supplants nearly every other "syntactic extension" mechanism: pattern matching, async/await, do-notation, contract systems, ORM DSLs, and entire embedded languages are macros.
 
-*See also:* _Type Systems_, _Effects and Algebraic Effect Handlers_
+*See also:* _Type Systems_, _Effects and Handlers_
 
 The technical challenges of doing macros *well* are unobvious and were not understood for two decades after macros were invented. Variable capture, *referential transparency* of identifiers introduced by the macro, *phase separation* between compile-time and run-time computations, and the *hygiene* problem occupied the Scheme community from the late 1980s through 2016. The set-of-scopes model (Flatt 2016) is the current synthesis. Multi-stage programming (Taha–Sheard 1997) is a *typed* alternative that runs in parallel.
 
