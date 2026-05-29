@@ -15,8 +15,8 @@ Fix a multitape Turing machine model. For a function $f : NN -> NN$,
 - $"DTIME"(f(n))$: languages decided by some deterministic TM in time $O(f(n))$.
 - $"NTIME"(f(n))$: languages decided by some nondeterministic TM (existential
   acceptance) in time $O(f(n))$ on every accepting branch.
-- $"DSPACE"(f(n))$: deterministic TM using $O(f(n))$ work-tape cells (input is"
-  read-"only", output is write-"only"; this allows sublinear space).
+- $"DSPACE"(f(n))$: deterministic TM using $O(f(n))$ work-tape cells (input is
+  read-only, output is write-only; this allows sublinear space).
 - $"NSPACE"(f(n))$: nondeterministic counterpart.
 
 A function $f$ is *time-constructible* if some DTM, on input $1^n$, outputs $f(n)$
@@ -49,7 +49,7 @@ simulation). So $D in "DTIME"(g(n))$. If $D in "DTIME"(f(n))$ via some $M_0$, th
 running $M_0$ on $angle.l M_0, M_0 angle.r$ yields a contradiction by the standard
 diagonal argument. $square$
 
-The $log f$ factor is "the *cost of universal simulation*. For single-tape DTMs the"
+The $log f$ factor is the *cost of universal simulation*. For single-tape DTMs the
 gap is $f(n)^2 = o(g(n))$ (Hartmanis--Stearns original); for RAM machines it
 collapses to $f(n) = o(g(n))$ (Cobham). Random-access models that simulate any TM
 in linear time achieve the cleanest hierarchy.
@@ -57,7 +57,7 @@ in linear time achieve the cleanest hierarchy.
 *Corollary.* $"P" subset.eq."not" "EXP"$; in particular $"DTIME"(n) subset.neq
 "DTIME"(n^2)$, $"DTIME"(2^n) subset.neq "DTIME"(2^(2 n))$.
 
-*Theorem (Space Hierarchy, Stearns--Hartmanis--Lewis 1965).* If $f$ is"
+*Theorem (Space Hierarchy, Stearns--Hartmanis--Lewis 1965).* If $f$ is
 space-constructible and $f(n) = o(g(n))$, then $"DSPACE"(f(n)) subset.neq
 "DSPACE"(g(n))$. (No log factor: a $g$-space machine can directly simulate any
 $f$-space machine within its own space budget once it has a clock to prevent
@@ -77,14 +77,14 @@ So the hierarchy can have *arbitrarily large gaps* if $f$ is allowed to be
 pathologically non-constructible. The constructibility hypothesis in the hierarchy
 theorems is therefore essential, not cosmetic.
 
-*Theorem (Blum Speed-up, 1967).* There exists a recursive language $L$ such that"
+*Theorem (Blum Speed-up, 1967).* There exists a recursive language $L$ such that
 for *every* DTM $M$ deciding $L$ in time $t_M (n)$, there is another DTM $M'$
 deciding $L$ in time $t_(M') (n) = O(log t_M (n))$ almost everywhere. In short,
 $L$ has *no asymptotically optimal algorithm*.
 
 The proof uses a priority-style diagonalisation over (machine, time bound) pairs.
 Speed-up languages are highly contrived, but the theorem demolishes naive hopes
-"that every problem has a "best" algorithm.
+that every problem has a "best" algorithm.
 
 == P, NP, coNP, and the Polynomial Hierarchy
 
@@ -118,7 +118,7 @@ Karp-reduces to $"SAT"$.
 *Proof (tableau encoding).* Fix $L in "NP"$ decided by an NTM $M$ in time $p(n)$.
 For input $x$ of length $n$, an *accepting tableau* is a $(p(n) + 1) times (p(n) + 1)$
 grid whose row $i$ is the configuration of $M$ at step $i$, with row $0$ being
-"the start configuration on $x$. The reduction builds a CNF formula $phi_x$ whose
+the start configuration on $x$. The reduction builds a CNF formula $phi_x$ whose
 satisfying assignments correspond exactly to accepting tableaux.
 
 Variables (polynomially many in $n$):
@@ -138,7 +138,7 @@ Move:    For each 2x3 window of cells (rows i, i+1; cols j-1, j, j+1):
 ```
 
 The total number of variables and clauses is polynomial. $M$ accepts $x$ iff
-$phi_x$ "is satisfiable. The reduction is computable in $O(p(n)^2 log p(n))$
+$phi_x$ is satisfiable. The reduction is computable in $O(p(n)^2 log p(n))$
 time. $square$
 
 Levin's independent proof used *tag systems* and emphasised the universality of
@@ -179,8 +179,8 @@ constructed set of formula sizes designed by *delayed diagonalisation*: at even
 stages, "blow up" $L$ enough to defeat the $i$-th polynomial-time machine
 (ensuring $L in."not" "P"$); at odd stages, "blow down" $L$ enough to defeat the
 $i$-th polynomial reduction $f_i : "SAT" lt.eq^p_m L$ (ensuring $L$ is not
-NP-complete). The blow-up/blow-down "is parameterised by a slow-growing function
-"that depends on which stage was last accomplished. $square$
+NP-complete). The blow-up/blow-down is parameterised by a slow-growing function
+that depends on which stage was last accomplished. $square$
 
 Ladner shows the NP landscape is rich. Natural candidates for NP-intermediate
 problems include FACTORING, GRAPH ISOMORPHISM (almost-polynomial, Babai 2016),
@@ -203,13 +203,13 @@ with the recurrence
 $ "REACH"(c_1, c_2, k) = exists c . "REACH"(c_1, c, k - 1) and "REACH"(c, c_2, k - 1). $
 
 Base case $k = 0$: $c_1 = c_2$ or $c_1 |-_M c_2$ in one step, checkable in space
-$O(f)$. Recursive depth is $log 2^(O(f)) = O(f)$. Each level pushes one $c$ of"
+$O(f)$. Recursive depth is $log 2^(O(f)) = O(f)$. Each level pushes one $c$ of
 size $O(f)$ onto the stack. Total space: $O(f) dot O(f) = O(f^2)$. $square$
 
 *Corollary.* $"PSPACE" = "NPSPACE"$; $"NL" subset.eq "DSPACE"(log^2 n)$.
 
 *Theorem (Immerman 1988, Szelepcsényi 1987 -- independent).* $"NSPACE"(f(n)) =
-"coNSPACE"(f(n))$ "for" $f(n) gt.eq log n$.
+"coNSPACE"(f(n))$ for $f(n) gt.eq log n$.
 
 *Proof (inductive counting).* Given a graph $G$ on $2^(O(f))$ configurations and a
 source $s$, we show that "$t$ not reachable" is in NSPACE$(f)$. Suppose the exact
@@ -221,7 +221,7 @@ and counts.
 
 To compute $r_(i + 1)$ from $r_i$: for each potential new vertex $v$, decide
 "reachable in $lt.eq i + 1$" by guessing whether $v$ is reachable in $lt.eq i$
-or $v$ "is a neighbour of one "of the $r_i$ vertices. Iterate from $r_0 = 1$ to
+or $v$ is a neighbour of one of the $r_i$ vertices. Iterate from $r_0 = 1$ to
 $r_n$ where $n = 2^(O(f))$, storing only one $r_i$ at a time. Total space $O(f)$. $square$
 
 *Corollary.* $"NL" = "coNL"$. This was a major surprise: the NP/coNP analogue at
@@ -241,7 +241,7 @@ A *probabilistic TM* has a transition function with random bits. Define:
 - $"PP"$: $Pr["correct"] > 1/2$. Unbounded error; $"PH" subset.eq "P"^"PP"$ (Toda).
 
 Error amplification: $k$ independent repetitions plus majority vote reduce error
-"to $2^(-Omega(k))$ in BPP, by Chernoff. So the constant $2/3$ can be replaced by
+to $2^(-Omega(k))$ in BPP, by Chernoff. So the constant $2/3$ can be replaced by
 $1 - 2^(-"poly")$ without change of cal(C).
 
 *Theorem (Adleman 1978).* $"BPP" subset.eq "P/poly"$.
@@ -263,7 +263,7 @@ $ x in L arrow.l.r.double exists t_1, ..., t_m in {0, 1}^m forall r in {0, 1}^m 
 
 If $|S_x|$ is large, random shifts cover ${0, 1}^m$ with high probability; union
 bound gives existence. If $|S_x|$ is small, $m$ shifts cover at most $m 2^(-n) 2^m
-< 2^m$, so "some" $r$ is missed. Resulting formula "is $exists forall$, i.e.
+< 2^m$, so some $r$ is missed. Resulting formula is $exists forall$, i.e.
 $Sigma^p_2$. Symmetrically $Pi^p_2$. $square$
 
 *Theorem (Impagliazzo--Wigderson 1997).* If some language in $"E"$ requires
@@ -292,7 +292,7 @@ $ sum_(x_1 in {0,1}) sum_(x_2 in {0,1}) dots sum_(x_n in {0,1}) hat(phi)(x_1, ..
 
 where $hat(phi)$ is the *arithmetisation* of $phi$ (AND $arrow.bar dot$, OR
 $arrow.bar a + b - a b$, NOT $arrow.bar 1 - a$) over a prime field $bb(F)_p$ with
-$p$ exponentially larger than "the degree.
+$p$ exponentially larger than the degree.
 
 Round $i$: Prover sends univariate $g_i (X) = sum_(x_(i + 1), ..., x_n) hat(phi)
 (r_1, ..., r_(i - 1), X, x_(i + 1), ..., x_n)$ (degree $lt.eq 3 n$, the formula's
@@ -315,7 +315,7 @@ can be simulated by computing the optimal verifier-against-best-prover game tree
 which fits in polynomial space. $"PSPACE" subset.eq "IP"$: extend LFKN to True
 Quantified Boolean Formulas (TQBF), the canonical PSPACE-complete problem. The
 arithmetisation must now handle alternating $exists$ and $forall$ quantifiers,
-encoded as $sum$ "and $product$ over $bb(F)_p$. Naive arithmetisation explodes the
+encoded as $sum$ and $product$ over $bb(F)_p$. Naive arithmetisation explodes the
 degree; the *Shamir trick* inserts a *linearisation operator* $L_(x_i)$ after each
 quantifier that re-projects to degree 1 in each variable, keeping polynomials
 manageable. The number of rounds is $O("poly"(n))$. $square$
@@ -329,7 +329,7 @@ what interactive proofs can verify. The proof uses *no cryptographic assumptions
 proof).* $"NP" = "PCP"(O(log n), O(1))$.
 
 A *probabilistically checkable proof* system $"PCP"(r(n), q(n))$ uses $O(r(n))$
-random bits, queries $O(q(n))$ proof bits non-adaptively, and decides with"
+random bits, queries $O(q(n))$ proof bits non-adaptively, and decides with
 completeness $1$ and soundness $1/2$. So every NP language has a proof that a
 *constant* number of bits suffices to verify, with logarithmic randomness.
 
@@ -353,7 +353,7 @@ with constraints over alphabet $Sigma$:
 + *Alphabet reduction* via an inner PCP (e.g. long-code or Hadamard): reduce
   $|Sigma^t|$ back to constant alphabet, paying a constant-factor loss in UNSAT.
 
-Each iteration multiplies UNSAT-gap "by a constant factor; $O(log n)$ iterations
+Each iteration multiplies UNSAT-gap by a constant factor; $O(log n)$ iterations
 amplify $1/"poly"(n)$ to $Omega(1)$. The original ALMSS proof was algebraic
 (linearity testing, low-degree testing, composition); Dinur's is combinatorial
 and shorter.
@@ -362,11 +362,11 @@ and shorter.
 
 - *MAX-3SAT* is NP-hard to approximate within $7/8 + epsilon$ (Håstad 2001 -- the"
   $7/8$ bound is tight, matching random assignment).
-- *Set Cover*: $(1 - epsilon) ln n$ approximation "is NP-hard (Dinur--Steurer
+- *Set Cover*: $(1 - epsilon) ln n$ approximation is NP-hard (Dinur--Steurer
   2014).
 - *Vertex Cover*: NP-hard to approximate within $sqrt(2) - epsilon$ (Khot--Minzer--
   Safra 2017); $2 - epsilon$ under the Unique Games Conjecture (Khot--Regev).
-- *Label Cover* is "the master problem for two-prover one-round PCPs and the source
+- *Label Cover* is the master problem for two-prover one-round PCPs and the source
   of most hardness reductions.
 
 == Circuit Complexity
@@ -377,7 +377,7 @@ free), and a designated output. *Size* = number of gates; *depth* = longest path
 length.
 
 A *family* $C = (C_n)_(n in NN)$ decides a language $L$ if $C_n (x) = 1
-arrow.l.r.double x in L$ "for" $|x| = n$. The family is *uniform* if the map $n
+arrow.l.r.double x in L$ for $|x| = n$. The family is *uniform* if the map $n
 arrow.bar C_n$ is computable within stated resources (typically log-space).
 
 - $"P/poly"$: polynomial-size circuits (non-uniform).
@@ -406,7 +406,7 @@ $"MOD"_p$ gates, $p$ prime) cannot compute $"MOD"_q$ for $q$ a different prime.
 In particular $"AC"^0 [2]$ cannot compute $"MOD"_3$.
 
 *Proof.* Approximate each gate by a *low-degree polynomial* over $bb(F)_p$.
-Over $O(log n)$ depth this gives a degree-$"polylog"$ approximator for the"
+Over $O(log n)$ depth this gives a degree-$"polylog"$ approximator for the
 entire circuit, agreeing with it on most inputs. But $"MOD"_q$ for $q eq."not" p$
 has full degree as a function $bb(F)_p^n -> bb(F)_p$; no low-degree polynomial
 agrees with it on a $1/2 + epsilon$ fraction. $square$
@@ -442,12 +442,12 @@ $cal(C) eq."not" "P/poly"$ for any superpolynomial $cal(C)$.
 *statistical test* distinguishing "random" functions from functions in $cal(C)$.
 If $cal(C) supset.eq $ pseudorandom function family, the test breaks PRFs. PRFs
 in turn are believed to follow from one-way functions on hard instances
-(Goldreich--Goldwasser--Micali, Håstad--Impagliazzo--Levin--Luby). So either"
+(Goldreich--Goldwasser--Micali, Håstad--Impagliazzo--Levin--Luby). So either
 crypto fails, or natural proofs do not exist for strong lower bounds. $square$
 
 Most known lower-bound techniques (random restrictions, approximation, polynomial
 method, communication complexity) yield natural properties. To prove $"P" eq.not
-"NP"$ ("or even $"NEXP" eq.not "P/poly"$) one must invent *non-natural* techniques
+"NP"$ (or even $"NEXP" eq.not "P/poly"$) one must invent *non-natural* techniques
 -- e.g. *non-constructive* or *non-large*.
 
 *Theorem (Williams 2014).* $"NEXP" eq."not" "ACC"^0$. The proof *bypasses natural
@@ -460,7 +460,7 @@ $"NEXP" eq."not" cal(C)$" -- is one of the few known routes around the barrier.
 *Other barriers.* The *relativisation barrier* (Baker--Gill--Solovay 1975): there
 exist oracles $A$ with $"P"^A = "NP"^A$ and oracles $B$ with $"P"^B eq."not" "NP"^B$,
 so any proof of $"P" eq."not" "NP"$ must use techniques that *do not relativise*.
-The *algebrisation barrier* (Aaronson--Wigderson 2008): low-degree extensions of"
+The *algebrisation barrier* (Aaronson--Wigderson 2008): low-degree extensions of
 oracles also fail to separate $"P"$ from $"NP"$.
 
 == Descriptive Complexity
@@ -518,7 +518,7 @@ $a dot b = 0$ requires time $n^(2 - o(1))$.
 - *Longest Common Subsequence* (Abboud--Hansen--Vassilevska Williams--Williams
   2016): under SETH, no $O(n^(2 - epsilon))$ algorithm, even for binary alphabet.
 - *Fréchet distance* (Bringmann 2014): $n^(2 - o(1))$ under SETH.
-- *APSP* (All-Pairs Shortest Paths) is conjectured "to require $n^(3 - o(1))$;
+- *APSP* (All-Pairs Shortest Paths) is conjectured to require $n^(3 - o(1))$;
   many cubic problems (negative triangle, radius, betweenness centrality) are
   equivalent under sub-cubic reductions (Vassilevska Williams--Williams).
 
@@ -550,8 +550,8 @@ let edit_distance a b =
 
 An *alternating TM* (Chandra--Kozen--Stockmeyer 1981) has states partitioned into
 existential and universal. A configuration accepts if it is existential and some
-successor accepts, or universal and every successor accepts. Define $"ATIME"$ and"
-"ASPACE" analogously.
+successor accepts, or universal and every successor accepts. Define $"ATIME"$ and
+$"ASPACE"$ analogously.
 
 *Theorem (CKS 1981).*
 
@@ -616,10 +616,10 @@ Cryptography rests on average-case hardness assumptions stronger than $"P" eq.no
 "NP"$:
 
 - *One-way functions* (OWFs): poly-time computable, not poly-time invertible on a
-  $1/"poly"$ fraction of inputs "of each length. Existence => $"P" eq.not
+  $1/"poly"$ fraction of inputs of each length. Existence => $"P" eq.not
   "NP"$ but is not known to follow from it.
 - *Trapdoor permutations*: OWF with auxiliary inversion key.
-- *Pseudorandom generators*: stretch $n$ bits "to $n^omega(1)$ bits indistinguishable
+- *Pseudorandom generators*: stretch $n$ bits to $n^omega(1)$ bits indistinguishable
   from uniform by poly-size circuits.
 
 *Theorem (Håstad--Impagliazzo--Levin--Luby 1999).* OWFs exist iff PRGs exist iff
@@ -633,7 +633,7 @@ Cryptomania are consistent with our current knowledge.
 
 == Communication Complexity
 
-Two parties Alice and Bob hold inputs $x, y$ and wish to compute $f(x, y)$ with"
+Two parties Alice and Bob hold inputs $x, y$ and wish to compute $f(x, y)$ with
 minimum communication. Models: deterministic $D(f)$, nondeterministic $N(f)$,
 randomised $R(f)$, quantum $Q(f)$.
 
@@ -654,13 +654,13 @@ communication complexity of a specific relational problem on YES/NO pairs.
 
 Sometimes inputs come with a natural *parameter* $k$ (treewidth, solution size,
 parameter of the formula). $"FPT"$ = problems solvable in time $f(k) dot
-"poly"(n)$ "for" "some" computable $f$. The W-hierarchy $"FPT" subset.eq W[1] subset.eq
+"poly"(n)$ for some computable $f$. The W-hierarchy $"FPT" subset.eq W[1] subset.eq
 W[2] subset.eq dots subset.eq W[P] subset.eq "XP"$ classifies parameterised
 intractability.
 
 *Vertex Cover* is in FPT: $O(2^k n)$ via bounded search trees. *Clique* is
 $W[1]$-complete: no $f(k) n^(O(1))$ algorithm under standard hypotheses. *Dominating
-Set* "is $W[2]$-complete.
+Set* is $W[2]$-complete.
 
 *ETH connection.* Under ETH, $k$-CLIQUE requires $n^(Omega(k))$ time
 (Chen--Huang--Kanj--Xia 2006).
@@ -682,7 +682,7 @@ poly-size quantum circuits with bounded two-sided error.
 verifier runs poly-size quantum circuit. $"NP" subset.eq "QMA" subset.eq "PP"
 subset.eq "PSPACE"$. $k$-local Hamiltonian (estimating ground-state energy of a
 $k$-local Hamiltonian to inverse-polynomial precision) is QMA-complete for $k gt.eq
-2$ (Kitaev 1999; Kempe--Kitaev--Regev 2006 "for" $k = 2$).
+2$ (Kitaev 1999; Kempe--Kitaev--Regev 2006 for $k = 2$).
 
 == Algebraic Complexity
 
@@ -709,7 +709,7 @@ $\#"P" eq."not" "FP"$ in the appropriate non-uniform setting.
 == Average-Case Complexity
 
 *Distributional NP* ($"DistNP"$, Levin 1986): pairs $(L, mu)$ of an NP language
-"and a polynomial-time samplable distribution. A *poly-time on average* algorithm
+and a polynomial-time samplable distribution. A *poly-time on average* algorithm
 runs in expected polynomial time with respect to $mu$.
 
 *Levin's tiling problem* is DistNP-complete with respect to *polynomial-time
@@ -753,8 +753,8 @@ which is why post-quantum cryptography centres on lattices.
 
 Among these, *proper* inclusions are exactly: $"L" subset.eq."not" "PSPACE"$, $"NL"
 subset.neq "PSPACE"$, $"P" subset.neq "EXP"$, $"NP" subset.neq "NEXP"$, $"PSPACE"
-subset.neq "EXPSPACE"$ ("all from hierarchy theorems). Everything else -- $"L"
-"versus" "P"$, $"P" "versus" "NP"$, $"NP" "versus" "PSPACE"$, $"BPP" "versus" "P"$ -- is"
+subset.neq "EXPSPACE"$ (all from hierarchy theorems). Everything else -- $"L"
+"versus" "P"$, $"P" "versus" "NP"$, $"NP" "versus" "PSPACE"$, $"BPP" "versus" "P"$ -- is
 *open after fifty years*.
 
 == Why It Matters in Practice
@@ -773,10 +773,10 @@ subset.neq "EXPSPACE"$ ("all from hierarchy theorems). Everything else -- $"L"
   reasons why all standard techniques fail.
 - *Fine-grained complexity* gives engineering meaning to "is this the right
   exponent?": for sequence problems quadratic is essentially optimal under SETH;
-  for graph problems cubic "is essentially optimal under APSP.
+  for graph problems cubic is essentially optimal under APSP.
 
 _See also: _Computability_ for the undecidable companion to this hierarchy --
-NP-complete and PSPACE-complete are "to feasible computation what $K$ and Tot are
-"to" general computation -- and _Omega-Automata_ for the complexity of infinite-word
+NP-complete and PSPACE-complete are to feasible computation what $K$ and Tot are
+to general computation -- and _Omega-Automata_ for the complexity of infinite-word
 problems and parity games, whose membership in $"P"$ remains the most famous open
 question in the analysis of fixed-point logics._
