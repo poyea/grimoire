@@ -6,7 +6,7 @@ are equivalent, or whether a program has a given property is ultimately a questi
 Turing machines. The answers are mostly negative, and understanding why shapes the design
 of every tool that analyzes programs.
 
-_See also: programming-languages/type-systems.typ for how type systems carve out
+_See also: Type Systems for how type systems carve out
 decidable sub-problems by restricting the language to a sub-Turing-complete fragment._
 
 == Turing Machine Definition
@@ -205,6 +205,6 @@ become decidable. This is the design philosophy behind:
 - *Coq/Lean's termination checker:* structural recursion ensures all functions terminate.
 - *Rust's borrow checker:* a sub-TC analysis of ownership and lifetimes.
 
-_See also: programming-languages/type-systems.typ for how type systems deliberately
+_See also: Type Systems for how type systems deliberately
 restrict expressiveness to regain decidability -- Hindley-Milner inference is decidable
 precisely because the language of types is sub-Turing-complete._
