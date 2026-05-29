@@ -2,7 +2,7 @@
 
 The transformer is a sequence-to-sequence architecture built entirely from attention and feed-forward layers. Every modern LLM — GPT, LLaMA, Mistral, Gemma, Qwen — is a decoder-only transformer. Understanding its internals precisely is prerequisite to everything that follows.
 
-*See also:* _gpu-architecture/ml-workloads.typ_ (Flash Attention, GEMM kernels), _llm/pretraining.typ_ (how these weights are learned).
+*See also:* _ML Workload Optimization on GPUs (GPU Architecture volume)_ (Flash Attention, GEMM kernels), _Pretraining_ (how these weights are learned).
 
 *Code note:* PyTorch is used for all runnable examples. C++ (libtorch / llama.cpp) is shown for performance-critical kernels where the implementation detail matters. JAX is shown where its functional style clarifies the math.
 
@@ -77,7 +77,7 @@ AV  matmul:       2 × L² × d_model             FLOPs
 Output proj:      2 × L × d_model²             FLOPs
 ```
 
-The $O(L^2)$ term dominates for long contexts. Flash Attention avoids materializing the $L times L$ matrix in HBM — see _gpu-architecture/ml-workloads.typ_.
+The $O(L^2)$ term dominates for long contexts. Flash Attention avoids materializing the $L times L$ matrix in HBM — see _ML Workload Optimization on GPUs (GPU Architecture volume)_.
 
 *PyTorch 2.0+ dispatches to Flash Attention automatically* (Flash Attention 2 backend: PyTorch ≥ 2.2, CUDA, fp16/bf16, head_dim ≤ 256):
 ```python
