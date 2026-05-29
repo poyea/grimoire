@@ -213,4 +213,4 @@ scx_rusty                  # load and run a sched_ext-based scheduler
 
 This is the most significant scheduling-architecture change in over a decade. For most systems, the default fair scheduler remains correct; for workloads with very specific patterns (e.g. tightly coupled HPC, gaming foreground/background), `sched_ext` lets you ship a tailored scheduler as user code.
 
-*See also:* _cpu-affinity.typ_ (isolation, the necessary complement to RT scheduling), _interrupts.typ_ (IRQ jitter, threaded IRQs), _coding/advanced-systems.typ_ (scheduler theory: EDF, rate-monotonic), _cgroups-namespaces.typ_ (cpu controller, cpuset partitions).
+*See also:* _cpu-affinity.typ_ (isolation, the necessary complement to RT scheduling), _interrupts.typ_ (IRQ jitter, threaded IRQs), _Advanced Algorithms in Modern Systems (Coding volume)_ (scheduler theory: EDF, rate-monotonic), _cgroups-namespaces.typ_ (cpu controller, cpuset partitions).
