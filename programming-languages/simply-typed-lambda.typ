@@ -1,9 +1,9 @@
 = Simply-Typed Lambda Calculus
 
 The simply-typed lambda calculus, $lambda^arrow.r$, is the minimal nontrivial typed language: variables, function abstraction, and application, with a type discipline that forbids self-application.
-It is the *ur-typed-language* — every modern type system is, at the core, $lambda^arrow.r$ "with extensions.
-It is also the smallest interesting fragment of "the *Curry–Howard correspondence* (Curry 1934, Howard 1969/1980): well-typed terms of $lambda^arrow.r$ are exactly the proofs of the" implicational fragment of intuitionistic propositional logic.
-The story begins with Church (1932, 1940) and Curry (1934); the modern metatheory is "the work of Tait (1967), Girard (1972), Martin-Löf (1972, 1975), and Statman (1979).
+It is the *ur-typed-language* — every modern type system is, at the core, $lambda^arrow.r$ with extensions.
+It is also the smallest interesting fragment of the *Curry–Howard correspondence* (Curry 1934, Howard 1969/1980): well-typed terms of $lambda^arrow.r$ are exactly the proofs of the implicational fragment of intuitionistic propositional logic.
+The story begins with Church (1932, 1940) and Curry (1934); the modern metatheory is the work of Tait (1967), Girard (1972), Martin-Löf (1972, 1975), and Statman (1979).
 
 _See also: _Type Systems_, _System F and Parametricity_, _Dependent Types_, _Turing Machines and Computability_._
 
@@ -19,7 +19,7 @@ where $iota$ ranges over a (possibly empty) set of *base types*. We will mostly 
 *Terms* (Church presentation, à la Church 1940).
 $ e ::= x | lambda x : tau . e | e_1 space e_2 $
 
-Variables $x, y, z, ...$ are drawn from a countably infinite set". The abstraction $lambda x : tau . e$ binds $x$ with declared type $tau$ in the body $e$. We work up to $alpha$-equivalence (renaming of bound variables): $lambda x : tau . x equiv lambda y : tau . y$.
+Variables $x, y, z, ...$ are drawn from a countably infinite set. The abstraction $lambda x : tau . e$ binds $x$ with declared type $tau$ in the body $e$. We work up to $alpha$-equivalence (renaming of bound variables): $lambda x : tau . x equiv lambda y : tau . y$.
 
 *Terms* (Curry presentation).
 $ e ::= x | lambda x . e | e_1 space e_2 $
@@ -68,13 +68,13 @@ These three rules are the entire static semantics of $lambda^arrow.r$. With base
 *Lemma (Type Uniqueness, Church-style).* If $Gamma tack.r e : tau_1$ and $Gamma tack.r e : tau_2$, then $tau_1 = tau_2$.
 
 *Proof.* Induction on $e$.
-- $e = x$: both derivations end in T-VAR with $x : tau_1 in Gamma$ "and $x : tau_2 in Gamma$; since $Gamma$ is a function, $tau_1 = tau_2$.
+- $e = x$: both derivations end in T-VAR with $x : tau_1 in Gamma$ and $x : tau_2 in Gamma$; since $Gamma$ is a function, $tau_1 = tau_2$.
 - $e = lambda x : sigma . e'$: both derivations end in T-ABS; both yield $tau_i = sigma arrow.r tau_i'$ with $Gamma, x : sigma tack.r e' : tau_i'$; by IH $tau_1' = tau_2'$, so $tau_1 = tau_2$.
 - $e = e_1 space e_2$: both derivations end in T-APP, with $Gamma tack.r e_1 : sigma_i arrow.r tau_i$ and $Gamma tack.r e_2 : sigma_i$ for $i = 1, 2$. By IH on $e_2$, $sigma_1 = sigma_2$. By IH on $e_1$, $sigma_1 arrow.r tau_1 = sigma_2 arrow.r tau_2$, so $tau_1 = tau_2$. $square$
 
 In Curry-style $lambda^arrow.r$ type uniqueness fails: $lambda x . x$ has type $tau arrow.r tau$ for every $tau$. Instead one has *principal types*: every typable term has a most-general type-scheme of which all its types are instances (Hindley 1969).
 
-*Lemma (Inversion).* If $Gamma tack.r lambda x : sigma . e : tau$, then $tau = sigma arrow.r tau'$ for some $tau'$ "with $Gamma, x : sigma tack.r e : tau'$. If $Gamma tack.r e_1 space e_2 : tau$, then there exists $sigma$ with $Gamma tack.r e_1 : sigma arrow.r tau$ and $Gamma tack.r e_2 : sigma$.
+*Lemma (Inversion).* If $Gamma tack.r lambda x : sigma . e : tau$, then $tau = sigma arrow.r tau'$ for some $tau'$ with $Gamma, x : sigma tack.r e : tau'$. If $Gamma tack.r e_1 space e_2 : tau$, then there exists $sigma$ with $Gamma tack.r e_1 : sigma arrow.r tau$ and $Gamma tack.r e_2 : sigma$.
 
 *Proof.* The only typing rule that concludes with a lambda is T-ABS; the only one that concludes with an application is T-APP. Read the premises. $square$
 
@@ -101,18 +101,18 @@ The $eta$-rule expresses *functional extensionality*: a function equals "itself 
 
 We write $arrow.r^*$ for the reflexive-transitive closure.
 
-=== Call-"by"-Value and Call-"by"-Name
+=== Call-by-Value and Call-by-Name
 
 To get a deterministic semantics suitable for implementation, restrict where reduction may fire.
 
-*Call-"by"-name* (CBN, Plotkin 1975) — reduce the leftmost outermost redex; arguments are *not* evaluated before "the call.
+*Call-by-name* (CBN, Plotkin 1975) — reduce the leftmost outermost redex; arguments are *not* evaluated before the call.
 ```text
   e_1 ->n e_1'
   -----------------       --------------------------------
   e_1 e_2 ->n e_1' e_2    (lam x:tau. e_1) e_2 ->n [x|->e_2] e_1
 ```
 
-*Call-"by"-value* (CBV, Plotkin 1975) — reduce arguments to values $v$ before substituting; values are $v ::= lambda x : tau . e | "true" | "false" | n$.
+*Call-by-value* (CBV, Plotkin 1975) — reduce arguments to values $v$ before substituting; values are $v ::= lambda x : tau . e | "true" | "false" | n$.
 ```text
   e_1 ->v e_1'             e_2 ->v e_2'
   -----------------       -----------------
@@ -122,7 +122,7 @@ To get a deterministic semantics suitable for implementation, restrict where red
   (lam x:tau. e_1) v_2 ->v [x|->v_2] e_1
 ```
 
-For pure $lambda^arrow.r$ (no side effects, no general recursion) CBN and CBV are *contextually equivalent* on closed base-type terms (Plotkin 1975) but compute different terms in general. CBN may diverge "on subterms whose values are never needed in CBV; CBV may diverge on subterms whose values are not needed in CBN (e.g., $(lambda x : "Int" . 0) space Omega$ where $Omega$ is divergent — but $Omega$ does not exist as a well-typed $lambda^arrow.r$ term: $lambda^arrow.r$ "is strongly normalising).
+For pure $lambda^arrow.r$ (no side effects, no general recursion) CBN and CBV are *contextually equivalent* on closed base-type terms (Plotkin 1975) but compute different terms in general. CBN may diverge on subterms whose values are never needed in CBV; CBV may diverge on subterms whose values are not needed in CBN (e.g., $(lambda x : "Int" . 0) space Omega$ where $Omega$ is divergent — but $Omega$ does not exist as a well-typed $lambda^arrow.r$ term: $lambda^arrow.r$ is strongly normalising).
 
 == Confluence (Church–Rosser)
 
@@ -164,7 +164,7 @@ So $=>$ contracts an arbitrary set of redexes simultaneously, possibly none.
 
 *Proof.* Induction on $e_1 => e_1'$. Case $x$: $[x |-> e_2] x = e_2 => e_2' = [x |-> e_2'] x$. Case $y eq."not" x$: both sides are $y$. Case $lambda y . e => lambda y . e'$ with $e => e'$: $alpha$-rename $y$ star.op, apply IH. Case $f space a => f' space a'$: by IH and congruence. Case $(lambda y . e) space a => [y |-> a'] e'$: apply IH then use the well-known substitution lemma $[x |-> e_2'] [y |-> a'] e' = [y |-> [x |-> e_2'] a'] [x |-> e_2'] e'$. $square$
 
-*Lemma 3 (Diamond for $=>$).* If $e => e_1$ and $e => e_2$, there exists $e'$ "with $e_1 => e'$ and $e_2 => e'$.
+*Lemma 3 (Diamond for $=>$).* If $e => e_1$ and $e => e_2$, there exists $e'$ with $e_1 => e'$ and $e_2 => e'$.
 
 *Proof.* Define the *complete development* $e^*$ of all redexes present in $e$ simultaneously:
 $ x^* &= x \
@@ -174,7 +174,7 @@ $ x^* &= x \
 
 By induction on $e$, if $e => e'$ then $e' => e^*$ — every parallel reduct can be completed to $e^*$. So $e_1, e_2 => e^*$ closes the diamond. $square$
 
-*Proof of confluence.* Take the reflexive-transitive closure of $=>$, which by Lemma 1 equals $arrow.r_beta^*$. The diamond property for $=>$ lifts "to confluence of $=>^*$ by a standard tiling argument. $square$
+*Proof of confluence.* Take the reflexive-transitive closure of $=>$, which by Lemma 1 equals $arrow.r_beta^*$. The diamond property for $=>$ lifts to confluence of $=>^*$ by a standard tiling argument. $square$
 
 *Corollary (Uniqueness of normal forms).* A $lambda^arrow.r$ term has at most one $beta$-normal form.
 
@@ -194,7 +194,7 @@ T-APP: $e = e_1 space e_2$, $Gamma, x : sigma tack.r e_i$ at appropriate types. 
 
 *Proof.* Induction on the derivation $e arrow.r_beta e'$.
 
-Case B-AppAbs: $e = (lambda x : sigma . e_1) space e_2$ "and $e' = [x |-> e_2] e_1$. By Inversion on T-APP, $Gamma tack.r lambda x : sigma . e_1 : sigma' arrow.r tau$ and $Gamma tack.r e_2 : sigma'$. By Inversion on T-ABS, $sigma' = sigma$ and" $Gamma, x : sigma tack.r e_1 : tau$. By the Substitution Lemma, $Gamma tack.r [x |-> e_2] e_1 : tau$.
+Case B-AppAbs: $e = (lambda x : sigma . e_1) space e_2$ and $e' = [x |-> e_2] e_1$. By Inversion on T-APP, $Gamma tack.r lambda x : sigma . e_1 : sigma' arrow.r tau$ and $Gamma tack.r e_2 : sigma'$. By Inversion on T-ABS, $sigma' = sigma$ and $Gamma, x : sigma tack.r e_1 : tau$. By the Substitution Lemma, $Gamma tack.r [x |-> e_2] e_1 : tau$.
 
 Congruence cases (under $lambda$, in $e_1$ or $e_2$ of an application): direct by IH. $square$
 
@@ -206,15 +206,15 @@ Congruence cases (under $lambda$, in $e_1$ or $e_2$ of an application): direct b
 
 *Theorem (Progress).* If $emptyset tack.r e : tau$, then either $e$ is a value or there exists $e'$ with $e arrow.r e'$.
 
-*Proof.* Induction on $emptyset tack.r e : tau$. T-VAR: vacuous (no variables in empty context). T-ABS: $e$ is a value. T-APP: $e = e_1 space e_2$. By IH $e_1$ "is a value or steps; if it steps, congruence. If $e_1$ is a value, "by Canonical Forms $e_1 = lambda x : sigma . e_1'$, and the redex fires (with CBV: first step $e_2$ if not a value, else B-AppAbs). $square$
+*Proof.* Induction on $emptyset tack.r e : tau$. T-VAR: vacuous (no variables in empty context). T-ABS: $e$ is a value. T-APP: $e = e_1 space e_2$. By IH $e_1$ is a value or steps; if it steps, congruence. If $e_1$ is a value, by Canonical Forms $e_1 = lambda x : sigma . e_1'$, and the redex fires (with CBV: first step $e_2$ if not a value, else B-AppAbs). $square$
 
 *Theorem (Type Soundness).* A well-typed closed term either evaluates to a value in finitely many steps or — for systems with general recursion — diverges; it never gets *stuck*. Slogan: *"Well-typed programs cannot go wrong"* (Milner 1978). For $lambda^arrow.r$ proper, divergence is impossible (see Strong Normalization below), so evaluation terminates in a value.
 
 == Strong Normalization (Tait 1967)
 
-*Theorem (Strong Normalization, Tait 1967).* Every well-typed term $Gamma tack.r e : tau$ in $lambda^arrow.r$ "is *strongly normalising*: every reduction sequence from $e$ terminates.
+*Theorem (Strong Normalization, Tait 1967).* Every well-typed term $Gamma tack.r e : tau$ in $lambda^arrow.r$ is *strongly normalising*: every reduction sequence from $e$ terminates.
 
-A direct induction on typing derivations fails: in the T-APP case, "the IH gives SN for $e_1$ and $e_2$ separately, but says nothing about $e_1 space e_2$, because substitution can blow up. Tait's trick: strengthen the IH by defining a *type-indexed* family of predicates $cal(R)_tau$ stronger than SN, "and prove every well-typed term inhabits its $cal(R)$.
+A direct induction on typing derivations fails: in the T-APP case, the IH gives SN for $e_1$ and $e_2$ separately, but says nothing about $e_1 space e_2$, because substitution can blow up. Tait's trick: strengthen the IH by defining a *type-indexed* family of predicates $cal(R)_tau$ stronger than SN, and prove every well-typed term inhabits its $cal(R)$.
 
 === Reducibility Predicates
 
@@ -231,21 +231,21 @@ We extend $cal(R)$ to open terms via *closing substitutions*: if $Gamma = x_1 : 
 + *(CR2)* If $e in cal(R)_tau$ and $e arrow.r e'$, then $e' in cal(R)_tau$.
 + *(CR3)* If $e$ is *neutral* (i.e., not an abstraction) and every $e'$ with $e arrow.r e'$ lies in $cal(R)_tau$, then $e in cal(R)_tau$.
 
-(Variables are not closed but the right notion of neutral is "not an abstraction"; for the closed-term version, neutral means an application $x space ...$ or", after substitution, headed by a variable. We sketch the standard formulation; see Girard, Lafont, Taylor 1989 for details.)
+(Variables are not closed but the right notion of neutral is "not an abstraction"; for the closed-term version, neutral means an application $x space ...$ or, after substitution, headed by a variable. We sketch the standard formulation; see Girard, Lafont, Taylor 1989 for details.)
 
 *Proof.* Simultaneous induction on $tau$.
 
-*Base type $iota$.* CR1: by definition. CR2: SN is preserved under reduction (any infinite reduction from $e'$ extended by $e arrow.r e'$ would give one from $e$). CR3: if all one-step reducts of $e$ are SN, then $e$ is SN ("only finitely many one-step reducts; well-founded by König).
+*Base type $iota$.* CR1: by definition. CR2: SN is preserved under reduction (any infinite reduction from $e'$ extended by $e arrow.r e'$ would give one from $e$). CR3: if all one-step reducts of $e$ are SN, then $e$ is SN (only finitely many one-step reducts; well-founded by König).
 
 *Arrow type $tau_1 arrow.r tau_2$.*
 
 CR1: Let $e in cal(R)_(tau_1 arrow.r tau_2)$. We need SN$(e)$. By CR3 at type $tau_1$ (induction hypothesis on the smaller type — although neither $tau_1$ nor $tau_2$ is structurally smaller, the predicate is being unfolded — Tait's argument actually proceeds by induction on $tau$ as type-tree-size, with both subgoals inductively available; we are careful about the order), a variable $x : tau_1$ lies in $cal(R)_(tau_1)$ (it is neutral with no reducts). Then $e space x in cal(R)_(tau_2)$, so by IH CR1, SN$(e space x)$. Any infinite reduction of $e$ would give one of $e space x$. So SN$(e)$.
 
-CR2: Let $e in cal(R)_(tau_1 arrow.r tau_2)$ and $e arrow.r e'$. For any $a in cal(R)_(tau_1)$, $e space a in cal(R)_(tau_2)$ "and $e space a arrow.r e' space a$, so by IH CR2 at $tau_2$, $e' space a in cal(R)_(tau_2)$. Hence $e' in cal(R)_(tau_1 arrow.r tau_2)$.
+CR2: Let $e in cal(R)_(tau_1 arrow.r tau_2)$ and $e arrow.r e'$. For any $a in cal(R)_(tau_1)$, $e space a in cal(R)_(tau_2)$ and $e space a arrow.r e' space a$, so by IH CR2 at $tau_2$, $e' space a in cal(R)_(tau_2)$. Hence $e' in cal(R)_(tau_1 arrow.r tau_2)$.
 
-CR3: Let $e$ be neutral and all one-step reducts in $cal(R)_(tau_1 arrow.r tau_2)$. Take $a in cal(R)_(tau_1)$; by IH CR1, SN$(a)$, so do induction on the length of the longest reduction from $a$. We must show $e space a in cal(R)_(tau_2)$; by IH CR3 at $tau_2$ (since $e space a$ is neutral — $e$ "is not an abstraction), check all reducts of $e space a$:
+CR3: Let $e$ be neutral and all one-step reducts in $cal(R)_(tau_1 arrow.r tau_2)$. Take $a in cal(R)_(tau_1)$; by IH CR1, SN$(a)$, so do induction on the length of the longest reduction from $a$. We must show $e space a in cal(R)_(tau_2)$; by IH CR3 at $tau_2$ (since $e space a$ is neutral — $e$ is not an abstraction), check all reducts of $e space a$:
 - $e arrow.r e''$: then $e space a arrow.r e'' space a$, and $e'' in cal(R)_(tau_1 arrow.r tau_2)$ by hypothesis, hence $e'' space a in cal(R)_(tau_2)$.
-- $a arrow.r a'$: then $a' in cal(R)_(tau_1)$ "by CR2 (IH), and $e space a arrow.r e space a'$, with $e space a' in cal(R)_(tau_2)$ by inner IH on the length of reduction from $a$.
+- $a arrow.r a'$: then $a' in cal(R)_(tau_1)$ by CR2 (IH), and $e space a arrow.r e space a'$, with $e space a' in cal(R)_(tau_2)$ by inner IH on the length of reduction from $a$.
 - No B-AppAbs since $e$ is not an abstraction.
 
 So all reducts are in $cal(R)_(tau_2)$; by CR3 at $tau_2$, $e space a in cal(R)_(tau_2)$. $square$
@@ -254,10 +254,10 @@ So all reducts are in $cal(R)_(tau_2)$; by CR3 at $tau_2$, $e space a in cal(R)_
 
 *Lemma.* If for every $a in cal(R)_(tau_1)$ we have $[x |-> a] e in cal(R)_(tau_2)$, then $lambda x : tau_1 . e in cal(R)_(tau_1 arrow.r tau_2)$.
 
-*Proof.* We must show that for every $a in cal(R)_(tau_1)$, $(lambda x : tau_1 . e) space a in cal(R)_(tau_2)$. By CR1, both $e$ (take $a = x$, a variable in $cal(R)_(tau_1)$ by CR3) and $a$ are SN. Induction "on $"sn"(e) + "sn"(a)$ (sum of longest reduction lengths). The term $(lambda x : tau_1 . e) space a$ is neutral; by CR3 at $tau_2$, check reducts:
-- B-AppAbs: $(lambda x . e) space a arrow.r [x |-> a] e in cal(R)_(tau_2)$ "by hypothesis.
+*Proof.* We must show that for every $a in cal(R)_(tau_1)$, $(lambda x : tau_1 . e) space a in cal(R)_(tau_2)$. By CR1, both $e$ (take $a = x$, a variable in $cal(R)_(tau_1)$ by CR3) and $a$ are SN. Induction on $"sn"(e) + "sn"(a)$ (sum of longest reduction lengths). The term $(lambda x : tau_1 . e) space a$ is neutral; by CR3 at $tau_2$, check reducts:
+- B-AppAbs: $(lambda x . e) space a arrow.r [x |-> a] e in cal(R)_(tau_2)$ by hypothesis.
 - $e arrow.r e'$: then $(lambda x . e') space a$; the hypothesis $[x |-> a] e' in cal(R)_(tau_2)$ follows from $[x |-> a] e arrow.r [x |-> a] e'$ and CR2. Inner IH applies (sum decreased).
-- $a arrow.r a'$: $a' in cal(R)_(tau_1)$ by CR2. Show $[x |-> a'] e in cal(R)_(tau_2)$: we have $[x |-> a] e in cal(R)_(tau_2)$ and $[x |-> a] e arrow.r^* [x |-> a'] e$ (substituting reducts), so by" CR2 (multistep) $[x |-> a'] e in cal(R)_(tau_2)$. Apply inner IH.
+- $a arrow.r a'$: $a' in cal(R)_(tau_1)$ by CR2. Show $[x |-> a'] e in cal(R)_(tau_2)$: we have $[x |-> a] e in cal(R)_(tau_2)$ and $[x |-> a] e arrow.r^* [x |-> a'] e$ (substituting reducts), so by CR2 (multistep) $[x |-> a'] e in cal(R)_(tau_2)$. Apply inner IH.
 
 All reducts in $cal(R)_(tau_2)$, so by CR3 the application is in $cal(R)_(tau_2)$. $square$
 
@@ -275,9 +275,9 @@ T-ABS: $e = lambda y : tau_1' . e'$ with $tau = tau_1' arrow.r tau_2'$. $alpha$-
 
 *Corollary (Strong Normalization).* Every well-typed term is SN.
 
-*Proof.* Take $a_i = x_i$ (variables in $cal(R)_(tau_i)$ "by CR3, neutral with no reducts). Then $sigma$ is the identity and $e in cal(R)_tau$; CR1 gives SN$(e)$. $square$
+*Proof.* Take $a_i = x_i$ (variables in $cal(R)_(tau_i)$ by CR3, neutral with no reducts). Then $sigma$ is the identity and $e in cal(R)_tau$; CR1 gives SN$(e)$. $square$
 
-A *consequence:* $lambda^arrow.r$ is *not* Turing complete. There "is no fixed-point combinator $Y$ "with the property $Y space f arrow.r^* f space (Y space f)$ in $lambda^arrow.r$ — such a $Y$ would type at $forall tau . (tau arrow.r tau) arrow.r tau$, contradicting SN by producing non-terminating reductions. The price of strong normalization is loss of computational universality; the gain is decidable type checking, totality, and logical consistency under Curry–Howard.
+A *consequence:* $lambda^arrow.r$ is *not* Turing complete. There is no fixed-point combinator $Y$ with the property $Y space f arrow.r^* f space (Y space f)$ in $lambda^arrow.r$ — such a $Y$ would type at $forall tau . (tau arrow.r tau) arrow.r tau$, contradicting SN by producing non-terminating reductions. The price of strong normalization is loss of computational universality; the gain is decidable type checking, totality, and logical consistency under Curry–Howard.
 
 == The Curry–Howard Isomorphism
 
@@ -336,13 +336,13 @@ pi_2 (e_1, e_2) &arrow.r e_2 \
 
 Strong normalization of $lambda^arrow.r$ is therefore the proof-theoretic statement *cut elimination* for $"IPC"^supset$: every proof reduces to a normal proof in finitely many steps. Gentzen (1936) proved cut elimination for classical logic syntactically; Tait's reducibility argument is essentially a semantic cut-elimination proof.
 
-*Logical consistency.* $bot$ (= $"Empty"$) has no closed normal term: by Inversion, a closed normal term of type $"Empty"$ would have to be an application $e_1 space e_2$ with $e_1$ of arrow type ending in $"Empty"$; but $e_1$ would have to be normal, hence a variable (none, in empty context) or an abstraction (concluding type starts with $arrow.r$). Hence $emptyset tack.r e : "Empty"$ is empty, i.e., $bot$ is unprovable — $"IPC"^supset$ "is *consistent*. This is the logical content of strong normalization.
+*Logical consistency.* $bot$ (= $"Empty"$) has no closed normal term: by Inversion, a closed normal term of type $"Empty"$ would have to be an application $e_1 space e_2$ with $e_1$ of arrow type ending in $"Empty"$; but $e_1$ would have to be normal, hence a variable (none, in empty context) or an abstraction (concluding type starts with $arrow.r$). Hence $emptyset tack.r e : "Empty"$ is empty, i.e., $bot$ is unprovable — $"IPC"^supset$ is *consistent*. This is the logical content of strong normalization.
 
 == Extensions
 
 === Products, Sums, Unit, Empty
 
-Already specified above. Each extension is a *positive* type former: it has an introduction rule and "an elimination rule, with $beta$-reductions cancelling intro/elim. SN extends straightforwardly via reducibility (extend $cal(R)$ by clauses for product and sum).
+Already specified above. Each extension is a *positive* type former: it has an introduction rule and an elimination rule, with $beta$-reductions cancelling intro/elim. SN extends straightforwardly via reducibility (extend $cal(R)$ by clauses for product and sum).
 
 === System T: Primitive Recursion (Gödel 1958)
 
@@ -360,7 +360,7 @@ and reduction
 $ "rec"(e_z, e_s, 0) &arrow.r e_z \
 "rec"(e_z, e_s, S space n) &arrow.r e_s space n space "rec"(e_z, e_s, n) $
 
-System T is strongly normalising (Tait 1967; this was actually Tait's original target). The terms of $lambda^arrow.r + T$ at type $"Nat" arrow.r "Nat"$ compute exactly the *provably total functions* in first-order Peano arithmetic — a vast cal(C) including Ackermann's function, but properly contained in "the $mu$-recursive functions. System T separates the *higher-order primitive recursive* from the *general recursive*.
+System T is strongly normalising (Tait 1967; this was actually Tait's original target). The terms of $lambda^arrow.r + T$ at type $"Nat" arrow.r "Nat"$ compute exactly the *provably total functions* in first-order Peano arithmetic — a vast cal(C) including Ackermann's function, but properly contained in the $mu$-recursive functions. System T separates the *higher-order primitive recursive* from the *general recursive*.
 
 === Fixed Points
 
@@ -368,7 +368,7 @@ To recover Turing completeness we add a fixed-point operator $"fix"$:
 $ Gamma tack.r e : tau arrow.r tau  /  Gamma tack.r "fix" space e : tau \
 "fix" space (lambda x : tau . e) arrow.r [x |-> "fix"(lambda x : tau . e)] e $
 
-Once $"fix"$ is added, $lambda^arrow.r + "fix"$ is Turing complete; SN fails; Curry–Howard now corresponds to a *classical* ("or inconsistent) logic — every proposition is "provable" via the inhabitant $"fix"(lambda x . x)$. This is the price of general recursion: type soundness still holds (well-typed programs do not get stuck), but they may diverge, and the language is no longer a sound logic.
+Once $"fix"$ is added, $lambda^arrow.r + "fix"$ is Turing complete; SN fails; Curry–Howard now corresponds to a *classical* (or inconsistent) logic — every proposition is "provable" via the inhabitant $"fix"(lambda x . x)$. This is the price of general recursion: type soundness still holds (well-typed programs do not get stuck), but they may diverge, and the language is no longer a sound logic.
 
 == Type Checking and Inference
 
@@ -378,9 +378,9 @@ For Curry-style $lambda^arrow.r$ (no annotations), type inference is performed b
 + Assign a star.op metavariable $alpha_x$ to each variable.
 + For each abstraction $lambda x . e$, introduce a fresh $alpha$ for $x$ and recurse, producing a body type $beta$; emit nothing; the term has type $alpha arrow.r beta$.
 + For each application $e_1 space e_2$ producing types $tau_1, tau_2$, emit constraint $tau_1 = tau_2 arrow.r gamma$ with $gamma$ star.op.
-+ Solve all constraints "by Robinson unification.
++ Solve all constraints by Robinson unification.
 
-The result is a *principal type* — most-general type from which all valid types are substitution instances (Hindley 1969). Type inference for $lambda^arrow.r$ is linear in the term after near-linear unification (Damas–Milner 1982; see _Type Systems_ for "the algorithm).
+The result is a *principal type* — most-general type from which all valid types are substitution instances (Hindley 1969). Type inference for $lambda^arrow.r$ is linear in the term after near-linear unification (Damas–Milner 1982; see _Type Systems_ for the algorithm).
 
 ```ocaml
 (* OCaml: Curry-style lambda calculus inferred *)
@@ -410,7 +410,7 @@ S space x space y space z &arrow.r (x space z) (y space z) $
 
 In fact $I = S space K space K$ (verify: $S space K space K space x = K space x space (K space x) = x$), so $S$ and $K$ suffice.
 
-*Theorem (Bracket Abstraction).* For every $lambda$-term $M$ with free variable $x$, there is an SK-term $T$ "with no $lambda$ such that $T space x = M$. Notation: $T = [x] M$, defined by
+*Theorem (Bracket Abstraction).* For every $lambda$-term $M$ with free variable $x$, there is an SK-term $T$ with no $lambda$ such that $T space x = M$. Notation: $T = [x] M$, defined by
 $ [x] x &= I \
 [x] M &= K space M space space space (x in.not "FV"(M)) \
 [x] (M space N) &= S space ([x] M) space ([x] N) $
@@ -451,7 +451,7 @@ But in elaborator design (e.g., Lean, Agda), one wants to *minimise* annotations
 
 *Bidirectional type checking* (Pierce–Turner 2000) splits the typing judgment into two modes:
 - *Synthesis* $Gamma tack.r e => tau$ — given $e$, produce $tau$.
-- *Checking* $Gamma tack.r e arrow.l.double tau$ — given both", verify.
+- *Checking* $Gamma tack.r e arrow.l.double tau$ — given both, verify.
 
 Rules:
 ```text
@@ -468,7 +468,7 @@ Rules:
   Gamma |- (e : tau) ==> tau
 ```
 
-Bidirectional checking pushes type information *into* abstractions (no annotation needed on the binder) and *pulls* it out of variables "and applications.
+Bidirectional checking pushes type information *into* abstractions (no annotation needed on the binder) and *pulls* it out of variables and applications.
 The user annotates *"only"* at function-definition sites, not at every $lambda$.
 This is the kernel of all modern dependently-typed elaborators.
 
@@ -479,12 +479,12 @@ $lambda^arrow.r$ has a beautiful categorical model: it is the *internal language
 A *Cartesian closed category* $cal(C)$ has:
 - A terminal object $1$ (interpreting $"Unit"$).
 - Binary products $A times B$ with projections $pi_1, pi_2$ and pairing $angle.l f, g angle.r$ (interpreting $tau_1 times tau_2$).
-- Exponentials $B^A$ "with an evaluation morphism $"ev" : B^A times A arrow.r B$ and currying $Lambda : "Hom"(C times A, B) arrow.r "Hom"(C, B^A)$ (interpreting $tau_1 arrow.r tau_2$).
+- Exponentials $B^A$ with an evaluation morphism $"ev" : B^A times A arrow.r B$ and currying $Lambda : "Hom"(C times A, B) arrow.r "Hom"(C, B^A)$ (interpreting $tau_1 arrow.r tau_2$).
 
 The interpretation $[| - |]$ sends:
 - Types to objects: $[| iota |] = $ chosen base object; $[| tau_1 arrow.r tau_2 |] = [| tau_2 |]^([| tau_1 |])$; $[| tau_1 times tau_2 |] = [| tau_1 |] times [| tau_2 |]$.
 - Contexts to objects: $[| x_1 : tau_1, ..., x_n : tau_n |] = [| tau_1 |] times ... times [| tau_n |]$.
-- Typing derivations $Gamma tack.r e : tau$ "to morphisms $[| Gamma |] arrow.r [| tau |]$:
+- Typing derivations $Gamma tack.r e : tau$ to morphisms $[| Gamma |] arrow.r [| tau |]$:
   + T-VAR ($x_i$): $pi_i : [| Gamma |] arrow.r [| tau_i |]$.
   + T-APP: $"ev" circle.small angle.l [| e_1 |], [| e_2 |] angle.r$.
   + T-ABS: $Lambda([| e |])$.
@@ -505,10 +505,10 @@ $ "Terms" arrow.r^"eval" "Semantic values" arrow.r^"reify" "Normal forms" $
 For $lambda^arrow.r$:
 - *Semantic values*: $V_iota = "neutral terms of type" iota$, $V_(tau_1 arrow.r tau_2) = V_(tau_1) arrow.r V_(tau_2)$ (host-language functions).
 - *Eval*: standard environment-passing interpretation.
-- *Reify*: for arrow type, generate a star.op variable $x$ "of type $tau_1$, apply the semantic function to $x$ (viewed as a neutral), reify the result, wrap in $lambda x : tau_1$. For base type, just *reflect* the neutral.
+- *Reify*: for arrow type, generate a star.op variable $x$ of type $tau_1$, apply the semantic function to $x$ (viewed as a neutral), reify the result, wrap in $lambda x : tau_1$. For base type, just *reflect* the neutral.
 - *Reflect*: $arrow.t_iota n = n$; $arrow.t_(tau_1 arrow.r tau_2) n = lambda v . arrow.t_(tau_2) (n space (arrow.r_(tau_1) v))$.
 
-NbE is total for $lambda^arrow.r$ (because "the source is SN), "is one-pass, and produces *fully* $eta$-long normal forms. It is the standard implementation strategy for dependent type checkers (Coq's `vm_compute`, Agda, Lean 4).
+NbE is total for $lambda^arrow.r$ (because the source is SN), is one-pass, and produces *fully* $eta$-long normal forms. It is the standard implementation strategy for dependent type checkers (Coq's `vm_compute`, Agda, Lean 4).
 
 ```haskell
 -- Sketch: NbE for STLC in Haskell
@@ -576,7 +576,7 @@ infer ctx (App f a) = do
     _                      -> Left ("not a function: " ++ show ft)
 ```
 
-This is the entire type checker. It runs in $O(n^2)$ in the term size ("the bottleneck is structural equality of types in T-APP; with hash-consing it becomes $O(n)$). Type inference for Curry-style is also $O(n)$ via union-find unification (Damas–Milner; see _Type Systems_).
+This is the entire type checker. It runs in $O(n^2)$ in the term size (the bottleneck is structural equality of types in T-APP; with hash-consing it becomes $O(n)$). Type inference for Curry-style is also $O(n)$ via union-find unification (Damas–Milner; see _Type Systems_).
 
 == A Detailed Worked Reduction
 
@@ -601,7 +601,7 @@ Total: 4 $beta$-steps (plus arithmetic) to normal form $2$. The reduction is *st
 *CBN reduction:* delays the evaluation of $0$:
 + $(lambda f . ...) (lambda y . y + 1) space 0 arrow.r (lambda x . (lambda y . y + 1) ((lambda y . y + 1) space x)) space 0$.
 + $arrow.r (lambda y . y + 1) ((lambda y . y + 1) space 0)$.
-+ $arrow.r (lambda y . y + 1) space 0 + 1$ — wait, this depends on whether we reduce the argument or "the head first. CBN reduces the head:
++ $arrow.r (lambda y . y + 1) space 0 + 1$ — wait, this depends on whether we reduce the argument or the head first. CBN reduces the head:
 + $arrow.r ((lambda y . y + 1) space 0) + 1 arrow.r (0 + 1) + 1 = 2$.
 
 Same answer (Church–Rosser), different reduction trace.
@@ -660,9 +660,9 @@ These *Church encodings* show that products and sums are *derivable* in pure $la
 
 == Equational Theory
 
-The $beta eta$-equational theory of $lambda^arrow.r$ is "the smallest congruence containing:
+The $beta eta$-equational theory of $lambda^arrow.r$ is the smallest congruence containing:
 + $(beta)$  $(lambda x : tau . e_1) space e_2 = [x |-> e_2] e_1$
-+ $(eta)$  $lambda x : tau . (e space x) = e$ ("if $x in."not" "FV"(e)$)
++ $(eta)$  $lambda x : tau . (e space x) = e$ (if $x in."not" "FV"(e)$)
 + Reflexivity, symmetry, transitivity.
 + Congruence under $lambda$, application.
 
@@ -676,7 +676,7 @@ This contrasts sharply with untyped $lambda$: $beta$-equality of arbitrary $lamb
 
 What can $lambda^arrow.r$ compute? The cal(C) of *higher-type primitive recursive* functions, properly contained in the primitive recursive functions on naturals. The Ackermann function is not expressible in pure $lambda^arrow.r$ (no recursion), nor in $lambda^arrow.r$ + finite-type primitive recursion at first-order types — but it *"is"* expressible in System T (Gödel 1958) using primitive recursion at higher type $("Nat" arrow.r "Nat") arrow.r ("Nat" arrow.r "Nat")$.
 
-Pure $lambda^arrow.r$ without iterators or recursors computes only *bounded* polynomial functions; specifically, the term-complexity of normalisation can be hyperexponential (Statman 1979): there are terms "of size $n$ whose normal form has size a tower of exponentials in $n$. So even SN, decidable type-checking systems can be computationally explosive.
+Pure $lambda^arrow.r$ without iterators or recursors computes only *bounded* polynomial functions; specifically, the term-complexity of normalisation can be hyperexponential (Statman 1979): there are terms of size $n$ whose normal form has size a tower of exponentials in $n$. So even SN, decidable type-checking systems can be computationally explosive.
 
 *Statman's Theorem (1979).* The decision problem "is $e_1 =_(beta) e_2$?" for $lambda^arrow.r$ is *non-elementary*: it lies outside the elementary hierarchy.
 
@@ -696,7 +696,7 @@ What does $lambda^arrow.r$ lack?
 
 *Subtyping.* $lambda^arrow.r_"sub"$ adds a subtype relation $tau_1 <: tau_2$ (Cardelli 1984). The crucial *contravariant function rule*: $sigma_1 arrow.r tau_1 <: sigma_2 arrow.r tau_2$ <==> $sigma_2 <: sigma_1$ and $tau_1 <: tau_2$.
 
-Each extension is conservative over $lambda^arrow.r$: every pure $lambda^arrow.r$ derivation is still derivable in the extended system. The art of type-system design is "to add power while preserving ("or carefully relaxing) the metatheorems we have just proved: confluence, SR, progress, SN, and decidability of type checking.
+Each extension is conservative over $lambda^arrow.r$: every pure $lambda^arrow.r$ derivation is still derivable in the extended system. The art of type-system design is to add power while preserving (or carefully relaxing) the metatheorems we have just proved: confluence, SR, progress, SN, and decidability of type checking.
 
 == The Statman Hierarchy
 
@@ -714,7 +714,7 @@ So there is a strict hierarchy by type order — a phenomenon absent in untyped 
 
 == Schwichtenberg's Theorem
 
-*Schwichtenberg (1976).* The functions of type $"Nat" arrow.r "Nat"$ definable in *Gödel's System T* are exactly the *provably total functions of first-order Peano Arithmetic* — equivalently, "the functions whose totality is provable using transfinite induction up to $epsilon_0$.
+*Schwichtenberg (1976).* The functions of type $"Nat" arrow.r "Nat"$ definable in *Gödel's System T* are exactly the *provably total functions of first-order Peano Arithmetic* — equivalently, the functions whose totality is provable using transfinite induction up to $epsilon_0$.
 
 This places System T (and hence $lambda^arrow.r$ + primitive recursion) in correspondence with PA, just as $lambda^arrow.r$ alone corresponds to $"IPC"^supset$, System F corresponds to second-order arithmetic, and the Calculus of Constructions corresponds to higher-order intuitionistic logic plus inductive types.
 
@@ -739,16 +739,16 @@ The same reducibility technique scales to System F (with candidates), to MLTT (w
 
 For dependent types we will need *categories with families* (CwFs; Cartmell 1986, Dybjer 1996).
 For $lambda^arrow.r$ alone, the simpler structure of a *CCC* suffices.
-But $lambda^arrow.r$ already exhibits "the *substitution-equals-pullback* pattern: substitution in the term is composition in the" category; reindexing along a substitution is pullback of the context.
+But $lambda^arrow.r$ already exhibits the *substitution-equals-pullback* pattern: substitution in the term is composition in the category; reindexing along a substitution is pullback of the context.
 
-This perspective unifies "the syntactic and semantic accounts "and prepares the ground for dependent types, where substitution and type formation interact nontrivially.
+This perspective unifies the syntactic and semantic accounts and prepares the ground for dependent types, where substitution and type formation interact nontrivially.
 
 == Computational Adequacy
 
-A model $cal(M)$ of $lambda^arrow.r$ is *computationally adequate* if":
+A model $cal(M)$ of $lambda^arrow.r$ is *computationally adequate* if:
 - $emptyset tack.r e : "Bool"$ and $bracket.l.double e bracket.r.double = "true"$ in $cal(M)$ => $e arrow.r^* "true"$ (syntactically).
 
-The set"-theoretic model is adequate for $lambda^arrow.r$.
+The set-theoretic model is adequate for $lambda^arrow.r$.
 For $lambda^arrow.r + "fix"$, adequacy requires the *Scott model* (cpos and continuous functions, with $bot$ for divergence): Plotkin (1977) proved the seminal adequacy theorem for PCF.
 
 Adequacy is the *bridge* between operational and denotational semantics: it tells us that the denotational interpretation captures observational behaviour at base type.
@@ -768,7 +768,7 @@ Adequacy is the *bridge* between operational and denotational semantics: it tell
 )
 
 The pattern: each row strengthens one axis (polymorphism, recursion, type-level computation) and trades off another (SN, decidability, logical consistency).
-$lambda^arrow.r$ is the *origin* of this table; every column tells us something we get by adding ("or removing) a feature.
+$lambda^arrow.r$ is the *origin* of this table; every column tells us something we get by adding (or removing) a feature.
 
 == Exercises (for the dedicated reader)
 
@@ -776,14 +776,14 @@ $lambda^arrow.r$ is the *origin* of this table; every column tells us something 
 + Show that the term $omega = lambda x . x space x$ is *not* typable in $lambda^arrow.r$. (Hint: T-APP would demand $x : tau arrow.r sigma$ and $x : tau$ simultaneously.)
 + Verify that $S K K =_(beta) I$ in detail. Then show $S K K : forall alpha . alpha arrow.r alpha$ in System F.
 + Translate the proof of $((P supset Q) supset P) supset (P supset Q) supset Q$ (a simple intuitionistic tautology) into a $lambda^arrow.r$ term.
-+ Construct a Coq/Agda term proving "the symmetric pairing law: $forall A B . A times B arrow.r B times A$.
++ Construct a Coq/Agda term proving the symmetric pairing law: $forall A B . A times B arrow.r B times A$.
 + Show that there are well-typed $lambda^arrow.r$ terms whose normal form is hyperexponentially larger than the term itself. (Hint: iterated doubling using Church numerals at higher type.)
-+ Prove "that the Curry-style version of $lambda^arrow.r$ has *type inference* in time $O(n alpha(n))$ via union-find unification.
++ Prove that the Curry-style version of $lambda^arrow.r$ has *type inference* in time $O(n alpha(n))$ via union-find unification.
 + Explore: define the *call-by-need* (lazy) reduction strategy and prove it is observationally equivalent to CBN on closed base-type terms.
 
 == Summary
 
-The simply-typed lambda calculus is small, sharp, and complete-to-itself. The two-page syntax supports a full equational theory ($beta eta$), a confluent reduction, decidable type checking, principal-type inference, strong normalization with a beautiful semantic proof, a precise correspondence to a fragment of constructive logic, and termination/totality by construction. Every extension we encounter — polymorphism (System F), dependent types (MLTT, CIC), effects, subtyping — is built by adding type formers and corresponding term formers to $lambda^arrow.r$, then re-proving (or losing) confluence, SN, and decidability of type checking. $lambda^arrow.r$ is "the kernel; the rest of the" tower is decoration.
+The simply-typed lambda calculus is small, sharp, and complete-to-itself. The two-page syntax supports a full equational theory ($beta eta$), a confluent reduction, decidable type checking, principal-type inference, strong normalization with a beautiful semantic proof, a precise correspondence to a fragment of constructive logic, and termination/totality by construction. Every extension we encounter — polymorphism (System F), dependent types (MLTT, CIC), effects, subtyping — is built by adding type formers and corresponding term formers to $lambda^arrow.r$, then re-proving (or losing) confluence, SN, and decidability of type checking. $lambda^arrow.r$ is the kernel; the rest of the tower is decoration.
 
 *Slogan summary.*
 - *Confluence:* one term, one normal form (up to $alpha$).
@@ -791,8 +791,8 @@ The simply-typed lambda calculus is small, sharp, and complete-to-itself. The tw
 - *Progress:* well-typed terms are never stuck.
 - *Strong normalization:* every reduction sequence terminates.
 - *Curry–Howard:* types are propositions; terms are proofs; reduction is proof normalisation.
-- *Consistency:* the inhabitedness of $bot$ is decidable; it "is uninhabited.
-- *Decidability:* type checking is" decidable in $O(n)$; type inference (Curry) is decidable in $O(n alpha(n))$.
+- *Consistency:* the inhabitedness of $bot$ is decidable; it is uninhabited.
+- *Decidability:* type checking is decidable in $O(n)$; type inference (Curry) is decidable in $O(n alpha(n))$.
 
 The four landmark theorems — Church–Rosser (confluence), Subject Reduction (preservation), Progress, and Strong Normalisation — together with their proofs (parallel reduction, structural induction, canonical forms, and Tait reducibility) form the *standard playbook* for every typed calculus.
 Master them here, and the proofs for System F, $F_omega$, MLTT, CIC, and beyond are variations on these themes — with sharper tools (reducibility candidates, logical relations indexed by candidate assignments) but the same melody.
