@@ -225,11 +225,11 @@ Consequences of ETT:
 *Intensional MLTT* (ITT) — *omits* equality reflection. Definitional equality is only $beta$ + $eta$ + $iota$ + $delta$ (term-level reductions); propositional equality may differ. ITT has:
 + Decidable type checking.
 + Function extensionality is *independent* — neither provable nor refutable from MLTT alone.
-+ UIP is *independent* — Hofmann–Streicher (1995) gave the *groupoid model* refuting it.
++ UIP is *independent* — Hofmann–Streicher (1998) gave the *groupoid model* refuting it.
 
 === The Hofmann–Streicher Groupoid Model
 
-*Theorem (Hofmann–Streicher 1995).* There is a model of ITT in which types are *groupoids* (categories where every morphism is invertible), terms are objects, and propositional equality is *isomorphism*. In this model, UIP fails: two different isomorphisms can yield two different "proofs" of an equality.
+*Theorem (Hofmann–Streicher 1998).* There is a model of ITT in which types are *groupoids* (categories where every morphism is invertible), terms are objects, and propositional equality is *isomorphism*. In this model, UIP fails: two different isomorphisms can yield two different "proofs" of an equality.
 
 *Consequence.* UIP is not derivable from $J$ alone — only an additional axiom (Streicher's K-rule, or equivalently UIP itself) makes it provable. This insight is the seed of *Homotopy Type Theory* (Voevodsky et al., 2009): treat types as $oo$-groupoids and add the *univalence axiom* $("Id"_(cal(U)) A space B) tilde.equiv (A tilde.equiv B)$ — equality of types *"is"* equivalence of types. See _Homotopy Type Theory_ for the full development.
 
@@ -632,7 +632,7 @@ Combined with reflection (`reflect (n = m) (eq_nat n m)`) this gives tactical pr
 Type theories are validated by *categorical models*:
 - *Sets*: a model of ETT (with caveats).
 - *Setoids* (sets with an equivalence relation): a model of ITT validating proof irrelevance.
-- *Groupoids* (Hofmann–Streicher 1995): refutes UIP.
+- *Groupoids* (Hofmann–Streicher 1998): refutes UIP.
 - *Simplicial sets / Kan complexes* (Awodey–Warren 2007, Voevodsky 2009): the *univalent model* — validates univalence.
 - *Cubical sets* (Bezem–Coquand–Huber 2014): a computational model — gives univalence operational content.
 
