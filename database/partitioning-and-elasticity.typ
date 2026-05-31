@@ -187,6 +187,61 @@ total = scatter_gather(
 
 *Cross-shard aggregation is expensive:* prefer shard keys that co-locate frequently joined data (tenant ID, user ID). Avoid sharding on a key that requires all aggregation to be cross-shard.
 
+== Sharding PostgreSQL
+
+Vanilla PostgreSQL provides single-node *declarative partitioning* (range/hash/list above) but no built-in cross-node sharding. Distribution is layered on via extensions or forks.
+
+=== Citus
+
+Citus is a PostgreSQL extension that turns a cluster of Postgres nodes into a sharded database. One *coordinator* holds metadata and routes queries; *worker* nodes hold shards (each shard is a regular Postgres table).
+
+```sql
+-- 1. Hash-distribute a table across workers by tenant_id
+SELECT create_distributed_table('events', 'tenant_id');
+
+-- 2. Co-locate related tables on the same distribution column
+--    → joins on tenant_id stay local to a single worker (no shuffle).
+SELECT create_distributed_table('users',  'tenant_id', colocate_with => 'events');
+
+-- 3. Reference tables: replicated to every worker, for small dims
+SELECT create_reference_table('countries');
+
+-- 4. Rebalance after adding a worker (online, uses logical replication)
+SELECT citus_add_node('worker-4', 5432);
+SELECT rebalance_table_shards('events');
+```
+
+*Query routing.* The coordinator parses SQL, consults `pg_dist_shard` / `pg_dist_placement`, and either:
+- *Router-executes* single-shard queries (predicate on `tenant_id`) directly on one worker, OR
+- *Real-time-executes* multi-shard queries as parallel fragments + a coordinator-side merge (limit/sort/agg combine).
+
+*Co-location* is the central design lever: tables sharing a distribution column and shard count have matching shard IDs pinned to the same worker, so `JOIN ... USING (tenant_id)` and foreign keys stay node-local. Cross-tenant joins fall back to *repartition joins* (shuffle) and are expensive — model schemas to keep the tenant key on the hot path.
+
+*Distributed transactions* use 2PC across workers (`pg_prepared_xacts`); the coordinator is the transaction manager. Snapshot isolation is per-node — there is no global MVCC, so reads can see partial commits across shards (unlike Spanner/CockroachDB).
+
+=== Other PostgreSQL Sharding Approaches
+
+*postgres_fdw + partitioning.* Declare a partitioned parent table whose partitions are *foreign tables* pointing at remote Postgres instances. With `enable_partitionwise_join` and `enable_partitionwise_aggregate`, the planner pushes joins and aggregates to the remote nodes. DIY sharding — no rebalancer, no distributed transactions beyond per-statement `PREPARE TRANSACTION`.
+
+```sql
+CREATE EXTENSION postgres_fdw;
+CREATE SERVER shard1 FOREIGN DATA WRAPPER postgres_fdw
+  OPTIONS (host 'db1', dbname 'app');
+CREATE TABLE orders (id BIGINT, region TEXT) PARTITION BY LIST (region);
+CREATE FOREIGN TABLE orders_us PARTITION OF orders FOR VALUES IN ('us')
+  SERVER shard1 OPTIONS (table_name 'orders_us');
+```
+
+*pg_shard* (Citus's predecessor, archived 2016) — folded into Citus; mentioned for historical context only.
+
+*Forks and Postgres-compatible distributed SQL:*
+- *CockroachDB, YugabyteDB* — wire-compatible with PostgreSQL but reimplement storage and transactions on Raft-replicated ranges/tablets. True distributed MVCC.
+- *Greenplum* — MPP fork for analytics; hash distribution + motion (shuffle) operators in the plan.
+- *Postgres-XL / Postgres-XC* — coordinator + datanode + global transaction manager (GTM) architecture; largely superseded.
+- *Amazon Aurora, Neon* — *not* sharded; they disaggregate storage from compute but keep a single-writer Postgres process. Scaling is vertical + read replicas, not horizontal sharding.
+
+*Trade-off vs. Citus:* CockroachDB / Yugabyte give global consistency and automatic rebalancing but reimplement the storage layer (no Postgres-native `pg_*` tooling, extensions, or `VACUUM` semantics). Citus keeps real Postgres on every worker — full extension/datatype/index support — at the cost of weaker cross-shard transaction guarantees.
+
 == Auto-Sharding Systems
 
 *CockroachDB:* ranges (64 MB default). The cluster periodically rebalances ranges based on storage and QPS. Range splits happen automatically when a range exceeds size or QPS limits.
@@ -194,6 +249,8 @@ total = scatter_gather(
 *Vitess:* VSchema defines the sharding key. The VTGate proxy routes queries; VShards are MySQL instances. Supports re-sharding (doubling shard count) with 0 downtime via traffic cutover.
 
 *Cassandra:* consistent hashing with virtual nodes. No central coordinator — each node knows the ring state via gossip. Rebalancing is `nodetool repair` plus streaming.
+
+*Citus:* shard placements tracked in coordinator metadata; `rebalance_table_shards` moves shards between workers via logical replication with a brief cutover, analogous to the live-migration pattern above.
 
 == References
 
@@ -206,3 +263,7 @@ Amazon DynamoDB Team. (2022). "Amazon DynamoDB: A Scalable, Predictably Performa
 Corbett, J. et al. (2012). "Spanner: Google's Globally-Distributed Database." OSDI.
 
 Shute, J. et al. (2013). "F1: A Distributed SQL Database That Scales." VLDB.
+
+Çitus Data. (2016). "Citus: Distributed PostgreSQL for Multi-Tenant and Real-Time Analytics."
+
+Taft, R. et al. (2020). "CockroachDB: The Resilient Geo-Distributed SQL Database." SIGMOD.
