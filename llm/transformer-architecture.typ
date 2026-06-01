@@ -328,7 +328,7 @@ class GPT2FFN(nn.Module):
 
 === RMSNorm (LLaMA, Mistral, Gemma — standard in 2024)
 
-$ "RMSNorm"(x) = (x) / (sqrt((1/d) sum_i x_i^2 + epsilon)) times.circle g $
+$ "RMSNorm"(x) = (x) / (sqrt((1/d) sum_i x_i^2 + epsilon)) dot.o g $
 
 No mean-centering; ~15% faster than LayerNorm. $g in RR^d$ is learned.
 

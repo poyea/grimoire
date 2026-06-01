@@ -26,16 +26,46 @@
 #include "llm/introduction.typ"
 #pagebreak()
 
+#include "llm/tokenization.typ"
+#pagebreak()
+
+#include "llm/data-curation.typ"
+#pagebreak()
+
 #include "llm/transformer-architecture.typ"
 #pagebreak()
 
 #include "llm/pretraining.typ"
 #pagebreak()
 
+#include "llm/mixture-of-experts.typ"
+#pagebreak()
+
+#include "llm/long-context.typ"
+#pagebreak()
+
+#include "llm/multimodal.typ"
+#pagebreak()
+
 #include "llm/finetuning.typ"
 #pagebreak()
 
 #include "llm/rlhf.typ"
+#pagebreak()
+
+#include "llm/reasoning-models.typ"
+#pagebreak()
+
+#include "llm/agents-and-tool-use.typ"
+#pagebreak()
+
+#include "llm/rag.typ"
+#pagebreak()
+
+#include "llm/distillation.typ"
+#pagebreak()
+
+#include "llm/safety-and-alignment.typ"
 #pagebreak()
 
 #include "llm/inference-optimization.typ"
@@ -48,6 +78,9 @@
 #pagebreak()
 
 #include "llm/evaluation.typ"
+#pagebreak()
+
+#include "llm/interpretability.typ"
 #pagebreak()
 
 = Conclusion

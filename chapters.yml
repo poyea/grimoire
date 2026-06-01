@@ -399,6 +399,21 @@ chapters:
     lines: 216
     status: draft
   - subject: llm
+    slug: agents-and-tool-use
+    path: llm/agents-and-tool-use.typ
+    lines: 266
+    status: draft
+  - subject: llm
+    slug: data-curation
+    path: llm/data-curation.typ
+    lines: 263
+    status: draft
+  - subject: llm
+    slug: distillation
+    path: llm/distillation.typ
+    lines: 166
+    status: draft
+  - subject: llm
     slug: evaluation
     path: llm/evaluation.typ
     lines: 771
@@ -414,9 +429,29 @@ chapters:
     lines: 858
     status: draft
   - subject: llm
+    slug: interpretability
+    path: llm/interpretability.typ
+    lines: 200
+    status: draft
+  - subject: llm
     slug: introduction
     path: llm/introduction.typ
     lines: 284
+    status: draft
+  - subject: llm
+    slug: long-context
+    path: llm/long-context.typ
+    lines: 208
+    status: draft
+  - subject: llm
+    slug: mixture-of-experts
+    path: llm/mixture-of-experts.typ
+    lines: 204
+    status: draft
+  - subject: llm
+    slug: multimodal
+    path: llm/multimodal.typ
+    lines: 177
     status: draft
   - subject: llm
     slug: pretraining
@@ -429,14 +464,34 @@ chapters:
     lines: 619
     status: draft
   - subject: llm
+    slug: rag
+    path: llm/rag.typ
+    lines: 223
+    status: draft
+  - subject: llm
+    slug: reasoning-models
+    path: llm/reasoning-models.typ
+    lines: 200
+    status: draft
+  - subject: llm
     slug: rlhf
     path: llm/rlhf.typ
     lines: 712
     status: draft
   - subject: llm
+    slug: safety-and-alignment
+    path: llm/safety-and-alignment.typ
+    lines: 194
+    status: draft
+  - subject: llm
     slug: serving-systems
     path: llm/serving-systems.typ
     lines: 742
+    status: draft
+  - subject: llm
+    slug: tokenization
+    path: llm/tokenization.typ
+    lines: 247
     status: draft
   - subject: llm
     slug: transformer-architecture
