@@ -409,7 +409,7 @@ IO types support powerful information-hiding patterns: a server publishes only t
 The *join calculus* (Fournet–Gonthier 1996) reformulates $pi$ around *join patterns*: channels are receptors that fire only when messages have arrived on a specified set. A definition
 
 ```text
-  eq.def get<r> | put<x, r'> |> r<x> | r'<>
+  def get<r> | put<x, r'> |> r<x> | r'<>
   in ...
 ```
 
@@ -467,7 +467,7 @@ A coordinator $C$ and $n$ participants $P_1, dots, P_n$ communicate over private
   C = (nu r1...rn, c1...cn) (
     bar p1<r1>. ... . bar pn<rn>.   // send prepare
     r1(v1). ... . rn(vn).            // collect votes
-    ("if all vi = yes
+    (if all vi = yes
        then bar c1<commit> | ... | bar cn<commit>
        else bar c1<abort>  | ... | bar cn<abort>)
   )

@@ -253,10 +253,10 @@ import Control.Concurrent.STM
 
 transfer :: TVar Int -> TVar Int -> Int -> STM ()
 transfer from to amt = do
-    f <- readTVar from"
+    f <- readTVar from
     when (f < amt) retry
     writeTVar from (f - amt)
-    t <- readTVar to"
+    t <- readTVar to
     writeTVar to (t + amt)
 
 main = do

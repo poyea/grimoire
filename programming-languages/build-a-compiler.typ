@@ -142,7 +142,7 @@ class Parser {
     std::vector<Token> tokens_;
     size_t pos_ = 0;
 
-    Token peek() const { return pos_<tokens_.size()?tokens_[pos_]:{TokenKind::Eof,"",0,0}; }
+    Token peek() const { return pos_<tokens_.size()?tokens_[pos_]:Token{TokenKind::Eof,"",0,0}; }
     Token consume()    { return tokens_[pos_++]; }
     Token expect(TokenKind k) {
         auto t = consume();
@@ -482,7 +482,7 @@ class Codegen {
         case IrInstr::Op::Store: {
             int idx = alloc_local(ir.dst);   // dst holds the variable name
             // src1 is a temp or immediate
-            if (!ir.src1.empty() && std::isdigit((unsigned char)ir.src1[0]))
+            if (!ir.src1.empty() && (std::isdigit((unsigned char)ir.src1[0]) || ir.src1[0]=='-'))
                 emit(Opcode::Push, std::stoi(ir.src1));
             else
                 emit(Opcode::Load, alloc_local(ir.src1));
@@ -510,7 +510,7 @@ class Codegen {
             emit(Opcode::Store, alloc_local(ir.dst)); break;
         }
         case IrInstr::Op::Return:
-            if (!ir.src1.empty() && std::isdigit((unsigned char)ir.src1[0]))
+            if (!ir.src1.empty() && (std::isdigit((unsigned char)ir.src1[0]) || ir.src1[0]=='-'))
                 emit(Opcode::Push, std::stoi(ir.src1));
             else
                 emit(Opcode::Load, alloc_local(ir.src1));
@@ -678,7 +678,7 @@ Several widely deployed languages are intentionally not Turing-complete. The pay
 
 *Regular languages:* Regular expressions, `grep`, lexers. Finite-state. Every property (emptiness, equivalence, intersection) is decidable. Query optimizers use regex-like patterns for index selection.
 
-*JSON without recursive CTEs:* A JSON schema validator can decide in $O(n)$ whether any document matches a schema. Add recursive `$ref` and the schema language becomes Turing-complete; schema validation becomes undecidable in general.
+*JSON Schema without recursive `$ref`:* A JSON schema validator can decide in $O(n)$ whether any document matches a schema. Add recursive `$ref` and the schema language becomes Turing-complete; schema validation becomes undecidable in general.
 
 *SQL without recursive CTEs:* Standard SQL SELECT is equivalent to relational algebra — first-order logic over finite structures, which is decidable. The query optimizer can rewrite, reorder, and index-select queries with provable correctness. Recursive CTEs (`WITH RECURSIVE`) add a fixed-point operator and lift SQL into the territory of Datalog; most optimizers treat recursive queries conservatively.
 
