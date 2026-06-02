@@ -78,7 +78,7 @@ After $N-1$ ReduceScatter steps each rank holds the *reduced* version of one chu
 
 == Tree and Double-Binary Tree
 
-Ring latency grows as $O(N)$ — painful at $N = 1024$+. NCCL ($>=$ 2.4) added a *double binary tree* (Sanders 2009, Mai et al. 2015): every rank is an interior node in one tree and a leaf in the other, so all links are saturated in both directions.
+Ring latency grows as $O(N)$ — painful at $N = 1024$+. NCCL ($>=$ 2.4) added a *double binary tree* (Sanders et al. 2009): every rank is an interior node in one tree and a leaf in the other, so all links are saturated in both directions.
 
 ```
 Tree A:                     Tree B (mirror):

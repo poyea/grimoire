@@ -12,7 +12,7 @@ CUDA cores are scalar floating-point and integer execution units. Each processes
 
 ```
 FP32:    1 FLOP per cycle (add, mul, FMA)
-FP64:    0.5 FLOP per cycle (consumer GPUs) or 1 FLOP (datacenter)
+FP64:    1/32 to 1/64 FLOP per cycle (consumer GPUs) or 1/2 FLOP (datacenter)
 INT32:   1 IOP per cycle
 FP16:    2 FLOPs per cycle (packed operations)
 ```
@@ -757,7 +757,7 @@ RT Cores/SM      -        1         1         1         -
 Shared Mem/SM    96 KB    64 KB     164 KB    100 KB    228 KB
 L2 Cache         6 MB     6 MB      40 MB     72 MB     50 MB
 Register/SM      256 KB   256 KB    256 KB    256 KB    256 KB
-FP32 TFLOPS      15.7     16.3      19.5      82.6      60
+FP32 TFLOPS      15.7     16.3      19.5      82.6      67
 Tensor TFLOPS    125      130       312       660       989
 Memory           HBM2     GDDR6     HBM2e     GDDR6X    HBM3
 ```

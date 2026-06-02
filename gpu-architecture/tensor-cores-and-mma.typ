@@ -9,8 +9,8 @@ Tensor Cores are specialized matrix-multiply pipelines that deliver an order of 
 #table(
   columns: 6,
   [*Arch*], [*SM*], [*Tile (M\@N\@K)*], [*Dtypes*], [*Peak (per SM/cycle)*], [*Year*],
-  [Volta],   [sm_70], [8x8x4],    [FP16$->$FP32], [64 FMA / cycle / TC, 8 TC/SM], [2017],
-  [Turing],  [sm_75], [8x8x4],    [+ INT8, INT4], [+ inference dtypes], [2018],
+  [Volta],   [sm_70], [4x4x4],    [FP16$->$FP32], [64 FMA / cycle / TC, 8 TC/SM], [2017],
+  [Turing],  [sm_75], [4x4x4],    [+ INT8, INT4], [+ inference dtypes], [2018],
   [Ampere],  [sm_80], [16x8x16],  [+ BF16, TF32, FP64, 2:4 sparse], [256 FMA / cycle / TC, 4 TC/SM], [2020],
   [Hopper],  [sm_90], [64x*xK (wgmma)], [+ FP8 (E4M3/E5M2)], [warp-group MMA, async], [2022],
   [Blackwell], [sm_100], [larger wgmma, microscaled FP4/FP6], [+ MXFP8/MXFP6/MXFP4], [further 2x over Hopper], [2024],
@@ -214,4 +214,4 @@ Micikevicius, P. et al. (2022). "FP8 Formats for Deep Learning." arXiv:2209.0543
 
 Thakkar, V. et al. (2023). _CUTLASS 3.0: A Hopper-Native Library_. NVIDIA GTC.
 
-Shao, J. et al. (2024). "FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision." arXiv:2407.08608.
+Shah, J. et al. (2024). "FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision." arXiv:2407.08608.

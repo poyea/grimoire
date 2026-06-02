@@ -41,7 +41,7 @@ Each GPU gets 18 NVLink lanes at 50 GB/s = 900 GB/s total. NVSwitch provides non
 *GB200 NVL72 (rack-scale):*
 - 72 Blackwell GPUs + 36 Grace CPUs in a single liquid-cooled rack
 - NVLink 5 switch fabric provides 1800 GB/s per GPU, all-to-all bisection bandwidth
-- Presents as a single logical accelerator domain for CUDA; 30 TB unified HBM
+- Presents as a single logical accelerator domain for CUDA; ~13.4 TB HBM3e (72 × 192 GB) total GPU memory
 - 1.44 exaFLOPS FP4 *sparse* (NVIDIA marketing); ~1.3 EFLOPS FP4 sparse / 648 PFLOPS FP4 dense computed from per-GPU B200 specs in the compute-architecture chapter
 
 *Hands-on — inspect topology:*
@@ -197,10 +197,10 @@ $ T = log_2 p dot alpha + 2 (p-1)/p dot n / beta $
 *Double binary tree (NCCL default for 2+ nodes):*
 $ T approx 2 log_2 p dot alpha + 2 n / beta $
 
-*Concrete numbers*, 1 GB all-reduce on 8 $times$ H100 with NVLink 4 (900 GB/s per-GPU):
-- Effective bisection BW $approx 6.3$ TB/s ($8 times 900 / (p-1)$ ring)
-- Lower bound: $2 (p-1)/p dot 1"GB" / 900"GB/s" approx 1.9 "ms"$
-- Measured NCCL: $tilde$ 2-3 ms (typical efficiency 70-90%)
+*Concrete numbers*, 1 GB all-reduce on 8 $times$ H100 with NVLink 4 (900 GB/s per-GPU bidirectional):
+- Ring effective per-GPU egress: 450 GB/s unidirectional
+- Lower bound: $2 (p-1)/p dot 1"GB" / 450"GB/s" approx 3.9 "ms"$
+- Measured NCCL: $tilde$ 4-5 ms (typical efficiency 75-90%)
 
 == NVSHMEM and One-Sided Communication
 

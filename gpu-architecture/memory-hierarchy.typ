@@ -194,9 +194,6 @@ Sequential access: 3× slower
 ```c
 __shared__ float smem[32][32];
 
-// NO conflict: Sequential access
-float val = smem[threadIdx.x][0];  // Threads access different banks
-
 // NO conflict: Stride = 1
 float val = smem[0][threadIdx.x];  // Threads access consecutive banks
 
