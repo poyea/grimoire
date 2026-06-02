@@ -62,7 +62,7 @@ The language $L(M)$ of a DPDA accepting by final state is a *deterministic conte
 
 The witness is the even-length palindromes $L = { w w^R | w in { a, b }^* }$. Any PDA recognising $L$ must guess the midpoint to begin popping; no deterministic strategy can do this without lookahead. Knuth (1965) characterised DCFLs as exactly the LR(1) languages.
 
-*Theorem (DCFL closed under complement; Schützenberger 1963; Hopcroft–Ullman §10.6).* The complement of every DCFL is a DCFL.
+*Theorem (DCFL closed under complement; Ginsburg–Greibach 1966; Hopcroft–Ullman §10.6).* The complement of every DCFL is a DCFL.
 
 *Proof sketch.* The challenge is handling $epsilon$-loops and configurations that "die" by failing to consume input. Convert the DPDA into an equivalent *loop-free* DPDA whose every configuration is either accepting, rejecting, or has a defined next move on every input symbol — by careful introduction of a "dead" state. Then swap accepting and non-accepting states. The technical heart is showing that the loop-elimination preserves acceptance. $square$
 
@@ -107,7 +107,7 @@ A *level-$k$ PDA* has finite control with transitions reading input and applying
 
 *Theorem (Maslov 1976; Damm 1982; Engelfriet 1991).* The language classes $L_k$ recognised by level-$k$ PDAs form a *strict* hierarchy:
 
-$ "Reg" = L_0 subset.eq."not" L_1 = "CFL" subset.eq."not" L_2 = "indexed languages" subset.eq."not" L_3 subset.eq."not" dots subset.eq."not" "EXPTIME" $
+$ "Reg" = L_0 subset.neq L_1 = "CFL" subset.neq L_2 = "indexed languages" subset.neq L_3 subset.neq dots subset.neq "EXPTIME" $
 
 For each $k$ the membership problem for $L_k$ is decidable in $k$-fold exponential time, and is $(k-1)$-EXPTIME-complete for fixed $k$.
 
@@ -123,7 +123,7 @@ $ A_phi arrow.r alpha quad or quad A_phi arrow.r alpha [B_(f phi) "with" f in F]
 
 intuitively: each nonterminal carries a *stack* of indices $phi in F^*$; productions can pop the top index ($A_(f phi) arrow.r alpha$ checking $f$), push an index ($A_phi arrow.r alpha[B_(f phi)]$), or inherit ($A_phi arrow.r alpha[B_phi]$).
 
-*Theorem (Aho 1968).* The class of indexed languages strictly contains the CFLs and is strictly contained in the context-sensitive languages. Membership is decidable in exponential time (NP-complete by a result of Rounds; precisely *EXPTIME* — Aho's original $O(2^("poly")$) bound).
+*Theorem (Aho 1968).* The class of indexed languages strictly contains the CFLs and is strictly contained in the context-sensitive languages. Membership is *NP-complete* (Rounds 1973); since indexed languages lie within NP they are in particular context-sensitive (NSPACE-recognisable).
 
 *Examples* (canonically non-CFL):
 - $L = { a^n b^n c^n | n >= 0 }$.
@@ -230,7 +230,7 @@ Regular         | O(n)      | P     | PSPC | PSPC  | + + + + +
 DCFL            | O(n)      | P     | dec  | DEC*  | - - + + -
 CFL             | O(n^3)    | P     | UND  | UND   | + - - + +
 VPL             | O(n)      | P     | EXP  | EXP   | + + + + +
-Indexed         | EXP       | UND   | UND  | UND   | + - - + +
+Indexed         | NP        | dec   | UND  | UND   | + - - + +
 TAL             | O(n^6)    | dec   | UND  | UND   | + - - + +
 MCFL(k)         | O(n^O(k)) | dec   | UND  | UND   | + - - + +
 CSL             | PSPC      | UND   | UND  | UND   | + + + + +
