@@ -199,7 +199,7 @@ Implementations:
 
 RFC 6182: Architectural Guidelines for Multipath TCP Development. Ford et al., 2011.
 
-RFC 6824: TCP Extensions for Multipath Operation with Multiple Addresses. Ford et al., 2013.
+RFC 8684 (obsoletes RFC 6824): TCP Extensions for Multipath Operation with Multiple Addresses. Ford et al., 2013.
 
 RFC 6356: Coupled Congestion Control for Multipath Transport Protocols (LIA). Raiciu et al., 2011.
 

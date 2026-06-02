@@ -166,7 +166,7 @@ setsockopt(sock, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling));
 
 == Socket States and TIME_WAIT
 
-*TCP state machine [RFC 793]:*
+*TCP state machine [RFC 9293 (obsoletes RFC 793)]:*
 
 ```
 CLOSED → SYN_SENT → ESTABLISHED → FIN_WAIT_1 → FIN_WAIT_2 → TIME_WAIT → CLOSED

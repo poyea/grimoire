@@ -6,7 +6,7 @@ The transport layer provides end-to-end communication between applications. Two 
 
 == TCP (Transmission Control Protocol)
 
-*TCP provides [RFC 793]:*
+*TCP provides [RFC 9293 (obsoletes RFC 793)]:*
 - Reliable delivery (retransmission of lost packets)
 - Ordered delivery (sequence numbers)
 - Flow control (receiver window)
@@ -236,7 +236,7 @@ sysctl -p
 
 *Solution:* Receiver advertises available buffer space in TCP Window field (16-bit, max 65535 bytes).
 
-*Window scaling [RFC 1323]:*
+*Window scaling [RFC 7323 (obsoletes RFC 1323)]:*
 ```cpp
 // Option in SYN: window scale factor (0-14)
 // Actual window = TCP_window << scale_factor
@@ -442,7 +442,7 @@ setsockopt(sock, IPPROTO_TCP, TCP_QUICKACK, &flag, sizeof(flag));
 
 *Primary sources:*
 
-RFC 793: Transmission Control Protocol. Postel, J. (1981).
+RFC 9293: Transmission Control Protocol. Eddy, W. (2022). (Updates and obsoletes RFC 793, Postel 1981.)
 
 RFC 768: User Datagram Protocol. Postel, J. (1980).
 
