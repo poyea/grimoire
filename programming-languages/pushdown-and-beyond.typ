@@ -25,7 +25,7 @@ The PDA accepts $w$ in one of two equivalent modes:
 
 *Theorem (Equivalence of acceptance modes).* For every PDA $M$ accepting by final state there is a PDA $M'$ accepting by empty stack with $L_E (M') = L_F (M)$, and vice versa.
 
-*Proof.* (*Final $arrow.r$ empty.*) Add a star.op bottom marker $X_0 in."not" Gamma$; $M'$ first pushes $X_0$ below $Z_0$. When $M$ reaches an accepting state, $M'$ enters a new "drain" state that pops everything; otherwise the marker prevents $M'$ from accidentally emptying via $M$'s normal moves. (*Empty $arrow.r$ final.*) Similarly add a marker $X_0$ and a star.op accept state $q_F$; the only transition into $q_F$ is on seeing $X_0$ alone on the stack. $square$
+*Proof.* (*Final $arrow.r$ empty.*) Add a fresh bottom marker $X_0 in."not" Gamma$; $M'$ first pushes $X_0$ below $Z_0$. When $M$ reaches an accepting state, $M'$ enters a new "drain" state that pops everything; otherwise the marker prevents $M'$ from accidentally emptying via $M$'s normal moves. (*Empty $arrow.r$ final.*) Similarly add a marker $X_0$ and a fresh accept state $q_F$; the only transition into $q_F$ is on seeing $X_0$ alone on the stack. $square$
 
 The two modes are *not* equivalent for *deterministic* PDAs — empty-stack DPDAs are *strictly less expressive* than final-state DPDAs because empty-stack acceptance forces the language to be *prefix-free*.
 
@@ -130,7 +130,7 @@ intuitively: each nonterminal carries a *stack* of indices $phi in F^*$; product
 - $L = { a^(2^n) | n >= 0 }$ — double-exponential growth.
 - $L = { w \# w | w in { a, b }^* }$ — the *copy* language.
 
-The copy language is not even an indexed language in all formulations; it lies in the slightly larger cal(C) of *linear indexed languages*.
+The copy language is not even an indexed language in all formulations; it lies in the slightly larger class of *linear indexed languages*.
 
 == Tree-Adjoining Grammars
 
@@ -146,7 +146,7 @@ The two operations:
 - *Substitution.* Replace a substitution-marked leaf in some tree by an initial tree with matching root label.
 - *Adjunction.* Splice an auxiliary tree into an internal node $n$ of an existing tree: the auxiliary tree's root replaces $n$; the subtree previously rooted at $n$ is reattached at the auxiliary's foot.
 
-*Theorem (Joshi–Levy–Takahashi 1975; Vijay-Shanker 1987).* TAGs generate exactly the cal(C) *TAL* of *tree-adjoining languages*, which strictly contains CFLs, includes the copy language and $a^n b^n c^n d^n$, and is properly contained in the *indexed languages*. TAL is recognised in $O(n^6)$ time.
+*Theorem (Joshi–Levy–Takahashi 1975; Vijay-Shanker 1987).* TAGs generate exactly the class *TAL* of *tree-adjoining languages*, which strictly contains CFLs, includes the copy language and $a^n b^n c^n d^n$, and is properly contained in the *indexed languages*. TAL is recognised in $O(n^6)$ time.
 
 TAGs are weakly equivalent to several formalisms (Vijay-Shanker, Weir, Joshi 1987):
 
@@ -154,11 +154,11 @@ TAGs are weakly equivalent to several formalisms (Vijay-Shanker, Weir, Joshi 198
 - *Head grammars* (Pollard 1984), using a head-distinguishing combination operation.
 - *Combinatory categorial grammars* (CCG; Steedman 1996), which build expressions via combinators applied to typed lexical entries.
 
-This four-way equivalence delimits the *mildly context-sensitive* cal(C).
+This four-way equivalence delimits the *mildly context-sensitive* class.
 
 == Mildly Context-Sensitive Languages
 
-Joshi's *mildly context-sensitive* desiderata for a language cal(C) $cal(C)$:
+Joshi's *mildly context-sensitive* desiderata for a language class $cal(C)$:
 
 (MC1) $cal(C) supset.eq "CFL"$.
 
@@ -219,7 +219,7 @@ with proper inclusions at every level:
 
 $ "Reg" subset.eq."not" "CFL" subset.eq."not" "CSL" subset.eq."not" "RE" $
 
-Properness of $"Reg" subset "CFL"$: $a^n b^n in "CFL" without "Reg"$. Of $"CFL" subset "CSL"$: $a^n b^n c^n in "CSL" without "CFL"$. Of $"CSL" subset "RE"$: by diagonalisation, since CSL membership is decidable but $"RE"$ contains undecidable sets like $H = { angle.l M, w angle.r | M "halts on" w }$.
+Properness of $"Reg" subset "CFL"$: $a^n b^n in "CFL" without "Reg"$. Of $"CFL" subset "CSL"$: $a^n b^n c^n in "CSL" without "CFL"$. Of $"CSL" subset "RE"$: by diagonalisation, since CSL membership is decidable but $"RE"$ contains undecidable sets like $H = { chevron.l M, w chevron.r | M "halts on" w }$.
 
 == Decidability and Complexity Landscape
 
@@ -258,7 +258,7 @@ Acceptance by final state with $F = { q }$ and the additional check that the sta
 
 === VPA for Well-Nested XML
 
-Let $Sigma_c = { angle.l a angle.r | a in "tag names" }$ (open tags), $Sigma_r = { angle.l \/ a angle.r }$ (close tags), $Sigma_i = "PCDATA"$. A VPA enforcing matching tag names:
+Let $Sigma_c = { chevron.l a chevron.r | a in "tag names" }$ (open tags), $Sigma_r = { chevron.l \/ a chevron.r }$ (close tags), $Sigma_i = "PCDATA"$. A VPA enforcing matching tag names:
 
 ```text
 On call ⟨a⟩:   push tag-name 'a' onto stack

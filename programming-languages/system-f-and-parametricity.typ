@@ -99,7 +99,7 @@ overline(n+1) &:= Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alp
 
 Iteration is *built in*: $n [tau] space s space z$ applies $s$ to $z$ exactly $n$ times.
 
-*Theorem.* The functions $"Nat" arrow.r "Nat"$ representable in System F are exactly the *provably total recursive functions* of second-order Peano arithmetic — a strictly larger cal(C) than those provable in $"PA"$ (Girard 1972). This includes Ackermann's function and many beyond.
+*Theorem.* The functions $"Nat" arrow.r "Nat"$ representable in System F are exactly the *provably total recursive functions* of second-order Peano arithmetic — a strictly larger class than those provable in $"PA"$ (Girard 1972). This includes Ackermann's function and many beyond.
 
 === Pairs
 
@@ -127,7 +127,7 @@ Church-encoded $exists alpha . tau$ as $forall beta . (forall alpha . tau arrow.
 
 *Theorem (Girard 1972).* Every well-typed term of System F is strongly normalising.
 
-This is *substantially* harder than the STLC case. The naïve attempt — define $cal(R)_tau$ by induction on $tau$, with $cal(R)_(forall alpha . tau) = sect.big_(sigma) [alpha |-> ?] cal(R)_(tau)$ — fails because the type $sigma$ may be larger than $forall alpha . tau$ itself (impredicativity!), so no structural induction on types is available. Tait's plain reducibility works for STLC but breaks here.
+This is *substantially* harder than the STLC case. The naïve attempt — define $cal(R)_tau$ by induction on $tau$, with $cal(R)_(forall alpha . tau) = inter.big_(sigma) [alpha |-> ?] cal(R)_(tau)$ — fails because the type $sigma$ may be larger than $forall alpha . tau$ itself (impredicativity!), so no structural induction on types is available. Tait's plain reducibility works for STLC but breaks here.
 
 Girard's solution: *reducibility candidates*. The idea is to *give up* on defining $cal(R)$ directly and instead axiomatize a *family* of acceptable interpretations. A type variable $alpha$ is interpreted by *any* candidate satisfying the closure conditions; $forall alpha . tau$ then quantifies semantically over all candidates.
 
@@ -143,7 +143,7 @@ A set $cal(C)$ of closed terms of a given type is a *candidate* (write $cal(C) i
 *Notational difference from STLC.* In Girard's framework, the *interpretation* $[| tau |]_eta in "CR"$ is parameterised by an *environment* $eta$ assigning to each free type variable a candidate. Define it by recursion on $tau$:
 $ [| alpha |]_eta &= eta(alpha) \
 [| tau_1 arrow.r tau_2 |]_eta &= {e : forall e' in [| tau_1 |]_eta . space e space e' in [| tau_2 |]_eta} \
-[| forall alpha . tau |]_eta &= sect.big_(cal(C) in "CR") space [| tau |]_(eta, alpha |-> cal(C)) $
+[| forall alpha . tau |]_eta &= inter.big_(cal(C) in "CR") space [| tau |]_(eta, alpha |-> cal(C)) $
 
 The big intersection is the crux. Because we range over the *abstract* class of candidates rather than concrete types, the recursion is on $tau$ rather than on the (semantic) type of the interpretation.
 
@@ -166,7 +166,7 @@ The big intersection is the crux. Because we range over the *abstract* class of 
 
 === Why Plain Reducibility Fails
 
-In STLC, $cal(R)_tau$ was defined by induction on $tau$. In System F we cannot do the same for $forall alpha . tau$: defining it as $sect_sigma cal(R)_([alpha |-> sigma] tau)$ would require already having $cal(R)$ at *every* type $sigma$ — including types *larger* than $forall alpha . tau$. The recursion is non-well-founded. Girard's solution decouples the *type* from its *interpretation*: candidates are an axiomatic class, not constructed by induction on syntax. The price is a slightly more elaborate proof; the prize is SN for all of System F.
+In STLC, $cal(R)_tau$ was defined by induction on $tau$. In System F we cannot do the same for $forall alpha . tau$: defining it as $inter_sigma cal(R)_([alpha |-> sigma] tau)$ would require already having $cal(R)$ at *every* type $sigma$ — including types *larger* than $forall alpha . tau$. The recursion is non-well-founded. Girard's solution decouples the *type* from its *interpretation*: candidates are an axiomatic class, not constructed by induction on syntax. The price is a slightly more elaborate proof; the prize is SN for all of System F.
 
 == The $Y$-Combinator is Not Typable
 
@@ -232,9 +232,9 @@ Parametricity is not merely a curiosity: it underlies *representation independen
 Mitchell–Plotkin (1988) recognised that *existential types* model abstract data types. The Church-encoding:
 $ exists alpha . tau &:= forall beta . (forall alpha . tau arrow.r beta) arrow.r beta \
 "pack" tau "with" e "as" exists alpha . tau' &:= Lambda beta . lambda k : forall alpha . tau' arrow.r beta . k [tau] space e \
-"unpack" angle.l alpha, x angle.r = e "in" e' &:= e [tau_("answer")] (Lambda alpha . lambda x : tau' . e') $
+"unpack" chevron.l alpha, x chevron.r = e "in" e' &:= e [tau_("answer")] (Lambda alpha . lambda x : tau' . e') $
 
-The introduction $"pack"$ packages a *concrete* witness $tau$ together with a value $e : [alpha |-> tau] tau'$, hiding the witness behind the existential. The elimination $"unpack"$ binds a *star.op* type variable $alpha$ (the abstract type) and a term variable $x$ of representation type $tau'$. Crucially, the eliminator's body $e'$ may not mention $alpha$ in its result type — this is *information hiding*.
+The introduction $"pack"$ packages a *concrete* witness $tau$ together with a value $e : [alpha |-> tau] tau'$, hiding the witness behind the existential. The elimination $"unpack"$ binds a *fresh* type variable $alpha$ (the abstract type) and a term variable $x$ of representation type $tau'$. Crucially, the eliminator's body $e'$ may not mention $alpha$ in its result type — this is *information hiding*.
 
 *Example.* A counter ADT:
 $ "Counter" &:= exists alpha . alpha times (alpha arrow.r alpha) times (alpha arrow.r "Int") \
@@ -307,7 +307,7 @@ Terms depending on terms (ordinary $lambda$) is always present. The three axes c
 
 === Hindley–Milner Decidability
 
-The *let-polymorphic* restriction of System F (no first-cal(C) $forall$ in argument positions; quantifiers only at $"let"$-bindings) — *Hindley–Milner* (HM; Damas–Milner 1982) — has decidable type inference in near-linear time (see _Type Systems_). This is the type system of ML, OCaml, Haskell 98.
+The *let-polymorphic* restriction of System F (no first-class $forall$ in argument positions; quantifiers only at $"let"$-bindings) — *Hindley–Milner* (HM; Damas–Milner 1982) — has decidable type inference in near-linear time (see _Type Systems_). This is the type system of ML, OCaml, Haskell 98.
 
 === System F Type Inference is Undecidable
 
@@ -432,7 +432,7 @@ In every case, the semantic universe of "types" is a small object in some catego
 == Practical Languages and System F
 
 - *Haskell*: GHC's intermediate language `System FC` is System $F_omega$ plus *coercions* (witnesses for type equalities arising from GADTs and type families).
-- *OCaml*: surface ML is Hindley–Milner, but `let` polymorphism, first-cal(C) modules (`module type of`), and GADTs push toward System F.
+- *OCaml*: surface ML is Hindley–Milner, but `let` polymorphism, first-class modules (`module type of`), and GADTs push toward System F.
 - *Scala*: subtyping + higher kinds = essentially $F_(<:)^omega$. Decidability is precarious (Scala type-checking can loop).
 - *Rust*: traits and lifetimes are an HM-like fragment with subtype-like coercions.
 - *Java/C\#*: F-bounded generics. Subtype-checking undecidable in the limit (Grigore 2017 for Java).
@@ -485,7 +485,7 @@ In contrast: *contextual* equivalence (Mason–Talcott 1991) is decidable for ST
 
 === The Type $forall alpha . alpha$
 
-A closed inhabitant $e : forall alpha . alpha$ would, instantiated at $"Empty"$, produce a closed term of type $"Empty"$ — contradicting consistency. By parametricity, $[| forall alpha . alpha |] = sect_R [| alpha |]_R = sect_R R$. The intersection over *all* relations of the empty relation is empty. Hence $forall alpha . alpha$ has no closed inhabitant — it is the *false* proposition under Curry–Howard.
+A closed inhabitant $e : forall alpha . alpha$ would, instantiated at $"Empty"$, produce a closed term of type $"Empty"$ — contradicting consistency. By parametricity, $[| forall alpha . alpha |] = inter_R [| alpha |]_R = inter_R R$. The intersection over *all* relations of the empty relation is empty. Hence $forall alpha . alpha$ has no closed inhabitant — it is the *false* proposition under Curry–Howard.
 
 === The Type $forall alpha . alpha arrow.r alpha arrow.r alpha$
 
@@ -521,7 +521,7 @@ A subtle point in *predicative* extensions: when type instantiation triggers fur
 
 *Theorem (Mitchell, Girard, others).* A typed System F term $e$ and its *type-erasure* $|e|$ (delete all $Lambda$ and $[tau]$) have the same untyped reduction behaviour on the corresponding term-level redexes.
 
-So a System F program *runs* like an untyped $lambda$ program — types are computationally inert. This justifies *type erasure* in compilers: GHC erases types between Core and STG/Cmm; OCaml erases at the back end. The exception: features like Haskell's `Typeable` or polymorphic recursion with type-cal(C) dictionaries pass *runtime representations*, breaking pure erasure.
+So a System F program *runs* like an untyped $lambda$ program — types are computationally inert. This justifies *type erasure* in compilers: GHC erases types between Core and STG/Cmm; OCaml erases at the back end. The exception: features like Haskell's `Typeable` or polymorphic recursion with type-class dictionaries pass *runtime representations*, breaking pure erasure.
 
 == Predicative vs Impredicative System F
 
@@ -572,7 +572,7 @@ zoo = [MkShowable 42, MkShowable "hi", MkShowable True]
 
 Here `Showable` is essentially `exists a. (Show a, a)`. The constraint `Show a` is part of the existential package — packed in, opened out. Such *heterogeneous lists* are a typical use of Haskell existentials.
 
-In OCaml, *first-cal(C) modules* play a similar role:
+In OCaml, *first-class modules* play a similar role:
 
 ```ocaml
 module type SHOWABLE = sig
@@ -632,8 +632,8 @@ Final result: $"id"$ — as expected, identity applied to identity is identity. 
 Three strategies for compiling polymorphic code:
 
 + *Erasure* (OCaml, Haskell): polymorphism vanishes; all values share a uniform representation (boxed pointer). Type instantiation has no runtime cost.
-+ *Specialization* (C++ templates, Rust generics, MLton ML): each instantiation generates a star.op specialized version. Fast but blows up code size.
-+ *Dictionary passing* (Haskell type classes): polymorphism is preserved but type-cal(C) methods pass a runtime *dictionary* of operations.
++ *Specialization* (C++ templates, Rust generics, MLton ML): each instantiation generates a freshly specialized version. Fast but blows up code size.
++ *Dictionary passing* (Haskell type classes): polymorphism is preserved but type-class methods pass a runtime *dictionary* of operations.
 
 Erasure relies on parametricity: by Reynolds, a polymorphic function cannot inspect its argument, so a uniform boxed representation suffices. Languages with *non-parametric* features (Haskell's `Typeable`, Java's reflection) break erasure and require runtime type information.
 
@@ -777,7 +777,7 @@ By parametricity, *no* client of `STACK` can distinguish `ListStack` from any ot
 == Worked Example: Existential Counters
 
 ```ocaml
-(* Existential ADT in OCaml first-cal(C) modules *)
+(* Existential ADT in OCaml first-class modules *)
 module type COUNTER = sig
   type t
   val init : t

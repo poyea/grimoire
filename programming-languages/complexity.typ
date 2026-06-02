@@ -41,12 +41,12 @@ subset.neq "DTIME"(g(n))$.
 
 *Proof sketch.* Construct a *diagonal* language
 
-$ D = { angle.l M, w angle.r | M "is a DTM and" M "rejects" angle.l M, w angle.r "within" g(n) "steps"}. $
+$ D = { chevron.l M, w chevron.r | M "is a DTM and" M "rejects" chevron.l M, w chevron.r "within" g(n) "steps"}. $
 
 A universal TM simulates an arbitrary DTM with $O(log f(n))$ overhead (each step
 costs $O(log f(n))$ for state lookup and clock maintenance with two-tape
 simulation). So $D in "DTIME"(g(n))$. If $D in "DTIME"(f(n))$ via some $M_0$, then
-running $M_0$ on $angle.l M_0, M_0 angle.r$ yields a contradiction by the standard
+running $M_0$ on $chevron.l M_0, M_0 chevron.r$ yields a contradiction by the standard
 diagonal argument. $square$
 
 The $log f$ factor is the *cost of universal simulation*. For single-tape DTMs the
@@ -174,7 +174,7 @@ only if $"NP" = "coNP"$.
 *Theorem (Ladner 1975).* If $"P" eq."not" "NP"$, then there exists an *NP-intermediate*
 language: $L in "NP" backslash "P"$ with $L$ not NP-complete.
 
-*Proof idea.* Define $L = "SAT" sect cal(F)$ where $cal(F)$ is a recursively
+*Proof idea.* Define $L = "SAT" inter cal(F)$ where $cal(F)$ is a recursively
 constructed set of formula sizes designed by *delayed diagonalisation*: at even
 stages, "blow up" $L$ enough to defeat the $i$-th polynomial-time machine
 (ensuring $L in."not" "P"$); at odd stages, "blow down" $L$ enough to defeat the
@@ -242,7 +242,7 @@ A *probabilistic TM* has a transition function with random bits. Define:
 
 Error amplification: $k$ independent repetitions plus majority vote reduce error
 to $2^(-Omega(k))$ in BPP, by Chernoff. So the constant $2/3$ can be replaced by
-$1 - 2^(-"poly")$ without change of cal(C).
+$1 - 2^(-"poly")$ without change of class.
 
 *Theorem (Adleman 1978).* $"BPP" subset.eq "P/poly"$.
 
@@ -425,7 +425,7 @@ were not.
 == The Natural Proofs Barrier
 
 *Definition (Razborov--Rudich 1997).* A *combinatorial property* $cal(P)_n
-subset.eq { f : {0, 1}^n -> {0, 1} }$ is *natural* against a cal(C) $cal(C)$ if it
+subset.eq { f : {0, 1}^n -> {0, 1} }$ is *natural* against a class $cal(C)$ if it
 satisfies:
 
 + *Largeness*: $|cal(P)_n| gt.eq 2^(-O(n)) dot 2^(2^n)$; a random function has
@@ -590,7 +590,7 @@ branching programs).
 
 == Counting Classes and \#P
 
-*Definition (Valiant 1979).* $\#"P"$ is the cal(C) of functions $f : Sigma^* -> NN$
+*Definition (Valiant 1979).* $\#"P"$ is the class of functions $f : Sigma^* -> NN$
 such that $f(x) = |{ y | V(x, y) "accepts" }|$ for some poly-time verifier $V$
 and polynomial bound on $|y|$. So $\#"P"$ counts NP-witnesses.
 
@@ -606,7 +606,7 @@ clause coverage.
 
 *Theorem (Toda 1991).* $"PH" subset.eq "P"^(\#"P")$. So counting is at least as
 hard as the whole polynomial hierarchy. *Proof.* Two-stage: first show $"PH"
-subset.eq "BP" dot plus.circle "P"$ (probabilistic parity), then $plus.circle "P" subset.eq
+subset.eq "BP" dot plus.o "P"$ (probabilistic parity), then $plus.o "P" subset.eq
 #"P"$. Beneath the technicalities: counting modulo 2 plus randomisation
 simulates alternating quantifiers.
 
@@ -640,7 +640,7 @@ randomised $R(f)$, quantum $Q(f)$.
 *Theorem (Yao 1979).* $D("EQ")_n = n$: equality testing requires $n$ bits
 deterministically. $R("EQ")_n = O(log n)$ via hashing.
 
-*Disjointness.* $f("DISJ")(x, y) = 1 arrow.l.r.double x sect y = emptyset$ for
+*Disjointness.* $f("DISJ")(x, y) = 1 arrow.l.r.double x inter y = emptyset$ for
 $x, y subset.eq [n]$. *Theorem (Kalyanasundaram--Schnitger 1992; Razborov 1992).*
 $R("DISJ")_n = Theta(n)$. The lower bound uses the *corruption method*: a random
 restriction of inputs forces any small protocol to err on a constant fraction of
@@ -678,7 +678,7 @@ poly-size quantum circuits with bounded two-sided error.
   problems (BosonSampling, IQP) cannot be efficiently classically simulated
   unless PH collapses.
 
-*$"QMA"$*: quantum analogue of NP -- prover sends quantum witness $|psi angle.r$,
+*$"QMA"$*: quantum analogue of NP -- prover sends quantum witness $|psi chevron.r$,
 verifier runs poly-size quantum circuit. $"NP" subset.eq "QMA" subset.eq "PP"
 subset.eq "PSPACE"$. $k$-local Hamiltonian (estimating ground-state energy of a
 $k$-local Hamiltonian to inverse-polynomial precision) is QMA-complete for $k gt.eq

@@ -55,7 +55,7 @@ with the last allowed only if $epsilon in L(G)$ and $S$ does not appear on any r
 
 (1) *START.* Introduce a fresh $S_0 arrow.r S$ to ensure $S$ does not appear on a right-hand side.
 
-(2) *TERM.* For each production with mixed terminals and nonterminals, replace each terminal $a$ on the right by a star.op nonterminal $T_a$ and add $T_a arrow.r a$.
+(2) *TERM.* For each production with mixed terminals and nonterminals, replace each terminal $a$ on the right by a fresh nonterminal $T_a$ and add $T_a arrow.r a$.
 
 (3) *BIN.* For each production $A arrow.r B_1 B_2 dots B_k$ with $k >= 3$, introduce $A_1, dots, A_(k-2)$ and replace by $A arrow.r B_1 A_1$, $A_1 arrow.r B_2 A_2$, ..., $A_(k-2) arrow.r B_(k-1) B_k$.
 
@@ -81,7 +81,7 @@ A *pushdown automaton* (PDA) is the canonical recogniser for CFLs — full treat
 
 *Theorem (CFG–PDA equivalence; Chomsky, Evey, Schützenberger).* A language $L$ is context-free <==> $L = L(M)$ for some nondeterministic pushdown automaton $M$.
 
-The construction *CFG $arrow.r$ PDA*: from a CFG in GNF, build a one-state PDA whose stack holds a *sentential form's tail*. The PDA pops the top nonterminal $A$, reads the next input $a$, and pushes the tail of some production $A arrow.r a alpha$ — guessing $alpha$ nondeterministically. The construction *PDA $arrow.r$ CFG* introduces nonterminals $angle.l p, X, q angle.r$ standing for "the PDA goes from state $p$ to state $q$ while net popping $X$" and grammar productions encode push/pop sequences; the construction is quadratic in PDA size and produces $|Q|^2 |Gamma|$ nonterminals.
+The construction *CFG $arrow.r$ PDA*: from a CFG in GNF, build a one-state PDA whose stack holds a *sentential form's tail*. The PDA pops the top nonterminal $A$, reads the next input $a$, and pushes the tail of some production $A arrow.r a alpha$ — guessing $alpha$ nondeterministically. The construction *PDA $arrow.r$ CFG* introduces nonterminals $chevron.l p, X, q chevron.r$ standing for "the PDA goes from state $p$ to state $q$ while net popping $X$" and grammar productions encode push/pop sequences; the construction is quadratic in PDA size and produces $|Q|^2 |Gamma|$ nonterminals.
 
 == CYK Algorithm
 

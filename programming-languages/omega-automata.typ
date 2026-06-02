@@ -115,7 +115,7 @@ The transition on input $a in Sigma$ from a Safra tree $T$ is:
 
 ```text
   1. (Branch creation) For each node v whose label L meets F, attach
-     a new rightmost child to v with label L inter F and a star.op name.
+     a new rightmost child to v with label L inter F and a fresh name.
 
   2. (Powerset step) Replace every label L by delta(L, a) (image under the
      transition relation on input a).
@@ -218,7 +218,7 @@ Here $"lift"(m, v)$ is the least element of $M union {top}$ greater than $m$ on 
 
 The *modal $mu$-calculus* $L_mu$ (Kozen 1983) adds least and greatest fixed-point operators to multimodal logic:
 $ phi ::= p | not p | phi and phi | phi or phi | diamond_a phi | square_a phi | X | mu X. phi | nu X. phi $
-with $X$ a propositional variable and $phi$ positive in $X$ under each binder. Semantics over Kripke structures: $bracket.l.double mu X. phi bracket.r.double = "lfp"(X |-> bracket.l.double phi bracket.r.double)$, $bracket.l.double nu X. phi bracket.r.double = "gfp"(X |-> bracket.l.double phi bracket.r.double)$.
+with $X$ a propositional variable and $phi$ positive in $X$ under each binder. Semantics over Kripke structures: $bracket.l.stroked mu X. phi bracket.r.stroked = "lfp"(X |-> bracket.l.stroked phi bracket.r.stroked)$, $bracket.l.stroked nu X. phi bracket.r.stroked = "gfp"(X |-> bracket.l.stroked phi bracket.r.stroked)$.
 
 The *alternation depth* of a formula counts nesting of alternating $mu / nu$ binders that share free variables. The *alternation hierarchy* is the chain
 $ Sigma_0^mu subset.eq Pi_0^mu subset.eq Sigma_1^mu subset.eq Pi_1^mu subset.eq Sigma_2^mu subset.eq dots $
@@ -359,7 +359,7 @@ The invariants:
 3. If $v$ has children $v_1, dots, v_k$, then $union_i ell(v_i) subset.eq ell(v)$, and the inclusion may be strict (the difference is the set of "newcomers").
 4. Each leaf has nonempty label.
 
-Initial tree: single node, name $1$, label ${q_0}$, mark $0$. The transition on $a in Sigma$ proceeds in five phases (as listed earlier). After the transition, the *star.op-name supply* is replenished from names of deleted nodes.
+Initial tree: single node, name $1$, label ${q_0}$, mark $0$. The transition on $a in Sigma$ proceeds in five phases (as listed earlier). After the transition, the *fresh-name supply* is replenished from names of deleted nodes.
 
 The Rabin pairs $(E_i, F_i)$ for $i in {1, dots, 2n}$ then capture: name $i$ survives forever (i.e. eventually appears in every reached tree) *and* is marked infinitely often, witnessing an accepting infinite branch in the original NBA. The proof of correctness rests on a delicate argument that the youngest surviving accepting branch of an accepting NBA run corresponds to exactly one Safra-tree node that is eventually never deleted.
 

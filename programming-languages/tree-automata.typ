@@ -149,7 +149,7 @@ where $u$ is a term over $Omega$ with subterms of the form $q'(x_i)$ for $q' in 
 
 A computation rewrites $q_0(t)$ to a tree over $Omega$ by repeatedly applying rules.
 
-*Theorem.* The cal(C) of *top-down tree transductions* is properly contained in the cal(C) of *bottom-up tree transductions* (BUTT, Engelfriet 1975). The two classes are *incomparable* on the deterministic level.
+*Theorem.* The class of *top-down tree transductions* is properly contained in the class of *bottom-up tree transductions* (BUTT, Engelfriet 1975). The two classes are *incomparable* on the deterministic level.
 
 The key difference: a BUTT can *inspect* a subterm and *"then"* decide what to output (the input is processed before the output is committed), whereas a TDTT commits to output structure at each step and then recurses; this lets BUTT realise transductions like if the input is $f(a, a)$ output $g$, else output $h$ that TDTT cannot.
 
@@ -222,7 +222,7 @@ The deepest application of tree automata in algorithmics:
 
 The constant factor (a tower of exponentials) is the price of generality but is rarely a practical obstacle for small $k$ and short formulae.
 
-*Theorem (Courcelle--Makowsky--Rotics 2000).* The same statement holds for *clique-width* instead of tree-width, for MSO with vertex-set quantification only (MSO_1). Clique-width is more permissive: every bounded-tree-width cal(C) has bounded clique-width, but cliques themselves have unbounded tree-width and clique-width 2.
+*Theorem (Courcelle--Makowsky--Rotics 2000).* The same statement holds for *clique-width* instead of tree-width, for MSO with vertex-set quantification only (MSO_1). Clique-width is more permissive: every bounded-tree-width class has bounded clique-width, but cliques themselves have unbounded tree-width and clique-width 2.
 
 Courcelle's theorem is the unifying meta-theorem of *parameterised complexity*: a great many NP-hard problems (3-COLOURING, INDEPENDENT SET, HAMILTONIAN CYCLE, ...) are MSO-expressible and hence linear-time on bounded-tree-width inputs.
 
@@ -256,7 +256,7 @@ Tree-automata completion is the basis of static analyses for term-rewriting syst
 
 === XML Schema Validation
 
-A *DTD* corresponds to a *local* hedge automaton -- one whose horizontal regular languages depend only on the parent's label, not on its state. *XML Schema* defines a strictly larger cal(C): *single-type* tree grammars. *RelaxNG* permits arbitrary regular tree grammars. The validation problem -- given a document $t$ and a schema $S$, does $t in L(S)$? -- is linear-time for all three; the *inclusion* problem $L(S_1) subset.eq L(S_2)$ is PSPACE-complete for RelaxNG, polynomial for DTDs.
+A *DTD* corresponds to a *local* hedge automaton -- one whose horizontal regular languages depend only on the parent's label, not on its state. *XML Schema* defines a strictly larger class: *single-type* tree grammars. *RelaxNG* permits arbitrary regular tree grammars. The validation problem -- given a document $t$ and a schema $S$, does $t in L(S)$? -- is linear-time for all three; the *inclusion* problem $L(S_1) subset.eq L(S_2)$ is PSPACE-complete for RelaxNG, polynomial for DTDs.
 
 == Decision Problems and Complexity
 
@@ -421,7 +421,7 @@ For *GADTs* (generalised algebraic data types) and *dependent pattern matching*,
 
 == Tree Automata and Type Soundness
 
-Many *type-soundness* arguments in language design come down to *regular invariants on syntax trees* -- e.g. every well-typed term in normal form is in the syntactic cal(C) of values. These invariants are typically expressed as regular tree languages and verified by tree-automaton emptiness / inclusion:
+Many *type-soundness* arguments in language design come down to *regular invariants on syntax trees* -- e.g. every well-typed term in normal form is in the syntactic class of values. These invariants are typically expressed as regular tree languages and verified by tree-automaton emptiness / inclusion:
 
 - *Progress* (well-typed normal forms are values) reduces to the tree language of well-typed non-value normal forms is empty -- a tree-automaton emptiness check on the cross product of the typing automaton and the non-value automaton.
 

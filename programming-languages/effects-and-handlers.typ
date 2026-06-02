@@ -18,7 +18,7 @@ The two `read_line ()` calls return *different* strings — yet syntactically th
 
 Haskell's choice (Wadler 1992, Peyton Jones 1993) was to embed effects in the *types* rather than the *evaluation order*. A function performing I/O does not have type $"Unit" arrow.r "String"$; it has type $"IO String"$ — *a value representing an I/O action that, when executed, will yield a string*. The value can be substituted freely; only its *execution* has effects, and execution happens only at one place (the `main` action) by virtue of the type discipline.
 
-This insight generalises. Effects are *first-cal(C) data* described by a type constructor; programs are *recipes* for effects; an *interpreter* (often the runtime) turns the recipe into observable behaviour.
+This insight generalises. Effects are *first-class data* described by a type constructor; programs are *recipes* for effects; an *interpreter* (often the runtime) turns the recipe into observable behaviour.
 
 == Monads (Moggi 1989, 1991)
 
@@ -117,7 +117,7 @@ The pain: every operation must be `lift`ed to the level at which its effect live
 Not every effectful computation needs the full power of bind. *Applicative functors* (McBride–Paterson 2008) abstract over computations whose effect structure is *static* — independent of intermediate values.
 
 ```haskell
-cal(C) Functor f => Applicative f where"
+class Functor f => Applicative f where
   pure  :: a -> f a
   (<*>) :: f (a -> b) -> f a -> f b
 ```
@@ -231,7 +231,7 @@ How arrow.r *type* effectful computations? Naively, give each effectful function
 
 The solution is *row polymorphism*. A *row* of effects is a sequence of labelled effects, possibly extending a row variable $rho$:
 
-$ epsilon ::= angle.l angle.r | angle.l ell : tau | epsilon angle.r | rho $
+$ epsilon ::= chevron.l chevron.r | chevron.l ell : tau | epsilon chevron.r | rho $
 
 Function types carry a row: $tau_1 arrow.r^epsilon tau_2$. A polymorphic combinator like `map` has type:
 
@@ -251,7 +251,7 @@ fun safe-div(x : int, y : int) : <exn> int
   if y == 0 then throw("division by zero") else x / y
 ```
 
-The effect row is written between angle brackets in the return type. Pure functions have the empty row $angle.l angle.r$ (written `<>`). Effect polymorphism is the default for higher-order functions.
+The effect row is written between angle brackets in the return type. Pure functions have the empty row $chevron.l chevron.r$ (written `<>`). Effect polymorphism is the default for higher-order functions.
 
 ```text
 fun map( xs : list<a>, f : a -> e b ) : e list<b>
@@ -624,7 +624,7 @@ Under the *deep* handler `counter_deep`, `loop 5` yields `(0, 5)`. Under a *shal
 In Koka's row-based effect system, types and effects are:
 
 $ tau ::= "Int" | "Bool" | tau_1 ->^epsilon tau_2 | "list"(tau) | dots \
-epsilon ::= angle.l angle.r | angle.l op : sigma | epsilon angle.r | rho $
+epsilon ::= chevron.l chevron.r | chevron.l op : sigma | epsilon chevron.r | rho $
 
 where $rho$ is a *row variable* and $sigma$ is the *type scheme* of operation $op$ (parameter and return type).
 
@@ -655,7 +655,7 @@ The handle rule *removes* operation $op$ from the effect row: if $e$ can perform
 
 Row unification uses the *scoped labels* representation:
 
-$ angle.l l_1 : sigma_1 | angle.l l_2 : sigma_2 | rho angle.r angle.r $
+$ chevron.l l_1 : sigma_1 | chevron.l l_2 : sigma_2 | rho chevron.r chevron.r $
 
 Two rows are unified by finding corresponding labels and unifying their schemes, with the remaining row variable absorbing unmatched labels. The key invariant: labels appear in alphabetical order, so unification terminates.
 

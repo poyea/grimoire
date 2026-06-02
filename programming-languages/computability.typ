@@ -12,7 +12,7 @@ _See also: _Turing Machines and Computability_, _Type Systems_, _Complexity Theo
 == Primitive Recursive and $mu$-Recursive Functions
 
 We work with partial functions $f : NN^k harpoon.rt NN$. The class of *primitive
-recursive* functions $cal(P R)$ is the smallest cal(C) containing the *initial
+recursive* functions $cal(P R)$ is the smallest class containing the *initial
 functions*
 
 - *Zero*: $Z(x) = 0$
@@ -29,7 +29,7 @@ $ f(arrow(x), 0) &= g(arrow(x)) \
   f(arrow(x), y + 1) &= h(arrow(x), y, f(arrow(x), y)) $
 
 Every primitive recursive function is total. Addition, multiplication,
-exponentiation, bounded minimisation, the Cantor pairing $angle.l x, y angle.r =
+exponentiation, bounded minimisation, the Cantor pairing $chevron.l x, y chevron.r =
 ((x + y)(x + y + 1))/2 + y$, prime enumeration, and Gödel's $beta$-function are
 primitive recursive. The class is closed under bounded quantification and bounded
 search, which is what makes it powerful enough to encode finite sequences and thus
@@ -218,7 +218,7 @@ The complement $overline(K) = { e | phi_e (e) "diverges" }$ is *productive*
 
 == Rice's Theorem
 
-A cal(C) $cal(A)$ of partial computable functions is *extensional* if membership of
+A class $cal(A)$ of partial computable functions is *extensional* if membership of
 $phi_e$ in $cal(A)$ depends only on $phi_e$ as a function, not on the index $e$.
 The associated *index set* is $I_(cal(A)) = { e | phi_e in cal(A) }$.
 
@@ -413,8 +413,8 @@ order arithmetic (Simpson 1977, Slaman--Woodin).
 *The jump operator.* $A' = { e | Phi_e^A (e) "halts"}$, the halting problem
 *relative* to $A$. The jump is *strictly* increasing: $A <_T A'$ for every $A$, by
 the relativised diagonal argument. Iterating gives $emptyset, emptyset', emptyset'',
-..., emptyset^((n))$. The infinitary jump $emptyset^((omega)) = { angle.l e, n
-angle.r | e in emptyset^((n)) }$ goes beyond all finite levels.
+..., emptyset^((n))$. The infinitary jump $emptyset^((omega)) = { chevron.l e, n
+chevron.r | e in emptyset^((n)) }$ goes beyond all finite levels.
 
 == The Arithmetical Hierarchy
 
@@ -439,7 +439,7 @@ So $Sigma^0_1$ = r.e., $Pi^0_1$ = co-r.e., $Delta^0_1$ = decidable.
   [Rec $= { e | W_e "recursive"}$], [], [$Sigma^0_3$-complete],
 )
 
-*Theorem (Post 1948).* $Sigma^0_(n + 1)$ is precisely the cal(C) of sets that are
+*Theorem (Post 1948).* $Sigma^0_(n + 1)$ is precisely the class of sets that are
 r.e. relative to $emptyset^((n))$. Equivalently,
 
 $ A in Sigma^0_(n + 1) arrow.l.r.double A "is r.e. in" emptyset^((n)), $
@@ -464,7 +464,7 @@ Beyond the arithmetical levels lies the *hyperarithmetical* hierarchy, indexed b
 the recursive ordinals $alpha < omega_1^"CK"$ (the Church--Kleene ordinal, the
 least non-recursive ordinal). For $alpha = beta + 1$, $emptyset^((alpha))$ is the
 jump of $emptyset^((beta))$; for limit $alpha$ given by a recursive notation
-$a$, $emptyset^((alpha)) = { angle.l b, n angle.r | b <_O a and n in
+$a$, $emptyset^((alpha)) = { chevron.l b, n chevron.r | b <_O a and n in
 emptyset^((|b|)) }$ where $<_O$ is Kleene's $cal(O)$ ordering of notations. The
 union $bold(H) = union.big_(alpha < omega_1^"CK") emptyset^((alpha))$ is the
 *hyperarithmetical* set.
@@ -476,7 +476,7 @@ The *analytical hierarchy* extends the arithmetical hierarchy with quantificatio
 over *functions* $f : NN -> NN$.
 
 - $Sigma^1_1$: $A = { x | exists f forall y . R(x, f overline(y), y) }$ with $R$
-  decidable. Equivalently, $A$ is the projection of a $Pi^0_1$ cal(C) in Baire space.
+  decidable. Equivalently, $A$ is the projection of a $Pi^0_1$ class in Baire space.
 - $Pi^1_1$: complement of $Sigma^1_1$. Equivalently, "$A$ is the set of trees with
   no infinite path" (well-foundedness).
 - $Sigma^1_2$: $exists f$ of a $Pi^1_1$ matrix; and so on.
@@ -698,7 +698,7 @@ recursive programs can simultaneously fix-point themselves.
 
 *Application: Smullyan's double diagonal.* In provability logic, the Gödel--
 Carnap fixed-point lemma (every $phi(x)$ has a sentence $sigma$ with $"PA" tack.r
-sigma arrow.l.r.double phi(angle.l sigma angle.r)$) is the proof-theoretic shadow
+sigma arrow.l.r.double phi(chevron.l sigma chevron.r)$) is the proof-theoretic shadow
 of the recursion theorem. The proof of Gödel's incompleteness theorem is then
 the same diagonal that proves $K$ undecidable.
 
@@ -736,7 +736,7 @@ theorem.
 
 A binary sequence $X in 2^omega$ is *Martin-Löf random* (1966) if it passes every
 *effective statistical test*: for every uniformly c.e. sequence $(U_n)$ of open
-sets in $2^omega$ with $mu(U_n) lt.eq 2^(-n)$, $X in."not" sect_n U_n$.
+sets in $2^omega$ with $mu(U_n) lt.eq 2^(-n)$, $X in."not" inter_n U_n$.
 
 *Theorem (universal test).* There is a universal Martin-Löf test, so the class of
 ML-random sequences has measure $1$ and is $Pi^0_2$.

@@ -39,7 +39,7 @@ $ [x |-> s] x &= s \
 [x |-> s] (e_1 space e_2) &= ([x |-> s] e_1) space ([x |-> s] e_2) \
 [x |-> s] (lambda y : tau . e) &= lambda y : tau . [x |-> s] e space space (y eq.not x, space y in.not "FV"(s)) $
 
-The side condition $y in."not" "FV"(s)$ is enforced by $alpha$-renaming $y$ to a star.op variable if necessary. Substitution composition: $[x |-> s_1][y |-> s_2]$ is in general not commutative; the order matters.
+The side condition $y in."not" "FV"(s)$ is enforced by $alpha$-renaming $y$ to a fresh variable if necessary. Substitution composition: $[x |-> s_1][y |-> s_2]$ is in general not commutative; the order matters.
 
 == Static Semantics
 
@@ -162,7 +162,7 @@ So $=>$ contracts an arbitrary set of redexes simultaneously, possibly none.
 
 *Lemma 2 (Substitution).* If $e_1 => e_1'$ and $e_2 => e_2'$, then $[x |-> e_2] e_1 => [x |-> e_2'] e_1'$.
 
-*Proof.* Induction on $e_1 => e_1'$. Case $x$: $[x |-> e_2] x = e_2 => e_2' = [x |-> e_2'] x$. Case $y eq."not" x$: both sides are $y$. Case $lambda y . e => lambda y . e'$ with $e => e'$: $alpha$-rename $y$ star.op, apply IH. Case $f space a => f' space a'$: by IH and congruence. Case $(lambda y . e) space a => [y |-> a'] e'$: apply IH then use the well-known substitution lemma $[x |-> e_2'] [y |-> a'] e' = [y |-> [x |-> e_2'] a'] [x |-> e_2'] e'$. $square$
+*Proof.* Induction on $e_1 => e_1'$. Case $x$: $[x |-> e_2] x = e_2 => e_2' = [x |-> e_2'] x$. Case $y eq."not" x$: both sides are $y$. Case $lambda y . e => lambda y . e'$ with $e => e'$: $alpha$-rename $y$ fresh, apply IH. Case $f space a => f' space a'$: by IH and congruence. Case $(lambda y . e) space a => [y |-> a'] e'$: apply IH then use the well-known substitution lemma $[x |-> e_2'] [y |-> a'] e' = [y |-> [x |-> e_2'] a'] [x |-> e_2'] e'$. $square$
 
 *Lemma 3 (Diamond for $=>$).* If $e => e_1$ and $e => e_2$, there exists $e'$ with $e_1 => e'$ and $e_2 => e'$.
 
@@ -271,7 +271,7 @@ T-VAR: $e = x_i$. $sigma(x_i) = a_i in cal(R)_(tau_i)$ by assumption.
 
 T-APP: $e = e_1 space e_2$. By IH, $sigma(e_1) in cal(R)_(tau_2 arrow.r tau)$ and $sigma(e_2) in cal(R)_(tau_2)$. By definition of $cal(R)$ at arrow type, $sigma(e_1) space sigma(e_2) = sigma(e_1 space e_2) in cal(R)_tau$.
 
-T-ABS: $e = lambda y : tau_1' . e'$ with $tau = tau_1' arrow.r tau_2'$. $alpha$-rename $y$ star.op. Pick arbitrary $a in cal(R)_(tau_1')$; by IH applied to the extended substitution $sigma, y |-> a$, we have $(sigma, y |-> a)(e') = [y |-> a] sigma(e') in cal(R)_(tau_2')$. The Abstraction Lemma gives $lambda y : tau_1' . sigma(e') = sigma(lambda y : tau_1' . e') in cal(R)_(tau_1' arrow.r tau_2')$. $square$
+T-ABS: $e = lambda y : tau_1' . e'$ with $tau = tau_1' arrow.r tau_2'$. $alpha$-rename $y$ fresh. Pick arbitrary $a in cal(R)_(tau_1')$; by IH applied to the extended substitution $sigma, y |-> a$, we have $(sigma, y |-> a)(e') = [y |-> a] sigma(e') in cal(R)_(tau_2')$. The Abstraction Lemma gives $lambda y : tau_1' . sigma(e') = sigma(lambda y : tau_1' . e') in cal(R)_(tau_1' arrow.r tau_2')$. $square$
 
 *Corollary (Strong Normalization).* Every well-typed term is SN.
 
@@ -375,9 +375,9 @@ Once $"fix"$ is added, $lambda^arrow.r + "fix"$ is Turing complete; SN fails; Cu
 For Church-style $lambda^arrow.r$, type checking is straightforward — every binder is annotated, so a single pass reading T-VAR, T-ABS, T-APP suffices, $O(n)$ in the term size.
 
 For Curry-style $lambda^arrow.r$ (no annotations), type inference is performed by *constraint generation + unification*:
-+ Assign a star.op metavariable $alpha_x$ to each variable.
++ Assign a fresh metavariable $alpha_x$ to each variable.
 + For each abstraction $lambda x . e$, introduce a fresh $alpha$ for $x$ and recurse, producing a body type $beta$; emit nothing; the term has type $alpha arrow.r beta$.
-+ For each application $e_1 space e_2$ producing types $tau_1, tau_2$, emit constraint $tau_1 = tau_2 arrow.r gamma$ with $gamma$ star.op.
++ For each application $e_1 space e_2$ producing types $tau_1, tau_2$, emit constraint $tau_1 = tau_2 arrow.r gamma$ with $gamma$ fresh.
 + Solve all constraints by Robinson unification.
 
 The result is a *principal type* — most-general type from which all valid types are substitution instances (Hindley 1969). Type inference for $lambda^arrow.r$ is linear in the term after near-linear unification (Damas–Milner 1982; see _Type Systems_ for the algorithm).
@@ -478,7 +478,7 @@ $lambda^arrow.r$ has a beautiful categorical model: it is the *internal language
 
 A *Cartesian closed category* $cal(C)$ has:
 - A terminal object $1$ (interpreting $"Unit"$).
-- Binary products $A times B$ with projections $pi_1, pi_2$ and pairing $angle.l f, g angle.r$ (interpreting $tau_1 times tau_2$).
+- Binary products $A times B$ with projections $pi_1, pi_2$ and pairing $chevron.l f, g chevron.r$ (interpreting $tau_1 times tau_2$).
 - Exponentials $B^A$ with an evaluation morphism $"ev" : B^A times A arrow.r B$ and currying $Lambda : "Hom"(C times A, B) arrow.r "Hom"(C, B^A)$ (interpreting $tau_1 arrow.r tau_2$).
 
 The interpretation $[| - |]$ sends:
@@ -486,7 +486,7 @@ The interpretation $[| - |]$ sends:
 - Contexts to objects: $[| x_1 : tau_1, ..., x_n : tau_n |] = [| tau_1 |] times ... times [| tau_n |]$.
 - Typing derivations $Gamma tack.r e : tau$ to morphisms $[| Gamma |] arrow.r [| tau |]$:
   + T-VAR ($x_i$): $pi_i : [| Gamma |] arrow.r [| tau_i |]$.
-  + T-APP: $"ev" circle.small angle.l [| e_1 |], [| e_2 |] angle.r$.
+  + T-APP: $"ev" circle.small chevron.l [| e_1 |], [| e_2 |] chevron.r$.
   + T-ABS: $Lambda([| e |])$.
 
 *Soundness.* $beta eta$-conversion is sound: if $e_1 =_(beta eta) e_2$ then $[| e_1 |] = [| e_2 |]$.
@@ -505,7 +505,7 @@ $ "Terms" arrow.r^"eval" "Semantic values" arrow.r^"reify" "Normal forms" $
 For $lambda^arrow.r$:
 - *Semantic values*: $V_iota = "neutral terms of type" iota$, $V_(tau_1 arrow.r tau_2) = V_(tau_1) arrow.r V_(tau_2)$ (host-language functions).
 - *Eval*: standard environment-passing interpretation.
-- *Reify*: for arrow type, generate a star.op variable $x$ of type $tau_1$, apply the semantic function to $x$ (viewed as a neutral), reify the result, wrap in $lambda x : tau_1$. For base type, just *reflect* the neutral.
+- *Reify*: for arrow type, generate a fresh variable $x$ of type $tau_1$, apply the semantic function to $x$ (viewed as a neutral), reify the result, wrap in $lambda x : tau_1$. For base type, just *reflect* the neutral.
 - *Reflect*: $arrow.t_iota n = n$; $arrow.t_(tau_1 arrow.r tau_2) n = lambda v . arrow.t_(tau_2) (n space (arrow.r_(tau_1) v))$.
 
 NbE is total for $lambda^arrow.r$ (because the source is SN), is one-pass, and produces *fully* $eta$-long normal forms. It is the standard implementation strategy for dependent type checkers (Coq's `vm_compute`, Agda, Lean 4).
@@ -746,7 +746,7 @@ This perspective unifies the syntactic and semantic accounts and prepares the gr
 == Computational Adequacy
 
 A model $cal(M)$ of $lambda^arrow.r$ is *computationally adequate* if:
-- $emptyset tack.r e : "Bool"$ and $bracket.l.double e bracket.r.double = "true"$ in $cal(M)$ => $e arrow.r^* "true"$ (syntactically).
+- $emptyset tack.r e : "Bool"$ and $bracket.l.stroked e bracket.r.stroked = "true"$ in $cal(M)$ => $e arrow.r^* "true"$ (syntactically).
 
 The set-theoretic model is adequate for $lambda^arrow.r$.
 For $lambda^arrow.r + "fix"$, adequacy requires the *Scott model* (cpos and continuous functions, with $bot$ for divergence): Plotkin (1977) proved the seminal adequacy theorem for PCF.

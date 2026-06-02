@@ -202,7 +202,7 @@ The technique encodes a two-counter machine using two variables with different r
 
 A *rectangular hybrid automaton* (RHA) restricts further: each variable evolves in an interval $dot(x) in [a_l^x, b_l^x]$ depending only on $l$ (no coupling), and guards/invariants are rectangular (each constraint involves a single variable).
 
-*Definition (Initialized RHA).* An RHA is *initialized* if every jump that changes the flow interval of a variable $x$ also resets $x$ to a star.op value (i.e. $x$'s history is forgotten).
+*Definition (Initialized RHA).* An RHA is *initialized* if every jump that changes the flow interval of a variable $x$ also resets $x$ to a fresh value (i.e. $x$'s history is forgotten).
 
 *Theorem (Henzinger--Kopke--Puri--Varaiya 1998).* Reachability for *initialized* rectangular hybrid automata is *decidable* (PSPACE-complete) by reduction to a multi-rate region automaton.
 
@@ -301,7 +301,7 @@ $ phi ::= p | not phi | phi and phi | exists phi_1 U_("≺" c) phi_2 | forall ph
 
 Read $exists phi_1 U_(lt.eq 5) phi_2$ as there is a run along which $phi_1$ holds until $phi_2$ holds, within $5$ time units.
 
-*Theorem (Alur--Courcoubetis--Dill 1993).* TCTL model checking for timed automata is *PSPACE-complete*. The algorithm augments the automaton with a star.op observer clock for each subformula and reduces to repeated reachability on a region/zone graph.
+*Theorem (Alur--Courcoubetis--Dill 1993).* TCTL model checking for timed automata is *PSPACE-complete*. The algorithm augments the automaton with a fresh observer clock for each subformula and reduces to repeated reachability on a region/zone graph.
 
 == Beyond Reachability: Parametric and Weighted Extensions
 

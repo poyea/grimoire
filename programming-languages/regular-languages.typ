@@ -78,7 +78,7 @@ The size of the resulting NFA is linear in $|r|$ — exactly $2 |r|$ states in t
 
 === NFA to Regex: State Elimination
 
-*Proof (NFA $arrow.r.long$ regex).* Add a star.op start $s$ and accept $f$ arrow.r the NFA, with $epsilon$-transitions $s arrow.r q_0$ and $q arrow.r f$ for $q in F$. Now systematically *eliminate* internal states one at a time: when removing state $q$, for every pair $(p, r)$ with $p eq."not" q eq."not" r$ and transitions $p arrow.r^(alpha) q$, $q arrow.r^(beta) q$, $q arrow.r^(gamma) r$, $p arrow.r^(delta) r$, add a transition $p arrow.r^(delta + alpha dot beta^* dot gamma) r$. After all internal states are eliminated, a single transition $s arrow.r^r f$ remains, and $L(N) = L(r)$. $square$
+*Proof (NFA $arrow.r.long$ regex).* Add a fresh start $s$ and accept $f$ to the NFA, with $epsilon$-transitions $s arrow.r q_0$ and $q arrow.r f$ for $q in F$. Now systematically *eliminate* internal states one at a time: when removing state $q$, for every pair $(p, r)$ with $p eq."not" q eq."not" r$ and transitions $p arrow.r^(alpha) q$, $q arrow.r^(beta) q$, $q arrow.r^(gamma) r$, $p arrow.r^(delta) r$, add a transition $p arrow.r^(delta + alpha dot beta^* dot gamma) r$. After all internal states are eliminated, a single transition $s arrow.r^r f$ remains, and $L(N) = L(r)$. $square$
 
 An alternative — *Brzozowski–McCluskey* via linear systems — solves $X_q = sum_(a, q') a dot X_(q') + [q in F]$ over the regex semiring using Arden's lemma ($X = A X + B$ has least solution $X = A^* B$ when $epsilon in."not" L(A)$).
 
@@ -112,9 +112,9 @@ $("iii") => ("i")$. Let $tilde$ be such a relation with classes $[x]_tilde$ and 
 
 The minimal DFA can be computed from any DFA $M$ by collapsing *Nerode-equivalent* states $p tilde q <==> forall w. hat(delta)(p, w) in F <==> hat(delta)(q, w) in F$. Several algorithms compute $tilde$:
 
-- *Moore (1956).* Partition refinement starting from ${ F, Q without F }$; at each step split a class $C$ if some transition under symbol $a$ sends part of $C$ into one current cal(C) and part into another. Time: $O(n^2 |Sigma|)$.
+- *Moore (1956).* Partition refinement starting from ${ F, Q without F }$; at each step split a class $C$ if some transition under symbol $a$ sends part of $C$ into one current class and part into another. Time: $O(n^2 |Sigma|)$.
 
-- *Hopcroft (1971).* The asymptotically optimal $O(n log n |Sigma|)$ algorithm. The key idea is the *smaller-half trick*: maintain a worklist $W$ of (cal(C), symbol) splitters; when splitting cal(C) $X$ into $X_1, X_2$, add only the *smaller* of the two to $W$ for further processing. Each state participates in at most $O(log n)$ splits because each time it is in a splitter, the cal(C) containing it at least halves.
+- *Hopcroft (1971).* The asymptotically optimal $O(n log n |Sigma|)$ algorithm. The key idea is the *smaller-half trick*: maintain a worklist $W$ of (class, symbol) splitters; when splitting class $X$ into $X_1, X_2$, add only the *smaller* of the two to $W$ for further processing. Each state participates in at most $O(log n)$ splits because each time it is in a splitter, the class containing it at least halves.
 
 *Theorem (Hopcroft correctness and complexity).* Hopcroft's algorithm computes the coarsest stable partition refining the initial partition ${ F, Q without F }$, in time $O(n log n dot |Sigma|)$.
 
@@ -141,7 +141,7 @@ where $nu(r) = epsilon$ if $epsilon in L(r)$, $emptyset$ otherwise.
 
 *Theorem (Brzozowski 1964).* For any regex $r$, the set ${ partial_w r | w in Sigma^* }$ modulo the ACI equations of $+$ (associativity, commutativity, idempotence) is *finite*. The states are the derivatives, transitions are $r arrow.r^a partial_a r$, accept <==> $epsilon in L(r)$. The resulting DFA recognises $L(r)$ and, after minimisation, *is* the minimal DFA.
 
-*Proof sketch.* By structural induction on $r$, every iterated derivative is a finite ACI-sum of terms drawn from a finite syntactic universe determined by $r$ — the *diff-derivative states* of Antimirov give a sharper bound of at most $1 + ||r||$ states where $||r||$ counts symbol occurrences. Bounded by $2^(1 + ||r||)$ in the Brzozowski formulation. $square$
+*Proof sketch.* By structural induction on $r$, every iterated derivative is a finite ACI-sum of terms drawn from a finite syntactic universe determined by $r$ — the *partial derivative states* of Antimirov give a sharper bound of at most $1 + ||r||$ states where $||r||$ counts symbol occurrences. Bounded by $2^(1 + ||r||)$ in the Brzozowski formulation. $square$
 
 === Coalgebraic View
 
@@ -149,7 +149,7 @@ Rutten (1998, 2003) observed that derivatives exhibit $cal(P)(Sigma^*)$ as the c
 
 $ F X = 2 times X^Sigma $
 
-where $2 = { 0, 1 }$. A coalgebra is a pair $(X, angle.l o, t angle.r)$ with $o : X arrow.r 2$ (output) and $t : X arrow.r X^Sigma$ (next-state). The map $L |-> angle.l [epsilon in L], a |-> partial_a L angle.r$ makes $cal(P)(Sigma^*)$ into such a coalgebra, and it is *final*: every coalgebra admits a unique homomorphism into it. DFAs are exactly finite-state $F$-coalgebras with deterministic transition, and *bisimilarity* of states coincides with Nerode equivalence — the categorical reason minimisation works. This perspective unifies regular and infinite-trace languages (where one replaces $cal(P)$ with finitary measures or weights).
+where $2 = { 0, 1 }$. A coalgebra is a pair $(X, chevron.l o, t chevron.r)$ with $o : X arrow.r 2$ (output) and $t : X arrow.r X^Sigma$ (next-state). The map $L |-> chevron.l [epsilon in L], a |-> partial_a L chevron.r$ makes $cal(P)(Sigma^*)$ into such a coalgebra, and it is *final*: every coalgebra admits a unique homomorphism into it. DFAs are exactly finite-state $F$-coalgebras with deterministic transition, and *bisimilarity* of states coincides with Nerode equivalence — the categorical reason minimisation works. This perspective unifies regular and infinite-trace languages (where one replaces $cal(P)$ with finitary measures or weights).
 
 == Pumping Lemma and Its Limits
 
@@ -163,13 +163,13 @@ The pumping lemma is *necessary* but *not sufficient* for regularity. *Jaffe's e
 
 The *state complexity* of $L$ is the size of its minimal DFA. Lower bounds via communication complexity (Hromkovič, Karchmer–Wigderson) exploit the *fooling set* technique: a set $S subset.eq Sigma^* times Sigma^*$ is a fooling set for $L$ if (i) $x y in L$ for all $(x, y) in S$ and (ii) for all distinct $(x_1, y_1), (x_2, y_2) in S$, either $x_1 y_2 in."not" L$ or $x_2 y_1 in."not" L$. Then the minimal DFA needs at least $|S|$ states. This is the standard tool for proving exponential separations between NFAs and DFAs.
 
-*Sakoda–Sipser problem (1978).* Is the conversion from *two-way nondeterministic* finite automata (2NFA) arrow.r *two-way deterministic* (2DFA) polynomial or exponential? Equivalently: is $"NL" = "L"$ in the small? This is one of the longest-standing open problems in automata theory; diff results (Geffert, Hromkovič, Schnitger) show super-polynomial blow-up for restricted machine models, but the general question remains open.
+*Sakoda–Sipser problem (1978).* Is the conversion from *two-way nondeterministic* finite automata (2NFA) to *two-way deterministic* (2DFA) polynomial or exponential? Equivalently: is $"NL" = "L"$ in the small? This is one of the longest-standing open problems in automata theory; partial results (Geffert, Hromkovič, Schnitger) show super-polynomial blow-up for restricted machine models, but the general question remains open.
 
 == Eilenberg's Variety Theorem
 
-A cal(C) $cal(V)$ of regular languages closed under Boolean operations, quotients $a^(-1) L = { w | a w in L }$ and $L a^(-1)$, and inverse homomorphisms is a *variety of languages*. Dually, a class of finite monoids closed under submonoids, quotients, and finite direct products is a *pseudovariety of monoids*. Eilenberg (1974, 1976) proved:
+A class $cal(V)$ of regular languages closed under Boolean operations, quotients $a^(-1) L = { w | a w in L }$ and $L a^(-1)$, and inverse homomorphisms is a *variety of languages*. Dually, a class of finite monoids closed under submonoids, quotients, and finite direct products is a *pseudovariety of monoids*. Eilenberg (1974, 1976) proved:
 
-*Theorem (Eilenberg's Variety Theorem).* The correspondence sending a pseudovariety $bold(V)$ arrow.r the cal(C) $cal(V)(bold(V))$ of languages whose syntactic monoid lies in $bold(V)$ is a bijection between pseudovarieties of monoids and varieties of languages.
+*Theorem (Eilenberg's Variety Theorem).* The correspondence sending a pseudovariety $bold(V)$ arrow.r the class $cal(V)(bold(V))$ of languages whose syntactic monoid lies in $bold(V)$ is a bijection between pseudovarieties of monoids and varieties of languages.
 
 This is the algebraic backbone of *decidable classification* of regular languages: deciding whether a regular $L$ belongs to $cal(V)(bold(V))$ reduces to deciding whether its (computable) syntactic monoid lies in $bold(V)$ — a *finite* algebraic question.
 

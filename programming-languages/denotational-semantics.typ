@@ -6,9 +6,9 @@ Denotational semantics assigns to each program a *mathematical object* -- a func
 
 == The Compositionality Principle
 
-A semantics $bracket.l.double dot bracket.r.double$ is *compositional* if, for every syntactic constructor $C$ of arity $n$, there is a mathematical operation $hat(C)$ such that
+A semantics $bracket.l.stroked dot bracket.r.stroked$ is *compositional* if, for every syntactic constructor $C$ of arity $n$, there is a mathematical operation $hat(C)$ such that
 
-$ bracket.l.double C(e_1, dots, e_n) bracket.r.double = hat(C)(bracket.l.double e_1 bracket.r.double, dots, bracket.l.double e_n bracket.r.double). $
+$ bracket.l.stroked C(e_1, dots, e_n) bracket.r.stroked = hat(C)(bracket.l.stroked e_1 bracket.r.stroked, dots, bracket.l.stroked e_n bracket.r.stroked). $
 
 This is non-trivial. The meaning of $"if" b "then" c_1 "else" c_2$ must be determined by the meanings of $b$, $c_1$, $c_2$ alone -- not by their syntax. Compositionality is what allows local reasoning: a subterm may be replaced by anything with the same denotation without disturbing the meaning of the whole.
 
@@ -60,58 +60,58 @@ The fixed point operator $"fix" : [D arrow.r D] arrow.r D$ is itself continuous 
 
 We are ready to give meaning to IMP. Fix $"State" = "Var" arrow.r ZZ$ and use the lifted CPO $"State"_bot = "State" union {bot}$ for partial state transformers.
 
-*Arithmetic.* $bracket.l.double a bracket.r.double : "State" arrow.r ZZ$, defined inductively:
+*Arithmetic.* $bracket.l.stroked a bracket.r.stroked : "State" arrow.r ZZ$, defined inductively:
 
-$ bracket.l.double n bracket.r.double sigma = n $
-$ bracket.l.double x bracket.r.double sigma = sigma(x) $
-$ bracket.l.double a_1 + a_2 bracket.r.double sigma = bracket.l.double a_1 bracket.r.double sigma + bracket.l.double a_2 bracket.r.double sigma $
+$ bracket.l.stroked n bracket.r.stroked sigma = n $
+$ bracket.l.stroked x bracket.r.stroked sigma = sigma(x) $
+$ bracket.l.stroked a_1 + a_2 bracket.r.stroked sigma = bracket.l.stroked a_1 bracket.r.stroked sigma + bracket.l.stroked a_2 bracket.r.stroked sigma $
 
 Arithmetic is total; no $bot$ is needed.
 
-*Booleans.* $bracket.l.double b bracket.r.double : "State" arrow.r {"tt", "ff"}$, analogous.
+*Booleans.* $bracket.l.stroked b bracket.r.stroked : "State" arrow.r {"tt", "ff"}$, analogous.
 
-*Commands.* $bracket.l.double c bracket.r.double : "State" arrow.r "State"_bot$, written as a Scott-continuous function.
+*Commands.* $bracket.l.stroked c bracket.r.stroked : "State" arrow.r "State"_bot$, written as a Scott-continuous function.
 
-$ bracket.l.double "skip" bracket.r.double sigma = sigma $
-$ bracket.l.double x := a bracket.r.double sigma = sigma[x |-> bracket.l.double a bracket.r.double sigma] $
-$ bracket.l.double c_1 ; c_2 bracket.r.double = bracket.l.double c_2 bracket.r.double^* circle.small bracket.l.double c_1 bracket.r.double $
-$ bracket.l.double "if" b "then" c_1 "else" c_2 bracket.r.double sigma = cases(bracket.l.double c_1 bracket.r.double sigma & "if" bracket.l.double b bracket.r.double sigma = "tt", bracket.l.double c_2 bracket.r.double sigma & "if" bracket.l.double b bracket.r.double sigma = "ff") $
+$ bracket.l.stroked "skip" bracket.r.stroked sigma = sigma $
+$ bracket.l.stroked x := a bracket.r.stroked sigma = sigma[x |-> bracket.l.stroked a bracket.r.stroked sigma] $
+$ bracket.l.stroked c_1 ; c_2 bracket.r.stroked = bracket.l.stroked c_2 bracket.r.stroked^* circle.small bracket.l.stroked c_1 bracket.r.stroked $
+$ bracket.l.stroked "if" b "then" c_1 "else" c_2 bracket.r.stroked sigma = cases(bracket.l.stroked c_1 bracket.r.stroked sigma & "if" bracket.l.stroked b bracket.r.stroked sigma = "tt", bracket.l.stroked c_2 bracket.r.stroked sigma & "if" bracket.l.stroked b bracket.r.stroked sigma = "ff") $
 
 Here $f^*$ is the *strict extension* of $f$ to $"State"_bot$: $f^*(bot) = bot$, $f^*(sigma) = f(sigma)$. The strict extension is what makes sequencing propagate divergence.
 
 *While.* The meaning of $W = "while" b "do" c$ satisfies the unfolding equation
 
-$ bracket.l.double W bracket.r.double = bracket.l.double "if" b "then" (c ; W) "else" "skip" bracket.r.double. $
+$ bracket.l.stroked W bracket.r.stroked = bracket.l.stroked "if" b "then" (c ; W) "else" "skip" bracket.r.stroked. $
 
 Define the functional $Phi_(b,c) : ["State" arrow.r "State"_bot] arrow.r ["State" arrow.r "State"_bot]$ by
 
-$ Phi_(b,c) (f) (sigma) = cases(f^* (bracket.l.double c bracket.r.double sigma) & "if" bracket.l.double b bracket.r.double sigma = "tt", sigma & "if" bracket.l.double b bracket.r.double sigma = "ff"). $
+$ Phi_(b,c) (f) (sigma) = cases(f^* (bracket.l.stroked c bracket.r.stroked sigma) & "if" bracket.l.stroked b bracket.r.stroked sigma = "tt", sigma & "if" bracket.l.stroked b bracket.r.stroked sigma = "ff"). $
 
-$Phi_(b,c)$ is Scott-continuous, so by Kleene's theorem it has a least fixed point. Set $bracket.l.double W bracket.r.double = "fix"(Phi_(b,c))$. By construction $Phi_(b,c)^n (bot)$ is the partial function defined on states from which the loop terminates in at most $n$ iterations; the supremum captures *all* terminating runs and assigns $bot$ to non-terminating ones.
+$Phi_(b,c)$ is Scott-continuous, so by Kleene's theorem it has a least fixed point. Set $bracket.l.stroked W bracket.r.stroked = "fix"(Phi_(b,c))$. By construction $Phi_(b,c)^n (bot)$ is the partial function defined on states from which the loop terminates in at most $n$ iterations; the supremum captures *all* terminating runs and assigns $bot$ to non-terminating ones.
 
 This is the punchline: recursion as fixed point. Operationally, the loop unrolls; denotationally, it *is* the limit of its finite unrollings.
 
 == Adequacy and Full Abstraction
 
-We have two semantics: operational ($arrow.r^*$) and denotational ($bracket.l.double dot bracket.r.double$). They must agree.
+We have two semantics: operational ($arrow.r^*$) and denotational ($bracket.l.stroked dot bracket.r.stroked$). They must agree.
 
 *Theorem (Adequacy, IMP).* For every command $c$ and state $sigma$:
 
-(a) If $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$, then $bracket.l.double c bracket.r.double sigma = sigma'$.
+(a) If $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$, then $bracket.l.stroked c bracket.r.stroked sigma = sigma'$.
 
-(b) If $bracket.l.double c bracket.r.double sigma = sigma'$ (with $sigma' eq."not" bot$), then $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$.
+(b) If $bracket.l.stroked c bracket.r.stroked sigma = sigma'$ (with $sigma' eq."not" bot$), then $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$.
 
 *Proof sketch.* (a) by induction on the length of reduction (or on the big-step derivation, using the equivalence theorem). (b) is harder for the loop case: one shows by induction on $n$ that $Phi_(b,c)^n (bot)(sigma) = sigma'$ => the loop terminates with $sigma'$ in at most $n$ iterations, then takes the supremum. $square$
 
 Adequacy is a *soundness* result: the denotation does not invent answers the operational semantics disagrees with. But two operationally distinct programs may receive the same denotation only if they are contextually indistinguishable.
 
-*Definition (Full abstraction).* The denotational semantics is *fully abstract* if for all $c_1, c_2$: $bracket.l.double c_1 bracket.r.double = bracket.l.double c_2 bracket.r.double$ <==> $c_1 tilde.equiv_"ctx" c_2$. Equivalently, the model contains exactly the contextual equivalences -- no more, no less.
+*Definition (Full abstraction).* The denotational semantics is *fully abstract* if for all $c_1, c_2$: $bracket.l.stroked c_1 bracket.r.stroked = bracket.l.stroked c_2 bracket.r.stroked$ <==> $c_1 tilde.equiv_"ctx" c_2$. Equivalently, the model contains exactly the contextual equivalences -- no more, no less.
 
 Sound and complete with respect to contextual equivalence: this is the holy grail of denotational semantics, and it is *harder* than it sounds.
 
 == Recursive Domain Equations
 
-When the language has function types, the denotation $bracket.l.double tau_1 arrow.r tau_2 bracket.r.double$ is a function space, and we run into a size problem.
+When the language has function types, the denotation $bracket.l.stroked tau_1 arrow.r tau_2 bracket.r.stroked$ is a function space, and we run into a size problem.
 
 *Cantor's obstacle.* For the untyped $lambda$-calculus we want a domain $D$ with $D tilde.eq [D arrow.r D]$. In Set, $|[D arrow.r D]| > |D|$ whenever $|D| gt.eq 2$, so no such bijection exists. Scott's insight (1969) was to weaken bijection to *isomorphism in a category of domains with continuous maps*: the function space $[D arrow.r D]$ in that category is *smaller* than the Set-theoretic function space because it contains only continuous functions.
 
@@ -123,7 +123,7 @@ ordered componentwise. Then $D_infinity tilde.eq [D_infinity arrow.r D_infinity]
 
 This is *"the"* original solution. Smyth and Plotkin (1982) generalized the construction to arbitrary *locally continuous* functors on the category of CPOs and embedding-projection pairs ("the *category $bold("CPO")^"E"$*): every such functor has an *initial algebra* / *terminal coalgebra* that solves the corresponding domain equation. Functors built from sum, product, function space, and the lift monad are locally continuous, so every type expression of an ML-like language has a denotation.
 
-For *recursive types* $mu alpha. tau$ in a typed language, the same technology gives $bracket.l.double mu alpha. tau bracket.r.double$ as a fixed point of the locally continuous functor induced by $tau$.
+For *recursive types* $mu alpha. tau$ in a typed language, the same technology gives $bracket.l.stroked mu alpha. tau bracket.r.stroked$ as a fixed point of the locally continuous functor induced by $tau$.
 
 == PCF and Plotkin's Full Abstraction Problem
 
@@ -131,7 +131,7 @@ PCF (Programming Computable Functions; Plotkin 1977) is a typed $lambda$-calculu
 
 The natural Scott model interprets types as Scott domains and terms as continuous functions; the operational semantics is leftmost-outermost reduction.
 
-*Theorem (Adequacy, Plotkin 1977).* For closed $e : "nat"$, $bracket.l.double e bracket.r.double = n$ <==> $e$ reduces to the numeral $n$.
+*Theorem (Adequacy, Plotkin 1977).* For closed $e : "nat"$, $bracket.l.stroked e bracket.r.stroked = n$ <==> $e$ reduces to the numeral $n$.
 
 Adequacy holds; *full abstraction* fails.
 
@@ -165,13 +165,13 @@ There are three classical powerdomains (Plotkin 1976; Smyth 1978):
 - *Smyth powerdomain* $cal(P)_S (D)$ (also *upper*): upward-closed Scott-compact subsets, ordered by reverse inclusion. Captures *must*-nondeterminism / total correctness in the presence of divergence.
 - *Plotkin powerdomain* $cal(P)_P (D)$ (also *convex*): Scott-compact convex subsets, ordered by the *Egli-Milner* order ($A subset.eq B$ <==> $A subset.eq arrow.b B$ and $B subset.eq arrow.t A$). Captures both may and must.
 
-Each powerdomain is a *monad* on CPO; the algebraic operation is binary nondeterministic choice $plus.circle$, and the equational theory differs (semilattice; semilattice + idempotence + commutativity vs. extra absorption laws involving $bot$).
+Each powerdomain is a *monad* on CPO; the algebraic operation is binary nondeterministic choice $plus.o$, and the equational theory differs (semilattice; semilattice + idempotence + commutativity vs. extra absorption laws involving $bot$).
 
 The Plotkin powerdomain is the "right" one for *bisimulation*; Hoare matches trace semantics; Smyth matches failure semantics in the sense of CSP. The choice of powerdomain reflects the choice of observation.
 
 == Continuations and the C-Translation
 
-*Continuation-passing style* (CPS) converts a direct-style term to one that takes its current continuation as an explicit argument. Denotationally, the *continuation domain* is $K = "Ans"$ for some answer domain, and $bracket.l.double e bracket.r.double : [bracket.l.double tau bracket.r.double arrow.r K] arrow.r K$. Plotkin's *call-by-name* and *call-by-value* CPS translations (1975) are the standard targets and have precise correspondences with the *double-negation translation* in logic (Curry-Howard, $not "not" P = (P arrow.r bot) arrow.r bot$).
+*Continuation-passing style* (CPS) converts a direct-style term to one that takes its current continuation as an explicit argument. Denotationally, the *continuation domain* is $K = "Ans"$ for some answer domain, and $bracket.l.stroked e bracket.r.stroked : [bracket.l.stroked tau bracket.r.stroked arrow.r K] arrow.r K$. Plotkin's *call-by-name* and *call-by-value* CPS translations (1975) are the standard targets and have precise correspondences with the *double-negation translation* in logic (Curry-Howard, $not "not" P = (P arrow.r bot) arrow.r bot$).
 
 The denotational reading: the CBV model factors through a *continuation monad* $T A = (A arrow.r R) arrow.r R$. This is the cleanest example of monadic semantics for an effect, anticipating the categorical chapter.
 
@@ -191,7 +191,7 @@ Linear logic (Girard 1987) was discovered by analyzing the structure of stable f
 
 - The *linear* function space $X multimap Y$ has cliques as token pairs respecting coherence.
 - The *exponential* $!X$ packs *finite* cliques of $X$ as new tokens; intuitionistic implication $X arrow.r Y$ decomposes as $!X multimap Y$.
-- Multiplicative connectives ($times.circle$, $⅋$) and additives ($plus.circle$, $&$) all have natural interpretations.
+- Multiplicative connectives ($times.o$, $⅋$) and additives ($plus.o$, $&$) all have natural interpretations.
 
 Coherence-space semantics gave the semantic motivation for the *exponential modality* and provided the first precise account of *resource sensitivity* in $lambda$-calculus. Linear-logic-inspired denotational models -- relational, finiteness spaces, probabilistic coherence spaces (Danos-Ehrhard 2011) -- are now standard tools.
 
@@ -199,7 +199,7 @@ Coherence-space semantics gave the semantic motivation for the *exponential moda
 
 *Action semantics* (Mosses, Watt 1990s) was an attempt to make denotational semantics readable: meanings are expressed as compositions of *actions* drawn from a fixed vocabulary (control, data, storage, communication). The framework is modular -- adding a new effect adds a new action sort -- but it never achieved widespread adoption.
 
-The deeper development was *monadic semantics* (Moggi 1989, 1991), in which every computational effect (state, exceptions, nondeterminism, continuations, I/O) is captured by a *strong monad* $T$ on a base category. The denotation of a term of type $tau$ in a CBV language becomes a morphism into $T bracket.l.double tau bracket.r.double$; sequencing is monad composition. This will be developed in detail in _Categorical Semantics_.
+The deeper development was *monadic semantics* (Moggi 1989, 1991), in which every computational effect (state, exceptions, nondeterminism, continuations, I/O) is captured by a *strong monad* $T$ on a base category. The denotation of a term of type $tau$ in a CBV language becomes a morphism into $T bracket.l.stroked tau bracket.r.stroked$; sequencing is monad composition. This will be developed in detail in _Categorical Semantics_.
 
 == Adequacy vs. Full Abstraction: The Trade-Off
 
@@ -219,7 +219,7 @@ The adequacy-full-abstraction pair is the bridge between operational and denotat
 
 Symbolically:
 
-$ bracket.l.double e_1 bracket.r.double = bracket.l.double e_2 bracket.r.double quad arrow.l.r.double.long quad e_1 tilde.equiv_"ctx" e_2 $
+$ bracket.l.stroked e_1 bracket.r.stroked = bracket.l.stroked e_2 bracket.r.stroked quad arrow.l.r.double.long quad e_1 tilde.equiv_"ctx" e_2 $
 
 with the forward direction being soundness (always sought) and the backward direction being completeness (the harder property).
 

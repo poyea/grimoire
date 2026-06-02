@@ -8,7 +8,7 @@ The previous chapter studied algebraic theories — CCS, CSP, the $pi$-calculus 
 
 == Interleaving Semantics
 
-The simplest model of concurrency takes a multi-threaded program to be a set of sequential threads, and a concurrent execution to be an arbitrary *interleaving* of their atomic steps. A configuration is a tuple $angle.l T_1, dots, T_n; sigma angle.r$ where $T_i$ are the per-thread control states and $sigma$ is a shared store. The transition rule:
+The simplest model of concurrency takes a multi-threaded program to be a set of sequential threads, and a concurrent execution to be an arbitrary *interleaving* of their atomic steps. A configuration is a tuple $chevron.l T_1, dots, T_n; sigma chevron.r$ where $T_i$ are the per-thread control states and $sigma$ is a shared store. The transition rule:
 
 ```text
             T_i  ;  sigma   -->_seq   T_i'  ;  sigma'
@@ -109,7 +109,7 @@ The *actor model* (Hewitt 1973; Agha 1986) discards shared state entirely. The w
 
 === Operational Semantics
 
-A *configuration* is a multiset of actors and undelivered messages. Each actor is $angle.l a, b, q angle.r$ with address $a$, behaviour $b$, and mailbox $q$. A message is $a triangle.l v$ ("$v$ for $a$"). The transition rules:
+A *configuration* is a multiset of actors and undelivered messages. Each actor is $chevron.l a, b, q chevron.r$ with address $a$, behaviour $b$, and mailbox $q$. A message is $a triangle.l v$ ("$v$ for $a$"). The transition rules:
 
 ```text
         a triangle.l v   on the wire
@@ -158,7 +158,7 @@ loop(N) ->
     end.
 ```
 
-The `receive` construct is selective: an Erlang process inspects its mailbox for a message matching any of the patterns, and the first matching message is consumed (in mailbox order among matching messages). Selective receive substantially complicates the semantics (a star.op message may not be the head of the queue when consumed) but is essential for the protocol patterns common in OTP applications.
+The `receive` construct is selective: an Erlang process inspects its mailbox for a message matching any of the patterns, and the first matching message is consumed (in mailbox order among matching messages). Selective receive substantially complicates the semantics (a matching message may not be at the head of the queue when consumed) but is essential for the protocol patterns common in OTP applications.
 
 === Akka, Pony, Orleans
 
@@ -291,7 +291,7 @@ A subtlety: Hoare's original semantics has `signal` *immediately* transfer the l
 
 A separate concurrency tradition treats time as the primitive and computation as the propagation of values through a network of operators. *Synchronous dataflow* languages — Lustre (Halbwachs–Caspi–Raymond–Pilaud 1991), Esterel (Berry–Gonthier 1992), Signal — model a system as a network of operators that fire in lock-step with a global clock. Each tick, every operator consumes one value on each input and produces one on each output. The semantics is deterministic and verifiable; Lustre/SCADE is certified for use in avionics (Airbus fly-by-wire).
 
-*Functional Reactive Programming* (Elliott–Hudak 1997) treats time-varying values (*signals*) and discrete events as first-cal(C). A signal $s : "Time" arrow.r alpha$ models a continuously varying quantity; an event $e : "Time" arrow.r "Maybe" alpha$ models a sporadic occurrence. Combinators such as `lift`, `integral`, and `accumulate` build complex behaviours from primitive signals. The pure-functional version of FRP suffers from the *space leak* problem (retaining histories that are never used); push–pull FRP (Elliott 2009) and the more recent *arrowised FRP* (Yampa) ameliorate this.
+*Functional Reactive Programming* (Elliott–Hudak 1997) treats time-varying values (*signals*) and discrete events as first-class. A signal $s : "Time" arrow.r alpha$ models a continuously varying quantity; an event $e : "Time" arrow.r "Maybe" alpha$ models a sporadic occurrence. Combinators such as `lift`, `integral`, and `accumulate` build complex behaviours from primitive signals. The pure-functional version of FRP suffers from the *space leak* problem (retaining histories that are never used); push–pull FRP (Elliott 2009) and the more recent *arrowised FRP* (Yampa) ameliorate this.
 
 *Reactive Extensions* (Rx; Meijer 2010 and successors) carry the dataflow idea into mainstream languages as libraries: an `Observable<T>` is a (push-based) sequence of values with subscription, transformation, and composition operators. Backpressure protocols (Reactive Streams JEP) negotiate flow rates between producer and consumer.
 
