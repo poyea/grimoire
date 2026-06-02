@@ -55,10 +55,11 @@ for i in range(num_merges):
 ```
 
 ```python
-# Production: tiktoken (OpenAI) — used by LLaMA 3, GPT-4
+# Production: tiktoken (OpenAI) — used by GPT-4 and (a related variant) by LLaMA 3
 import tiktoken
 
-enc = tiktoken.get_encoding("cl100k_base")   # GPT-4 / LLaMA 3 tokenizer
+enc = tiktoken.get_encoding("cl100k_base")   # GPT-3.5 / GPT-4 (100 256 tokens)
+# LLaMA 3 ships its own tiktoken merges with a 128 256-token vocabulary.
 ids = enc.encode("The transformer learns representations.")
 print(ids)          # list of ints
 print(enc.decode(ids))  # round-trip
@@ -792,7 +793,7 @@ Standard initialization (e.g., Kaiming normal) causes feature scale to change wi
 + *Input weights:* $W_"in" tilde cal(N)(0, 1)$ (no $1/d$ factor) — input embeddings and first-layer weights.
 + *Hidden weights:* $W_"hidden" tilde cal(N)(0, 1/d)$ and *learning rate scaled by $1/d$*: $eta_"hidden" = eta_"base" / d$.
 + *Output weights:* $W_"out" tilde cal(N)(0, 1/d)$ with learning rate $eta_"out" = eta_"base"$.
-+ *Attention logit scale:* use $1/d_k$ instead of $1/sqrt(d_k)$ (absorb into output projection scaling).
++ *Attention logit scale:* divide $Q K^top$ by $d_k$ instead of $sqrt(d_k)$, keeping logit magnitudes $O(1)$ as $d_k$ grows.
 
 *Why it matters:* with µP, you can tune hyperparameters on a small proxy model (e.g., 40M params) and transfer them to the large model (7B, 70B) without re-tuning. Most production open-weights models (LLaMA, Mistral) do not use µP publicly; phi-2 and phi-3 explicitly use it, as does Cerebras-GPT.
 
