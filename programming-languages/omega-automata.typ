@@ -8,7 +8,7 @@ Finite automata read finite words and accept by halting in a designated state. R
 
 Fix a finite alphabet $Sigma$. An *infinite word* (or $omega$-word) is a function $alpha : NN arrow.r Sigma$, written $alpha = alpha(0) alpha(1) alpha(2) dots$. The set of all infinite words is $Sigma^omega$. A *language of infinite words* is a subset $L subset.eq Sigma^omega$.
 
-The class of $omega$-*regular languages* is the smallest class containing the singletons ${alpha}$ for $alpha = u v^omega$ with $u, v in Sigma^*$ and $v != epsilon$, and closed under finite union, finite intersection, and the operator $U arrow.r U^omega = { u_0 u_1 u_2 dots | u_i in U \\ {epsilon} }$. Equivalently (Büchi 1962), $L$ is $omega$-regular iff it is a finite cup of sets of the form $U V^omega$ where $U, V subset.eq Sigma^*$ are regular and $epsilon in.not V$.
+The class of $omega$-*regular languages* is the smallest class containing the singletons ${alpha}$ for $alpha = u v^omega$ with $u, v in Sigma^*$ and $v != epsilon$, and closed under finite union, finite intersection, and the operator $U |-> U^omega = { u_0 u_1 u_2 dots | u_i in U \\ {epsilon} }$. Equivalently (Büchi 1962), $L$ is $omega$-regular iff it is a finite union of sets of the form $U V^omega$ where $U, V subset.eq Sigma^*$ are regular and $epsilon in.not V$.
 
 The fundamental theorem of $omega$-regular languages (Büchi) is that this class coincides exactly with the languages definable in monadic second-order logic over $(omega, <)$, the so-called *S1S*. This is the infinite-word analogue of the classical Kleene--Myhill theorem and the launching point for all that follows.
 
@@ -36,7 +36,7 @@ i.e. some state in $F$ is visited infinitely often. The language $L(cal(A))$ is 
 
 === Deterministic Büchi is Strictly Weaker
 
-A *deterministic Büchi automaton* (DBA) requires $delta$ arrow.r be a (total) function $Q times Sigma arrow.r Q$. The class of DBA-recognisable languages is strictly contained in the $omega$-regular languages.
+A *deterministic Büchi automaton* (DBA) requires $delta$ to be a (total) function $Q times Sigma arrow.r Q$. The class of DBA-recognisable languages is strictly contained in the $omega$-regular languages.
 
 *Theorem (Landweber 1969).* The language $L = { alpha in {a,b}^omega | a "occurs only finitely often" }$ is $omega$-regular but not DBA-recognisable.
 
@@ -79,11 +79,11 @@ The dual min-parity condition (minimum priority infinitely often is even) is equ
 
 === The Acceptance Hierarchy
 
-The following table summarises relative expressiveness (with $=$ meaning "recognises the same cal(C) of languages", $subset.eq.not$ meaning "strictly weaker"):
+The following table summarises relative expressiveness (with $=$ meaning "recognises the same class of languages", $subset.neq$ meaning "strictly weaker"):
 
 ```text
                     Nondeterministic        Deterministic
-  Büchi             omega-regular           DBA-recognisable (subset.eq.not)
+  Büchi             omega-regular           DBA-recognisable (strict)
   Generalized Büchi omega-regular           = DBA in expressiveness
   Rabin             omega-regular           omega-regular
   Streett           omega-regular           omega-regular
@@ -93,7 +93,9 @@ The following table summarises relative expressiveness (with $=$ meaning "recogn
 
 So: in the *nondeterministic* setting, all of NBA, GBA, NRA, NSA, NMA, NPA recognise exactly the $omega$-regular languages. In the *deterministic* setting, DBA is strictly weaker (Landweber); DCO-Büchi (co-Büchi) is also strictly weaker but incomparable with DBA; deterministic Rabin, Streett, Muller, and parity are all expressively complete (full $omega$-regular). Crucially:
 
-$ "DBA" subset.eq."not" "DCO-Büchi subset.eq."not dots subset.eq."not" "DMuller" = "DRabin" = "DStreett" = "DParity". $
+$ "DBA", "DCO-Büchi" subset.neq "Bool"("DBA") subset.neq "DMuller" = "DRabin" = "DStreett" = "DParity". $
+
+(DBA and DCO-Büchi are *incomparable* — neither contains the other — but both are strictly weaker than their Boolean closure, which already attains the full deterministic $omega$-regular power of parity/Rabin/Streett/Muller.)
 
 == Closure Properties
 
@@ -126,7 +128,7 @@ The transition on input $a in Sigma$ from a Safra tree $T$ is:
 
   4. (Vertical removal) Delete every node whose label is empty.
 
-  5. (Mark) Mark every node whose label equals the cup of its children's
+  5. (Mark) Mark every node whose label equals the union of its children's
      labels; remove all descendants of marked nodes.
 ```
 
@@ -269,7 +271,7 @@ $omega$-regular languages occupy low levels of the *Borel hierarchy* on $Sigma^o
 
 - *open* <==> $L = W Sigma^omega$ for some regular $W subset.eq Sigma^*$;
 - $G_delta$ (= countable intersection of opens, i.e. *safety*) <==> $L = lim(W)$ for some regular prefix-closed $W$;
-- $F_sigma$ (= countable cup of closed, i.e. *guarantee*) <==> $L$ is reachability-like;
+- $F_sigma$ (= countable union of closed, i.e. *guarantee*) <==> $L$ is reachability-like;
 - *Boolean combination of $G_delta$* iff DBA-recognisable;
 - *Boolean combination of $G_delta$ and $F_sigma$* iff DCO-Büchi $inter$ DBA;
 - $G_(delta sigma) inter F_(sigma delta)$ <==> $omega$-regular.
@@ -373,7 +375,7 @@ Piterman (2006) shaves a factor and re-derives the construction targeting determ
 - priorities are assigned in $[1, 2n]$, with *even* priorities meaning accepting and *odd* meaning "live";
 - the priority of a tree is determined by the youngest dying node (odd) or the youngest marked-but-not-dying node (even).
 
-The state space remains $2^(O(n log n))$ but the resulting automaton plugs directly into parity-game solvers, saving the Rabin-arrow.r-parity conversion. Schewe (2009) and Schewe--Varghese (2014) provide further constant-factor improvements through *history trees* and *ordered Safra trees*.
+The state space remains $2^(O(n log n))$ but the resulting automaton plugs directly into parity-game solvers, saving the Rabin-to-parity conversion. Schewe (2009) and Schewe--Varghese (2014) provide further constant-factor improvements through *history trees* and *ordered Safra trees*.
 
 === Complementation via Ranking Functions
 
@@ -436,7 +438,7 @@ Each step is *worst-case tight* in the asymptotic sense, giving the famous *doub
 
 == Safra Construction Worked Through in Full
 
-We trace the Safra construction on a small but nontrivial NBA arrow.r make the abstract five-step procedure concrete.
+We trace the Safra construction on a small but nontrivial NBA to make the abstract five-step procedure concrete.
 
 *Running example.* Let $cal(A) = ({q_0, q_1, q_2}, {a, b}, q_0, delta, {q_1})$ where the transition relation is:
 
@@ -460,11 +462,11 @@ Step 3 (*horizontal merge*): Only one node; nothing to merge.
 
 Step 4 (*vertical removal*): Label ${q_0, q_1} != emptyset$; keep node.
 
-Step 5 (*mark*): Node 1 has no children, so its label trivially equals the cup of children's labels (empty union = $emptyset$? No: the condition is that its label equals the cup of children's labels; since it has no children, union is $emptyset$ and label is ${q_0, q_1} != emptyset$, so do *not* mark). Node 1 remains unmarked.
+Step 5 (*mark*): the marking rule requires a node's label to equal the union of its children's labels. Node 1 has no children, so that union is $emptyset$, while its label is ${q_0, q_1} != emptyset$ — so do *not* mark. Node 1 remains unmarked.
 
 Tree after $a$: single node, name 1, label ${q_0, q_1}$, mark 0.
 
-*Processing input $b$.* Step 1: ${q_0, q_1} inter {q_1} = {q_1} != emptyset$. Attach new child: name $2$, label ${q_1}$, mark 1 (starred / newly created; in the standard notation, new children are "born" with a mark that they have just been created -- some presentations call this a distinct "new" flag rather than the mark-and-then-remove mark of Step 5).
+*Processing input $b$.* Step 1: ${q_0, q_1} inter {q_1} = {q_1} != emptyset$. Attach new child: name $2$, label ${q_1}$, *unmarked* (mark 0). A new child carries only a "new"/created flag (the star), which is *distinct* from the Step-5 acceptance mark: a node is never born with the acceptance mark, and acquires it only later, when its own label comes to equal the union of its children's labels.
 
 Step 2: $delta({q_0, q_1}, b) = delta(q_0, b) union delta(q_1, b) = {q_0} union {q_2} = {q_0, q_2}$ for node 1; $delta({q_1}, b) = {q_2}$ for node 2. Labels become: node 1 $-> {q_0, q_2}$, node 2 $-> {q_2}$.
 
@@ -488,7 +490,7 @@ Step 5: label(1) = ${q_0}$; union of children labels = ${q_1}$; ${q_0} != {q_1}$
 
 Tree after second $a$: node 1 (label ${q_0}$) with child node 2 (label ${q_1}$).
 
-*Rabin pairs.* For $i = 1$: $E_1$ = states where name 1 is absent; $F_1$ = states where name 1 is marked. For $i = 2$: $E_2$ = states where name 2 is absent; $F_2$ = states where name 2 is marked. The pair $(E_2, F_2)$ fires when name 2 persists (appears in every sufficiently late tree) and is marked infinitely often. Name 2, born when $q_1$ entered the accepting set, corresponds to the accepting runs of the original NBA. In an ultimately-periodic run $alpha$ where $q_1$ is visited infinitely often, name 2 survives and is eventually marked in Step 5 whenever its label equals the cup of *its* children's labels (after Step 3 removes duplicates upward), signalling that the accepting branch has "converged". This is the essential argument. $square$
+*Rabin pairs.* For $i = 1$: $E_1$ = states where name 1 is absent; $F_1$ = states where name 1 is marked. For $i = 2$: $E_2$ = states where name 2 is absent; $F_2$ = states where name 2 is marked. The pair $(E_2, F_2)$ fires when name 2 persists (appears in every sufficiently late tree) and is marked infinitely often. Name 2, born when $q_1$ entered the accepting set, corresponds to the accepting runs of the original NBA. In an ultimately-periodic run $alpha$ where $q_1$ is visited infinitely often, name 2 survives and is eventually marked in Step 5 whenever its label equals the union of *its* children's labels (after Step 3 removes duplicates upward), signalling that the accepting branch has "converged". This is the essential argument. $square$
 
 === Piterman's Compactification
 
@@ -500,7 +502,7 @@ $ "pri"(T, T') = cases(2 dot min { i | "name" i "is marked in" T' }, "if any nod
 
 (using a suitably adjusted ordering). Even priorities correspond to *good* events (mark, witnessing acceptance); odd priorities correspond to *bad* events (death without mark). The *maximum priority seen infinitely often* is even iff the original run is accepting -- exactly the parity condition.
 
-The resulting DPA has $2^(O(n log n))$ states and $O(n)$ priorities, plugging directly into a parity-game solver without any Rabin-arrow.r-parity conversion.
+The resulting DPA has $2^(O(n log n))$ states and $O(n)$ priorities, plugging directly into a parity-game solver without any Rabin-to-parity conversion.
 
 === Schewe's History Trees
 
@@ -512,7 +514,7 @@ The correctness proof uses a *simulation argument*: every Safra tree is mapped t
 
 $ |"states"| lt.eq (n+1)^n dot n! approx 2^(n log n) $
 
-matching Safra's bound asymptotically but with a concrete formula that gives better constants for small $n$ (e.g., $n = 4$: Safra gives $2^{4 log 4} = 256$, history trees give $lt.eq 120$).
+matching Safra's bound asymptotically but with a concrete formula that gives better constants for small $n$ (e.g., $n = 4$: Safra gives $2^(4 log 4) = 256$, history trees give $lt.eq 120$).
 
 == GPVW Tableau on a Nontrivial Formula
 
@@ -553,7 +555,7 @@ We work with a compact formulation: rewrite $phi = nu X. ((p => (q or X_"next" (
             Next = {G(p => Fq)}       -- same as s0 effectively
 ```
 
-Transitions (on alphabet $2^{p, q}$):
+Transitions (on alphabet $2^({p, q})$):
 
 ```text
   s0 -{ neg p, neg q }-> s0     (no p, no q: obligation deferred)
@@ -582,13 +584,13 @@ Step 2. *Deterministic verification of a specific $C$.* For a fixed $C subset.eq
 
 Step 3. *Disjunction over finitely many $C$'s.* There are $2^n$ choices of $C$; the DMA takes the cup over all $C in "candidate sets"$, which is captured by a Muller acceptance family $cal(F)$ containing all subsets $S$ of the DMA's macro-state set corresponding to "the current macrostate witnesses $C$".
 
-The full correctness argument requires showing that the subset tracking is faithful on *every* path, not just on one run -- precisely the difficulty that motivates Safra's later refinement. The resulting DMA has states $2^n$ and Muller table of size $2^{2^n}$, accounting for McNaughton's triply-exponential state count before Safra. $square$
+The full correctness argument requires showing that the subset tracking is faithful on *every* path, not just on one run -- precisely the difficulty that motivates Safra's later refinement. The resulting DMA has states $2^n$ and Muller table of size $2^(2^n)$, accounting for McNaughton's triply-exponential state count before Safra. $square$
 
 == Wadge Hierarchy and Borel Structure
 
 The $omega$-regular languages live at the lowest finite levels of the *Borel hierarchy* $bold(Sigma)^0_n, bold(Pi)^0_n$ on the Cantor space $Sigma^omega$.
 
-*Topological basics.* Equip $Sigma^omega$ with the *product topology* of the discrete topology on $Sigma$. The basic open sets are *cylinders* $u Sigma^omega = { alpha | alpha "starts with" u }$ for $u in Sigma^*$. The topology is *zero-dimensional*, *compact*, and *metrizable* (with $d(alpha, beta) = 2^{-"lcp"(alpha, beta)}$).
+*Topological basics.* Equip $Sigma^omega$ with the *product topology* of the discrete topology on $Sigma$. The basic open sets are *cylinders* $u Sigma^omega = { alpha | alpha "starts with" u }$ for $u in Sigma^*$. The topology is *zero-dimensional*, *compact*, and *metrizable* (with $d(alpha, beta) = 2^(-"lcp"(alpha, beta))$).
 
 *Borel classes.*
 
@@ -602,12 +604,11 @@ and so on, closing at $bold(Delta)^1_1$ (Borel sets) by $omega$-unions and $omeg
 *Landweber's theorem revisited.* The classification of $omega$-regular languages by acceptance condition coincides with their Borel level:
 
 ```text
-  open (Sigma^0_1):     safety languages; recognised by DBAs with F = Q
-  Pi^0_2 (G_delta):     liveness (co-safety) languages; recognised by DCoBAs
-  Sigma^0_2 (F_sigma):  reachability languages; "F p"-type
-  Delta^0_3 = Pi^0_2 cap Sigma^0_2: Boolean combinations above; DRA(1)
-  ...
-  Borel (finite level): all omega-regular (Landweber 1969, Wagner 1979)
+  Pi^0_1 (closed):      safety languages; recognised by safety automata (F = Q)
+  Sigma^0_1 (open):     guarantee / co-safety ("F p"-type, reachability)
+  Pi^0_2 (G_delta):     recurrence / liveness; recognised by det. Buchi (DBA)
+  Sigma^0_2 (F_sigma):  persistence; recognised by det. co-Buchi (DCoBA)
+  Bool(G_delta) = Delta^0_3: all omega-regular (Landweber 1969, Wagner 1979)
 ```
 
 *Wagner hierarchy.* Wagner (1979) defined a strict hierarchy *within* the $omega$-regular languages, refining the Borel classification using the *index* of a deterministic Muller automaton. The index determines the minimal Rabin/Streett/parity index needed:
@@ -656,7 +657,7 @@ We give concrete $L_mu$ formulas at each level $Sigma^mu_k$ and $Pi^mu_k$, follo
 
 *Level $Sigma^mu_2$ (least of greatest):* $mu X. nu Y. (p or diamond X or (q and diamond Y))$ -- a liveness property: "there are infinitely many positions satisfying $p$, interspersed with continuous $q$". The $nu Y$ guards a co-Büchi obligation; the outer $mu X$ requires iteration. CTL equivalent: $G F p$ (with $q$ tracking fairness).
 
-*Bradfield's separation witness.* For $Sigma^mu_n backslash (Pi^mu_{n-1} union Sigma^mu_{n-1})$, Bradfield constructs a *Cantor--Bendixson-type* game on a graph $cal(G)_n$ where winning requires exactly $n$ alternations of "oo-often" and "all-but-finitely-often" along the winning path. The precise example for $n = 3$:
+*Bradfield's separation witness.* For $Sigma^mu_n backslash (Pi^mu_(n-1) union Sigma^mu_(n-1))$, Bradfield constructs a *Cantor--Bendixson-type* game on a graph $cal(G)_n$ where winning requires exactly $n$ alternations of "oo-often" and "all-but-finitely-often" along the winning path. The precise example for $n = 3$:
 
 $ phi_3 = mu X_1. nu X_2. mu X_3. (p_3 or (p_2 and diamond X_3) or (p_1 and diamond X_2) or diamond X_1) $
 
@@ -678,7 +679,7 @@ This formula is not equivalent to any $Pi^mu_2 union Sigma^mu_2$ formula; the pr
 
 == Emptiness Check via Nested DFS: Full Worked Example
 
-We trace the nested DFS algorithm on a 4-state NBA arrow.r ground the pseudocode in something concrete.
+We trace the nested DFS algorithm on a 4-state NBA to ground the pseudocode in something concrete.
 
 *Automaton.* States ${q_0, q_1, q_2, q_3}$, initial $q_0$, accepting $F = {q_1}$. Over $Sigma = {a, b}$:
 
@@ -728,9 +729,9 @@ The algorithm halts, reporting the lasso: $q_0 arrow.r^a q_1$ (prefix) and $q_1 
 
 Jurdziński's small-progress-measures algorithm (2000) is the first to run in time $O(d dot m dot (n / floor(d/2))^(floor(d/2)))$, substantially better than $O(n^d)$ for large $n$.
 
-*Setup.* Fix a parity game $G = (V_0, V_1, E, Omega)$ with $|V| = n$ and max priority $d$. Let $n_i = |Omega^{-1}(i)|$ for each priority $i$. Define the *progress measure lattice*:
+*Setup.* Fix a parity game $G = (V_0, V_1, E, Omega)$ with $|V| = n$ and max priority $d$. Let $n_i = |Omega^(-1)(i)|$ for each priority $i$. Define the *progress measure lattice*:
 
-$ cal(M) = {0, 1, ..., n_1} times {0, ..., n_3} times dots times {0, ..., n_{d'}} times T $
+$ cal(M) = {0, 1, ..., n_1} times {0, ..., n_3} times dots times {0, ..., n_(d')} times T $
 
 where $d' = d$ if $d$ is odd, $d-1$ if even, and $T$ is a top element. The order is lexicographic from right to left on the odd-priority components, treating $T$ as strictly largest.
 
@@ -741,7 +742,7 @@ where $d' = d$ if $d$ is odd, $d-1$ if even, and $T$ is a top element. The order
 
 The operation $"lift"(m, p)$ bumps $m$ above the constraint imposed by priority $p$: if $p$ is even, the constraint is $rho(v) lt.eq_p rho(u)$ (coordinates up to position $p/2$ weakly decreasing); if $p$ is odd, strictly increasing at the $(p+1)/2$ coordinate.
 
-*Algorithm.* The smallest progress measure (wrt the pointwise order $lt.eq$) is the *least fixed point* of the update equations. Initialise $rho(v) = (0, ..., 0)$ for all $v$. Iterate: for each $v$, set $rho(v)$ arrow.r the minimum value in $cal(M)$ consistent with all edges from $v$. Terminate when stable.
+*Algorithm.* The smallest progress measure (wrt the pointwise order $lt.eq$) is the *least fixed point* of the update equations. Initialise $rho(v) = (0, ..., 0)$ for all $v$. Iterate: for each $v$, set $rho(v)$ to the minimum value in $cal(M)$ consistent with all edges from $v$. Terminate when stable.
 
 *Correctness.* $v$ is winning for Even <==> $rho(v) != T$. The strategy: Even moves to any $v'$ minimising $rho(v')$. $square$
 
@@ -765,23 +766,23 @@ Strategy improvement (Vöge--Jurdziński 2000; Schewe 2008) provides an alternat
   5. The stable strategy is winning for Even from her winning region.
 ```
 
-*Termination.* The number of positional strategies for Even is $product_{v in V_0} |"out"(v)|$, which is finite. Each improvement strictly decreases the strategy's *lexicographic valuation*; no strategy is visited twice. Hence the algorithm terminates in at most $product_{v in V_0} |"out"(v)|$ iterations.
+*Termination.* The number of positional strategies for Even is $product_(v in V_0) |"out"(v)|$, which is finite. Each improvement strictly decreases the strategy's *lexicographic valuation*; no strategy is visited twice. Hence the algorithm terminates in at most $product_(v in V_0) |"out"(v)|$ iterations.
 
 *Worst-case complexity.* There exist families of parity games on which strategy improvement takes exponentially many steps (Friedmann 2011), so the algorithm is exponential worst-case. In practice it is highly efficient, and competitive with or superior to progress measures on typical hardware-verification instances.
 
 == The CJKLS Quasi-Polynomial Algorithm
 
-Calude--Jain--Khoussainov--Li--Stephan (2017) gave the first quasi-polynomial parity-game algorithm, running in time $n^{O(log d)}$.
+Calude--Jain--Khoussainov--Li--Stephan (2017) gave the first quasi-polynomial parity-game algorithm, running in time $n^(O(log d))$.
 
 The key notion is a *separating automaton*: a deterministic automaton $cal(S)$ over $Q^omega$ that *separates* winning from losing plays, i.e., $cal(S)$ accepts exactly the plays won by Even. A parity game on $n$ positions with priority $d$ is won by Even iff a separating automaton accepts the play -- but the separating automaton need not recognise exactly the parity condition; it only needs to be correct on plays consistent with *some* positional strategy.
 
 *Universal trees.* Czerwiński--Daviaud--Fijalkow--Jurdziński--Lazić--Parys (2019) showed that all quasi-polynomial parity-game algorithms are captured by the notion of a *$(n, d)$-universal tree*: a finite labeled tree $T$ of height $d$ with at most $n$ leaves such that every $d$-coloured path of length $n$ can be *embedded* into $T$ in a color-respecting way.
 
-The size of the smallest $(n, d)$-universal tree is $n^{O(log d)}$, giving the quasi-polynomial bound. Czerwiński et al. also proved a lower bound $n^{Omega(log d)}$ for any algorithm based on universal trees, showing that new ideas beyond this framework are needed for polynomial.
+The size of the smallest $(n, d)$-universal tree is $n^(O(log d))$, giving the quasi-polynomial bound. Czerwiński et al. also proved a lower bound $n^(Omega(log d))$ for any algorithm based on universal trees, showing that new ideas beyond this framework are needed for polynomial.
 
-*Reformulation (Jurdziński--Lazić 2017, "succinct progress measures").* Define a progress measure ranging not over the counting lattice $cal(M)$ but over positions in a universal tree. The tree has height $d$ and branching factor $O(n^{1/d})$, so size $O(n)^{d/2} = n^{O(log d)}$. Monotone updates in this tree give the quasi-polynomial algorithm.
+*Reformulation (Jurdziński--Lazić 2017, "succinct progress measures").* Define a progress measure ranging not over the counting lattice $cal(M)$ but over positions in a universal tree. The tree has height $d$ and branching factor $O(n^(1/d))$, so size $O(n)^(d/2) = n^(O(log d))$. Monotone updates in this tree give the quasi-polynomial algorithm.
 
-*Bottom line.* The question "is parity-game solving in $P$?" remains open. All known algorithms have complexity either polynomial in the number of positions *and exponential in the number of priorities* (e.g., progress measures: $n^{O(d)}$) or quasi-polynomial ($n^{O(log d)}$) but not both simultaneously bounded by a polynomial in $n$ alone.
+*Bottom line.* The question "is parity-game solving in $P$?" remains open. All known algorithms have complexity either polynomial in the number of positions *and exponential in the number of priorities* (e.g., progress measures: $n^(O(d))$) or quasi-polynomial ($n^(O(log d))$) but not both simultaneously bounded by a polynomial in $n$ alone.
 
 == Summary Table: Automaton Types and Key Properties
 
@@ -797,4 +798,4 @@ The size of the smallest $(n, d)$-universal tree is $n^{O(log d)}$, giving the q
   NPA         No       2^O(n log n)     omega-regular     PSPACE
 ```
 
-Deterministic parity automata are the sweet spot: they can represent every $omega$-regular language, support polynomial complementation and Boolean operations, and plug directly into parity-game solvers for synthesis and model checking. The $2^{O(n log n)}$ cost of obtaining them (via Safra/Piterman) from an NBA is unavoidable (Michel's lower bound) but amortized over the many downstream operations that become polynomial.
+Deterministic parity automata are the sweet spot: they can represent every $omega$-regular language, support polynomial complementation and Boolean operations, and plug directly into parity-game solvers for synthesis and model checking. The $2^(O(n log n))$ cost of obtaining them (via Safra/Piterman) from an NBA is unavoidable (Michel's lower bound) but amortized over the many downstream operations that become polynomial.
