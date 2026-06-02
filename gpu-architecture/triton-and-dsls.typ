@@ -2,7 +2,7 @@
 
 Writing peak-performance CUDA by hand is a job for a small number of experts; writing it in Python with single-digit-percent loss in efficiency is now a job for many more. The new generation of GPU DSLs — Triton, Pallas, ThunderKittens, and CUTLASS in its template form — trade some of CUDA's flexibility for a *block-level* programming model that lets the compiler handle the painful parts: shared-memory layout, async pipelining, and tensor-core scheduling.
 
-*See also:* _cuda-programming-model.typ_ (raw CUDA), _tensor-cores-and-mma.typ_ (wmma/wgmma), _ml-workloads.typ_ (GEMM, attention).
+*See also:* _CUDA Programming Model_ (raw CUDA), _Tensor Cores and MMA_ (wmma/wgmma), _ML Workloads_ (GEMM, attention).
 
 == Why a DSL?
 
