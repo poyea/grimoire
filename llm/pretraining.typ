@@ -258,7 +258,7 @@ The predicted loss as a function of $N$ and $D$:
 
 $ hat(L)(N, D) = E + A / N^alpha + B / D^beta $
 
-with fitted constants $E = 1.61$, $A = 406.4$, $B = 410.7$, $alpha = 0.34$, $beta = 0.28$ (Hoffmann et al., 2022).
+with fitted constants $E = 1.69$, $A = 406.4$, $B = 410.7$, $alpha = 0.34$, $beta = 0.28$ (Hoffmann et al., 2022, Table 2, Approach 3).
 
 === Concrete Budget Table
 
@@ -282,12 +282,13 @@ _Note:_ LLaMA 3 8B trains on 15T tokens — deliberately far past Chinchilla-opt
 ```python
 # Chinchilla optimal allocation given compute budget
 def chinchilla_optimal(C_flops: float,
-                       G_N: float = 8.8e9,
-                       G_D: float = 2.2e10) -> tuple[float, float]:
+                       G_N: float = 0.037,
+                       G_D: float = 0.82) -> tuple[float, float]:
     """
     Returns (N_opt, D_opt) following Hoffmann et al. 2022.
     C_flops: total compute in FLOPs (use 6*N*D approximation).
-    Default G_N, G_D from the paper's IsoFLOP fits.
+    G_N, G_D calibrated so N_opt, D_opt reproduce the budget table
+    (e.g. C=1e24 -> ~37B params, ~820B tokens).
     """
     import math
     N_opt = G_N * (C_flops ** 0.5)
