@@ -122,7 +122,7 @@ class Functor f => Applicative f where
   (<*>) :: f (a -> b) -> f a -> f b
 ```
 
-Laws: identity, composition, homomorphism, interchange. Applicatives circle.small: if `f` and `g` are applicatives, so is `Compose f g`. This is *not* true for monads.
+Laws: identity, composition, homomorphism, interchange. Applicatives compose: if `f` and `g` are applicatives, so is `Compose f g`. This is *not* true for monads.
 
 *Use case:* parsing without backtracking, validation accumulating multiple errors, parallel I/O where the effect schedule is known a priori.
 
@@ -195,7 +195,7 @@ Hillerström–Lindley (2016) show the two styles are inter-translatable but wit
 Implementing state with two operations `get` and `put`:
 
 ```text
-handle e with"
+handle e with
   | return x   -> s. (x, s)
   | get  (); k -> s. k s s
   | put  s'; k -> \_. k () s'
@@ -216,7 +216,7 @@ The continuation $k$ is bound but never called. This is the classical handling o
 === Nondeterminism, via Handlers
 
 ```text
-handle e with"
+handle e with
   | return x      -> [x]
   | choose (); k  -> k true ++ k false
 ```
@@ -260,7 +260,7 @@ fun map( xs : list<a>, f : a -> e b ) : e list<b>
     Cons(x,r) -> Cons(f(x), map(r, f))
 ```
 
-Koka uses *evidence translation* (Xie–Brachthäuser–Hillerström–Schuster–Leijen 2020) arrow.r compile handlers efficiently: at each call site of an operation, the compiler statically threads a piece of evidence (essentially a vtable plus a stack pointer) pointing at the relevant handler frame, avoiding the runtime cost of stack searching.
+Koka uses *evidence translation* (Xie–Brachthäuser–Hillerström–Schuster–Leijen 2020) to compile handlers efficiently: at each call site of an operation, the compiler statically threads a piece of evidence (essentially a vtable plus a stack pointer) pointing at the relevant handler frame, avoiding the runtime cost of stack searching.
 
 == OCaml 5 Algebraic Effects (2022)
 
@@ -278,7 +278,7 @@ let all_results : (unit -> 'a) -> 'a list =
   fun f ->
     try_with f ()
       { effc = fun (type c) (eff : c t) ->
-          match eff "with"
+          match eff with
           | Choose -> Some (fun (k : (c, _) continuation) ->
               continue (Multicont.clone_continuation k) true
               @ continue k false)
@@ -288,7 +288,7 @@ let all_results : (unit -> 'a) -> 'a list =
 Notes on the OCaml model:
 
 1. *Effects are dynamically typed at the perform site* — the `Effect.t` extensible variant carries an indexed effect tag; type safety of handlers is enforced via GADTs on the continuation.
-2. *Continuations are one-shot by default* — arrow.r call a continuation more than once (for nondeterminism), one needs `Multicont` arrow.r *clone* it.
+2. *Continuations are one-shot by default* — to call a continuation more than once (for nondeterminism), one needs `Multicont` to *clone* it.
 3. *Handlers are non-recursive deep* — `try_with` installs a handler that re-handles operations performed in the continuation.
 4. The implementation uses *segmented stacks*: each handler installs a stack chunk, and capturing a continuation copies the chunk between the perform and the handler.
 
@@ -375,7 +375,7 @@ reset { 1 + shift { k -> k (k 10) } }
 
 *Theorem (Forster–Kammar–Lindley–Pretnar 2017).* Algebraic effects with handlers and multi-prompt delimited continuations are mutually macro-expressible: each can encode the other with a local syntactic transformation.
 
-The intuition: a `perform` is a `shift` arrow.r the nearest matching `reset`-with-handler-clause; the handler's pattern-matching on the operation is the body of the `reset`.
+The intuition: a `perform` is a `shift` to the nearest matching `reset`-with-handler-clause; the handler's pattern-matching on the operation is the body of the `reset`.
 
 == Compilation Strategies
 
@@ -422,13 +422,13 @@ let xor () =
 let backtrack m =
   try_with m ()
     { effc = fun (type c) (eff : c Effect.t) ->
-        match eff with"
+        match eff with
         | Decide -> Some (fun k -> continue k true @ continue k false)
         | Fail   -> Some (fun _ -> [])
         | _ -> None }
 ```
 
-`xor ()` *appears* arrow.r compute `bool`. Under the `backtrack` handler, it produces *every* possible boolean satisfying the xor constraint — here, the singleton `[true]` chosen along the path `(true, false)` and `[true]` along `(false, true)`, with the other two paths failing. The result is the list `[true; true]`. A different handler (`first-result`) would run only one path; another (`random`) would pick a branch by coin flip. Same code, three semantics — chosen at the handler site.
+`xor ()` *appears* to compute `bool`. Under the `backtrack` handler, it produces *every* possible boolean satisfying the xor constraint — here, the singleton `[true]` chosen along the path `(true, false)` and `[true]` along `(false, true)`, with the other two paths failing. The result is the list `[true; true]`. A different handler (`first-result`) would run only one path; another (`random`) would pick a branch by coin flip. Same code, three semantics — chosen at the handler site.
 
 == Algebraic Effects, Monads, Practical Verdict
 
@@ -444,7 +444,7 @@ A modest schematic of the design space:
   [Capability calculi (Wyvern, Scala 3 caps)], [excellent], [research-quality], [Scala 3 has it experimentally],
 )
 
-The trajectory of the last 30 years is clear: from baked-in side effects, through monads and transformers, arrow.r user-definable algebraic effects with handlers. Each step pays a syntactic price for a semantic gain. Algebraic effects appear to be the local optimum: they recover the composability of monadic effects, restore the equational reasoning of purity, and admit efficient compilation by evidence translation.
+The trajectory of the last 30 years is clear: from baked-in side effects, through monads and transformers, to user-definable algebraic effects with handlers. Each step pays a syntactic price for a semantic gain. Algebraic effects appear to be the local optimum: they recover the composability of monadic effects, restore the equational reasoning of purity, and admit efficient compilation by evidence translation.
 
 _See also: _Type Systems_ for the substrate of judgements $Gamma tack.r e : tau ! epsilon$, _Linear and Substructural Type Systems_ for the dual axis of resource accounting, _Subtyping and Polymorphism_ for how effect rows compose subtyping-wise._
 
@@ -523,13 +523,13 @@ An *algebraic effect theory* $cal(T)$ consists of:
 
 The *term model* over signature $Sigma$ and value type $A$:
 
-$ T_Sigma(A) = mu X . A + sum_{op in Sigma} P_op arrow.r (A_op arrow.r X) $
+$ T_Sigma(A) = mu X . A + sum_(op in Sigma) (P_op times (A_op arrow.r X)) $
 
 — either a *return* of a value, or an *operation application* with a continuation. This is the free $Sigma$-algebra on $A$.
 
 *Example — state.* With $"Get" : 1 arrow.r S$ and $"Put" : S arrow.r 1$:
 
-$ T_{"Get","Put"}(A) = mu X . A + (S arrow.r X) + (S times X) $
+$ T_({"Get", "Put"})(A) = mu X . A + (S arrow.r X) + (S times X) $
 
 The equations:
 
@@ -549,7 +549,7 @@ interpret(Put(s', k), s)  = interpret(k(()), s')
 
 This gives a morphism of $Sigma$-algebras. Uniqueness follows because any other morphism must satisfy the same equations — there is no choice.
 
-*Theorem (Plotkin–Power 2001).* Every finitary monad on $"Set"$ is the free monad of some algebraic theory. The theory is given by: operations = $Sigma$-algebra generators, equations = the monad's equations.
+*Theorem (Plotkin–Power 2002).* Every finitary monad on $"Set"$ is the free monad of some algebraic theory. The theory is given by: operations = $Sigma$-algebra generators, equations = the monad's equations.
 
 *Corollary.* Exception, state, reader, writer, nondeterminism, and finite distribution monads are all algebraic. The continuation monad $"Cont" r$ is *not* algebraic for non-trivial $r$ (it cannot be presented by a finitary theory).
 
@@ -559,7 +559,7 @@ We work in a core language $lambda_"eff"$ with the following syntax:
 
 $ v ::= x | lambda x . e | "Inl" v | "Inr" v | () \
 e ::= v | e_1 e_2 | "op"(v; y . e) | "return" v | "handle" e "with" h \
-h ::= {"return" x |-> e_r; "op"_i(x; k) |-> e_i}_{i in I} $
+h ::= {"return" x |-> e_r; "op"_i(x; k) |-> e_i}_(i in I) $
 
 The handler $h$ describes what to do for the `return` case and for each operation case, with $k$ bound to the delimited continuation.
 
@@ -661,7 +661,7 @@ Two rows are unified by finding corresponding labels and unifying their schemes,
 
 *Effect polymorphism example.* Inferred type for `map`:
 
-$ "map" : forall alpha beta . forall rho . (alpha ->^{rho} beta) -> "list"(alpha) ->^{rho} "list"(beta) $
+$ "map" : forall alpha beta . forall rho . (alpha ->^(rho) beta) -> "list"(alpha) ->^(rho) "list"(beta) $
 
 The row variable $rho$ is the *effect parameter*: `map` introduces exactly the same effects as the function it applies. At each call site, $rho$ is instantiated to the particular row of the function argument.
 
@@ -876,7 +876,7 @@ The continuation $k$ has a *linear* arrow $->_1$: it must be called exactly once
 #table(
   columns: (auto, auto, auto, auto, auto),
   [*Language*], [*Effect syntax*], [*Handler style*], [*Typing*], [*Key features*],
-  [Eff (Bauer–Pretnar 2012)], [`effect E : P -> A`], [deep by default, shallow via manual re-wrap], [HM + effects], [first implementation; algebraic semantics faithful to theory],
+  [Eff (Bauer–Pretnar 2015)], [`effect E : P -> A`], [deep by default, shallow via manual re-wrap], [HM + effects], [first implementation; algebraic semantics faithful to theory],
   [Frank (Levy–Lindley–McBride 2017)], [`<Op : P -> A>`], [shallow; pattern-matching on effects], [bidirectional + effect rows], [handlers are functions; uniform call-by-push-value],
   [Helium (Biernacki–Piróg–Polesiuk–Sieczkowski 2019)], [`let effect E = ...`], [deep, with scoping restrictions], [effect rows + row polymorphism], [scoped effects with algebraic semantics],
   [Koka (Leijen 2014+)], [`effect E { fun op(p : P) : A }`], [multi-clause; deep or shallow], [full row poly + evidence], [production-quality; evidence translation for performance],
