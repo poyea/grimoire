@@ -159,7 +159,7 @@ Trade-offs of SQPOLL:
 - *Latency:* near-zero on the submission side; a CPU core is dedicated to polling.
 - *Throughput:* eliminates ~80-150 ns per submission (the syscall transition) — at 5 M ops/s that's 25-50% of a core saved on the producer.
 - *Power / packing:* the dedicated poller is always-on while busy; pin it to an isolated core (`IORING_SETUP_SQ_AFF` + `sq_thread_cpu`) so it doesn't steal user time. See _CPU Affinity and Isolation_.
-- *Privilege:* unprivileged SQPOLL was restricted after CVE-2022-29582; modern kernels require either CAP_SYS_NICE or a matching ring fd to attach to an existing poller via `IORING_SETUP_ATTACH_WQ`.
+- *Privilege:* before Linux 5.13, SQPOLL required `CAP_SYS_ADMIN`; since 5.13 unprivileged users can use it but the busy-polling kthread is accounted against the user's cgroup. To share one poller across multiple rings, attach via `IORING_SETUP_ATTACH_WQ`.
 
 == liburing Equivalents
 
