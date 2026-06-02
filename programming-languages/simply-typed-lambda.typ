@@ -598,11 +598,11 @@ at type $"Int"$.
 
 Total: 4 $beta$-steps (plus arithmetic) to normal form $2$. The reduction is *strongly normalising* — every path leads to $2$ in finitely many steps.
 
-*CBN reduction:* delays the evaluation of $0$:
+*CBN reduction:* reduces the leftmost-outermost redex and passes arguments unevaluated:
 + $(lambda f . ...) (lambda y . y + 1) space 0 arrow.r (lambda x . (lambda y . y + 1) ((lambda y . y + 1) space x)) space 0$.
 + $arrow.r (lambda y . y + 1) ((lambda y . y + 1) space 0)$.
-+ $arrow.r (lambda y . y + 1) space 0 + 1$ — wait, this depends on whether we reduce the argument or the head first. CBN reduces the head:
-+ $arrow.r ((lambda y . y + 1) space 0) + 1 arrow.r (0 + 1) + 1 = 2$.
++ the head $(lambda y . y + 1)$ is applied, substituting its *unevaluated* argument into the body: $arrow.r ((lambda y . y + 1) space 0) + 1$.
++ only now is the argument forced to evaluate the addition: $arrow.r (0 + 1) + 1 = 2$.
 
 Same answer (Church–Rosser), different reduction trace.
 
@@ -634,7 +634,7 @@ In $lambda^arrow.r$ proper, $overline(n)$ types at $(iota arrow.r iota) arrow.r 
 In *System F* (next chapter), one can give $overline(n) : forall alpha . (alpha arrow.r alpha) arrow.r alpha arrow.r alpha$.
 
 The successor, addition, and multiplication operations in Church encoding:
-$ "succeeds" &= lambda n . lambda f . lambda x . f space (n space f space x) \
+$ "succ" &= lambda n . lambda f . lambda x . f space (n space f space x) \
 "add"  &= lambda m . lambda n . lambda f . lambda x . m space f space (n space f space x) \
 "mul"  &= lambda m . lambda n . lambda f . m space (n space f) $
 

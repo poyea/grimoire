@@ -115,7 +115,7 @@ Coq has a special *impredicative* universe $"Prop"$: $Pi A : "Type" . A arrow.r 
 
 *Hurkens' miniature paradox.* In 1995 Hurkens produced a *short* paradox: a 24-line term of type $bot$ in the system $* : *$. The encoding uses a Russell-style trick: define $U = forall X . ((X arrow.r *) arrow.r X) arrow.r X$, then a paradoxical inhabitant of $bot$.
 
-*Consequence.* Predicativity is essential. Coq's $"Prop"$ is impredicative without paradox because $"Prop"$ inhabitants are proof-irrelevant and erased.
+*Consequence.* Predicativity is essential. Coq's $"Prop"$ is impredicative without paradox not because of proof irrelevance (by default Coq's $"Prop"$ is proof-*relevant* — see below) but because elimination *out of* $"Prop"$ into $"Type"$ is restricted (*singleton elimination*) and $"Prop"$ is erased at extraction, so its impredicativity cannot leak into the computational fragment.
 
 == Inductive Types
 
@@ -135,7 +135,7 @@ A W-tree is a *node* labelled $a : A$ with a *fan* of children indexed by $B(a)$
 $ W "-rec" : Pi P : W arrow.r cal(U) . (Pi a : A . forall f : B(a) arrow.r W . space (Pi b : B(a) . P (f space b)) arrow.r P ("sup" a space f)) arrow.r Pi w : W . P(w) $
 
 *Encodings.*
-- $"Nat" = W_(b : "Bool") "if" b "then" "Empty" "else" "Unit"$. The two constructors correspond to $b = "true"$ (no children, gives $"zero"$) and $b = "false"$ (one child, gives $"succeeds"$).
+- $"Nat" = W_(b : "Bool") "if" b "then" "Empty" "else" "Unit"$. The two constructors correspond to $b = "true"$ (no children, gives $"zero"$) and $b = "false"$ (one child, gives $"succ"$).
 - $"List" A = W_(p : "Unit" + A) "case" p "of" "inl" \_ => "Empty" | "inr" \_ => "Unit"$. Nil and cons.
 - Binary trees: $W_(p : "Unit" + A) (...)$ analogously.
 
@@ -289,7 +289,7 @@ The simplest criterion: recursive calls must be on a *structurally smaller* subt
 
 ```coq
 Fixpoint plus (m n : nat) : nat :=
-  match m with"
+  match m with
   | 0    => n
   | S k  => S (plus k n)   (* k < S k structurally *)
   end.
@@ -499,7 +499,7 @@ Letouzey's extraction (2008) — soundness theorem: the extracted program *corre
 When pattern-matching on $v : "Vec" A space n$ inside an expression of type depending on $n$, the type checker loses the connection between $n$ and the *constructor* matched. The *convoy pattern* re-establishes it:
 
 ```coq
-match v in Vec _ k return P k -> Q k with"
+match v in Vec _ k return P k -> Q k with
 | vnil _          => fun (p : P 0)     => ...
 | vcons _ k a v'  => fun (p : P (S k)) => ...
 end
@@ -564,7 +564,7 @@ A `BST lo hi` is a tree whose every element lies in `[lo, hi]`; the type prevent
 === Type-Level Naturals as Singletons
 
 ```idris
-data Sing : Nat -> Type where"
+data Sing : Nat -> Type where
   SZ : Sing Z
   SS : (n : Nat) -> Sing n -> Sing (S n)
 
@@ -702,7 +702,7 @@ Agda has a `--without-K` flag (default for HoTT-style development) to prevent in
 Coq desugars pattern matching to recursors. The function
 ```coq
 Fixpoint length {A} (l : list A) : nat :=
-  match l with"
+  match l with
   | nil       => 0
   | cons _ xs => S (length xs)
   end.

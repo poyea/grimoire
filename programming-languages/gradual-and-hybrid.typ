@@ -106,7 +106,7 @@ A second metatheorem, often called the *gradual guarantee* (Siek–Vitousek–Ci
 
 Equivalently: refining annotations never introduces *new* successful behaviours, only new *failures*; relaxing annotations never *eliminates* successful behaviours, but may eliminate failures. A program whose annotated version runs successfully will also run successfully when the annotations are erased (modulo "?" wherever they appeared).
 
-The gradual guarantee is *not* automatic. Several proposed gradual systems failed it in subtle ways. Gradual typing for *mutable references* requires especially careful design: a naïve approach assigns invariant types to mutable cells and produces casts that violate the guarantee. The *monotonic references* design (Siek–Vitousek–Cimini–Tobin-Hochstadt–Vitousek 2015) maintains a monotonic record of the *most precise* type ever stored in a cell, and refuses to demote, restoring the guarantee at the cost of additional metadata on the heap.
+The gradual guarantee is *not* automatic. Several proposed gradual systems failed it in subtle ways. Gradual typing for *mutable references* requires especially careful design: a naïve approach assigns invariant types to mutable cells and produces casts that violate the guarantee. The *monotonic references* design (Siek–Vitousek–Cimini–Tobin-Hochstadt–Garcia 2015) maintains a monotonic record of the *most precise* type ever stored in a cell, and refuses to demote, restoring the guarantee at the cost of additional metadata on the heap.
 
 == Cast Calculi: Lazy, Eager, and Threesomes
 
@@ -206,11 +206,11 @@ Typed Racket (Tobin-Hochstadt–Felleisen 2008) is the canonical sound gradual l
 
 (: factorial (-> Integer Integer))
 (define (factorial n)
-  ("if (zero? n) 1 (* n (factorial (- n 1)))))
+  (if (zero? n) 1 (* n (factorial (- n 1)))))
 
 (: map* (All (a b) (-> (-> a b) (Listof a) (Listof b))))
 (define (map* f xs)
-  ("if" (null? xs) '() (cons (f (car xs)) (map* f (cdr xs)))))
+  (if (null? xs) '() (cons (f (car xs)) (map* f (cdr xs)))))
 ```
 
 Untyped modules can import typed ones and vice versa; the contract layer interposes at the boundary. The contract on a polymorphic function uses *parametricity-preserving* sealing (Matthews–Findler 2009) — the untyped side cannot inspect a sealed value, and the typed side cannot accidentally observe a value that should have been polymorphic.
@@ -218,11 +218,11 @@ Untyped modules can import typed ones and vice versa; the contract layer interpo
 === TypeScript
 
 ```typescript
-function len(x: string | any"[]): number {
+function len(x: string | any[]): number {
   return x.length;        // static dispatch on union
 }
 
-function risky(x: any"): number {
+function risky(x: any): number {
   return x.foo.bar.baz;   // any disables all checks
 }
 
@@ -239,16 +239,16 @@ The distinction between `"any"` and `unknown` is the entire gradual story compre
 === Python (mypy, Pyright)
 
 ```python
-"from typing import Any, Optional
+from typing import Any, Optional
 
-eq.def parse_age(s: str) -> Optional[int]:
+def parse_age(s: str) -> Optional[int]:
     try:
         return int(s)
     except ValueError:
         return None
 
-eq.def legacy_callback(payload: Any) -> None:
-    print(payload["user"]["name"])   \# mypy admits, runtime may fail
+def legacy_callback(payload: Any) -> None:
+    print(payload["user"]["name"])   # mypy admits, runtime may fail
 ```
 
 Python type hints (PEP 484) are *purely advisory*. The interpreter ignores them; only external checkers (mypy, Pyright, Pyre) consult them. There is no run-time cast and no blame. This is *optional* typing, not gradual typing in the technical sense.
