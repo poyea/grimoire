@@ -433,7 +433,7 @@ These observations underlie *type-system synthesis tools* (Bezem--Coquand; Klin-
 
 A non-exhaustive list of contemporary open questions in tree-automata theory:
 
-- *Tighter bounds for top-down deterministic separation.* Magidor--Moran's example shows DTDA $subset.eq.not$ NFTA; the exact *expressiveness gap* (which subclass of regular tree languages is DTDA-recognisable?) is partially characterised but not closed.
+- *Tighter bounds for top-down deterministic separation.* Magidor--Moran's example shows DTDA $subset.neq$ NFTA; the exact *expressiveness gap* (which subclass of regular tree languages is DTDA-recognisable?) is partially characterised but not closed.
 
 - *Macro tree transducer composition and decomposition.* The MTT hierarchy by arity is strict; the exact relationship between MTTs and MSO-definable transductions for *non-linear* size increase remains a topic of active research.
 

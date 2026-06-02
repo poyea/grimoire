@@ -88,7 +88,7 @@ The factor $|X|!$ counts the orderings of fractional parts; the $2^|X|$ counts w
 
 *Proof sketch.* Membership: guess a path in $cal(R)(cal(A))$ on the fly; each region is representable in $O(|X| log c_max)$ bits, so the procedure runs in NPSPACE = PSPACE by Savitch. Hardness: reduce from acceptance of a linearly-bounded Turing machine; the encoding uses $O(n)$ clocks for tape contents (Alur--Dill).
 
-*Theorem (Courcoubetis--Yannakakis 1992).* Reachability is PSPACE-hard already with *three* clocks. With one clock, it drops to NLOGSPACE; with two, it is NP-hard but PSPACE-membership is open in restricted fragments.
+*Theorem (Courcoubetis--Yannakakis 1992).* Reachability is PSPACE-hard already with *three* clocks. With one clock, it drops to NLOGSPACE; with two, it is NP-hard (PSPACE-membership holds in general, as for any fixed number of clocks) — the precise complexity below PSPACE for two clocks remains open.
 
 == Zones and Difference Bound Matrices
 
