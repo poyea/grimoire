@@ -201,7 +201,7 @@ def compute_advantages(rewards, values, gamma=GAMMA, lam=GAE_LAMBDA):
     last_gae = 0.0
     T = rewards.size(1)
     for t in reversed(range(T)):
-        next_val = values[:, t + 1] if t < T - 1 else torch.zeros(rewards.size(0))
+        next_val = values[:, t + 1] if t < T - 1 else torch.zeros(rewards.size(0), device=rewards.device)
         delta = rewards[:, t] + gamma * next_val - values[:, t]
         last_gae = delta + gamma * lam * last_gae
         advantages[:, t] = last_gae
@@ -499,8 +499,10 @@ def grpo_step(
     surr2 = torch.clamp(ratio, 1 - clip_eps, 1 + clip_eps) * advantages
     policy_loss = -torch.min(surr1, surr2).mean()
 
-    # Per-sequence KL penalty
-    kl = (old_logprobs - ref_logprobs).mean()
+    # Per-sequence KL penalty against the reference, measured at the *current*
+    # policy via the k3 unbiased estimator (DeepSeekMath), not the rollout policy
+    log_ratio = ref_logprobs - new_logprobs
+    kl = (torch.exp(log_ratio) - log_ratio - 1).mean()
     loss = policy_loss + beta * kl
 
     loss.backward()
