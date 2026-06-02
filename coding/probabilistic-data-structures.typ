@@ -307,8 +307,10 @@ public:
     void add(const string& item) {
         uint64_t h = hash(item);
         size_t idx = h >> (64 - P);  // First P bits = register index
-        uint64_t w = h << P;          // Remaining bits
-        int rho = countLeadingZeros(w) + 1;  // Position of first 1
+        uint64_t w = h << P;          // Remaining bits (top 64-P meaningful)
+        // rho in [1, 64-P+1]. The +1 accounts for the position of the first 1
+        // when w != 0; when w == 0 (all remaining bits zero), rho = 64-P+1.
+        int rho = std::min<int>(countLeadingZeros(w), 64 - P) + 1;
         registers[idx] = max(registers[idx], static_cast<uint8_t>(rho));
     }
 
