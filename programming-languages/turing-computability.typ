@@ -69,7 +69,7 @@ by a 3-tape DTM via *breadth-first search* over the computation tree:
 - Tape 3: address of the current branch in the tree (encoded in the branching factor $b$
   of the NDTM).
 
-If the NDTM accepts within $T(n)$ steps, the BFS simulation uses time $O(b^{T(n)})$ and
+If the NDTM accepts within $T(n)$ steps, the BFS simulation uses time $O(b^(T(n)))$ and
 space $O(T(n))$. The exponential blowup is unavoidable in general and is precisely the
 $P$ vs $"NP"$ question.
 

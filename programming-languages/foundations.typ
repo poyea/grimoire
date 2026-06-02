@@ -62,7 +62,7 @@ equivalent to it in $O(n log n)$ time. The key idea is *partition refinement*:
 
 1. Initialize partition $Pi = { F, Q without F }$ (accepting vs non-accepting).
 2. Maintain a worklist $W$ of splitter sets.
-3. For each splitter $A in W$ and each symbol $a in Sigma$: find $X = delta^{-1}(A, a)$ (states
+3. For each splitter $A in W$ and each symbol $a in Sigma$: find $X = delta^(-1)(A, a)$ (states
    that transition into $A$ on $a$). For every block $Y in Pi$ split by $X$ into $Y inter X$
    and $Y without X$, replace $Y$ with the two halves and update $W$ accordingly.
 4. Repeat until $W$ is empty. Each block in the final $Pi$ is one minimized state.
@@ -112,13 +112,13 @@ every $w in L$ with $|w| >= p$, $w$ can be written as $w = x y z$ with:
 3. For all $i >= 0$, $x y^i z in L$
 
 *Proof sketch:* Let $M$ be a DFA with $p$ states accepting $L$. For $|w| >= p$, the
-sequence of states $q_0, q_1, dots, q_{|w|}$ has $|w|+1 > p$ states, so by the pigeonhole
+sequence of states $q_0, q_1, dots, q_(|w|)$ has $|w|+1 > p$ states, so by the pigeonhole
 principle some state $q_j = q_k$ with $j < k <= p$. Set $x = w[0..j)$, $y = w[j..k)$,
 $z = w[k..|w|)$. Since $q_j = q_k$, pumping $y$ any number of times remains in $L$.
 
 *Application — $a^n b^n$ is not regular:* Suppose it were, with pumping length $p$.
 Choose $w = a^p b^p$. Conditions 1-2 force $y = a^k$ for some $k >= 1$ (since $|x y| <= p$
-keeps us in the $a$-prefix). Then $x y^2 z = a^{p+k} b^p in.not L$ since $p+k > p$.
+keeps us in the $a$-prefix). Then $x y^2 z = a^(p+k) b^p in.not L$ since $p+k > p$.
 Contradiction. Therefore ${ a^n b^n | n >= 0 }$ is not regular.
 
 == Closure Properties
