@@ -20,7 +20,7 @@ Full fine-tuning updates every parameter. For a 7B model at BF16 that is 14 GB o
   [QLoRA (r=16, NF4)], [~0.1–0.5%],   [~6–8 GB],        [~48 GB (2×24 GB)],[Base in 4-bit NF4; LoRA in BF16],
 )
 
-_Trainable params_ for LoRA at rank 16 targeting `q_proj` and `v_proj` in all layers of LLaMA 3 8B: approximately 20 M out of 8 000 M total (0.25%).
+_Trainable params_ for LoRA at rank 16 targeting `q_proj` and `v_proj` in all layers of LLaMA 3 8B: approximately 6.8 M out of 8 000 M total (~0.085%). The count is below the MHA estimate because LLaMA 3 uses GQA — `v_proj` is only $4096 times 1024$, not $4096 times 4096$.
 
 The GPU RAM column is the minimum for training with per-token batch size 1, gradient checkpointing enabled, and no Flash Attention activation recomputation overhead beyond checkpointing. Real jobs need headroom; multiply by ~1.3.
 
@@ -58,7 +58,7 @@ Targeting only `q_proj` and `v_proj` (attention query and value projections) was
 #table(
   columns: (auto, auto, auto),
   [*Target set*], [*Params (r=16, 7B)*], [*Recommendation*],
-  [`q_proj`, `v_proj`],              [~20 M],  [Baseline; smallest footprint],
+  [`q_proj`, `v_proj`],              [~6.8 M],  [Baseline; smallest footprint (GQA `v_proj`)],
   [All attention projections],        [~40 M],  [Better for instruction following],
   [All linear (attn + MLP)],          [~80 M],  [Best quality; use when GPU allows],
   [Embedding + lm\_head (+ linear)],  [~100 M], [Needed for new vocabulary tokens],
@@ -220,9 +220,9 @@ $
 "Base weights (NF4):"       & quad 65 times 10^9 times 0.5 "B" = 32.5 "GB" \
 "LoRA params (BF16, r=64):" & quad ~300 times 10^6 times 2 "B" = 0.6 "GB" \
 "LoRA grads:"               & quad 0.6 "GB" \
-"Adam states (LoRA only):"  & quad 0.6 times 2 = 1.2 "GB" \
+"Adam states (LoRA only, FP32):" & quad 300 times 10^6 times 4 "B" times 2 = 2.4 "GB" \
 "Activations (2K ctx, ckpt):",&quad ~3 "GB per GPU" \
-"Total:"                    & quad ~38 "GB per GPU" quad ("fits" 2 times 48 "GB")
+"Total:"                    & quad ~39 "GB per GPU" quad ("fits" 2 times 48 "GB")
 $
 
 _Headroom note:_ peak memory can exceed the static estimate when paged optimizer states spill to CPU under fragmentation, when activation checkpointing is partially disabled, or when sequence length exceeds 2K. Budget +15–20% headroom per GPU to avoid OOM on long-context batches.
@@ -465,7 +465,7 @@ The DPO loss is the negative log-likelihood of this preference:
 
 $ cal(L)_"DPO"(pi_theta; pi_"ref") = -EE_((x, y_w, y_l) ~ cal(D)) lr([ log sigma lr(( beta log (pi_theta(y_w|x)) / (pi_"ref"(y_w|x)) - beta log (pi_theta(y_l|x)) / (pi_"ref"(y_l|x)) |)) ]) $
 
-This is the entire loss: two forward passes (on winner and loser), no reward model, no sampling loop.
+This is the entire loss: four forward passes per pair (the policy and the reference, each on winner and loser — the reference passes can be precomputed and cached), no reward model, no sampling loop.
 
 === Why DPO Avoids an Explicit Reward Model
 
