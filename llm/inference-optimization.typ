@@ -330,7 +330,8 @@ def speculative_step(
 
     # --- Draft: sample k tokens autoregressively ---
     draft_tokens = []
-    draft_probs  = []   # q(x_i | context)
+    draft_probs  = []   # q(x_i | context), scalar at the sampled token
+    draft_dists  = []   # full q(· | context), needed for the correction step
     ctx = input_ids
     with torch.no_grad():
         for _ in range(k):
@@ -339,6 +340,7 @@ def speculative_step(
             token    = torch.multinomial(prob_d[0], 1)         # [1]
             draft_tokens.append(token)
             draft_probs.append(prob_d[0, token[0]].item())
+            draft_dists.append(prob_d[0].clone())
             ctx = torch.cat([ctx, token.unsqueeze(0)], dim=1)
 
     draft_ids = torch.stack(draft_tokens, dim=0).squeeze(-1)  # [k]
@@ -361,12 +363,9 @@ def speculative_step(
         if u <= alpha:
             accepted.append(draft_ids[i].unsqueeze(0))
         else:
-            # Correction: sample from max(0, p - q)
-            corrected = F.relu(probs_t[0, i] -
-                                torch.tensor(
-                                    [draft_probs[i] if j == x_i else 0.0
-                                     for j in range(probs_t.shape[-1])],
-                                    device=device))
+            # Correction: sample from the residual max(0, p - q) over the
+            # *whole* vocabulary, comparing against the full draft distribution
+            corrected = F.relu(probs_t[0, i] - draft_dists[i])
             if corrected.sum() < 1e-9:
                 corrected = probs_t[0, i].clone()
             corrected = corrected / corrected.sum()
@@ -742,7 +741,7 @@ def init_tp(tp_size: int = 8) -> dist.ProcessGroup:
     return dist.new_group(tp_ranks)
 ```
 
-*NVLink bandwidth:* A100/H100 NVLink provides 600 GB/s bidirectional bandwidth. An all-reduce for a 4096-dimensional vector at bf16 across 8 GPUs transfers $2 times (8-1)/8 times 4096 times 2 approx 14$ KiB — well under 10 µs, negligible relative to the GEMM itself.
+*NVLink bandwidth:* A100 NVLink 3 provides 600 GB/s bidirectional bandwidth per GPU (H100 NVLink 4: 900 GB/s). An all-reduce for a 4096-dimensional vector at bf16 across 8 GPUs transfers $2 times (8-1)/8 times 4096 times 2 approx 14$ KiB — well under 10 µs, negligible relative to the GEMM itself.
 
 *Practical scaling limits:* Real NVLink all-reduce achieves only $approx 80%$ of theoretical bandwidth due to protocol overhead and ring/tree algorithm inefficiencies. TP $> 8$ typically requires NVSwitch (within an HGX node) or crosses node boundaries onto InfiniBand, where latency is 5–10$times$ higher and per-step all-reduce cost can dominate the GEMM. Most production deployments cap TP at 8 and combine with pipeline or expert parallelism beyond that.
 
@@ -763,7 +762,7 @@ TTFT is dominated by prefill latency (and queuing delay). ITL is dominated by th
 
 *Memory-bandwidth bound:* At batch size $B=1$, each decode step loads all model weights once. On an H100 (3.35 TB/s HBM3), a 70B bf16 model decodes at:
 
-$ "ITL"_"min" approx frac(140 times 10^9 times 2, 3.35 times 10^12) approx 84 "ms" $
+$ "ITL"_"min" approx frac(140 times 10^9, 3.35 times 10^12) approx 42 "ms" $
 
 Increasing batch size amortizes weight loads: at $B=32$, effective per-token memory traffic is $1/32$ and ITL approaches 2–3 ms.
 
