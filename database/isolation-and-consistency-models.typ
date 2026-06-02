@@ -187,11 +187,12 @@ BEGIN;
   END IF;
 COMMIT;
 
--- 2. DEFERRABLE constraints for within-txn consistency
-ALTER TABLE on_call ADD CONSTRAINT at_least_one_active
-    CHECK (EXISTS (SELECT 1 FROM on_call WHERE active = true))
-    DEFERRABLE INITIALLY DEFERRED;
--- PostgreSQL checks the constraint at COMMIT, not per-statement
+-- 2. DEFERRABLE constraints for within-txn consistency.
+--    Note: PostgreSQL CHECK constraints cannot reference other rows or use
+--    subqueries. To express the "at least one active" invariant deferred to
+--    commit time, use a CONSTRAINT TRIGGER (DEFERRABLE INITIALLY DEFERRED)
+--    that runs the EXISTS check, or rely on SSI (Serializable) to detect the
+--    write-skew dependency cycle automatically.
 
 -- 3. Predicate locks (SSI approach)
 -- Automatically acquired under ISOLATION LEVEL SERIALIZABLE

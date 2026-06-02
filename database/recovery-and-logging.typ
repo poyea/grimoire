@@ -194,12 +194,14 @@ pg_basebackup -D /backup/base -Ft -z -P
 # archive_mode = on
 # archive_command = 'cp %p /wal_archive/%f'
 
-# 3. Restore to specific time
-cat > /backup/restore/recovery.conf << 'EOF'
+# 3. Restore to specific time (PostgreSQL 12+: recovery.conf was removed;
+#    set recovery parameters in postgresql.conf and create recovery.signal)
+cat >> /backup/restore/postgresql.conf << 'EOF'
 restore_command = 'cp /wal_archive/%f %p'
 recovery_target_time = '2025-12-01 14:30:00'
 recovery_target_action = 'promote'
 EOF
+touch /backup/restore/recovery.signal
 ```
 
 == Log-Structured Storage and WAL Elision
