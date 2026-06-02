@@ -92,7 +92,7 @@ $e ->^* v$.
 *Rules for arithmetic expressions* (integers, variables, addition):
 
 ```
-[E-Int]       n -> n         (already a value, no step)
+(no rule)     n              (a numeral is a value; it does not step)
 
 [E-Var]       x -> sigma(x)  (look up x in store sigma)
 
@@ -150,11 +150,11 @@ The *big-step* relation $e arrow.b.double v$ (also written $chevron.l e, sigma c
               ──────────────────────
               if e then c1 else c2 => v
 
-[B-While]     e => true    c => sigma'    (while e do c, sigma') => sigma''
-              ──────────────────────────────────────────────────────────────
+[B-While]     (e, sigma) => true    (c, sigma) => sigma'    (while e do c, sigma') => sigma''
+              ──────────────────────────────────────────────────────────────────────────
               (while e do c, sigma) => sigma''
 
-[B-While-F]   e => false
+[B-While-F]   (e, sigma) => false
               ─────────────────────────
               (while e do c, sigma) => sigma
 ```

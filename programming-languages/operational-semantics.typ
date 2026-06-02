@@ -46,9 +46,9 @@ Notice the *left-to-right* evaluation order: the right operand of $+$ may step o
 ```text
   ------------------                        <b1, sigma> -> <b1', sigma>
   <true and b, sigma> -> <b, sigma>         -------------------------------
-                                            <b1 "and b2, sigma> -> <b1' and b2, sigma>
+                                            <b1 and b2, sigma> -> <b1' and b2, sigma>
   ------------------
-  <false and" b, sigma> -> <false, sigma>
+  <false and b, sigma> -> <false, sigma>
 ```
 
 *Command rules.*
@@ -64,13 +64,13 @@ Notice the *left-to-right* evaluation order: the right operand of $+$ may step o
 
   <b, sigma> -> <b', sigma>
   ---------------------------------------------------------------
-  <"if b then c1 else c2, sigma> -> <"if b' then c1 "else c2, sigma>
+  <if b then c1 else c2, sigma> -> <if b' then c1 else c2, sigma>
 
   ----------------------------------------------    ----------------------------------------------
-  <"if true then c1 else c2, sigma> -> <c1, sigma>   <"if false then c1 "else c2, sigma> -> <c2, sigma>
+  <if true then c1 else c2, sigma> -> <c1, sigma>   <if false then c1 else c2, sigma> -> <c2, sigma>
 
   -------------------------------------------------------------------------------
-  <while b do c, sigma> -> <"if b then (c ; while b do c) else skip, sigma>
+  <while b do c, sigma> -> <if b then (c ; while b do c) else skip, sigma>
 ```
 
 The `while` rule *unfolds* the loop by one syntactic iteration. There is no fixpoint in sight at the operational level; the fixpoint will appear when we move to denotations. A loop that runs forever simply has no finite reduction sequence.
