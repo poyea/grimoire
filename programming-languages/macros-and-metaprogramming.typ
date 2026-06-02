@@ -108,8 +108,8 @@ The idea is brutally simple:
 
 The expander's job is then to *add scopes* to the identifiers it traverses:
 
-- When the expander enters a `(lambda (x) e)` form, it creates a fresh scope $s$, adds $s$ arrow.r $x$, adds $s$ arrow.r every identifier in $e$, and recursively expands $e$.
-- When the expander expands a macro use, it creates a fresh scope $s_"macro"$ for the macro's introduced bindings, adds $s_"macro"$ arrow.r identifiers that come *from the macro template*, and leaves identifiers that come *from the macro's arguments* untouched (those keep their original scope set from the *use* site).
+- When the expander enters a `(lambda (x) e)` form, it creates a fresh scope $s$, adds $s$ to $x$, adds $s$ to every identifier in $e$, and recursively expands $e$.
+- When the expander expands a macro use, it creates a fresh scope $s_"macro"$ for the macro's introduced bindings, adds $s_"macro"$ to identifiers that come *from the macro template*, and leaves identifiers that come *from the macro's arguments* untouched (those keep their original scope set from the *use* site).
 
 The result: an identifier introduced by the macro has $s_"macro"$ in its scope set; the user's identifier of the same name does not. A binding of the user's identifier is *outside* the macro's introduced binding (it has a *different* scope set), so the two do not capture each other.
 
@@ -188,7 +188,7 @@ F$hash$ has *code quotations* (`<@ ... @>` and `%`) in the same spirit but with 
 Scala 3 has both *inline definitions* (a syntactic facility) and *quoted programming* (a typed multi-stage facility), described in (Stucki–Biboudis–Odersky 2018).
 
 ```scala
-inline eq.def power(inline n: Int, x: Double): Double =
+inline def power(inline n: Int, x: Double): Double =
   inline if n == 0 then 1.0
   else x * power(n - 1, x)
 ```
@@ -200,7 +200,7 @@ For more sophisticated needs, Scala 3's `quoted` API gives full multi-stage prog
 ```scala
 import scala.quoted.*
 
-eq.def powerCode(n: Int, x: Expr[Double])(using Quotes): Expr[Double] =
+def powerCode(n: Int, x: Expr[Double])(using Quotes): Expr[Double] =
   if n == 0 then '{ 1.0 }
   else '{ ${x} * ${powerCode(n - 1, x)} }
 ```
@@ -308,8 +308,8 @@ $ "PE"(p, x) = p_x quad "such that" quad p(x, y) = p_x(y) "for all dynamic" y $
 
 The *Futamura projections* (Futamura 1971) give the program-construction implications:
 
-- *First projection.* $"PE"("interp", "source")$ specialises an interpreter arrow.r a particular source program, yielding a *compiled* version of the source.
-- *Second projection.* $"PE"("PE", "interp")$ specialises the PE arrow.r an interpreter, yielding a *compiler*.
+- *First projection.* $"PE"("interp", "source")$ specialises an interpreter to a particular source program, yielding a *compiled* version of the source.
+- *Second projection.* $"PE"("PE", "interp")$ specialises the PE to an interpreter, yielding a *compiler*.
 - *Third projection.* $"PE"("PE", "PE")$ specialises the PE to itself, yielding a *compiler generator*.
 
 Multi-stage programming with explicit stage annotations *recovers* the Futamura projections in a typed setting: the brackets tell the system which subexpressions are static, the staging operations correspond to PE's binding-time analysis, and *running* the staged program is exactly specialisation. The MSP discipline is sometimes described as "PE with the programmer doing the binding-time analysis".
@@ -339,7 +339,7 @@ The convergence point of macros and PE is *typed metaprogramming with reflection
 
 == Multi-Stage Programming: Soundness
 
-The type system of MetaML guarantees that staged code is *well-typed at every stage*. A staged expression that produces a value of type $chevron.l "int" chevron.r$ can be *run* arrow.r produce an `int`; the operational semantics of `.!` is to take a code value and run it in the next stage, and the type system's *staging invariants* ensure the code value is closed and type-correct.
+The type system of MetaML guarantees that staged code is *well-typed at every stage*. A staged expression that produces a value of type $angle.l "int" angle.r$ can be *run* to produce an `int`; the operational semantics of `.!` is to take a code value and run it in the next stage, and the type system's *staging invariants* ensure the code value is closed and type-correct.
 
 *Theorem (Type Safety for MetaML, Taha 2000).* Well-typed MetaML programs do not produce ill-typed code values or unbound-variable errors when run.
 
@@ -357,16 +357,16 @@ The grand bet of macros — that the right way to extend a language is to write 
 
 The connection to *partial evaluation* and the *Futamura projections* points toward the future: macros that are not merely syntactic transformations but *staged compilers* for embedded languages, capable of fusing user-written DSLs with the host language's optimiser. The work of *Lightweight Modular Staging* (Rompf–Odersky 2010) in Scala and the *futhark* / *accelerate* / *halide* lineage of DSL compilers in Haskell and C++ are concrete instances of this convergence — macro-flavoured tools that produce code competitive with hand-written low-level implementations.
 
-== Hygiene Formalized: The Hilsdale--Friedman Proof
+== Hygiene Formalized: Macros That Work (Clinger--Rees)
 
-(Hilsdale--Friedman 2000) gave the first published *proof* that the `syntax-rules`
-expander satisfies hygiene. The argument works by induction on the derivation of
-the expansion relation.
+(Clinger--Rees 1991, "Macros That Work") gave the first rigorous *proof* that the
+`syntax-rules` expander satisfies hygiene, via the painting/timestamp algorithm
+below. The argument works by induction on the derivation of the expansion relation.
 
 *Setting.* Fix a `syntax-rules` macro $m$ with rules
 $[(m p_1) t_1], dots, [(m p_n) t_n]$. Let $E$ be the expansion of a use
-$u = (m e_1 dots e_k)$ in the context produced by pattern $p_i$ matching arrow.r
-template $t_i$, where $sigma$ is the substitution mapping pattern variables arrow.r
+$u = (m e_1 dots e_k)$ in the context produced by pattern $p_i$ matching against
+template $t_i$, where $sigma$ is the substitution mapping pattern variables to
 syntax objects (pieces of the input with their use-site hygiene metadata attached).
 
 *Definition.* An identifier $x$ occurring in the output $E$ is called *macro-introduced*
@@ -374,7 +374,7 @@ if it originated in $t_i$ (the template), and *use-site* if it originated in som
 $e_j$ (an argument). A mixed identifier is one produced by a template escape
 `(datum->syntax ...)` and is treated as use-site for hygiene purposes.
 
-*Theorem (Hilsdale--Friedman 2000; paraphrase).* For any `syntax-rules` expansion,
+*Theorem (Clinger--Rees 1991; paraphrase).* For any `syntax-rules` expansion,
 no macro-introduced identifier in the output $E$ free-captures a use-site binding,
 and no use-site identifier free-captures a macro-introduced binding.
 
@@ -698,7 +698,7 @@ followed by defunctionalisation of the continuation type.
 
 *Theorem.* The CPS transformation of a direct-style program $P$ with $n$ `await`
 points produces a state machine with at most $n + 1$ states. Each state corresponds
-arrow.r the continuation of $P$ from a particular `await` point. $square$
+to the continuation of $P$ from a particular `await` point. $square$
 
 This is directly analogous to the *Futamura first projection*: specialising the
 "async interpreter" (the executor) to a particular coroutine `read_two` yields the
