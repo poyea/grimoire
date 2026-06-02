@@ -24,6 +24,11 @@ chapters:
     lines: 830
     status: draft
   - subject: coding
+    slug: approximation-algorithms
+    path: coding/approximation-algorithms.typ
+    lines: 202
+    status: draft
+  - subject: coding
     slug: arrays
     path: coding/arrays.typ
     lines: 281
@@ -54,6 +59,11 @@ chapters:
     lines: 590
     status: draft
   - subject: coding
+    slug: flows-and-matching
+    path: coding/flows-and-matching.typ
+    lines: 367
+    status: draft
+  - subject: coding
     slug: graphs
     path: coding/graphs.typ
     lines: 232
@@ -74,6 +84,16 @@ chapters:
     lines: 398
     status: draft
   - subject: coding
+    slug: interview-systems-design
+    path: coding/interview-systems-design.typ
+    lines: 242
+    status: draft
+  - subject: coding
+    slug: linear-programming-and-simplex
+    path: coding/linear-programming-and-simplex.typ
+    lines: 222
+    status: draft
+  - subject: coding
     slug: linked-list
     path: coding/linked-list.typ
     lines: 426
@@ -84,6 +104,16 @@ chapters:
     lines: 371
     status: draft
   - subject: coding
+    slug: online-algorithms
+    path: coding/online-algorithms.typ
+    lines: 190
+    status: draft
+  - subject: coding
+    slug: parallel-algorithms
+    path: coding/parallel-algorithms.typ
+    lines: 254
+    status: draft
+  - subject: coding
     slug: probabilistic-data-structures
     path: coding/probabilistic-data-structures.typ
     lines: 663
@@ -92,6 +122,11 @@ chapters:
     slug: problem-solving
     path: coding/problem-solving.typ
     lines: 127
+    status: draft
+  - subject: coding
+    slug: randomized-algorithms
+    path: coding/randomized-algorithms.typ
+    lines: 210
     status: draft
   - subject: coding
     slug: reference
@@ -144,6 +179,16 @@ chapters:
     lines: 468
     status: draft
   - subject: cpu-architecture
+    slug: accelerators
+    path: cpu-architecture/accelerators.typ
+    lines: 179
+    status: draft
+  - subject: cpu-architecture
+    slug: arm-deep-dive
+    path: cpu-architecture/arm-deep-dive.typ
+    lines: 203
+    status: draft
+  - subject: cpu-architecture
     slug: branch-prediction
     path: cpu-architecture/branch-prediction.typ
     lines: 355
@@ -159,6 +204,11 @@ chapters:
     lines: 539
     status: draft
   - subject: cpu-architecture
+    slug: interconnects
+    path: cpu-architecture/interconnects.typ
+    lines: 179
+    status: draft
+  - subject: cpu-architecture
     slug: memory-system
     path: cpu-architecture/memory-system.typ
     lines: 314
@@ -167,6 +217,11 @@ chapters:
     slug: multicore
     path: cpu-architecture/multicore.typ
     lines: 530
+    status: draft
+  - subject: cpu-architecture
+    slug: out-of-order-deep-dive
+    path: cpu-architecture/out-of-order-deep-dive.typ
+    lines: 216
     status: draft
   - subject: cpu-architecture
     slug: performance-analysis
@@ -179,9 +234,24 @@ chapters:
     lines: 438
     status: draft
   - subject: cpu-architecture
+    slug: power-and-dvfs
+    path: cpu-architecture/power-and-dvfs.typ
+    lines: 190
+    status: draft
+  - subject: cpu-architecture
+    slug: risc-v
+    path: cpu-architecture/risc-v.typ
+    lines: 210
+    status: draft
+  - subject: cpu-architecture
     slug: simd
     path: cpu-architecture/simd.typ
     lines: 421
+    status: draft
+  - subject: cpu-architecture
+    slug: speculative-execution-security
+    path: cpu-architecture/speculative-execution-security.typ
+    lines: 177
     status: draft
   - subject: cpu-architecture
     slug: superscalar
@@ -209,6 +279,11 @@ chapters:
     lines: 272
     status: draft
   - subject: database
+    slug: cloud-native-databases
+    path: database/cloud-native-databases.typ
+    lines: 234
+    status: draft
+  - subject: database
     slug: column-stores-and-vectorized-execution
     path: database/column-stores-and-vectorized-execution.typ
     lines: 254
@@ -224,9 +299,19 @@ chapters:
     lines: 247
     status: draft
   - subject: database
+    slug: embedded-databases
+    path: database/embedded-databases.typ
+    lines: 215
+    status: draft
+  - subject: database
     slug: foundations
     path: database/foundations.typ
     lines: 233
+    status: draft
+  - subject: database
+    slug: geospatial
+    path: database/geospatial.typ
+    lines: 232
     status: draft
   - subject: database
     slug: hardware-aware-design
@@ -249,9 +334,19 @@ chapters:
     lines: 250
     status: draft
   - subject: database
+    slug: multi-model
+    path: database/multi-model.typ
+    lines: 262
+    status: draft
+  - subject: database
     slug: observability-and-self-driving
     path: database/observability-and-self-driving.typ
     lines: 291
+    status: draft
+  - subject: database
+    slug: oltp-htap-olap-convergence
+    path: database/oltp-htap-olap-convergence.typ
+    lines: 256
     status: draft
   - subject: database
     slug: partitioning-and-elasticity
@@ -262,6 +357,11 @@ chapters:
     slug: query-compilation
     path: database/query-compilation.typ
     lines: 237
+    status: draft
+  - subject: database
+    slug: query-languages
+    path: database/query-languages.typ
+    lines: 287
     status: draft
   - subject: database
     slug: query-optimization
@@ -277,6 +377,11 @@ chapters:
     slug: security-and-privacy
     path: database/security-and-privacy.typ
     lines: 294
+    status: draft
+  - subject: database
+    slug: sql-engines-internals
+    path: database/sql-engines-internals.typ
+    lines: 251
     status: draft
   - subject: database
     slug: storage-engines
@@ -314,6 +419,11 @@ chapters:
     lines: 775
     status: draft
   - subject: gpu-architecture
+    slug: cuda-programming-model
+    path: gpu-architecture/cuda-programming-model.typ
+    lines: 270
+    status: draft
+  - subject: gpu-architecture
     slug: execution-model
     path: gpu-architecture/execution-model.typ
     lines: 545
@@ -322,6 +432,11 @@ chapters:
     slug: gpu-fundamentals
     path: gpu-architecture/gpu-fundamentals.typ
     lines: 424
+    status: draft
+  - subject: gpu-architecture
+    slug: gpu-virtualization
+    path: gpu-architecture/gpu-virtualization.typ
+    lines: 187
     status: draft
   - subject: gpu-architecture
     slug: memory-hierarchy
@@ -339,6 +454,16 @@ chapters:
     lines: 268
     status: draft
   - subject: gpu-architecture
+    slug: nccl-and-collectives
+    path: gpu-architecture/nccl-and-collectives.typ
+    lines: 183
+    status: draft
+  - subject: gpu-architecture
+    slug: non-nvidia
+    path: gpu-architecture/non-nvidia.typ
+    lines: 208
+    status: draft
+  - subject: gpu-architecture
     slug: performance-optimization
     path: gpu-architecture/performance-optimization.typ
     lines: 684
@@ -348,10 +473,25 @@ chapters:
     path: gpu-architecture/profiling.typ
     lines: 620
     status: draft
+  - subject: gpu-architecture
+    slug: tensor-cores-and-mma
+    path: gpu-architecture/tensor-cores-and-mma.typ
+    lines: 217
+    status: draft
+  - subject: gpu-architecture
+    slug: triton-and-dsls
+    path: gpu-architecture/triton-and-dsls.typ
+    lines: 213
+    status: draft
   - subject: linux-kernel
     slug: abi-syscalls
     path: linux-kernel/abi-syscalls.typ
     lines: 200
+    status: draft
+  - subject: linux-kernel
+    slug: block-layer
+    path: linux-kernel/block-layer.typ
+    lines: 229
     status: draft
   - subject: linux-kernel
     slug: cgroups-namespaces
@@ -359,9 +499,19 @@ chapters:
     lines: 286
     status: draft
   - subject: linux-kernel
+    slug: containers-in-the-kernel
+    path: linux-kernel/containers-in-the-kernel.typ
+    lines: 247
+    status: draft
+  - subject: linux-kernel
     slug: cpu-affinity
     path: linux-kernel/cpu-affinity.typ
     lines: 255
+    status: draft
+  - subject: linux-kernel
+    slug: ebpf-deep-dive
+    path: linux-kernel/ebpf-deep-dive.typ
+    lines: 239
     status: draft
   - subject: linux-kernel
     slug: interrupts
@@ -389,14 +539,44 @@ chapters:
     lines: 279
     status: draft
   - subject: linux-kernel
+    slug: live-patching
+    path: linux-kernel/live-patching.typ
+    lines: 272
+    status: draft
+  - subject: linux-kernel
+    slug: memory-reclaim
+    path: linux-kernel/memory-reclaim.typ
+    lines: 237
+    status: draft
+  - subject: linux-kernel
     slug: mmap-memory
     path: linux-kernel/mmap-memory.typ
     lines: 261
     status: draft
   - subject: linux-kernel
+    slug: networking-stack
+    path: linux-kernel/networking-stack.typ
+    lines: 253
+    status: draft
+  - subject: linux-kernel
+    slug: rcu-and-locking
+    path: linux-kernel/rcu-and-locking.typ
+    lines: 233
+    status: draft
+  - subject: linux-kernel
     slug: scheduler
     path: linux-kernel/scheduler.typ
     lines: 216
+    status: draft
+  - subject: linux-kernel
+    slug: security-modules
+    path: linux-kernel/security-modules.typ
+    lines: 233
+    status: draft
+  - subject: linux-kernel
+    slug: vfs-and-fs
+    path: linux-kernel/vfs-and-fs.typ
+    lines: 248
     status: draft
   - subject: llm
     slug: agents-and-tool-use
@@ -514,6 +694,11 @@ chapters:
     lines: 178
     status: draft
   - subject: networking
+    slug: congestion-control
+    path: networking/congestion-control.typ
+    lines: 228
+    status: draft
+  - subject: networking
     slug: connection-pooling
     path: networking/connection-pooling.typ
     lines: 524
@@ -522,6 +707,11 @@ chapters:
     slug: container-networking
     path: networking/container-networking.typ
     lines: 481
+    status: draft
+  - subject: networking
+    slug: data-center-networking
+    path: networking/data-center-networking.typ
+    lines: 211
     status: draft
   - subject: networking
     slug: debugging
@@ -549,6 +739,11 @@ chapters:
     lines: 187
     status: draft
   - subject: networking
+    slug: ipv6
+    path: networking/ipv6.typ
+    lines: 303
+    status: draft
+  - subject: networking
     slug: kernel-bypass
     path: networking/kernel-bypass.typ
     lines: 267
@@ -574,9 +769,14 @@ chapters:
     lines: 220
     status: draft
   - subject: networking
-    slug: nat-firewalls
-    path: networking/nat-firewalls.typ
-    lines: 733
+    slug: multipath
+    path: networking/multipath.typ
+    lines: 218
+    status: draft
+  - subject: networking
+    slug: nat
+    path: networking/nat.typ
+    lines: 307
     status: draft
   - subject: networking
     slug: network-security
@@ -592,6 +792,16 @@ chapters:
     slug: performance-reference
     path: networking/performance-reference.typ
     lines: 139
+    status: draft
+  - subject: networking
+    slug: programmable-data-planes
+    path: networking/programmable-data-planes.typ
+    lines: 311
+    status: draft
+  - subject: networking
+    slug: quic-and-http3
+    path: networking/quic-and-http3.typ
+    lines: 213
     status: draft
   - subject: networking
     slug: realtime-protocols
@@ -622,6 +832,11 @@ chapters:
     slug: sockets-api
     path: networking/sockets-api.typ
     lines: 474
+    status: draft
+  - subject: networking
+    slug: stateful-firewalls
+    path: networking/stateful-firewalls.typ
+    lines: 478
     status: draft
   - subject: networking
     slug: tls

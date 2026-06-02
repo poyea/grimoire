@@ -140,6 +140,24 @@ Each section includes practical code examples, specific hardware numbers, and re
 #include "gpu-architecture/profiling.typ"
 #pagebreak()
 
+#include "gpu-architecture/cuda-programming-model.typ"
+#pagebreak()
+
+#include "gpu-architecture/tensor-cores-and-mma.typ"
+#pagebreak()
+
+#include "gpu-architecture/nccl-and-collectives.typ"
+#pagebreak()
+
+#include "gpu-architecture/gpu-virtualization.typ"
+#pagebreak()
+
+#include "gpu-architecture/triton-and-dsls.typ"
+#pagebreak()
+
+#include "gpu-architecture/non-nvidia.typ"
+#pagebreak()
+
 = Conclusion
 
 Modern GPUs are sophisticated parallel processors with unique architectural characteristics. Writing efficient GPU code requires understanding the execution model, memory hierarchy, and optimization principles covered in this reference.

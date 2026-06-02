@@ -71,7 +71,13 @@ Modern computer architecture represents decades of optimization at every level: 
 #include "cpu-architecture/superscalar.typ"
 #pagebreak()
 
+#include "cpu-architecture/out-of-order-deep-dive.typ"
+#pagebreak()
+
 #include "cpu-architecture/branch-prediction.typ"
+#pagebreak()
+
+#include "cpu-architecture/speculative-execution-security.typ"
 #pagebreak()
 
 #include "cpu-architecture/cache-hierarchy.typ"
@@ -93,6 +99,21 @@ Modern computer architecture represents decades of optimization at every level: 
 #pagebreak()
 
 #include "cpu-architecture/performance-analysis.typ"
+#pagebreak()
+
+#include "cpu-architecture/power-and-dvfs.typ"
+#pagebreak()
+
+#include "cpu-architecture/accelerators.typ"
+#pagebreak()
+
+#include "cpu-architecture/interconnects.typ"
+#pagebreak()
+
+#include "cpu-architecture/risc-v.typ"
+#pagebreak()
+
+#include "cpu-architecture/arm-deep-dive.typ"
 #pagebreak()
 
 = Conclusion

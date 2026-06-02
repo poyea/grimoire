@@ -53,6 +53,33 @@
 #include "linux-kernel/kernel-modules.typ"
 #pagebreak()
 
+#include "linux-kernel/vfs-and-fs.typ"
+#pagebreak()
+
+#include "linux-kernel/block-layer.typ"
+#pagebreak()
+
+#include "linux-kernel/networking-stack.typ"
+#pagebreak()
+
+#include "linux-kernel/rcu-and-locking.typ"
+#pagebreak()
+
+#include "linux-kernel/memory-reclaim.typ"
+#pagebreak()
+
+#include "linux-kernel/ebpf-deep-dive.typ"
+#pagebreak()
+
+#include "linux-kernel/security-modules.typ"
+#pagebreak()
+
+#include "linux-kernel/containers-in-the-kernel.typ"
+#pagebreak()
+
+#include "linux-kernel/live-patching.typ"
+#pagebreak()
+
 = Conclusion
 
 The Linux kernel is the universal substrate of modern server and cloud computing. Mastery of its primitives — syscall ABI, virtual memory, scheduling classes, cgroups, interrupts, and tracing — is what separates systems engineers who can diagnose tail-latency outliers from those who cannot.

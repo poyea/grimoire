@@ -97,6 +97,9 @@
 #include "coding/union-find.typ"
 #pagebreak()
 
+#include "coding/flows-and-matching.typ"
+#pagebreak()
+
 // ============================================================================
 // PART V: Specialized Topics
 // ============================================================================
@@ -126,6 +129,28 @@
 #pagebreak()
 
 #include "coding/computational-geometry.typ"
+#pagebreak()
+
+// ============================================================================
+// PART VI: Advanced Algorithmic Paradigms
+// ============================================================================
+
+#include "coding/linear-programming-and-simplex.typ"
+#pagebreak()
+
+#include "coding/randomized-algorithms.typ"
+#pagebreak()
+
+#include "coding/approximation-algorithms.typ"
+#pagebreak()
+
+#include "coding/online-algorithms.typ"
+#pagebreak()
+
+#include "coding/parallel-algorithms.typ"
+#pagebreak()
+
+#include "coding/interview-systems-design.typ"
 #pagebreak()
 
 #include "coding/advanced-java-sections.typ"

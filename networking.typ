@@ -68,7 +68,16 @@ The OSI 7-layer model is pedagogical; practical implementations use TCP/IP 4-lay
 #include "networking/internet-layer.typ"
 #pagebreak()
 
+#include "networking/ipv6.typ"
+#pagebreak()
+
 #include "networking/transport-layer.typ"
+#pagebreak()
+
+#include "networking/congestion-control.typ"
+#pagebreak()
+
+#include "networking/multipath.typ"
 #pagebreak()
 
 #include "networking/sockets-api.typ"
@@ -92,6 +101,9 @@ The OSI 7-layer model is pedagogical; practical implementations use TCP/IP 4-lay
 #include "networking/tls.typ"
 #pagebreak()
 
+#include "networking/quic-and-http3.typ"
+#pagebreak()
+
 #include "networking/zero-copy.typ"
 #pagebreak()
 
@@ -113,10 +125,16 @@ The OSI 7-layer model is pedagogical; practical implementations use TCP/IP 4-lay
 #include "networking/debugging.typ"
 #pagebreak()
 
-#include "networking/nat-firewalls.typ"
+#include "networking/nat.typ"
+#pagebreak()
+
+#include "networking/stateful-firewalls.typ"
 #pagebreak()
 
 #include "networking/load-balancing.typ"
+#pagebreak()
+
+#include "networking/data-center-networking.typ"
 #pagebreak()
 
 #include "networking/container-networking.typ"
@@ -141,6 +159,9 @@ The OSI 7-layer model is pedagogical; practical implementations use TCP/IP 4-lay
 #pagebreak()
 
 #include "networking/sdn-programmable-networks.typ"
+#pagebreak()
+
+#include "networking/programmable-data-planes.typ"
 #pagebreak()
 
 #include "networking/wireless-protocols.typ"

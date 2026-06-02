@@ -26,7 +26,13 @@
 #include "database/foundations.typ"
 #pagebreak()
 
+#include "database/query-languages.typ"
+#pagebreak()
+
 #include "database/storage-engines.typ"
+#pagebreak()
+
+#include "database/embedded-databases.typ"
 #pagebreak()
 
 #include "database/recovery-and-logging.typ"
@@ -45,6 +51,9 @@
 #pagebreak()
 
 #include "database/query-optimization.typ"
+#pagebreak()
+
+#include "database/sql-engines-internals.typ"
 #pagebreak()
 
 #include "database/joins-and-aggregation.typ"
@@ -71,10 +80,22 @@
 #include "database/lakehouses-and-open-formats.typ"
 #pagebreak()
 
+#include "database/cloud-native-databases.typ"
+#pagebreak()
+
+#include "database/oltp-htap-olap-convergence.typ"
+#pagebreak()
+
 #include "database/streaming-and-incremental-computation.typ"
 #pagebreak()
 
 #include "database/time-series-and-graph.typ"
+#pagebreak()
+
+#include "database/geospatial.typ"
+#pagebreak()
+
+#include "database/multi-model.typ"
 #pagebreak()
 
 #include "database/hardware-aware-design.typ"
