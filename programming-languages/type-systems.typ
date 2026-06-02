@@ -111,7 +111,7 @@ In $lambda arrow.r$, every function must be annotated: `lam x:Int. x+1`. Hindley
 3. *Unify* the constraints via Robinson's unification algorithm. Unification finds the most general substitution $S$ such that all constraints $tau_1 = tau_2$ are satisfied under $S$.
 4. *Apply* the substitution to recover the inferred types.
 
-Unification terminates because each unification step either eliminates a variable (substituting it with a term) or reduces the size of the constraint. The total work is bounded by $O(n log n)$ in the nearly-linear union-find formulation (Huet 1976).
+Unification terminates because each unification step either eliminates a variable (substituting it with a term) or reduces the size of the constraint. The total work is bounded by $O(n log n)$ in the nearly-linear union-find formulation (Martelli–Montanari 1982).
 
 *Principal types:* HM always infers the *most general* type. The expression `lam f. lam x. f x` gets type `(alpha -> beta) -> alpha -> beta`, not a specific instantiation. Every use of this expression can specialize the type variables to concrete types without any extra annotation.
 
@@ -156,7 +156,7 @@ unify(s, t):
 
 The *occurs check* (line 4) prevents unification of $alpha$ with $alpha arrow.r "Int"$, which would require an infinite type. Most Haskell compilers skip the occurs check for performance (enabling equirecursive types); OCaml enforces it (isorecursive).
 
-Termination: every recursive call either eliminates a variable (binding it in $theta$) or reduces the total size of the remaining constraint set. The union-find formulation (Huet 1976) achieves near-linear $O(n alpha(n))$ time, where $alpha$ is the inverse Ackermann function.
+Termination: every recursive call either eliminates a variable (binding it in $theta$) or reduces the total size of the remaining constraint set. The union-find formulation (Paterson–Wegman 1978; Martelli–Montanari 1982) achieves near-linear $O(n alpha(n))$ time, where $alpha$ is the inverse Ackermann function.
 
 === Worked HM Inference Trace
 

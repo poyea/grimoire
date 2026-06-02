@@ -144,7 +144,7 @@ Pierce reduces from the halting problem for two-counter machines, encoding count
 
 The diagnosis: the *bound* of a quantifier $forall alpha lt.tri tau_1 . dots$ may itself be a universal $forall beta lt.tri tau . dots$; nesting these triggers the unbounded recursion. The *kernel* F$(lt.tri)$ (Cardelli–Martini–Mitchell–Scedrov) requires the bound to remain the *same* in the rule S-All — which sacrifices some expressiveness but restores decidability.
 
-*Kernel F$(lt.tri)$* (Curien–Ghelli) modifies the S-All rule:
+*Kernel F$(lt.tri)$* (Cardelli–Martini–Mitchell–Scedrov; algorithmic study by Curien–Ghelli 1992) modifies the S-All rule:
 
 ```text
    Gamma, alpha <: tau_1 |- tau_2 <: tau_2'
