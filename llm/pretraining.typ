@@ -204,7 +204,7 @@ Perplexity is the standard intrinsic evaluation metric for language models. It m
 
 $ "PPL"(theta, cal(D)) = exp(- 1/T sum_(t=1)^T log p_theta (x_t | x_(t-1))) $
 
-A model assigning uniform probability over $V$ tokens has perplexity $V$. Good models achieve single-digit perplexity on in-distribution text (LLaMA 3 70B: PPL $approx$ 2.85 on Wikitext-103). Lower is better.
+A model assigning uniform probability over $V$ tokens has perplexity $V$. Strong base LMs reach low single-digit perplexity on in-distribution corpora; figures depend heavily on tokenizer and the exact eval split, so any cross-model comparison must control for both. Lower is better.
 
 ```python
 import torch, torch.nn.functional as F
