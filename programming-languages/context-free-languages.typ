@@ -100,9 +100,9 @@ $ T[i, j] = { A in V | A =>^* a_i a_(i+1) dots a_j } $
 The outer two indices give $Theta(n^2)$ cells, each filled in $O(n |G|)$ work, yielding $O(n^3 |G|)$ total. Empirically the algorithm runs much faster on grammars where $T[i, j]$ is sparse.
 
 ```python
-eq.def cyk(grammar, w):
+def cyk(grammar, w):
     n = len(w)
-    T = [["set"() for _ in range(n+1)] for _ in range(n+1)]
+    T = [[set() for _ in range(n+1)] for _ in range(n+1)]
     for i, a in enumerate(w, 1):
         T[i][i] = {A for (A, rhs) in grammar if rhs == (a,)}
     for length in range(2, n+1):
@@ -110,7 +110,7 @@ eq.def cyk(grammar, w):
             j = i + length - 1
             for k in range(i, j):
                 for (A, rhs) in grammar:
-                    "if len(rhs) == 2 and rhs[0] in T[i][k] "and rhs[1] in T[k+1][j]:
+                    if len(rhs) == 2 and rhs[0] in T[i][k] and rhs[1] in T[k+1][j]:
                         T[i][j].add(A)
     return grammar.start in T[1][n]
 ```

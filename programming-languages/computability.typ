@@ -136,9 +136,9 @@ The proof is a *Quine*: a program that builds its own description and then appli
 $f$ to it. The Python sketch:
 
 ```python
-eq.def quine(f):
+def quine(f):
     template = (
-        "eq.def prog(y):\n"
+        "def prog(y):\n"
         "    src = {src!r}\n"
         "    e = compile_to_index(src.format(src=src))\n"
         "    return run(f(e), y)\n"
@@ -481,7 +481,7 @@ over *functions* $f : NN -> NN$.
   no infinite path" (well-foundedness).
 - $Sigma^1_2$: $exists f$ of a $Pi^1_1$ matrix; and so on.
 
-*Example.* "$e$ codes a recursive tree with a recursive infinite path" is
+*Example.* "$e$ codes a recursive tree with an infinite path" is
 $Sigma^1_1$; "$e$ codes a well-founded recursive tree" is $Pi^1_1$-complete. The
 set of indices of total recursive functions is $Pi^0_2$-complete; the set of
 *hyperarithmetical* indices is $Pi^1_1$.

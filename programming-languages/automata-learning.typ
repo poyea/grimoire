@@ -10,7 +10,7 @@ Three classical learning frameworks structure the field.
 
 === Identification in the Limit (Gold 1967)
 
-A *learner* receives an infinite sequence of examples (or examples and counterexamples) from an unknown language $L$ in a cal(C) $cal(C)$ and outputs a hypothesis after each example. The learner *identifies $cal(C)$ in the limit* if for every $L in cal(C)$ and every fair enumeration, after finitely many steps the hypothesis stabilizes at a correct representation of $L$.
+A *learner* receives an infinite sequence of examples (or examples and counterexamples) from an unknown language $L$ in a class $cal(C)$ and outputs a hypothesis after each example. The learner *identifies $cal(C)$ in the limit* if for every $L in cal(C)$ and every fair enumeration, after finitely many steps the hypothesis stabilizes at a correct representation of $L$.
 
 *Theorem (Gold 1967).* No *superfinite* class -- one containing every finite language and at least one infinite language -- is identifiable in the limit from *positive data only*.
 
@@ -214,7 +214,7 @@ For infinite-word languages, the analogue of $L^*$ runs into a structural proble
 
 *$L^omega$ (Maler--Pnueli 1995).* Learns deterministic *weak Büchi* automata via a $L^*$-style table over $omega$-regular sample words $u v^omega$.
 
-*Angluin--Boker--Fisman 2018.* Active learning for *families of DFAs* (FDFAs) that represent $omega$-regular languages: a leading DFA partitions $Sigma^omega$ into ultimately periodic classes; a per-cal(C) DFA recognizes the periodic part. The framework recovers polynomial learnability.
+*Angluin--Boker--Fisman 2018.* Active learning for *families of DFAs* (FDFAs) that represent $omega$-regular languages: a leading DFA partitions $Sigma^omega$ into ultimately periodic classes; a per-class DFA recognizes the periodic part. The framework recovers polynomial learnability.
 
 *Lazy active learning of Büchi automata* (Li--Sun--Pu--Vardi--Wang 2020): defer commitment to acceptance set; refine on counterexample.
 
@@ -421,7 +421,7 @@ The *Iterative AGAR* loop refines $A$ via counterexamples from either the verifi
 
 == Extended Topic: Learning Visibly Pushdown Languages
 
-*Visibly pushdown languages* (Alur--Madhusudan 2004) restrict pushdown automata so that the input symbol determines whether to push, pop, or no-op. The cal(C) enjoys closure under Boolean operations and decidable inclusion, recovering many DFA-like properties.
+*Visibly pushdown languages* (Alur--Madhusudan 2004) restrict pushdown automata so that the input symbol determines whether to push, pop, or no-op. The class enjoys closure under Boolean operations and decidable inclusion, recovering many DFA-like properties.
 
 *Theorem (Kumar--Madhusudan--Viswanathan 2007).* VPLs are *learnable in polynomial time* via an $L^*$-style algorithm querying membership and equivalence of visibly pushdown languages. The observation table is replaced by a *call/return* table tracking call-symbol equivalence classes paired with return-context equivalence classes.
 
@@ -452,7 +452,7 @@ The connection between *MDL* (minimum description length) and DFA inference yiel
 
 *Theorem (Angluin 1981).* Regular languages are *not* learnable in polynomial time from membership queries alone (no equivalence oracle), even with arbitrary prior knowledge of the alphabet.
 
-*Counterexample.* The cal(C) of languages ${L_w | w in {0, 1}^n}$ where $L_w = {w}$ requires $2^n$ membership queries in the worst case to distinguish among $2^n$ candidates.
+*Counterexample.* The class of languages ${L_w | w in {0, 1}^n}$ where $L_w = {w}$ requires $2^n$ membership queries in the worst case to distinguish among $2^n$ candidates.
 
 This motivates the *MAT model* and the various PAC-style relaxations.
 
