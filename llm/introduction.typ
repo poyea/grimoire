@@ -269,7 +269,7 @@ IO-aware attention tiling: avoids $O(L^2)$ HBM traffic. 2× faster than FA1. Now
 === 2024 — DeepSeek-V2 / V3 / R1
 
 - *V2:* Multi-head Latent Attention (MLA), 93% KV cache reduction.
-- *V3:* 671B MoE trained for \$6M. GPT-4 class.
+- *V3:* 671B MoE trained for \$5.5M. GPT-4 class.
 - *R1:* Pure RL reasoning (GRPO), no supervised chain-of-thought. Matched o1 on math.
 
 == Document Structure

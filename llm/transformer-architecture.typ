@@ -430,7 +430,7 @@ for name, p in model.named_parameters():
   [LLaMA 3 70B],  [70B],     [8 192],  [80], [64], [8],  [28 672],
   [Mistral 7B],   [7B],      [4 096],  [32], [32], [8],  [14 336],
   [Gemma 2 9B],   [9B],      [3 584],  [42], [16], [8],  [14 336],
-  [DeepSeek-V3],  [671B MoE],[7 168],  [61], [128],[128],[18 432 × 256 exp.],
+  [DeepSeek-V3],  [671B MoE],[7 168],  [61], [128],[128],[2 048 × (256+1) exp.],
 )
 
 == Multi-Head Latent Attention (MLA) — DeepSeek-V2
@@ -439,7 +439,7 @@ Compresses the KV cache via low-rank projection. Instead of caching $n_"kv" time
 
 $ c_t = W^(D K V) h_t, quad K_t = W^(U K) c_t, quad V_t = W^(U V) c_t $
 
-DeepSeek-V2 uses $d_c = 512$ for the KV-compression latent and $d_c' = 1536$ for a separate query-compression latent (with $d_"model" = 5120$, $n_"heads" = 128$, $d_"head" = 128$). Per-token cache comparison: standard MHA stores $2 times n_"heads" times d_"head" = 2 times 128 times 128 = 32,768$ values; MLA stores $d_c + d_"head"^R = 512 + 64 = 576$ values (the $d_"head"^R = 64$ is the decoupled RoPE key) — roughly a 57× reduction, i.e. ~93% KV cache savings vs MHA at similar quality. Trade-off: additional matrix multiplies per decode step.
+DeepSeek-V2 uses $d_c = 512$ for the KV-compression latent and $d_c' = 1536$ for a separate query-compression latent (with $d_"model" = 5120$, $n_"heads" = 128$, $d_"head" = 128$). Per-token cache comparison: standard MHA stores $2 times n_"heads" times d_"head" = 2 times 128 times 128 = 32,768$ values; MLA stores $d_c + d_"head"^R = 512 + 64 = 576$ values (the $d_"head"^R = 64$ is the decoupled RoPE key) — roughly a 57× reduction, i.e. ~98% KV cache savings vs MHA at similar quality. Trade-off: additional matrix multiplies per decode step.
 
 ```python
 class MultiHeadLatentAttention(nn.Module):
