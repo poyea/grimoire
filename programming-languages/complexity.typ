@@ -238,7 +238,7 @@ A *probabilistic TM* has a transition function with random bits. Define:
 - $"coRP"$: one-sided error toward YES.
 - $"ZPP" = "RP" inter "coRP"$: zero error, expected polynomial time.
 - $"BPP"$: $Pr["correct"] gt.eq 2/3$ on every input. Two-sided bounded error.
-- $"PP"$: $Pr["correct"] > 1/2$. Unbounded error; $"PH" subset.eq "P"^"PP"$ (Toda).
+- $"PP"$: $Pr["correct"] > 1/2$. Unbounded error; $"PH" subset.eq "P"^(\#"P") = "P"^"PP"$ (Toda).
 
 Error amplification: $k$ independent repetitions plus majority vote reduce error
 to $2^(-Omega(k))$ in BPP, by Chernoff. So the constant $2/3$ can be replaced by
@@ -306,7 +306,7 @@ $bb(F)_p$ disagree everywhere outside a $3 n / p$ fraction, so soundness error p
 round is $3 n \/ p$. Over $n$ rounds: $3 n^2 \/ p$, negligible. $square$
 
 *Corollary (LFKN).* $\#"SAT" in "IP"$, hence $"coNP" subset.eq "IP"$ (since $"coNP"
-lt.eq^p_T #"SAT"$).
+lt.eq^p_T \#"SAT"$).
 
 *Theorem (Shamir 1990).* $"IP" = "PSPACE"$.
 
@@ -450,12 +450,12 @@ method, communication complexity) yield natural properties. To prove $"P" eq.not
 "NP"$ (or even $"NEXP" eq.not "P/poly"$) one must invent *non-natural* techniques
 -- e.g. *non-constructive* or *non-large*.
 
-*Theorem (Williams 2014).* $"NEXP" eq."not" "ACC"^0$. The proof *bypasses natural
+*Theorem (Williams 2014).* $"NEXP" subset.eq.not "ACC"^0$. The proof *bypasses natural
 proofs* by using a non-constructive ingredient: a faster-than-trivial satisfiability
 algorithm for $"ACC"^0$ circuits, combined with a Karp--Lipton style diagonalisation.
 
 Williams's blueprint -- "improved SAT algorithm for $cal(C)$ $=>$
-$"NEXP" eq."not" cal(C)$" -- is one of the few known routes around the barrier.
+$"NEXP" subset.eq.not cal(C)$" -- is one of the few known routes around the barrier.
 
 *Other barriers.* The *relativisation barrier* (Baker--Gill--Solovay 1975): there
 exist oracles $A$ with $"P"^A = "NP"^A$ and oracles $B$ with $"P"^B eq."not" "NP"^B$,
@@ -481,7 +481,7 @@ The order is essential: without it, FO+LFP cannot count or even detect parity. O
 ordered finite structures, fixed-point iteration corresponds to polynomial-time
 DTM computation.
 
-*Immerman--Szelepcsényi as descriptive.* $"NL" = "FO + TC"$ (transitive closure).
+*Immerman--Szelepcsényi as descriptive.* $"NL" = "FO + posTC"$ (positive transitive closure, over ordered structures; deterministic TC instead gives $"L"$).
 $"NL" = "coNL"$ is the model-theoretic statement that FO+TC is closed under
 negation.
 
