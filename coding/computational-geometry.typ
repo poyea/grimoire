@@ -259,11 +259,11 @@ public:
             if (id1 < 0 || id2 < 0) return;
             if (segmentsIntersect(segments[id1].p1, segments[id1].p2,
                                   segments[id2].p1, segments[id2].p2)) {
-                Point inter = lineIntersection(
+                auto inter = lineIntersection(
                     segments[id1].p1, segments[id1].p2,
                     segments[id2].p1, segments[id2].p2);
-                if (inter.x > sweepX + EPS) {
-                    events.push({inter.x, 2, id1, id2});
+                if (inter && inter->x > sweepX + EPS) {
+                    events.push({inter->x, 2, id1, id2});
                 }
             }
         };
