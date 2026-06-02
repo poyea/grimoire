@@ -46,8 +46,8 @@ Client receives streamed tokens
   [Model weights], [16 GB], [8B params × 2 bytes/param (BF16)],
   [CUDA / framework overhead], [~2 GB], [PyTorch allocator, NCCL buffers],
   [KV cache (remainder)], [~62 GB], [paged or contiguous],
-  [KV per token (LLaMA 3 8B)], [0.5 MB], [32 layers × 2 × 8 kv-heads × 128 dim × 2 bytes],
-  [Max tokens in KV cache], [~124k], [62 GB / 0.5 MB per token],
+  [KV per token (LLaMA 3 8B)], [0.125 MB (128 KiB)], [32 layers × 2 × 8 kv-heads × 128 dim × 2 bytes = 131,072 B],
+  [Max tokens in KV cache], [~500k], [62 GB / 0.125 MB per token],
 )
 
 == vLLM
@@ -390,7 +390,7 @@ $
 "Concurrent requests" = "Request rate" times "Mean latency per request"
 $
 
-*Example:* if mean end-to-end latency is 2 s at steady state, and the system sustains 50 requests/s, then on average $50 times 2 = 100$ requests are in-flight simultaneously. Each in-flight request holds KV cache blocks. At 0.5 MB/token and 200 output tokens, that is 100 × 200 × 0.5 MB = 10 GB of KV cache just for output tokens.
+*Example:* if mean end-to-end latency is 2 s at steady state, and the system sustains 50 requests/s, then on average $50 times 2 = 100$ requests are in-flight simultaneously. Each in-flight request holds KV cache blocks. At 0.125 MB/token and 200 output tokens, that is 100 × 200 × 0.125 MB = 2.5 GB of KV cache just for output tokens.
 
 === Time to First Token (TTFT) vs Output Throughput
 
@@ -409,10 +409,10 @@ $
 $
 
 $
-approx frac(16 "GB" + 0.5 "MB" times N_"seqs", 3.35 "TB/s") approx 4.8 "ms at" N_"seqs"=1
+approx frac(16 "GB" + 0.125 "MB" times N_"seqs", 3.35 "TB/s") approx 4.8 "ms at" N_"seqs"=1
 $
 
-At batch size 64, the KV cache adds 32 MB, still dominated by the 16 GB weight read: ITL remains ~5–7 ms. The model is roofline-limited by HBM bandwidth.
+At batch size 64, the KV cache adds 8 MB, still dominated by the 16 GB weight read: ITL remains ~5–7 ms. The model is roofline-limited by HBM bandwidth.
 
 === Concrete Numbers (H100 80 GB, LLaMA 3 8B BF16)
 
@@ -481,7 +481,7 @@ Mixing prefill and decode on the same GPU means neither workload can be tuned fo
 *KV transfer:* after prefill completes on a prefill GPU, the KV cache for that sequence must be transferred to a decode GPU. This adds latency (tens of milliseconds over PCIe, less than 5 ms over NVLink/RDMA for 8k tokens). The KV transfer cost is:
 
 $
-T_"KV" = frac("KV size", "NVLink BW") = frac(0.5 "MB/token" times L, 900 "GB/s") approx 0.6 mu s slash "token"
+T_"KV" = frac("KV size", "NVLink BW") = frac(0.125 "MB/token" times L, 900 "GB/s") approx 0.14 mu s slash "token"
 $
 
 For an 8k prompt: $0.5 times 8192 = 4096 "MB" slash 900 "GB/s" approx 4.5 "ms"$ — acceptable overhead.

@@ -29,7 +29,7 @@ Prefill (processing a long prompt) is batch-parallel and can reach arithmetic in
   [DeepSeek-V3], [671B],  [1342],[671],[671],[336],
 )
 
-_Bytes per parameter:_ FP16 = 2, BF16 = 2, FP8 = 1, INT8 = 1, INT4 = 0.5. Figures exclude KV cache and activation buffers. KV cache at FP16 adds roughly $2 times 2 times n_"layers" times n_"heads" times d_"head" times "context_len"$ bytes per batch element — up to 64 GB for a 128k-token LLaMA 3 70B context.
+_Bytes per parameter:_ FP16 = 2, BF16 = 2, FP8 = 1, INT8 = 1, INT4 = 0.5. Figures exclude KV cache and activation buffers. KV cache at FP16 adds roughly $2 times 2 times n_"layers" times n_"kv-heads" times d_"head" times "context_len"$ bytes per batch element — about 320 KiB/token, i.e. ~40 GB for a 128k-token LLaMA 3 70B context at batch 1 (using GQA $n_"kv-heads" = 8$).
 
 == Quantization Basics
 
@@ -149,7 +149,7 @@ GPTQ builds on the Optimal Brain Surgeon (OBS) framework (Hassibi & Stork, 1993)
 
 $ delta L = frac(1, 2) frac((w_q - "quant"(w_q))^2, [H_F^(-1)]_(q q)) $
 
-where $H_F = 2 X X^top$ is the layer Hessian (factor of 2 from the squared Frobenius loss) and $[H_F^(-1)]_(q q)$ is the $q$-th diagonal entry of its inverse.
+where $H_F = 2 X^top X$ is the layer Hessian (with $X in RR^(n_"calib" times d_"in")$; factor of 2 from the squared Frobenius loss) and $[H_F^(-1)]_(q q)$ is the $q$-th diagonal entry of its inverse.
 
 After quantizing weight $w_q$, the *OBS weight update* adjusts the remaining unquantized weights to compensate for the introduced error:
 
@@ -458,7 +458,7 @@ The NF4 base weights are dequantized to BF16 only during the forward pass (for t
 
 == KV Cache Quantization
 
-The key-value cache stores past attention keys and values for all layers, growing linearly with sequence length. At context length 128k with batch size 8, LLaMA 3 70B accumulates roughly 64 GB of KV cache at FP16 — larger than the weights themselves.
+The key-value cache stores past attention keys and values for all layers, growing linearly with sequence length. At context length 128k with batch size 8, LLaMA 3 70B accumulates roughly 320 GB of KV cache at FP16 (≈40 GB per batch element) — larger than the weights themselves.
 
 === FP8 KV Cache
 
@@ -489,11 +489,11 @@ Recent work — KIVI (Liu et al., 2024, ICML) for 2-bit KV with per-channel keys
 
 #table(
   columns: (auto, auto, auto, auto),
-  [*KV dtype*], [*Memory (128k ctx, 70B)*], [*Throughput*], [*PPL delta*],
-  [FP16],  [~64 GB], [baseline],  [0.00],
-  [FP8],   [~32 GB], [+5--10\%],   [+0.05],
-  [INT8],  [~32 GB], [+8--12\%],   [+0.10],
-  [INT4],  [~16 GB], [+15--25\%],  [+0.20--0.40],
+  [*KV dtype*], [*Memory (128k ctx, 70B, batch 1)*], [*Throughput*], [*PPL delta*],
+  [FP16],  [~40 GB], [baseline],  [0.00],
+  [FP8],   [~20 GB], [+5--10\%],   [+0.05],
+  [INT8],  [~20 GB], [+8--12\%],   [+0.10],
+  [INT4],  [~10 GB], [+15--25\%],  [+0.20--0.40],
 )
 
 == GGUF Format and llama.cpp
@@ -561,9 +561,9 @@ void dequant_q4km_block(const BlockQ4KM* blk, float* output) {
     const uint8_t* s = blk->scales;
     for (int i = 0; i < 4; ++i) {
         sc[i]   =  s[i] & 0x3F;
-        sc[i+4] = (s[i] >> 4) | ((s[i+8] & 0x0F) << 4) & 0x3F;
+        sc[i+4] = ((s[i] >> 4) | ((s[i+8] & 0x0F) << 4)) & 0x3F;
         m[i]    =  s[i+4] & 0x3F;
-        m[i+4]  = (s[i+4] >> 4) | ((s[i+8] >> 4) << 4) & 0x3F;
+        m[i+4]  = ((s[i+4] >> 4) | ((s[i+8] >> 4) << 4)) & 0x3F;
     }
 
     // Dequantize 8 sub-blocks of 32 weights each
