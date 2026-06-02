@@ -96,7 +96,7 @@ This is an equivalence relation, right-invariant ($x equiv_L y => x w equiv_L y 
 
 (ii) $equiv_L$ has finite index.
 
-(iii) $L$ is the cup of equivalence classes of some right-invariant equivalence relation of finite index on $Sigma^*$.
+(iii) $L$ is the union of equivalence classes of some right-invariant equivalence relation of finite index on $Sigma^*$.
 
 *Proof.* $("i") => ("ii")$. Let $M = (Q, Sigma, delta, q_0, F)$ recognise $L$. Define $x tilde y$ <==> $hat(delta)(q_0, x) = hat(delta)(q_0, y)$. Then $tilde$ refines $equiv_L$ and has index $<= |Q|$, so $equiv_L$ has index $<= |Q|$.
 
@@ -104,7 +104,7 @@ $("ii") => ("iii")$. Take $equiv_L$ itself.
 
 $("iii") => ("i")$. Let $tilde$ be such a relation with classes $[x]_tilde$ and index $n$. Define a DFA whose states are the classes, start state $[epsilon]_tilde$, transition $delta([x]_tilde, a) = [x a]_tilde$ (well-defined by right-invariance), and accepting classes $F = { [x]_tilde | x in L }$ (well-defined by saturation). This DFA recognises $L$. $square$
 
-*Corollary (canonical minimal DFA).* The quotient $Sigma^* slash equiv_L$ is itself a DFA recognising $L$, and any DFA $M$ recognising $L$ admits a surjective homomorphism onto $Sigma^* slash equiv_L$. Hence among all DFAs recognising $L$ there is a unique-up-arrow.r-isomorphism *minimal* one, with exactly $|Sigma^* slash equiv_L|$ states.
+*Corollary (canonical minimal DFA).* The quotient $Sigma^* slash equiv_L$ is itself a DFA recognising $L$, and any DFA $M$ recognising $L$ admits a surjective homomorphism onto $Sigma^* slash equiv_L$. Hence among all DFAs recognising $L$ there is a unique-up-to-isomorphism *minimal* one, with exactly $|Sigma^* slash equiv_L|$ states.
 
 *Application (non-regularity).* To prove $L = { a^n b^n | n >= 0 }$ non-regular: the strings $a^i$ for distinct $i$ are pairwise $equiv_L$-inequivalent (witness $z = b^i$), so $equiv_L$ has infinite index.
 
@@ -141,7 +141,7 @@ where $nu(r) = epsilon$ if $epsilon in L(r)$, $emptyset$ otherwise.
 
 *Theorem (Brzozowski 1964).* For any regex $r$, the set ${ partial_w r | w in Sigma^* }$ modulo the ACI equations of $+$ (associativity, commutativity, idempotence) is *finite*. The states are the derivatives, transitions are $r arrow.r^a partial_a r$, accept <==> $epsilon in L(r)$. The resulting DFA recognises $L(r)$ and, after minimisation, *is* the minimal DFA.
 
-*Proof sketch.* By structural induction on $r$, every iterated derivative is a finite ACI-sum of terms drawn from a finite syntactic universe determined by $r$ — the *partial derivative states* of Antimirov give a sharper bound of at most $1 + ||r||$ states where $||r||$ counts symbol occurrences. Bounded by $2^(1 + ||r||)$ in the Brzozowski formulation. $square$
+*Proof sketch.* By structural induction on $r$, every iterated derivative is a finite ACI-sum of terms drawn from a finite syntactic universe determined by $r$. Antimirov's *partial derivatives* give the sharp bound of at most $1 + ||r||$ states, where $||r||$ counts symbol occurrences. The naive Brzozowski construction *without* ACI-canonicalisation can produce up to $2^(1 + ||r||)$ syntactically distinct derivatives; quotienting by the ACI equations of $+$ is exactly what collapses this back to the finite (and, after minimisation, minimal) automaton. $square$
 
 === Coalgebraic View
 
@@ -169,7 +169,7 @@ The *state complexity* of $L$ is the size of its minimal DFA. Lower bounds via c
 
 A class $cal(V)$ of regular languages closed under Boolean operations, quotients $a^(-1) L = { w | a w in L }$ and $L a^(-1)$, and inverse homomorphisms is a *variety of languages*. Dually, a class of finite monoids closed under submonoids, quotients, and finite direct products is a *pseudovariety of monoids*. Eilenberg (1974, 1976) proved:
 
-*Theorem (Eilenberg's Variety Theorem).* The correspondence sending a pseudovariety $bold(V)$ arrow.r the class $cal(V)(bold(V))$ of languages whose syntactic monoid lies in $bold(V)$ is a bijection between pseudovarieties of monoids and varieties of languages.
+*Theorem (Eilenberg's Variety Theorem).* The correspondence sending a pseudovariety $bold(V)$ to the class $cal(V)(bold(V))$ of languages whose syntactic monoid lies in $bold(V)$ is a bijection between pseudovarieties of monoids and varieties of languages.
 
 This is the algebraic backbone of *decidable classification* of regular languages: deciding whether a regular $L$ belongs to $cal(V)(bold(V))$ reduces to deciding whether its (computable) syntactic monoid lies in $bold(V)$ — a *finite* algebraic question.
 
@@ -253,7 +253,7 @@ while ((c = *input++) != EOF) {
         last_accept_state = state;
         last_accept_pos = input;
     }
-    "if (state == DEAD) break;
+    if (state == DEAD) break;
 }
 ```
 
@@ -309,7 +309,7 @@ The sketch in the earlier section omits two points that matter in practice: the
 
 (ii) The right-congruence $equiv_L$ defined by $x equiv_L y <==> forall z. x z in L <==> y z in L$ has finite index.
 
-(iii) $L$ is a cup of classes of *some* right-congruence of finite index saturating $L$.
+(iii) $L$ is a union of classes of *some* right-congruence of finite index saturating $L$.
 
 *Proof, (i) $=> $ (ii).* Let $M = (Q, Sigma, delta, q_0, F)$ be a DFA with $|Q| = n$. Define
 $phi : Sigma^* arrow.r Q$ by $phi(w) = hat(delta)(q_0, w)$. Observe: $x equiv_L y$ whenever
@@ -322,7 +322,7 @@ right-invariant ($x equiv_L y => x a equiv_L y a$ for all $a$, since for any $z$
 $(x a) z = x (a z)$ and $(y a) z = y (a z)$), and saturates $L$ (if $x equiv_L y$
 and $x in L$ then taking $z = epsilon$ yields $y in L$).
 
-*Proof, (iii) $=>$ (i).* Let $tilde$ be the right-congruence with classes $C_0, dots, C_{k-1}$
+*Proof, (iii) $=>$ (i).* Let $tilde$ be the right-congruence with classes $C_0, dots, C_(k-1)$
 (finitely many), right-invariant, and saturating $L$. Define the DFA
 $M = (C, Sigma, delta, [epsilon]_tilde, { C_i | C_i subset.eq L })$
 where $delta(C_i, a) = [x a]_tilde$ for any representative $x in C_i$ (well-defined by
@@ -336,7 +336,7 @@ $square$
 $delta_L([x], a) = [x a]$ and $F_L = { [x] | x in L }$ is the *canonical* minimal DFA.
 
 *Non-constructive remark.* Condition (ii) does not, by itself, yield an algorithm
-arrow.r compute $equiv_L$ — the relation is defined by an infinite family of futures $z$.
+to compute $equiv_L$ — the relation is defined by an infinite family of futures $z$.
 The constructive content of (iii) $=>$ (i) requires that the finite right-congruence be
 *explicitly given* (e.g., as a DFA or as a finitely-presented monoid quotient). This is
 why non-regularity proofs via Myhill–Nerode must exhibit an *infinite* anti-chain of
@@ -346,7 +346,7 @@ inequivalent strings, not merely assert one exists.
 $L = { w w | w in { a, b }^* }$ (the *copy* language). Pumping lemma argument:
 take $w = a^p b a^p b$ where $p$ is the pumping length. Every decomposition
 $x y z$ with $|x y| <= p$, $|y| >= 1$ has $y subset a^+$ (the first $a^p$ block);
-pumping $y^2$ gives $a^{p + |y|} b a^p b$ with unequal block lengths, hence not in $L$.
+pumping $y^2$ gives $a^(p + |y|) b a^p b$ with unequal block lengths, hence not in $L$.
 
 Myhill–Nerode argument (stronger, since it characterises exactly): for distinct
 $i, j in NN$ the strings $a^i$ and $a^j$ are $equiv_L$-inequivalent with witness $z = a^i$:
@@ -359,17 +359,17 @@ tells you *why* a DFA cannot exist (it would need to remember $i$ exactly).
 
 For $u in Sigma^*$, the *left quotient* of $L$ by $u$ is
 
-$ u^{-1} L = { v in Sigma^* | u v in L } = partial_u L $
+$ u^(-1) L = { v in Sigma^* | u v in L } = partial_u L $
 
-the Brzozowski derivative. Right quotients: $L u^{-1} = { w | w u in L }$; these are
+the Brzozowski derivative. Right quotients: $L u^(-1) = { w | w u in L }$; these are
 less frequently used but appear in the theory of two-way automata and in deciding
-whether $L$ is closed under right quotient (the condition for $L$ arrow.r be a *right ideal*).
+whether $L$ is closed under right quotient (the condition for $L$ to be a *right ideal*).
 
-*Proposition.* The Nerode equivalence classes are exactly the left quotients: $[u]_{equiv_L} = u^{-1} L$ as a *language* (the class of $u$ is characterised by the set of valid continuations). The states of the minimal DFA are thus precisely the distinct left quotients of $L$.
+*Proposition.* The Nerode equivalence classes are exactly the left quotients: $[u]_(equiv_L) = u^(-1) L$ as a *language* (the class of $u$ is characterised by the set of valid continuations). The states of the minimal DFA are thus precisely the distinct left quotients of $L$.
 
 *Corollary.* $L$ is regular <==> $L$ has finitely many distinct left quotients. This
-gives an algorithm: compute $epsilon^{-1} L = L$, then $a^{-1} L$ for $a in Sigma$,
-then $(a b)^{-1} L$, etc., stopping when no new quotient appears. Termination is
+gives an algorithm: compute $epsilon^(-1) L = L$, then $a^(-1) L$ for $a in Sigma$,
+then $(a b)^(-1) L$, etc., stopping when no new quotient appears. Termination is
 guaranteed by finiteness of the Nerode index; the resulting automaton is exactly the
 Brzozowski automaton.
 
@@ -381,7 +381,7 @@ Brzozowski automaton.
 minimisation.
 
 *Hopcroft–Karp algorithm (1971).* Directly check bisimilarity of states using
-*union-find*. Maintain a partition of $Q_1 union Q_2$ and a queue of *arrow.r-be-merged*
+*union-find*. Maintain a partition of $Q_1 union Q_2$ and a queue of *to-be-merged*
 pairs. Initially merge the start states $q^1_0 tilde q^2_0$. Whenever $p tilde q$ is
 asserted, for each $a in Sigma$, assert $delta_1(p, a) tilde delta_2(q, a)$ (or
 $delta(p, a) tilde delta(q, a)$ for pairs within the same machine). If at any point
@@ -407,9 +407,8 @@ def dfa_equiv(M1, M2):
         if rp == rq:
             continue
         # accepting vs non-accepting => inequivalent
-        if (rp in M1.F or rq in M2.F) != (rp in M1.F and rq in M2.F):
-            if (p in M1.F) != (q in M2.F):
-                return False
+        if (p in M1.F) != (q in M2.F):
+            return False
         union(p, q)
         for a in M1.alphabet:
             queue.append((M1.delta(p, a), M2.delta(q, a)))
@@ -445,7 +444,7 @@ More precisely, for any NFA $N$, the DFA $D$ produced by subset construction fro
 $N^R$ is *already* accessible (all states reachable from start) by construction. After
 a second reversal and subset construction, the resulting DFA is both accessible and
 *co-accessible* (all states reach an accepting state — dead states never appear) and
-its states are exactly the equivalence classes of $equiv_{L^R}^{-1} = equiv_L$ after
+its states are exactly the equivalence classes of $equiv_(L^R)^(-1) = equiv_L$ after
 swapping. Hence $D$ is the minimal DFA. $square$
 
 *Complexity.* If $M$ has $n$ states, the intermediate NFA $D^R$ from step 2 may have
@@ -486,7 +485,7 @@ hierarchy strict (does each level add new languages)?
 
 *Theorem (Eggan 1963).* For every $k >= 0$ there exists a regular language requiring
 star-height exactly $k$. One such language: let $L_k$ be defined by the regular
-expression $r_k$ where $r_0 = a$, $r_{k+1} = (r_k b^* r_k)^*$. The star-height
+expression $r_k$ where $r_0 = a$, $r_(k+1) = (r_k b^* r_k)^*$. The star-height
 of $L_k$ is exactly $k + 1$.
 
 *Theorem (Hashiguchi 1988).* The star-height of a regular language is computable.
@@ -519,12 +518,12 @@ language has generalised star-height $<= 1$.
 === Shepherdson's Crossing-Sequence Proof
 
 *Theorem (Shepherdson 1959).* Every two-way DFA can be simulated by a one-way DFA
-with at most $(|Q| + 1)^{|Q|}$ states.
+with at most $(|Q| + 1)^(|Q|)$ states.
 
 *Proof.* Let $M = (Q, Sigma, delta, q_0, F)$ be a 2DFA reading input $\#a_1 a_2 dots a_n \#$.
 For each input position $i$ ($0 <= i <= n+1$), define the *crossing sequence at $i$*
 as the sequence of states in which $M$'s head crosses the boundary between position $i-1$
-and $i$: $(q_{i_1}, q_{i_2}, dots, q_{i_r})$ where $q_{i_j}$ is the state of $M$ when
+and $i$: $(q_(i_1), q_(i_2), dots, q_(i_r))$ where $q_(i_j)$ is the state of $M$ when
 the head crosses position $i$ for the $j$-th time. Consecutive crossings alternate
 direction (right then left then right ...).
 
@@ -535,7 +534,7 @@ while moving off the right end. But the crossing sequence at position $i+1$ is
 it is a computable function of these two inputs.
 
 This defines a one-way DFA: states are *crossing sequences*, i.e., alternating sequences
-of states of $M$. The number of valid crossing sequences is at most $(|Q| + 1)^{|Q|}$
+of states of $M$. The number of valid crossing sequences is at most $(|Q| + 1)^(|Q|)$
 (each of the $|Q|$ possible "crossing slots" can be one of $|Q|$ states or absent).
 The transition function updates the crossing sequence deterministically. $square$
 
@@ -565,7 +564,7 @@ a corresponding $"NL" eq.not "L"$ proof would give a new separation.
 The *state complexity* of a binary operation on regular languages can be precisely
 bounded using *communication complexity* (Hromkovič 1997; Karchmer–Wigderson 1990).
 
-*Fooling set technique.* A set $S = { (x_i, y_i) }_{i=1}^{k} subset.eq Sigma^* times Sigma^*$
+*Fooling set technique.* A set $S = { (x_i, y_i) }_(i=1)^(k) subset.eq Sigma^* times Sigma^*$
 is a *fooling set* for $L$ if:
 (i) $x_i y_i in L$ for all $i$.
 (ii) For $i eq.not j$, either $x_i y_j in.not L$ or $x_j y_i in.not L$.
@@ -576,15 +575,15 @@ is a *fooling set* for $L$ if:
 $i eq.not j$. Then $hat(delta)(q_0, x_i y_j) = hat(delta)(q_j, y_j) = hat(delta)(q_i, y_j)$
 and $hat(delta)(q_0, x_j y_i) = hat(delta)(q_i, y_i)$. Since $x_i y_i in L$ and
 $x_j y_j in L$, we have $q_i in F <==> hat(delta)(q_i, y_i) in F$. This forces
-both $x_i y_j$ and $x_j y_i$ arrow.r be in $L$, contradicting (ii). Hence $q_i eq.not q_j$
+both $x_i y_j$ and $x_j y_i$ to be in $L$, contradicting (ii). Hence $q_i eq.not q_j$
 for all $i eq.not j$. $square$
 
 *Example.* For $L = { a^n b^n | n >= 0 }$ (non-regular — the technique also applies
-arrow.r lower-bounding witness quotients): the fooling set ${ (a^i, b^i) | i >= 0 }$ has
+to lower-bounding witness quotients): the fooling set ${ (a^i, b^i) | i >= 0 }$ has
 infinite size, confirming non-regularity.
 
 For the *intersection* $L(M_1) inter L(M_2)$, the state complexity of the product
-DFA is $|Q_1| times |Q_2|$, and Hromkovič–Jirásková proved this is *tight*: for every
+DFA is $|Q_1| times |Q_2|$, and Yu–Zhuang–Salomaa (1994) proved this is *tight*: for every
 $m, n$ there exist DFAs $M_1, M_2$ with $m, n$ states such that $L(M_1) inter L(M_2)$
 requires exactly $m n$ states. The argument uses a fooling set of size $m n$ constructed
 from crossing-pair sequences.
@@ -600,7 +599,7 @@ from crossing-pair sequences.
 - *Varieties of regular languages* (mappings $Sigma^* |-> cal(V)(Sigma^*)$ closed
   under Boolean operations, left and right quotients, and inverse homomorphisms).
 
-The correspondence sends a pseudovariety $bold(V)$ arrow.r $cal(V)(bold(V))$: the class
+The correspondence sends a pseudovariety $bold(V)$ to $cal(V)(bold(V))$: the class
 $cal(V)(bold(V))(Sigma^*) = { L subset.eq Sigma^* | "Synt"(L) in bold(V) }$ where
 $"Synt"(L)$ is the *syntactic monoid* of $L$.
 
@@ -609,7 +608,7 @@ $"Synt"(L)$ is the *syntactic monoid* of $L$.
 The *syntactic congruence* of $L$ is $u tilde_L v <==> forall x, y. x u y in L <==> x v y in L$.
 The *syntactic monoid* is $"Synt"(L) = Sigma^* / tilde_L$ with the multiplication
 $[u][v] = [u v]$. It is the *smallest* monoid recognising $L$ in the sense that any
-monoid recognising $L$ (via a homomorphism $h$ with $L = h^{-1}(h(L))$) admits a
+monoid recognising $L$ (via a homomorphism $h$ with $L = h^(-1)(h(L))$) admits a
 surjective homomorphism from $"Synt"(L)$.
 
 *Computing the syntactic monoid.* For the minimal DFA $M = (Q, Sigma, delta, q_0, F)$,
@@ -626,7 +625,7 @@ a *group* (every element has an inverse) and groups are *not* aperiodic
 (e.g., $"swap"^2 = "id"$ but $"swap"^1 eq.not "swap"^2$), $L$ is *not* star-free.
 
 *Example (star-free: threshold counting).* The language $L = { w | |w|_a >= 1 }$ —
-at least one $a$. Its syntactic monoid has three elements: ${ [epsilon], [a], [b a^{-1} b] }$
+at least one $a$. Its syntactic monoid has three elements: ${ [epsilon], [a], [b a^(-1) b] }$
 where $[a]$ represents "has seen at least one $a$", which is *idempotent* ($[a]^2 = [a]$).
 The monoid is aperiodic (no non-trivial groups), so $L$ is star-free. Indeed
 $L = Sigma^* a Sigma^*$, which is star-free by definition.
@@ -647,7 +646,7 @@ Idempotent-comm. monoids     | Regular languages over Parikh-equivalent classes
 ```
 
 This table is the engine of *decidable classification*: checking whether $L$ belongs
-arrow.r a given variety reduces to computing $"Synt"(L)$ (a finite object, computable in
+to a given variety reduces to computing $"Synt"(L)$ (a finite object, computable in
 polynomial time from any DFA) and checking membership of the monoid in a pseudovariety
 (often decidable by finite algebraic algorithms).
 
@@ -673,7 +672,7 @@ pseudovariety $bold(V)$. The *Reiterman theorem* (1982) states:
 
 This is the Birkhoff HSP theorem carried into the finite setting via profinite completion.
 The pseudoidentity for *aperiodic* monoids: $x^omega = x^(omega+1)$ where $x^omega$
-denotes the "idempotent power" in the profinite monoid (the limit of $x^{n!}$).
+denotes the "idempotent power" in the profinite monoid (the limit of $x^(n!)$).
 
 Profinite methods are the language-theoretic backbone of the *concatenation hierarchy*
 (Brzozowski's dot-depth hierarchy): each level is a pseudovariety defined by progressively
@@ -803,14 +802,14 @@ def thompson(regex):
             s, f = fresh(), fresh()
             t = merge_transitions(n1.transitions, n2.transitions)
             t.setdefault((s, None), set()).update({n1.start, n2.start})
-            t.setdefault((n1.accept_state, None), set()).add(f)
-            t.setdefault((n2.accept_state, None), set()).add(f)
+            t.setdefault((next(iter(n1.accept)), None), set()).add(f)
+            t.setdefault((next(iter(n2.accept)), None), set()).add(f)
             return NFA(n1.states | n2.states | {s, f},
                        n1.alphabet | n2.alphabet, t, s, {f})
         case ('seq', r1, r2):
             n1, n2 = thompson(r1), thompson(r2)
             t = merge_transitions(n1.transitions, n2.transitions)
-            t.setdefault((n1.accept_state, None), set()).add(n2.start)
+            t.setdefault((next(iter(n1.accept)), None), set()).add(n2.start)
             return NFA(n1.states | n2.states, n1.alphabet | n2.alphabet,
                        t, n1.start, n2.accept)
         case ('star', r):
@@ -818,7 +817,7 @@ def thompson(regex):
             s, f = fresh(), fresh()
             t = dict(n.transitions)
             t.setdefault((s, None), set()).update({n.start, f})
-            t.setdefault((n.accept_state, None), set()).update({n.start, f})
+            t.setdefault((next(iter(n.accept)), None), set()).update({n.start, f})
             return NFA(n.states | {s, f}, n.alphabet, t, s, {f})
 ```
 
@@ -866,26 +865,16 @@ $O(log n)$ times per symbol. The total work is $O(n log n |Sigma|)$.
 Both the pumping lemma and Myhill–Nerode are used to prove non-regularity, but they
 differ sharply in *what they can establish*.
 
-*Pumping lemma limitations.* There exist non-regular languages that satisfy the pumping
-condition. The canonical example (attributed to various sources, popularised by Jaffe 1978)
-is constructed as follows:
-
-$ L_J = { a^n b^m a^n | n, m >= 0 } union { a^n b^m a^p | n, m, p >= 0, n eq.not p } $
-
-Wait — this is actually regular (its complement is ${ a^n b^m a^n | n eq.not p }$ with
-fixed $n, p$). The correct example of a non-regular language satisfying pumping is:
-
-$ L = { a^i b^j | i eq.not j } union { c }^* $
-
-No: the simplest explicit construction uses a direct product of a non-regular language
-with a pumping-valid witness. The cleanest published example (Ehrenfeucht–Parikh–Rozenberg 1981):
-
-$ L = { (a b)^n a^n b^{2n} | n >= 0 } $
-
-is non-regular (Myhill–Nerode: strings $(a b)^n a^n$ are pairwise inequivalent) but
-satisfies the pumping condition because any long string has the $a b$ prefix block which
-can be pumped while the $a^n b^{2n}$ suffix is absorbed. To show pumping is satisfied
-but Myhill–Nerode fails, one exhibits the infinite anti-chain.
+*Pumping lemma limitations.* The pumping lemma is *necessary but not sufficient* —
+there exist non-regular languages that satisfy the pumping condition for every $w$ of
+sufficient length. Constructing such examples requires care (early attempts in the
+literature contain errors); a verified construction is Jaffe's *block-pumping*
+language (Jaffe 1978), which interleaves a non-regular kernel with a "pumpable
+prefix" engineered so that every long word has a single-character $y$ whose insertion
+or deletion keeps the word in the language while the kernel still violates
+Myhill–Nerode. The pedagogical takeaway: a pumping argument can *only refute*
+regularity, never confirm it. Myhill–Nerode is the characterisation; pumping is
+sometimes a more convenient route to the same negative conclusion.
 
 *Myhill–Nerode strength.* Myhill–Nerode is a *characterisation*: $L$ is regular <==>
 the anti-chain is finite. The pumping lemma is only *necessary*. In practice:
@@ -914,7 +903,7 @@ for most applications.
 == Summary: The Seven Faces of Regular Languages
 
 The multiple equivalent characterisations are not redundant — each is *optimally suited*
-arrow.r a different task:
+to a different task:
 
 ```text
 Characterisation         | Best used for
