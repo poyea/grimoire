@@ -61,7 +61,7 @@ Use only for tiny graphs or as a correctness oracle when testing faster solvers.
 
 == Dinic's Algorithm
 
-Dinic builds a *level graph* with BFS from $s$, then finds blocking flows with DFS. The level graph forbids backward or same-level edges, so each blocking-flow phase strictly increases the shortest $s$-$t$ distance. There are at most $V$ phases, so the total cost is $O(V^2 E)$ in general, $O(E sqrt(V))$ on unit-capacity networks (and bipartite matching), and $O(E sqrt(C))$ where $C$ is total capacity.
+Dinic builds a *level graph* with BFS from $s$, then finds blocking flows with DFS. The level graph forbids backward or same-level edges, so each blocking-flow phase strictly increases the shortest $s$-$t$ distance. There are at most $V$ phases, so the total cost is $O(V^2 E)$ in general and $O(E sqrt(V))$ on unit-capacity networks (and bipartite matching). For graphs with integer capacities, Gabow's capacity-scaling variant achieves $O(E^2 log U)$ where $U$ is the maximum capacity, which is preferable when $U$ is small.
 
 ```cpp
 struct Dinic {
