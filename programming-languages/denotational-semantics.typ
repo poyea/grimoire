@@ -127,7 +127,7 @@ For *recursive types* $mu alpha. tau$ in a typed language, the same technology g
 
 == PCF and Plotkin's Full Abstraction Problem
 
-PCF (Programming Computable Functions; Plotkin 1977) is a typed $lambda$-calculus over base types $"nat"$ and $"bool"$, with constants $0, "succeeds", "pred", "ifz"$, conditionals, and a fixed-point operator $"fix"_tau : (tau arrow.r tau) arrow.r tau$ at every type.
+PCF (Programming Computable Functions; Plotkin 1977) is a typed $lambda$-calculus over base types $"nat"$ and $"bool"$, with constants $0, "succ", "pred", "ifz"$, conditionals, and a fixed-point operator $"fix"_tau : (tau arrow.r tau) arrow.r tau$ at every type.
 
 The natural Scott model interprets types as Scott domains and terms as continuous functions; the operational semantics is leftmost-outermost reduction.
 
@@ -149,7 +149,7 @@ The resolution came from *game semantics*, developed independently by Abramsky-J
 
 The idea: interpret a type as a *game* between two players, *Proponent* (P, the program) and *Opponent* (O, the environment). A term is an *innocent strategy* for P -- a deterministic rule for how P responds to O's moves, depending only on the *view* of the play (P's own moves and the moves O has made in response). Sequentiality is built into the model by the structure of plays.
 
-*Theorem (Hyland-Ong 1993; Abramsky-Jagadeesan-Malacaria 1993).* The category of arenas and innocent strategies provides a fully abstract model of PCF.
+*Theorem (Hyland--Ong 2000; Abramsky--Jagadeesan--Malacaria 2000).* The category of arenas and innocent strategies provides a fully abstract model of PCF.
 
 *Proof sketch.* Soundness: composition of innocent strategies is innocent, and reduction in PCF corresponds to the *interaction* of strategies. Adequacy: an innocent strategy denoting a closed term of type $"nat"$ that converges to $n$ has a finite trace producing $n$ as a P-move, and finite strategies are definable. Completeness: any innocent strategy can be approximated by definable strategies, and a *definability* argument shows that an undefinable strategy would have to involve non-sequential behavior, which innocence rules out. $square$
 
@@ -185,7 +185,7 @@ A continuous function $f : D arrow.r E$ is *stable* if it preserves binary infim
 
 == Coherence Spaces and Linear Logic
 
-A *coherence space* is a pair $(|X|, frown)$ where $|X|$ is a set (of *tokens*) and $frown$ is a reflexive, symmetric *coherence* relation. Cliques (subsets where every pair is coherent) form a domain under inclusion.
+A *coherence space* is a pair $(|X|, scripts(tilde.eq))$ where $|X|$ is a set (of *tokens*) and $tilde.eq$ is a reflexive, symmetric *coherence* relation. Cliques (subsets where every pair is coherent) form a domain under inclusion.
 
 Linear logic (Girard 1987) was discovered by analyzing the structure of stable functions on coherence spaces:
 
