@@ -158,13 +158,15 @@ int binary_gcd(int a, int b) {
 *Montgomery Multiplication:* Efficient modular reduction for repeated operations.
 
 ```cpp
-// Schematic — `mod_inverse_mod_2_64` here is the multiplicative inverse of
-// `mod` modulo $2^64$, computed by Hensel lifting.
+// Schematic — `neg_mod_inverse_2_64` computes -mod^{-1} mod 2^64 via Hensel
+// lifting (start with -mod mod 4, double-precision Newton step five times).
 class Montgomery {
     uint64_t mod, r2, inv;  // inv = -mod^{-1} mod 2^64
 
     uint64_t reduce(__uint128_t t) {
         // R = 2^64 conceptually; mask-by-64-bits is implicit in uint64_t cast.
+        // Since inv ≡ -mod^{-1} (mod 2^64), t + m*mod ≡ 0 (mod 2^64), so the
+        // shift below is exact.
         uint64_t m = (uint64_t)t * inv;
         uint64_t u = (uint64_t)((t + (__uint128_t)m * mod) >> 64);
         return u >= mod ? u - mod : u;
@@ -172,7 +174,7 @@ class Montgomery {
 
 public:
     Montgomery(uint64_t m) : mod(m) {
-        inv = mod_inverse_mod_2_64(mod);
+        inv = neg_mod_inverse_2_64(mod);
         // r2 = R^2 mod m = (2^64)^2 mod m, computed without literal 2^64:
         __uint128_t r_mod = ((__uint128_t)1 << 64) % mod;
         r2 = (uint64_t)((r_mod * r_mod) % mod);
