@@ -4,7 +4,7 @@ System F — the *polymorphic $lambda$-calculus*, or second-order $lambda$-calcu
 
 *See also:* _Simply-Typed Lambda Calculus_, _Type Systems_, _Dependent Types_, _Categorical Semantics_
 
-This chapter develops System F in full. We give the syntax, typing rules with T-TABS and T-TAPP, and worked Church encodings of $"Bool"$, $"Nat"$, $"Pair"$, and $"List"$ as polymorphic types. We show why the $Y$-combinator is not typable. We sketch Girard's strong-normalization proof via *reducibility candidates*, the genuine innovation over Tait's plain reducibility predicates. We develop Reynolds' *abstraction theorem* (parametricity) and Wadler's "theorems for free", deriving in detail the free theorems for the polymorphic identity, swap, and map types. We treat existential types and Mitchell–Plotkin abstract data types. We climb to System $F_omega$ and the Barendregt cube. We close with Wells' undecidability of System F type inference and Pierce's undecidability of full $F_{<:}$.
+This chapter develops System F in full. We give the syntax, typing rules with T-TABS and T-TAPP, and worked Church encodings of $"Bool"$, $"Nat"$, $"Pair"$, and $"List"$ as polymorphic types. We show why the $Y$-combinator is not typable. We sketch Girard's strong-normalization proof via *reducibility candidates*, the genuine innovation over Tait's plain reducibility predicates. We develop Reynolds' *abstraction theorem* (parametricity) and Wadler's "theorems for free", deriving in detail the free theorems for the polymorphic identity, swap, and map types. We treat existential types and Mitchell–Plotkin abstract data types. We climb to System $F_omega$ and the Barendregt cube. We close with Wells' undecidability of System F type inference and Pierce's undecidability of full $F_(<:)$.
 
 == Syntax
 
@@ -93,7 +93,7 @@ where $tau$ is the common type of $e_1, e_2$. Verify: $"if" "true" "then" 3 "els
 $ "Nat" &:= forall alpha . (alpha arrow.r alpha) arrow.r alpha arrow.r alpha \
 overline(0) &:= Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . x \
 overline(n+1) &:= Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . f^(n+1) (x) \
-"succeeds" &:= lambda n : "Nat" . Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . f (n [alpha] space f space x) \
+"succ" &:= lambda n : "Nat" . Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . f (n [alpha] space f space x) \
 "add"  &:= lambda m n : "Nat" . Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . m [alpha] space f space (n [alpha] space f space x) \
 "mul"  &:= lambda m n : "Nat" . Lambda alpha . lambda f : alpha arrow.r alpha . m [alpha] space (n [alpha] space f) $
 
@@ -172,7 +172,7 @@ In STLC, $cal(R)_tau$ was defined by induction on $tau$. In System F we cannot d
 
 The untyped fixed-point combinator
 $ Y = lambda f . (lambda x . f (x space x)) (lambda x . f (x space x)) $
-satisfies $Y space f arrow.r^* f (Y space f)$ and produces non-terminating reductions. If $Y$ were typable at some type $tau = (alpha arrow.r alpha) arrow.r alpha$ in System F, then for $f : alpha arrow.r alpha$, $Y space f$ would be a closed well-typed term of type $alpha$. By Strong Normalization, $Y space f$ is SN. But $Y space f$ reduces to $f (Y space f)$ which reduces to $f (f (Y space f))$ etc., infinite reduction — contradiction. Hence no fixed-point combinator is typable in System F. Adding $"fix"$ as a primitive (with its own typing rule $forall alpha . (alpha arrow.r alpha) arrow.r alpha$ and reduction rule) makes the system Turing-complete but destroys SN and logical consistency.
+satisfies $Y space f arrow.r^* f (Y space f)$ and produces non-terminating reductions. If $Y$ were typable in System F at the polymorphic type $tau = forall alpha . (alpha arrow.r alpha) arrow.r alpha$, then for any type $alpha$ and any $f : alpha arrow.r alpha$, the term $Y space [alpha] space f$ would be a closed well-typed term of type $alpha$. By Strong Normalization, $Y space f$ is SN. But $Y space f$ reduces to $f (Y space f)$ which reduces to $f (f (Y space f))$ etc., infinite reduction — contradiction. Hence no fixed-point combinator is typable in System F. Adding $"fix"$ as a primitive (with its own typing rule $forall alpha . (alpha arrow.r alpha) arrow.r alpha$ and reduction rule) makes the system Turing-complete but destroys SN and logical consistency.
 
 == Reynolds' Parametricity
 
@@ -213,7 +213,7 @@ So $r$ *commutes with $"map"$*. This holds for *every* function $r$ of that type
 
 === Free Theorem for $forall alpha . alpha times alpha arrow.r alpha$
 
-Take $f : forall alpha . alpha times alpha arrow.r alpha$. Specialising at $R = {((a_1, a_2), b) : b = a_1} union {((a_1, a_2), b) : b = a_2}$ (the disjoint-union relation): by parametricity, $f[B] (b, b) = b$ — diagonal. More carefully, take $R$ to be the graph of $h$ as before; then $f[B] (h space a_1, h space a_2) = h (f[A] (a_1, a_2))$.
+Take $f : forall alpha . alpha times alpha arrow.r alpha$. Parametricity, instantiated at the *graph* of an arbitrary function $h : A arrow.r B$ (a genuine relation), yields the naturality law $f[B] (h space a_1, h space a_2) = h (f[A] (a_1, a_2))$ for all $a_1, a_2 : A$. That is, $f$ commutes with every $h$ on both components.
 
 Now pick $A = "Bool"$, $a_1 = "true"$, $a_2 = "false"$, $B = "Bool"$, $h = "id"$: $f["Bool"] ("true", "false") in {"true", "false"}$. By a case analysis using $h = $ constant function, we can show $f$ is *either* uniformly $pi_1$ *or* uniformly $pi_2$. (Detailed argument: define $h_1 (x) = "true"$ when $x = a_1$ else "false"; the naturality square forces a binary choice.)
 
@@ -311,7 +311,7 @@ The *let-polymorphic* restriction of System F (no first-class $forall$ in argume
 
 === System F Type Inference is Undecidable
 
-*Theorem (Wells 1999).* Type inference for full (Curry-style) System F is undecidable. Type *checking* with annotations on all $Lambda$ and $[tau]$ is decidable (just walk the tree); but inferring a type for an unannotated term is undecidable.
+*Theorem (Wells 1994).* Type inference for full (Curry-style) System F is undecidable. Type *checking* with annotations on all $Lambda$ and $[tau]$ is decidable (just walk the tree); but inferring a type for an unannotated term is undecidable.
 
 *Proof sketch.* Wells gave a reduction from *semi-unification* — given a system of equations $tau_i = tau'_i$ and inequations $tau_j lt.eq.eq tau'_j$ (where $lt.eq.eq$ is "is a substitution instance of"), decide solvability. Semi-unification is undecidable (Kfoury–Tiuryn–Urzyczyn 1990). Wells encoded an arbitrary semi-unification problem as a System F typability problem: each inequation becomes a quantifier instantiation. $square$
 
@@ -505,7 +505,7 @@ Generalisation: $forall alpha . (A arrow.r alpha) arrow.r F alpha tilde.equiv F 
 
 == Logical Relations as Proof Technique
 
-Parametricity is the *binary* logical-relation construction. *Unary* logical relations are exactly Tait/Girard reducibility for SN. *Step-indexed* logical relations (Appel–McAllester 2001, Ahmed 2004) handle recursive types and mutable state by indexing relations by a *step count* — a relation $R_k$ guarantees behaviour up to $k$ reduction steps. Step-indexing is the bedrock of modern soundness proofs for ML-"with"-references (e.g., Iris, RustBelt).
+Parametricity is the *binary* logical-relation construction. *Unary* logical relations are exactly Tait/Girard reducibility for SN. *Step-indexed* logical relations (Appel–McAllester 2001, Ahmed 2004) handle recursive types and mutable state by indexing relations by a *step count* — a relation $R_k$ guarantees behaviour up to $k$ reduction steps. Step-indexing is the bedrock of modern soundness proofs for ML-with-references (e.g., Iris, RustBelt).
 
 A unifying meta-theorem: for any *open* term $Gamma tack.r e : tau$ and any logical relation $cal(L)$, if $cal(L)$ is closed under the typing rules, then $e$ respects $cal(L)$. This is the *fundamental lemma* of logical relations. SN, parametricity, contextual equivalence, type abstraction — all are instances.
 
@@ -547,7 +547,7 @@ System FC is *just* expressive enough to type-check what GHC's source can produc
 
 ```haskell
 -- GADT in source
-data Eq a b where"
+data Eq a b where
   Refl :: Eq a a
 
 -- After translation: Refl carries a coercion variable
@@ -674,7 +674,7 @@ A type theory's *proof-theoretic strength* is measured by the ordinal of its pro
   [$lambda^arrow.r$], [$omega^omega$],
   [Gödel's System T], [$epsilon_0$],
   [HM / ML], [$omega^omega$ (same as STLC)],
-  [System F], [$Gamma_0$ — Feferman–Schütte ordinal],
+  [System F], [far beyond $Gamma_0$ — proof strength of second-order arithmetic $"PA"_2$],
   [$F_omega$], [larger, complicated],
   [Predicative MLTT (1 universe)], [Bachmann–Howard],
   [MLTT + W-types + universes], [grows with universes],
