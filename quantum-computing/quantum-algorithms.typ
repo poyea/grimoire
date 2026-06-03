@@ -126,7 +126,7 @@ $p = 1$ QAOA on MaxCut achieves approximation ratio 0.6924 on 3-regular graphs �
 
 == Quantum Walks and Element Distinctness
 
-Ambainis (2004): element distinctness on $N$ items needs $Theta(N^(2/3))$ quantum queries via a quantum walk on the Johnson graph — beating Grover's $O(sqrt(N))$ for collision-finding. This drives BHT collision finding ($O(N^(1/3))$) and triangle finding speedups; relevant to symmetric-cryptography post-quantum security margins.
+Ambainis (2004): element distinctness on $N$ items needs $Theta(N^(2/3))$ quantum queries via a quantum walk on the Johnson graph — improving on the earlier $O(N^(3/4))$ Grover-based bound. The same quantum-walk framework relates to BHT collision finding ($O(N^(1/3))$, Brassard-Høyer-Tapp 1997) and triangle finding speedups; relevant to symmetric-cryptography post-quantum security margins.
 
 == Further Reading
 
