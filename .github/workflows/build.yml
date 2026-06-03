@@ -28,14 +28,26 @@ jobs:
       fail-fast: false
       matrix:
         subject:
+          - cloud-and-infrastructure
           - coding
+          - compilers
           - cpu-architecture
+          - cryptography-and-security
+          - data-engineering
           - database
+          - distributed-systems
+          - embedded-and-realtime
+          - formal-methods
           - gpu-architecture
+          - graphics-and-rendering
           - linux-kernel
           - llm
+          - machine-learning-foundations
           - networking
+          - observability-and-sre
+          - operating-systems
           - programming-languages
+          - quantum-computing
     steps:
       - uses: actions/checkout@v4
       - uses: typst-community/setup-typst@v3

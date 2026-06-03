@@ -3,6 +3,21 @@
 # script after adding or removing chapter files. Other fields are
 # derived from the filesystem.
 chapters:
+  - subject: cloud-and-infrastructure
+    slug: containers
+    path: cloud-and-infrastructure/containers.typ
+    lines: 281
+    status: draft
+  - subject: cloud-and-infrastructure
+    slug: iaas-fundamentals
+    path: cloud-and-infrastructure/iaas-fundamentals.typ
+    lines: 193
+    status: draft
+  - subject: cloud-and-infrastructure
+    slug: kubernetes-internals
+    path: cloud-and-infrastructure/kubernetes-internals.typ
+    lines: 273
+    status: draft
   - subject: coding
     slug: advanced-graphs
     path: coding/advanced-graphs.typ
@@ -101,7 +116,7 @@ chapters:
   - subject: coding
     slug: math-number-theory
     path: coding/math-number-theory.typ
-    lines: 371
+    lines: 373
     status: draft
   - subject: coding
     slug: online-algorithms
@@ -116,7 +131,7 @@ chapters:
   - subject: coding
     slug: probabilistic-data-structures
     path: coding/probabilistic-data-structures.typ
-    lines: 663
+    lines: 665
     status: draft
   - subject: coding
     slug: problem-solving
@@ -177,6 +192,21 @@ chapters:
     slug: union-find
     path: coding/union-find.typ
     lines: 468
+    status: draft
+  - subject: compilers
+    slug: dataflow-analysis
+    path: compilers/dataflow-analysis.typ
+    lines: 258
+    status: draft
+  - subject: compilers
+    slug: frontends
+    path: compilers/frontends.typ
+    lines: 287
+    status: draft
+  - subject: compilers
+    slug: ir-design
+    path: compilers/ir-design.typ
+    lines: 265
     status: draft
   - subject: cpu-architecture
     slug: accelerators
@@ -268,6 +298,51 @@ chapters:
     path: cpu-architecture/virtual-memory.typ
     lines: 520
     status: draft
+  - subject: cryptography-and-security
+    slug: asymmetric
+    path: cryptography-and-security/asymmetric.typ
+    lines: 191
+    status: draft
+  - subject: cryptography-and-security
+    slug: hashing-and-macs
+    path: cryptography-and-security/hashing-and-macs.typ
+    lines: 217
+    status: draft
+  - subject: cryptography-and-security
+    slug: post-quantum
+    path: cryptography-and-security/post-quantum.typ
+    lines: 180
+    status: draft
+  - subject: cryptography-and-security
+    slug: symmetric-primitives
+    path: cryptography-and-security/symmetric-primitives.typ
+    lines: 214
+    status: draft
+  - subject: data-engineering
+    slug: batch-processing
+    path: data-engineering/batch-processing.typ
+    lines: 148
+    status: draft
+  - subject: data-engineering
+    slug: etl-vs-elt
+    path: data-engineering/etl-vs-elt.typ
+    lines: 159
+    status: draft
+  - subject: data-engineering
+    slug: lakehouse-engineering
+    path: data-engineering/lakehouse-engineering.typ
+    lines: 177
+    status: draft
+  - subject: data-engineering
+    slug: orchestration
+    path: data-engineering/orchestration.typ
+    lines: 198
+    status: draft
+  - subject: data-engineering
+    slug: streaming
+    path: data-engineering/streaming.typ
+    lines: 135
+    status: draft
   - subject: database
     slug: benchmarking-and-research-methods
     path: database/benchmarking-and-research-methods.typ
@@ -321,7 +396,7 @@ chapters:
   - subject: database
     slug: isolation-and-consistency-models
     path: database/isolation-and-consistency-models.typ
-    lines: 213
+    lines: 214
     status: draft
   - subject: database
     slug: joins-and-aggregation
@@ -371,7 +446,7 @@ chapters:
   - subject: database
     slug: recovery-and-logging
     path: database/recovery-and-logging.typ
-    lines: 228
+    lines: 230
     status: draft
   - subject: database
     slug: security-and-privacy
@@ -413,6 +488,51 @@ chapters:
     path: database/weakly-consistent-systems.typ
     lines: 260
     status: draft
+  - subject: distributed-systems
+    slug: consensus-deep-dive
+    path: distributed-systems/consensus-deep-dive.typ
+    lines: 207
+    status: draft
+  - subject: distributed-systems
+    slug: failure-detection
+    path: distributed-systems/failure-detection.typ
+    lines: 187
+    status: draft
+  - subject: distributed-systems
+    slug: introduction
+    path: distributed-systems/introduction.typ
+    lines: 180
+    status: draft
+  - subject: distributed-systems
+    slug: leader-election-and-leases
+    path: distributed-systems/leader-election-and-leases.typ
+    lines: 190
+    status: draft
+  - subject: distributed-systems
+    slug: time-and-order
+    path: distributed-systems/time-and-order.typ
+    lines: 224
+    status: draft
+  - subject: embedded-and-realtime
+    slug: mcus-and-soc
+    path: embedded-and-realtime/mcus-and-soc.typ
+    lines: 197
+    status: draft
+  - subject: embedded-and-realtime
+    slug: rtos
+    path: embedded-and-realtime/rtos.typ
+    lines: 226
+    status: draft
+  - subject: formal-methods
+    slug: model-checking
+    path: formal-methods/model-checking.typ
+    lines: 276
+    status: draft
+  - subject: formal-methods
+    slug: propositional-and-fol
+    path: formal-methods/propositional-and-fol.typ
+    lines: 260
+    status: draft
   - subject: gpu-architecture
     slug: compute-architecture
     path: gpu-architecture/compute-architecture.typ
@@ -441,7 +561,7 @@ chapters:
   - subject: gpu-architecture
     slug: memory-hierarchy
     path: gpu-architecture/memory-hierarchy.typ
-    lines: 850
+    lines: 847
     status: draft
   - subject: gpu-architecture
     slug: ml-workloads
@@ -482,6 +602,21 @@ chapters:
     slug: triton-and-dsls
     path: gpu-architecture/triton-and-dsls.typ
     lines: 213
+    status: draft
+  - subject: graphics-and-rendering
+    slug: physically-based-rendering
+    path: graphics-and-rendering/physically-based-rendering.typ
+    lines: 162
+    status: draft
+  - subject: graphics-and-rendering
+    slug: rasterization-pipeline
+    path: graphics-and-rendering/rasterization-pipeline.typ
+    lines: 193
+    status: draft
+  - subject: graphics-and-rendering
+    slug: shaders
+    path: graphics-and-rendering/shaders.typ
+    lines: 203
     status: draft
   - subject: linux-kernel
     slug: abi-syscalls
@@ -606,7 +741,7 @@ chapters:
   - subject: llm
     slug: inference-optimization
     path: llm/inference-optimization.typ
-    lines: 858
+    lines: 857
     status: draft
   - subject: llm
     slug: interpretability
@@ -636,7 +771,7 @@ chapters:
   - subject: llm
     slug: pretraining
     path: llm/pretraining.typ
-    lines: 839
+    lines: 841
     status: draft
   - subject: llm
     slug: quantization
@@ -656,7 +791,7 @@ chapters:
   - subject: llm
     slug: rlhf
     path: llm/rlhf.typ
-    lines: 712
+    lines: 714
     status: draft
   - subject: llm
     slug: safety-and-alignment
@@ -677,6 +812,26 @@ chapters:
     slug: transformer-architecture
     path: llm/transformer-architecture.typ
     lines: 492
+    status: draft
+  - subject: machine-learning-foundations
+    slug: generalization-theory
+    path: machine-learning-foundations/generalization-theory.typ
+    lines: 209
+    status: draft
+  - subject: machine-learning-foundations
+    slug: linear-algebra-for-ml
+    path: machine-learning-foundations/linear-algebra-for-ml.typ
+    lines: 245
+    status: draft
+  - subject: machine-learning-foundations
+    slug: optimization
+    path: machine-learning-foundations/optimization.typ
+    lines: 262
+    status: draft
+  - subject: machine-learning-foundations
+    slug: probability-and-information
+    path: machine-learning-foundations/probability-and-information.typ
+    lines: 217
     status: draft
   - subject: networking
     slug: application-protocols
@@ -863,6 +1018,46 @@ chapters:
     path: networking/zero-copy.typ
     lines: 278
     status: draft
+  - subject: observability-and-sre
+    slug: distributed-tracing
+    path: observability-and-sre/distributed-tracing.typ
+    lines: 275
+    status: draft
+  - subject: observability-and-sre
+    slug: metrics-systems
+    path: observability-and-sre/metrics-systems.typ
+    lines: 279
+    status: draft
+  - subject: observability-and-sre
+    slug: the-three-pillars-and-beyond
+    path: observability-and-sre/the-three-pillars-and-beyond.typ
+    lines: 201
+    status: draft
+  - subject: operating-systems
+    slug: file-systems
+    path: operating-systems/file-systems.typ
+    lines: 114
+    status: draft
+  - subject: operating-systems
+    slug: memory-management
+    path: operating-systems/memory-management.typ
+    lines: 114
+    status: draft
+  - subject: operating-systems
+    slug: processes-and-threads
+    path: operating-systems/processes-and-threads.typ
+    lines: 105
+    status: draft
+  - subject: operating-systems
+    slug: scheduling-theory
+    path: operating-systems/scheduling-theory.typ
+    lines: 118
+    status: draft
+  - subject: operating-systems
+    slug: storage-stack
+    path: operating-systems/storage-stack.typ
+    lines: 133
+    status: draft
   - subject: programming-languages
     slug: automata-learning
     path: programming-languages/automata-learning.typ
@@ -956,7 +1151,7 @@ chapters:
   - subject: programming-languages
     slug: omega-automata
     path: programming-languages/omega-automata.typ
-    lines: 800
+    lines: 801
     status: draft
   - subject: programming-languages
     slug: operational-semantics
@@ -986,7 +1181,7 @@ chapters:
   - subject: programming-languages
     slug: regular-languages
     path: programming-languages/regular-languages.typ
-    lines: 935
+    lines: 924
     status: draft
   - subject: programming-languages
     slug: semantics
@@ -1032,4 +1227,24 @@ chapters:
     slug: weighted-and-probabilistic-automata
     path: programming-languages/weighted-and-probabilistic-automata.typ
     lines: 512
+    status: draft
+  - subject: quantum-computing
+    slug: error-correction
+    path: quantum-computing/error-correction.typ
+    lines: 162
+    status: draft
+  - subject: quantum-computing
+    slug: hardware-architectures
+    path: quantum-computing/hardware-architectures.typ
+    lines: 177
+    status: draft
+  - subject: quantum-computing
+    slug: quantum-algorithms
+    path: quantum-computing/quantum-algorithms.typ
+    lines: 155
+    status: draft
+  - subject: quantum-computing
+    slug: qubits-and-gates
+    path: quantum-computing/qubits-and-gates.typ
+    lines: 173
     status: draft

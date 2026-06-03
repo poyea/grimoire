@@ -28,14 +28,26 @@ import sys
 from pathlib import Path
 
 SUBJECTS = [
+    "cloud-and-infrastructure",
     "coding",
+    "compilers",
     "cpu-architecture",
+    "cryptography-and-security",
+    "data-engineering",
     "database",
+    "distributed-systems",
+    "embedded-and-realtime",
+    "formal-methods",
     "gpu-architecture",
+    "graphics-and-rendering",
     "linux-kernel",
     "llm",
+    "machine-learning-foundations",
     "networking",
+    "observability-and-sre",
+    "operating-systems",
     "programming-languages",
+    "quantum-computing",
 ]
 
 INCLUDE_RE = re.compile(r'#include\s+"([^"]+\.typ)"')
