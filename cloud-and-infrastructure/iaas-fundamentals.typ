@@ -81,7 +81,7 @@ ec2.create_volume(SnapshotId=snap["SnapshotId"], AvailabilityZone="us-east-1a",
 
 == Object Storage as the Universal Substrate
 
-Object stores (S3, GCS, Blob) are the only IaaS primitive that combines durability, capacity elasticity, and global accessibility. Internally they shard objects across thousands of nodes via consistent hashing + erasure coding. Reed-Solomon $(k, m)$ codes — e.g., $(10, 4)$ — recover any 4 lost shards out of 14 with $1.4 times.o$ overhead vs $3 times.o$ for triple replication.
+Object stores (S3, GCS, Blob) are the only IaaS primitive that combines durability, capacity elasticity, and global accessibility. Internally they shard objects across thousands of nodes via consistent hashing + erasure coding. Reed-Solomon $(k, m)$ codes — e.g., $(10, 4)$ — recover any 4 lost shards out of 14 with $1.4 times$ overhead vs $3 times$ for triple replication.
 
 ```text
 Object "logs/2026-06-03.gz" (1 GB)
