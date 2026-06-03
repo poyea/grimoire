@@ -220,7 +220,7 @@ The fundamental theorem: $cal(R)(A^top) perp cal(N)(A)$ and $cal(R)(A) perp cal(
 
 == Conditioning
 
-The *condition number* $kappa(A) = parallel A parallel dot.o parallel A^(-1) parallel$ governs how perturbations in $A$ or $b$ affect $x$ in $A x = b$:
+The *condition number* $kappa(A) = parallel A parallel dot parallel A^(-1) parallel$ governs how perturbations in $A$ or $b$ affect $x$ in $A x = b$:
 
 $ (parallel Delta x parallel) / (parallel x parallel) <= kappa(A) ((parallel Delta A parallel) / (parallel A parallel) + (parallel Delta b parallel) / (parallel b parallel)). $
 

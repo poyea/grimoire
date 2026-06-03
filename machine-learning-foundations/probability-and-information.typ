@@ -47,7 +47,7 @@ The *exponential family* form is foundational: $T(x)$ is the sufficient statisti
 
 === Reparameterization
 
-A Gaussian sample can be written $x = mu + sigma dot.o epsilon$ with $epsilon tilde cal(N)(0, 1)$. This *reparameterization trick* moves randomness outside the differentiable path and is the gradient backbone of VAEs and diffusion models.
+A Gaussian sample can be written $x = mu + sigma dot epsilon$ with $epsilon tilde cal(N)(0, 1)$. This *reparameterization trick* moves randomness outside the differentiable path and is the gradient backbone of VAEs and diffusion models.
 
 ```python
 import torch

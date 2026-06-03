@@ -105,7 +105,7 @@ class Adam:
 
 The "weight decay" added to Adam by stuffing $lambda x$ into the gradient interacts badly with adaptive learning rates: regularization strength varies per-parameter. Loshchilov & Hutter's AdamW *decouples* weight decay from the gradient step:
 
-$ x_(k+1) = x_k - eta dot.o m_hat / (sqrt(v_hat) + epsilon) - eta lambda x_k. $
+$ x_(k+1) = x_k - eta dot m_hat / (sqrt(v_hat) + epsilon) - eta lambda x_k. $
 
 For transformer training this single change often moves the optimal $lambda$ by an order of magnitude and improves generalization. AdamW is now the default for LLM pretraining (`llm/pretraining.typ`).
 
@@ -113,7 +113,7 @@ For transformer training this single change often moves the optimal $lambda$ by 
 
 Chen et al. (2023) discovered Lion via program search: the update is the *sign* of an exponential moving average of gradients,
 
-$ x_(k+1) = x_k - eta dot.o "sign"(beta_1 m + (1 - beta_1) g) - eta lambda x_k. $
+$ x_(k+1) = x_k - eta dot "sign"(beta_1 m + (1 - beta_1) g) - eta lambda x_k. $
 
 Lion uses half the memory of Adam (one moment instead of two) and matches or beats it on many tasks; it requires a smaller learning rate (typically 1/3 of Adam's) and benefits from larger batch sizes.
 
@@ -176,7 +176,7 @@ The schedule often matters more than the optimizer.
   columns: 3,
   [*Schedule*], [*Form*], [*Use*],
   [Constant], [$eta_k = eta$], [Theoretical analyses; rarely best in practice],
-  [Step decay], [$eta dot.o gamma^(floor(k \/ s))$], [Classic CNN training],
+  [Step decay], [$eta dot gamma^(floor(k \/ s))$], [Classic CNN training],
   [Cosine], [$eta_min + 1/2 (eta_max - eta_min)(1 + cos(pi k / K))$], [Transformer pretraining],
   [Warmup + cosine], [linear warmup then cosine], [LLM pretraining standard],
   [Linear decay], [$eta_max (1 - k/K)$], [Fine-tuning, RLHF],
@@ -200,7 +200,7 @@ def warmup_cosine(step, total, warmup, lr_max, lr_min=0.0):
 
 Exploding gradients are common in RNNs, RL, and large transformers. *Global-norm clipping* renormalizes:
 
-$ g <- g dot.o min(1, c \/ parallel g parallel). $
+$ g <- g dot min(1, c \/ parallel g parallel). $
 
 A typical choice is $c = 1$. Per-parameter or per-layer clipping exists but is less standard. Adaptive gradient clipping (AGC, Brock et al. 2021) scales clipping by the parameter norm and enabled training large vision models without BatchNorm.
 
