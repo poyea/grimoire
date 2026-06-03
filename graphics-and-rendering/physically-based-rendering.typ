@@ -8,13 +8,13 @@ Physically based rendering ($"PBR"$) replaces ad-hoc shading models (Phong, Blin
 
 Kajiya (1986) wrote outgoing radiance at point $x$ in direction $omega_o$ as
 
-$ L_o (x, omega_o) = L_e (x, omega_o) + integral_(Omega^+) f_r (x, omega_i, omega_o) L_i (x, omega_i) (omega_i dot.o n) d omega_i. $
+$ L_o (x, omega_o) = L_e (x, omega_o) + integral_(Omega^+) f_r (x, omega_i, omega_o) L_i (x, omega_i) (omega_i dot n) d omega_i. $
 
-Here $f_r$ is the *bidirectional reflectance distribution function* ($"BRDF"$), $Omega^+$ is the upper hemisphere, and the cosine $omega_i dot.o n$ accounts for foreshortening. Three properties pin the space of physically valid $"BRDFs"$:
+Here $f_r$ is the *bidirectional reflectance distribution function* ($"BRDF"$), $Omega^+$ is the upper hemisphere, and the cosine $omega_i dot n$ accounts for foreshortening. Three properties pin the space of physically valid $"BRDFs"$:
 
 - *Non-negativity*: $f_r >= 0$.
 - *Helmholtz reciprocity*: $f_r (omega_i, omega_o) = f_r (omega_o, omega_i)$.
-- *Energy conservation*: $integral_(Omega^+) f_r (omega_i, omega_o) (omega_i dot.o n) d omega_i <= 1$ for all $omega_o$.
+- *Energy conservation*: $integral_(Omega^+) f_r (omega_i, omega_o) (omega_i dot n) d omega_i <= 1$ for all $omega_o$.
 
 Phong with $k_d + k_s = 1$ obeys the first two but not the third (specular lobe shape depends on exponent without compensation).
 
@@ -22,7 +22,7 @@ Phong with $k_d + k_s = 1$ obeys the first two but not the third (specular lobe 
 
 A surface is modeled as countless mirror-like micro-facets with normals distributed by $D(h)$. Cook–Torrance derived the specular term
 
-$ f_("spec") (omega_i, omega_o) = (D(h) thin F(omega_o, h) thin G(omega_i, omega_o, h)) / (4 thin (n dot.o omega_i) thin (n dot.o omega_o)), $
+$ f_("spec") (omega_i, omega_o) = (D(h) thin F(omega_o, h) thin G(omega_i, omega_o, h)) / (4 thin (n dot omega_i) thin (n dot omega_o)), $
 
 with half-vector $h = (omega_i + omega_o) \/ ||omega_i + omega_o||$, normal distribution $D$, Fresnel $F$, and geometry/shadowing-masking $G$.
 
@@ -30,19 +30,19 @@ with half-vector $h = (omega_i + omega_o) \/ ||omega_i + omega_o||$, normal dist
 
 The de-facto standard since Disney's 2012 BRDF Explorer.
 
-$ D_("GGX") (h) = alpha^2 / (pi ((n dot.o h)^2 (alpha^2 - 1) + 1)^2), quad alpha = "roughness"^2. $
+$ D_("GGX") (h) = alpha^2 / (pi ((n dot h)^2 (alpha^2 - 1) + 1)^2), quad alpha = "roughness"^2. $
 
 $"GGX"$ has long tails — better matches real measured $"BRDFs"$ from $"MERL"$ than Beckmann or Phong.
 
 === Fresnel: Schlick
 
-$ F(omega, h) approx F_0 + (1 - F_0)(1 - omega dot.o h)^5. $
+$ F(omega, h) approx F_0 + (1 - F_0)(1 - omega dot h)^5. $
 
 For dielectrics $F_0 approx 0.04$; for metals $F_0$ is RGB (gold $approx (1.00, 0.71, 0.29)$, copper $approx (0.95, 0.64, 0.54)$). This split is why $"PBR"$ exposes a *metallic* parameter rather than authoring $F_0$ directly.
 
 === Smith Masking-Shadowing
 
-$ G_2 (omega_i, omega_o) = G_1 (omega_i) thin G_1 (omega_o), quad G_1 (omega) = (2 (n dot.o omega)) / ((n dot.o omega) + sqrt(alpha^2 + (1 - alpha^2)(n dot.o omega)^2)). $
+$ G_2 (omega_i, omega_o) = G_1 (omega_i) thin G_1 (omega_o), quad G_1 (omega) = (2 (n dot omega)) / ((n dot omega) + sqrt(alpha^2 + (1 - alpha^2)(n dot omega)^2)). $
 
 The height-correlated variant (Heitz 2014) is more accurate at low roughness; both are cheap enough for real-time.
 
@@ -50,9 +50,9 @@ The height-correlated variant (Heitz 2014) is more accurate at low roughness; bo
 
 Lambert: $f_d = ("albedo") \/ pi$. Disney 2012 introduced a roughness-aware diffuse:
 
-$ f_d^("Disney") = ("albedo") / pi (1 + (F_(D 90) - 1)(1 - omega_i dot.o n)^5)(1 + (F_(D 90) - 1)(1 - omega_o dot.o n)^5), $
+$ f_d^("Disney") = ("albedo") / pi (1 + (F_(D 90) - 1)(1 - omega_i dot n)^5)(1 + (F_(D 90) - 1)(1 - omega_o dot n)^5), $
 
-with $F_(D 90) = 0.5 + 2 thin "rough" thin (h dot.o omega_i)^2$. Captures retroreflection on rough surfaces (cloth, sand). Frostbite later derived an energy-conserving variant.
+with $F_(D 90) = 0.5 + 2 thin "rough" thin (h dot omega_i)^2$. Captures retroreflection on rough surfaces (cloth, sand). Frostbite later derived an energy-conserving variant.
 
 == Reference $"HLSL"$ Implementation
 
@@ -95,11 +95,11 @@ float3 brdf(float3 N, float3 V, float3 L,
 
 $"IBL"$ replaces analytic lights with an environment map. Diffuse $"IBL"$ uses a precomputed irradiance cubemap:
 
-$ E(n) = integral_(Omega^+) L_i (omega_i)(omega_i dot.o n) d omega_i. $
+$ E(n) = integral_(Omega^+) L_i (omega_i)(omega_i dot n) d omega_i. $
 
 Convolve the source environment once at load time. Specular $"IBL"$ is split into two parts (Karis 2013):
 
-$ L_o approx integral L_i thin f_r thin cos d omega approx underbrace((sum_k L_i (h_k)), "prefiltered cubemap by " a) dot.o underbrace(integral f_r cos d omega, "2D LUT"(N dot.o V, a)). $
+$ L_o approx integral L_i thin f_r thin cos d omega approx underbrace((sum_k L_i (h_k)), "prefiltered cubemap by " a) dot underbrace(integral f_r cos d omega, "2D LUT"(N dot V, a)). $
 
 A small 2D $"LUT"$ stores the geometry/Fresnel scale-bias terms; mip levels of the cubemap store prefiltered radiance per roughness. Cost at runtime is two texture fetches and a `lerp`.
 
