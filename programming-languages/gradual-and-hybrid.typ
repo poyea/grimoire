@@ -52,7 +52,7 @@ A subtle consequence: the consistency rule for arrows is *covariant on both side
 
 == Static Becomes Dynamic via Casts
 
-The typing relation describes what programs are *accepted*. To give those programs meaning, the surface language $lambda_(arrow.r ?)$ is elaborated to an internal *cast calculus* $lambda_C$ in which every implicit consistency use becomes an explicit cast term $chevron.l tau_2 arrow.l tau_1 chevron.r e$. The elaboration is:
+The typing relation describes what programs are *accepted*. To give those programs meaning, the surface language $lambda_(arrow.r ?)$ is elaborated to an internal *cast calculus* $lambda_C$ in which every implicit consistency use becomes an explicit cast term $angle.l tau_2 arrow.l tau_1 angle.r e$. The elaboration is:
 
 ```text
   Gamma |- e1 : tau1 -> tau2     Gamma |- e2 : tau3     tau3 ~ tau1
@@ -64,17 +64,17 @@ When $tau_1 = tau_3$ the cast is the identity; when one side is "?" the cast bec
 
 The operational semantics of casts is the heart of the system. Injection is simple — tag a value with its static type and inject it into a universal sum:
 
-$ chevron.l "?" arrow.l "Int" chevron.r 7 arrow.r "Inj"_"Int" 7 $
+$ angle.l "?" arrow.l "Int" angle.r 7 arrow.r "Inj"_"Int" 7 $
 
 Projection inspects the tag and either succeeds or fails:
 
-$ chevron.l "Int" arrow.l "?" chevron.r ("Inj"_"Int" 7) arrow.r 7 $
+$ angle.l "Int" arrow.l "?" angle.r ("Inj"_"Int" 7) arrow.r 7 $
 
-$ chevron.l "Bool" arrow.l "?" chevron.r ("Inj"_"Int" 7) arrow.r "blame" $
+$ angle.l "Bool" arrow.l "?" angle.r ("Inj"_"Int" 7) arrow.r "blame" $
 
 For function values the cast cannot be discharged eagerly — we do not know all future arguments. Instead it factors:
 
-$ chevron.l tau_1' arrow.r tau_2' arrow.l tau_1 arrow.r tau_2 chevron.r v arrow.r lambda x : tau_1' . chevron.l tau_2' arrow.l tau_2 chevron.r (v (chevron.l tau_1 arrow.l tau_1' chevron.r x)) $
+$ angle.l tau_1' arrow.r tau_2' arrow.l tau_1 arrow.r tau_2 angle.r v arrow.r lambda x : tau_1' . angle.l tau_2' arrow.l tau_2 angle.r (v (angle.l tau_1 arrow.l tau_1' angle.r x)) $
 
 The cast is split into a *contravariant* cast on the argument and a *covariant* cast on the result. This is the same wrapping pattern that contract systems for higher-order functions had been using since (Findler–Felleisen 2002).
 
@@ -84,13 +84,13 @@ When a projection cast fails, *who is to blame*? The answer is the foundational 
 
 For higher-order casts the labels must flip on the contravariant side. The wrapping rule, with labels:
 
-$ (chevron.l tau_1' arrow.r tau_2' arrow.l^ell tau_1 arrow.r tau_2 chevron.r v) space w arrow.r chevron.l tau_2' arrow.l^ell tau_2 chevron.r (v (chevron.l tau_1 arrow.l^(macron(ell)) tau_1' chevron.r w)) $
+$ (angle.l tau_1' arrow.r tau_2' arrow.l^ell tau_1 arrow.r tau_2 angle.r v) space w arrow.r angle.l tau_2' arrow.l^ell tau_2 angle.r (v (angle.l tau_1 arrow.l^(macron(ell)) tau_1' angle.r w)) $
 
 where $macron(ell)$ denotes the *negation* (complementary blame) of $ell$. Negative blame falls on the *caller* when an argument fails its precondition; positive blame falls on the *callee* when the result fails its postcondition.
 
 *Theorem (Blame, Wadler–Findler 2009).* In a cast calculus annotated with *positive* and *negative* labels, the "more typed" side of a failing cast is never blamed. Formally, if a closed program $e$ in $lambda_C$ reduces to $"blame" space ell^+$ (positive blame at $ell$), then the type that originated the cast labelled $ell$ is *not* a refinement of the actually-flowing value's type — the dynamically typed side is the one that violated the contract.
 
-*Proof sketch.* The proof proceeds by a logical relation indexed by *subtyping* (more precisely, by the *naive subtyping* $lt.eq$ that treats "?" as bottom on the positive side and as top on the negative side). One shows: if $tau_1 lt.eq tau_2$ then a cast $chevron.l tau_2 arrow.l^ell tau_1 chevron.r$ never blames $ell^+$, and dually for $ell^-$. The arrow case is the interesting one: contravariance of the function space requires flipping the polarity of the blame label, which is exactly what the operational rule above does. Closure under reduction gives the theorem. $square$
+*Proof sketch.* The proof proceeds by a logical relation indexed by *subtyping* (more precisely, by the *naive subtyping* $lt.eq$ that treats "?" as bottom on the positive side and as top on the negative side). One shows: if $tau_1 lt.eq tau_2$ then a cast $angle.l tau_2 arrow.l^ell tau_1 angle.r$ never blames $ell^+$, and dually for $ell^-$. The arrow case is the interesting one: contravariance of the function space requires flipping the polarity of the blame label, which is exactly what the operational rule above does. Closure under reduction gives the theorem. $square$
 
 The blame theorem makes "well-typed programs cannot be blamed" a precise statement: the *static* fragment of a partially-typed program is in the position of a server that can trust its inputs, modulo the assumptions it has stated. The dynamic fragment is in the position of a client that must obey those assumptions or be blamed for breaking them. This is the precise sense in which gradual typing has *teeth*.
 
@@ -112,7 +112,7 @@ The gradual guarantee is *not* automatic. Several proposed gradual systems faile
 
 The naive cast calculus accumulates casts pathologically. A function passed back and forth across a typed/untyped boundary acquires a new wrapper at every crossing, and the chain of wrappers grows without bound. A program of $n$ crossings can incur $O(n)$ wrapper indirection at every call to the underlying function, giving $O(n^2)$ total cost.
 
-*Threesomes* (Siek–Wadler 2010) are the optimisation that fixes this. The observation: a sequence of casts $chevron.l tau_n arrow.l tau_(n-1) chevron.r dots.h chevron.l tau_2 arrow.l tau_1 chevron.r$ can be *summarised* by a single triple $(tau_1, tau_"meet", tau_n)$ where $tau_"meet"$ is the *meet* in the precision lattice of all intermediate types. The triple has the property that any further composition produces another triple, so casts circle.small in *constant* additional space.
+*Threesomes* (Siek–Wadler 2010) are the optimisation that fixes this. The observation: a sequence of casts $angle.l tau_n arrow.l tau_(n-1) angle.r dots.h angle.l tau_2 arrow.l tau_1 angle.r$ can be *summarised* by a single triple $(tau_1, tau_"meet", tau_n)$ where $tau_"meet"$ is the *meet* in the precision lattice of all intermediate types. The triple has the property that any further composition produces another triple, so casts circle.small in *constant* additional space.
 
 Formally, threesomes form a *monoid* under composition with the empty triple as identity. The meet is the *unification* of the intermediate types modulo "?", failing (producing the bottom element) exactly when an inconsistency would have produced blame. The implementation in Typed Racket reduces space overhead from $O(n)$ to $O(1)$ per wrapper and removes the worst-case quadratic-blowup pathology.
 
@@ -144,11 +144,11 @@ The AGT methodology has not entirely replaced ad hoc designs — sometimes the d
 
 We work out the cast calculus $lambda_C$ explicitly. Terms:
 
-$ e ::= x | n | "true" | "false" | lambda x : tau . e | e_1 space e_2 | chevron.l tau_2 arrow.l^ell tau_1 chevron.r e | "blame" space ell $
+$ e ::= x | n | "true" | "false" | lambda x : tau . e | e_1 space e_2 | angle.l tau_2 arrow.l^ell tau_1 angle.r e | "blame" space ell $
 
 Values:
 
-$ v ::= n | "true" | "false" | lambda x : tau . e | chevron.l tau_1' arrow.r tau_2' arrow.l^ell tau_1 arrow.r tau_2 chevron.r v $
+$ v ::= n | "true" | "false" | lambda x : tau . e | angle.l tau_1' arrow.r tau_2' arrow.l^ell tau_1 arrow.r tau_2 angle.r v $
 
 Note that the last form is the *wrapped function value* — a value that has not yet had its enclosed cast discharged. Reduction:
 
@@ -167,7 +167,7 @@ Note that the last form is the *wrapped function value* — a value that has not
       -->  <tau2' <- tau2>^ell (v (<tau1 <- tau1'>^bar(ell) w))       (wrap)
 ```
 
-A *ground* type is one of `Bool`, `Int`, or the *prime* arrow `? -> ?`. Higher-order casts to "?" decompose through the prime arrow: $chevron.l "?" arrow.l tau_1 arrow.r tau_2 chevron.r v$ reduces to $chevron.l "?" arrow.l "?" arrow.r "?" chevron.r (chevron.l "?" arrow.r "?" arrow.l tau_1 arrow.r tau_2 chevron.r v)$. The factoring through ground types is what makes blame coherent: the run-time check is always between a known ground type and another known ground type.
+A *ground* type is one of `Bool`, `Int`, or the *prime* arrow `? -> ?`. Higher-order casts to "?" decompose through the prime arrow: $angle.l "?" arrow.l tau_1 arrow.r tau_2 angle.r v$ reduces to $angle.l "?" arrow.l "?" arrow.r "?" angle.r (angle.l "?" arrow.r "?" arrow.l tau_1 arrow.r tau_2 angle.r v)$. The factoring through ground types is what makes blame coherent: the run-time check is always between a known ground type and another known ground type.
 
 *Theorem (Type Safety for $lambda_C$).* If $dot tack.r e : tau$ then either $e$ is a value of type $tau$, $e arrow.r e'$ with $dot tack.r e' : tau$, or $e arrow.r "blame" space ell$ for some label $ell$.
 
@@ -263,7 +263,7 @@ Hack (Facebook) and Sorbet (Stripe) take Python/Ruby and attach a checker. Sorbe
 
 (Flanagan 2006) introduced *hybrid type checking* as a refinement of gradual typing for *refinement types*: types of the form $ { x : tau | phi(x) } $ where $phi$ is a predicate. The challenge: subtyping between refinement types reduces to *implication* between predicates, which is undecidable in general.
 
-The hybrid solution: try to prove subtyping by an SMT solver; if the solver succeeds, the subtyping is *statically* discharged; if the solver fails (or times out), insert a *run-time* check $chevron.l { x : tau | phi(x) } arrow.l tau chevron.r e$ that evaluates the predicate at the boundary.
+The hybrid solution: try to prove subtyping by an SMT solver; if the solver succeeds, the subtyping is *statically* discharged; if the solver fails (or times out), insert a *run-time* check $angle.l { x : tau | phi(x) } arrow.l tau angle.r e$ that evaluates the predicate at the boundary.
 
 ```text
   Gamma |- e : tau1     SMT |- Gamma => tau1 <: tau2
@@ -297,7 +297,7 @@ The composition fails — and the program raises blame — if and only if $m_1 i
 
 *Theorem (Space Efficiency, Herman–Tomb–Flanagan 2010, Siek–Wadler 2010).* In a cast calculus with threesomes, the size of any value is bounded by a constant times the size of its type. Hence the heap usage of a gradually typed program is asymptotically the same as the corresponding statically typed program.
 
-*Proof.* By induction on values. A wrapped function value $chevron.l (tau_1, m, tau_2) chevron.r v$ stores one threesome, of constant size; the inner $v$ is recursively bounded. Composition of two wrappers produces another wrapper with a single threesome. $square$
+*Proof.* By induction on values. A wrapped function value $angle.l (tau_1, m, tau_2) angle.r v$ stores one threesome, of constant size; the inner $v$ is recursively bounded. Composition of two wrappers produces another wrapper with a single threesome. $square$
 
 == Gradual Session Types
 
@@ -307,7 +307,7 @@ Soundness is subtle because session types are *linear*: a channel must be used e
 
 == Gradual Dependent Types
 
-(Lennon-Bertrand–Maillard–Tabareau–Tanter 2022) constructed *Gradual CIC* (GCIC): a gradual extension of the Calculus of Inductive Constructions. The dynamic type "?" becomes a proof-relevant *unknown term* $"?"_A$ at each type $A$. The cast $chevron.l B arrow.l A chevron.r$ on dependent types becomes a unifier that may produce blame, and Gradual CIC enjoys both the gradual guarantee and *strong normalisation* — proofs do not loop, but they may fail to typecheck only after computation.
+(Lennon-Bertrand–Maillard–Tabareau–Tanter 2022) constructed *Gradual CIC* (GCIC): a gradual extension of the Calculus of Inductive Constructions. The dynamic type "?" becomes a proof-relevant *unknown term* $"?"_A$ at each type $A$. The cast $angle.l B arrow.l A angle.r$ on dependent types becomes a unifier that may produce blame, and Gradual CIC enjoys both the gradual guarantee and *strong normalisation* — proofs do not loop, but they may fail to typecheck only after computation.
 
 The construction reveals a deep tension: *univalence* (see _Homotopy Type Theory_) and *gradual guarantee* are *incompatible* in their natural strongest forms. GCIC must weaken one or the other. The chosen weakening — *propositional* gradual guarantee rather than definitional — has consequences for what proofs survive the gradualisation.
 

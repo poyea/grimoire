@@ -57,7 +57,7 @@ The composition $p tack.r q$ is associative *not strictly* but only up to a 2-pa
 The basic operations and their derivations:
 
 - *Inverse* $p^(-1) : "Id"_A(b, a)$. Defined by $J$ on $p$, sending $"refl"_a$ to $"refl"_a$.
-- *Concatenation* $p tack.r q : "Id"_A(a, c)$ (also written $p plus.o q$). Defined by $J$ on $q$.
+- *Concatenation* $p tack.r q : "Id"_A(a, c)$ (also written $p plus.circle q$). Defined by $J$ on $q$.
 - *Whiskering* $p tack.r alpha$ for a 2-path $alpha$ at the right endpoint of $p$. Two-dimensional analogue, defined by $J$.
 
 These satisfy the *groupoid laws up to higher path*:

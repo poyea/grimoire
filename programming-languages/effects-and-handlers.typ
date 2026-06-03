@@ -231,7 +231,7 @@ How arrow.r *type* effectful computations? Naively, give each effectful function
 
 The solution is *row polymorphism*. A *row* of effects is a sequence of labelled effects, possibly extending a row variable $rho$:
 
-$ epsilon ::= chevron.l chevron.r | chevron.l ell : tau | epsilon chevron.r | rho $
+$ epsilon ::= angle.l angle.r | angle.l ell : tau | epsilon angle.r | rho $
 
 Function types carry a row: $tau_1 arrow.r^epsilon tau_2$. A polymorphic combinator like `map` has type:
 
@@ -251,7 +251,7 @@ fun safe-div(x : int, y : int) : <exn> int
   if y == 0 then throw("division by zero") else x / y
 ```
 
-The effect row is written between angle brackets in the return type. Pure functions have the empty row $chevron.l chevron.r$ (written `<>`). Effect polymorphism is the default for higher-order functions.
+The effect row is written between angle brackets in the return type. Pure functions have the empty row $angle.l angle.r$ (written `<>`). Effect polymorphism is the default for higher-order functions.
 
 ```text
 fun map( xs : list<a>, f : a -> e b ) : e list<b>
@@ -624,7 +624,7 @@ Under the *deep* handler `counter_deep`, `loop 5` yields `(0, 5)`. Under a *shal
 In Koka's row-based effect system, types and effects are:
 
 $ tau ::= "Int" | "Bool" | tau_1 ->^epsilon tau_2 | "list"(tau) | dots \
-epsilon ::= chevron.l chevron.r | chevron.l op : sigma | epsilon chevron.r | rho $
+epsilon ::= angle.l angle.r | angle.l op : sigma | epsilon angle.r | rho $
 
 where $rho$ is a *row variable* and $sigma$ is the *type scheme* of operation $op$ (parameter and return type).
 
@@ -655,7 +655,7 @@ The handle rule *removes* operation $op$ from the effect row: if $e$ can perform
 
 Row unification uses the *scoped labels* representation:
 
-$ chevron.l l_1 : sigma_1 | chevron.l l_2 : sigma_2 | rho chevron.r chevron.r $
+$ angle.l l_1 : sigma_1 | angle.l l_2 : sigma_2 | rho angle.r angle.r $
 
 Two rows are unified by finding corresponding labels and unifying their schemes, with the remaining row variable absorbing unmatched labels. The key invariant: labels appear in alphabetical order, so unification terminates.
 

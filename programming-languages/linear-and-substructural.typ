@@ -42,20 +42,20 @@ Girard's *linear logic* (LL) is the foundational system. It refines intuitionist
 
 *Formulae* of intuitionistic linear logic (ILL):
 
-$ tau ::= A | tau_1 multimap tau_2 | tau_1 times.o tau_2 | tau_1 amp tau_2 | tau_1 plus.o tau_2 | !tau | 1 | 0 | top $
+$ tau ::= A | tau_1 multimap tau_2 | tau_1 times.circle tau_2 | tau_1 amp tau_2 | tau_1 plus.circle tau_2 | !tau | 1 | 0 | top $
 
 (The classical version adds par $tau_1 #h(0.3em) "par" #h(0.3em) tau_2$, the dual $bot$, and the why-not modality $?tau$. ILL omits these; intuitionistic linear logic is the one most directly relevant to type systems.) The connectives split into two flavours:
 
-- *Multiplicatives* share their context. To prove $A times.o B$ the context splits into two disjoint pieces, one proving $A$ and one proving $B$.
+- *Multiplicatives* share their context. To prove $A times.circle B$ the context splits into two disjoint pieces, one proving $A$ and one proving $B$.
 - *Additives* share their context. To prove $A amp B$ a single context proves both $A$ and $B$ — but only one can be chosen at elimination time.
 
 #table(
   columns: (auto, auto, auto, auto),
   [*Connective*], [*Symbol*], [*Flavour*], [*Reading*],
   [Linear implication], [$multimap$], [(multiplicative)], [consume an $A$, produce a $B$],
-  [Tensor], [$times.o$], [multiplicative conjunction], [both $A$ and $B$, simultaneously],
+  [Tensor], [$times.circle$], [multiplicative conjunction], [both $A$ and $B$, simultaneously],
   [With], [$amp$], [additive conjunction], [your choice of $A$ or $B$],
-  [Plus], [$plus.o$], [additive disjunction], [either $A$ or $B$, decided by the prover],
+  [Plus], [$plus.circle$], [additive disjunction], [either $A$ or $B$, decided by the prover],
   [Of-course], [$!tau$], [exponential], [unlimited copies of $tau$ available],
   [One], [$1$], [tensor unit], [empty multiplicative resource],
   [Top], [$top$], [with unit], [trivially satisfiable in any context],
@@ -124,7 +124,7 @@ Promotion has the side condition that *all* hypotheses are exponential — other
 
 *Theorem (Girard 1987, cut elimination).* Every derivation in linear logic can be transformed into a cut-free derivation of the same sequent.
 
-The proof is the usual triple induction (on the cut formula, on the height of the right derivation, on the height of the left derivation), but linear logic gives sharper data: a cut between $A times.o B$ on one side and its left-rule on the other reduces *without duplication*; the reduction strictly decreases a resource measure rather than merely a proof height. Cut elimination on the exponentials, in contrast, may duplicate sub-derivations precisely when contraction is invoked — locating the irreducible source of complexity in the modality $!$, not the linear core.
+The proof is the usual triple induction (on the cut formula, on the height of the right derivation, on the height of the left derivation), but linear logic gives sharper data: a cut between $A times.circle B$ on one side and its left-rule on the other reduces *without duplication*; the reduction strictly decreases a resource measure rather than merely a proof height. Cut elimination on the exponentials, in contrast, may duplicate sub-derivations precisely when contraction is invoked — locating the irreducible source of complexity in the modality $!$, not the linear core.
 
 *Computational reading.* Cut is the typing rule for substitution; cut elimination is normalisation of programs; the linear core normalises in polynomial time, while the exponentials are where the combinatorial blow-up of $beta$-reduction lives (Girard, Scedrov, Scott; *Bounded linear logic* 1992).
 
@@ -305,13 +305,13 @@ A *session type* (Honda 1993; Honda–Vasconcelos–Kubo 1998) is a type assigne
 
 The basic syntax:
 
-$ S ::= !tau . S | ?tau . S | S_1 plus.o S_2 | S_1 amp S_2 | "end" $
+$ S ::= !tau . S | ?tau . S | S_1 plus.circle S_2 | S_1 amp S_2 | "end" $
 
 with the dyadic reading:
 
 - $!tau . S$ — send a value of type $tau$, then continue as $S$.
 - $?tau . S$ — receive a value of type $tau$, then continue as $S$.
-- $S_1 plus.o S_2$ — internal choice: *we* choose to continue as $S_1$ or $S_2$.
+- $S_1 plus.circle S_2$ — internal choice: *we* choose to continue as $S_1$ or $S_2$.
 - $S_1 amp S_2$ — external choice: *the peer* picks the branch.
 - $"end"$ — protocol complete.
 
@@ -356,9 +356,9 @@ A global type is *projected* onto each participant to obtain a *local* session t
   [Cut rule], [parallel composition with hidden channel],
   [Identity], [forwarder process $x <-> y$],
   [$A multimap B$], [input a session of type $A$, behave as $B$],
-  [$A times.o B$], [output a fresh session of type $A$, then behave as $B$],
+  [$A times.circle B$], [output a fresh session of type $A$, then behave as $B$],
   [$A amp B$], [offer external choice between $A$ and $B$],
-  [$A plus.o B$], [make internal choice],
+  [$A plus.circle B$], [make internal choice],
   [Cut elimination], [reduction (communication) in the $pi$-calculus],
 )
 

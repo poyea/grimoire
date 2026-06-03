@@ -6,14 +6,14 @@ Classical automata are Boolean: a word is either accepted or rejected. *Weighted
 
 == Semirings
 
-A *semiring* is a tuple $(K, plus.o, times.o, 0_K, 1_K)$ such that
+A *semiring* is a tuple $(K, plus.circle, times.circle, 0_K, 1_K)$ such that
 
-- $(K, plus.o, 0_K)$ is a commutative monoid;
-- $(K, times.o, 1_K)$ is a monoid;
-- $times.o$ distributes over $plus.o$ on both sides;
-- $0_K$ is absorbing for $times.o$: $0_K times.o a = a times.o 0_K = 0_K$.
+- $(K, plus.circle, 0_K)$ is a commutative monoid;
+- $(K, times.circle, 1_K)$ is a monoid;
+- $times.circle$ distributes over $plus.circle$ on both sides;
+- $0_K$ is absorbing for $times.circle$: $0_K times.circle a = a times.circle 0_K = 0_K$.
 
-A semiring is *commutative* if $times.o$ commutes, *idempotent* if $a plus.o a = a$, *complete* if arbitrary sums $plus.o.big_(i in I) a_i$ exist, *continuous* if such sums commute with $times.o$.
+A semiring is *commutative* if $times.circle$ commutes, *idempotent* if $a plus.circle a = a$, *complete* if arbitrary sums $plus.circle.big_(i in I) a_i$ exist, *continuous* if such sums commute with $times.circle$.
 
 === A Zoo of Useful Semirings
 
@@ -36,7 +36,7 @@ A semiring is *commutative* if $times.o$ commutes, *idempotent* if $a plus.o a =
 ```
 
 The tropical and arctic semirings are *idempotent*; they linearize shortest- and longest-path problems via the matrix product
-$ (A times.o B)_(i j) = min_k (A_(i k) + B_(k j)). $
+$ (A times.circle B)_(i j) = min_k (A_(i k) + B_(k j)). $
 Repeated multiplication yields the Floyd--Warshall and Bellman--Ford algorithms; this is what Mohri exploits in his transducer algorithms.
 
 == Weighted Automata
@@ -55,7 +55,7 @@ Extend $mu$ to $Sigma^*$ multiplicatively: $mu(epsilon) = I$, $mu(w a) = mu(w) m
 The *behaviour* of $cal(A)$ is the formal power series
 $ cal(A)(w) = lambda mu(w) gamma = sum_(p in "Paths"(w)) "weight"(p). $
 
-Equivalently, $cal(A)(w)$ is the sum over all $w$-labelled paths $q_0 arrow.r q_1 arrow.r dots arrow.r q_n$ of $lambda_(q_0) times.o mu(a_1)_(q_0 q_1) times.o dots times.o mu(a_n)_(q_(n-1) q_n) times.o gamma_(q_n)$.
+Equivalently, $cal(A)(w)$ is the sum over all $w$-labelled paths $q_0 arrow.r q_1 arrow.r dots arrow.r q_n$ of $lambda_(q_0) times.circle mu(a_1)_(q_0 q_1) times.circle dots times.circle mu(a_n)_(q_(n-1) q_n) times.circle gamma_(q_n)$.
 
 A series $s : Sigma^* arrow.r K$ is *$K$-recognizable* if it equals the behaviour of some finite $K$-weighted automaton.
 
@@ -68,20 +68,20 @@ A series $s : Sigma^* arrow.r K$ is *$K$-recognizable* if it equals the behaviou
 
 == Rational Power Series
 
-Let $K chevron.l chevron.l Sigma^* chevron.r chevron.r$ denote the set of formal power series $s : Sigma^* arrow.r K$, written
+Let $K angle.l angle.l Sigma^* angle.r angle.r$ denote the set of formal power series $s : Sigma^* arrow.r K$, written
 $ s = sum_(w in Sigma^*) (s, w) dot w. $
 
-Equipped with pointwise sum and the *Cauchy product* $(s dot t, w) = sum_(u v = w) (s, u) times.o (t, v)$, $K chevron.l chevron.l Sigma^* chevron.r chevron.r$ is a (non-commutative) semiring.
+Equipped with pointwise sum and the *Cauchy product* $(s dot t, w) = sum_(u v = w) (s, u) times.circle (t, v)$, $K angle.l angle.l Sigma^* angle.r angle.r$ is a (non-commutative) semiring.
 
 *Star.* For $s$ with $(s, epsilon) = 0$, define
 $ s^* = sum_(n gt.eq 0) s^n = 1 + s + s dot s + dots, $
-which is a well-defined element of $K chevron.l chevron.l Sigma^* chevron.r chevron.r$ since each coefficient $(s^*, w)$ is a finite sum.
+which is a well-defined element of $K angle.l angle.l Sigma^* angle.r angle.r$ since each coefficient $(s^*, w)$ is a finite sum.
 
-*Definition.* The set of *$K$-rational* series is the smallest subset of $K chevron.l chevron.l Sigma^* chevron.r chevron.r$ containing $0$, $1$, every $k dot a$ ($k in K$, $a in Sigma$), and closed under sum, Cauchy product, scalar product, and (proper) star.
+*Definition.* The set of *$K$-rational* series is the smallest subset of $K angle.l angle.l Sigma^* angle.r angle.r$ containing $0$, $1$, every $k dot a$ ($k in K$, $a in Sigma$), and closed under sum, Cauchy product, scalar product, and (proper) star.
 
 === Kleene--Schützenberger Theorem
 
-*Theorem (Schützenberger 1961).* For any semiring $K$, a power series $s in K chevron.l chevron.l Sigma^* chevron.r chevron.r$ is *$K$-recognizable* iff it is *$K$-rational*.
+*Theorem (Schützenberger 1961).* For any semiring $K$, a power series $s in K angle.l angle.l Sigma^* angle.r angle.r$ is *$K$-recognizable* iff it is *$K$-rational*.
 
 *Proof sketch.* $(arrow.l.double)$ By induction on the rational expression, constructing automata for each constructor (sum, product, star) by direct analogues of Thompson's NFA constructions, with weights propagated through. $(=>)$ Given a weighted automaton, eliminate states one at a time, accumulating expressions of the form $k_1 (k_2)^* k_3$ on remaining transitions; the surviving single-state automaton yields a rational expression. (This is the *state-elimination* / *Brzozowski--McCluskey* construction.) $square$
 
@@ -116,16 +116,16 @@ A *weighted finite-state transducer* (WFST) realizes a relation $Sigma^* times D
 === Composition
 
 Given $T_1 : Sigma^* times Delta^* arrow.r K$ and $T_2 : Delta^* times Gamma^* arrow.r K$, the composition $T_1 circle T_2 : Sigma^* times Gamma^* arrow.r K$ is
-$ (T_1 circle T_2)(x, z) = sum_y T_1(x, y) times.o T_2(y, z). $
+$ (T_1 circle T_2)(x, z) = sum_y T_1(x, y) times.circle T_2(y, z). $
 
 The *product construction* (Mohri 1997) produces a WFST with states $Q_1 times Q_2$ and edges
-$ ((q_1, q_2), a, c, k_1 times.o k_2, (q_1', q_2')) " if " (q_1, a, b, k_1, q_1') in E_1, (q_2, b, c, k_2, q_2') in E_2. $
+$ ((q_1, q_2), a, c, k_1 times.circle k_2, (q_1', q_2')) " if " (q_1, a, b, k_1, q_1') in E_1, (q_2, b, c, k_2, q_2') in E_2. $
 
 Handling $epsilon$-transitions requires *filter automata* to avoid spurious paths (Mohri--Pereira--Riley 1996).
 
 === Weight Pushing
 
-For minimization, *weight pushing* reweights transitions so that the weight of every path from a state to the final state is "normalized". Let $V(q) = sum_(p : q ~> "final") w(p)$ (the *potential* of $q$); push by replacing each edge weight $w(q, a, q')$ with $V(q)^(-1) times.o w(q, a, q') times.o V(q')$. The behaviour is invariant; the resulting automaton is *equivalent* and admits classical Hopcroft minimization.
+For minimization, *weight pushing* reweights transitions so that the weight of every path from a state to the final state is "normalized". Let $V(q) = sum_(p : q ~> "final") w(p)$ (the *potential* of $q$); push by replacing each edge weight $w(q, a, q')$ with $V(q)^(-1) times.circle w(q, a, q') times.circle V(q')$. The behaviour is invariant; the resulting automaton is *equivalent* and admits classical Hopcroft minimization.
 
 In the tropical case, $V(q)$ is the shortest distance from $q$ to a final state, computable by Bellman--Ford in $O(|Q| |E|)$.
 
@@ -263,8 +263,8 @@ All three are instances of generic matrix algorithms over different semirings; s
 == Behavioural Equivalences for Probabilistic Systems
 
 For non-deterministic-probabilistic systems (PA in the Segala sense, distinct from Rabin PA), the relevant equivalences are *strong/weak probabilistic bisimulation* (Larsen--Skou 1991; Segala--Lynch 1994). The Larsen--Skou *logic* $L_("LS")$
-$ phi ::= "true" | "not" phi | and.big_i phi_i | chevron.l a chevron.r_p phi $
-where $chevron.l a chevron.r_p phi$ means "with probability $> p$ a transition by $a$ leads to a state satisfying $phi$" characterizes bisimulation in the Hennessy--Milner sense.
+$ phi ::= "true" | "not" phi | and.big_i phi_i | angle.l a angle.r_p phi $
+where $angle.l a angle.r_p phi$ means "with probability $> p$ a transition by $a$ leads to a state satisfying $phi$" characterizes bisimulation in the Hennessy--Milner sense.
 
 *Theorem (Baier--Hermanns 1999).* Probabilistic bisimulation is decidable in polynomial time on finite PAs (partition-refinement à la Paige--Tarjan).
 
@@ -298,8 +298,8 @@ For acyclic graphs over any semiring: $O(|V| + |E|)$. For Boolean semiring: BFS.
 
 Weighted automata over a (positive) semiring are closed under:
 
-- *Sum*: $(cal(A) + cal(B))(w) = cal(A)(w) plus.o cal(B)(w)$; disjoint union with combined initial/final vectors.
-- *Hadamard product*: $(cal(A) dot.o cal(B))(w) = cal(A)(w) times.o cal(B)(w)$; product construction.
+- *Sum*: $(cal(A) + cal(B))(w) = cal(A)(w) plus.circle cal(B)(w)$; disjoint union with combined initial/final vectors.
+- *Hadamard product*: $(cal(A) dot.circle cal(B))(w) = cal(A)(w) times.circle cal(B)(w)$; product construction.
 - *Scalar*: $k cal(A)$; multiply initial vector by $k$.
 - *Cauchy product / star* (when defined).
 
@@ -369,7 +369,7 @@ This perspective views weighted automata as *linear representations* of $Sigma^*
 
 == Extended Topic: Hankel Matrices and Minimization
 
-For $s in K chevron.l chevron.l Sigma^* chevron.r chevron.r$, the *Hankel matrix* $H_s$ is the $Sigma^* times Sigma^*$ matrix with $H_s[u, v] = (s, u v)$.
+For $s in K angle.l angle.l Sigma^* angle.r angle.r$, the *Hankel matrix* $H_s$ is the $Sigma^* times Sigma^*$ matrix with $H_s[u, v] = (s, u v)$.
 
 *Theorem (Carlyle--Paz 1971; Fliess 1974).* For a field $K$, $s$ is $K$-recognizable iff $H_s$ has finite rank, and the minimum number of states recognizing $s$ equals $"rank"(H_s)$.
 
@@ -409,7 +409,7 @@ CRAs serve as a *structured operational semantics* for streaming computation; to
 The tropical semiring $(RR union {oo}, min, +)$ linearizes:
 
 - *Shortest path*: $A^*$-th power computes all-pairs shortest paths;
-- *Optimal control*: Bellman's equation $V = c plus.o M times.o V$ has tropical Banach fixpoint solutions;
+- *Optimal control*: Bellman's equation $V = c plus.circle M times.circle V$ has tropical Banach fixpoint solutions;
 - *Tropical polynomials*: the *Newton polytope* governs roots; *tropical geometry* (Itenberg--Mikhalkin--Shustin) is a thriving discipline.
 
 The undecidability of WA equivalence over the tropical semiring (Krob 1994) => that *several* optimization-theoretic equivalence questions are uncomputable: the equality of two min-plus rational functions cannot in general be decided.
