@@ -31,7 +31,7 @@ This is the *Bloch sphere* parameterization.
                   |1>
 ```
 
-The poles are $|0 angle.r$ and $|1 angle.r$. The equator carries the superposition states $(|0 angle.r + e^(i phi)|1 angle.r) / sqrt(2)$ — including $|+ angle.r$, $|- angle.r$, $|"+i" angle.r$, $|"-i" angle.r$. Mixed states (statistical ensembles) live *inside* the ball as density matrices $rho = (II + arrow(r) dot.o arrow(sigma)) / 2$ with $|arrow(r)| <= 1$.
+The poles are $|0 angle.r$ and $|1 angle.r$. The equator carries the superposition states $(|0 angle.r + e^(i phi)|1 angle.r) / sqrt(2)$ — including $|+ angle.r$, $|- angle.r$, $|"+i" angle.r$, $|"-i" angle.r$. Mixed states (statistical ensembles) live *inside* the ball as density matrices $rho = (II + arrow(r) dot arrow(sigma)) / 2$ with $|arrow(r)| <= 1$.
 
 == Single-Qubit Gates
 
@@ -77,7 +77,7 @@ For $n$ qubits the state is a unit vector in $bb(C)^(2^n)$ written in the comput
 
 $ |psi angle.r = sum_(x in {0,1}^n) c_x |x angle.r, quad sum_x |c_x|^2 = 1. $
 
-A state is *product* if $|psi angle.r = |a angle.r times.o |b angle.r$ and *entangled* otherwise. The canonical Bell pair
+A state is *product* if $|psi angle.r = |a angle.r times.circle |b angle.r$ and *entangled* otherwise. The canonical Bell pair
 
 $ |Phi^+ angle.r = (|00 angle.r + |11 angle.r) / sqrt(2) $
 
@@ -105,7 +105,7 @@ bell.measure([0,1], [0,1])
 
 A projective measurement in the computational basis projects $|psi angle.r = sum c_x |x angle.r$ onto outcome $x$ with probability $|c_x|^2$, collapsing the state to $|x angle.r$. More generally, a *POVM* ${E_m}$ with $sum_m E_m = II$ yields outcome $m$ with $P(m) = angle.l psi | E_m | psi angle.r$.
 
-The *no-cloning theorem* (Wootters & Zurek 1982) forbids a unitary $U$ with $U(|psi angle.r times.o |0 angle.r) = |psi angle.r times.o |psi angle.r$ for arbitrary $|psi angle.r$ — measurement is destructive in a fundamental way, which is why classical debugging tools do not port to quantum directly.
+The *no-cloning theorem* (Wootters & Zurek 1982) forbids a unitary $U$ with $U(|psi angle.r times.circle |0 angle.r) = |psi angle.r times.circle |psi angle.r$ for arbitrary $|psi angle.r$ — measurement is destructive in a fundamental way, which is why classical debugging tools do not port to quantum directly.
 
 == Universal Gate Sets and Solovay-Kitaev
 
