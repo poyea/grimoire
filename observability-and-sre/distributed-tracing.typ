@@ -114,7 +114,7 @@ processors:
       - { name: prob,    type: probabilistic, probabilistic: { sampling_percentage: 0.5 } }
 ```
 
-Trade-off: tail sampling needs RAM proportional to (traces/sec) $times.o$ (decision_wait) $times.o$ (avg spans/trace). At 10k traces/sec, 30 s window, 50 spans/trace, that is 15 M spans buffered.
+Trade-off: tail sampling needs RAM proportional to (traces/sec) $times$ (decision_wait) $times$ (avg spans/trace). At 10k traces/sec, 30 s window, 50 spans/trace, that is 15 M spans buffered.
 
 === Adaptive and Throughput-Limited
 

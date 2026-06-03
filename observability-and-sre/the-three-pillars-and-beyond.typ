@@ -26,7 +26,7 @@ Charity Majors at Honeycomb argues for a unified *wide event* model where every 
   [Events], [Variable], [Bounded], [\$0.10–\$2], [What changed?],
 )
 
-The "cost" column folds storage, ingestion, and query into one rough figure; real vendor pricing varies 10$times.o$ across these.
+The "cost" column folds storage, ingestion, and query into one rough figure; real vendor pricing varies 10$times$ across these.
 
 == The Resource Model
 
@@ -157,12 +157,12 @@ For traces and profiles you cannot retain everything. Sampling decisions interac
 - *Tail sampling* (decide after all spans arrive): unbiased but requires buffering the entire trace, expensive at scale.
 - *Adaptive sampling:* keep all errors + slow tails, sample fast successes at $1$–$0.01$%; this is what most production deployments do.
 
-Profiles use stratified time-based sampling: 100 Hz CPU profile = 1 stack/10 ms per core. At 1000 cores and 24 h, that is $8.64 dot.o 10^9$ stacks — only viable with stack-aggregating storage like Pyroscope's tree compression.
+Profiles use stratified time-based sampling: 100 Hz CPU profile = 1 stack/10 ms per core. At 1000 cores and 24 h, that is $8.64 dot 10^9$ stacks — only viable with stack-aggregating storage like Pyroscope's tree compression.
 
 == Anti-Patterns to Avoid
 
 - *Logging the trace_id only:* no parent/child = not a trace, just labeled logs.
-- *Per-customer dashboards:* $10^4$ customers $times.o$ $10$ panels = $10^5$ time series the eye cannot scan.
+- *Per-customer dashboards:* $10^4$ customers $times$ $10$ panels = $10^5$ time series the eye cannot scan.
 - *Alerting on raw metrics:* alert on $"SLO"$ burn rate, not on $"P99" > X$ — see _SLO Engineering_.
 - *Separate ingestion for each signal:* triples your collector failure modes.
 - *Sampling at the SDK:* loses the ability to do tail-based decisions later.

@@ -43,7 +43,7 @@ Counters survive process restarts via *reset detection*: the query engine notice
   [InfluxDB IOx], [Parquet + Apache Arrow], [Per-shard], [SQL via DataFusion],
 )
 
-VictoriaMetrics typically uses 4–10$times.o$ less memory per active series than Prometheus by using a custom string interning scheme and delta-of-delta encoding similar to Gorilla. Mimir scales horizontally by sharding ingesters and pushing immutable blocks to S3 every two hours.
+VictoriaMetrics typically uses 4–10$times$ less memory per active series than Prometheus by using a custom string interning scheme and delta-of-delta encoding similar to Gorilla. Mimir scales horizontally by sharding ingesters and pushing immutable blocks to S3 every two hours.
 
 === Pull vs Push
 
@@ -116,9 +116,9 @@ http_request_duration_seconds_count              1000
 `histogram_quantile` linearly interpolates inside the bucket containing the target quantile rank. Two failure modes:
 
 - *Coarse buckets:* if $"P99"$ falls in a `le="1.0"` to `le="+Inf"` interval, the function returns $"+Inf"$.
-- *Too many buckets:* each bucket is a separate series; 20 buckets $times.o$ 100 routes = 2000 series.
+- *Too many buckets:* each bucket is a separate series; 20 buckets $times$ 100 routes = 2000 series.
 
-Native histograms (Prometheus 2.40+, "sparse histograms") encode exponentially spaced buckets in a single sample. Schema $s$ defines bucket width $2^(2^(-s))$; $s=8$ gives $approx 0.27%$ relative error. A single native histogram is one series regardless of bucket count, so cardinality drops by 10–50$times.o$.
+Native histograms (Prometheus 2.40+, "sparse histograms") encode exponentially spaced buckets in a single sample. Schema $s$ defines bucket width $2^(2^(-s))$; $s=8$ gives $approx 0.27%$ relative error. A single native histogram is one series regardless of bucket count, so cardinality drops by 10–50$times$.
 
 == Sketches: TDigest, HdrHistogram, DDSketch
 
