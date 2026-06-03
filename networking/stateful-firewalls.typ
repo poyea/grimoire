@@ -312,7 +312,7 @@ ip link show eth0 | grep xdp
 
 #table(
   columns: (auto, auto, auto),
-  [*Operation*], [*Cycles*], [*Time @ 3 GHz*],
+  [*Operation*], [*Cycles*], [*Time \@ 3 GHz*],
   [Conntrack lookup (hash)], [200-500], [70-170 ns],
   [NAT translation], [100-200], [35-70 ns],
   [Filter rule matching (10 rules)], [500-1000], [170-330 ns],
