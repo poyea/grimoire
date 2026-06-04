@@ -79,7 +79,7 @@ The systems lesson: *abrupt* termination of a unit holding shared state is a des
 
 == Capability Models and Process Identity
 
-Classical Unix identifies the process by UID/GID — coarse and ambient. Capability-based systems (Mach ports, seL4 endpoints, Capsicum, Fuchsia handles) instead identify it by the set of *unforgeable references* it possesses; revoking access means revoking the handle. The two models can coexist (Linux capabilities split root into ~40 flags; Linux 5.10+ ambient capabilities propagate across `execve`), but the philosophical gulf is wide. See `operating-systems/security-models.typ`.
+Classical Unix identifies the process by UID/GID — coarse and ambient. Capability-based systems (Mach ports, seL4 endpoints, Capsicum, Fuchsia handles) instead identify it by the set of *unforgeable references* it possesses; revoking access means revoking the handle. The two models can coexist (Linux capabilities split root into ~40 flags; Linux 4.3+ ambient capabilities propagate across `execve`), but the philosophical gulf is wide. See `operating-systems/security-models.typ`.
 
 == Pitfalls
 
