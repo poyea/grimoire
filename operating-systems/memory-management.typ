@@ -40,7 +40,7 @@ Demand paging keeps RAM working set tight at the cost of fault latency. *Pre-fau
 
 == Huge Pages and TLB Pressure
 
-A 4 KB page touches 1024 cache lines of page-table state to map 4 MB; the $"TLB"$ holds ~64-2048 entries depending on level. A workload with > $"TLB"$ × 4 KB hot data thrashes translation. *Huge pages* (2 MB and 1 GB on x86-64; 64 KB / 2 MB / 32 MB / 1 GB on AArch64) raise the per-entry coverage and dramatically reduce $"TLB"$ misses.
+A 4 KB granularity needs 1024 PTEs — 128 cache lines of page-table state — to map 4 MB; the $"TLB"$ holds ~64-2048 entries depending on level. A workload with > $"TLB"$ × 4 KB hot data thrashes translation. *Huge pages* (2 MB and 1 GB on x86-64; 64 KB / 2 MB / 32 MB / 1 GB on AArch64) raise the per-entry coverage and dramatically reduce $"TLB"$ misses.
 
 Two delivery models:
 - *Explicit / HugeTLB*: reserved pool, applications opt in via `MAP_HUGETLB` or `hugetlbfs`. Strict but predictable.
