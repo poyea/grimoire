@@ -50,7 +50,7 @@ A real-time task has a period $T$, worst-case execution time (WCET) $C$, and dea
 
 *Rate Monotonic* (RM, Liu & Layland 1973): static priority equal to $1/T$ (shorter period $=>$ higher priority). For $n$ tasks the utilization bound is:
 
-$ U = sum_{i=1}^n C_i / T_i <= n(2^(1/n) - 1) $
+$ U = sum_(i=1)^n C_i / T_i <= n(2^(1/n) - 1) $
 
 which approaches $ln 2 approx 0.693$ as $n -> infinity$. RM is optimal among static-priority policies for periodic tasks with $D = T$.
 
