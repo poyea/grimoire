@@ -20,10 +20,19 @@
   #include "operating-systems/processes-and-threads.typ"
   #pagebreak()
 
+  #include "operating-systems/ipc-mechanisms.typ"
+  #pagebreak()
+
   #include "operating-systems/scheduling-theory.typ"
   #pagebreak()
 
   #include "operating-systems/storage-stack.typ"
+  #pagebreak()
+
+  #include "operating-systems/boot-and-init.typ"
+  #pagebreak()
+
+  #include "operating-systems/security-models.typ"
   #pagebreak()
 
 ]

@@ -1034,9 +1034,19 @@ chapters:
     lines: 201
     status: draft
   - subject: operating-systems
+    slug: boot-and-init
+    path: operating-systems/boot-and-init.typ
+    lines: 200
+    status: draft
+  - subject: operating-systems
     slug: file-systems
     path: operating-systems/file-systems.typ
     lines: 114
+    status: draft
+  - subject: operating-systems
+    slug: ipc-mechanisms
+    path: operating-systems/ipc-mechanisms.typ
+    lines: 177
     status: draft
   - subject: operating-systems
     slug: memory-management
@@ -1052,6 +1062,11 @@ chapters:
     slug: scheduling-theory
     path: operating-systems/scheduling-theory.typ
     lines: 118
+    status: draft
+  - subject: operating-systems
+    slug: security-models
+    path: operating-systems/security-models.typ
+    lines: 219
     status: draft
   - subject: operating-systems
     slug: storage-stack
