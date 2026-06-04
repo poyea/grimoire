@@ -276,7 +276,7 @@ $ Y = X W = underbrace((X dot "diag"(s)^(-1)))_("easy to quantize") dot underbra
 
 The scale $s_j$ is set to balance quantization difficulty between $X$ and $W$:
 
-$ s_j = frac(max(|X_{:,j}|)^alpha, max(|W_{j,:}|)^(1-alpha)) $
+$ s_j = frac(max(|X_(:,j)|)^alpha, max(|W_(j,:)|)^(1-alpha)) $
 
 The migration strength $alpha in [0, 1]$ controls the tradeoff. $alpha = 0.5$ works well empirically; $alpha = 1$ moves all difficulty to the weights (AWQ limit).
 

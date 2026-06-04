@@ -88,7 +88,7 @@ Web-crawled data has massive duplication: the same news article, StackOverflow a
 *Algorithm sketch:*
 
 + Shingling: convert each document into a set of $k$-grams (typically $k=5$ word shingles or character $k$-grams).
-+ MinHash signatures: apply $h$ independent hash functions to the shingle set. The _minhash_ of function $f_i$ over document $d$ is $m_i(d) = min_{s in d} f_i(s)$. Stack into a signature vector $bold(s)(d) in ZZ^h$.
++ MinHash signatures: apply $h$ independent hash functions to the shingle set. The _minhash_ of function $f_i$ over document $d$ is $m_i(d) = min_(s in d) f_i(s)$. Stack into a signature vector $bold(s)(d) in ZZ^h$.
 + Jaccard estimate: $hat(J)(d_1, d_2) = (1/h) sum_i bb(1)[m_i(d_1) = m_i(d_2)]$. This is an unbiased estimator of the true Jaccard similarity.
 + LSH banding: divide the $h$ hash values into $b$ bands of $r = h/b$ rows each. Two documents become a _candidate pair_ if they collide in at least one band. Tune $b, r$ to control the similarity threshold.
 + Deduplicate: remove one document from each near-duplicate pair (Jaccard $gt$ 0.8 is a common threshold).
@@ -571,7 +571,7 @@ Large language models require distributing computation across tens to thousands 
 
 Each GPU holds a *full copy* of the model. The global batch is split: each GPU processes a _micro-batch_, computes gradients independently, then gradients are _all-reduced_ (summed and divided) across all GPUs before the optimizer step. After all-reduce, every GPU has identical gradients and performs an identical optimizer step.
 
-$ g_"global" = (1/K) sum_(k=1)^K g^{(k)} $
+$ g_"global" = (1/K) sum_(k=1)^K g^((k)) $
 
 All-reduce cost: $2(K-1)/K times P times "sizeof(float)"$ bytes transmitted per GPU for ring all-reduce over $K$ GPUs and $P$ parameters.
 

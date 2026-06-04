@@ -295,7 +295,7 @@ assistant: "Gradient descent is an iterative optimization algorithm ..."
 
 Given a tokenized conversation of length $L$, let $M_i = 1$ if token $i$ is part of an assistant turn, else $M_i = 0$. The masked loss is:
 
-$ cal(L) = - (1 / (sum_i M_i)) sum_(i=1)^(L) M_i log p_theta (t_i | t_{< i}) $
+$ cal(L) = - (1 / (sum_i M_i)) sum_(i=1)^(L) M_i log p_theta (t_i | t_(< i)) $
 
 Only assistant tokens contribute to the gradient. This is critical: without masking the model memorizes the user prompts and degrades on unseen instruction styles.
 
