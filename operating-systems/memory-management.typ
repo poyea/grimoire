@@ -83,7 +83,7 @@ Common pitfall: a producer thread `malloc`s; a consumer thread `free`s. ptmalloc
 
 When RAM is exhausted the kernel either evicts clean pages (file-backed — re-fetch from disk) or pages out dirty anonymous pages (to swap). Swap-to-disk is slow enough that modern systems prefer *compressed RAM* (`zswap`, `zram`) for the first tier of pressure and only spill to disk under sustained shortage.
 
-CXL-attached memory introduces a new tier: 100-300 ns away, attached over PCIe lanes. Page-promotion / demotion daemons (`damon`, NUMA-balancing extensions) now schedule pages across local DRAM, CXL DRAM, and NVMe swap.
+CXL-attached memory introduces a new tier between DRAM and NVMe: 100-300 ns latency, attached over PCIe 5.0 lanes with coherent load/store semantics. The kernel models CXL memory as a high-bandwidth NUMA node with higher latency; `numactl --membind` or `mbind()` pins allocations to it. Page-promotion / demotion daemons (`damon`, NUMA-balancing extensions) now schedule pages across local DRAM, CXL DRAM, and NVMe swap — hot pages promoted to local DRAM, warm pages demoted to CXL, cold pages swapped. Tiering policy is tunable via `damon_reclaim` and the kernel's `memory.tiering` cgroup v2 interface, with hardware vendors exposing bandwidth and latency statistics via the CXL telemetry protocol.
 
 == Pitfalls
 

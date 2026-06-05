@@ -224,7 +224,11 @@ where $Sigma$ is the gradient covariance. Above $B_("crit")$, doubling batch siz
 
 == Distributed Optimization
 
-For data-parallel training, each worker computes a local gradient on its mini-batch and the gradients are averaged via all-reduce. *ZeRO* (Rajbhandari et al. 2020) partitions optimizer state, gradients, and parameters across workers to fit very large models. *Local SGD* communicates only every $k$ steps with bias-correction. See `llm/pretraining.typ` for the full distributed-training stack.
+For data-parallel training, each worker computes a local gradient on its mini-batch; gradients are averaged across workers via ring all-reduce ($O(N)$ messages, bandwidth-optimal). Communication and computation overlap when frameworks pipeline backward passes with gradient transfer.
+
+*ZeRO* (Rajbhandari et al. 2020) partitions optimizer state (ZeRO-1), gradients (ZeRO-2), and parameters (ZeRO-3) across workers. ZeRO-3 removes the $3 Psi$ memory term per device but adds all-gather overhead per forward pass — a tradeoff controlled by `offload_optimizer` and `contiguous_gradients` flags in DeepSpeed.
+
+*Gradient compression* (PowerSGD, Top-K sparsification) reduces communication at the cost of a biased estimator; error feedback accumulates the residual to prevent drift. *Local SGD* communicates every $k$ steps, which reduces synchronization frequency but requires careful learning rate scaling to avoid consensus drift. See `llm/pretraining.typ` for the full pipeline-parallel + tensor-parallel stack.
 
 == Convergence Diagnostics
 
