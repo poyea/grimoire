@@ -2,7 +2,7 @@
 
 A production compiler frontend is judged not by what it accepts but by what it does when input is wrong. This chapter is about lexing, parsing, error recovery, and incremental reparsing as engineered artifacts — the theory of context-free grammars and LR/LL parsing lives in the programming-languages volume.
 
-*See also:* #emph[programming-languages/lexing], #emph[programming-languages/parsing], #emph[programming-languages/pushdown-cfg], #emph[ir-design]
+*See also:* _programming-languages/lexing_, _programming-languages/parsing_, _programming-languages/pushdown-cfg_, _ir-design_
 
 == Hand-Written vs Generated Parsers
 

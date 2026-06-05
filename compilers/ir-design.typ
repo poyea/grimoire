@@ -2,7 +2,7 @@
 
 The choice of intermediate representation determines what optimizations are tractable. $"SSA"$ made dataflow sparse; $"CPS"$ made control explicit; sea-of-nodes erased the program order; $"MLIR"$ made the IR itself extensible. This chapter compares the practical tradeoffs of each.
 
-*See also:* #emph[dataflow-analysis], #emph[optimization-passes], #emph[programming-languages/operational-semantics]
+*See also:* _dataflow-analysis_, _optimization-passes_, _programming-languages/operational-semantics_
 
 == Why an IR?
 

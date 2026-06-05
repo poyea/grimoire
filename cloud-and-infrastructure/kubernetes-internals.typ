@@ -2,7 +2,7 @@
 
 Kubernetes is best understood as a *control loop platform built around a strongly-consistent key-value store*. The apiserver is the only client of etcd; everything else — controllers, schedulers, kubelets — watches the apiserver and writes back desired state through it. This level-triggered, declarative model is the deep structural decision that makes the system extensible (CRDs and custom controllers are first-class) and self-healing (every reconciliation step recomputes from current state, never from deltas).
 
-*See also:* `containers.typ`, `service-mesh-deep-dive.typ`, `iac.typ`, `multi-tenancy.typ`, `networking/container-networking.typ`, `linux-kernel/cgroups-namespaces.typ`.
+*See also:* `containers.typ`, `networking/service-mesh.typ`, `iac.typ`, `multi-tenancy.typ`, `networking/container-networking.typ`, `linux-kernel/cgroups-namespaces.typ`.
 
 == Architectural Overview
 
@@ -232,13 +232,28 @@ metadata:
     eks.amazonaws.com/role-arn: arn:aws:iam::123:role/ReportWriter
 ```
 
-== Multi-Tenancy Considerations (preview)
+== Multi-Tenancy Considerations
 
-- *Namespaces* are not security boundaries by themselves; RBAC + NetworkPolicy + ResourceQuota + PSA are needed.
-- *Cluster-per-tenant* gives strong isolation but costs control plane resources.
-- *Virtual clusters* (vcluster) run a tenant apiserver as a pod, sharing host nodes.
+Kubernetes namespaces are organisational, not security boundaries. A tenant that can exec into a pod or exploit a container escape reaches the shared kernel. Defence in depth requires layering several controls:
 
-See `multi-tenancy.typ` for the full treatment.
+#table(
+  columns: 3,
+  [*Control*], [*Mechanism*], [*What it stops*],
+  [Identity], [RBAC + ServiceAccounts], [Accidental cross-tenant API access],
+  [Network], [NetworkPolicy (CNI-enforced)], [Pod-to-pod traffic across namespaces],
+  [Resource], [ResourceQuota + LimitRange], [CPU/memory monopolisation],
+  [Pod security], [Pod Security Admission (PSA)], [Privileged containers, host-path mounts],
+  [Syscall filter], [seccomp profile, AppArmor], [Container breakout via kernel exploits],
+  [Audit], [kube-apiserver audit log], [Forensics after incident],
+)
+
+Three isolation models span the cost-isolation tradeoff:
+
+- *Namespace-per-tenant* (soft multi-tenancy): cheap, one control plane, suitable for trusted internal teams.
+- *Virtual cluster* (vcluster): each tenant gets their own apiserver running as pods; workloads land on shared nodes. Near-cluster UX with shared kernel risk.
+- *Cluster-per-tenant* (hard multi-tenancy): separate control planes and nodes. Required for strict compliance (PCI-DSS, HIPAA). Managed via fleet tools (Cluster API, GKE Config Sync, ACM).
+
+The choice is driven by threat model: internal vs external tenants, blast-radius tolerance, and cost budget.
 
 == Scaling Limits
 
