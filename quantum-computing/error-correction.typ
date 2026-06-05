@@ -18,7 +18,7 @@ A $[[n, k, d]]$ stabilizer code encodes $k$ logical qubits in $n$ physical qubit
 
 The *3-qubit bit-flip code* (encodes one logical against $X$ errors, not a true QEC):
 
-$ |0 angle.r_L = |000 angle.r, quad |1 angle.r_L = |111 angle.r, $
+$ |0 chevron.r_L = |000 chevron.r, quad |1 chevron.r_L = |111 chevron.r, $
 
 stabilizers $S_1 = Z_1 Z_2, S_2 = Z_2 Z_3$.
 
@@ -99,9 +99,9 @@ These require long-range couplers (photonic interconnects, reconfigurable atom a
 
 Transversal gates are limited by Eastin-Knill (2009): no QEC code admits a *universal* set of transversal gates. The surface code has transversal Clifford only — non-Clifford $T$ requires *magic states*
 
-$ |T angle.r = (|0 angle.r + e^(i pi / 4) |1 angle.r) / sqrt(2). $
+$ |T chevron.r = (|0 chevron.r + e^(i pi / 4) |1 chevron.r) / sqrt(2). $
 
-Inject a noisy $|T angle.r$, then distill: Bravyi-Kitaev's 15-to-1 protocol takes 15 noisy magic states with error $p$ to one with error $approx 35 p^3$. Hierarchies of distillation factories dominate the resource cost of fault-tolerant quantum algorithms — typically 50-90% of qubits in a Shor-factoring layout.
+Inject a noisy $|T chevron.r$, then distill: Bravyi-Kitaev's 15-to-1 protocol takes 15 noisy magic states with error $p$ to one with error $approx 35 p^3$. Hierarchies of distillation factories dominate the resource cost of fault-tolerant quantum algorithms — typically 50-90% of qubits in a Shor-factoring layout.
 
 ```python
 # Stim: simulate the 15-to-1 distillation circuit (Clifford-only, fast)

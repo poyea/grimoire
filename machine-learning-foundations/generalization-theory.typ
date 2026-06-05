@@ -33,7 +33,7 @@ $ hat(cal(R))_S (cal(F)) = EE_sigma [sup_(f in cal(F)) 1/n sum_(i=1)^n sigma_i f
 
 Intuitively, it measures how well $cal(F)$ can fit random labels. Rademacher generalization bound:
 
-$ R(h) <= hat(R)_n (h) + 2 hat(cal(R))_S (cal(L) circle.stroked.small cal(H)) + 3 sqrt(log(2 \/ delta) \/ (2 n)). $
+$ R(h) <= hat(R)_n (h) + 2 hat(cal(R))_S (cal(L) circle.stroked cal(H)) + 3 sqrt(log(2 \/ delta) \/ (2 n)). $
 
 For Lipschitz losses and norm-bounded hypothesis classes, Rademacher complexity often gives tight bounds where VC dim is loose. Bartlett's *margin theory* for SVMs uses Rademacher to prove margin-based generalization bounds for kernel methods.
 
@@ -124,7 +124,9 @@ Nagarajan & Kolter (2019) showed that uniform-convergence-based generalization b
 
 == Compression-Based Bounds
 
-Arora et al. (2018), Zhou et al. (2019): if a trained network can be compressed (sparsified, quantized, distilled) to $k$ bits while preserving accuracy, then it generalizes with a bound proportional to $sqrt(k \/ n)$. This explains why models that compress well (low effective dimensionality) tend to generalize.
+Arora et al. (2018), Zhou et al. (2019): if a trained network can be compressed (sparsified, quantized, or distilled) to $k$ bits while preserving accuracy, then it generalizes with a bound proportional to $sqrt(k \/ n)$. Formally, any function class of VC-dimension $d$ satisfies $R(h) - hat(R)(h) = O(sqrt(d \/ n))$; compression provides an implicit upper bound on effective dimension.
+
+This gives a practical handle: networks that tolerate aggressive pruning (90%+ sparsity at minimal accuracy loss) have empirically low effective dimension and generalize well. The bound also explains the lottery ticket hypothesis — small dense sub-networks train to the same accuracy as the full network, with fewer bits needed to describe them. A corollary for practitioners: post-training quantization success (INT8 with < 1% degradation) is evidence of good generalization, not just model efficiency.
 
 == Practical Diagnostics
 
@@ -155,9 +157,16 @@ def hessian_top_eig(loss_fn, params, num_iter=20):
 
 == Grokking
 
-Power et al. (2022) showed certain algorithmic tasks exhibit *grokking*: long after training accuracy reaches 100%, validation accuracy is near chance, then suddenly jumps to 100% — sometimes after $100 times$ more steps. Mechanistic interpretations (Nanda et al. 2023): the network initially memorizes (a high-norm solution that interpolates), then weight decay slowly drives it toward a generalizing circuit (a low-norm Fourier-feature solution for modular arithmetic).
+Power et al. (2022) showed certain algorithmic tasks exhibit *grokking*: long after training accuracy reaches 100%, validation accuracy is near chance, then suddenly jumps to 100% — sometimes after $100 times$ more steps. The phenomenon is robust across modular arithmetic, permutation composition, and sparse parity.
 
-Grokking is now used as a clean testbed for studying generalization dynamics decoupled from data complexity.
+Mechanistic interpretations (Nanda et al. 2023): the network initially memorizes (a high-norm solution that interpolates training data), then weight decay slowly penalizes the memorizing circuit and drives the model toward a generalizing one — a low-norm Fourier-feature solution that implements modular arithmetic via structured embeddings. The transition point corresponds to the generalizing circuit becoming slightly lower loss than the memorizing one, after which the optimizer rapidly transfers weight.
+
+Practical implications:
+- Weight decay is *necessary* for grokking — without regularization the memorizing solution is stable.
+- Longer training is not always wasteful; delayed generalization can occur on real tasks (code, math).
+- Grokking provides a controlled microscope for studying representation formation and phase transitions in learned circuits.
+
+Grokking is now a standard testbed for mechanistic interpretability and for studying the geometry of generalization decoupled from data complexity.
 
 == Distribution Shift
 

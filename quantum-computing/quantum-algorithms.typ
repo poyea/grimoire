@@ -8,7 +8,7 @@ Quantum algorithms exploit interference — amplitudes can cancel, not just add 
 
 Given $f: {0,1}^n -> {0,1}$ promised to be either *constant* or *balanced* (half zeros, half ones), determine which. Classically, the worst case requires $2^(n-1) + 1$ queries; Deutsch-Jozsa answers with a *single* quantum query.
 
-Circuit: prepare $|0 angle.r^(times.circle n) |1 angle.r$, apply $H^(times.circle n+1)$, query the phase oracle $U_f: |x angle.r |y angle.r -> |x angle.r |y plus.circle f(x) angle.r$, apply $H^(times.circle n)$ to the first register, measure. The output is $|0 angle.r^n$ iff $f$ is constant.
+Circuit: prepare $|0 angle.r^(times.o n) |1 angle.r$, apply $H^(times.o n+1)$, query the phase oracle $U_f: |x angle.r |y angle.r -> |x angle.r |y plus.o f(x) angle.r$, apply $H^(times.o n)$ to the first register, measure. The output is $|0 angle.r^n$ iff $f$ is constant.
 
 ```python
 # Qiskit Deutsch-Jozsa for a balanced oracle f(x) = x_0

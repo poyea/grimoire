@@ -83,7 +83,7 @@ A MAC is a keyed function $T = "MAC"_K (M)$ such that no adversary without $K$ c
 
 $"HMAC"$ (RFC 2104) wraps any Merkle–Damgård hash and is provably secure under PRF assumption on the compression function. Pad key to block size, XOR with $"ipad"$/$"opad"$, hash twice:
 
-$ "HMAC"_K (M) = H((K plus.circle "opad") parallel H((K plus.circle "ipad") parallel M)) $
+$ "HMAC"_K (M) = H((K plus.o "opad") parallel H((K plus.o "ipad") parallel M)) $
 
 ```python
 import hmac, hashlib
