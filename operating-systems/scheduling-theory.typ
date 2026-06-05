@@ -42,7 +42,7 @@ In production systems p99 has eclipsed mean latency as the dominant metric: a re
 
 *Virtual-time / WFQ* (Weighted Fair Queueing, originally from networks) generalizes further: each task accumulates virtual time $V_i = sum (delta_i \/ w_i)$ where $delta_i$ is CPU consumed and $w_i$ its weight; the scheduler picks minimum $V_i$. This is the conceptual foundation of CFS.
 
-*EEVDF* (Earliest Eligible Virtual Deadline First, Stoica & Abdel-Wahab 1995) refines virtual-time scheduling with explicit eligibility (a task is eligible once its virtual time has caught up to a "service curve") and virtual deadlines. Provides both proportional fairness *and* bounded lag — the lateness of any task relative to its fair share is provably $O(1)$. Linux 6.6+ replaced CFS internals with EEVDF for exactly this latency guarantee.
+*EEVDF* (Earliest Eligible Virtual Deadline First, Stoica & Abdel-Wahab 1995) refines virtual-time scheduling with explicit eligibility (a task is eligible once its virtual time has caught up to a "service curve") and virtual deadlines. Provides both proportional fairness *and* bounded lag — the lateness of any task relative to its fair share is provably $O(1)$. Linux 6.6+ made EEVDF the default scheduler (replacing CFS as the active policy) for exactly this latency guarantee; the CFS compatibility layer remains.
 
 == Real-Time Scheduling
 

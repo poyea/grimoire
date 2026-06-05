@@ -79,11 +79,11 @@ Use SLH-DSA when:
 
 == FN-DSA (Falcon)
 
-FN-DSA (formerly Falcon) is a lattice signature based on NTRU lattices with smaller signatures than ML-DSA ($approx 666$ B for Falcon-512) but harder constant-time implementation due to floating-point Gaussian sampling. NIST will publish FIPS 206 separately.
+FN-DSA (formerly Falcon) is a lattice signature based on NTRU lattices with smaller signatures than ML-DSA ($approx 666$ B for Falcon-512) but harder constant-time implementation due to floating-point Gaussian sampling. NIST published FIPS 206 in August 2024.
 
 == Other Families
 
-- *Code-based:* Classic McEliece (HQC was selected as fourth-round KEM standard in 2025). McEliece has 60-year track record, very large public keys (\~ 1 MB).
+- *Code-based:* Classic McEliece (HQC was selected as the fifth KEM standard in 2025 (FIPS 205 covers ML-KEM; HQC was added as a code-based alternative)). McEliece has 60-year track record, very large public keys (\~ 1 MB).
 - *Isogeny-based:* SIDH/SIKE broken by Castryck-Decru (2022) via torsion-point attack. CSIDH and SQIsign remain candidates.
 - *Multivariate:* Rainbow broken by Beullens (2022). $"GeMSS"$ and $"UOV"$ variants survive.
 

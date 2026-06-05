@@ -212,7 +212,7 @@ For verification engineers, the practical consequences of Gödel's theorems are:
 
 - *Completeness (1930):* FOL has a sound and complete proof system; every valid sentence is provable. This is what makes resolution-based provers work.
 - *Incompleteness I (1931):* Any consistent recursively axiomatized theory extending Robinson arithmetic has true sentences it cannot prove. So Peano arithmetic, ZFC, Coq's calculus — none can prove their own consistency.
-- *Incompleteness II:* Such a theory cannot prove its own consistency. Foundational systems for proof assistants (CIC, MLTT + universes) rely on meta-theoretic consistency proofs in stronger systems.
+- *Incompleteness II:* Extends I: the consistency of such a theory cannot be proved within that same theory. Foundational systems for proof assistants (CIC, MLTT + universes) rely on meta-theoretic consistency proofs in stronger systems.
 
 For day-to-day verification this means: total automation of unbounded program reasoning is impossible, which is why proof assistants exist alongside SMT solvers.
 
