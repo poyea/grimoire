@@ -2,7 +2,7 @@
 
 Every microcontroller or application processor exposes its peripherals — UARTs, SPI controllers, DMA engines, GPIO banks — as memory-mapped registers or, on legacy x86, as port I/O addresses. This chapter covers how hardware exposes peripheral state to software, how interrupts and DMA transfer data efficiently, the electrical and framing details of UART/SPI/I2C, and how the Linux driver model translates all of it into a portable, maintainable kernel interface.
 
-*See also:* _Real-Time Operating Systems_, _Microcontrollers and SoC_, `linux-kernel/scheduler.typ`, `operating-systems/processes-and-threads.typ`
+*See also:* _Real-Time Operating Systems_, _Microcontrollers and Systems-on-Chip_, `linux-kernel/scheduler.typ`, `operating-systems/processes-and-threads.typ`
 
 == Memory-Mapped I/O vs Port I/O
 
