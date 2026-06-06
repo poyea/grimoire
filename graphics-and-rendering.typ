@@ -11,10 +11,19 @@
 
   #pagebreak()
 
+  #include "graphics-and-rendering/gi-techniques.typ"
+  #pagebreak()
+
   #include "graphics-and-rendering/physically-based-rendering.typ"
   #pagebreak()
 
   #include "graphics-and-rendering/rasterization-pipeline.typ"
+  #pagebreak()
+
+  #include "graphics-and-rendering/ray-tracing.typ"
+  #pagebreak()
+
+  #include "graphics-and-rendering/realtime-engines.typ"
   #pagebreak()
 
   #include "graphics-and-rendering/shaders.typ"
