@@ -14,9 +14,19 @@ chapters:
     lines: 193
     status: draft
   - subject: cloud-and-infrastructure
+    slug: iac
+    path: cloud-and-infrastructure/iac.typ
+    lines: 299
+    status: draft
+  - subject: cloud-and-infrastructure
     slug: kubernetes-internals
     path: cloud-and-infrastructure/kubernetes-internals.typ
-    lines: 273
+    lines: 288
+    status: draft
+  - subject: cloud-and-infrastructure
+    slug: serverless
+    path: cloud-and-infrastructure/serverless.typ
+    lines: 270
     status: draft
   - subject: coding
     slug: advanced-graphs
@@ -494,9 +504,19 @@ chapters:
     lines: 207
     status: draft
   - subject: distributed-systems
+    slug: coordination-services
+    path: distributed-systems/coordination-services.typ
+    lines: 216
+    status: draft
+  - subject: distributed-systems
     slug: failure-detection
     path: distributed-systems/failure-detection.typ
     lines: 187
+    status: draft
+  - subject: distributed-systems
+    slug: gossip
+    path: distributed-systems/gossip.typ
+    lines: 182
     status: draft
   - subject: distributed-systems
     slug: introduction
@@ -513,10 +533,20 @@ chapters:
     path: distributed-systems/time-and-order.typ
     lines: 224
     status: draft
+  - subject: distributed-systems
+    slug: transactions
+    path: distributed-systems/transactions.typ
+    lines: 190
+    status: draft
   - subject: embedded-and-realtime
     slug: mcus-and-soc
     path: embedded-and-realtime/mcus-and-soc.typ
     lines: 197
+    status: draft
+  - subject: embedded-and-realtime
+    slug: peripherals-and-drivers
+    path: embedded-and-realtime/peripherals-and-drivers.typ
+    lines: 320
     status: draft
   - subject: embedded-and-realtime
     slug: rtos
@@ -532,6 +562,21 @@ chapters:
     slug: propositional-and-fol
     path: formal-methods/propositional-and-fol.typ
     lines: 260
+    status: draft
+  - subject: formal-methods
+    slug: sat-and-smt
+    path: formal-methods/sat-and-smt.typ
+    lines: 245
+    status: draft
+  - subject: formal-methods
+    slug: theorem-proving
+    path: formal-methods/theorem-proving.typ
+    lines: 185
+    status: draft
+  - subject: formal-methods
+    slug: tla-plus
+    path: formal-methods/tla-plus.typ
+    lines: 261
     status: draft
   - subject: gpu-architecture
     slug: compute-architecture
@@ -604,6 +649,11 @@ chapters:
     lines: 213
     status: draft
   - subject: graphics-and-rendering
+    slug: gi-techniques
+    path: graphics-and-rendering/gi-techniques.typ
+    lines: 150
+    status: draft
+  - subject: graphics-and-rendering
     slug: physically-based-rendering
     path: graphics-and-rendering/physically-based-rendering.typ
     lines: 162
@@ -612,6 +662,16 @@ chapters:
     slug: rasterization-pipeline
     path: graphics-and-rendering/rasterization-pipeline.typ
     lines: 193
+    status: draft
+  - subject: graphics-and-rendering
+    slug: ray-tracing
+    path: graphics-and-rendering/ray-tracing.typ
+    lines: 177
+    status: draft
+  - subject: graphics-and-rendering
+    slug: realtime-engines
+    path: graphics-and-rendering/realtime-engines.typ
+    lines: 177
     status: draft
   - subject: graphics-and-rendering
     slug: shaders
@@ -816,7 +876,7 @@ chapters:
   - subject: machine-learning-foundations
     slug: generalization-theory
     path: machine-learning-foundations/generalization-theory.typ
-    lines: 209
+    lines: 218
     status: draft
   - subject: machine-learning-foundations
     slug: linear-algebra-for-ml
@@ -826,7 +886,7 @@ chapters:
   - subject: machine-learning-foundations
     slug: optimization
     path: machine-learning-foundations/optimization.typ
-    lines: 262
+    lines: 266
     status: draft
   - subject: machine-learning-foundations
     slug: probability-and-information
@@ -1019,6 +1079,11 @@ chapters:
     lines: 278
     status: draft
   - subject: observability-and-sre
+    slug: continuous-profiling
+    path: observability-and-sre/continuous-profiling.typ
+    lines: 275
+    status: draft
+  - subject: observability-and-sre
     slug: distributed-tracing
     path: observability-and-sre/distributed-tracing.typ
     lines: 275
@@ -1027,6 +1092,11 @@ chapters:
     slug: metrics-systems
     path: observability-and-sre/metrics-systems.typ
     lines: 279
+    status: draft
+  - subject: observability-and-sre
+    slug: slo-engineering
+    path: observability-and-sre/slo-engineering.typ
+    lines: 214
     status: draft
   - subject: observability-and-sre
     slug: the-three-pillars-and-beyond
