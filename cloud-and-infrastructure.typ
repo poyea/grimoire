@@ -14,10 +14,16 @@
   #include "cloud-and-infrastructure/containers.typ"
   #pagebreak()
 
+  #include "cloud-and-infrastructure/iac.typ"
+  #pagebreak()
+
   #include "cloud-and-infrastructure/iaas-fundamentals.typ"
   #pagebreak()
 
   #include "cloud-and-infrastructure/kubernetes-internals.typ"
+  #pagebreak()
+
+  #include "cloud-and-infrastructure/serverless.typ"
   #pagebreak()
 
 ]
