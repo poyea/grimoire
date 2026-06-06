@@ -14,7 +14,13 @@
   #include "distributed-systems/consensus-deep-dive.typ"
   #pagebreak()
 
+  #include "distributed-systems/coordination-services.typ"
+  #pagebreak()
+
   #include "distributed-systems/failure-detection.typ"
+  #pagebreak()
+
+  #include "distributed-systems/gossip.typ"
   #pagebreak()
 
   #include "distributed-systems/introduction.typ"
@@ -24,6 +30,9 @@
   #pagebreak()
 
   #include "distributed-systems/time-and-order.typ"
+  #pagebreak()
+
+  #include "distributed-systems/transactions.typ"
   #pagebreak()
 
 ]
