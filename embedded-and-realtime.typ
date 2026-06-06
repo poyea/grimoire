@@ -14,6 +14,9 @@
   #include "embedded-and-realtime/mcus-and-soc.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/peripherals-and-drivers.typ"
+  #pagebreak()
+
   #include "embedded-and-realtime/rtos.typ"
   #pagebreak()
 
