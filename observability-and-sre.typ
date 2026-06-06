@@ -11,10 +11,16 @@
 
   #pagebreak()
 
+  #include "observability-and-sre/continuous-profiling.typ"
+  #pagebreak()
+
   #include "observability-and-sre/distributed-tracing.typ"
   #pagebreak()
 
   #include "observability-and-sre/metrics-systems.typ"
+  #pagebreak()
+
+  #include "observability-and-sre/slo-engineering.typ"
   #pagebreak()
 
   #include "observability-and-sre/the-three-pillars-and-beyond.typ"
