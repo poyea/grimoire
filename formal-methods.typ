@@ -17,4 +17,13 @@
   #include "formal-methods/propositional-and-fol.typ"
   #pagebreak()
 
+  #include "formal-methods/sat-and-smt.typ"
+  #pagebreak()
+
+  #include "formal-methods/theorem-proving.typ"
+  #pagebreak()
+
+  #include "formal-methods/tla-plus.typ"
+  #pagebreak()
+
 ]
