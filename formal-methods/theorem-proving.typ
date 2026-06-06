@@ -2,7 +2,7 @@
 
 Interactive theorem provers let humans and machines collaborate to construct machine-checked proofs of mathematical and software correctness claims that lie beyond the reach of fully automatic tools. Three systems dominate practice — Coq, Lean 4, and Isabelle/HOL — each grounded in a rich type-theoretic or set-theoretic foundation that doubles as both specification language and proof language. The Curry-Howard correspondence is the conceptual bridge: proofs are programs, propositions are types.
 
-*See also:* _propositional-and-fol.typ_, _sat-and-smt.typ_, _programming-languages/axiomatic-semantics.typ_
+*See also:* _propositional-and-fol.typ_, _sat-and-smt.typ_, _propositional-and-fol.typ_
 
 == The Curry-Howard Correspondence
 
@@ -170,16 +170,16 @@ The result: no undefined behavior, no security policy violations, given the hard
 
 == Further Reading
 
-Chlipala, A. (2022). #emph[Certified Programming with Dependent Types.] MIT Press (free online).
+Chlipala, A. (2022). _Certified Programming with Dependent Types._ MIT Press (free online).
 
-Pierce, B. et al. (2023). #emph[Software Foundations.] (free online, Coq-based).
+Pierce, B. et al. (2023). _Software Foundations._ (free online, Coq-based).
 
-Avigad, J., de Moura, L. et al. #emph[Theorem Proving in Lean 4.] (free online).
+Avigad, J., de Moura, L. et al. _Theorem Proving in Lean 4._ (free online).
 
-Leroy, X. (2009). "Formal Verification of a Realistic Compiler." #emph[CACM] 52(7).
+Leroy, X. (2009). "Formal Verification of a Realistic Compiler." _CACM_ 52(7).
 
-Klein, G. et al. (2009). "seL4: Formal Verification of an OS Kernel." #emph[SOSP].
+Klein, G. et al. (2009). "seL4: Formal Verification of an OS Kernel." _SOSP_.
 
-Nipkow, T., Paulson, L., Wenzel, M. (2002). #emph[Isabelle/HOL: A Proof Assistant for Higher-Order Logic.] Springer.
+Nipkow, T., Paulson, L., Wenzel, M. (2002). _Isabelle/HOL: A Proof Assistant for Higher-Order Logic._ Springer.
 
-Howard, W. (1980). "The Formulae-as-Types Notion of Construction." In #emph[To H. B. Curry: Essays on Combinatory Logic.]
+Howard, W. (1980). "The Formulae-as-Types Notion of Construction." In _To H. B. Curry: Essays on Combinatory Logic._

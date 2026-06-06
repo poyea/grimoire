@@ -184,10 +184,8 @@ def bmc_divisible_by_5(bound=4):
         print("No violation within bound", bound)
 
 bmc_divisible_by_5()
-# Output: Counterexample: [0, 3, 6, 9, 15]  (15 is divisible by 5 at step 4... wait)
-# Actually 15 % 5 == 0, found at step 4: [0, 3, 6, 9, 15]? No: x_5 = 15 but bound=4.
-# Correct trace: [0, 3, 6, 9, 12] — none divisible by 5 within 4 steps => UNSAT.
-# Extend to bound=5: x_5 = 15, 15 % 5 = 0 => SAT.
+# bound=4: trace [0,3,6,9,12] — no multiple of 5 => UNSAT within 4 steps.
+# bound=5: trace [0,3,6,9,12,15] — 15 % 5 == 0 at step 5 => SAT (counterexample found).
 ```
 
 Z3's `Int` sort maps to the theory of integers ($"LIA"$); the modulo constraint is handled by the arithmetic solver. The Python API translates directly to SMT-LIB2 internally.
@@ -230,16 +228,16 @@ Quantified fragments remain challenging — most practical tools keep quantifier
 
 == Further Reading
 
-Biere, A., Heule, M., van Maaren, H., Walsh, T. (eds.) (2021). #emph[Handbook of Satisfiability, 2nd ed.] IOS Press.
+Biere, A., Heule, M., van Maaren, H., Walsh, T. (eds.) (2021). _Handbook of Satisfiability, 2nd ed._ IOS Press.
 
-Nieuwenhuis, R., Oliveras, A., Tinelli, C. (2006). "Solving SAT and SAT Modulo Theories." #emph[JACM] 53(6).
+Nieuwenhuis, R., Oliveras, A., Tinelli, C. (2006). "Solving SAT and SAT Modulo Theories." _JACM_ 53(6).
 
-de Moura, L., Bjørner, N. (2008). "Z3: An Efficient SMT Solver." #emph[TACAS].
+de Moura, L., Bjørner, N. (2008). "Z3: An Efficient SMT Solver." _TACAS_.
 
-Barbosa, H. et al. (2022). "cvc5: A Versatile and Industrial-Strength SMT Solver." #emph[TACAS].
+Barbosa, H. et al. (2022). "cvc5: A Versatile and Industrial-Strength SMT Solver." _TACAS_.
 
-Lopes, N. P. et al. (2021). "Alive2: Bounded Translation Validation for LLVM." #emph[PLDI].
+Lopes, N. P. et al. (2021). "Alive2: Bounded Translation Validation for LLVM." _PLDI_.
 
-Barrett, C., Sebastiani, R., Seshia, S., Tinelli, C. (2021). "Satisfiability Modulo Theories." In #emph[Handbook of Satisfiability, 2nd ed.]
+Barrett, C., Sebastiani, R., Seshia, S., Tinelli, C. (2021). "Satisfiability Modulo Theories." In _Handbook of Satisfiability, 2nd ed._
 
-Moskewicz, M. et al. (2001). "Chaff: Engineering an Efficient SAT Solver." #emph[DAC].
+Moskewicz, M. et al. (2001). "Chaff: Engineering an Efficient SAT Solver." _DAC_.
