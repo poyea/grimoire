@@ -2,7 +2,7 @@
 
 Application-layer protocols define message formats and communication patterns for specific services.
 
-*See also:* Transport Layer (for TCP/UDP foundations), Sockets API (for implementation)
+*See also:* `networking/transport-layer.typ`, `networking/sockets-api.typ`, `networking/tls-and-certificates.typ`
 
 == HTTP (Hypertext Transfer Protocol)
 
@@ -111,6 +111,75 @@ Client → Server: {Finished}
 - Handshake: 1 RTT = 20-100ms depending on distance
 - Encryption overhead: 5-15% CPU (AES-GCM), 1-3% with AES-NI hardware
 
+== WebSocket
+
+*Full-duplex framing over a single TCP connection [RFC 6455].*
+
+WebSocket starts as an HTTP/1.1 `Upgrade` handshake and then switches to a framed binary protocol on the same connection. After the upgrade, either side can send frames at any time — eliminating the request/response constraint of HTTP. This makes it the standard transport for real-time applications (chat, collaborative editing, live dashboards, game state).
+
+*Upgrade handshake:*
+```http
+GET /ws HTTP/1.1
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+Sec-WebSocket-Version: 13
+
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+```
+
+*Frame format* (2-byte minimum header): FIN bit, opcode (text/binary/ping/pong/close), mask bit, payload length (7, 16, or 64 bits). Client-to-server frames must be masked with a random key to prevent cache-poisoning attacks on HTTP proxies.
+
+*Trade-offs:* WebSocket adds no multiplexing (head-of-line blocking per connection), no built-in flow control, and no typed schemas. For server-to-client-only push, *Server-Sent Events* (SSE, `text/event-stream`) is simpler. For bidirectional structured RPC, gRPC or WebTransport (QUIC-based) supersede it.
+
+== MQTT
+
+*Publish-subscribe protocol for constrained devices [OASIS Standard, v5.0].*
+
+MQTT is a lightweight pub/sub protocol designed for IoT sensors, embedded systems, and mobile clients on lossy links. A central *broker* (Mosquitto, EMQX, HiveMQ) routes messages from publishers to subscribers by *topic* — a `/`-delimited string (`home/bedroom/temperature`). Clients subscribe with optional wildcards (`+` single-level, `#` multi-level).
+
+*Three QoS levels:*
+#table(columns: (auto, auto, 1fr),
+  [*Level*], [*Name*], [*Guarantee*],
+  [0], [At most once], [Fire and forget — no ACK, possible loss],
+  [1], [At least once], [Publisher retries until PUBACK — possible duplicates],
+  [2], [Exactly once], [4-way handshake (PUBLISH → PUBREC → PUBREL → PUBCOMP)],
+)
+
+*Retained messages:* the broker stores the last message per topic and delivers it immediately to new subscribers — useful for "last known state" semantics. *Will messages:* a client registers a message to be published if it disconnects unexpectedly (dead man's switch for device monitoring).
+
+MQTT v5 added topic aliases (reduce wire size), message expiry, shared subscriptions (load-balanced consumer groups analogous to Kafka consumer groups), and reason codes on CONNACK/PUBACK.
+
+*Performance:* 2-byte minimum header; a $"QoS"=0$ publish is a single TCP write. Brokers handle millions of concurrent connections by keeping per-session state in memory.
+
+== gRPC
+
+*High-performance RPC framework using HTTP/2 and Protocol Buffers.*
+
+gRPC (Google, 2016) defines services and message types in `.proto` files and generates typed client/server stubs in any supported language. The wire encoding is Protocol Buffers (binary, schema-driven, ~5–10× smaller than equivalent JSON). Transport is HTTP/2, providing multiplexing, header compression, and built-in flow control.
+
+*Service definition:*
+```protobuf
+service UserService {
+  rpc GetUser (GetUserRequest) returns (User);
+  rpc ListUsers (ListRequest) returns (stream User);
+  rpc BatchCreate (stream CreateRequest) returns (BatchResult);
+  rpc Chat (stream Message) returns (stream Message);
+}
+```
+
+*Four call types:*
+- *Unary:* one request, one response (replaces REST GET/POST).
+- *Server streaming:* one request, N responses (result pagination, live feeds).
+- *Client streaming:* N requests, one response (bulk upload, aggregation).
+- *Bidirectional streaming:* N requests, M responses interleaved (real-time chat, game state, collaborative editing).
+
+*Key features:* deadline propagation (every RPC carries a deadline that is honoured through call chains), cancellation (an HTTP/2 RST_STREAM tears down all in-flight work), interceptors (middleware for auth, logging, metrics), and load balancing via per-RPC header-based routing. *grpc-gateway* translates REST+JSON ↔ gRPC for clients that cannot speak HTTP/2.
+
+*Trade-offs:* gRPC requires HTTP/2; browser support uses grpc-web (a proxy translates between HTTP/1.1 and HTTP/2). Schema evolution must preserve field numbers (adding fields is safe; renaming is not). Debugging binary frames requires tooling (`grpcurl`, Wireshark gRPC dissector).
+
 == References
 
 RFC 7230: Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing. Fielding, R. & Reschke, J. (2014).
@@ -118,5 +187,11 @@ RFC 7230: Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing. Fi
 RFC 7540: Hypertext Transfer Protocol Version 2 (HTTP/2). Belshe, M., Peon, R., & Thomson, M. (2015).
 
 RFC 9114: HTTP/3. Bishop, M. (2022).
+
+RFC 6455: The WebSocket Protocol. Fette, I. & Melnikov, A. (2011).
+
+OASIS MQTT Version 5.0 Standard. (2019).
+
+Google. gRPC Documentation. https://grpc.io/docs/
 
 Grigorik, I. (2013). High Performance Browser Networking. O'Reilly Media.
