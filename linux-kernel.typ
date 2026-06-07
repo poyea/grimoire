@@ -23,9 +23,6 @@
 
 #pagebreak()
 
-#include "linux-kernel/introduction.typ"
-#pagebreak()
-
 #include "linux-kernel/abi-syscalls.typ"
 #pagebreak()
 

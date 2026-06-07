@@ -65,9 +65,6 @@ The OSI 7-layer model is pedagogical; practical implementations use TCP/IP 4-lay
 #include "networking/link-layer.typ"
 #pagebreak()
 
-#include "networking/internet-layer.typ"
-#pagebreak()
-
 #include "networking/ipv6.typ"
 #pagebreak()
 
