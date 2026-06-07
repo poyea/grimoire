@@ -2,7 +2,7 @@
 
 Model checking is the algorithmic verification of finite-state (or finitely abstractable) systems against temporal specifications. Given a Kripke structure $cal(K)$ and a property $phi$ in LTL, CTL, or the modal $mu$-calculus, the model checker either certifies $cal(K) models phi$ or returns a concrete counterexample trace. Three decades of research have produced explicit-state, symbolic (BDD-based), bounded ($"SAT"$-based), and IC3/PDR algorithms — each tuned for a different state-space regime.
 
-*See also:* _SAT and SMT_, _Propositional and FOL_, _TLA+_, _programming-languages/omega-automata.typ_, _programming-languages/infinite-trees-and-games.typ_
+*See also:* _sat-and-smt.typ_, _propositional-and-fol.typ_, _tla-plus.typ_, `programming-languages/omega-automata.typ`
 
 == Kripke Structures and Transition Systems
 
@@ -26,7 +26,7 @@ Model checking asks: does every initial path satisfy $phi$? Equivalently, is the
 
 *CTL* (branching-time) quantifies over paths from each state with $bold(A)$ (all paths) and $bold(E)$ (exists path), paired with a path operator. $bold(A G) phi$ means "$phi$ holds along every path from here." $bold(E F) phi$ means "some reachable state satisfies $phi$."
 
-LTL and CTL are incomparable in expressivity. CTL\* subsumes both. The modal $mu$-calculus $L_mu$ subsumes CTL\*: $mu Z. phi$ (least fixpoint) and $nu Z. phi$ (greatest) encode reachability and safety directly. See `programming-languages/infinite-trees-and-games.typ` for the language-theoretic side.
+LTL and CTL are incomparable in expressivity. CTL\* subsumes both. The modal $mu$-calculus $L_mu$ subsumes CTL\*: $mu Z. phi$ (least fixpoint) and $nu Z. phi$ (greatest) encode reachability and safety directly. See `programming-languages/omega-automata.typ` for the language-theoretic side.
 
 == Automata-Theoretic LTL Model Checking
 

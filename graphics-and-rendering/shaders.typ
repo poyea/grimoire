@@ -16,7 +16,7 @@ Shaders are the programmable spine of every modern $"GPU"$ pipeline. They evolve
   [Slang], [Slang $arrow.r$ $"SPIR-V"$/$"DXIL"$], [All], [Generics, modules, autodiff],
 )
 
-Slang in particular has become the language of choice for new research because of its first-class generics and reverse-mode autodiff (used in differentiable rendering, see `realtime-engines.typ`).
+Slang in particular has become the language of choice for new research because of its first-class generics and reverse-mode autodiff (used in differentiable rendering, see _realtime-engines.typ_).
 
 == A Minimal Forward Pipeline
 
