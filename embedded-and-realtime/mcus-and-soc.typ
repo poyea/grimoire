@@ -2,7 +2,7 @@
 
 A microcontroller ($"MCU"$) packages a CPU core, on-chip SRAM and flash, and a peripheral fabric onto one die — typically tens of kilobytes of RAM, megahertz to a few hundred MHz clock, and a power budget measured in milliwatts. A system-on-chip ($"SoC"$) scales this up: application-class cores (Cortex-A, RISC-V U-mode), DRAM controllers, GPUs, and accelerators sit alongside one or more $"MCU"$-class real-time cores. This chapter walks the silicon, the memory map, the interrupt fabric, and the boot path that every embedded engineer must internalize.
 
-*See also:* _Real-Time Operating Systems_, _Peripherals and Drivers_, `cpu-architecture/arm-deep-dive.typ`, `cpu-architecture/risc-v.typ`
+*See also:* _Real-Time Operating Systems_, _Peripherals and Drivers_, _ARM Deep Dive_ (architecture), _RISC-V_ (architecture)
 
 == The Cortex-M Family
 

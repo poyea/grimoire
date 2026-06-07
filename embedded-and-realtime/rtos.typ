@@ -2,7 +2,7 @@
 
 A real-time operating system ($"RTOS"$) supplies a preemptive priority-based scheduler, deterministic IPC primitives, and a memory-frugal kernel — typically a few kilobytes of code, no MMU dependency, and no dynamic allocation in the critical path. This chapter dissects the three dominant designs: *FreeRTOS* (minimal, source-available, AWS-stewarded), *Zephyr* (Apache-licensed, Linux-style infrastructure, broad driver model), and *PREEMPT_RT Linux* (full POSIX, real-time only after invasive patches).
 
-*See also:* _Real-Time Scheduling_, _Peripherals and Drivers_, _Microcontrollers and SoC_, `linux-kernel/scheduler.typ`, `operating-systems/processes-and-threads.typ`
+*See also:* _Real-Time Scheduling_, _Peripherals and Drivers_, _Microcontrollers and SoC_, _The Scheduler_ (implementation), _Processes and Threads_ (operating systems)
 
 == What Makes an OS "Real-Time"
 
