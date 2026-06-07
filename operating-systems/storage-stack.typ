@@ -1,6 +1,6 @@
 = The Storage Stack
 
-Between `write(2)` and a flash cell sit half a dozen layers, each with its own queueing, ordering, and failure semantics. Understanding the stack as a whole — VFS, page cache, block layer, I/O scheduler, driver, controller, media — is what separates a system that scales from one that mysteriously stalls under load. This chapter is the conceptual treatment; Linux-specific `blk-mq` and io_uring are in `linux-kernel/block-layer.typ` and `linux-kernel/io-uring.typ`.
+Between `write(2)` and a flash cell sit half a dozen layers, each with its own queueing, ordering, and failure semantics. Understanding the stack as a whole (VFS, page cache, block layer, I/O scheduler, driver, controller, media) is what separates a system that scales from one that mysteriously stalls under load. This chapter is the conceptual treatment; Linux-specific `blk-mq` and io_uring are in `linux-kernel/block-layer.typ` and `linux-kernel/io-uring.typ`.
 
 *See also:* _The Block Layer_ (linux-kernel), _io_uring_ (linux-kernel), _Buffer Pool and I/O_ (database).
 
@@ -43,20 +43,20 @@ The block layer presents a uniform "linear array of 512 B (or 4 KB) sectors" abs
 - *Queueing*: hold pending I/Os until the device can accept more.
 - *Completion delivery*: interrupt-driven, polled, or hybrid (NAPI-style).
 
-Historically (Linux pre-3.13) the queue was a single per-device structure with a global lock — a scaling disaster at million-IOPS NVMe. *Multi-queue block layer* (blk-mq) replaced it with per-CPU submission queues mapped to device-side hardware queues. NVMe supports up to 64K queues × 64K depth; blk-mq lets you actually use them.
+Historically (Linux pre-3.13) the queue was a single per-device structure with a global lock, a scaling disaster at million-IOPS NVMe. *Multi-queue block layer* (blk-mq) replaced it with per-CPU submission queues mapped to device-side hardware queues. NVMe supports up to 64K queues × 64K depth; blk-mq lets you actually use them.
 
-*I/O scheduling* once meant elevators on HDDs (`cfq`, `deadline`, `noop`). On modern flash it largely doesn't — the device's own FTL has better information. The current crop:
+*I/O scheduling* once meant elevators on HDDs (`cfq`, `deadline`, `noop`). On modern flash it largely doesn't matter, since the device's own FTL has better information. The current crop:
 
-- `none` / `noop` — pass straight through; appropriate for fast SSDs.
-- `mq-deadline` — light reordering with a starvation guarantee; safe default.
-- `bfq` — fairness-aware, useful for desktop interactivity.
-- `kyber` — token-based, p99 latency oriented; good for mixed reader/writer workloads.
+- `none` / `noop`: pass straight through; appropriate for fast SSDs.
+- `mq-deadline`: light reordering with a starvation guarantee; safe default.
+- `bfq`: fairness-aware, useful for desktop interactivity.
+- `kyber`: token-based, p99 latency oriented; good for mixed reader/writer workloads.
 
 == Interrupts vs Polling
 
 A traditional driver fires an interrupt on each completion: CPU is freed during the wait, but interrupt servicing costs 1-3 $mu$s. At MIOPS rates, interrupt overhead dominates.
 
-*Polling* — the driver spins waiting for completion — eliminates interrupt cost but burns a CPU. NVMe's *hybrid polling* combines: poll for the expected device latency, fall back to interrupt if it takes longer. Linux's `io_uring` `IORING_SETUP_IOPOLL` and `IORING_SETUP_SQPOLL` push this further (kernel-side polling threads, no syscall per submission).
+*Polling* (where the driver spins waiting for completion) eliminates interrupt cost but burns a CPU. NVMe's *hybrid polling* combines: poll for the expected device latency, fall back to interrupt if it takes longer. Linux's `io_uring` `IORING_SETUP_IOPOLL` and `IORING_SETUP_SQPOLL` push this further (kernel-side polling threads, no syscall per submission).
 
 The crossover where polling wins is when the device latency is shorter than the interrupt overhead — i.e., on Optane and Gen5 NVMe.
 
@@ -81,7 +81,7 @@ NVMe extensions worth knowing:
   [Computational storage (TP4091)], [Push compute to the drive],
 )
 
-ZNS deserves special mention: it discards the random-write illusion and exposes append-only zones (the underlying NAND erase-block structure). The host FS or DB takes over what was the FTL's job (segment cleaning) but with full-stack visibility. F2FS, btrfs, and RocksDB all have ZNS variants.
+ZNS deserves special mention: it discards the random-write illusion and exposes append-only zones (the underlying NAND erase-block structure). The host FS or DB takes over the FTL's former job of segment cleaning, but with full-stack visibility. F2FS, btrfs, and RocksDB all have ZNS variants.
 
 == Caching and Write-Back
 
@@ -91,7 +91,7 @@ The page cache buffers reads (read-ahead) and absorbs writes (write-back). The w
 - Dirty page count exceeds `dirty_ratio` (writers throttle).
 - A page exceeds `dirty_expire_centisecs` (age-based flush).
 
-Pitfall: a process doing `fsync` may stall for tens of seconds while a *different* process's accumulated dirty pages drain — the "fsync stall" problem. Cgroup writeback throttling (`io.latency`, `io.cost`) addresses this by accounting dirty pages per cgroup.
+Pitfall: a process doing `fsync` may stall for tens of seconds while a different process's accumulated dirty pages drain. This is the "fsync stall" problem. Cgroup writeback throttling (`io.latency`, `io.cost`) addresses this by accounting dirty pages per cgroup.
 
 == Stable Writes and the Ordering Question
 
@@ -136,7 +136,7 @@ Bovet, D., Cesati, M. "Understanding the Linux Kernel," Chapter 14 (Linux block 
 
 === File Systems
 
-A file system is a translation from a flat block device into a named, hierarchical, durable namespace. The translation must survive crashes, scale to billions of files, and present a useful concurrency model. Different file systems answer those constraints differently — and the design choices are remarkably persistent: ext4's roots reach back to ffs (1984), ZFS's snapshot algebra to WAFL (1994), and modern F2FS to log-structured ideas from Sprite LFS (1992).
+A file system is a translation from a flat block device into a named, hierarchical, durable namespace. The translation must survive crashes, scale to billions of files, and present a useful concurrency model. Different file systems answer those constraints differently, and the design choices are remarkably persistent: ext4's roots reach back to ffs (1984), ZFS's snapshot algebra to WAFL (1994), and modern F2FS to log-structured ideas from Sprite LFS (1992).
 
 *See also:* _VFS and Filesystems_ (linux-kernel), _Storage Engines_ (database).
 
@@ -147,10 +147,10 @@ Almost every general-purpose FS has the same conceptual layout:
 #table(columns: (auto, 1fr),
   [*Structure*], [*Role*],
   [Superblock], [Magic, size, root-inode pointer, feature flags],
-  [Inode table], [Metadata records — owner, mode, timestamps, extent/block pointers],
+  [Inode table], [Metadata records: owner, mode, timestamps, extent/block pointers],
   [Directory], [Maps names to inode numbers; itself a file],
   [Allocation map], [Free blocks / inodes — bitmap, B-tree, or extent tree],
-  [Journal / log], [Crash-consistency record (if any)],
+  [Journal / log], [Crash-consistency record, if any],
   [Data blocks], [User payload],
 )
 
@@ -164,12 +164,12 @@ Four established techniques:
 
 *fsck offline repair* (original Unix ffs): assume the FS is consistent on boot; if not, walk every inode and reconcile. Tractable when disks were 100 MB; ruinous on 100 TB. Survived in `e2fsck`.
 
-*Soft updates* (McKusick & Ganger 1999, FreeBSD UFS2): order writes such that any subset visible after crash is *consistent* (possibly with leaked resources, reclaimed by a background scrubber). Elegant, fragile to extend with new operations.
+*Soft updates* (McKusick & Ganger 1999, FreeBSD UFS2): order writes such that any subset visible after crash is consistent (possibly with leaked resources reclaimed by a background scrubber). Elegant but fragile to extend with new operations.
 
 *Journaling* (ext3/4, XFS, JFS): write intentions to a serial log, then apply to the main FS. On recovery, replay the log. Sub-modes:
-- *Metadata-only* (default ext4 `data=ordered`): journals metadata, orders data writes before metadata commit. Cheap, correct enough for most.
-- *Full data journaling* (`data=journal`): journals everything, doubles write amplification.
-- *Writeback* (`data=writeback`): journals metadata, data unordered. Fastest, can expose stale data.
+- *Metadata-only* (default ext4 `data=ordered`): journals metadata and orders data writes before metadata commit. Cheap and correct enough for most workloads.
+- *Full data journaling* (`data=journal`): journals everything; doubles write amplification.
+- *Writeback* (`data=writeback`): journals metadata with data unordered. Fastest, but can expose stale data.
 
 *Copy-on-write* (ZFS, btrfs, APFS, bcachefs): never overwrite. Modified data is written to new blocks; the superblock atomically swings to a new root pointer. Snapshots are free (retain the old root); the cost is per-write *amplification* from updating the entire B-tree spine.
 
@@ -187,9 +187,9 @@ Four established techniques:
 
 *Block group* design (ext family, XFS allocation groups): partition the disk into ~1 GB regions, each with its own inode table and bitmap. Allocation tries to keep an inode and its data in the same group to bound seek distance. Effective when "seek" was the dominant cost.
 
-*Extents* (XFS, ext4): represent a contiguous run of blocks as `(start, length)` rather than per-block pointers, drastically reducing metadata for large files. The classic Berkeley FS used direct + indirect block pointers — fine for 1980s files but pathological for video files.
+*Extents* (XFS, ext4): represent a contiguous run of blocks as `(start, length)` rather than per-block pointers, drastically reducing metadata for large files. The classic Berkeley FS used direct + indirect block pointers, which were fine for 1980s files but pathological for video files.
 
-*Log-structured FS* (LFS, F2FS): treat the entire disk as an append-only log. Beautifully fast for writes — no in-place updates — but requires *segment cleaning* (compaction) to recover space, with the LFS-vs-update-in-place tradeoff that has played out repeatedly in storage research. F2FS is the production design optimized for flash (which itself behaves as a log internally).
+*Log-structured FS* (LFS, F2FS): treat the entire disk as an append-only log. Beautifully fast for writes with no in-place updates, but requires *segment cleaning* (compaction) to recover space. The LFS-vs-update-in-place tradeoff has played out repeatedly in storage research. F2FS is the production design optimized for flash (which itself behaves as a log internally).
 
 == Caching: Buffer vs Page
 
@@ -206,7 +206,7 @@ POSIX semantics impose constraints that hurt scaling:
 - *Strong write ordering* — a `read` after a `write` in another thread must see the write (per the byte-range lock if held, otherwise undefined-but-usually-ordered).
 - *Hard links across directories* — defeats simple tree mental models.
 
-Distributed FS designs routinely relax these: GFS dropped atomic appends; HDFS made files write-once; object stores (S3, GCS) dropped the directory abstraction entirely (prefixes are a *convention*). The lesson is recurring: full POSIX is hard to scale; relaxed semantics buy throughput.
+Distributed FS designs routinely relax these: GFS dropped atomic appends; HDFS made files write-once; object stores (S3, GCS) dropped the directory abstraction entirely (prefixes are merely a convention). The lesson is recurring: full POSIX is hard to scale; relaxed semantics buy throughput.
 
 == Modern Features
 
@@ -216,7 +216,7 @@ Distributed FS designs routinely relax these: GFS dropped atomic appends; HDFS m
 
 *Send/receive*: serialize the delta between two snapshots for backup/replication. ZFS `send` and btrfs `send` are widely used; bandwidth proportional to changed extents, not total size.
 
-*Checksums*: end-to-end protection against silent data corruption (a real concern at PB scale — see CERN 2007 study finding 1 corruption per ~$10^7$ reads). ZFS pioneered always-on checksums; btrfs followed. ext4 added metadata-only checksums in 2012.
+*Checksums*: end-to-end protection against silent data corruption (a real concern at PB scale; see CERN 2007 study finding 1 corruption per ~$10^7$ reads). ZFS pioneered always-on checksums; btrfs followed. ext4 added metadata-only checksums in 2012.
 
 *Encryption*: per-file (fscrypt) or per-volume (LUKS below the FS, ZFS native). Per-file enables differential per-user keys; per-volume is simpler.
 

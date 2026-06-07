@@ -1,6 +1,6 @@
 = Security Models
 
-Every protection system answers one question: *which subject may perform which operation on which object?* The answers differ wildly — Unix mode bits, SELinux type enforcement, an seL4 capability table — but all are concrete projections of the same abstract structure, and all aspire to the same ideal of a small, trustworthy decision point that nothing can bypass. This chapter treats the models conceptually; the Linux mechanisms that implement them live in `linux-kernel/security-modules.typ` and `linux-kernel/cgroups-namespaces.typ`.
+Every protection system answers one question: *which subject may perform which operation on which object?* The answers differ wildly (Unix mode bits, SELinux type enforcement, an seL4 capability table) but all are concrete projections of the same abstract structure, and all aspire to the same ideal of a small, trustworthy decision point that nothing can bypass. This chapter treats the models conceptually; the Linux mechanisms that implement them live in `linux-kernel/security-modules.typ` and `linux-kernel/cgroups-namespaces.typ`.
 
 *See also:* _Processes and Threads_, _Memory Management_, _Security Modules_ (implementation), _cgroups and Namespaces_ (implementation), _Asymmetric Cryptography_ (cryptography).
 
@@ -18,8 +18,8 @@ These three are in tension with everything a real OS wants to do. Performance pu
 
 Lampson (1971) framed authorization as a matrix: rows are subjects, columns are objects, and cell $A[s, o]$ holds the rights subject $s$ has on object $o$ (read, write, execute, own, ...). The matrix is the ground truth; no real system stores it densely because it is enormous and sparse. There are two ways to slice it:
 
-- *By column* — store with each object the list of subjects and their rights. This is an *access control list* (ACL). "Who may touch this file?"
-- *By row* — store with each subject the list of objects it may reach and how. This is a *capability list*. "What may this process touch?"
+- *By column*: store with each object the list of subjects and their rights. This is an *access control list* (ACL): "Who may touch this file?"
+- *By row*: store with each subject the list of objects it may reach and how. This is a *capability list*: "What may this process touch?"
 
 The choice is not cosmetic. ACLs make it easy to ask "who can access $o$?" and to revoke everyone at once; capabilities make it easy to ask "what can $s$ reach?", to delegate a single right, and to confine a process by simply not handing it a capability. Revocation is hard for capabilities; enumeration is hard for ACLs. Almost every real model is one of these two with patches for the other's weakness.
 
@@ -34,13 +34,13 @@ DAC means the *owner* of an object sets its policy at their discretion. Classic 
   [sticky], [1000], [On dirs (`/tmp`), only the owner may unlink a file],
 )
 
-DAC is simple and familiar, and it is also the source of the deepest structural problem in Unix security: *ambient authority*. A process's rights are an implicit property of its identity (its UID), not of what it was asked to do. Every operation a process performs is checked against *all* the authority it happens to hold, whether or not that authority is relevant to the task.
+DAC is simple and familiar, but it is also the source of the deepest structural problem in Unix security: *ambient authority*. A process's rights are an implicit property of its identity (its UID), not of what it was asked to do. Every operation a process performs is checked against all the authority it happens to hold, whether or not that authority is relevant to the task.
 
 This produces the *confused deputy*. A privileged program (the deputy) acts on behalf of a less-privileged client; if the client can name an object the deputy can reach but the client cannot, the deputy will dutifully use its own authority on the client's behalf. The original 1988 example was a compiler with billing-file write access tricked into overwriting that file via an attacker-chosen output path. `setuid-root` binaries are deputies by construction, which is why they are a perennial source of privilege-escalation bugs.
 
 == POSIX Capabilities
 
-Linux splits the monolithic power of root into roughly forty distinct *capabilities*, each a single bit of privilege (the term here is unrelated to object-capabilities below — an unfortunate naming collision). `CAP_NET_BIND_SERVICE` lets a process bind ports below 1024; `CAP_SYS_ADMIN` is the notorious catch-all; `CAP_DAC_OVERRIDE` bypasses file permission checks. The goal is to grant a daemon only the slice of root it needs, retiring `setuid-root`.
+Linux splits the monolithic power of root into roughly forty distinct *capabilities*, each a single bit of privilege (the term here is unrelated to object-capabilities below, an unfortunate naming collision). `CAP_NET_BIND_SERVICE` lets a process bind ports below 1024; `CAP_SYS_ADMIN` is the notorious catch-all; `CAP_DAC_OVERRIDE` bypasses file permission checks. The goal is to grant a daemon only the slice of root it needs, retiring `setuid-root`.
 
 Each thread carries several capability sets:
 
@@ -61,11 +61,11 @@ I_new = I_thread;
 A_new = (file_is_privileged) ? 0 : A_thread;
 ```
 
-Ambient capabilities were added because inheritable capabilities were nearly useless in practice: they required the *target* binary to carry a matching file-inheritable set, so a plain script could never receive them. Ambient bits (kernel 4.3, 2015) propagate across `execve` of an unmarked binary, finally letting a launcher hand a daemon exactly `CAP_NET_BIND_SERVICE` and nothing else. The catch: ambient bits are cleared the instant a `setuid` or file-capability binary is executed, to avoid laundering privilege.
+Ambient capabilities were added because inheritable capabilities were nearly useless in practice: they required the target binary to carry a matching file-inheritable set, so a plain script could never receive them. Ambient bits (kernel 4.3, 2015) propagate across `execve` of an unmarked binary, finally letting a launcher hand a daemon exactly `CAP_NET_BIND_SERVICE` and nothing else. The catch is that ambient bits are cleared the instant a `setuid` or file-capability binary is executed, to avoid laundering privilege.
 
 == Mandatory Access Control
 
-Under MAC the policy is set by the *system* (the security administrator), and no subject — not even the object's owner, not even root — may relax it. DAC asks "does the owner allow this?"; MAC asks "does the system policy allow this?", and a request must pass *both*.
+Under MAC the policy is set by the system (the security administrator), and no subject, not even the object's owner or root, may relax it. DAC asks "does the owner allow this?"; MAC asks "does the system policy allow this?", and a request must pass both.
 
 === Bell-LaPadula and Biba
 
@@ -94,7 +94,7 @@ SELinux implements *type enforcement*. Every subject and object gets a *security
 allow httpd_t httpd_sys_content_t : file { read getattr open };
 ```
 
-The web server domain `httpd_t` may read files of type `httpd_sys_content_t` — and nothing else, because SELinux is default-deny. Domain transitions (e.g. `init_t` exec'ing the httpd binary transitions to `httpd_t`) are themselves policy-governed. The result is fine-grained but the policy is enormous (the Fedora reference policy is tens of thousands of rules), which is its central trade-off: precise confinement at the cost of a steep authoring and debugging burden.
+The web server domain `httpd_t` may read files of type `httpd_sys_content_t` — and nothing else, because SELinux is default-deny. Domain transitions (e.g. `init_t` exec'ing the httpd binary transitions to `httpd_t`) are themselves policy-governed. The result is fine-grained but the policy is enormous (the Fedora reference policy is tens of thousands of rules). The central trade-off is precise confinement at the cost of a steep authoring and debugging burden.
 
 === AppArmor
 
@@ -108,7 +108,7 @@ AppArmor confines by *path* rather than label. A profile names a binary and list
 }
 ```
 
-This is far easier to write and reason about, and needs no filesystem labelling — but it inherits the weaknesses of paths: hard links, bind mounts, and renames can make the same inode reachable under a name the profile never mentioned. The label-vs-path choice is the defining axis: SELinux binds policy to the object's identity, AppArmor to the name used to reach it.
+This is far easier to write and reason about, and needs no filesystem labelling, but it inherits the weaknesses of paths: hard links, bind mounts, and renames can make the same inode reachable under a name the profile never mentioned. The label-vs-path choice is the defining axis: SELinux binds policy to the object's identity, AppArmor to the name used to reach it.
 
 #table(columns: (auto, auto, auto),
   [*Aspect*], [*SELinux*], [*AppArmor*],
@@ -120,21 +120,21 @@ This is far easier to write and reason about, and needs no filesystem labelling 
 
 == The LSM Framework
 
-Linux does not bake any one MAC model into the kernel. The *Linux Security Modules* framework places hooks at every security-relevant decision point — `inode_permission`, `bprm_check_security`, `socket_connect`, and hundreds more. A hook is a callback the core kernel invokes after its own DAC checks pass but before it acts; the module returns allow or `-EACCES`. This keeps the policy logic out of the core and lets SELinux, AppArmor, Smack, or TOMOYO be the decision-maker.
+Linux does not bake any one MAC model into the kernel. The *Linux Security Modules* framework places hooks at every security-relevant decision point — `inode_permission`, `bprm_check_security`, `socket_connect`, and hundreds more. A hook is a callback the core kernel invokes after its own DAC checks pass but before it acts; the module returns allow or `-EACCES`. This keeps policy logic out of the core and lets SELinux, AppArmor, Smack, or TOMOYO be the decision-maker.
 
 Originally exactly one "major" module could be active. Modern kernels support *stacking*: capability and the small "minor" modules (Yama, LoadPin, SafeSetID, Landlock) always compose, and stacking of the larger modules has been progressively enabled. A request must satisfy *every* stacked module — the hooks are conjunctive, consistent with the reference-monitor ideal that any module may deny.
 
 == Capability-Based Security
 
-This is *object*-capabilities, distinct from POSIX capability bits. A capability is an *unforgeable reference that both designates an object and confers the authority to use it*. Possession is permission; there is no separate ACL lookup. Because you cannot name what you do not hold, the confused-deputy problem largely dissolves: a process has authority only over objects whose capabilities it was explicitly given, so it cannot be tricked into using authority it never received on an attacker's object.
+This is *object*-capabilities, distinct from POSIX capability bits. A capability is an unforgeable reference that both designates an object and confers the authority to use it. Possession is permission; there is no separate ACL lookup. Because you cannot name what you do not hold, the confused-deputy problem largely dissolves: a process has authority only over objects whose capabilities it was explicitly given, so it cannot be tricked into using authority it never received on an attacker's object.
 
 The Unix file descriptor is already a near-capability: an opaque, unforgeable, per-process handle that grants the access negotiated at `open`. Capability designs generalize this to *everything*.
 
 - *Capsicum* (FreeBSD) adds a *capability mode* — after `cap_enter()` a process loses all global namespaces (no open-by-path, no PIDs, no sysctls) and may act only through file descriptors, each narrowed by a *rights* mask via `cap_rights_limit()`. A process can sandbox itself incrementally.
-- *seL4* is a microkernel whose entire API is capability-invocation, with a machine-checked proof that the implementation matches its specification and enforces its access-control model — the strongest realization of "verifiable."
+- *seL4* is a microkernel whose entire API is capability-invocation, with a machine-checked proof that the implementation matches its specification and enforces its access-control model, the strongest realization of "verifiable."
 - *Fuchsia* builds its userspace on *handles* to kernel objects; a component receives a bundle of handles at startup and can reach nothing else.
 
-The unifying discipline is the *principle of least authority* (POLA): a component should hold exactly the authority its task requires, no more. Ambient-authority DAC violates POLA by construction (a process wields its whole UID for every act); capability systems make least authority the default, since authority must be deliberately conferred.
+The unifying discipline is the *principle of least authority* (POLA): a component should hold exactly the authority its task requires, no more. Ambient-authority DAC violates POLA by construction, since a process wields its whole UID for every act. Capability systems make least authority the default, since authority must be deliberately conferred.
 
 #table(columns: (auto, auto, auto, auto),
   [*Property*], [*DAC*], [*MAC*], [*Object-capability*],
@@ -161,7 +161,7 @@ BPF_STMT(BPF_RET, SECCOMP_RET_ALLOW),
 BPF_STMT(BPF_RET, SECCOMP_RET_KILL_PROCESS),
 ```
 
-A crucial limitation: seccomp filters argument *registers*, not memory the pointers reference, so it cannot safely inspect path strings (TOCTOU). It is a syscall-surface reducer, not a full policy engine.
+A crucial limitation: seccomp filters argument registers, not memory the pointers reference, so it cannot safely inspect path strings (TOCTOU). It is a syscall-surface reducer, not a full policy engine.
 
 === Namespaces and cgroups
 
@@ -173,7 +173,7 @@ OpenBSD's `pledge()` declares the set of operation classes a program promises to
 
 === Case study: OpenSSH privilege separation
 
-`sshd` is the canonical *privilege separation* design. A small, trusted *monitor* runs as root and performs only the handful of operations that genuinely need privilege (authentication, PTY allocation). All untrusted work — parsing network input, running the protocol state machine before login — happens in an unprivileged, chrooted child that talks to the monitor over a socket. A bug in the parser (the large, exposed attack surface) compromises only the deprivileged child; the attacker still cannot do anything the monitor refuses. This is the reference monitor recursively applied: shrink the privileged TCB to the smallest piece that must be trusted.
+`sshd` is the canonical *privilege separation* design. A small, trusted *monitor* runs as root and performs only the handful of operations that genuinely need privilege (authentication, PTY allocation). All untrusted work, such as parsing network input and running the protocol state machine before login, happens in an unprivileged, chrooted child that talks to the monitor over a socket. A bug in the parser (the large, exposed attack surface) compromises only the deprivileged child; the attacker still cannot do anything the monitor refuses. This is the reference monitor recursively applied: shrink the privileged TCB to the smallest piece that must be trusted.
 
 == Integrity and Verified Execution
 

@@ -1,6 +1,6 @@
 = Processes and Threads
 
-The process is the operating system's unit of resource ownership; the thread is its unit of scheduling. Every modern kernel — from monolithic Unix derivatives to microkernels like seL4 — draws this distinction in some form, even when the surface vocabulary differs. This chapter treats the abstractions conceptually; Linux's specific implementation lives in `linux-kernel/scheduler.typ` and `linux-kernel/cgroups-namespaces.typ`.
+The process is the operating system's unit of resource ownership; the thread is its unit of scheduling. Every modern kernel, from monolithic Unix derivatives to microkernels like seL4, draws this distinction in some form, even when the surface vocabulary differs. This chapter treats the abstractions conceptually; Linux's specific implementation lives in `linux-kernel/scheduler.typ` and `linux-kernel/cgroups-namespaces.typ`.
 
 *See also:* _Scheduling Theory_, _Inter-Process Communication_, _The Scheduler_ (implementation), _Virtual Memory_ (architecture).
 
@@ -41,17 +41,17 @@ A thread is an independently schedulable register context (program counter, stac
 
 === Kernel Threads (1:1 Model)
 
-*Kernel threads* (Linux NPTL, Windows, modern Solaris) place one kernel scheduling entity per user thread. Blocking syscalls block only the calling thread; the kernel scheduler has full visibility over all threads for load-balancing and priority decisions. The cost is a kernel stack and a `task_struct` per thread — roughly 16 KB on Linux. Under the hood, Linux's `clone(2)` syscall with `CLONE_VM | CLONE_SIGHAND | CLONE_THREAD` creates a thread that shares the address space, signal handlers, and thread group with its parent. The `task_struct` that results differs from a process only in which resources it shares.
+*Kernel threads* (Linux NPTL, Windows, modern Solaris) place one kernel scheduling entity per user thread. Blocking syscalls block only the calling thread; the kernel scheduler has full visibility over all threads for load-balancing and priority decisions. The cost is a kernel stack and a `task_struct` per thread, roughly 16 KB on Linux. Under the hood, Linux's `clone(2)` syscall with `CLONE_VM | CLONE_SIGHAND | CLONE_THREAD` creates a thread that shares the address space, signal handlers, and thread group with its parent. The `task_struct` that results differs from a process only in which resources it shares.
 
 === User Threads (N:1 Model)
 
-*User threads* (early Java green threads, GNU Pth, Lua coroutines) multiplex many user-level execution contexts on a single kernel thread. Context switches are cheap — a `setjmp`/`longjmp` analog, ~50-100 ns — because no kernel transition is needed. However, any blocking syscall stalls all siblings, and SMP parallelism is impossible since only one kernel thread is runnable at a time. This model has largely been abandoned for general concurrency; it survives in cooperative coroutine-style libraries where blocking calls are explicitly avoided.
+*User threads* (early Java green threads, GNU Pth, Lua coroutines) multiplex many user-level execution contexts on a single kernel thread. Context switches are cheap (a `setjmp`/`longjmp` analog, ~50-100 ns) because no kernel transition is needed. However, any blocking syscall stalls all siblings, and SMP parallelism is impossible since only one kernel thread is runnable at a time. This model has largely been abandoned for general concurrency; it survives in cooperative coroutine-style libraries where blocking calls are explicitly avoided.
 
 === Hybrid / Green Threads (M:N Model)
 
 *M:N threading* (Solaris LWPs, FreeBSD KSE, Go goroutines, Java virtual threads since JDK 21) places a pool of $M$ kernel threads under a user-space scheduler that multiplexes $N >> M$ lightweight execution units across them. This is the most flexible model and the most complex to implement correctly.
 
-The critical challenge is the *scheduler activation problem*: when a goroutine (or virtual thread) makes a blocking syscall, the runtime must detect the block and park the kernel thread so another goroutine can run on a different OS thread. Go's runtime solves this by wrapping every syscall: if a goroutine enters a slow syscall (`read`, `write`, network I/O), the runtime detaches it from its OS thread (called an *M* in Go's $M:P:G$ model) and spins up a fresh thread from a pool to keep the other goroutines running. Java's Project Loom uses OS-level continuations to unmount a virtual thread's stack when it blocks and remount it on a different carrier thread when the operation completes — entirely invisible to the application.
+The critical challenge is the *scheduler activation problem*: when a goroutine (or virtual thread) makes a blocking syscall, the runtime must detect the block and park the kernel thread so another goroutine can run on a different OS thread. Go's runtime solves this by wrapping every syscall: if a goroutine enters a slow syscall (`read`, `write`, network I/O), the runtime detaches it from its OS thread (called an *M* in Go's $M:P:G$ model) and spins up a fresh thread from a pool to keep the other goroutines running. Java's Project Loom uses OS-level continuations to unmount a virtual thread's stack when it blocks and remount it on a different carrier thread when the operation completes, entirely invisible to the application.
 
 #table(columns: (auto, auto, auto, auto, auto),
   [*Model*], [*Example*], [*Switch cost*], [*Blocking syscall*], [*SMP*],
@@ -78,7 +78,7 @@ In Linux every thread and process is represented by a `task_struct`. The kernel 
   [`CLONE_SYSVSEM`], [Share System V semaphore undo list],
 )
 
-`fork()` calls `clone` with no sharing flags. `pthread_create` calls `clone` with `CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_THREAD` (plus a few more). Containers are just tasks with a full set of `CLONE_NEW*` namespace flags. The elegance is that a single mechanism covers the full spectrum from heavyweight fork to lightweight thread to isolated container.
+`fork()` calls `clone` with no sharing flags. `pthread_create` calls `clone` with `CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_THREAD` (plus a few more). Containers are just tasks with a full set of `CLONE_NEW*` namespace flags. A single mechanism thus covers the full spectrum from heavyweight fork to lightweight thread to isolated container.
 
 === fork() vs posix_spawn() Performance
 
@@ -86,17 +86,17 @@ In Linux every thread and process is represented by a `task_struct`. The kernel 
 
 === PID Namespaces and PID 1
 
-A PID namespace virtualizes the process ID space. Inside a new PID namespace the first process has PID 1 — the *init* role. If PID 1 exits, the kernel sends `SIGKILL` to every other process in the namespace, making namespace lifetime tied to its init. Container runtimes exploit this: each container's init (`tini`, `s6`, or a language runtime) is PID 1 inside its namespace; killing it cleanly tears down the container.
+A PID namespace virtualizes the process ID space. Inside a new PID namespace the first process has PID 1, fulfilling the *init* role. If PID 1 exits, the kernel sends `SIGKILL` to every other process in the namespace, making namespace lifetime tied to its init. Container runtimes exploit this: each container's init (`tini`, `s6`, or a language runtime) is PID 1 inside its namespace; killing it cleanly tears down the container.
 
 From outside the namespace, processes have their real (host-namespace) PIDs, and the kernel maintains a mapping. PID namespaces are hierarchical; a process can see PIDs in its namespace and all ancestor namespaces but not in descendants. `pidfd` handles cross namespace boundaries stably — they reference the kernel's `task_struct` directly, making them immune to PID reuse even across namespace boundaries.
 
 == Stacks, TLS, and Context Switching
 
-Each thread owns a stack. Sizing is awkward: too small risks overflow; too large wastes virtual address space when threads are numerous. The standard trick is a *guard page* — one unmapped page below the stack — so overflow traps deterministically as a segfault rather than corrupting a neighbor. Go sidesteps the problem entirely with *segmented stacks* (now replaced by *contiguous stacks* that double in size): goroutine stacks start at 4 KB and grow dynamically, freeing the programmer from stack-size estimation.
+Each thread owns a stack. Sizing is awkward: too small risks overflow; too large wastes virtual address space when threads are numerous. The standard trick is a *guard page*: one unmapped page below the stack, so overflow traps deterministically as a segfault rather than corrupting a neighbor. Go sidesteps the problem entirely with *segmented stacks* (now replaced by *contiguous stacks* that double in size): goroutine stacks start at 4 KB and grow dynamically, freeing the programmer from stack-size estimation.
 
 === Thread-Local Storage Layout
 
-Thread-local storage (TLS) provides per-thread globals. The ELF TLS ABI uses a segment register (`%fs` on x86-64, `tpidr_el0` on AArch64) pointing at a per-thread *Thread Control Block* (TCB); static TLS variables live at fixed negative offsets from the TCB pointer, computed at link time. Dynamic TLS (`dlopen`-loaded modules) uses an indirection through a *DTV* (Dynamic Thread Vector) — an array of pointers, one per module. The first time a dynamic TLS variable is accessed in a thread, the runtime allocates a per-module block and stores its address in the DTV. The cost of a static TLS access is a single segment-relative load; dynamic TLS adds a DTV dereference and may call into the allocator on first access.
+Thread-local storage (TLS) provides per-thread globals. The ELF TLS ABI uses a segment register (`%fs` on x86-64, `tpidr_el0` on AArch64) pointing at a per-thread *Thread Control Block* (TCB); static TLS variables live at fixed negative offsets from the TCB pointer, computed at link time. Dynamic TLS (`dlopen`-loaded modules) uses an indirection through a *DTV* (Dynamic Thread Vector), an array of pointers with one entry per module. The first time a dynamic TLS variable is accessed in a thread, the runtime allocates a per-module block and stores its address in the DTV. The cost of a static TLS access is a single segment-relative load; dynamic TLS adds a DTV dereference and may call into the allocator on first access.
 
 A context switch saves the outgoing thread's volatile state to its kernel stack, optionally switches CR3 / TTBR (if the address space changes — i.e., it's a cross-process switch), then restores the incoming thread. Costs:
 
@@ -107,7 +107,7 @@ Mitigations like KPTI (after Meltdown) double the TLB cost by maintaining separa
 
 == Process Lifecycle and Zombies
 
-A process exits via `_exit` (or a fatal signal); the kernel tears down its address space, closes file descriptors, and transitions the task to *zombie* state, retaining only enough metadata for the parent to call `wait`. A parent that never reaps leaks zombies until PID exhaustion. The `SIGCHLD` signal notifies the parent; `prctl(PR_SET_CHILD_SUBREAPER)` lets init-like processes adopt orphaned descendants.
+A process exits via `_exit` (or a fatal signal); the kernel tears down its address space, closes file descriptors, and transitions the task to *zombie* state, retaining only enough metadata for the parent to call `wait`. A parent that never reaps leaks zombies until PID space is exhausted. The `SIGCHLD` signal notifies the parent; `prctl(PR_SET_CHILD_SUBREAPER)` lets init-like processes adopt orphaned descendants.
 
 Daemonization classically uses a double-fork to detach from the controlling terminal and reparent to init; modern Linux prefers `systemd`-style service supervision (see `operating-systems/boot-and-init.typ`) where the supervisor stays in the foreground and the init system handles backgrounding.
 
@@ -119,7 +119,7 @@ The systems lesson: *abrupt* termination of a unit holding shared state is a des
 
 == Capability Models and Process Identity
 
-Classical Unix identifies the process by UID/GID — coarse and ambient. Capability-based systems (Mach ports, seL4 endpoints, Capsicum, Fuchsia handles) instead identify it by the set of *unforgeable references* it possesses; revoking access means revoking the handle. The two models can coexist (Linux capabilities split root into ~40 flags; Linux 4.3+ ambient capabilities propagate across `execve`), but the philosophical gulf is wide. See `operating-systems/security-models.typ`.
+Classical Unix identifies the process by UID/GID (coarse and ambient). Capability-based systems (Mach ports, seL4 endpoints, Capsicum, Fuchsia handles) instead identify it by the set of unforgeable references it possesses; revoking access means revoking the handle. The two models can coexist (Linux capabilities split root into ~40 flags; Linux 4.3+ ambient capabilities propagate across `execve`), but the philosophical gulf is wide. See `operating-systems/security-models.typ`.
 
 == Async-Signal-Safety Constraints
 

@@ -1,6 +1,6 @@
 = Inter-Process Communication
 
-Once the operating system isolates processes into separate address spaces, it must hand back a controlled way for them to cooperate. Inter-process communication (IPC) is the set of primitives that punch holes — carefully — through that isolation: to move bytes, to share pages, to wake a sleeper, or to pass a capability. Every IPC mechanism is a negotiated trade between three axes: how much it costs per message, how the payload is framed, and who owns the channel's lifetime. This chapter treats those primitives conceptually; their Linux realizations live in `linux-kernel/networking-stack.typ` and the kernel's signal and futex code.
+Once the operating system isolates processes into separate address spaces, it must hand back a controlled way for them to cooperate. Inter-process communication (IPC) is the set of primitives that punch holes (carefully) through that isolation: to move bytes, to share pages, to wake a sleeper, or to pass a capability. Every IPC mechanism is a negotiated trade across three axes: cost per message, payload framing, and channel lifetime ownership. This chapter treats those primitives conceptually; their Linux realizations live in `linux-kernel/networking-stack.typ` and the kernel's signal and futex code.
 
 *See also:* _Processes and Threads_, _Memory Management_, _POSIX Sockets API_ (networking), _Synchronization Primitives_ (architecture).
 
@@ -45,8 +45,8 @@ Unix domain sockets (UDS, address family `AF_UNIX`) are the local sibling of the
 
 Two capabilities make UDS more than a fast pipe:
 
-- *File-descriptor passing.* Using `sendmsg` with an `SCM_RIGHTS` control message, a process can hand a live file descriptor to another process. The kernel installs a new descriptor in the receiver pointing at the *same* open file object — the basis of privilege separation (a sandboxed worker receives an already-opened socket it could never have opened itself).
-- *Credential passing.* `SO_PASSCRED` / `SCM_CREDENTIALS` let the kernel attest the sender's PID, UID, and GID, unforgeable by userspace — the foundation of `polkit` and D-Bus authorization.
+- *File-descriptor passing.* Using `sendmsg` with an `SCM_RIGHTS` control message, a process can hand a live file descriptor to another process. The kernel installs a new descriptor in the receiver pointing at the same open file object, which is the basis of privilege separation (a sandboxed worker receives an already-opened socket it could never have opened itself).
+- *Credential passing.* `SO_PASSCRED` / `SCM_CREDENTIALS` let the kernel attest the sender's PID, UID, and GID, unforgeable by userspace; this is the foundation of `polkit` and D-Bus authorization.
 
 The *abstract namespace* (Linux) binds a UDS to a name beginning with a NUL byte instead of a filesystem path, so the socket has no inode, needs no `unlink` cleanup, and vanishes automatically when the last reference closes.
 
@@ -63,7 +63,7 @@ Unix carries two parallel families of message queues, semaphores, and shared mem
   [Descriptor I/O], [No — opaque IDs], [Yes — usable with `poll`],
 )
 
-Both families are *kernel-persistent*: an object outlives the process that created it and survives until explicitly removed (`IPC_RMID`, `shm_unlink`, `mq_unlink`) or until reboot. This is the source of the classic leak — a crashed process leaves a System V segment occupying memory with no owning process, visible only via `ipcs`. POSIX IPC at least exposes objects as paths under `/dev/shm` and `/dev/mqueue`, and its descriptors integrate with `poll`/`epoll`, which System V's opaque integer IDs cannot. New code should prefer POSIX (or skip both for `memfd` + sockets); System V survives mainly for compatibility.
+Both families are *kernel-persistent*: an object outlives the process that created it and survives until explicitly removed (`IPC_RMID`, `shm_unlink`, `mq_unlink`) or until reboot. This is the source of the classic leak: a crashed process leaves a System V segment occupying memory with no owning process, visible only via `ipcs`. POSIX IPC at least exposes objects as paths under `/dev/shm` and `/dev/mqueue`, and its descriptors integrate with `poll`/`epoll`, which System V's opaque integer IDs cannot. New code should prefer POSIX (or skip both for `memfd` + sockets); System V survives mainly for compatibility.
 
 == Shared Memory
 
@@ -76,7 +76,7 @@ void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 // send fd to peer over a UDS via SCM_RIGHTS; both mmap the same pages
 ```
 
-Shared memory carries *no synchronization and no notification*. The kernel is out of the loop after the mapping is established, so correctness is entirely the programmer's burden:
+Shared memory carries no synchronization and no notification. The kernel is out of the loop after the mapping is established, so correctness is entirely the programmer's burden:
 
 - *Memory ordering.* On a weakly-ordered architecture (AArch64, POWER), a writer's store to a payload and its store to a "ready" flag can be observed out of order by the reader. Correct code needs explicit acquire/release barriers or C11 atomics; see `cpu-architecture/synchronization.typ`.
 - *False sharing.* Two unrelated variables that share a 64-byte cache line ping-pong between cores' caches under write contention, silently destroying throughput. Pad hot fields to a cache line. See `operating-systems/memory-management.typ`.
@@ -84,7 +84,7 @@ Shared memory carries *no synchronization and no notification*. The kernel is ou
 
 == Signals as IPC
 
-A signal is the thinnest possible message: a single integer asynchronously interrupting the target. As an IPC mechanism it is severely limited — only ~30 standard numbers, no queuing of duplicates, and delivery to an arbitrary thread at an arbitrary instruction.
+A signal is the thinnest possible message: a single integer asynchronously interrupting the target. As an IPC mechanism it is severely limited, with only ~30 standard numbers, no queuing of duplicates, and delivery to an arbitrary thread at an arbitrary instruction.
 
 The deepest hazard is *async-signal-safety*. A handler may interrupt the main flow mid-`malloc`; calling any non-reentrant function (most of libc) from a handler risks deadlock or corruption. The safe set is tiny (`man 7 signal-safety`). The idiomatic dodge is the *self-pipe trick* or its modern form, `signalfd`, which converts signals into readable bytes on a descriptor so they can be handled synchronously in an `epoll` loop instead of an async context.
 
@@ -94,7 +94,7 @@ The deepest hazard is *async-signal-safety*. A handler may interrupt the main fl
 
 Two processes sharing memory still need to coordinate access. The mechanism that made this cheap is the *futex* — "fast userspace mutex."
 
-The futex insight: the common case (an uncontended lock) needs no kernel at all. A lock is just an integer in shared memory; acquiring it is an atomic compare-and-swap in userspace. Only when a thread must *block* (the lock was held) or *wake* a waiter does it enter the kernel via the `futex(2)` syscall (`FUTEX_WAIT` / `FUTEX_WAKE`). For the uncontended path the cost is a single atomic instruction — tens of nanoseconds — versus a syscall's microsecond.
+The futex insight: the common case (an uncontended lock) needs no kernel at all. A lock is just an integer in shared memory; acquiring it is an atomic compare-and-swap in userspace. Only when a thread must *block* (the lock was held) or *wake* a waiter does it enter the kernel via the `futex(2)` syscall (`FUTEX_WAIT` / `FUTEX_WAKE`). For the uncontended path the cost is a single atomic instruction, tens of nanoseconds versus a syscall's microsecond.
 
 ```c
 // uncontended acquire never enters the kernel
@@ -106,7 +106,7 @@ syscall(SYS_futex, &lock, FUTEX_WAIT, LOCKED, NULL, NULL, 0);
 Built atop futexes:
 
 - *Process-shared mutexes / condvars.* A `pthread_mutex_t` placed in `MAP_SHARED` memory and initialized with `PTHREAD_PROCESS_SHARED` synchronizes across processes, not just threads.
-- *Robust futexes.* If a process dies holding a normal lock, that lock is wedged forever. A *robust* mutex registers held locks with the kernel, which marks them `OWNERDEAD` on the holder's death so the next acquirer can recover (or declare the protected state inconsistent).
+- *Robust futexes.* If a process dies holding a normal lock, that lock is wedged forever. A *robust* mutex registers held locks with the kernel; on the holder's death the kernel marks them `OWNERDEAD` so the next acquirer can recover (or declare the protected state inconsistent).
 - *Priority inheritance* (`FUTEX_LOCK_PI`) addresses priority inversion for realtime workloads — see `operating-systems/scheduling-theory.typ`.
 
 == Event Notification: eventfd and pidfd
@@ -129,11 +129,11 @@ Numbers below are order-of-magnitude on a modern x86-64 machine, round-trip wher
   [eventfd], [~2-5 $mu$s], [n/a], [64-bit counter], [process],
 )
 
-The pattern is consistent: any mechanism whose fast path stays in userspace (shared memory + futex) beats any whose every operation crosses the syscall boundary by an order of magnitude. The price is that shared memory makes the programmer responsible for framing, ordering, and notification that the kernel-mediated channels provide for free.
+The pattern is consistent: any mechanism whose fast path stays in userspace (shared memory + futex) beats any that crosses the syscall boundary on every operation by an order of magnitude. The price is that shared memory makes the programmer responsible for framing, ordering, and notification that the kernel-mediated channels provide for free.
 
 == IPC as the Central Primitive: Microkernels
 
-In a monolithic kernel, IPC is one service among many. In a *microkernel*, almost everything — drivers, filesystems, the network stack — is a userspace server reached by IPC, so IPC latency is *the* system's performance. This is the lesson of the L4 lineage: Liedtke's 1993 insight was that the original Mach's slow IPC (hundreds of cycles) doomed the microkernel idea, and that a ruthlessly optimized fast path (registers-only transfer, no scheduler invocation, direct address-space switch) could cut a round trip to a few hundred cycles, making the decomposition viable.
+In a monolithic kernel, IPC is one service among many. In a *microkernel*, almost everything (drivers, filesystems, the network stack) is a userspace server reached by IPC, so IPC latency is the system's defining performance metric. This is the lesson of the L4 lineage: Liedtke's 1993 insight was that the original Mach's slow IPC (hundreds of cycles) doomed the microkernel idea. A ruthlessly optimized fast path (registers-only transfer, no scheduler invocation, direct address-space switch) could cut a round trip to a few hundred cycles, making the decomposition viable.
 
 These systems are built on *message passing over capabilities* — an endpoint is an unforgeable handle, and possessing it is the right to send to it:
 

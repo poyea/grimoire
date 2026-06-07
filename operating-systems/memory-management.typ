@@ -17,7 +17,7 @@ The hardware contract is a page table that maps virtual page numbers to physical
 
 == mmap Internals
 
-`mmap(2)` is the kernel's unified interface for mapping files, anonymous memory, shared memory, and device memory into a process's address space. The kernel represents each mapping as a *Virtual Memory Area* (`vm_area_struct` / VMA): a contiguous range of virtual addresses with uniform permissions and a pointer to the `vm_ops` function table that handles faults, msync, and unmapping. All VMAs for a process are organized in an interval tree (a red-black tree keyed on `[vm_start, vm_end)`) plus a linked list for sequential scanning; the kernel binary-searches the tree on every page fault to find the covering VMA.
+`mmap(2)` is the kernel's unified interface for mapping files, anonymous memory, shared memory, and device memory into a process's address space. The kernel represents each mapping as a *Virtual Memory Area* (`vm_area_struct` / VMA): a contiguous range of virtual addresses with uniform permissions and a pointer to the `vm_ops` function table that handles faults, msync, and unmapping. All VMAs for a process are organized in an interval tree (a red-black tree keyed on `[vm_start, vm_end)`) plus a linked list for sequential scanning. The kernel binary-searches the tree on every page fault to find the covering VMA.
 
 Key mapping modes:
 
@@ -31,15 +31,15 @@ Key mapping modes:
   [`MAP_HUGETLB`], [Use huge pages; must be pre-reserved in the HugeTLB pool],
 )
 
-*Demand paging vs MAP_POPULATE:* by default `mmap` is lazy — it creates the VMA but installs no PTEs. Each first access faults in one page. `MAP_POPULATE` asks the kernel to fault in all pages immediately (equivalent to `mlock` minus the memory reservation guarantee). The trade-off: a server that memory-maps a 10 GB file for random access benefits from demand paging (only hot pages touch RAM); a sequential log-reader benefits from `MAP_POPULATE | MAP_SEQUENTIAL` to front-load I/O.
+*Demand paging vs MAP_POPULATE:* by default `mmap` is lazy: it creates the VMA but installs no PTEs. Each first access faults in one page. `MAP_POPULATE` asks the kernel to fault in all pages immediately (equivalent to `mlock` minus the memory reservation guarantee). The trade-off: a server that memory-maps a 10 GB file for random access benefits from demand paging (only hot pages touch RAM); a sequential log-reader benefits from `MAP_POPULATE | MAP_SEQUENTIAL` to front-load I/O.
 
 *Memory-mapped files vs read/write:* `read`/`write` copy data through a kernel buffer and a user buffer — two copies. `mmap` + direct access avoids the user-buffer copy; the page cache is the buffer. The win is largest for random access to large files and for producer-consumer patterns where the file itself is the shared state. The loss is that `mmap` page faults can block on I/O at an arbitrary instruction, making worst-case latency harder to reason about; `O_DIRECT` `read/write` trades bandwidth for predictable latency.
 
 === Copy-on-Write Mechanics
 
-COW is used in three places: `fork`, `MAP_PRIVATE` file mappings, and kernel object sharing (e.g., `vmsplice`). After `fork`, parent and child share all physical pages with read-only PTEs. On the first write to a shared page, the MMU raises a *protection fault*. The kernel fault handler (`do_wp_page` in Linux) checks the page's reference count: if it is 1 (no other mapper), the handler simply marks the PTE writable and returns; if > 1, it allocates a new page, copies the contents, installs the new writable PTE in the faulting task, and decrements the old page's reference count. The copy is invisible to the other task.
+COW is used in three places: `fork`, `MAP_PRIVATE` file mappings, and kernel object sharing (e.g., `vmsplice`). After `fork`, parent and child share all physical pages with read-only PTEs. On the first write to a shared page, the MMU raises a *protection fault*. The kernel fault handler (`do_wp_page` in Linux) checks the page's reference count: if it is 1 (no other mapper), the handler simply marks the PTE writable and returns; if greater than 1, it allocates a new page, copies the contents, installs the new writable PTE in the faulting task, and decrements the old page's reference count. The copy is invisible to the other task.
 
-COW makes `fork` cheap for read-mostly workloads. The risk is *copy explosion*: a child that writes every page triggers as many copy operations as there are dirty pages, with each copy consuming a burst of CPU and memory bus bandwidth. Large Redis instances that fork for `BGSAVE` can double their RSS within seconds if the foreground is write-intensive.
+COW makes `fork` cheap for read-mostly workloads. The risk is *copy explosion*: a child that writes every page triggers as many copy operations as there are dirty pages, each consuming a burst of CPU and memory bus bandwidth. Large Redis instances that fork for `BGSAVE` can double their RSS within seconds if the foreground is write-intensive.
 
 === userfaultfd
 
@@ -79,7 +79,7 @@ Demand paging keeps RAM working set tight at the cost of fault latency. *Pre-fau
 A 4 KB granularity needs 1024 PTEs — 128 cache lines of page-table state — to map 4 MB; the $"TLB"$ holds ~64-2048 entries depending on level. A workload with > $"TLB"$ × 4 KB hot data thrashes translation. *Huge pages* (2 MB and 1 GB on x86-64; 64 KB / 2 MB / 32 MB / 1 GB on AArch64) raise the per-entry coverage and dramatically reduce $"TLB"$ misses.
 
 Two delivery models:
-- *Explicit / HugeTLB*: reserved pool, applications opt in via `MAP_HUGETLB` or `hugetlbfs`. Strict but predictable.
+- *Explicit / HugeTLB*: reserved pool; applications opt in via `MAP_HUGETLB` or `hugetlbfs`. Strict but predictable.
 - *Transparent / THP*: kernel opportunistically promotes contiguous 4 KB pages into 2 MB; `khugepaged` collapses fragmented regions. Easier but introduces tail-latency surprises (allocator stalls during defragmentation).
 
 Databases and JVMs typically prefer explicit huge pages because THP's compaction stalls show up as p99 spikes.
@@ -92,13 +92,13 @@ Non-Uniform Memory Access ($"NUMA"$) systems have memory partitioned across sock
 2. *Schedule locally* — keep tasks on CPUs near their memory (see `linux-kernel/scheduler.typ`).
 3. *Migrate when necessary* — Linux's *AutoNUMA* periodically samples page residency vs access patterns and migrates pages or tasks.
 
-A subtle pitfall: a parent thread allocating buffers then handing them to worker threads on other nodes pins the memory to the parent's node. The fix is to allocate from the consumer or use `mbind` / `numactl --membind`.
+A subtle pitfall: a parent thread allocating buffers then handing them to worker threads on other nodes pins the memory to the parent's node. The fix is to allocate from the consumer, or use `mbind` / `numactl --membind`.
 
 == Allocators
 
 Kernel and user-space allocators face different constraints. Kernel allocators must handle physical fragmentation, IRQ-context calls, and DMA constraints (contiguity, address ceilings).
 
-*Buddy allocator* (kernel page allocator): physical memory split into power-of-two blocks; splits and coalesces on allocation. $O(log "max-order")$ ops; fragmentation bounded by 50% worst-case for the same order.
+*Buddy allocator* (kernel page allocator): physical memory is split into power-of-two blocks that are split and coalesced on allocation. $O(log "max-order")$ ops; fragmentation bounded by 50% worst-case for the same order.
 
 *Slab / SLUB / SLOB* (kernel object allocator): caches typed objects (`task_struct`, `dentry`) to amortize page-allocator cost and improve cache locality. SLUB is Linux's current default.
 
@@ -125,7 +125,7 @@ Common pitfall: a producer thread `malloc`s; a consumer thread `free`s. ptmalloc
 
 == Swap, Compression, and Memory Tiers
 
-When RAM is exhausted the kernel either evicts clean pages (file-backed — re-fetch from disk) or pages out dirty anonymous pages (to swap). Swap-to-disk is slow enough that modern systems prefer *compressed RAM* (`zswap`, `zram`) for the first tier of pressure and only spill to disk under sustained shortage.
+When RAM is exhausted the kernel either evicts clean pages (file-backed, re-fetched from disk) or pages out dirty anonymous pages (to swap). Swap-to-disk is slow enough that modern systems prefer *compressed RAM* (`zswap`, `zram`) for the first tier of pressure and only spill to disk under sustained shortage.
 
 CXL-attached memory introduces a new tier between DRAM and NVMe: 100-300 ns latency, attached over PCIe 5.0 lanes with coherent load/store semantics. The kernel models CXL memory as a high-bandwidth NUMA node with higher latency; `numactl --membind` or `mbind()` pins allocations to it. Page-promotion / demotion daemons (`damon`, NUMA-balancing extensions) now schedule pages across local DRAM, CXL DRAM, and NVMe swap — hot pages promoted to local DRAM, warm pages demoted to CXL, cold pages swapped. Tiering policy is tunable via `damon_reclaim` and the kernel's `memory.tiering` cgroup v2 interface, with hardware vendors exposing bandwidth and latency statistics via the CXL telemetry protocol.
 
@@ -157,7 +157,7 @@ Control group v2 (`cgroup2`) provides fine-grained memory accounting and enforce
   [`memory.events`], [Counts OOM kills, `memory.high` throttles, etc. (read-only)],
 )
 
-The interaction between `memory.high` and `memory.max` implements a two-tier response: throttle first (slowing allocations to encourage the application to release memory), hard-kill only when throttling fails. Kubernetes uses `memory.max` = container limit and `memory.high` = slightly below limit to trigger GC or memory pressure callbacks before an OOM kill. The `memory.oom.group` flag (Linux 5.17+) kills all processes in the cgroup atomically when any member would be OOM-killed — useful for containers where a partial kill leaves the app in an inconsistent state.
+The interaction between `memory.high` and `memory.max` implements a two-tier response: throttle first (slowing allocations to encourage the application to release memory), hard-kill only when throttling fails. Kubernetes sets `memory.max` to the container limit and `memory.high` slightly below to trigger GC or memory pressure callbacks before an OOM kill. The `memory.oom.group` flag (Linux 5.17+) kills all processes in the cgroup atomically when any member would be OOM-killed — useful for containers where a partial kill leaves the app in an inconsistent state.
 
 == Pitfalls
 
