@@ -2,7 +2,7 @@
 
 Modern machine learning — particularly LLM training and inference — dominates GPU design decisions. Understanding how core primitives (GEMM, attention) map onto GPU hardware is essential for achieving near-peak throughput on Hopper/Blackwell-class devices.
 
-*See also:* _compute-architecture.typ_ (Tensor Cores, TMA), _memory-hierarchy.typ_ (HBM, coalescing), _multi-gpu.typ_ (scaling).
+*See also:* _Compute Units and Specialized Cores_ (Tensor Cores, TMA), _GPU Memory Hierarchy_ (HBM, coalescing), _Multi-GPU Communication and Scaling_ (scaling).
 
 == GEMM: the Core Primitive
 

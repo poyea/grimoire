@@ -2,7 +2,7 @@
 
 Modern ML training (LLMs with 100B+ parameters) and HPC simulations no longer fit on a single GPU. Scaling requires high-bandwidth GPU-to-GPU interconnects, efficient collective communication libraries, and parallelism strategies that map workload structure onto hardware topology.
 
-*See also:* _memory-hierarchy.typ_ (HBM, global memory), _compute-architecture.typ_ (Hopper/Blackwell interconnect), _performance-optimization.typ_ (kernel tuning).
+*See also:* _GPU Memory Hierarchy_ (HBM, global memory), _Compute Units and Specialized Cores_ (Hopper/Blackwell interconnect), _Performance Optimization_ (kernel tuning).
 
 == Interconnect Hierarchy
 
