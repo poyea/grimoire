@@ -40,15 +40,21 @@ SQL text
 
 === Parse
 
-The *parser* converts SQL text into an Abstract Syntax Tree (AST). Most engines use a hand-written recursive-descent parser or a Bison/YACC grammar. Errors at this stage are purely syntactic ("unexpected token").
+The *parser* converts SQL text into an Abstract Syntax Tree (AST). Most engines use a hand-written recursive-descent parser or a Bison/YACC grammar. Errors at this stage are purely syntactic ("unexpected token"). The parser does not consult the catalog — it knows nothing about whether `users` is a real table. PostgreSQL's gram.y is a ~16 000-line Bison grammar; DuckDB uses a hand-written recursive-descent parser for better error messages and incremental extension.
+
+Modern systems track source locations for each AST node so that error messages can point to the exact character in the original query. Some engines (e.g., Calcite) produce a SQL-standard AST and normalise dialect differences at this layer.
 
 === Bind
 
 The *binder* (or analyser) walks the AST and resolves every name against the *catalog* (schema metadata): table names, column names, function signatures, and type information. It produces a *bound logical plan* where every node carries resolved types. Semantic errors ("column `foor` does not exist") are raised here.
 
+Binding involves: (1) resolving table references including CTEs, subqueries, and views by inlining their definitions; (2) column disambiguation — figuring out which table a bare `id` refers to when multiple tables are in scope; (3) function overload resolution matching argument types; (4) implicit cast insertion where the type system allows (e.g., promoting an integer literal to DECIMAL for comparison). The output is a fully-typed, unambiguous logical plan tree ready for optimisation.
+
 === Plan and Optimise
 
-The planner generates an initial *logical plan* — a tree of relational algebra operators — and the *optimizer* transforms it. Optimisation is the most complex stage; see `database/query-optimization.typ` for a dedicated treatment. The output is a *physical plan* in which each logical operator is replaced by a concrete algorithm (e.g., Hash Join vs Sort-Merge Join, sequential scan vs index scan).
+The *planner* generates an initial *logical plan* — a tree of relational algebra operators (Scan, Filter, Project, Join, Aggregate, Sort) — directly from the bound AST. This logical plan is correct but naive: it preserves the query's written structure including the order of joins and placement of predicates.
+
+The *optimizer* then applies *rewrite rules* to the logical plan before selecting physical operators. Logical rewrites include predicate pushdown (moving Filter nodes toward leaf Scans), column pruning (eliminating Project columns unused by upstream operators), subquery unnesting (converting correlated subqueries to joins), and join reordering (permuting join inputs to minimize intermediate cardinality). After logical rewrites, the optimizer selects a *physical plan* in which each logical operator is replaced by a concrete algorithm — Hash Join vs Sort-Merge Join, sequential scan vs index scan, hash aggregate vs sorted aggregate — guided by cost estimates from the catalog's column statistics (histograms, NDV, null fraction). This cost-based search is the most complex stage; see `database/query-optimization.typ` for a dedicated treatment.
 
 == Volcano / Iterator Model
 

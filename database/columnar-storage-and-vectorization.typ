@@ -133,7 +133,7 @@ Parquet file layout:
 
 A *row group* is the unit of parallel I/O (default 128 MB). Each *column chunk* holds all values for one column within that row group. Within a column chunk, *pages* (~1 MB) are the unit of compression and encoding. Statistics stored per column chunk (min, max, null count) and per page enable *predicate pushdown*: a reader can skip entire row groups or pages without decompressing.
 
-*Bloom filters* in Parquet (v2.7+) are stored per column chunk and answer "does value X appear in this column chunk?" in one probabilistic lookup, avoiding decompression for point-lookup style predicates on high-cardinality columns.
+*Bloom filters* in Parquet are stored per column chunk and answer "does value X appear in this column chunk?" in one probabilistic lookup, avoiding decompression for point-lookup style predicates on high-cardinality columns.
 
 === Apache ORC
 
@@ -145,7 +145,7 @@ A *row group* is the unit of parallel I/O (default 128 MB). Each *column chunk* 
   [Ecosystem],        [Spark, Flink, DuckDB, Trino], [Hive, Spark, Presto],
   [Compression],      [Snappy, Zstd, Gzip, LZ4],     [Zlib, Snappy, Zstd, LZO],
   [Encoding],         [RLE, dict, bit-pack, delta],   [RLE, dict, direct, delta],
-  [Bloom filters],    [Yes (v2.7+)],                  [Yes],
+  [Bloom filters],    [Yes],                          [Yes],
   [Nested types],     [Dremel encoding],               [ORC struct/list/map],
   [Row group size],   [128 MB (default)],              [64 MB (default stripe)],
 )
