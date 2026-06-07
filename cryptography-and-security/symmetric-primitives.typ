@@ -2,7 +2,7 @@
 
 Symmetric cryptography is built from a small set of well-studied primitives: block ciphers (AES), stream ciphers (ChaCha20), polynomial MACs (Poly1305, GMAC), and the AEAD modes that combine them. Choosing the right mode, using nonces correctly, and writing constant-time code matter far more than the underlying algorithm.
 
-*See also:* _Hashing and MACs_, _Protocols_, _Key Management_, #emph[networking\/tls.typ], #emph[database\/security-and-privacy.typ].
+*See also:* _Hashing and MACs_, _Protocols_, _Key Management_, _TLS (Transport Layer Security)_ (networking), _Database Security and Privacy_ (database).
 
 == Block Ciphers
 

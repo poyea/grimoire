@@ -2,7 +2,7 @@
 
 Public-key cryptography rests on number-theoretic problems believed hard for classical computers: integer factorization (RSA), discrete log in $(ZZ slash p)^*$ and elliptic curve groups (DH, ECDSA, EdDSA), and bilinear pairings (BLS signatures, identity-based encryption). Modern deployments are dominated by elliptic curves with classical hardness arguments, in transition to post-quantum.
 
-*See also:* _Symmetric Primitives_, _Hashing and MACs_, _Post-Quantum_, _Protocols_, #emph[networking\/tls.typ].
+*See also:* _Symmetric Primitives_, _Hashing and MACs_, _Post-Quantum Cryptography_, _Protocols_, _TLS (Transport Layer Security)_ (networking).
 
 == RSA
 
