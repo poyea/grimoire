@@ -11,16 +11,13 @@
 
   #pagebreak()
 
-  #include "operating-systems/file-systems.typ"
+  #include "operating-systems/ipc-mechanisms.typ"
   #pagebreak()
 
   #include "operating-systems/memory-management.typ"
   #pagebreak()
 
   #include "operating-systems/processes-and-threads.typ"
-  #pagebreak()
-
-  #include "operating-systems/ipc-mechanisms.typ"
   #pagebreak()
 
   #include "operating-systems/scheduling-theory.typ"

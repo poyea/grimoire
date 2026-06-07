@@ -103,3 +103,6 @@ Drepper, U. (2013). "ELF Handling for Thread-Local Storage." Red Hat technical r
 Tanenbaum, A., Bos, H. (2014). "Modern Operating Systems" (4th ed.), Chapters 2-3.
 
 Silberschatz, A., Galvin, P., Gagne, G. (2018). "Operating System Concepts" (10th ed.), Chapters 3-4.
+
+#pagebreak()
+
