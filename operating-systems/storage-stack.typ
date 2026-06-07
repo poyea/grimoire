@@ -2,7 +2,7 @@
 
 Between `write(2)` and a flash cell sit half a dozen layers, each with its own queueing, ordering, and failure semantics. Understanding the stack as a whole — VFS, page cache, block layer, I/O scheduler, driver, controller, media — is what separates a system that scales from one that mysteriously stalls under load. This chapter is the conceptual treatment; Linux-specific `blk-mq` and io_uring are in `linux-kernel/block-layer.typ` and `linux-kernel/io-uring.typ`.
 
-*See also:* `operating-systems/file-systems.typ`, `linux-kernel/block-layer.typ`, `linux-kernel/io-uring.typ`, `database/buffer-pool-and-io.typ`.
+*See also:* _The Block Layer_ (linux-kernel), _io_uring_ (linux-kernel), _Buffer Pool and I/O_ (database).
 
 == Layers
 
@@ -138,7 +138,7 @@ Bovet, D., Cesati, M. "Understanding the Linux Kernel," Chapter 14 (Linux block 
 
 A file system is a translation from a flat block device into a named, hierarchical, durable namespace. The translation must survive crashes, scale to billions of files, and present a useful concurrency model. Different file systems answer those constraints differently — and the design choices are remarkably persistent: ext4's roots reach back to ffs (1984), ZFS's snapshot algebra to WAFL (1994), and modern F2FS to log-structured ideas from Sprite LFS (1992).
 
-*See also:* `operating-systems/storage-stack.typ`, `linux-kernel/vfs-and-fs.typ`, `database/storage-engines.typ`.
+*See also:* _VFS and Filesystems_ (linux-kernel), _Storage Engines_ (database).
 
 == Anatomy
 
