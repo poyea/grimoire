@@ -25,7 +25,7 @@ $ a ::= n | x | a_1 + a_2 | a_1 * a_2 $
 $ b ::= "true" | "false" | a_1 = a_2 | a_1 <= a_2 | "not" b | b_1 and b_2 $
 $ c ::= "skip" | x := a | c_1 ; c_2 | "if" b "then" c_1 "else" c_2 | "while" b "do" c $
 
-A *store* is a finite map $sigma : "Var" arrow.r ZZ$. Configurations come in three sorts: $angle.l a, sigma angle.r$ for arithmetic, $angle.l b, sigma angle.r$ for booleans, $angle.l c, sigma angle.r$ for commands. Terminal configurations are integers, booleans, and the pair $angle.l "skip", sigma angle.r$.
+A *store* is a finite map $sigma : "Var" arrow.r ZZ$. Configurations come in three sorts: $chevron.l a, sigma chevron.r$ for arithmetic, $chevron.l b, sigma chevron.r$ for booleans, $chevron.l c, sigma chevron.r$ for commands. Terminal configurations are integers, booleans, and the pair $chevron.l "skip", sigma chevron.r$.
 
 *Arithmetic rules.*
 
@@ -79,7 +79,7 @@ The `while` rule *unfolds* the loop by one syntactic iteration. There is no fixp
 
 == Big-Step (Natural) Semantics
 
-Kahn's *natural semantics* (1987) relates a term directly to its final value, suppressing intermediate states. The judgement for IMP commands is $angle.l c, sigma angle.r arrow.b sigma'$.
+Kahn's *natural semantics* (1987) relates a term directly to its final value, suppressing intermediate states. The judgement for IMP commands is $chevron.l c, sigma chevron.r arrow.b sigma'$.
 
 ```text
                                                  <a, sigma> => n
@@ -105,7 +105,7 @@ Kahn's *natural semantics* (1987) relates a term directly to its final value, su
 
 Big-step is convenient because each rule corresponds to one clause of a recursive interpreter. The drawback is that non-termination is silent: a diverging program has no big-step derivation, which is indistinguishable from a stuck program. Small-step keeps the two apart.
 
-*Theorem (Equivalence of small-step and big-step, IMP).* For all $c$, $sigma$, $sigma'$: $angle.l c, sigma angle.r arrow.b sigma'$ <==> $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$.
+*Theorem (Equivalence of small-step and big-step, IMP).* For all $c$, $sigma$, $sigma'$: $chevron.l c, sigma chevron.r arrow.b sigma'$ <==> $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$.
 
 *Proof sketch.* Forward direction by induction on the big-step derivation, using a substitution-style splicing lemma for sequencing. Backward by induction on the length of the small-step reduction, with a lemma that says any prefix ending in a value can be lifted into a big-step subderivation. $square$
 
@@ -169,7 +169,7 @@ An abstract machine is a tuple $(S, arrow.r_S, "ini", "fin")$ where $S$ is a set
 
 === CK Machine
 
-State: $angle.l e, K angle.r$ where $K$ is a continuation built from frames matching evaluation contexts. For CBV $lambda$ with $E ::= square | E space e | v space E$, frames are $"ap"_1(e)$ and $"ap"_2(v)$, and $K ::= "halt" | "ap"_1(e) :: K | "ap"_2(v) :: K$.
+State: $chevron.l e, K chevron.r$ where $K$ is a continuation built from frames matching evaluation contexts. For CBV $lambda$ with $E ::= square | E space e | v space E$, frames are $"ap"_1(e)$ and $"ap"_2(v)$, and $K ::= "halt" | "ap"_1(e) :: K | "ap"_2(v) :: K$.
 
 ```text
   <e1 e2, K>               -> <e1, ap1(e2) :: K>             (search)
@@ -181,9 +181,9 @@ The CK machine internalizes the evaluation context as the continuation. *Correct
 
 === CEK Machine
 
-CK still performs substitution, which copies syntax and is expensive. CEK replaces substitution by an *environment* $rho : "Var" arrow.r "Val"$ and represents closures as $angle.l lambda x. e, rho angle.r$. Values are now closures, not raw terms.
+CK still performs substitution, which copies syntax and is expensive. CEK replaces substitution by an *environment* $rho : "Var" arrow.r "Val"$ and represents closures as $chevron.l lambda x. e, rho chevron.r$. Values are now closures, not raw terms.
 
-State: $angle.l e, rho, K angle.r$.
+State: $chevron.l e, rho, K chevron.r$.
 
 ```text
   <x, rho, K>                      -> <v, K>          where rho(x) = v
@@ -197,7 +197,7 @@ CEK is the algorithmic shape of a real interpreter: closures and continuation st
 
 === CESK Machine
 
-To handle mutable state, add a *store* $sigma$ and use *addresses* rather than values inside environments: $rho : "Var" arrow.r "Addr"$ and $sigma : "Addr" arrow.r "Val"$. State: $angle.l e, rho, sigma, K angle.r$.
+To handle mutable state, add a *store* $sigma$ and use *addresses* rather than values inside environments: $rho : "Var" arrow.r "Addr"$ and $sigma : "Addr" arrow.r "Val"$. State: $chevron.l e, rho, sigma, K chevron.r$.
 
 Mutation is now a primitive that updates $sigma$. The CESK machine (Felleisen, Friedman; Flatt) is the canonical machine used in the *abstracting abstract machines* (AAM, Van Horn-Might 2010) framework: replacing $sigma$ by an abstract store with finite addresses yields, mechanically, a sound static analyzer.
 

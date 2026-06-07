@@ -136,9 +136,9 @@ The phase structure makes *separate compilation* of macro-using modules possible
 
 A radically different tradition is *multi-stage programming* (MSP), founded by (Taha–Sheard 1997, 2000) with the language *MetaML*. MSP adds three syntactic constructs:
 
-- *Brackets* `<. e .>` (or `.<e>.`): produce a *code value* representing the expression $e$ without evaluating it. Type: $angle.l tau angle.r$ if $e : tau$.
-- *Escape* `~e` (or `.~e`): inside brackets, insert a code value computed by $e$ into the surrounding code. Type: $angle.l tau angle.r$ produces $tau$ in the brackets.
-- *Run* `!e` (`.! e`): take a code value and execute it. Type: $angle.l tau angle.r arrow.r tau$.
+- *Brackets* `<. e .>` (or `.<e>.`): produce a *code value* representing the expression $e$ without evaluating it. Type: $chevron.l tau chevron.r$ if $e : tau$.
+- *Escape* `~e` (or `.~e`): inside brackets, insert a code value computed by $e$ into the surrounding code. Type: $chevron.l tau chevron.r$ produces $tau$ in the brackets.
+- *Run* `!e` (`.! e`): take a code value and execute it. Type: $chevron.l tau chevron.r arrow.r tau$.
 
 The classical example is the *power* function staged on its exponent:
 
@@ -155,7 +155,7 @@ The expression `power 3 .<x>.` runs at the meta-stage and *builds* the AST `x * 
 
 MSP differs from Lisp macros in two ways:
 
-1. *Typed.* `<. e .>` is a *type*, $angle.l tau angle.r$ or $"code"(tau)$, and the type system tracks which subexpressions live in which stage. A type error at the *meta* stage is reported as a type error; a code value of the wrong type cannot be inserted.
+1. *Typed.* `<. e .>` is a *type*, $chevron.l tau chevron.r$ or $"code"(tau)$, and the type system tracks which subexpressions live in which stage. A type error at the *meta* stage is reported as a type error; a code value of the wrong type cannot be inserted.
 2. *Hygienic by construction.* Bound variables in code values cannot be captured because the type-checker tracks the *binding environment* of each stage. A code value carries enough information to know which free variables it depends on.
 
 MetaOCaml (Calcagno–Taha–Huang–Leroy 2003; BER MetaOCaml, Kiselyov 2014) is the production implementation, integrated into the OCaml type checker. The brackets become `.< ... >.` and the escape `.~`; the run is `.!`. The compiler generates native code at runtime, often at significant speedup over interpreted alternatives.
@@ -339,7 +339,7 @@ The convergence point of macros and PE is *typed metaprogramming with reflection
 
 == Multi-Stage Programming: Soundness
 
-The type system of MetaML guarantees that staged code is *well-typed at every stage*. A staged expression that produces a value of type $angle.l "int" angle.r$ can be *run* to produce an `int`; the operational semantics of `.!` is to take a code value and run it in the next stage, and the type system's *staging invariants* ensure the code value is closed and type-correct.
+The type system of MetaML guarantees that staged code is *well-typed at every stage*. A staged expression that produces a value of type $chevron.l "int" chevron.r$ can be *run* to produce an `int`; the operational semantics of `.!` is to take a code value and run it in the next stage, and the type system's *staging invariants* ensure the code value is closed and type-correct.
 
 *Theorem (Type Safety for MetaML, Taha 2000).* Well-typed MetaML programs do not produce ill-typed code values or unbound-variable errors when run.
 

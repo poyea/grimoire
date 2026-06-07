@@ -461,28 +461,28 @@ Let $Gamma tack.r_n e : tau$ denote "$e$ has type $tau$ at stage $n$".
 *Typing rules for the three staging operations:*
 
 $
-  (Gamma tack.r_n e : tau) / (Gamma tack.r_(n) angle.l e angle.r : angle.l tau angle.r) quad quad ("BRACKET")
+  (Gamma tack.r_n e : tau) / (Gamma tack.r_(n) chevron.l e chevron.r : chevron.l tau chevron.r) quad quad ("BRACKET")
 $
 
 $
-  (Gamma tack.r_n e : angle.l tau angle.r) / (Gamma tack.r_(n+1) tilde e : tau) quad quad ("ESCAPE")
+  (Gamma tack.r_n e : chevron.l tau chevron.r) / (Gamma tack.r_(n+1) tilde e : tau) quad quad ("ESCAPE")
 $
 
 $
-  (Gamma tack.r_0 e : angle.l tau angle.r) / (Gamma tack.r_0 "run" e : tau) quad quad ("RUN")
+  (Gamma tack.r_0 e : chevron.l tau chevron.r) / (Gamma tack.r_0 "run" e : tau) quad quad ("RUN")
 $
 
-BRACKET says: if $e$ is well-typed at stage $n$, then the code value $angle.l e angle.r$
-has type $angle.l tau angle.r$ at stage $n$. ESCAPE says: inside a stage-$(n+1)$
-bracket, an escape $tilde e$ at stage $n$ splices the code value $e : angle.l tau angle.r$
+BRACKET says: if $e$ is well-typed at stage $n$, then the code value $chevron.l e chevron.r$
+has type $chevron.l tau chevron.r$ at stage $n$. ESCAPE says: inside a stage-$(n+1)$
+bracket, an escape $tilde e$ at stage $n$ splices the code value $e : chevron.l tau chevron.r$
 as a $tau$ at stage $n+1$. RUN only applies at stage 0 and removes a bracket.
 
 *Cross-stage persistence (CSP).* A value at stage 0 used inside a stage-1 bracket
-is a *cross-stage use*. MetaML handles this with a special form `lift : tau -> angle.l tau angle.r`
+is a *cross-stage use*. MetaML handles this with a special form `lift : tau -> chevron.l tau chevron.r`
 that serialises a value into a code constant. The type rule:
 
 $
-  (Gamma tack.r_0 v : tau) / (Gamma tack.r_1 "lift" v : angle.l tau angle.r) quad quad ("LIFT")
+  (Gamma tack.r_0 v : tau) / (Gamma tack.r_1 "lift" v : chevron.l tau chevron.r) quad quad ("LIFT")
 $
 
 Not all types support CSP: closures that refer to mutable state cannot be lifted.
@@ -492,8 +492,8 @@ The *liftable* types form a sub-kind.
 $e arrow.r e'$ (by the staged reduction relation), then $Gamma tack.r_n e' : tau$.
 
 *Proof.* By induction on the typing derivation and the reduction rule. The key case
-is ESCAPE under BRACKET: reducing $angle.l tilde e angle.r arrow.r e$ when
-$e : angle.l tau angle.r$ at stage $n$ yields $e$ itself, which has type $angle.l tau angle.r$
+is ESCAPE under BRACKET: reducing $chevron.l tilde e chevron.r arrow.r e$ when
+$e : chevron.l tau chevron.r$ at stage $n$ yields $e$ itself, which has type $chevron.l tau chevron.r$
 at stage $n$. All other cases follow from the standard preservation argument for
 $lambda$-calculus extended with fresh constants. $square$
 

@@ -103,7 +103,7 @@ bell.measure([0,1], [0,1])
 
 == Measurement and the Born Rule
 
-A projective measurement in the computational basis projects $|psi chevron.r = sum c_x |x chevron.r$ onto outcome $x$ with probability $|c_x|^2$, collapsing the state to $|x chevron.r$. More generally, a *POVM* ${E_m}$ with $sum_m E_m = II$ yields outcome $m$ with $P(m) = angle.l psi | E_m | psi chevron.r$.
+A projective measurement in the computational basis projects $|psi chevron.r = sum c_x |x chevron.r$ onto outcome $x$ with probability $|c_x|^2$, collapsing the state to $|x chevron.r$. More generally, a *POVM* ${E_m}$ with $sum_m E_m = II$ yields outcome $m$ with $P(m) = chevron.l psi | E_m | psi chevron.r$.
 
 The *no-cloning theorem* (Wootters & Zurek 1982) forbids a unitary $U$ with $U(|psi chevron.r times.o |0 chevron.r) = |psi chevron.r times.o |psi chevron.r$ for arbitrary $|psi chevron.r$ — measurement is destructive in a fundamental way, which is why classical debugging tools do not port to quantum directly.
 

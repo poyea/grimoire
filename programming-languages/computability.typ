@@ -29,7 +29,7 @@ $ f(arrow(x), 0) &= g(arrow(x)) \
   f(arrow(x), y + 1) &= h(arrow(x), y, f(arrow(x), y)) $
 
 Every primitive recursive function is total. Addition, multiplication,
-exponentiation, bounded minimisation, the Cantor pairing $angle.l x, y angle.r =
+exponentiation, bounded minimisation, the Cantor pairing $chevron.l x, y chevron.r =
 ((x + y)(x + y + 1))/2 + y$, prime enumeration, and Gödel's $beta$-function are
 primitive recursive. The class is closed under bounded quantification and bounded
 search, which is what makes it powerful enough to encode finite sequences and thus
@@ -413,8 +413,8 @@ order arithmetic (Simpson 1977, Slaman--Woodin).
 *The jump operator.* $A' = { e | Phi_e^A (e) "halts"}$, the halting problem
 *relative* to $A$. The jump is *strictly* increasing: $A <_T A'$ for every $A$, by
 the relativised diagonal argument. Iterating gives $emptyset, emptyset', emptyset'',
-..., emptyset^((n))$. The infinitary jump $emptyset^((omega)) = { angle.l e, n
-angle.r | e in emptyset^((n)) }$ goes beyond all finite levels.
+..., emptyset^((n))$. The infinitary jump $emptyset^((omega)) = { chevron.l e, n
+chevron.r | e in emptyset^((n)) }$ goes beyond all finite levels.
 
 == The Arithmetical Hierarchy
 
@@ -464,7 +464,7 @@ Beyond the arithmetical levels lies the *hyperarithmetical* hierarchy, indexed b
 the recursive ordinals $alpha < omega_1^"CK"$ (the Church--Kleene ordinal, the
 least non-recursive ordinal). For $alpha = beta + 1$, $emptyset^((alpha))$ is the
 jump of $emptyset^((beta))$; for limit $alpha$ given by a recursive notation
-$a$, $emptyset^((alpha)) = { angle.l b, n angle.r | b <_O a and n in
+$a$, $emptyset^((alpha)) = { chevron.l b, n chevron.r | b <_O a and n in
 emptyset^((|b|)) }$ where $<_O$ is Kleene's $cal(O)$ ordering of notations. The
 union $bold(H) = union.big_(alpha < omega_1^"CK") emptyset^((alpha))$ is the
 *hyperarithmetical* set.
@@ -698,7 +698,7 @@ recursive programs can simultaneously fix-point themselves.
 
 *Application: Smullyan's double diagonal.* In provability logic, the Gödel--
 Carnap fixed-point lemma (every $phi(x)$ has a sentence $sigma$ with $"PA" tack.r
-sigma arrow.l.r.double phi(angle.l sigma angle.r)$) is the proof-theoretic shadow
+sigma arrow.l.r.double phi(chevron.l sigma chevron.r)$) is the proof-theoretic shadow
 of the recursion theorem. The proof of Gödel's incompleteness theorem is then
 the same diagonal that proves $K$ undecidable.
 

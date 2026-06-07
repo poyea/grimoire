@@ -232,7 +232,7 @@ Parametricity is not merely a curiosity: it underlies *representation independen
 Mitchell–Plotkin (1988) recognised that *existential types* model abstract data types. The Church-encoding:
 $ exists alpha . tau &:= forall beta . (forall alpha . tau arrow.r beta) arrow.r beta \
 "pack" tau "with" e "as" exists alpha . tau' &:= Lambda beta . lambda k : forall alpha . tau' arrow.r beta . k [tau] space e \
-"unpack" angle.l alpha, x angle.r = e "in" e' &:= e [tau_("answer")] (Lambda alpha . lambda x : tau' . e') $
+"unpack" chevron.l alpha, x chevron.r = e "in" e' &:= e [tau_("answer")] (Lambda alpha . lambda x : tau' . e') $
 
 The introduction $"pack"$ packages a *concrete* witness $tau$ together with a value $e : [alpha |-> tau] tau'$, hiding the witness behind the existential. The elimination $"unpack"$ binds a *fresh* type variable $alpha$ (the abstract type) and a term variable $x$ of representation type $tau'$. Crucially, the eliminator's body $e'$ may not mention $alpha$ in its result type — this is *information hiding*.
 

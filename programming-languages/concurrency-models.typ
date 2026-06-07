@@ -8,7 +8,7 @@ The previous chapter studied algebraic theories — CCS, CSP, the $pi$-calculus 
 
 == Interleaving Semantics
 
-The simplest model of concurrency takes a multi-threaded program to be a set of sequential threads, and a concurrent execution to be an arbitrary *interleaving* of their atomic steps. A configuration is a tuple $angle.l T_1, dots, T_n; sigma angle.r$ where $T_i$ are the per-thread control states and $sigma$ is a shared store. The transition rule:
+The simplest model of concurrency takes a multi-threaded program to be a set of sequential threads, and a concurrent execution to be an arbitrary *interleaving* of their atomic steps. A configuration is a tuple $chevron.l T_1, dots, T_n; sigma chevron.r$ where $T_i$ are the per-thread control states and $sigma$ is a shared store. The transition rule:
 
 ```text
             T_i  ;  sigma   -->_seq   T_i'  ;  sigma'
@@ -109,20 +109,20 @@ The *actor model* (Hewitt 1973; Agha 1986) discards shared state entirely. The w
 
 === Operational Semantics
 
-A *configuration* is a multiset of actors and undelivered messages. Each actor is $angle.l a, b, q angle.r$ with address $a$, behaviour $b$, and mailbox $q$. A message is $a triangle.l v$ ("$v$ for $a$"). The transition rules:
+A *configuration* is a multiset of actors and undelivered messages. Each actor is $chevron.l a, b, q chevron.r$ with address $a$, behaviour $b$, and mailbox $q$. A message is $a gt.triple v$ ("$v$ for $a$"). The transition rules:
 
 ```text
-        a triangle.l v   on the wire
+        a gt.triple v   on the wire
         actor at a is ready (mailbox empty? — or, append to mailbox)
         --------------------------------------------------       (DELIVER)
-        ... | <a, b, q> | (a triangle.l v) -->
+        ... | <a, b, q> | (a gt.triple v) -->
         ... | <a, b, q ++ [v]>
 
         actor at a is ready, head of q is v, b(v) computes
         actions: send m1...mk, create c1...cj, become b'
         --------------------------------------------------       (DISPATCH)
         ... | <a, b, v :: q> -->
-        ... | <a, b', q> | (a_1 triangle.l m_1) | ... |
+        ... | <a, b', q> | (a_1 gt.triple m_1) | ... |
                           <c_1, b_{c_1}, []> | ...
 ```
 

@@ -97,9 +97,9 @@ We have two semantics: operational ($arrow.r^*$) and denotational ($bracket.l.do
 
 *Theorem (Adequacy, IMP).* For every command $c$ and state $sigma$:
 
-(a) If $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$, then $bracket.l.double c bracket.r.double sigma = sigma'$.
+(a) If $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$, then $bracket.l.double c bracket.r.double sigma = sigma'$.
 
-(b) If $bracket.l.double c bracket.r.double sigma = sigma'$ (with $sigma' eq."not" bot$), then $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$.
+(b) If $bracket.l.double c bracket.r.double sigma = sigma'$ (with $sigma' eq."not" bot$), then $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$.
 
 *Proof sketch.* (a) by induction on the length of reduction (or on the big-step derivation, using the equivalence theorem). (b) is harder for the loop case: one shows by induction on $n$ that $Phi_(b,c)^n (bot)(sigma) = sigma'$ => the loop terminates with $sigma'$ in at most $n$ iterations, then takes the supremum. $square$
 
@@ -165,7 +165,7 @@ There are three classical powerdomains (Plotkin 1976; Smyth 1978):
 - *Smyth powerdomain* $cal(P)_S (D)$ (also *upper*): upward-closed Scott-compact subsets, ordered by reverse inclusion. Captures *must*-nondeterminism / total correctness in the presence of divergence.
 - *Plotkin powerdomain* $cal(P)_P (D)$ (also *convex*): Scott-compact convex subsets, ordered by the *Egli-Milner* order ($A subset.eq B$ <==> $A subset.eq arrow.b B$ and $B subset.eq arrow.t A$). Captures both may and must.
 
-Each powerdomain is a *monad* on CPO; the algebraic operation is binary nondeterministic choice $plus.circle$, and the equational theory differs (semilattice; semilattice + idempotence + commutativity vs. extra absorption laws involving $bot$).
+Each powerdomain is a *monad* on CPO; the algebraic operation is binary nondeterministic choice $plus.o$, and the equational theory differs (semilattice; semilattice + idempotence + commutativity vs. extra absorption laws involving $bot$).
 
 The Plotkin powerdomain is the "right" one for *bisimulation*; Hoare matches trace semantics; Smyth matches failure semantics in the sense of CSP. The choice of powerdomain reflects the choice of observation.
 
@@ -191,7 +191,7 @@ Linear logic (Girard 1987) was discovered by analyzing the structure of stable f
 
 - The *linear* function space $X multimap Y$ has cliques as token pairs respecting coherence.
 - The *exponential* $!X$ packs *finite* cliques of $X$ as new tokens; intuitionistic implication $X arrow.r Y$ decomposes as $!X multimap Y$.
-- Multiplicative connectives ($times.circle$, $⅋$) and additives ($plus.circle$, $&$) all have natural interpretations.
+- Multiplicative connectives ($times.o$, $⅋$) and additives ($plus.o$, $&$) all have natural interpretations.
 
 Coherence-space semantics gave the semantic motivation for the *exponential modality* and provided the first precise account of *resource sensitivity* in $lambda$-calculus. Linear-logic-inspired denotational models -- relational, finiteness spaces, probabilistic coherence spaces (Danos-Ehrhard 2011) -- are now standard tools.
 

@@ -24,7 +24,7 @@ In programming-language terms: types are objects, terms (up to equivalence) are 
 A category $cal(C)$ is *cartesian closed* (CCC) if it has:
 
 - A *terminal object* $1$: for every $A$, a unique morphism $!_A : A arrow.r 1$.
-- *Binary products* $A times B$ with projections $pi_1 : A times B arrow.r A$, $pi_2 : A times B arrow.r B$, and a *pairing* $angle.l f, g angle.r : C arrow.r A times B$ for every $f : C arrow.r A$, $g : C arrow.r B$, satisfying $pi_1 circle.small angle.l f, g angle.r = f$, $pi_2 circle.small angle.l f, g angle.r = g$, and uniqueness.
+- *Binary products* $A times B$ with projections $pi_1 : A times B arrow.r A$, $pi_2 : A times B arrow.r B$, and a *pairing* $chevron.l f, g chevron.r : C arrow.r A times B$ for every $f : C arrow.r A$, $g : C arrow.r B$, satisfying $pi_1 circle.small chevron.l f, g chevron.r = f$, $pi_2 circle.small chevron.l f, g chevron.r = g$, and uniqueness.
 - *Exponentials* $B^A$: for every pair $A, B$, an object $B^A$ and an *evaluation* $"ev" : B^A times A arrow.r B$ such that for every $f : C times A arrow.r B$ there is a unique $hat(f) : C arrow.r B^A$ with $"ev" circle.small (hat(f) times "id"_A) = f$.
 
 The exponential adjunction expresses the *currying isomorphism*:
@@ -193,11 +193,11 @@ Realizability gives a rigorous categorical semantics for *Church's thesis* and f
 
 == Categorical Semantics of Linear Logic
 
-Linear logic (Girard 1987) treats hypotheses as *resources* to be used exactly once. Its categorical models are *not* CCCs but *symmetric monoidal closed categories*, with $times.circle$ for the *tensor* (linear conjunction) and $multimap$ for the linear implication.
+Linear logic (Girard 1987) treats hypotheses as *resources* to be used exactly once. Its categorical models are *not* CCCs but *symmetric monoidal closed categories*, with $times.o$ for the *tensor* (linear conjunction) and $multimap$ for the linear implication.
 
 For the additive and exponential connectives, more structure is needed. Seely (1989) proposed *$*$-autonomous categories* (Barr 1979) with a dualizing object for the classical multiplicatives, plus a *linear-exponential comonad* $!$ encoding the *exponential modality*.
 
-*Seely's models.* A model of classical linear logic is a $*$-autonomous category with finite products (for $&$) and a linear-exponential comonad $!$ such that $!(A & B) tilde.eq !A times.circle !B$ (the Seely isomorphisms).
+*Seely's models.* A model of classical linear logic is a $*$-autonomous category with finite products (for $&$) and a linear-exponential comonad $!$ such that $!(A & B) tilde.eq !A times.o !B$ (the Seely isomorphisms).
 
 The decomposition $A arrow.r B = !A multimap B$ shows that intuitionistic logic is *linear logic with the exponential pre-applied to the antecedent*. This decomposition reorganized proof theory: the cut-elimination procedure for linear logic is *finer* than for intuitionistic logic, and the analysis of computational content (Girard's *geometry of interaction*) becomes substantially cleaner.
 

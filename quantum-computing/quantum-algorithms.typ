@@ -27,7 +27,7 @@ The lesson: phase kickback turns a function-evaluation oracle into a *phase* ora
 
 Grover (1996) finds a marked element in an unstructured list of $N$ items with $O(sqrt(N))$ oracle queries — a *quadratic* speedup, provably tight (BBBV lower bound, 1997).
 
-The algorithm iterates the *Grover operator* $G = (2|s chevron.r angle.l s| - II) O_f$, where $|s chevron.r$ is the uniform superposition and $O_f$ phase-flips marked states. Geometrically, $G$ rotates $|s chevron.r$ toward the target by $2 theta$ per step where $sin theta = sqrt(M/N)$. Optimal iteration count: $k^* = floor(pi/4 sqrt(N/M))$.
+The algorithm iterates the *Grover operator* $G = (2|s chevron.r chevron.l s| - II) O_f$, where $|s chevron.r$ is the uniform superposition and $O_f$ phase-flips marked states. Geometrically, $G$ rotates $|s chevron.r$ toward the target by $2 theta$ per step where $sin theta = sqrt(M/N)$. Optimal iteration count: $k^* = floor(pi/4 sqrt(N/M))$.
 
 ```python
 # Grover for one marked item in n=3 qubits (N=8), marked = |101>
@@ -85,11 +85,11 @@ Cost: $O(n^2 log n log log n)$ modular multiplications via fast arithmetic, tota
 
 Harrow-Hassidim-Lloyd (2009): given a sparse $s$-sparse, well-conditioned (condition number $kappa$) $N times N$ matrix $A$ and $|b chevron.r$ encoded as a state, produce $|x chevron.r prop A^(-1) |b chevron.r$ in $tilde(O)(log(N) s^2 kappa^2 / epsilon)$ time vs classical $O(N s sqrt(kappa) log(1/epsilon))$ with conjugate gradient.
 
-*Caveats* (Aaronson 2015): (1) state preparation of $|b chevron.r$ may itself be expensive; (2) you cannot read out $|x chevron.r$ entry-wise without paying $O(N)$; (3) only specific functionals $angle.l x | M | x chevron.r$ are extractable cheaply. HHL gives exponential speedup only when these match the application.
+*Caveats* (Aaronson 2015): (1) state preparation of $|b chevron.r$ may itself be expensive; (2) you cannot read out $|x chevron.r$ entry-wise without paying $O(N)$; (3) only specific functionals $chevron.l x | M | x chevron.r$ are extractable cheaply. HHL gives exponential speedup only when these match the application.
 
 == Variational Quantum Eigensolver (VQE)
 
-NISQ-era algorithm: minimize $E(theta) = angle.l psi(theta) | H | psi(theta) chevron.r$ over a parameterized ansatz $|psi(theta) chevron.r$ using a classical optimizer. Decompose $H = sum_i c_i P_i$ into Pauli strings, measure each term, aggregate.
+NISQ-era algorithm: minimize $E(theta) = chevron.l psi(theta) | H | psi(theta) chevron.r$ over a parameterized ansatz $|psi(theta) chevron.r$ using a classical optimizer. Decompose $H = sum_i c_i P_i$ into Pauli strings, measure each term, aggregate.
 
 ```python
 # Qiskit VQE for H2 (sketch)
