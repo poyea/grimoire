@@ -275,9 +275,9 @@ key_s→c = HASH(K || H || "D" || session_id)
 mac_c→s = HASH(K || H || "E" || session_id)
 mac_s→c = HASH(K || H || "F" || session_id)
 ```
-Each direction gets independent IV, cipher key, and MAC key — compromise of one direction does not expose the other.
+Each direction gets independent IV, cipher key, and MAC key; compromise of one direction does not expose the other.
 
-*OpenSSH source:* `kex_derive_keys()` implements RFC 4253 §7.2 key material expansion — #link("https://github.com/openssh/openssh-portable/blob/master/kex.c")[`kex.c`]
+*OpenSSH source:* `kex_derive_keys()` implements RFC 4253 §7.2 key material expansion: #link("https://github.com/openssh/openssh-portable/blob/master/kex.c")[`kex.c`]
 
 === Packet Wire Format
 
@@ -290,9 +290,9 @@ byte[p]  random padding   (p = padding_length, min 4, rounds to cipher block)
 byte[m]  MAC              (m = mac length, over sequence_number + plaintext)
 ```
 
-Sequence number is implicit (uint32, wraps at 2³²) — prevents replay within a session. MAC covers the plaintext packet, not the ciphertext (Encrypt-then-MAC in modern ciphers like AES-GCM where AEAD subsumes the MAC field).
+Sequence number is implicit (uint32, wraps at 2³²) and prevents replay within a session. MAC covers the plaintext packet, not the ciphertext (Encrypt-then-MAC in modern ciphers like AES-GCM where AEAD subsumes the MAC field).
 
-*OpenSSH source:* `ssh_packet_send2_wrapped()` for the encryption path — #link("https://github.com/openssh/openssh-portable/blob/master/packet.c")[`packet.c`]
+*OpenSSH source:* `ssh_packet_send2_wrapped()` for the encryption path: #link("https://github.com/openssh/openssh-portable/blob/master/packet.c")[`packet.c`]
 
 === Authentication Protocol
 
@@ -318,7 +318,7 @@ restrict,command="rsync --server ..." ssh-ed25519 AAAA... deploy@ci
 ```
 Options: `no-pty`, `no-port-forwarding`, `from="IP"`, `command="..."`, `restrict`
 
-*OpenSSH source:* `auth_key_is_revoked()` + `user_key_allowed2()` — #link("https://github.com/openssh/openssh-portable/blob/master/auth-rsa.c")[`openssh-portable/auth-rsa.c`]
+*OpenSSH source:* `auth_key_is_revoked()` + `user_key_allowed2()`: #link("https://github.com/openssh/openssh-portable/blob/master/auth-rsa.c")[`openssh-portable/auth-rsa.c`]
 
 *2. password:* plaintext password sent inside encrypted channel. Vulnerable to server compromise; avoid in hardened deployments.
 
@@ -327,7 +327,7 @@ Options: `no-pty`, `no-port-forwarding`, `from="IP"`, `command="..."`, `restrict
 === Host Key Verification and `known_hosts`
 
 On first connect, client receives server's host public key. Client checks `~/.ssh/known_hosts`:
-- If absent: TOFU (Trust On First Use) — user prompted, key saved
+- If absent: TOFU (Trust On First Use): user prompted, key saved
 - If present but changed: *WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED* (potential MITM)
 - SSHFP DNS records (RFC 4255) provide a CA-independent second channel for verification
 
@@ -363,14 +363,14 @@ Client                                          Server
 ```
 
 *Channel types:*
-- `session` — remote shell / exec / subsystem (sftp)
-- `direct-tcpip` — local port forward (client→server→destination)
-- `forwarded-tcpip` — remote port forward (server→client→destination)
-- `tun@openssh.com` — layer-3 VPN tun device
+- `session`: remote shell / exec / subsystem (sftp)
+- `direct-tcpip`: local port forward (client→server→destination)
+- `forwarded-tcpip`: remote port forward (server→client→destination)
+- `tun@openssh.com`: layer-3 VPN tun device
 
 *Flow control:* each side advertises a window (bytes it can receive without acknowledgement). Sender must stop when window is 0. Prevents fast sender from overwhelming slow receiver without per-packet ACKs.
 
-*OpenSSH source:* `channel_output_poll()`, `channel_post_open()` — #link("https://github.com/openssh/openssh-portable/blob/master/channels.c")[`openssh-portable/channels.c`]
+*OpenSSH source:* `channel_output_poll()`, `channel_post_open()`: #link("https://github.com/openssh/openssh-portable/blob/master/channels.c")[`openssh-portable/channels.c`]
 
 === ssh-agent and Key Forwarding
 
@@ -661,13 +661,13 @@ RFC 4256: Generic Message Exchange Authentication for SSH (keyboard-interactive)
 
 Friedl, M., Provos, N., & Simpson, W. (2006). "Diffie-Hellman Group Exchange for the Secure Shell (SSH) Transport Layer Protocol." RFC 4419.
 
-OpenSSH portable source — #link("https://github.com/openssh/openssh-portable")[`openssh/openssh-portable`]:
-- #link("https://github.com/openssh/openssh-portable/blob/master/kex.c")[`kex.c`] — key exchange and session key derivation
-- #link("https://github.com/openssh/openssh-portable/blob/master/packet.c")[`packet.c`] — packet encryption and MAC
-- #link("https://github.com/openssh/openssh-portable/blob/master/channels.c")[`channels.c`] — channel multiplexing
-- #link("https://github.com/openssh/openssh-portable/blob/master/auth2-pubkey.c")[`auth2-pubkey.c`] — public key authentication
-- #link("https://github.com/openssh/openssh-portable/blob/master/monitor.c")[`monitor.c`] — privilege separation monitor
-- #link("https://github.com/openssh/openssh-portable/blob/master/sandbox-seccomp-filter.c")[`sandbox-seccomp-filter.c`] — Linux seccomp sandbox
+OpenSSH portable source: #link("https://github.com/openssh/openssh-portable")[`openssh/openssh-portable`]:
+- #link("https://github.com/openssh/openssh-portable/blob/master/kex.c")[`kex.c`]: key exchange and session key derivation
+- #link("https://github.com/openssh/openssh-portable/blob/master/packet.c")[`packet.c`]: packet encryption and MAC
+- #link("https://github.com/openssh/openssh-portable/blob/master/channels.c")[`channels.c`]: channel multiplexing
+- #link("https://github.com/openssh/openssh-portable/blob/master/auth2-pubkey.c")[`auth2-pubkey.c`]: public key authentication
+- #link("https://github.com/openssh/openssh-portable/blob/master/monitor.c")[`monitor.c`]: privilege separation monitor
+- #link("https://github.com/openssh/openssh-portable/blob/master/sandbox-seccomp-filter.c")[`sandbox-seccomp-filter.c`]: Linux seccomp sandbox
 
 Bellovin, S.M. & Blaze, M. (2000). "Cryptographic Modes of Operation for the Internet." NDSS.
 

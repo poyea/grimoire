@@ -1,6 +1,6 @@
 = Multipath Transport
 
-Multipath transports — MPTCP, MPQUIC, and SCTP-CMT — use several network paths simultaneously between a single pair of endpoints, improving throughput, resilience, and seamless handover between heterogeneous links (Wi-Fi + LTE, dual-uplink data centres). This chapter focuses on MPTCP, the most widely deployed multipath transport, with a survey of MPQUIC.
+Multipath transports (MPTCP, MPQUIC, and SCTP-CMT) use several network paths simultaneously between a single pair of endpoints, improving throughput, resilience, and seamless handover between heterogeneous links (Wi-Fi + LTE, dual-uplink data centres). This chapter focuses on MPTCP, the most widely deployed multipath transport, with a survey of MPQUIC.
 
 *See also:* _Transport Layer_ (single-path TCP), _Congestion Control_ (coupled CC algorithms), _QUIC and HTTP/3_ (MPQUIC builds on QUIC), _Wireless Protocols_ (heterogeneous radio handover).
 
@@ -37,9 +37,9 @@ The third goal makes coupled congestion control mandatory and is where most algo
 
 *Components:*
 
-+ *Path Manager* — discovers, advertises, and tears down subflows. Linux `mptcpd` user-space daemon plus kernel API; Apple has its own per-app policies.
-+ *Scheduler* — decides which subflow carries each segment.
-+ *Congestion Coupling* — links per-subflow congestion windows so total throughput is fair to single-path TCP.
++ *Path Manager*: discovers, advertises, and tears down subflows. Linux `mptcpd` user-space daemon plus kernel API; Apple has its own per-app policies.
++ *Scheduler*: decides which subflow carries each segment.
++ *Congestion Coupling*: links per-subflow congestion windows so total throughput is fair to single-path TCP.
 
 == Handshake and Wire Format
 
@@ -78,8 +78,8 @@ The scheduler picks a subflow for every outgoing segment. The Linux kernel ships
   [`default` (lowest-RTT)], [Send on the subflow with the smallest smoothed $"RTT"$ that has available cwnd. Good general-purpose choice.],
   [`roundrobin`], [Strict alternation. Simple but ignores heterogeneous latency.],
   [`redundant`], [Send the *same* segment on every subflow. Trades bandwidth for tail-latency reduction. Used by some financial services.],
-  [`BLEST`], [Blocking Estimation — avoids using slow paths if they would block fast-path reordering buffer.],
-  [`ECF`], [Earliest Completion First — picks the path expected to deliver soonest, accounting for cwnd remaining and RTT.],
+  [`BLEST`], [Blocking Estimation: avoids using slow paths if they would block fast-path reordering buffer.],
+  [`ECF`], [Earliest Completion First: picks the path expected to deliver soonest, accounting for cwnd remaining and RTT.],
 )
 
 ```bash
@@ -92,7 +92,7 @@ sysctl -w net.mptcp.scheduler=blest
 
 == Coupled Congestion Control
 
-If each subflow ran independent NewReno, an MPTCP flow with two paths sharing a single bottleneck would receive twice the bandwidth of a single-path TCP flow — unfair. Coupled CC sums (or partially sums) the windows so the aggregate behaves fairly.
+If each subflow ran independent NewReno, an MPTCP flow with two paths sharing a single bottleneck would receive twice the bandwidth of a single-path TCP flow, which is unfair. Coupled CC sums (or partially sums) the windows so the aggregate behaves fairly.
 
 === LIA — Linked Increases Algorithm (RFC 6356)
 
@@ -100,7 +100,7 @@ For each subflow $r$, on ACK:
 $ w_r ← w_r + min(alpha / w_"total", 1 / w_r) $
 where $w_"total" = sum_(s in "subflows") w_s$ and $alpha$ is computed so the total throughput equals what a single-path TCP would get on the best path. LIA was the original deployed coupling.
 
-*Weakness:* not Pareto-optimal — may underutilise paths that are not bottlenecked together.
+*Weakness:* not Pareto-optimal; may underutilise paths that are not bottlenecked together.
 
 === OLIA — Opportunistic Linked Increases (Khalili et al., CoNEXT 2012)
 
@@ -161,10 +161,10 @@ Apple was the first hyperscaler to deploy MPTCP at scale: Siri on iOS 7 (2013) u
 - Apple Maps tile fetching (iOS 11+).
 - Apple Music streaming.
 - iOS 14+: the public `URLSession.multipathServiceType` API exposes three modes:
-  - `none` — single path
-  - `handover` — secondary used only when primary fails
-  - `interactive` — favour low latency, may use both paths concurrently
-  - `aggregate` — maximise throughput (developer mode only)
+  - `none`: single path
+  - `handover`: secondary used only when primary fails
+  - `interactive`: favour low latency, may use both paths concurrently
+  - `aggregate`: maximise throughput (developer mode only)
 
 Apple's path manager is more conservative than Linux's: typically one cellular subflow is held in *backup* state and activated only when Wi-Fi degrades.
 
@@ -174,7 +174,7 @@ Multipath QUIC (IETF draft `draft-ietf-quic-multipath`) brings the same ideas to
 - Multiple network paths share one QUIC connection ID space.
 - Each path has its own packet number space, RTT estimate, and congestion controller (instance of $"BBR"$ or $"CUBIC"$).
 - Stream data is multiplexed across paths via a scheduler; reordering is handled at the connection-level by QUIC's existing offset/stream machinery.
-- No new transport-layer header is required — MPQUIC reuses the existing connection migration primitives plus `PATH_ABANDON` / `PATH_AVAILABLE` frames.
+- No new transport-layer header is required; MPQUIC reuses the existing connection migration primitives plus `PATH_ABANDON` / `PATH_AVAILABLE` frames.
 
 ```
 QUIC connection (CID space)
@@ -190,9 +190,9 @@ Implementations:
 
 == Performance Lessons
 
-- *Heterogeneous paths hurt.* A subflow with 4$times$ the RTT of another can drag overall throughput below single-path if the scheduler is naive — schedulers like BLEST and ECF exist for this reason.
+- *Heterogeneous paths hurt.* A subflow with 4$times$ the RTT of another can drag overall throughput below single-path if the scheduler is naive; schedulers like BLEST and ECF exist for this reason.
 - *Reordering buffer.* The receiver may hold seconds of data waiting for a slow subflow. Tune `net.mptcp.checksum_enabled` and consider `redundant` scheduler for latency-sensitive traffic.
-- *Battery cost.* Holding a cellular radio active for MPTCP backup subflow drains the phone — Apple's `handover` mode is the default for this reason.
+- *Battery cost.* Holding a cellular radio active for MPTCP backup subflow drains the phone; Apple's `handover` mode is the default for this reason.
 - *Middlebox traversal.* MPTCP option-stripping middleboxes are common ($>$ 15% of paths historically). The graceful fallback is essential.
 
 == Further Reading
