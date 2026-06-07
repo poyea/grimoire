@@ -164,19 +164,38 @@ Pure $"FaaS"$ imposes packaging constraints (zip or container ≤ 10 GiB uncompr
 
 == Cost Model
 
-The economic comparison between serverless and always-on depends on utilisation:
+The economic comparison between serverless and always-on depends on utilisation. Setting costs equal gives the *crossover utilisation* $u^*$:
 
 $ "cost"_"serverless" = N_"invocations" times t_"avg" times "price"_"GB-s" $
 
-$ "cost"_"always-on" = N_"instances" times t_"running" times "price"_"instance" $
+$ "cost"_"always-on" = N_"instances" times t_"running" times "price"_"instance-s" $
 
-Serverless wins when $"utilisation"$ is low (below ~15–20% of a comparably-sized instance). Above that threshold, reserved instances are cheaper. The crossover depends on invocation duration: a 100 ms Lambda at \$0.0000166 per GB-s (128 MiB) costs roughly \$0.0000000021 per invocation — negligible until millions of invocations per second.
+$ u^* = frac(N_"invocations" times t_"avg", N_"instances" times t_"running") $
 
-*Hidden costs* include:
-- API Gateway: \$3.50 per million $"HTTP"$ API requests.
-- Provisioned concurrency: billed continuously at \$0.000004646 per GB-s.
-- Data transfer: same egress costs as $"EC2"$ — often the dominant term at scale.
-- DynamoDB on-demand: \$1.25 per million write request units.
+Serverless wins when $u < u^*$; reserved capacity wins above it.
+
+*Worked example — API endpoint, 128 MiB Lambda, us-east-1 (2025 pricing):*
+
+#table(
+  columns: 4,
+  [*Scenario*], [*Invocations\/month*], [*Serverless cost*], [*t3.micro always-on*],
+  [Low traffic], [1 M × 100 ms], [\$0.20 compute + \$3.50 $"APIGW"$ ≈ *\$3.70*], [*\$7.59* (reserved)],
+  [Medium traffic], [50 M × 100 ms], [\$9.96 + \$175 $"APIGW"$ ≈ *\$185*], [*\$7.59*],
+  [High traffic], [500 M × 100 ms], [*\$1 850*], [3–4 instances ≈ *\$30*],
+)
+
+The crossover here is around 8–10 M invocations per month at 100 ms duration — below that, serverless wins on cost; above it, a single reserved instance is already cheaper. The break-even shifts dramatically with duration: a 1 s Lambda crosses over at roughly 800 k invocations/month.
+
+*Per-invocation cost breakdown (128 MiB, 100 ms, us-east-1):*
+- Compute: 128/1024 GB × 0.1 s × \$0.0000166667\/GB-s = *\$0.000000208*
+- Requests: \$0.20 per 1 M = *\$0.0000002*
+- Total: *≈ \$0.0000004* per call (free tier excluded)
+
+*Hidden costs* that shift the crossover:
+- API Gateway: \$3.50 per million $"HTTP"$ API requests — often exceeds compute cost at low durations.
+- Provisioned concurrency: billed continuously at \$0.000004646 per GB-s, approximating reserved-instance economics.
+- Data transfer: same egress pricing as $"EC2"$ — often the dominant term at scale (\$0.09\/GB after first 100 GB/month).
+- DynamoDB on-demand: \$1.25 per million write request units; use provisioned capacity + auto-scaling above ~5 M writes/day.
 
 == Stateless Constraints and Workarounds
 
