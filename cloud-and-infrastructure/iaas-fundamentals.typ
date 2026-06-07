@@ -149,7 +149,7 @@ IaaS pricing decomposes into:
 - *Egress* — outbound bytes to the public Internet, the single largest hidden cost in most architectures.
 - *Storage* — per GB-month, plus per-request fees on object stores.
 
-A useful mental model: compute is roughly \$0.05 per vCPU-hour on-demand, storage is \$0.02 per GB-month, egress is \$0.05--0.09 per GB. Egress dominates as soon as a service serves more than a few TB/month externally — covered in detail in _cost-engineering.typ_.
+A useful mental model: compute is roughly \$0.05 per vCPU-hour on-demand, storage is \$0.02 per GB-month, egress is \$0.05--0.09 per GB. Egress dominates as soon as a service serves more than a few TB/month externally — covered in detail in _Cloud Cost Engineering_.
 
 == Quotas and Control-Plane Limits
 
