@@ -26,15 +26,15 @@ Large Language Models (LLMs) are the defining systems of modern AI. A single mod
 *Model dimensions:*
 
 ```
-d_model   — residual stream dimension (hidden size), e.g. 4096 for LLaMA 3 8B
-d_ff      — feed-forward inner dimension, typically 4 × d_model (or ~2.67× for SwiGLU)
-d_head    — per-attention-head dimension = d_model / n_heads
-n_heads   — number of attention heads
-n_kv      — number of key/value heads (< n_heads for GQA/MQA)
-n_layers  — transformer depth (number of blocks)
-V         — vocabulary size, e.g. 128256 for LLaMA 3
-L         — sequence length (context window), e.g. 8192, 128k
-B         — batch size
+d_model   : residual stream dimension (hidden size), e.g. 4096 for LLaMA 3 8B
+d_ff      : feed-forward inner dimension, typically 4 × d_model (or ~2.67× for SwiGLU)
+d_head    : per-attention-head dimension = d_model / n_heads
+n_heads   : number of attention heads
+n_kv      : number of key/value heads (< n_heads for GQA/MQA)
+n_layers  : transformer depth (number of blocks)
+V         : vocabulary size, e.g. 128256 for LLaMA 3
+L         : sequence length (context window), e.g. 8192, 128k
+B         : batch size
 ```
 
 *Parameter count* (dense decoder-only, approximate):
@@ -233,7 +233,7 @@ $ L(N) approx (N_c / N)^(alpha_N), quad L(D) approx (D_c / D)^(alpha_D) $
 
 Power-law loss vs model size and data. Revised by Chinchilla (2022).
 
-=== 2022 — Chinchilla (Hoffmann et al., DeepMind)
+=== 2022: Chinchilla (Hoffmann et al., DeepMind)
 
 Compute-optimal training: ~20 tokens per parameter. GPT-3 was severely undertrained.
 
@@ -241,32 +241,32 @@ $ N_"opt" approx 0.5 (C / 6)^0.5, quad D_"opt" approx 20 N_"opt" $
 
 Chinchilla 70B (1.4T tokens) beat Gopher 280B (300B tokens) at equal compute.
 
-=== 2022 — InstructGPT / RLHF (Ouyang et al., OpenAI)
+=== 2022: InstructGPT / RLHF (Ouyang et al., OpenAI)
 
 SFT → reward model on human preferences → PPO. A 1.3B aligned model preferred over 175B base. Established RLHF as standard alignment.
 
-=== 2023 — LLaMA 1 & 2 (Meta)
+=== 2023: LLaMA 1 & 2 (Meta)
 
 First high-quality open-weights models. Architecture: RoPE + RMSNorm + SwiGLU + no bias. LLaMA 2 added GQA for 70B, 4k context, RLHF chat variants.
 
-=== 2023 — Mistral 7B
+=== 2023: Mistral 7B
 
 GQA + sliding window attention. 7B outperforms LLaMA 2 13B. Showed architectural efficiency compounds.
 
-=== 2023 — Flash Attention 2 (Dao)
+=== 2023: Flash Attention 2 (Dao)
 
 IO-aware attention tiling: avoids $O(L^2)$ HBM traffic. 2× faster than FA1. Now default in PyTorch (`F.scaled_dot_product_attention`).
 
-=== 2023–2024 — Speculative Decoding + PagedAttention
+=== 2023–2024: Speculative Decoding + PagedAttention
 
 - *Speculative decoding* (Leviathan et al.): draft + verify, 2–3× throughput at identical quality.
 - *vLLM / PagedAttention* (Kwon et al., UC Berkeley): KV cache as paged virtual memory. Became the dominant serving engine.
 
-=== 2024 — LLaMA 3, Gemma 2, Qwen 2
+=== 2024: LLaMA 3, Gemma 2, Qwen 2
 
 15T+ token training, 128k+ context via YaRN RoPE extension, FP8 training on H100.
 
-=== 2024 — DeepSeek-V2 / V3 / R1
+=== 2024: DeepSeek-V2 / V3 / R1
 
 - *V2:* Multi-head Latent Attention (MLA), 93% KV cache reduction.
 - *V3:* 671B MoE trained for \$5.5M. GPT-4 class.

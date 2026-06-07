@@ -1,6 +1,6 @@
 = Interpretability
 
-Interpretability tries to answer: what is *inside* a trained LLM, and how does it compute? The field has matured rapidly from "attention is interpretation" (largely wrong) to *mechanistic interpretability* — a research program that aims to reverse-engineer specific circuits implementing specific behaviors. This chapter covers the toolbox: probing classifiers, the residual stream view, activation patching and causal tracing, sparse autoencoders, dictionary learning, monosemantic features, attention head analysis, and the open problems that limit interpretability as a safety tool.
+Interpretability tries to answer: what is *inside* a trained LLM, and how does it compute? The field has matured rapidly from "attention is interpretation" (largely wrong) to *mechanistic interpretability*, a research program that aims to reverse-engineer specific circuits implementing specific behaviors. This chapter covers the toolbox: probing classifiers, the residual stream view, activation patching and causal tracing, sparse autoencoders, dictionary learning, monosemantic features, attention head analysis, and the open problems that limit interpretability as a safety tool.
 
 *See also:* _Transformer Architecture_ (mechanistic concepts assume familiarity with QKV, residual stream), _Safety and Alignment_ (interpretability as a possible lever).
 
@@ -10,7 +10,7 @@ A modern LLM has $10^(10)$ parameters and runs $10^(12)$ activations per query. 
 
 1. *Polysemanticity:* a single neuron typically responds to many unrelated concepts. Looking at one neuron tells you little.
 2. *Superposition* (Elhage et al. 2022): the model represents *more* features than it has dimensions by encoding them in overlapping (non-orthogonal) directions. Features are not aligned with neurons.
-3. *Distributed computation:* most behaviors emerge from interactions of many components — single-head, single-layer, single-MLP explanations are rare.
+3. *Distributed computation:* most behaviors emerge from interactions of many components; single-head, single-layer, single-MLP explanations are rare.
 
 Linear probes and attention visualizations remain useful as exploratory tools, but the modern field treats them as starting points, not explanations.
 
@@ -43,7 +43,7 @@ class LinearProbe(nn.Module):
         return self.lin(h)
 ```
 
-Train on (activation, label) pairs from a held-out dataset. If the probe's accuracy is high, the information is *linearly decodable* from the activation — necessary but not sufficient for "the model uses this representation."
+Train on (activation, label) pairs from a held-out dataset. If the probe's accuracy is high, the information is *linearly decodable* from the activation, which is necessary but not sufficient for "the model uses this representation."
 
 Probes are useful for:
 
@@ -70,11 +70,11 @@ def patch_and_measure(layer, position, h_clean, h_corrupt, model):
     return logit_diff(out, target_clean, target_corrupt)
 ```
 
-Sweep over all (layer, position) pairs to produce a *causal map* — a heatmap of which activations matter. Originally introduced by Meng et al. (2022 — "ROME") to localize factual knowledge in GPT models.
+Sweep over all (layer, position) pairs to produce a *causal map*, a heatmap of which activations matter. Originally introduced by Meng et al. (2022, "ROME") to localize factual knowledge in GPT models.
 
 === Path Patching
 
-Activation patching tells you *what* matters but not *through which path*. Path patching (Wang et al. 2022) restricts the patch to flow only through a specific edge in the computation graph — e.g., "patch attention head L5H2's output, but only into the input of MLP at L7." Refines circuit-level claims.
+Activation patching tells you *what* matters but not *through which path*. Path patching (Wang et al. 2022) restricts the patch to flow only through a specific edge in the computation graph; for example, "patch attention head L5H2's output, but only into the input of MLP at L7." Refines circuit-level claims.
 
 == Sparse Autoencoders (SAEs)
 
@@ -92,8 +92,8 @@ Anthropic's "Scaling Monosemanticity" (Templeton et al. 2024) and "Towards Monos
 
 === Variants
 
-- *Top-K SAE* (Gao et al. — OpenAI 2024): force exactly $k$ features active per token; replaces L1 with hard sparsity. More stable training.
-- *Gated SAE* (Rajamanoharan et al. — DeepMind 2024): separate the *magnitude* and *gate* heads; reduces the L1-induced shrinkage bias.
+- *Top-K SAE* (Gao et al., OpenAI 2024): force exactly $k$ features active per token; replaces L1 with hard sparsity. More stable training.
+- *Gated SAE* (Rajamanoharan et al., DeepMind 2024): separate the *magnitude* and *gate* heads; reduces the L1-induced shrinkage bias.
 - *Jump-ReLU SAE* (Rajamanoharan et al. 2024): learned per-feature threshold.
 
 === Scaling
@@ -102,7 +102,7 @@ SAEs trained on frontier model activations require massive dictionaries (million
 
 == Circuits
 
-A *circuit* is a small subgraph of the network — a specific subset of heads and MLPs across layers — that implements a specific behavior.
+A *circuit* is a small subgraph of the network (a specific subset of heads and MLPs across layers) that implements a specific behavior.
 
 Examples:
 
@@ -137,7 +137,7 @@ h ← h + α · v_feature
 added at a specific layer. Examples:
 
 - *Activation addition / ActAdd* (Turner et al. 2023): "love − hate" applied at layer L5 makes the model more affectionate.
-- *Refusal direction ablation* (Arditi et al. 2024): subtract the refusal direction from all residual streams. Bypasses safety training entirely on small models. (A safety concern — interpretability findings transfer to attack.)
+- *Refusal direction ablation* (Arditi et al. 2024): subtract the refusal direction from all residual streams. Bypasses safety training entirely on small models. (A safety concern: interpretability findings transfer to attack.)
 - *Feature steering with SAEs* (Templeton 2024): "Golden Gate Claude" amplified the SF Bay feature and made the model claim to be the Golden Gate Bridge.
 
 Model editing:
@@ -146,21 +146,21 @@ Model editing:
 - *MEMIT* (Meng et al. 2023): batch many ROME-style edits.
 - *Linear concept erasure* (Belrose et al. 2023): orthogonally project out a direction to remove a concept from representations.
 
-These methods *demonstrate* that the model uses the identified directions causally. They are not yet a reliable mechanism for safety patches — collateral effects on other behaviors are usually present.
+These methods *demonstrate* that the model uses the identified directions causally. They are not yet a reliable mechanism for safety patches; collateral effects on other behaviors are usually present.
 
 == Tools and Workflow
 
-- `TransformerLens` — load any HF model with hook points exposed on every component.
-- `nnsight` — same idea, supports remote inference on hosted models.
-- `circuitsvis`, `pyvene` — visualization.
-- *Neuronpedia* — community catalog of SAE features for several open models.
+- `TransformerLens`: load any HF model with hook points exposed on every component.
+- `nnsight`: same idea, supports remote inference on hosted models.
+- `circuitsvis`, `pyvene`: visualization.
+- *Neuronpedia*: community catalog of SAE features for several open models.
 
 A typical mech-interp workflow:
 
 1. Pick a narrow behavior with clear examples (a benchmark with prompt pairs).
 2. *Localize* with activation patching: which (layer, position, component) matters?
 3. *Decompose* with path patching: through which edges?
-4. *Identify* the components — name them, characterize when they fire.
+4. *Identify* the components: name them, characterize when they fire.
 5. *Hypothesize* an algorithm and reproduce model behavior with a hand-written implementation.
 6. *Test generalization*: does the circuit explain held-out examples?
 
@@ -171,7 +171,7 @@ A typical mech-interp workflow:
 - *Robustness:* circuits identified at one fine-tune may not persist after another. Interpretability is not yet a stable interface.
 - *Adversarial use:* the same techniques that find a refusal direction can ablate it. Interpretability is dual-use.
 
-Despite the limits, mech-interp is currently the most credible *non-behavioral* method to gain insight into what LLMs do internally — and its inclusion in safety roadmaps (Anthropic's Responsible Scaling Policy, OpenAI's preparedness framework) signals it as a serious research bet.
+Despite the limits, mech-interp is currently the most credible *non-behavioral* method to gain insight into what LLMs do internally, and its inclusion in safety roadmaps (Anthropic's Responsible Scaling Policy, OpenAI's preparedness framework) signals it as a serious research bet.
 
 == Further Reading
 
