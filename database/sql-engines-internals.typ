@@ -10,7 +10,7 @@ PostgreSQL's planner lives in `src/backend/optimizer/`. The pipeline is `parse` 
 
 === Path Generation and DP
 
-For each join level $k$ up to the threshold `geqo_threshold` (default 12), PostgreSQL enumerates left-deep, right-deep, and bushy join trees via dynamic programming (`make_rel_from_joinlist`). Each candidate is a *Path* — multiple paths per relation differ by sort order, index choice, parallel degree.
+For each join level $k$ up to the threshold `geqo_threshold` (default 12), PostgreSQL enumerates left-deep, right-deep, and bushy join trees via dynamic programming (`make_rel_from_joinlist`). Each candidate is a *Path*; multiple paths per relation differ by sort order, index choice, and parallel degree.
 
 ```
 For each base relation R_i:
@@ -24,7 +24,7 @@ For level = 2 .. N:
             Keep Pareto-optimal frontier
 ```
 
-Paths are kept only when dominant on at least one dimension — this is *path pruning*. Sort orders matter because merge joins and `ORDER BY` can reuse them.
+Paths are kept only when dominant on at least one dimension (this is *path pruning*). Sort orders matter because merge joins and `ORDER BY` can reuse them.
 
 === GEQO — Genetic Optimizer
 
@@ -43,7 +43,7 @@ Repeat for `generations` rounds:
 Return best-fitness plan
 ```
 
-The seed defaults to 0, so plans are deterministic across runs for the same statistics — important for regression testing.
+The seed defaults to 0, so plans are deterministic across runs for the same statistics, which is important for regression testing.
 
 === Cost Model
 
@@ -60,14 +60,14 @@ Defaults: `seq_page_cost = 1.0`, `random_page_cost = 4.0`, `cpu_tuple_cost = 0.0
 
 `ANALYZE` samples rows (default 300 × `default_statistics_target = 100` = 30 000) and stores per-column:
 
-- `stanullfrac` — fraction of NULLs.
-- `stawidth` — average width.
-- `stadistinct` — distinct count ($n_"distinct"$); negative means fraction of rows.
-- `most_common_vals` (MCV) + `most_common_freqs` — list of frequent values.
-- `histogram_bounds` — equi-depth histogram for the non-MCV portion.
-- `correlation` — physical-vs-logical correlation, used to discount index random reads.
+- `stanullfrac`: fraction of NULLs.
+- `stawidth`: average width.
+- `stadistinct`: distinct count ($n_"distinct"$); negative means fraction of rows.
+- `most_common_vals` (MCV) + `most_common_freqs`: list of frequent values.
+- `histogram_bounds`: equi-depth histogram for the non-MCV portion.
+- `correlation`: physical-vs-logical correlation, used to discount index random reads.
 
-*Extended statistics* (`CREATE STATISTICS`) capture multi-column dependencies, $n_"distinct"$ for column groups, and MCV lists for tuples — critical for correlated predicates that the independence assumption ruins.
+*Extended statistics* (`CREATE STATISTICS`) capture multi-column dependencies, $n_"distinct"$ for column groups, and MCV lists for tuples; these are critical for correlated predicates that the independence assumption ruins.
 
 === Join Selectivity
 
@@ -185,13 +185,13 @@ A `Resize` processor fans out or fans in streams; `Aggregator` splits into parti
 
 === Blocks of Columns
 
-Data flows as `Block`s — vectors of `IColumn` (PODs, strings, arrays, low-cardinality dictionaries) typically 65 536 rows. SIMD kernels in `src/Common/`, `src/AggregateFunctions/`, and `src/Functions/` operate on raw column data. AggregateFunctions store partial state in arenas with `addBatch`, `mergeBatch`, `serializeBatch`.
+Data flows as `Block`s: vectors of `IColumn` (PODs, strings, arrays, low-cardinality dictionaries) typically 65 536 rows each. SIMD kernels in `src/Common/`, `src/AggregateFunctions/`, and `src/Functions/` operate on raw column data. AggregateFunctions store partial state in arenas with `addBatch`, `mergeBatch`, `serializeBatch`.
 
 === Query Plan and Optimizations
 
 `InterpreterSelectQuery` builds a logical `QueryPlan` of `IQueryPlanStep`s; `QueryPlanOptimizationSettings` controls pushdown, predicate reordering, projection rewrite, sorting elimination, and aggregator-to-direct-execution rewrite. The plan is then *built into a Pipeline* of processors.
 
-ClickHouse omits a full cost-based join optimizer (until experimental `query_plan_join_swap_table` and new `allow_experimental_analyzer`). Joins default to *hash join with right table as build side* — users are expected to hint reorderings.
+ClickHouse omits a full cost-based join optimizer (until experimental `query_plan_join_swap_table` and new `allow_experimental_analyzer`). Joins default to *hash join with right table as build side*; users are expected to hint reorderings.
 
 === Pull vs Push
 
@@ -220,9 +220,9 @@ ClickHouse omits a full cost-based join optimizer (until experimental `query_pla
 
 All four engines share core ideas: predicate pushdown, projection pruning, sort/hash join selection, partition-aware scans. They diverge on:
 
-- *Estimation* — PostgreSQL invests in statistics; ClickHouse leaves this to the user.
-- *Parallelism granularity* — DuckDB's morsel model offers finer load balancing than PostgreSQL's per-worker partitioning.
-- *Execution model* — pull vs push is dual; the right choice depends on operator complexity and async-I/O patterns.
+- *Estimation*: PostgreSQL invests in statistics; ClickHouse leaves this to the user.
+- *Parallelism granularity*: DuckDB's morsel model offers finer load balancing than PostgreSQL's per-worker partitioning.
+- *Execution model*: pull vs push is dual; the right choice depends on operator complexity and async-I/O patterns.
 
 == Further Reading
 

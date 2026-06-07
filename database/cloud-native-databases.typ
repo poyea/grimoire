@@ -39,7 +39,7 @@ This *4-of-6 / 3-of-6 quorum* tolerates one AZ failure plus one additional node.
 
 === Read Replicas
 
-Up to 15 read replicas share the same storage. Each replica subscribes to the redo log stream and updates its own buffer pool. No physical replication of data pages — just log apply.
+Up to 15 read replicas share the same storage. Each replica subscribes to the redo log stream and updates its own buffer pool. No physical replication of data pages; only log apply.
 
 === Backtrack and Clones
 
@@ -88,7 +88,7 @@ Compute (vanilla Postgres) ──► WAL ──► Safekeepers (Paxos-replicated
 
 === Branching
 
-Because the pageserver indexes pages by LSN, a *branch* is just a fork at a particular LSN — a new compute instance reads `(lsn, page)` pairs from the shared pageserver, with COW for divergence. This gives Git-style branching of databases used heavily in CI/preview environments.
+Because the pageserver indexes pages by LSN, a *branch* is just a fork at a particular LSN: a new compute instance reads `(lsn, page)` pairs from the shared pageserver, with COW for divergence. This gives Git-style branching of databases used heavily in CI/preview environments.
 
 === Scale-to-Zero
 
@@ -122,7 +122,7 @@ VTGate caches query results with TTL invalidation; Vitess Boost (2022) added a s
 
 == TiDB
 
-TiDB (PingCAP, 2016) is a MySQL-compatible SQL layer on top of *TiKV* — a Raft-replicated, range-partitioned KV store inspired by Spanner. Adds *TiFlash* — a columnar replica for analytics (HTAP).
+TiDB (PingCAP, 2016) is a MySQL-compatible SQL layer on top of *TiKV*, a Raft-replicated, range-partitioned KV store inspired by Spanner. It adds *TiFlash*, a columnar replica for analytics (HTAP).
 
 ```
 TiDB SQL nodes (stateless, MySQL wire protocol)
@@ -142,7 +142,7 @@ TiDB uses *Percolator* (Google, 2010): optimistic, snapshot-isolated, 2PC over s
 
 === HTAP via TiFlash
 
-TiFlash is a *learner* in the Raft group — it receives the log but does not vote. It transcodes row format to ClickHouse-like columnar storage. The TiDB optimizer chooses row (TiKV) or columnar (TiFlash) per query, or even per operator (push partial aggregates to TiFlash, join with TiKV-served lookups).
+TiFlash is a *learner* in the Raft group: it receives the log but does not vote. It transcodes row format to ClickHouse-like columnar storage. The TiDB optimizer chooses row (TiKV) or columnar (TiFlash) per query, or even per operator (push partial aggregates to TiFlash, join with TiKV-served lookups).
 
 == YugabyteDB
 
@@ -164,9 +164,9 @@ Spanner uses TrueTime (GPS + atomic clocks). YugabyteDB uses HLCs: a timestamp c
 
 YugabyteDB supports three deployment models:
 
-- *Synchronous replication across regions* — Spanner-like; high write latency, strongly consistent.
-- *Read replicas* — single-region writes, eventually-consistent reads elsewhere.
-- *xCluster* (asynchronous replication) — independent clusters per region, conflict resolution by application.
+- *Synchronous replication across regions*: Spanner-like; high write latency, strongly consistent.
+- *Read replicas*: single-region writes, eventually-consistent reads elsewhere.
+- *xCluster* (asynchronous replication): independent clusters per region, conflict resolution by application.
 
 == CockroachDB
 
@@ -190,12 +190,12 @@ YugabyteDB supports three deployment models:
 
 == Common Architectural Patterns
 
-1. *Stateless compute / stateful storage* — every system above shares this.
-2. *Replicated WAL is the source of truth* — pages derive from log, not the other way.
-3. *Consensus per shard / range* — Raft or Paxos at the *partition* level, not the cluster level.
-4. *Timestamp oracle or HLC* — needed for cross-shard snapshot consistency.
-5. *Object storage as the tier-3 home* — Aurora to S3, Neon to S3, Snowflake to S3, all converge.
-6. *Branching as a first-class operation* — Aurora clones, Neon branches, PlanetScale dev branches.
+1. *Stateless compute / stateful storage*: every system above shares this.
+2. *Replicated WAL is the source of truth*: pages derive from log, not the other way.
+3. *Consensus per shard / range*: Raft or Paxos at the *partition* level, not the cluster level.
+4. *Timestamp oracle or HLC*: needed for cross-shard snapshot consistency.
+5. *Object storage as the tier-3 home*: Aurora to S3, Neon to S3, Snowflake to S3, all converge.
+6. *Branching as a first-class operation*: Aurora clones, Neon branches, PlanetScale dev branches.
 
 == Tradeoffs and Caveats
 
