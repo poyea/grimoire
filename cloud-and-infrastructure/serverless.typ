@@ -2,7 +2,7 @@
 
 *Serverless* is a misnomer — servers exist, but the operator no longer provisions, patches, or capacity-plans them. The defining contract is *pay-per-invocation*: the provider bills for compute time consumed, not for idle capacity. This shifts the economic model from always-on reserved capacity toward a step function where cost scales exactly with load, making serverless ideal for spiky, event-driven, or rarely-triggered workloads. This chapter covers the execution model, cold start physics, Lambda internals, event sources, serverless containers, and the stateless constraints that govern system design.
 
-*See also:* _iaas-fundamentals.typ_, _containers.typ_, _kubernetes-internals.typ_, _iac.typ_, _the-three-pillars-and-beyond.typ_.
+*See also:* _iaas-fundamentals.typ_, _containers.typ_, _kubernetes-internals.typ_, _iac.typ_, `observability-and-sre/the-three-pillars-and-beyond.typ`.
 
 == The FaaS Execution Model
 

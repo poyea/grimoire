@@ -2,7 +2,7 @@
 
 Infrastructure-as-a-Service abstracts compute, storage, and networking behind APIs so that capacity becomes an operational expense rather than a procurement cycle. The three hyperscalers (AWS, GCP, Azure) expose conceptually parallel primitives — virtual machines, virtual networks, object stores, managed identities — but the API shapes, isolation boundaries, and pricing models differ enough that portable design requires understanding each abstraction in detail. This chapter maps the primitives side-by-side and digs into the substrate (Nitro, Titan, hypervisors) that makes them possible.
 
-*See also:* `containers.typ`, `iac.typ`, `networking/data-center-networking.typ`, `networking/load-balancing.typ`, `linux-kernel/cgroups-namespaces.typ`.
+*See also:* _containers.typ_, _iac.typ_, `networking/data-center-networking.typ`, `networking/load-balancing.typ`, `linux-kernel/cgroups-namespaces.typ`.
 
 == The IaaS Stack
 
@@ -149,7 +149,7 @@ IaaS pricing decomposes into:
 - *Egress* — outbound bytes to the public Internet, the single largest hidden cost in most architectures.
 - *Storage* — per GB-month, plus per-request fees on object stores.
 
-A useful mental model: compute is roughly \$0.05 per vCPU-hour on-demand, storage is \$0.02 per GB-month, egress is \$0.05--0.09 per GB. Egress dominates as soon as a service serves more than a few TB/month externally — covered in detail in `cost-engineering.typ`.
+A useful mental model: compute is roughly \$0.05 per vCPU-hour on-demand, storage is \$0.02 per GB-month, egress is \$0.05--0.09 per GB. Egress dominates as soon as a service serves more than a few TB/month externally — covered in detail in _cost-engineering.typ_.
 
 == Quotas and Control-Plane Limits
 

@@ -2,7 +2,7 @@
 
 Managing cloud resources through version-controlled, declarative configuration files — rather than through consoles or ad-hoc scripts — is now the baseline expectation for production systems. *Infrastructure as Code* ($"IaC"$) makes topology reproducible, auditable, and testable: the diff of a pull request is the diff of the infrastructure. This chapter covers the dominant toolchains, their execution models, and the GitOps and policy-as-code practices that tie them together.
 
-*See also:* _iaas-fundamentals.typ_, _kubernetes-internals.typ_, _containers.typ_, _the-three-pillars-and-beyond.typ_, _consensus-deep-dive.typ_.
+*See also:* _iaas-fundamentals.typ_, _kubernetes-internals.typ_, _containers.typ_, `observability-and-sre/the-three-pillars-and-beyond.typ`, `distributed-systems/consensus-deep-dive.typ`.
 
 == Declarative vs Imperative IaC
 

@@ -2,7 +2,7 @@
 
 Containers are not a kernel feature but a *user-space packaging convention* over kernel features — namespaces, cgroups, seccomp, capabilities, mount propagation, and union filesystems. The OCI standards (runtime-spec, image-spec, distribution-spec) define the contract between image builders, registries, and runtimes so that an image produced by Docker, Buildah, or Bazel runs unchanged under runc, crun, youki, or gVisor. This chapter follows a container from `docker push` through registry, kubelet pull, image unpacking, runc invocation, and finally the `clone()` that creates the container's first process.
 
-*See also:* `kubernetes-internals.typ`, `linux-kernel/cgroups-namespaces.typ`, `linux-kernel/containers-in-the-kernel.typ`, `serverless.typ`, `networking/container-networking.typ`.
+*See also:* _kubernetes-internals.typ_, `linux-kernel/cgroups-namespaces.typ`, `linux-kernel/containers-in-the-kernel.typ`, _serverless.typ_, `networking/container-networking.typ`.
 
 == The OCI Stack
 
@@ -196,7 +196,7 @@ ip netns exec ctr1 ip addr add 10.244.0.5/24 dev eth0
 ip netns exec ctr1 ip route add default via 10.244.0.1
 ```
 
-CNI plugins are detailed in `kubernetes-internals.typ`.
+CNI plugins are detailed in _kubernetes-internals.typ_.
 
 == Resource Limits via Cgroups v2
 

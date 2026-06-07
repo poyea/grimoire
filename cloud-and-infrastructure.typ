@@ -14,6 +14,9 @@
   #include "cloud-and-infrastructure/containers.typ"
   #pagebreak()
 
+  #include "cloud-and-infrastructure/cost-engineering.typ"
+  #pagebreak()
+
   #include "cloud-and-infrastructure/iac.typ"
   #pagebreak()
 
@@ -21,6 +24,9 @@
   #pagebreak()
 
   #include "cloud-and-infrastructure/kubernetes-internals.typ"
+  #pagebreak()
+
+  #include "cloud-and-infrastructure/multi-tenancy.typ"
   #pagebreak()
 
   #include "cloud-and-infrastructure/serverless.typ"
