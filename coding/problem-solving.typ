@@ -132,7 +132,7 @@ Sedgewick, R., Wayne, K. (2011). "Algorithms" (4th ed.). Addison-Wesley. — Ref
 
 Cormen, T., Leiserson, C., Rivest, R., Stein, C. (2022). "Introduction to Algorithms" (4th ed.). MIT Press. — The canonical theoretical reference for proofs, recurrences, and amortized analysis.
 
-Knuth, D. (1997). "The Art of Computer Programming, Vol. 1-3." Addison-Wesley. — Exhaustive treatment of sorting, searching, and combinatorial algorithms at the deepest level.
+Knuth, D. (1968–1973). "The Art of Computer Programming, Volumes 1–3." Addison-Wesley. — Exhaustive treatment of sorting, searching, and combinatorial algorithms at the deepest level.
 
 LeetCode / Codeforces editorial archives — Model solutions with detailed complexity reasoning from competitive programmers; useful for learning pattern-specific idioms faster than textbooks.
 

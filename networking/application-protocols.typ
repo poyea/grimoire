@@ -2,7 +2,7 @@
 
 Application-layer protocols define message formats and communication patterns for specific services.
 
-*See also:* `networking/transport-layer.typ`, `networking/sockets-api.typ`, `networking/tls-and-certificates.typ`
+*See also:* `networking/transport-layer.typ`, `networking/sockets-api.typ`, `networking/tls.typ`
 
 == HTTP (Hypertext Transfer Protocol)
 
