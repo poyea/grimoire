@@ -30,7 +30,7 @@ Larger triangles ($> 32$ pixels on a side) fall back to hardware rasterization v
 
 === Material Evaluation
 
-Nanite uses the *visibility buffer* pattern: a single `uint64` render target stores `(clusterID << 32) | triangleID` per pixel. A subsequent full-screen material pass reads the visibility buffer, reconstructs vertex attributes via barycentrics, and evaluates the appropriate material. This means geometry density is entirely decoupled from shading cost.
+Nanite uses the *visibility buffer* pattern: a single `uint64` render target stores `(clusterID << 32) | triangleID` per pixel. Rather than shading each triangle as it rasterizes (which would thrash the instruction cache when adjacent pixels belong to different materials), a deferred full-screen material pass reads the visibility buffer, reconstructs vertex attributes via barycentrics, and evaluates the appropriate material. This decoupling is the key insight: geometry density no longer couples to shading cost — a surface covered by 10 million triangles costs exactly the same to shade as one covered by a single quad.
 
 ```hlsl
 // Nanite visibility decode (simplified HLSL)
@@ -42,6 +42,16 @@ float3 bary = ComputeBarycentrics(clusterID, triangleID, pixel);
 Material m  = LoadClusterMaterial(clusterID);
 float4 color = EvaluateMaterial(m, bary);
 ```
+
+The material pass is organised as a *classify-then-shade* pipeline to recover $"GPU"$ coherence:
+
++ A *classify pass* emits one draw call per unique material ID present in the visibility buffer (using a `DrawIndirect` argument buffer built by a compute pass over the visibility data).
++ Each draw's vertex shader emits a full-screen triangle clipped to only the pixels owned by that material — the depth test discards everything else.
++ The pixel shader reconstructs interpolated attributes (UVs, normals, tangents) from the stored barycentrics and cluster vertex data, then evaluates the material graph.
+
+This avoids the alternative of a branchy uber-shader with per-pixel material dispatch, which thrashes the warp execution unit on divergent material code paths. The classify step costs a single compute pass; the benefit is near-coherent execution within each material draw.
+
+*Limitations:* Nanite does not natively support vertex-animated meshes (skeletal, cloth), alpha-masked geometry, or custom vertex factories that modify positions post-projection — these fall back to traditional rendering. In Unreal Engine 5.3+, a *programmable rasterization* path extends Nanite to masked materials by running the pixel shader during rasterization and discarding via `clip()`.
 
 == Lumen: Engine Integration
 
