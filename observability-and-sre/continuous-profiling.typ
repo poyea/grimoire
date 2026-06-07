@@ -1,6 +1,6 @@
 = Continuous Profiling
 
-A distributed trace tells you which service is slow; a profile tells you which line of code inside that service is consuming the CPU or memory. Continuous profiling — always-on, low-overhead profiling in production — closes the gap between aggregate metrics and individual request traces by providing a third dimension: resource attribution at the code level. This chapter covers the mechanics of CPU and memory profiling, the flame graph as the canonical visualization, eBPF-based always-on profilers, and the emerging practice of correlating profiles with traces.
+A distributed trace tells you which service is slow; a profile tells you which line of code inside that service is consuming the CPU or memory. Continuous profiling (always-on, low-overhead profiling in production) closes the gap between aggregate metrics and individual request traces by providing a third dimension: resource attribution at the code level. This chapter covers the mechanics of CPU and memory profiling, the flame graph as the canonical visualization, eBPF-based always-on profilers, and the emerging practice of correlating profiles with traces.
 
 *See also:* _Metrics Systems_, _Distributed Tracing_, _The Three Pillars and Beyond_
 
@@ -10,18 +10,18 @@ Two fundamentally different approaches produce CPU profiles.
 
 *Instrumentation-based profiling* inserts probes at every function entry and exit, recording exact call counts and time spent. It is precise but incurs 2–10× overhead, making it impractical in production at continuous rates.
 
-*Sampling-based profiling* sends a signal (SIGPROF on POSIX systems) to the process at a fixed frequency — typically 99 or 100 Hz — and captures the current call stack at each interruption. Statistical inference yields fractional CPU time per stack frame. At 99 Hz the overhead is typically under 1 % of a single CPU core.
+*Sampling-based profiling* sends a signal (SIGPROF on POSIX systems) to the process at a fixed frequency (typically 99 or 100 Hz) and captures the current call stack at each interruption. Statistical inference yields fractional CPU time per stack frame. At 99 Hz the overhead is typically under 1 % of a single CPU core.
 
 The choice of 99 Hz rather than 100 Hz is deliberate: it avoids aliasing with processes that run at exactly 100 Hz (e.g., the Linux scheduler tick), which would cause systematic oversampling of specific code paths.
 
 === Call Stack Capture
 
-On Linux, sampling profilers capture stacks either through kernel signals (uprobes, perf_events) or via a language runtime. Languages with managed runtimes (JVM, Go) expose safe-point stack walks that avoid tearing mid-GC. Native profilers must handle frame pointer omission — compilers can elide the frame pointer register for performance, breaking naive stack unwinding. Solutions include:
+On Linux, sampling profilers capture stacks either through kernel signals (uprobes, perf_events) or via a language runtime. Languages with managed runtimes (JVM, Go) expose safe-point stack walks that avoid tearing mid-GC. Native profilers must handle frame pointer omission, since compilers can elide the frame pointer register for performance, breaking naive stack unwinding. Solutions include:
 
 - Compiling with `-fno-omit-frame-pointer` (adds 1–3 % overhead).
-- Using DWARF CFI (Call Frame Information) unwinding — slower but always correct.
-- LBR (Last Branch Record) hardware support on Intel CPUs — fast, limited to 32 frames.
-- eBPF with `bpf_get_stackid` — kernel-assisted, does not require frame pointers.
+- Using DWARF CFI (Call Frame Information) unwinding: slower but always correct.
+- LBR (Last Branch Record) hardware support on Intel CPUs: fast, limited to 32 frames.
+- eBPF with `bpf_get_stackid`: kernel-assisted, does not require frame pointers.
 
 == Flame Graphs
 
@@ -57,7 +57,7 @@ go tool pprof -seconds 30 http://service:6060/debug/pprof/profile > new.pb.gz
 pprof -diff_base base.pb.gz new.pb.gz -http=:8080 new.pb.gz
 ```
 
-The differential view makes regressions visible even when the absolute magnitude is small — a 2 % regression in a hot path is invisible on an absolute flame graph but vivid in red on a differential.
+The differential view makes regressions visible even when the absolute magnitude is small: a 2 % regression in a hot path is invisible on an absolute flame graph but vivid in red on a differential.
 
 == pprof Format
 
@@ -72,7 +72,7 @@ Profile {
 }
 ```
 
-Go's `runtime/pprof` and `net/http/pprof` packages emit this format natively. Rust's `pprof-rs` crate emits it. Java agents (async-profiler, JFR converter) output it. The format supports multiple sample types in a single file — CPU samples, heap allocations, and mutex contention can coexist.
+Go's `runtime/pprof` and `net/http/pprof` packages emit this format natively. Rust's `pprof-rs` crate emits it. Java agents (async-profiler, JFR converter) output it. The format supports multiple sample types in a single file; CPU samples, heap allocations, and mutex contention can coexist.
 
 ```go
 // Expose all pprof endpoints in a Go HTTP server
@@ -89,7 +89,7 @@ import _ "net/http/pprof"
 
 == eBPF-Based Continuous Profilers
 
-Traditional sampling profilers require per-language agents or runtime cooperation. *eBPF* (extended Berkeley Packet Filter) runs sandboxed programs in the Linux kernel that can attach to perf events, capture stack traces across language boundaries, and stream data to userspace with minimal overhead — typically 0.5–2 % CPU.
+Traditional sampling profilers require per-language agents or runtime cooperation. *eBPF* (extended Berkeley Packet Filter) runs sandboxed programs in the Linux kernel that can attach to perf events, capture stack traces across language boundaries, and stream data to userspace with minimal overhead (typically 0.5–2 % CPU).
 
 eBPF-based profilers are *always-on* by design: they capture profiles continuously, store them in a time-series backend, and expose them through a query interface. The three leading open-source options:
 
@@ -138,7 +138,7 @@ scrape_configs:
 
 CPU profiles miss memory pressure. Two complementary profile types address memory:
 
-*Heap profiles* show live heap allocations at the time of sampling. They identify which call paths are responsible for the current live object graph — useful for diagnosing steady-state memory growth.
+*Heap profiles* show live heap allocations at the time of sampling. They identify which call paths are responsible for the current live object graph, useful for diagnosing steady-state memory growth.
 
 *Allocation profiles* record every allocation (sampled at a byte threshold) regardless of whether the object is still live. They reveal allocation hot spots that stress the garbage collector even if objects are short-lived. In Go, the `allocs` pprof endpoint provides this; in Java, async-profiler's `--alloc` flag does.
 
@@ -150,7 +150,7 @@ runtime.GC()  // force GC so dead objects are excluded from live count
 pprof.WriteHeapProfile(f)
 ```
 
-In JVM languages, heap profiling additionally captures *object histograms* — the distribution of live bytes by class:
+In JVM languages, heap profiling additionally captures *object histograms* (the distribution of live bytes by class):
 
 ```
  num     #instances         #bytes  class name
@@ -161,7 +161,7 @@ In JVM languages, heap profiling additionally captures *object histograms* — t
 
 === Memory Leak Detection
 
-A steady upward slope in the heap profile over hours is the signature of a memory leak. Differential heap profiles — comparing two snapshots — identify which allocation sites grew:
+A steady upward slope in the heap profile over hours is the signature of a memory leak. Differential heap profiles (comparing two snapshots) identify which allocation sites grew:
 
 ```bash
 # Go: two heap snapshots, compare with pprof
@@ -204,7 +204,7 @@ Alternatively, `cargo flamegraph` wraps `perf record` and `flamegraph.pl` for on
 
 === JVM (Java, Kotlin, Scala)
 
-*async-profiler* is the standard choice for JVM profiling in production. It uses AsyncGetCallTrace (a non-safepoint JVM API) to avoid safe-point bias — the distortion that occurs when traditional JVMTI profilers only sample at GC safe points, causing hot loops to appear cold.
+*async-profiler* is the standard choice for JVM profiling in production. It uses AsyncGetCallTrace (a non-safepoint JVM API) to avoid safe-point bias, the distortion that occurs when traditional JVMTI profilers only sample at GC safe points, causing hot loops to appear cold.
 
 ```bash
 # Attach to running JVM process (PID 12345), CPU profile for 30s
@@ -219,7 +219,7 @@ asprof convert --pprof profile.jfr -o profile.pb.gz
 
 == Profile-Trace Correlation
 
-The most powerful observability pattern is linking a distributed trace span to the profile captured during that span's execution. When a P99 latency spike is visible in traces, engineers can click through to the profile of the hot span and see the exact stack frame responsible — without having to reproduce the issue.
+The most powerful observability pattern is linking a distributed trace span to the profile captured during that span's execution. When a P99 latency spike is visible in traces, engineers can click through to the profile of the hot span and see the exact stack frame responsible, without having to reproduce the issue.
 
 The mechanism: the profiler records the goroutine/thread ID alongside each stack sample. The tracing SDK tags spans with the thread ID and a time range. The profiling backend can then filter the profile to samples that occurred during the span's time range on the matching thread.
 
