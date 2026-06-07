@@ -1,6 +1,6 @@
 = ML Workload Optimization on GPUs
 
-Modern machine learning — particularly LLM training and inference — dominates GPU design decisions. Understanding how core primitives (GEMM, attention) map onto GPU hardware is essential for achieving near-peak throughput on Hopper/Blackwell-class devices.
+Modern machine learning (particularly LLM training and inference) dominates GPU design decisions. Understanding how core primitives (GEMM, attention) map onto GPU hardware is essential for achieving near-peak throughput on Hopper/Blackwell-class devices.
 
 *See also:* _Compute Units and Specialized Cores_ (Tensor Cores, TMA), _GPU Memory Hierarchy_ (HBM, coalescing), _Multi-GPU Communication and Scaling_ (scaling).
 
@@ -92,14 +92,14 @@ $ "AI" = "FLOPs" / "bytes" = (2 M^3) / ((3 M^2) dot "sizeof"(T)) = (2 M) / (3 do
 
 For FP16 on H100 (peak 989 TFLOPS, BW 3.35 TB/s): ridge point at $989 "TFLOPS" / 3.35 "TB/s" approx 295$ FLOPs/byte. So GEMM is compute-bound once $M >> 295 dot 3 dot 2 / 2 = 885$, i.e. problem sizes beyond about 1000$times$1000.
 
-Below that size, GEMM is memory-bound — which is exactly the case for small batch LLM inference (batch=1 decoding), which is why decode is BW-limited and prefill is compute-limited.
+Below that size, GEMM is memory-bound, which is exactly the case for small batch LLM inference (batch=1 decoding): decode is BW-limited and prefill is compute-limited.
 
 == Flash Attention (FA1, FA2, FA3)
 
 Naive self-attention materializes the $N times N$ score matrix $S = Q K^T$ in HBM:
 $ O(N^2) space, O(N^2 d) "time" $
 
-For $N = $ 32K, FP16: 2 GB intermediate — doesn't fit in SRAM, and repeatedly round-trips to HBM.
+For $N = $ 32K, FP16: 2 GB intermediate; doesn't fit in SRAM, and repeatedly round-trips to HBM.
 
 *Algorithmic insight — online softmax* (Milakov & Gimelshein 2018): compute softmax block-by-block, maintaining running maximum and sum of exponentials. Given block $x_b$:
 $ m_"new" = max(m_"old", max_i(x_(b,i))) $
@@ -113,7 +113,7 @@ The final output is $O / l$. This allows tiled computation of attention without 
 HBM accesses reduced from $O(N d + N^2)$ to $O((N d)^2 / M)$ where $M$ = SRAM size. For $N = 4096$, $d = 128$, $M = 100$ KB: $approx$ 8x fewer HBM round trips. Measured $tilde$ 3x speedup over `nn.Softmax(QK^T)V` on A100.
 
 *Flash Attention 2 (Dao 2023):*
-- Swapped outer and inner loops: Q in outer, K/V in inner — higher warp occupancy
+- Swapped outer and inner loops: Q in outer, K/V in inner (higher warp occupancy)
 - Reduced non-matmul FLOPs (fewer rescales, masked divides)
 - Better parallelism across sequence dim and heads
 - $tilde$ 2x FA1 throughput; $tilde$ 50-70% of A100 peak
@@ -193,20 +193,20 @@ cublasGemmEx(handle, ..., CUDA_R_8I, ...,   // A is INT8
 // Dequantize output back to FP16
 ```
 
-*Weight-only quantization (GPTQ, AWQ):* quantize only weights (INT4), keep activations FP16. On load, dequantize on-the-fly to FP16 registers before FP16 matmul. Benefit: only memory BW speedup — no loss from activation quant.
+*Weight-only quantization (GPTQ, AWQ):* quantize only weights (INT4), keep activations FP16. On load, dequantize on-the-fly to FP16 registers before FP16 matmul. Benefit: memory BW speedup only, with no loss from activation quant.
 
 *Quantization-Aware Training (QAT):* fake-quantize in forward pass with straight-through estimator for backward. Best accuracy, most expensive (requires retraining).
 
 === KV Cache: the Other Memory Hog
 
-During autoregressive decoding, every generated token appends a $d$-dim K, V vector per layer, per head. For LLaMA-70B at 8K context, 1 request: $2 times 80 "layers" times 8 "heads" times 8192 times 128 times 2 "bytes" approx 3.2$ GB. At batch 64: 200 GB — doesn't fit on single GPU.
+During autoregressive decoding, every generated token appends a $d$-dim K, V vector per layer, per head. For LLaMA-70B at 8K context, 1 request: $2 times 80 "layers" times 8 "heads" times 8192 times 128 times 2 "bytes" approx 3.2$ GB. At batch 64: 200 GB; doesn't fit on a single GPU.
 
 Optimizations:
-- *MQA (Multi-Query Attention, Shazeer 2019):* single K, V shared across all query heads — $1/H$ memory
-- *GQA (Grouped-Query, Ainslie 2023):* $G$ groups sharing K, V — $G/H$ memory (LLaMA-2 70B uses $G = 8$)
-- *PagedAttention (vLLM — Kwon et al. 2023):* manage KV cache in fixed 16-token blocks with a page table; prevents fragmentation, enables sharing (prefix caching). 2-4$times$ throughput gain for concurrent requests.
-- *Quantized KV cache:* INT8 or FP8 KV — cuts KV memory 2$times$ with small accuracy cost.
-- *Speculative decoding (Leviathan 2023):* cheap draft model proposes $k$ tokens; target model verifies in one parallel forward — 2-3$times$ wall-clock speedup when drafts mostly accepted.
+- *MQA (Multi-Query Attention, Shazeer 2019):* single K, V shared across all query heads ($1/H$ memory)
+- *GQA (Grouped-Query, Ainslie 2023):* $G$ groups sharing K, V ($G/H$ memory; LLaMA-2 70B uses $G = 8$)
+- *PagedAttention (vLLM, Kwon et al. 2023):* manage KV cache in fixed 16-token blocks with a page table; prevents fragmentation, enables sharing (prefix caching). 2-4$times$ throughput gain for concurrent requests.
+- *Quantized KV cache:* INT8 or FP8 KV, cutting KV memory 2$times$ with small accuracy cost.
+- *Speculative decoding (Leviathan 2023):* cheap draft model proposes $k$ tokens; target model verifies in one parallel forward pass, achieving 2-3$times$ wall-clock speedup when drafts are mostly accepted.
 
 == Operator Fusion
 
@@ -231,23 +231,23 @@ def gelu_kernel(x_ptr, y_ptr, n, BLOCK: tl.constexpr):
 ```
 
 *Compilers and fusion engines:*
-- `torch.compile` / TorchInductor — graph-level fusion, Triton codegen
-- cuDNN graph API — runtime fusion for attention, convolution chains
-- TensorRT — ahead-of-time compilation; best for deployed inference
-- XLA (JAX, TensorFlow) — HLO-level fusion, MLIR lowering
-- TVM / MLIR — research/extensibility
+- `torch.compile` / TorchInductor: graph-level fusion, Triton codegen
+- cuDNN graph API: runtime fusion for attention, convolution chains
+- TensorRT: ahead-of-time compilation; best for deployed inference
+- XLA (JAX, TensorFlow): HLO-level fusion, MLIR lowering
+- TVM / MLIR: research/extensibility
 
 == Profiling Checklist
 
 *Nsight Compute key metrics:*
-- `sm__throughput.avg.pct_of_peak_sustained_active` — overall SM utilization
-- `sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_active` — Tensor Core busy %
-- `dram__throughput.avg.pct_of_peak_sustained_active` — HBM utilization
-- `smsp__warps_active.avg.pct_of_peak_sustained_active` — effective occupancy
-- `smsp__average_warps_issue_stalled_long_scoreboard_per_issue_active.ratio` — memory-latency stalls
-- `l1tex__t_sectors_pipe_lsu_mem_global_op_ld.sum.per_request_percent` — coalescing efficiency
+- `sm__throughput.avg.pct_of_peak_sustained_active`: overall SM utilization
+- `sm__pipe_tensor_cycles_active.avg.pct_of_peak_sustained_active`: Tensor Core busy %
+- `dram__throughput.avg.pct_of_peak_sustained_active`: HBM utilization
+- `smsp__warps_active.avg.pct_of_peak_sustained_active`: effective occupancy
+- `smsp__average_warps_issue_stalled_long_scoreboard_per_issue_active.ratio`: memory-latency stalls
+- `l1tex__t_sectors_pipe_lsu_mem_global_op_ld.sum.per_request_percent`: coalescing efficiency
 
-Compute and memory should not _both_ be at peak simultaneously — if both idle, you're stalled (wait for barrier, pipeline bubble, or warp divergence).
+Compute and memory should not _both_ be at peak simultaneously; if both are idle, you're stalled (waiting for a barrier, pipeline bubble, or warp divergence).
 
 *Framework-level:*
 - PyTorch Profiler (kineto backend, Chrome trace): end-to-end timeline
