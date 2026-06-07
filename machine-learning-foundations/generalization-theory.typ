@@ -1,6 +1,6 @@
 = Generalization Theory
 
-Why does a model that fits 60M parameters to 50K labeled examples ever generalize? Classical statistical learning theory says it should not — the model has more than enough capacity to memorize noise. The story of generalization theory over the past three decades is the gradual closing of that gap: from worst-case VC bounds, through data-dependent Rademacher complexities and PAC-Bayes, to the modern phenomena of double descent and neural scaling laws. This chapter surveys those results at the level a practitioner needs to read papers like "Reconciling modern machine-learning practice and the classical bias-variance trade-off" or the Chinchilla scaling-laws paper.
+Why does a model that fits 60M parameters to 50K labeled examples ever generalize? Classical statistical learning theory says it should not: the model has more than enough capacity to memorize noise. The story of generalization theory over the past three decades is the gradual closing of that gap: from worst-case VC bounds, through data-dependent Rademacher complexities and PAC-Bayes, to the modern phenomena of double descent and neural scaling laws. This chapter surveys those results at the level a practitioner needs to read papers like "Reconciling modern machine-learning practice and the classical bias-variance trade-off" or the Chinchilla scaling-laws paper.
 
 *See also:* _Probability and Information_ (concentration inequalities), _Optimization_ (implicit regularization), _Pretraining_ (Chinchilla, scaling laws).
 
@@ -14,14 +14,14 @@ and the *empirical risk* is $hat(R)_n (h) = 1/n sum_i ell(h(x_i), y_i)$. *Genera
 
 == VC Dimension
 
-For binary classification with 0/1 loss, the *VC dimension* of $cal(H)$ is the largest $d$ such that some set of $d$ points can be *shattered* — labeled in all $2^d$ possible ways — by $cal(H)$. Vapnik–Chervonenkis (1971) proved that for any $delta > 0$, with probability $1 - delta$ over the sample,
+For binary classification with 0/1 loss, the *VC dimension* of $cal(H)$ is the largest $d$ such that some set of $d$ points can be *shattered* (labeled in all $2^d$ possible ways) by $cal(H)$. Vapnik–Chervonenkis (1971) proved that for any $delta > 0$, with probability $1 - delta$ over the sample,
 
 $ sup_(h in cal(H)) |R(h) - hat(R)_n (h)| <= O(sqrt((d log n + log(1 \/ delta)) / n)). $
 
 Key implications:
 
 - *VC dim grows with capacity.* Linear classifiers in $RR^d$: $d + 1$. Decision stumps: $log_2$ of feature count. Two-layer ReLU nets: $O(W L log W)$ in weights $W$ and depth $L$.
-- *Worst-case bound.* The bound is uniform over $cal(H)$ and over data distributions — for any specific learned $h$ on a specific distribution it is often vacuous.
+- *Worst-case bound.* The bound is uniform over $cal(H)$ and over data distributions; for any specific learned $h$ on a specific distribution it is often vacuous.
 
 VC theory predicted that deep nets should not generalize: a network with $10^8$ parameters has effective VC dim much larger than typical dataset sizes. The fact that they *do* generalize is one of the central puzzles of modern ML.
 
@@ -43,7 +43,7 @@ A Bayesian-flavored framework that produces non-vacuous bounds even for modern n
 
 $ EE_(h tilde Q) [R(h)] <= EE_(h tilde Q) [hat(R)_n (h)] + sqrt(("KL"(Q parallel P) + log(2 sqrt(n) \/ delta)) / (2 n - 1)). $
 
-Dziugaite & Roy (2017) computed PAC-Bayes bounds for MNIST CNNs that were under 20% — the first non-vacuous neural net bound. The trick: take $P$ to be a Gaussian around the *random initialization* and let $Q$ be a Gaussian around the trained weights. Modern variants (Pérez-Ortiz et al. 2021) achieve sub-10% bounds.
+Dziugaite & Roy (2017) computed PAC-Bayes bounds for MNIST CNNs that were under 20%, the first non-vacuous neural net bound. The trick: take $P$ to be a Gaussian around the *random initialization* and let $Q$ be a Gaussian around the trained weights. Modern variants (Pérez-Ortiz et al. 2021) achieve sub-10% bounds.
 
 == The Bias-Variance Decomposition
 
@@ -51,7 +51,7 @@ For squared loss and a random training set,
 
 $ EE_S [(f(x) - y)^2] = underbrace((EE_S [f(x)] - EE[y | x])^2, "bias"^2) + underbrace(EE_S [(f(x) - EE_S [f(x)])^2], "variance") + sigma^2_("noise"). $
 
-Classical wisdom: capacity tradeoff. Increasing model complexity reduces bias, increases variance — find the sweet spot. This worked for kernel methods and shallow nets. Then deep learning happened.
+Classical wisdom: capacity tradeoff. Increasing model complexity reduces bias, increases variance; the goal is to find the sweet spot. This worked for kernel methods and shallow nets. Then deep learning happened.
 
 == Double Descent
 
@@ -65,7 +65,7 @@ Belkin et al. (2019) documented a striking phenomenon: as model capacity increas
   [Overparameterized], [$p > n$], [Second descent: test error falls again],
 )
 
-Nakkiran et al. (2020) showed double descent also occurs along the *training-epoch* axis — error rises mid-training and falls again. The unifying explanation: in the overparameterized regime, the optimizer's *implicit bias* selects a particular interpolating solution among the many that exist, and that solution tends to generalize.
+Nakkiran et al. (2020) showed double descent also occurs along the *training-epoch* axis: error rises mid-training and falls again. The unifying explanation: in the overparameterized regime, the optimizer's *implicit bias* selects a particular interpolating solution among the many that exist, and that solution tends to generalize.
 
 == Neural Scaling Laws
 
@@ -73,7 +73,7 @@ Kaplan et al. (2020), refined by Hoffmann et al. (2022, "Chinchilla"), found tha
 
 $ L(N, D) approx E + A / N^alpha + B / D^beta, $
 
-with $alpha approx 0.34$, $beta approx 0.28$ for the Chinchilla constants (these vary by architecture and data). The compute-optimal frontier is $N prop C^a$, $D prop C^(1-a)$ — Chinchilla found $a approx 0.5$, meaning model and data should scale equally, *not* model-heavy as in the Kaplan recipe. See `llm/pretraining.typ` for the practical consequences.
+with $alpha approx 0.34$, $beta approx 0.28$ for the Chinchilla constants (these vary by architecture and data). The compute-optimal frontier is $N prop C^a$, $D prop C^(1-a)$; Chinchilla found $a approx 0.5$, meaning model and data should scale equally, *not* model-heavy as in the Kaplan recipe. See `llm/pretraining.typ` for the practical consequences.
 
 ```python
 import numpy as np
@@ -98,7 +98,7 @@ An algorithm is *uniform-stable* with parameter $beta$ if replacing one training
 
 $ |EE [R(h_S)] - EE [hat(R)_n (h_S)]| <= beta. $
 
-Hardt et al. (2016) showed SGD on convex losses is $O(T \/ n)$-stable after $T$ iterations — implying that, surprisingly, generalization improves with smaller learning rates and fewer steps, *not* just smaller capacity.
+Hardt et al. (2016) showed SGD on convex losses is $O(T \/ n)$-stable after $T$ iterations, implying that, surprisingly, generalization improves with smaller learning rates and fewer steps, *not* just smaller capacity.
 
 == The Implicit Bias of SGD
 
@@ -108,7 +108,7 @@ Even when many minima of the training loss exist, SGD selects specific ones. Key
 - *Matrix factorization:* gradient flow with small initialization converges to the min-nuclear-norm solution (Gunasekar et al. 2017).
 - *Deep ReLU nets:* recent work (Lyu–Li 2019, Chizat–Bach 2020) shows analogous max-margin behavior under various assumptions.
 
-These results connect generalization to *which* interpolating solution we find — recasting the question "why do overparameterized models generalize?" as "what does the optimizer choose?"
+These results connect generalization to *which* interpolating solution we find, recasting the question "why do overparameterized models generalize?" as "what does the optimizer choose?"
 
 == The Neural Tangent Kernel
 
@@ -116,24 +116,24 @@ Jacot, Gabriel, Hongler (2018) observed that in the infinite-width limit, traini
 
 $ K_("NTK") (x, x') = EE_(theta tilde "init") [⟨nabla_theta f(x; theta), nabla_theta f(x'; theta)⟩]. $
 
-In this regime, training is convex (kernel ridge regression), the parameters barely move ("lazy training"), and standard kernel-method generalization bounds apply. This explains *some* of why wide nets train so reliably but does not capture *feature learning*, where the kernel itself adapts during training — the regime where representation learning happens.
+In this regime, training is convex (kernel ridge regression), the parameters barely move ("lazy training"), and standard kernel-method generalization bounds apply. This explains *some* of why wide nets train so reliably but does not capture *feature learning*, where the kernel itself adapts during training (the regime where representation learning happens).
 
 == Uniform Convergence and Its Limits
 
-Nagarajan & Kolter (2019) showed that uniform-convergence-based generalization bounds (VC, Rademacher, PAC-Bayes with prior fixed before training) cannot explain deep learning generalization: any bound that is uniform over a sufficiently rich class is forced to be vacuous on real data. The implication is that *data-dependent* analyses — PAC-Bayes with data-dependent priors, implicit-bias arguments, NTK in the appropriate regime — are required.
+Nagarajan & Kolter (2019) showed that uniform-convergence-based generalization bounds (VC, Rademacher, PAC-Bayes with prior fixed before training) cannot explain deep learning generalization: any bound that is uniform over a sufficiently rich class is forced to be vacuous on real data. The implication is that *data-dependent* analyses are required: PAC-Bayes with data-dependent priors, implicit-bias arguments, and NTK in the appropriate regime.
 
 == Compression-Based Bounds
 
 Arora et al. (2018), Zhou et al. (2019): if a trained network can be compressed (sparsified, quantized, or distilled) to $k$ bits while preserving accuracy, then it generalizes with a bound proportional to $sqrt(k \/ n)$. Formally, any function class of VC-dimension $d$ satisfies $R(h) - hat(R)(h) = O(sqrt(d \/ n))$; compression provides an implicit upper bound on effective dimension.
 
-This gives a practical handle: networks that tolerate aggressive pruning (90%+ sparsity at minimal accuracy loss) have empirically low effective dimension and generalize well. The bound also explains the lottery ticket hypothesis — small dense sub-networks train to the same accuracy as the full network, with fewer bits needed to describe them. A corollary for practitioners: post-training quantization success (INT8 with < 1% degradation) is evidence of good generalization, not just model efficiency.
+This gives a practical handle: networks that tolerate aggressive pruning (90%+ sparsity at minimal accuracy loss) have empirically low effective dimension and generalize well. The bound also explains the lottery ticket hypothesis: small dense sub-networks train to the same accuracy as the full network, with fewer bits needed to describe them. A corollary for practitioners: post-training quantization success (INT8 with < 1% degradation) is evidence of good generalization, not just model efficiency.
 
 == Practical Diagnostics
 
 For a practitioner, generalization is an empirical question. Useful diagnostics:
 
 - *Train-test gap* as a function of model size: U-curve, monotone decreasing, or double-descent shape.
-- *Memorization probes:* train on randomly labeled data (Zhang et al. 2017) — if the model can fit random labels, it has the capacity to memorize, but on real data it does not.
+- *Memorization probes:* train on randomly labeled data (Zhang et al. 2017); if the model can fit random labels, it has the capacity to memorize, but on real data it does not.
 - *Sharpness/flatness:* Hessian top eigenvalue at the solution. Flatter $approx$ better generalization (controversial but empirically robust).
 - *Influence functions:* leave-one-out approximations to identify which training points the model "depends on" most.
 
@@ -157,12 +157,12 @@ def hessian_top_eig(loss_fn, params, num_iter=20):
 
 == Grokking
 
-Power et al. (2022) showed certain algorithmic tasks exhibit *grokking*: long after training accuracy reaches 100%, validation accuracy is near chance, then suddenly jumps to 100% — sometimes after $100 times$ more steps. The phenomenon is robust across modular arithmetic, permutation composition, and sparse parity.
+Power et al. (2022) showed certain algorithmic tasks exhibit *grokking*: long after training accuracy reaches 100%, validation accuracy is near chance, then suddenly jumps to 100%, sometimes after $100 times$ more steps. The phenomenon is robust across modular arithmetic, permutation composition, and sparse parity.
 
-Mechanistic interpretations (Nanda et al. 2023): the network initially memorizes (a high-norm solution that interpolates training data), then weight decay slowly penalizes the memorizing circuit and drives the model toward a generalizing one — a low-norm Fourier-feature solution that implements modular arithmetic via structured embeddings. The transition point corresponds to the generalizing circuit becoming slightly lower loss than the memorizing one, after which the optimizer rapidly transfers weight.
+Mechanistic interpretations (Nanda et al. 2023): the network initially memorizes (a high-norm solution that interpolates training data), then weight decay slowly penalizes the memorizing circuit and drives the model toward a generalizing one: a low-norm Fourier-feature solution that implements modular arithmetic via structured embeddings. The transition point corresponds to the generalizing circuit becoming slightly lower loss than the memorizing one, after which the optimizer rapidly transfers weight.
 
 Practical implications:
-- Weight decay is *necessary* for grokking — without regularization the memorizing solution is stable.
+- Weight decay is *necessary* for grokking; without regularization the memorizing solution is stable.
 - Longer training is not always wasteful; delayed generalization can occur on real tasks (code, math).
 - Grokking provides a controlled microscope for studying representation formation and phase transitions in learned circuits.
 
