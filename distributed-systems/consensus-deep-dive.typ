@@ -2,7 +2,7 @@
 
 Consensus is the abstraction every fault-tolerant distributed system reduces to: $N$ processes propose values, a single value is decided, and all correct processes eventually learn it. Beneath Paxos, Raft, EPaxos, and the Byzantine family lies a shared structure — *quorum intersection* plus *value carry-forward* across configuration epochs — that this chapter unfolds.
 
-*See also:* _Introduction_ (FLP), _Replication Protocols_, _State Machine Replication_, _Leader Election and Leases_, and `database/consensus-and-replication.typ`.
+*See also:* _Introduction_ (FLP), _Replication Protocols_, _State Machine Replication_, _Leader Election and Leases_, and _Consensus and Replication_ (database-side framing).
 
 == The Consensus Problem
 

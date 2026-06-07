@@ -2,7 +2,7 @@
 
 Distributed systems have no global "now". What they have are *clocks* (each imperfect) and *messages* (which establish happens-before relationships). The art of this chapter is converting one into the other: using clocks to approximate causality and using causality to compensate for clock skew.
 
-*See also:* _Introduction_, _Consensus Deep Dive_, _Replication Protocols_, and `database/consensus-and-replication.typ` (TrueTime in Spanner), `cpu-architecture/...` (TSC behavior).
+*See also:* _Introduction_, _Consensus Deep Dive_, _Replication Protocols_, and _Consensus and Replication_ (TrueTime in Spanner).
 
 == Physical Clocks
 

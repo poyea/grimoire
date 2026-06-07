@@ -2,7 +2,7 @@
 
 Epidemic algorithms spread information through a cluster the way a rumour spreads through a crowd: each node periodically contacts a small random set of peers, and the information reaches every node in $O(log N)$ rounds with high probability. This chapter covers the three fundamental gossip variants, convergence analysis, anti-entropy repair, the SWIM failure detector, and how CRDTs pair naturally with gossip dissemination.
 
-*See also:* _Failure Detection_, _Consensus Deep Dive_, _Leader Election and Leases_, `database/consensus-and-replication.typ`
+*See also:* _Failure Detection_, _Consensus Deep Dive_, _Leader Election and Leases_, _Consensus and Replication_ (database-side framing)
 
 == Epidemic Spreading Models
 
