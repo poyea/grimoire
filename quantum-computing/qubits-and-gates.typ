@@ -2,7 +2,7 @@
 
 A qubit is a unit vector in $bb(C)^2$, the simplest non-trivial quantum system. Where a classical bit chooses one of two values, a qubit superposes them — and when you compose $n$ qubits via tensor product, the state space grows to $bb(C)^(2^n)$, the source of every quantum speedup and every implementation headache. This chapter develops the linear-algebraic foundation: state vectors, the Bloch sphere, single- and multi-qubit gates, measurement, and the universal gate sets that quantum software stacks compile to.
 
-*See also:* _Quantum Algorithms_, _Quantum Software Stack_, _Hardware Architectures_, _Error Correction_, `cryptography-and-security/post-quantum.typ`, `programming-languages/complexity.typ`
+*See also:* _Quantum Algorithms_, _Quantum Software Stack_, _Hardware Architectures_, _Quantum Error Correction_, _Post-Quantum Cryptography_ (cryptography-and-security), _Complexity Theory_ (programming-languages)
 
 == State Vectors and the Bloch Sphere
 
