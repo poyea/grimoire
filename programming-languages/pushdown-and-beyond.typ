@@ -1,6 +1,6 @@
 = Pushdown Automata and Beyond
 
-The pushdown automaton is the operational counterpart of the context-free grammar — a finite control augmented with a single unbounded last-in-first-out memory. Its expressive power coincides exactly with the CFLs (Chomsky 1962; Evey 1963; Schützenberger 1963), but the operational view exposes structural distinctions invisible at the grammar level: *deterministic vs nondeterministic* acceptance modes are equivalent only at the CFG level, *empty-stack vs final-state* acceptance modes are equivalent only up to a stack-bottom marker, and *visibly pushdown* automata recover the closure-property elegance of the regular languages by externalising the stack discipline to the input alphabet. Above the CFLs lies a rich landscape — indexed grammars, tree-adjoining grammars, multiple context-free grammars, higher-order pushdown automata generating the Caucal hierarchy, linear bounded automata at the context-sensitive level, and finally the unrestricted grammars equivalent to Turing machines — together forming the *Chomsky hierarchy* and its modern refinements.
+The pushdown automaton is the operational counterpart of the context-free grammar: a finite control augmented with a single unbounded last-in-first-out memory. Its expressive power coincides exactly with the CFLs (Chomsky 1962; Evey 1963; Schützenberger 1963), but the operational view exposes structural distinctions invisible at the grammar level: *deterministic vs nondeterministic* acceptance modes are equivalent only at the CFG level, *empty-stack vs final-state* acceptance modes are equivalent only up to a stack-bottom marker, and *visibly pushdown* automata recover the closure-property elegance of the regular languages by externalising the stack discipline to the input alphabet. Above the CFLs lies a rich landscape (indexed grammars, tree-adjoining grammars, multiple context-free grammars, higher-order pushdown automata generating the Caucal hierarchy, linear bounded automata at the context-sensitive level, and finally the unrestricted grammars equivalent to Turing machines) together forming the *Chomsky hierarchy* and its modern refinements.
 
 *See also:* _Regular Languages_, _Context-Free Languages_, _Turing Machines and Computability_, _Type Systems_.
 
@@ -8,15 +8,15 @@ The pushdown automaton is the operational counterpart of the context-free gramma
 
 A *pushdown automaton* (PDA) is a 7-tuple $M = (Q, Sigma, Gamma, delta, q_0, Z_0, F)$:
 
-- $Q$ — finite set of states,
-- $Sigma$ — input alphabet,
-- $Gamma$ — stack alphabet,
-- $delta : Q times (Sigma union { epsilon }) times Gamma arrow.r cal(P)_"fin" (Q times Gamma^*)$ — transition function (nondeterministic, with $epsilon$-moves),
-- $q_0 in Q$ — start state,
-- $Z_0 in Gamma$ — initial stack symbol,
-- $F subset.eq Q$ — accepting states.
+- $Q$: finite set of states,
+- $Sigma$: input alphabet,
+- $Gamma$: stack alphabet,
+- $delta : Q times (Sigma union { epsilon }) times Gamma arrow.r cal(P)_"fin" (Q times Gamma^*)$: transition function (nondeterministic, with $epsilon$-moves),
+- $q_0 in Q$: start state,
+- $Z_0 in Gamma$: initial stack symbol,
+- $F subset.eq Q$: accepting states.
 
-A *configuration* is a triple $(q, w, gamma) in Q times Sigma^* times Gamma^*$ (state, remaining input, stack contents — top of stack on the left). The one-step transition is $(q, a w, X gamma) tack.r_M (q', w, beta gamma)$ whenever $(q', beta) in delta(q, a, X)$, where $a in Sigma union { epsilon }$.
+A *configuration* is a triple $(q, w, gamma) in Q times Sigma^* times Gamma^*$ (state, remaining input, stack contents, with top of stack on the left). The one-step transition is $(q, a w, X gamma) tack.r_M (q', w, beta gamma)$ whenever $(q', beta) in delta(q, a, X)$, where $a in Sigma union { epsilon }$.
 
 The PDA accepts $w$ in one of two equivalent modes:
 
@@ -27,7 +27,7 @@ The PDA accepts $w$ in one of two equivalent modes:
 
 *Proof.* (*Final $arrow.r$ empty.*) Add a fresh bottom marker $X_0 in."not" Gamma$; $M'$ first pushes $X_0$ below $Z_0$. When $M$ reaches an accepting state, $M'$ enters a new "drain" state that pops everything; otherwise the marker prevents $M'$ from accidentally emptying via $M$'s normal moves. (*Empty $arrow.r$ final.*) Similarly add a marker $X_0$ and a fresh accept state $q_F$; the only transition into $q_F$ is on seeing $X_0$ alone on the stack. $square$
 
-The two modes are *not* equivalent for *deterministic* PDAs — empty-stack DPDAs are *strictly less expressive* than final-state DPDAs because empty-stack acceptance forces the language to be *prefix-free*.
+The two modes are *not* equivalent for *deterministic* PDAs: empty-stack DPDAs are *strictly less expressive* than final-state DPDAs because empty-stack acceptance forces the language to be *prefix-free*.
 
 == PDA–CFG Equivalence
 
@@ -66,7 +66,7 @@ The witness is the even-length palindromes $L = { w w^R | w in { a, b }^* }$. An
 
 *Proof sketch.* The challenge is handling $epsilon$-loops and configurations that "die" by failing to consume input. Convert the DPDA into an equivalent *loop-free* DPDA whose every configuration is either accepting, rejecting, or has a defined next move on every input symbol — by careful introduction of a "dead" state. Then swap accepting and non-accepting states. The technical heart is showing that the loop-elimination preserves acceptance. $square$
 
-DCFLs are *not* closed under union, intersection, reversal, concatenation, Kleene star, or homomorphism — these failures motivate the search for richer deterministic classes such as the visibly pushdown languages.
+DCFLs are *not* closed under union, intersection, reversal, concatenation, Kleene star, or homomorphism; these failures motivate the search for richer deterministic classes such as the visibly pushdown languages.
 
 == Visibly Pushdown Languages
 
@@ -84,13 +84,13 @@ The class of languages accepted is the *visibly pushdown languages* (VPL).
 
 *Closure under complement.* VPLs are recognised by *visibly deterministic* PDAs (after Safra-style determinisation, an exponential blow-up), and complement is swapping accept states in the deterministic version. $square$
 
-Equivalently, VPLs are exactly the *regular* languages of *nested words* — sequences of letters with a matching relation on call/return pairs.
+Equivalently, VPLs are exactly the *regular* languages of *nested words*: sequences of letters with a matching relation on call/return pairs.
 
 === Nested Word Automata
 
 A *nested word* over $Sigma$ partitioned as above is a word $w = a_1 dots a_n$ together with a matching relation $arrow.hook subset.eq { 1, dots, n }^2$ where $i arrow.hook j$ requires $a_i in Sigma_c$, $a_j in Sigma_r$, $i < j$, and the matching is non-crossing (well-bracketed). A *nested word automaton* (NWA) is a finite-state device whose transitions read $(a_i, "history")$; on calls it produces a "hierarchical state" stored at the matching return; on returns it consumes that hierarchical state.
 
-*Theorem (Alur–Madhusudan 2009).* NWAs and VPAs recognise the same class — VPL is the *regular languages of nested words*. Furthermore, MSO logic over nested words (with both successor and matching) defines exactly the VPLs — a *Büchi–Elgot–Trakhtenbrot for nested words*.
+*Theorem (Alur–Madhusudan 2009).* NWAs and VPAs recognise the same class: VPL is the *regular languages of nested words*. Furthermore, MSO logic over nested words (with both successor and matching) defines exactly the VPLs, a *Büchi–Elgot–Trakhtenbrot for nested words*.
 
 VPLs are the formal foundation of *static analysis of programs with procedure calls*: each procedure call is a $Sigma_c$ event, each return a $Sigma_r$, and the matching tracks the call stack. Tools like *MOPS*, *SLAM*, and *XML Schema validation* (XML's open/close tags are syntactically call/return) are VPL-based.
 
@@ -100,8 +100,8 @@ Maslov (1976) introduced the *higher-order pushdown automata* (HOPDA), generalis
 
 A *level-$k$ stack* over $Gamma$ is defined recursively: a level-1 stack is an ordinary stack of $Gamma$-symbols; a level-$k$ stack ($k >= 2$) is a stack of level-$(k-1)$ stacks. Operations at level $k$ include:
 
-- $"push"_k$, $"pop"_k$ — duplicate or remove the top level-$(k-1)$ substack.
-- $"push"_i$, $"pop"_i$ for $i < k$ — apply level-$i$ operations to the innermost level-1 substack.
+- $"push"_k$, $"pop"_k$: duplicate or remove the top level-$(k-1)$ substack.
+- $"push"_i$, $"pop"_i$ for $i < k$: apply level-$i$ operations to the innermost level-1 substack.
 
 A *level-$k$ PDA* has finite control with transitions reading input and applying level-$k$ stack operations.
 
@@ -127,8 +127,8 @@ intuitively: each nonterminal carries a *stack* of indices $phi in F^*$; product
 
 *Examples* (canonically non-CFL):
 - $L = { a^n b^n c^n | n >= 0 }$.
-- $L = { a^(2^n) | n >= 0 }$ — double-exponential growth.
-- $L = { w \# w | w in { a, b }^* }$ — the *copy* language.
+- $L = { a^(2^n) | n >= 0 }$ (double-exponential growth).
+- $L = { w \# w | w in { a, b }^* }$, the *copy* language.
 
 The copy language is not even an indexed language in all formulations; it lies in the slightly larger class of *linear indexed languages*.
 
@@ -150,7 +150,7 @@ The two operations:
 
 TAGs are weakly equivalent to several formalisms (Vijay-Shanker, Weir, Joshi 1987):
 
-- *Linear indexed grammars* (where push-index productions are *linear* — only one daughter carries the new index).
+- *Linear indexed grammars* (where push-index productions are *linear*: only one daughter carries the new index).
 - *Head grammars* (Pollard 1984), using a head-distinguishing combination operation.
 - *Combinatory categorial grammars* (CCG; Steedman 1996), which build expressions via combinators applied to typed lexical entries.
 
@@ -172,13 +172,13 @@ Joshi's *mildly context-sensitive* desiderata for a language class $cal(C)$:
 
 *Theorem (Seki et al. 1991).* The classes $"MCFL"(m)$ form a *strict* hierarchy with $"MCFL"(1) = "CFL"$ and $"MCFL"(2) = "TAL"$. The union $union.big_m "MCFL"(m) = "PMCFL"$ (polynomial multiple CFL) is strictly contained in the context-sensitive languages. Recognition of an $m$-MCFL is in $O(n^(c m))$ for a constant $c$ depending on grammar structure.
 
-These hierarchies are the active area of research for *natural language syntax* — Dutch and Swiss German have been formally proven to lie outside CFL (Shieber 1985: Swiss German has true cross-serial dependencies inducing $a^n b^m c^n d^m$) but appear to be MCFL-recognisable.
+These hierarchies are the active area of research for *natural language syntax*: Dutch and Swiss German have been formally proven to lie outside CFL (Shieber 1985: Swiss German has true cross-serial dependencies inducing $a^n b^m c^n d^m$) but appear to be MCFL-recognisable.
 
 == Linear Bounded Automata and Context-Sensitive Languages
 
 A *linear bounded automaton* (LBA) is a nondeterministic Turing machine whose tape is bounded to *exactly the input length* (with endmarkers): the machine cannot use more cells than the input occupies. Formally, $delta : Q times Gamma arrow.r 2^(Q times Gamma times { L, R })$ with the constraint that the head never moves left of the left endmarker or right of the right endmarker.
 
-A language is *context-sensitive* (CSL) if it is generated by a *context-sensitive grammar* — productions of the form $alpha A beta arrow.r alpha gamma beta$ with $gamma eq."not" epsilon$. Equivalently, type-1 grammars in the Chomsky hierarchy.
+A language is *context-sensitive* (CSL) if it is generated by a *context-sensitive grammar* (productions of the form $alpha A beta arrow.r alpha gamma beta$ with $gamma eq."not" epsilon$; equivalently, type-1 grammars in the Chomsky hierarchy).
 
 *Theorem (Kuroda 1964).* A language is context-sensitive iff it is recognised by a *nondeterministic* LBA.
 
@@ -186,19 +186,19 @@ A language is *context-sensitive* (CSL) if it is generated by a *context-sensiti
 
 (LBA $arrow.r.long$ CSG.) Encode LBA configurations as sentential forms with a state-marker letter interleaved into the tape contents; each LBA transition becomes a context-sensitive production preserving length. $square$
 
-*The deterministic LBA question* (the *first LBA problem*) — whether deterministic LBAs are equivalent to nondeterministic LBAs — was the longest-standing open problem in classical formal-language theory:
+*The deterministic LBA question* (the *first LBA problem*), whether deterministic LBAs are equivalent to nondeterministic LBAs, was the longest-standing open problem in classical formal-language theory:
 
 *Theorem (Immerman–Szelepcsényi 1987).* $"NSPACE"(s(n))$ is closed under complement for every space-constructible $s(n) >= log n$. In particular $"NSPACE"(n) = "co-NSPACE"(n)$, hence the *context-sensitive languages are closed under complement*.
 
 *Proof sketch (inductive counting).* To complement a nondeterministic machine $M$ working in space $s(n)$: count the *exact* number of configurations reachable from the initial configuration in $k$ steps, for $k = 1, 2, dots$. The count can be maintained nondeterministically in space $s(n)$ via an inductive bootstrap: given the count $N_k$ for step $k$, the machine guesses for each potential configuration $C$ whether $C$ is reachable in $k+1$ steps, verifies the guess by guessing a predecessor in $k$ steps, and checks that exactly $N_k$ predecessors verify. Then non-acceptance means: the final reachable set contains *no* accepting configuration, which is verifiable in $"NSPACE"(s(n))$. $square$
 
-The *second LBA problem* — whether $"NLBA" = "DLBA"$ (equivalently $"NSPACE"(n) = "DSPACE"(n)$) — *remains open* and is the LBA-scale analogue of $"L"$ vs $"NL"$ (which Immerman–Szelepcsényi tells us is *not* the obvious obstruction).
+The *second LBA problem*, whether $"NLBA" = "DLBA"$ (equivalently $"NSPACE"(n) = "DSPACE"(n)$), *remains open* and is the LBA-scale analogue of $"L"$ vs $"NL"$ (which Immerman–Szelepcsényi tells us is *not* the obvious obstruction).
 
 *Decidability* of membership for CSLs: $"PSPACE"$-complete (Karp). Emptiness is *undecidable* (reduction from Turing machine halting). Equivalence is undecidable. Universality is undecidable.
 
 == Type-0 Grammars and Recursive Enumerability
 
-A *type-0* grammar (or *unrestricted* grammar) has productions $alpha arrow.r beta$ with $alpha in (V union Sigma)^* V (V union Sigma)^*$ and $beta in (V union Sigma)^*$ — *"any"* string-rewriting on contexts containing at least one nonterminal.
+A *type-0* grammar (or *unrestricted* grammar) has productions $alpha arrow.r beta$ with $alpha in (V union Sigma)^* V (V union Sigma)^*$ and $beta in (V union Sigma)^*$, permitting *"any"* string-rewriting on contexts containing at least one nonterminal.
 
 *Theorem (Chomsky 1959).* A language is generated by a type-0 grammar <==> it is *recursively enumerable* (Turing-recognisable).
 
@@ -239,7 +239,7 @@ RE              | UND       | UND   | UND  | UND   | + + - + +
 DEC* = Sénizergues; PSPC = PSPACE-complete; UND = undecidable.
 ```
 
-The pattern is informative: the *closure under complement* tracks closely with *decidability of universality*, since universality of $L$ is the emptiness of $overline(L)$. The VPL row is the elegant exception below CSL — it recovers all closure properties while remaining tractable.
+The pattern is informative: the *closure under complement* tracks closely with *decidability of universality*, since universality of $L$ is the emptiness of $overline(L)$. The VPL row is the elegant exception below CSL, recovering all closure properties while remaining tractable.
 
 == Worked-Out Examples
 
@@ -254,7 +254,7 @@ PDA D = ({q}, {(, )}, {Z, X}, δ, q, Z, {q})
 δ(q, ε, Z) = {(q, Z)}       -- accept (empty input or balanced)
 ```
 
-Acceptance by final state with $F = { q }$ and the additional check that the stack contains only $Z$ — implemented by transitioning to a separate accept state only when $Z$ is on top.
+Acceptance by final state with $F = { q }$ and the additional check that the stack contains only $Z$, implemented by transitioning to a separate accept state only when $Z$ is on top.
 
 === VPA for Well-Nested XML
 
@@ -297,7 +297,7 @@ A canonical level-2 PDA generates $L = { a^(2^n) | n >= 0 }$ by using $"push"_2$
 
 == Connections to Verification and Programming Languages
 
-The hierarchy of automata above the PDA is not academic — it is the foundation of modern *interprocedural program analysis*.
+The hierarchy of automata above the PDA is not academic: it is the foundation of modern *interprocedural program analysis*.
 
 - *Reachability in PDAs* (Bouajjani–Esparza–Maler 1997, Schwoon 2002) is *polynomial* and provides the algorithmic core of *summary-based interprocedural dataflow analysis*: programs with procedure calls and a regular abstraction of the data become PDAs; reachability of a "bad" configuration is the verification question.
 
@@ -305,17 +305,17 @@ The hierarchy of automata above the PDA is not academic — it is the foundation
 
 - *Visibly pushdown grammars* (Alur–Madhusudan 2009) are the type-theoretic backbone of *XML schema languages* (DTD = right-linear CFG; XML Schema = VPG-equivalent fragment). VPL closure under intersection enables *schema composition* without language-class escape.
 
-- *Context-sensitive analysis* and beyond is rare in practice — most program-analysis problems become undecidable at this level (reachability with non-regular data abstractions, equivalence of recursive programs). The *Owicki–Gries / rely–guarantee* concurrent verification techniques use type-0 expressiveness in their assertion language but rely on decidable fragments (Presburger, Boolean) for automation.
+- *Context-sensitive analysis* and beyond is rare in practice, as most program-analysis problems become undecidable at this level (reachability with non-regular data abstractions, equivalence of recursive programs). The *Owicki–Gries / rely–guarantee* concurrent verification techniques use type-0 expressiveness in their assertion language but rely on decidable fragments (Presburger, Boolean) for automation.
 
-The pattern is universal: *expressiveness up the hierarchy* trades for *algorithmic intractability down the decidability ladder*. The art of programming-language design is to live in the *narrow regions* — regular for lexing, deterministic context-free for parsing, visibly pushdown for stack-structured data, decidable type-1 fragments for static analysis — where both sides of the trade are favourable.
+The pattern is universal: *expressiveness up the hierarchy* trades for *algorithmic intractability down the decidability ladder*. The art of programming-language design is to live in the *narrow regions* (regular for lexing, deterministic context-free for parsing, visibly pushdown for stack-structured data, decidable type-1 fragments for static analysis) where both sides of the trade are favourable.
 
 == Pumping Lemmas for Higher Classes
 
 The pumping lemma generalises through the hierarchy with increasing decomposition complexity:
 
-- *Regular:* $w = x y z$ — *one* pump position.
-- *CFL:* $w = u v x y z$ — *two* paired pump positions (Bar-Hillel et al.).
-- *TAL:* $w = u_1 v_1 u_2 v_2 u_3 v_3 u_4 v_4 u_5$ — *four* paired pumps (Vijay-Shanker 1987); witnesses non-TAL-ness of, e.g., $w w w$ for arbitrary $w$.
+- *Regular:* $w = x y z$, *one* pump position.
+- *CFL:* $w = u v x y z$, *two* paired pump positions (Bar-Hillel et al.).
+- *TAL:* $w = u_1 v_1 u_2 v_2 u_3 v_3 u_4 v_4 u_5$, *four* paired pumps (Vijay-Shanker 1987); witnesses non-TAL-ness of, e.g., $w w w$ for arbitrary $w$.
 - *MCFG of dimension $m$:* $2m$ paired pump positions (Seki et al. 1991).
 
 In every case the pumping argument follows from *path repetition in the derivation tree (or DAG)*: by pigeonhole, a long enough derivation must reuse the same nonterminal in nested form, and the cycle can be iterated.
@@ -329,6 +329,6 @@ Modern formal-language theory studies subclasses *across* hierarchical levels ra
 - *$omega$-languages* (infinite words) yield Büchi, Muller, Rabin, parity, and Streett automata, with their own equivalence and complementation theorems.
 - *Quantitative automata* (Chatterjee–Doyen–Henzinger 2010) assign cost rather than acceptance, useful for resource analysis and reactive synthesis.
 
-Each generalisation interrogates which *closure properties*, *decidability results*, and *normal forms* survive — and the cumulative answer is what makes formal-language theory the algorithmically richest, most cross-pollinated branch of theoretical computer science.
+Each generalisation interrogates which *closure properties*, *decidability results*, and *normal forms* survive; the cumulative answer is what makes formal-language theory the algorithmically richest, most cross-pollinated branch of theoretical computer science.
 
-The next chapter examines how the regular and context-free machinery developed here is operationalised in *lexers* and *parsers*, the front end of every compiler — and how the engineering compromises (LALR tables, ambiguity heuristics, error-recovery strategies) embody the theoretical limits proven in this and the preceding chapters.
+The next chapter examines how the regular and context-free machinery developed here is operationalised in *lexers* and *parsers*, the front end of every compiler, and how the engineering compromises (LALR tables, ambiguity heuristics, error-recovery strategies) embody the theoretical limits proven in this and the preceding chapters.

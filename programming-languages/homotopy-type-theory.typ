@@ -4,7 +4,7 @@ Homotopy type theory (HoTT) is the synthesis of two disciplines that for half a 
 
 *See also:* _Dependent Types_, _Type Systems_
 
-The development is recent — the canonical reference, the HoTT Book (UFP 2013), was written collectively by visitors to the Institute for Advanced Study during Voevodsky's Special Year on Univalent Foundations — and the field is moving rapidly. The technical heart of the subject is the *univalence axiom* and the *higher inductive types*; the computational interpretation of both is *cubical type theory* (Cohen–Coquand–Huber–Mörtberg 2016); the mechanised libraries live in *Cubical Agda*, the *Coq HoTT library*, and *Lean's mathlib4*.
+The development is recent: the canonical reference, the HoTT Book (UFP 2013), was written collectively by visitors to the Institute for Advanced Study during Voevodsky's Special Year on Univalent Foundations, and the field is moving rapidly. The technical heart of the subject is the *univalence axiom* and the *higher inductive types*; the computational interpretation of both is *cubical type theory* (Cohen–Coquand–Huber–Mörtberg 2016); the mechanised libraries live in *Cubical Agda*, the *Coq HoTT library*, and *Lean's mathlib4*.
 
 == The Identity Type, Read as a Path Space
 
@@ -36,7 +36,7 @@ The *homotopy* reading reinterprets every component:
 
 The path induction principle $J$, under this reading, says: every path between $a$ and $b$ is *deformable* to the constant path on $a$ (when one allows the endpoint $b$ to vary). In topology this is the *contractibility* of based path spaces, a basic fact.
 
-The reading was anticipated by *groupoid models* of type theory (Hofmann–Streicher 1998). Hofmann and Streicher showed that the *category of groupoids* is a model of intensional type theory in which UIP *fails* — there are types with two distinct, non-equal identity proofs. The model proved that intensional type theory is *strictly weaker* than extensional type theory with UIP, and opened the door to interpretations with *non-trivial* identity structure.
+The reading was anticipated by *groupoid models* of type theory (Hofmann–Streicher 1998). Hofmann and Streicher showed that the *category of groupoids* is a model of intensional type theory in which UIP *fails*: there are types with two distinct, non-equal identity proofs. The model proved that intensional type theory is *strictly weaker* than extensional type theory with UIP, and opened the door to interpretations with *non-trivial* identity structure.
 
 == Types as $oo$-Groupoids
 
@@ -68,7 +68,7 @@ p tack.r p^(-1) &= "refl"_a \
 p^(-1) tack.r p &= "refl"_b \
 (p tack.r q) tack.r r &= p tack.r (q tack.r r) $
 
-Each equation is itself an inhabitant of an identity type — a *2-path* — and these 2-paths in turn satisfy coherences as 3-paths, and so on.
+Each equation is itself an inhabitant of an identity type (a *2-path*), and these 2-paths in turn satisfy coherences as 3-paths, and so on.
 
 A function $f : A arrow.r B$ acts on paths by the *action on paths* operation $"ap"_f$ (or just $"ap"$ when $f$ is clear):
 
@@ -92,7 +92,7 @@ Two types $A$ and $B$ are *equivalent*, written $A tilde B$, when there is a map
 
 $ "QInv"(f) :equiv (g : B arrow.r A) times (Pi y : B . "Id"(f(g(y)), y)) times (Pi x : A . "Id"(g(f(x)), x)) $
 
-This *quasi-inverse* formulation has a defect: $"QInv"(f)$ is not in general a *proposition* — a single $f$ may have many genuinely distinct quasi-inverses. To get a *good* notion of equivalence we want $"isEquiv"(f)$ to be a *proposition*, so that being an equivalence is a property, not a structure.
+This *quasi-inverse* formulation has a defect: $"QInv"(f)$ is not in general a *proposition*, since a single $f$ may have many genuinely distinct quasi-inverses. To get a *good* notion of equivalence we want $"isEquiv"(f)$ to be a *proposition*, so that being an equivalence is a property, not a structure.
 
 Voevodsky's solution: $f$ is an equivalence <==> every *fibre* of $f$ is *contractible*.
 
@@ -131,7 +131,7 @@ The pointwise-equal functions are equal. (FunExt is a *theorem*, not an axiom, i
 
 *Propositional extensionality* (PropExt). For propositions $P, Q$, $("Id"(P, Q)) tilde (P arrow.l.r Q)$. Logically equivalent propositions are equal.
 
-*Structure invariance*. If two algebraic structures (groups, rings, topological spaces, ...) are isomorphic, they are *equal* as types — and so every property provable for one is provable for the other. This is the *principle of equivalence* of category theory, made into a theorem of the foundational system rather than an informal mathematical practice.
+*Structure invariance*. If two algebraic structures (groups, rings, topological spaces, ...) are isomorphic, they are *equal* as types, so every property provable for one is provable for the other. This is the *principle of equivalence* of category theory, made into a theorem of the foundational system rather than an informal mathematical practice.
 
 The axiom is *consistent*: Voevodsky's *simplicial set model* (Kapulkin–Lumsdaine 2012, Voevodsky 2009) interprets type theory in the category of Kan simplicial sets, and the interpretation of $"idtoeqv"$ is the canonical comparison map between *path spaces* and *equivalences*, which is an equivalence by classical homotopy theory. The construction requires the axiom of choice and the law of excluded middle in the meta-theory, but yields a model in which type theory + UA is consistent.
 
@@ -176,7 +176,7 @@ data S1 : Set where
 
 The circle has *one point* $"base"$ and *one non-trivial path* $"loop"$ from $"base"$ to itself. The eliminator allows defining functions $f : S^1 arrow.r A$ by giving a point $a : A$ (the image of $"base"$) and a *loop at $a$*, $ell : "Id"_A(a, a)$ (the image of $"loop"$).
 
-Computation: $f("base") equiv a$ definitionally, and $"ap"_f ("loop")$ equals $ell$ — *propositionally* in book HoTT, *definitionally* in cubical HoTT.
+Computation: $f("base") equiv a$ definitionally, and $"ap"_f ("loop")$ equals $ell$ (*propositionally* in book HoTT, *definitionally* in cubical HoTT).
 
 The circle, defined this way, has the homotopy type of the geometric circle:
 
@@ -206,7 +206,7 @@ The phrase *synthetic homotopy theory* refers to doing homotopy theory entirely 
 - The *Freudenthal suspension theorem*: for an $n$-connected pointed type $A$, the suspension map $pi_k(A) arrow.r pi_(k+1)(Sigma A)$ is an equivalence for $k < 2n$ (Lumsdaine–Finster–Licata 2013).
 - The *Blakers–Massey theorem*, a key result connecting pushouts and connectedness.
 - *Brunerie's number*: a closed term in HoTT that represents the order of $pi_4(S^3)$, conjectured to be $2$, finally computed to be $plus.minus 2$ by *cubical normalisation* (Ljungström–Mörtberg 2023).
-- Cohomology, Eilenberg–MacLane spaces, the Hopf fibration — all constructed and reasoned about.
+- Cohomology, Eilenberg–MacLane spaces, and the Hopf fibration, all constructed and reasoned about synthetically.
 
 The Brunerie story is the cleanest demonstration of the *computational* dimension. Book HoTT defines a term whose normal form should be the integer $2$, but without canonicity for univalence and HITs, no proof assistant could *reduce* the term. Cubical Agda (Vezzosi–Mörtberg–Abel 2019) implements cubical type theory's reduction rules and computes the value.
 
@@ -216,7 +216,7 @@ The Brunerie story is the cleanest demonstration of the *computational* dimensio
 
 $ "Path"_A(a, b) :equiv (i : II) arrow.r A "with" p(0) equiv a, p(1) equiv b $
 
-The interval $II$ is a *primitive* type with two endpoints $0, 1 : II$ and is *not* an ordinary inductive type — it has a more refined structure governed by *face* and *degeneracy* maps drawn from the theory of *cubical sets*.
+The interval $II$ is a *primitive* type with two endpoints $0, 1 : II$ and is *not* an ordinary inductive type; it has a more refined structure governed by *face* and *degeneracy* maps drawn from the theory of *cubical sets*.
 
 The *Kan composition* operations are the heart of the system. A *Kan composition* takes:
 
@@ -226,7 +226,7 @@ The *Kan composition* operations are the heart of the system. A *Kan composition
 
 The operations are written $"hcomp"$ (homogeneous composition) and $"transp"$ (transport along a path of types). Together they give a *constructive* interpretation of univalence: the *Glue* type former allows constructing, for any equivalence $e : A tilde B$, a path $"ua"(e) : "Id"_(cal(U))(A, B)$ such that $"transp"("ua"(e), -) equiv e$.
 
-*Theorem (Canonicity for Cubical Type Theory, Huber 2018).* In CCHM cubical type theory, every closed term of base type (natural numbers, booleans) reduces to a canonical form. In particular, $"transp"("ua"(e), n) equiv e(n)$ for $n : NN$ — univalence computes.
+*Theorem (Canonicity for Cubical Type Theory, Huber 2018).* In CCHM cubical type theory, every closed term of base type (natural numbers, booleans) reduces to a canonical form. In particular, $"transp"("ua"(e), n) equiv e(n)$ for $n : NN$: univalence computes.
 
 *Proof.* A direct semantic argument using the *cubical sets* model and a *normalisation-by-evaluation* construction. The key is that the Kan composition operations are *deterministic*: there is no axiom whose computation is left undefined. $square$
 
@@ -240,15 +240,15 @@ Univalent foundations propose to replace ZFC as the foundation of mathematics. T
 
 The HoTT Book's chapters on *algebra* set up monoids, groups, rings as *$Sigma$-types* of carrier $+ $ operations $+ $ axioms, where the carrier is a *set* (a $0$-type) and the axioms are *propositions*. Two such structures are equal iff they are isomorphic. The *structure identity principle* generalises this to arbitrary algebraic structures.
 
-Beyond algebra: *categories* in HoTT come in two flavours — *precategories* (composition is associative *up to equality*) and *univalent categories* (the type of objects is at least a 1-type and the inclusion of isomorphisms into identity is an equivalence). Univalent categories satisfy the structure identity principle for categories: equivalent categories are equal.
+Beyond algebra: *categories* in HoTT come in two flavours, *precategories* (composition is associative *up to equality*) and *univalent categories* (the type of objects is at least a 1-type and the inclusion of isomorphisms into identity is an equivalence). Univalent categories satisfy the structure identity principle for categories: equivalent categories are equal.
 
 == Tool Ecosystem
 
-- *Cubical Agda* — built into recent Agda; full cubical type theory; the largest synthetic homotopy theory library.
-- *Coq HoTT library* (Bauer, Gross, Lumsdaine, Shulman, Spitters, Wood et al.) — book HoTT with axioms; mature, large; Coq's classical foundation makes this less computational but tactically powerful.
-- *Lean's mathlib4* — uses Lean 4's dependent type theory; has a small but growing category-theory layer with HoTT flavour; no native HITs.
-- *redtt*, *cooltt*, *cartesian-cubical-agda* — research languages exploring variants.
-- *UniMath* (Voevodsky, Ahrens, Grayson, et al.) — Coq library of univalent mathematics, axiom-based, focused on Voevodsky's vision.
+- *Cubical Agda*: built into recent Agda; full cubical type theory; the largest synthetic homotopy theory library.
+- *Coq HoTT library* (Bauer, Gross, Lumsdaine, Shulman, Spitters, Wood et al.): book HoTT with axioms; mature, large; Coq's classical foundation makes this less computational but tactically powerful.
+- *Lean's mathlib4*: uses Lean 4's dependent type theory; has a small but growing category-theory layer with HoTT flavour; no native HITs.
+- *redtt*, *cooltt*, *cartesian-cubical-agda*: research languages exploring variants.
+- *UniMath* (Voevodsky, Ahrens, Grayson, et al.): Coq library of univalent mathematics, axiom-based, focused on Voevodsky's vision.
 
 == Connections to Computer Science
 
@@ -256,7 +256,7 @@ The themes of HoTT have analogues in everyday programming:
 
 - *Protocol equivalence as path types.* A change of representation that preserves all observable behaviour is precisely an equivalence; univalence says the original and refactored versions are *equal*, justifying transport of all reasoning.
 - *Refactoring as univalence.* When two data structures are isomorphic (e.g. an array-of-structs and a struct-of-arrays), univalence justifies systematically rewriting code from one to the other; *cubical normalisation* turns the proof of equivalence into the actual rewriting program.
-- *Modular structures.* Software modules are algebraic structures with operations and equational laws; the univalence principle says interchangeable implementations are equal as modules — a *type-theoretic* justification for the *Liskov substitution principle*.
+- *Modular structures.* Software modules are algebraic structures with operations and equational laws; the univalence principle says interchangeable implementations are equal as modules, providing a *type-theoretic* justification for the *Liskov substitution principle*.
 - *Schema migration.* Database schema evolution, when the migration is information-preserving, is an equivalence; transporting queries along the equivalence is exactly what migration tooling must do.
 - *Homotopy type checking* (Cavallo–Harper 2019): formal sessions where the type checker is itself written in cubical type theory; checking a program *computes* the equivalences witnessing optimisations.
 
@@ -293,17 +293,17 @@ winding : ΩS1 -> Int
 winding p = transport (lam i -> helix (p i)) (pos zero)
 ```
 
-The function `winding` takes a loop and reads off its winding number — the integer that the loop encodes. The proof that `winding` is an equivalence is mechanised in Cubical Agda and computes: `winding (loop · loop · loop)` reduces to `pos 3`.
+The function `winding` takes a loop and reads off its winding number, the integer that the loop encodes. The proof that `winding` is an equivalence is mechanised in Cubical Agda and computes: `winding (loop · loop · loop)` reduces to `pos 3`.
 
 == Where the Field Stands
 
-HoTT is not a replacement for ordinary type theory in the immediate sense that gradual typing is a replacement for `any` — its programmer-facing benefits are subtler. But for *proof engineers* it changes the rules of the game: structural reasoning replaces equality-juggling, refactorings are first-class, and homotopy theory becomes a programming subject. The eventual integration into mainstream proof assistants — already substantially complete in Cubical Agda, partial in Coq, nascent in Lean — will bring the discipline to a much wider audience.
+HoTT is not a replacement for ordinary type theory in the immediate sense that gradual typing is a replacement for `any`; its programmer-facing benefits are subtler. But for *proof engineers* it changes the rules of the game: structural reasoning replaces equality-juggling, refactorings are first-class, and homotopy theory becomes a programming subject. The eventual integration into mainstream proof assistants (already substantially complete in Cubical Agda, partial in Coq, nascent in Lean) will bring the discipline to a much wider audience.
 
 The open problems are deep:
 
-1. *Higher universes and large eliminations.* Univalence with size issues — how to manage the hierarchy of universes when each universe is itself a type — remains a delicate engineering matter.
+1. *Higher universes and large eliminations.* Univalence with size issues (how to manage the hierarchy of universes when each universe is itself a type) remains a delicate engineering matter.
 2. *Modal HoTT* (Shulman 2018; Riehl–Shulman 2017) extends the theory with *modal operators* to support *cohesive* and *parametric* reasoning; computational interpretation is partial.
-3. *Synthetic differential and algebraic geometry* in HoTT (Cherubini, Wellen, et al.) — bringing geometric methods inside the type theory.
-4. *Tool maturity.* Error messages, performance, library coverage — practical engineering still lags the theory.
+3. *Synthetic differential and algebraic geometry* in HoTT (Cherubini, Wellen, et al.), bringing geometric methods inside the type theory.
+4. *Tool maturity.* Error messages, performance, and library coverage: practical engineering still lags the theory.
 
-The grand bet of univalent foundations — that the natural setting for mathematics is a higher-dimensional type theory in which the only structure-preserving notion of equality is up to equivalence — has, since 2013, accumulated enough mechanised mathematics and enough computational backing that it is no longer a curiosity. It is one of two viable foundational programmes (the other being set theory + classical first-order logic), with the unique selling point that *computation and equality are unified*.
+The grand bet of univalent foundations, that the natural setting for mathematics is a higher-dimensional type theory in which the only structure-preserving notion of equality is up to equivalence, has since 2013 accumulated enough mechanised mathematics and computational backing that it is no longer a curiosity. It is one of two viable foundational programmes (the other being set theory + classical first-order logic), with the unique selling point that *computation and equality are unified*.

@@ -1,6 +1,6 @@
 = Linear and Substructural Type Systems
 
-Substructural type systems control *how often* a variable may be used. Classical logic and the simply-typed lambda calculus treat the typing context $Gamma$ as a "set": any hypothesis may be duplicated, discarded, or reordered at will. Substructural systems drop one or more of those liberties — and in doing so gain the ability to talk about resources, capabilities, file handles, channel endpoints, and memory ownership inside the type system itself.
+Substructural type systems control *how often* a variable may be used. Classical logic and the simply-typed lambda calculus treat the typing context $Gamma$ as a "set": any hypothesis may be duplicated, discarded, or reordered at will. Substructural systems drop one or more of those liberties, and in doing so gain the ability to talk about resources, capabilities, file handles, channel endpoints, and memory ownership inside the type system itself.
 
 _See also: Type Systems, Effects and Handlers, Subtyping and Polymorphism._
 
@@ -47,7 +47,7 @@ $ tau ::= A | tau_1 multimap tau_2 | tau_1 times.o tau_2 | tau_1 amp tau_2 | tau
 (The classical version adds par $tau_1 #h(0.3em) "par" #h(0.3em) tau_2$, the dual $bot$, and the why-not modality $?tau$. ILL omits these; intuitionistic linear logic is the one most directly relevant to type systems.) The connectives split into two flavours:
 
 - *Multiplicatives* share their context. To prove $A times.o B$ the context splits into two disjoint pieces, one proving $A$ and one proving $B$.
-- *Additives* share their context. To prove $A amp B$ a single context proves both $A$ and $B$ — but only one can be chosen at elimination time.
+- *Additives* share their context. To prove $A amp B$ a single context proves both $A$ and $B$; but only one can be chosen at elimination time.
 
 #table(
   columns: (auto, auto, auto, auto),
@@ -118,13 +118,13 @@ The exponential $!tau$ marks formulae on which contraction and weakening are per
   Gamma, !A |- B
 ```
 
-Promotion has the side condition that *all* hypotheses are exponential — otherwise we could smuggle weakening past a linear assumption. The exponential is a *comonad* on the category of linear maps: there is a counit $!A multimap A$ (derelict the modality and obtain a usable $A$), a comultiplication $!A multimap !!A$ (a permission to use $A$ unboundedly can itself be used unboundedly), and the bang lifts maps $A multimap B$ to $!A multimap !B$.
+Promotion has the side condition that *all* hypotheses are exponential; otherwise we could smuggle weakening past a linear assumption. The exponential is a *comonad* on the category of linear maps: there is a counit $!A multimap A$ (derelict the modality and obtain a usable $A$), a comultiplication $!A multimap !!A$ (a permission to use $A$ unboundedly can itself be used unboundedly), and the bang lifts maps $A multimap B$ to $!A multimap !B$.
 
 === Cut Elimination
 
 *Theorem (Girard 1987, cut elimination).* Every derivation in linear logic can be transformed into a cut-free derivation of the same sequent.
 
-The proof is the usual triple induction (on the cut formula, on the height of the right derivation, on the height of the left derivation), but linear logic gives sharper data: a cut between $A times.o B$ on one side and its left-rule on the other reduces *without duplication*; the reduction strictly decreases a resource measure rather than merely a proof height. Cut elimination on the exponentials, in contrast, may duplicate sub-derivations precisely when contraction is invoked — locating the irreducible source of complexity in the modality $!$, not the linear core.
+The proof is the usual triple induction (on the cut formula, on the height of the right derivation, on the height of the left derivation), but linear logic gives sharper data: a cut between $A times.o B$ on one side and its left-rule on the other reduces *without duplication*; the reduction strictly decreases a resource measure rather than merely a proof height. Cut elimination on the exponentials, in contrast, may duplicate sub-derivations precisely when contraction is invoked, locating the irreducible source of complexity in the modality $!$, not the linear core.
 
 *Computational reading.* Cut is the typing rule for substitution; cut elimination is normalisation of programs; the linear core normalises in polynomial time, while the exponentials are where the combinatorial blow-up of $beta$-reduction lives (Girard, Scedrov, Scott; *Bounded linear logic* 1992).
 
@@ -178,7 +178,7 @@ Typing uses *two* contexts, $Gamma; Delta$: an *unrestricted* context $Gamma$ (v
   Gamma; Delta_1, Delta_2 |- (let !x = e_1 in e_2) : tau
 ```
 
-The application rule splits the linear context $Delta_1, Delta_2$ between function and argument: no linear resource is used twice. The introduction rule for $!$ requires an empty linear context — you cannot package a one-shot resource into something that can be used many times.
+The application rule splits the linear context $Delta_1, Delta_2$ between function and argument: no linear resource is used twice. The introduction rule for $!$ requires an empty linear context; you cannot package a one-shot resource into something that can be used many times.
 
 *Theorem (linearity invariant).* If $Gamma; Delta tack.r e : tau$, then each variable bound in $Delta$ appears free in $e$ exactly once; each variable bound in $Gamma$ may appear zero or more times.
 
@@ -186,9 +186,9 @@ The proof is a straightforward induction on derivations. The economic consequenc
 
 == Affine, Relevant, and Ordered Calculi
 
-*Affine* type systems drop contraction but retain weakening: every variable is used *at most* once. Rust's ownership discipline is essentially affine — values may be dropped silently (running their destructor) but cannot be aliased without an explicit borrow.
+*Affine* type systems drop contraction but retain weakening: every variable is used *at most* once. Rust's ownership discipline is essentially affine: values may be dropped silently (running their destructor) but cannot be aliased without an explicit borrow.
 
-*Relevant* type systems drop weakening but retain contraction: every variable is used *at least* once. Useful when one wishes to guarantee that resources are not silently discarded — e.g., that every transaction is either committed or explicitly rolled back, never forgotten.
+*Relevant* type systems drop weakening but retain contraction: every variable is used *at least* once. Useful when one wishes to guarantee that resources are not silently discarded, e.g., that every transaction is either committed or explicitly rolled back, never forgotten.
 
 *Ordered* (or *non-commutative*) systems drop exchange as well. The Lambek calculus (Lambek 1958), originally proposed for natural-language syntax, sits in this corner; concatenative languages like Forth and Joy implement an ordered discipline at the level of the runtime stack.
 
@@ -198,7 +198,7 @@ The proof is a straightforward induction on derivations. The economic consequenc
 
 $ Gamma ::= Delta | Gamma, Gamma | Gamma; Gamma $
 
-— *additive* semicolon $;$ allows weakening and contraction, *multiplicative* comma $,$ does not. BI has two implications, two conjunctions, and one disjunction. The crucial connective is *separating conjunction* $*$, with the introduction rule
+The *additive* semicolon $;$ allows weakening and contraction, *multiplicative* comma $,$ does not. BI has two implications, two conjunctions, and one disjunction. The crucial connective is *separating conjunction* $*$, with the introduction rule
 
 ```text
   Gamma |- A     Delta |- B
@@ -214,13 +214,13 @@ Two superficially similar disciplines, with different semantic intent.
 
 *Uniqueness types* (Barendsen–Smetsers 1996, in Clean) annotate a *reference* with the promise that no other reference to the same object exists. The type $"*"tau$ is read "the unique pointer to a $tau$". A unique reference can be safely mutated in place.
 
-*Linear types* (Wadler 1990) annotate a *binding* with the promise that the variable is used exactly once in the program text. A linear value need not be the only handle to its referent — but the program promises to forget its handle once it is used.
+*Linear types* (Wadler 1990) annotate a *binding* with the promise that the variable is used exactly once in the program text. A linear value need not be the only handle to its referent, but the program promises to forget its handle once it is used.
 
 #table(
   columns: (auto, auto, auto),
   [*Aspect*], [*Uniqueness (Clean)*], [*Linearity (Linear Haskell)*],
   [Annotates], [a value at a point in time], [a binding in the syntax],
-  [Allows aliasing?], [no — the type forbids it], [yes — only single use is required],
+  [Allows aliasing?], [no (the type forbids it)], [yes (only single use is required)],
   [Use case], [in-place update of arrays], [resource discipline, protocols],
   [Substitution interacts with], [the heap], [the typing context],
 )
@@ -229,7 +229,7 @@ The two disciplines coincide on the *non-aliased* fragment; the divergence appea
 
 == Linear Haskell (Bernardy–Boespflug–Newton–Peyton Jones–Spiwack 2018)
 
-Linear Haskell adds a *multiplicity-annotated arrow*: `a %1 -> b` is a function that uses its argument exactly once; `a %m -> b` is multiplicity-polymorphic. Crucially, the same data type can be constructed and consumed in either a linear or unrestricted style — a single `Maybe a` works both for ordinary `Maybe` and for linear `Maybe a`, parameterised by the multiplicity at which `a` is held.
+Linear Haskell adds a *multiplicity-annotated arrow*: `a %1 -> b` is a function that uses its argument exactly once; `a %m -> b` is multiplicity-polymorphic. Crucially, the same data type can be constructed and consumed in either a linear or unrestricted style: a single `Maybe a` works both for ordinary `Maybe` and for linear `Maybe a`, parameterised by the multiplicity at which `a` is held.
 
 ```haskell
 -- Linear function: consumes its argument exactly once
@@ -252,7 +252,7 @@ The design constraints were severe: Haskell already had a vast ecosystem, so ret
 
 *Use cases* in Linear Haskell:
 
-- *Mutable arrays without GC chatter:* `Array.alloc :: Int -> (Array a %1 -> Ur b) -> Ur b` — allocate, mutate linearly, return a non-linear result.
+- *Mutable arrays without GC chatter:* `Array.alloc :: Int -> (Array a %1 -> Ur b) -> Ur b` to allocate, mutate linearly, and return a non-linear result.
 - *Safe file handles:* a handle that *must* be closed.
 - *Session-typed channels:* a channel endpoint that must be used according to its protocol.
 
@@ -273,7 +273,7 @@ Rust's ownership and borrowing discipline is best understood as an affine type s
   [Non-Lexical Lifetimes (NLL)], [region inference via dataflow],
 )
 
-The *borrow checker* enforces two structural invariants at every program point: (1) every value has exactly one owner, (2) references are either one exclusive `&mut` *or* any number of shared `&` — never both. Reading the rules of the borrow checker as a sequent calculus, exclusive borrows are linear, shared borrows are affine within their region, and ownership transfer (move semantics) is precisely the linear-function application rule.
+The *borrow checker* enforces two structural invariants at every program point: (1) every value has exactly one owner, (2) references are either one exclusive `&mut` *or* any number of shared `&`, never both. Reading the rules of the borrow checker as a sequent calculus, exclusive borrows are linear, shared borrows are affine within their region, and ownership transfer (move semantics) is precisely the linear-function application rule.
 
 ```rust
 fn consume(s: String) {
@@ -309,13 +309,13 @@ $ S ::= !tau . S | ?tau . S | S_1 plus.o S_2 | S_1 amp S_2 | "end" $
 
 with the dyadic reading:
 
-- $!tau . S$ — send a value of type $tau$, then continue as $S$.
-- $?tau . S$ — receive a value of type $tau$, then continue as $S$.
-- $S_1 plus.o S_2$ — internal choice: *we* choose to continue as $S_1$ or $S_2$.
-- $S_1 amp S_2$ — external choice: *the peer* picks the branch.
-- $"end"$ — protocol complete.
+- $!tau . S$: send a value of type $tau$, then continue as $S$.
+- $?tau . S$: receive a value of type $tau$, then continue as $S$.
+- $S_1 plus.o S_2$: internal choice: *we* choose to continue as $S_1$ or $S_2$.
+- $S_1 amp S_2$: external choice: *the peer* picks the branch.
+- $"end"$: protocol complete.
 
-Duality: $overline(!tau . S) = ?tau . overline(S)$, etc. Two endpoints of a single channel must have dual types — what one sends, the other receives.
+Duality: $overline(!tau . S) = ?tau . overline(S)$, etc. Two endpoints of a single channel must have dual types: what one sends, the other receives.
 
 A simple arithmetic-server protocol:
 
@@ -368,12 +368,12 @@ Wadler's CP language (*Classical Processes*, 2014) gives a syntactic embodiment:
 
 == Implementations
 
-- *Linear Haskell* (GHC 9.0+, 2021) — `LinearTypes` extension, `linear-base` library.
-- *Idris 2* (Brady 2021) — quantitative type theory with multiplicities $0$, $1$, $omega$.
-- *Granule* (Orchard–Liepelt–Eades 2019) — research language with graded modal types, generalising linear/affine/relevant.
+- *Linear Haskell* (GHC 9.0+, 2021): `LinearTypes` extension, `linear-base` library.
+- *Idris 2* (Brady 2021): quantitative type theory with multiplicities $0$, $1$, $omega$.
+- *Granule* (Orchard–Liepelt–Eades 2019): research language with graded modal types, generalising linear/affine/relevant.
 - *ATS* and *F\** support linear-like resource tracking.
 - *Session types in OCaml* via GADTs (Padovani 2017): the indexed type of channels encodes the remaining protocol; mis-uses become type errors at compile time.
-- *Rust* — the only mainstream production language with an affine type system by default.
+- *Rust*: the only mainstream production language with an affine type system by default.
 
 == A Brief Worked Example: Safe File Handles
 
@@ -397,14 +397,14 @@ The handle `h` has linear type `Handle`; the only operations on it return a *new
 
 == Theoretical Coda: What Substructurality Buys
 
-The discipline of dropping structural rules is not free — it makes the typing context heavier and the rules subtler. What is gained:
+The discipline of dropping structural rules is not free: it makes the typing context heavier and the rules subtler. What is gained:
 
 1. *Resource tracking* without runtime reference counting or GC pauses.
-2. *Protocol enforcement* — the type system understands "must be done in order".
+2. *Protocol enforcement*: the type system understands "must be done in order".
 3. *Memory safety* without a managed runtime (Rust).
 4. *In-place update* of arrays in a pure language (Linear Haskell, Clean).
 5. *Deadlock freedom* for concurrent processes (Caires–Pfenning).
-6. *Capability discipline* — possession of a value *is* permission to act on it.
+6. *Capability discipline*: possession of a value *is* permission to act on it.
 
 The cost is a steeper learning curve and a more verbose surface syntax. Forty years on from Girard's original paper, the wager that linear logic captures something fundamental about computation has paid off: every modern systems language has, by name or by structure, absorbed a portion of the substructural toolbox.
 
@@ -416,4 +416,4 @@ Pierce remarks in *Types and Programming Languages* (2002) that "linear types ar
 
 This is the modern face of substructural type theory: not five competing logics, but one *graded* framework parameterised by a semiring of resource accounting.
 
-_See also: Effects and Handlers for the dual question — not 'how many times is a value used' but 'what operations does a computation perform' — and Type Systems for the substrate on top of which substructurality is layered._
+_See also: Effects and Handlers for the dual question (not 'how many times is a value used' but 'what operations does a computation perform'), and Type Systems for the substrate on top of which substructurality is layered._

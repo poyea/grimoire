@@ -1,6 +1,6 @@
 = Subtyping and Polymorphism
 
-Subtyping is the principle that lets you pass a `Cat` to a function expecting an `Animal`. Polymorphism is the principle that lets a function operate uniformly across types it does not name. Where pure parametric polymorphism (System F) erases all type information at runtime and forbids any inspection, subtyping adds a *partial order* on types — and the resulting interaction with type constructors, references, generics, and recursion is the source of three decades of language-design subtlety.
+Subtyping is the principle that lets you pass a `Cat` to a function expecting an `Animal`. Polymorphism is the principle that lets a function operate uniformly across types it does not name. Where pure parametric polymorphism (System F) erases all type information at runtime and forbids any inspection, subtyping adds a *partial order* on types; the resulting interaction with type constructors, references, generics, and recursion is the source of three decades of language-design subtlety.
 
 _See also: _Type Systems_, _Linear and Substructural Type Systems_, _Effects and Handlers_._
 
@@ -16,7 +16,7 @@ The defining feature of a subtyping system is a single inference rule:
 
 If $tau_1$ is a subtype of $tau_2$, then any term of type $tau_1$ may be promoted to type $tau_2$. The *subtype relation* $lt.tri$ is required to be a preorder (reflexive and transitive) on types; it may or may not be antisymmetric depending on whether types are considered up to alpha-equivalence and unfolding.
 
-The slogan attributed to Liskov (1987): *whenever an instance of $tau_1$ is expected, an instance of $tau_2$ may be supplied*. The reverse reading — *subtyping is implicit coercion* — leads to the *coercive* interpretation: subsumption is a logically silent insertion of a function $tau_1 arrow.r tau_2$. The *subset* interpretation, in contrast, treats subtypes as honest set inclusions on the semantic interpretation of types.
+The slogan attributed to Liskov (1987): *whenever an instance of $tau_1$ is expected, an instance of $tau_2$ may be supplied*. The reverse reading (*subtyping is implicit coercion*) leads to the *coercive* interpretation: subsumption is a logically silent insertion of a function $tau_1 arrow.r tau_2$. The *subset* interpretation, in contrast, treats subtypes as honest set inclusions on the semantic interpretation of types.
 
 #table(
   columns: (auto, auto),
@@ -57,7 +57,7 @@ Reading: if each field's type narrows to a subtype, the whole record narrows.
    {k_i : tau_i}_{i in I} <: {l_j : tau_j}_{j in J}
 ```
 
-These three rules together — width, depth, permutation — characterise *structural* subtyping on records. Languages with *nominal* type systems (Java, C\#) admit only declared subclass relationships, not arbitrary structural overlap.
+These three rules together (width, depth, permutation) characterise *structural* subtyping on records. Languages with *nominal* type systems (Java, C\#) admit only declared subclass relationships, not arbitrary structural overlap.
 
 == Variance: The Function Type
 
@@ -65,7 +65,7 @@ The function arrow does not behave covariantly in both positions.
 
 *Theorem (function subtyping).* $tau_1 arrow.r tau_2 lt.tri tau_1' arrow.r tau_2'$ <==> $tau_1' lt.tri tau_1$ and $tau_2 lt.tri tau_2'$.
 
-The argument position is *contravariant* — to substitute for a function expecting $tau_1$, you need a function that accepts *at least* $tau_1$, i.e., one accepting any $tau_1' supset.eq tau_1$. The return position is *covariant* — your replacement may return *at most* what's expected.
+The argument position is *contravariant*: to substitute for a function expecting $tau_1$, you need a function that accepts *at least* $tau_1$, i.e., one accepting any $tau_1' supset.eq tau_1$. The return position is *covariant*: your replacement may return *at most* what's expected.
 
 ```text
    tau_1' <: tau_1     tau_2 <: tau_2'
@@ -73,14 +73,14 @@ The argument position is *contravariant* — to substitute for a function expect
    tau_1 -> tau_2 <: tau_1' -> tau_2'
 ```
 
-The error of conflating the two — *assuming* the arrow is covariant in both positions — is the canonical broken inheritance pattern. Eiffel infamously allowed contravariant *argument* refinement; the resulting unsoundness (a `Cat::eats(Mouse)` overriding `Animal::eats(Food)`, then receiving a `Salad`) required runtime checks.
+The error of conflating the two, assuming the arrow is covariant in both positions, is the canonical broken inheritance pattern. Eiffel infamously allowed contravariant *argument* refinement; the resulting unsoundness (a `Cat::eats(Mouse)` overriding `Animal::eats(Food)`, then receiving a `Salad`) required runtime checks.
 
 === References and Arrays: Invariance
 
 For a mutable cell `Ref tau`, both read and write operations exist:
 
-- read: $"Ref" tau arrow.r tau$ — covariant in $tau$;
-- write: $"Ref" tau arrow.r tau arrow.r 1$ — contravariant in $tau$.
+- read: $"Ref" tau arrow.r tau$ (covariant in $tau$);
+- write: $"Ref" tau arrow.r tau arrow.r 1$ (contravariant in $tau$).
 
 To be sound for both, `Ref` must be *invariant*: $"Ref" tau lt.tri "Ref" tau'$ <==> $tau = tau'$.
 
@@ -91,7 +91,7 @@ Object[] xs = new String[10];
 xs[0] = Integer.valueOf(42);   // compiles fine
 ```
 
-But the store is unsound: `String[]` cannot store an `Integer`. Java patches this with a *runtime* `ArrayStoreException` check on every array write — a fixed-cost penalty for an unsound static rule.
+But the store is unsound: `String[]` cannot store an `Integer`. Java patches this with a *runtime* `ArrayStoreException` check on every array write, a fixed-cost penalty for an unsound static rule.
 
 C\# 1.0 inherited the same mistake. Modern languages (Scala, Kotlin, Swift) get it right: arrays are invariant, with read-only / write-only views (`IReadOnlyList`, `IEnumerable`) carrying their appropriate variance.
 
@@ -142,7 +142,7 @@ The subtyping rule for bounded universals is *itself* contravariant in the bound
 
 Pierce reduces from the halting problem for two-counter machines, encoding counter states as deeply-nested bounded universals and counter operations as subtyping derivations. The non-termination of subtyping checks tracks the non-termination of the encoded machine.
 
-The diagnosis: the *bound* of a quantifier $forall alpha lt.tri tau_1 . dots$ may itself be a universal $forall beta lt.tri tau . dots$; nesting these triggers the unbounded recursion. The *kernel* F$(lt.tri)$ (Cardelli–Martini–Mitchell–Scedrov) requires the bound to remain the *same* in the rule S-All — which sacrifices some expressiveness but restores decidability.
+The diagnosis: the *bound* of a quantifier $forall alpha lt.tri tau_1 . dots$ may itself be a universal $forall beta lt.tri tau . dots$; nesting these triggers the unbounded recursion. The *kernel* F$(lt.tri)$ (Cardelli–Martini–Mitchell–Scedrov) requires the bound to remain the *same* in the rule S-All, which sacrifices some expressiveness but restores decidability.
 
 *Kernel F$(lt.tri)$* (Cardelli–Martini–Mitchell–Scedrov; algorithmic study by Curien–Ghelli 1992) modifies the S-All rule:
 
@@ -152,7 +152,7 @@ The diagnosis: the *bound* of a quantifier $forall alpha lt.tri tau_1 . dots$ ma
    Gamma |- forall alpha <: tau_1. tau_2 <: forall alpha <: tau_1. tau_2'
 ```
 
-— the bound $tau_1$ must be identical on both sides. Subtyping in kernel F$(lt.tri)$ is decidable (exponential in the worst case; polynomial in practice).
+The bound $tau_1$ must be identical on both sides. Subtyping in kernel F$(lt.tri)$ is decidable (exponential in the worst case; polynomial in practice).
 
 === Bounded Existentials
 
@@ -167,7 +167,7 @@ Adding *type operators* (functions on types, kind $* arrow.r *$) gives System $F
 A *recursive type* $mu alpha . tau$ binds $alpha$ in $tau$, satisfying the fixed-point equation $mu alpha . tau = [alpha |-> mu alpha . tau] tau$. There are two semantics:
 
 - *Isorecursive*: $mu alpha . tau$ and its unfolding are *isomorphic* but not equal. Conversion requires explicit `fold` / `unfold`. OCaml uses isorecursive types.
-- *Equirecursive*: $mu alpha . tau$ and its unfolding are *literally equal* — types are infinite (regular) trees. Type unification must handle cyclic structures.
+- *Equirecursive*: $mu alpha . tau$ and its unfolding are *literally equal*; types are infinite (regular) trees. Type unification must handle cyclic structures.
 
 For subtyping, the *coinductive* characterisation is fundamental. Define a relation $cal(R)$ to be a *simulation* if whenever $sigma cal(R) tau$:
 
@@ -177,7 +177,7 @@ For subtyping, the *coinductive* characterisation is fundamental. Define a relat
 
 *Theorem (Amadio–Cardelli 1993).* The greatest simulation is the subtype relation on the infinite-tree unfoldings of recursive types.
 
-The algorithmic content: subtyping is checked by *coinduction* — the algorithm maintains an *assumption set* of pairs known to be in $cal(R)$ and adds new pairs as it descends, succeeding when it would infinite-loop. Brandt and Henglein (1997) refined this to an efficient algorithm running in $O(n^2)$ on the size of the input types.
+The algorithmic content: subtyping is checked by *coinduction*; the algorithm maintains an *assumption set* of pairs known to be in $cal(R)$ and adds new pairs as it descends, succeeding when it would infinite-loop. Brandt and Henglein (1997) refined this to an efficient algorithm running in $O(n^2)$ on the size of the input types.
 
 ```text
 ALGORITHM subtype(sigma, tau, A):
@@ -201,11 +201,11 @@ The assumption set $A$ is the *coinductive certificate* that recursive subtyping
 $ tau_1 inter tau_2 lt.tri tau_1 quad tau_1 inter tau_2 lt.tri tau_2 \
 "if" tau lt.tri tau_1 "and" tau lt.tri tau_2, "then" tau lt.tri tau_1 inter tau_2 $
 
-— intersection is the *greatest lower bound* in the subtype lattice.
+Here intersection is the *greatest lower bound* in the subtype lattice.
 
 *Theorem (Coppo–Dezani–Venneri 1981; Pottinger 1980).* A $lambda$-term has an intersection type in a non-trivial system iff it is strongly normalising.
 
-Intersection types thus *characterise* termination — but at the price of *undecidable* type inference. The full system has no principal types and no decision procedure.
+Intersection types thus *characterise* termination, but at the price of *undecidable* type inference. The full system has no principal types and no decision procedure.
 
 *Practical use:* TypeScript has intersection types `A & B`; Scala has `A with B` (subtle differences from intersection); Flow has `A & B`. These are restricted fragments where decidability is retained.
 
@@ -215,14 +215,14 @@ A useful restricted form: intersection of *refinements* of a single base type. E
 
 == Union Types
 
-Union types $tau_1 union tau_2$ — values of *either* type — appear in TypeScript, Flow, Ceylon, and Scala 3. The subtyping rules:
+Union types $tau_1 union tau_2$ (values of *either* type) appear in TypeScript, Flow, Ceylon, and Scala 3. The subtyping rules:
 
 $ tau_1 lt.tri tau_1 union tau_2 quad tau_2 lt.tri tau_1 union tau_2 \
 "if" tau_1 lt.tri tau "and" tau_2 lt.tri tau, "then" tau_1 union tau_2 lt.tri tau $
 
-— union is the *least upper bound*.
+Here union is the *least upper bound*.
 
-Unions interact poorly with overloading and inference; languages adopting them generally couple them with *narrowing* — discriminated by type-tests:
+Unions interact poorly with overloading and inference; languages adopting them generally couple them with *narrowing* via type-tests:
 
 ```typescript
 function area(s: Circle | Square): number {
@@ -231,7 +231,7 @@ function area(s: Circle | Square): number {
 }
 ```
 
-The compiler tracks the *flow-sensitive* type of `s` inside each branch — a feature called *type narrowing* or *occurrence typing* (Tobin-Hochstadt–Felleisen 2008, in Typed Racket).
+The compiler tracks the *flow-sensitive* type of `s` inside each branch, a feature called *type narrowing* or *occurrence typing* (Tobin-Hochstadt–Felleisen 2008, in Typed Racket).
 
 == Refinement Types
 
@@ -241,9 +241,9 @@ $ {x : "Int" | x > 0} quad {"xs" : "List" alpha | "length" "xs" > 0} $
 
 Subtyping reduces to *implication* between refinements: ${x : "Int" | P(x)} lt.tri {x : "Int" | Q(x)}$ <==> $forall x . P(x) => Q(x)$.
 
-The predicate language is typically chosen to admit a decision procedure (SMT-solvable theories: linear arithmetic, bit-vectors, uninterpreted functions, arrays). The resulting type system delivers strong guarantees with no proof-writing burden on the programmer — the SMT solver handles all the routine reasoning.
+The predicate language is typically chosen to admit a decision procedure (SMT-solvable theories: linear arithmetic, bit-vectors, uninterpreted functions, arrays). The resulting type system delivers strong guarantees with no proof-writing burden on the programmer, as the SMT solver handles all the routine reasoning.
 
-*Liquid Haskell* (Vazou–Seidel–Jhala 2014) — Hindley–Milner plus refinements over decidable theories. Annotations sit in comment pragmas:
+*Liquid Haskell* (Vazou–Seidel–Jhala 2014) extends Hindley–Milner with refinements over decidable theories. Annotations sit in comment pragmas:
 
 ```haskell
 {-@ type Nat = {v:Int | v >= 0} @-}
@@ -258,11 +258,11 @@ head :: [a] -> a
 head (x:_) = x
 ```
 
-Calling `head []` is now a *type error* — the SMT solver fails to discharge the obligation `len [] > 0`. Liquid Haskell has been used to verify properties of `Data.Text`, `Data.Vector`, and full bytestring libraries.
+Calling `head []` is now a *type error*; the SMT solver fails to discharge the obligation `len [] > 0`. Liquid Haskell has been used to verify properties of `Data.Text`, `Data.Vector`, and full bytestring libraries.
 
-*F$"*"$* (Swamy et al. 2016) — pushes further: dependent types, refinements, *and* an effect system, with SMT for routine obligations and tactics for harder ones. F$"*"$ has been used for the verified TLS implementation in *miTLS* and for the verified cryptographic library *HACL$"*"$*, deployed in Mozilla Firefox, Linux kernel, and WireGuard.
+*F$"*"$* (Swamy et al. 2016) pushes further: dependent types, refinements, *and* an effect system, with SMT for routine obligations and tactics for harder ones. F$"*"$ has been used for the verified TLS implementation in *miTLS* and for the verified cryptographic library *HACL$"*"$*, deployed in Mozilla Firefox, Linux kernel, and WireGuard.
 
-The pattern — *types refined by SMT-decidable propositions* — is the most promising current path to *practical* program verification: stronger than ordinary types, more automated than full dependent types.
+The pattern of *types refined by SMT-decidable propositions* is the most promising current path to *practical* program verification: stronger than ordinary types, more automated than full dependent types.
 
 == Row Polymorphism (Rémy 1989)
 
@@ -270,7 +270,7 @@ A different generalisation: instead of admitting subtyping on records, allow pol
 
 $ "getName" : forall alpha rho . {"name" : alpha | rho} arrow.r alpha $
 
-— `getName` accepts any record having a `name` field, regardless of what other fields are present.
+`getName` accepts any record having a `name` field, regardless of what other fields are present.
 
 Row polymorphism gives most of the practical benefits of structural subtyping while keeping inference *predictable*: no subsumption rule, no need for least-upper-bound joins. OCaml's object system, PureScript, and PureScript's effect rows all use row polymorphism. TypeScript's *spread* and *rest* on object types is a row-polymorphic feature in a structurally-subtyped clothing.
 
@@ -282,7 +282,7 @@ Categorical semantics of subtyping (Reynolds 1980, Mitchell 1988, Breazu-Tannen�
 
 *Theorem (coherence, Breazu-Tannen et al. 1991).* For F$(lt.tri)$ with kernel rule, the coercion semantics is coherent: the meaning of a term is independent of the derivation chosen.
 
-Without coherence, the *meaning* of a program would depend on which derivation the type-checker happened to find — a disaster for predictability. Languages with non-coherent subtype systems (Scala 2's implicit conversions, early TypeScript) have suffered the resulting confusion.
+Without coherence, the *meaning* of a program would depend on which derivation the type-checker happened to find, a disaster for predictability. Languages with non-coherent subtype systems (Scala 2's implicit conversions, early TypeScript) have suffered the resulting confusion.
 
 == Variance Polymorphism
 
@@ -300,7 +300,7 @@ void copy(List<? extends T> src, List<? super T> dst) {
 
 *Kennedy–Pierce theorem (2007).* Subtyping for Java generics with use-site variance is decidable; declaration-site variance with F-bounded polymorphism is *undecidable* in the full Java generics system.
 
-The undecidability of Java generics — established formally by Grigore (2017) — derives from the interaction of declaration-site variance, F-bounds, and wildcards. Practical Java compilers terminate on every realistic program but admit constructions where the type checker enters an infinite loop.
+The undecidability of Java generics (established formally by Grigore 2017) derives from the interaction of declaration-site variance, F-bounds, and wildcards. Practical Java compilers terminate on every realistic program but admit constructions where the type checker enters an infinite loop.
 
 == Liskov Substitution Principle, Object Encodings
 
@@ -310,7 +310,7 @@ The *Liskov Substitution Principle* (Liskov–Wing 1994) is the behavioural coun
 - postconditions may be *strengthened*;
 - invariants must be *preserved*.
 
-— exactly the variance pattern of function types, lifted to logical contracts.
+This is exactly the variance pattern of function types, lifted to logical contracts.
 
 Object encodings in $lambda$-calculus typically combine *bounded existentials* (to hide state) with *recursive types* (for `self`) and *F-bounded polymorphism* (for binary methods). Cook (1989, 2009) gives the classical comparison of *abstract data type* style (existential) vs *object* style (Self-quantified) encodings; Bruce, Cardelli, and Pierce (1999) give the canonical encoding under *MyType* polymorphism.
 
@@ -353,7 +353,7 @@ The argument has type ${"x" : "Int", "y" : "String"}$; the parameter expects ${"
        Gamma |- f {x=7, y="hi"} : Int
 ```
 
-The subsumption step is *silent*: it changes no values, performs no runtime work, only adjusts the static type. Compare with the function-arrow variance case where the type changes are likewise free but the elaborator might insert coercion combinators in a coercive semantics — for higher-order subtyping, the coercion is $eta$-expansion plus pointwise composition.
+The subsumption step is *silent*: it changes no values, performs no runtime work, only adjusts the static type. Compare with the function-arrow variance case where the type changes are likewise free but the elaborator might insert coercion combinators in a coercive semantics; for higher-order subtyping, the coercion is $eta$-expansion plus pointwise composition.
 
 == Polymorphism, Subtyping, and Their Synthesis
 
@@ -371,6 +371,6 @@ The subsumption step is *silent*: it changes no values, performs no runtime work
 
 A modern language designer's pragmatic recipe: *prefer parametric polymorphism with row polymorphism over subtyping for inference-friendliness*; *use refinements where stronger guarantees are needed*; *reserve full bounded quantification for foundational work*; *if subtyping is required (interop, OO heritage), enforce a discipline that preserves decidability and coherence*.
 
-The historical lesson — repeated in Eiffel, Java, Scala 2, TypeScript — is that subtyping is *easy* to add and *hard* to make sound, decidable, and predictable simultaneously. The pieces are well understood now; the design tasks remaining are tasteful selection from the menu, not invention of fundamentally new machinery.
+The historical lesson, repeated in Eiffel, Java, Scala 2, and TypeScript, is that subtyping is *easy* to add and *hard* to make sound, decidable, and predictable simultaneously. The pieces are well understood now; the design tasks remaining are tasteful selection from the menu, not invention of fundamentally new machinery.
 
 _See also: _Type Systems_ for the basic subsumption rule and parametric polymorphism, _Linear and Substructural Type Systems_ for the orthogonal axis of how often a value is used, _Effects and Handlers_ for the analogous question on the side-effect axis._

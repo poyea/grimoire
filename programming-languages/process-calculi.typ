@@ -1,18 +1,18 @@
 = Process Calculi
 
-Process calculi are algebraic theories of concurrent computation. Where the $lambda$-calculus reduces all computation to function application, a process calculus takes *interaction* — the synchronised exchange of signals between independent agents — as primitive. The objects of study are not values produced by a terminating computation but *behaviours*: possibly infinite, possibly nondeterministic, possibly nonterminating patterns of observable action.
+Process calculi are algebraic theories of concurrent computation. Where the $lambda$-calculus reduces all computation to function application, a process calculus takes *interaction* (the synchronised exchange of signals between independent agents) as primitive. The objects of study are not values produced by a terminating computation but *behaviours*: possibly infinite, possibly nondeterministic, possibly nonterminating patterns of observable action.
 
 *See also:* _Program Semantics_, _Type Systems_
 
-A process calculus is judged by three criteria. First, *compositionality*: the meaning of $P | Q$ should be derivable from the meanings of $P$ and $Q$, otherwise the algebra has no predictive power. Second, *expressiveness*: can the calculus represent the concurrency phenomena one cares about — synchronisation, choice, name passing, mobility, security, locality? Third, *equational reasoning*: when can we substitute $P$ for $Q$ inside a context $C[dot]$ and preserve behaviour? The latter is the deepest question, and it is the question that the theory of behavioural equivalences was invented to answer.
+A process calculus is judged by three criteria. First, *compositionality*: the meaning of $P | Q$ should be derivable from the meanings of $P$ and $Q$, otherwise the algebra has no predictive power. Second, *expressiveness*: can the calculus represent the concurrency phenomena one cares about (synchronisation, choice, name passing, mobility, security, locality)? Third, *equational reasoning*: when can we substitute $P$ for $Q$ inside a context $C[dot]$ and preserve behaviour? The latter is the deepest question, and it is the question that the theory of behavioural equivalences was invented to answer.
 
-This chapter surveys the three foundational calculi — CCS, CSP, and the $pi$-calculus — together with their descendants (join, ambient, spi, applied $pi$). The companion chapter _Concurrency Models_ treats the broader semantic landscape: event structures, Petri nets, memory models, actor systems, STM, and the operational semantics of mainstream concurrent languages.
+This chapter surveys the three foundational calculi (CCS, CSP, and the $pi$-calculus) together with their descendants (join, ambient, spi, applied $pi$). The companion chapter _Concurrency Models_ treats the broader semantic landscape: event structures, Petri nets, memory models, actor systems, STM, and the operational semantics of mainstream concurrent languages.
 
 == Why an Algebra of Processes?
 
 The 1970s exposed a foundational gap. Operational semantics (Plotkin's SOS, 1981) gave a satisfactory account of sequential computation: a transition relation between configurations, with a value as the terminal point of a reduction. Denotational semantics (Scott–Strachey) provided the matching mathematical universe. But neither approach scaled cleanly to concurrent systems. A concurrent program does not "return a value"; it engages in an unbounded dialogue with its environment. Two concurrent programs are equivalent not when they compute the same function but when they cannot be told apart by any observer.
 
-Robin Milner's *Calculus of Communicating Systems* (Milner 1980, 1989) was the first sustained attempt to develop concurrency as a branch of universal algebra. Tony Hoare's *Communicating Sequential Processes* (Hoare 1978, 1985) pursued the same goal from a different angle, with denotational rather than operational primacy. The $pi$-calculus (Milner–Parrow–Walker 1992) extended CCS with *mobility*: the names exchanged in communication are themselves channel identifiers, so the communication topology evolves dynamically. Each calculus is small — a half-dozen syntactic forms, a handful of inference rules — yet each supports a rich metatheory of bisimulation, congruence, axiomatisation, and modal logic.
+Robin Milner's *Calculus of Communicating Systems* (Milner 1980, 1989) was the first sustained attempt to develop concurrency as a branch of universal algebra. Tony Hoare's *Communicating Sequential Processes* (Hoare 1978, 1985) pursued the same goal from a different angle, with denotational rather than operational primacy. The $pi$-calculus (Milner–Parrow–Walker 1992) extended CCS with *mobility*: the names exchanged in communication are themselves channel identifiers, so the communication topology evolves dynamically. Each calculus is small (a half-dozen syntactic forms, a handful of inference rules), yet each supports a rich metatheory of bisimulation, congruence, axiomatisation, and modal logic.
 
 == CCS: Calculus of Communicating Systems
 
@@ -162,7 +162,7 @@ Between trace equivalence (the coarsest reasonable equivalence: $P =_T Q$ <==> t
 
 - *Trace equivalence:* same set of finite traces.
 - *Completed trace:* traces plus information about which traces lead to deadlock.
-- *Failures equivalence (CSP):* traces $s$ paired with refusal sets $X$ — $(s, X)$ holds when after $s$ the process can refuse every action in $X$.
+- *Failures equivalence (CSP):* traces $s$ paired with refusal sets $X$; $(s, X)$ holds when after $s$ the process can refuse every action in $X$.
 - *Failures–divergences:* failures plus the set of traces after which the process can diverge ($tau^omega$).
 - *Ready trace, ready simulation, possible futures, ...*
 - *Simulation:* one-sided bisimulation: every move of $P$ is matched by $Q$, but not conversely.
@@ -204,10 +204,10 @@ $ P ::= "STOP" | "SKIP" | a arrow.r P | P square Q | P inter.sq Q | P bar bar_A 
 - $"STOP"$: deadlock; performs no event.
 - $"SKIP"$: successful termination (signals $checkmark$).
 - $a arrow.r P$: event prefix.
-- $P square Q$: *external choice* — the environment selects the branch.
-- $P inter.sq Q$: *internal (nondeterministic) choice* — the process selects.
-- $P bar bar_A Q$: *alphabetised parallel* — $P$ and $Q$ must synchronise on every event in $A$, and proceed independently on events outside $A$.
-- $P backslash A$: *hiding* — events in $A$ become internal.
+- $P square Q$: *external choice* (the environment selects the branch).
+- $P inter.sq Q$: *internal (nondeterministic) choice* (the process selects).
+- $P bar bar_A Q$: *alphabetised parallel* ($P$ and $Q$ must synchronise on every event in $A$, and proceed independently on events outside $A$).
+- $P backslash A$: *hiding* (events in $A$ become internal).
 - $mu X. P$: recursion.
 
 The split of nondeterminism into $square$ and $inter.sq$ is the most striking design choice and the one that distinguishes CSP most sharply from CCS. CCS's single $+$ is intermediate: $(a . P) + (b . Q)$ behaves externally (the choice is resolved by the environment offering $a$ or $b$), but $tau . P + tau . Q$ behaves internally.
@@ -223,7 +223,7 @@ The model imposes several healthiness conditions: every prefix of a divergence i
 
 $ P subset.sq.eq_(F D) Q <==> F(Q) subset.eq F(P) and D(Q) subset.eq D(P) $
 
-read as "$Q$ refines $P$" — $Q$ has fewer behaviours (less nondeterminism, less divergence) than $P$.
+read as "$Q$ refines $P$": $Q$ has fewer behaviours (less nondeterminism, less divergence) than $P$.
 
 Refinement is the central proof obligation in CSP-based verification: a specification $S$ is refined by an implementation $I$ when $S subset.sq.eq_(F D) I$. The *FDR* model checker (Roscoe et al.) decides refinement by normalising both sides and comparing finite state machines. FDR has been used to verify cryptographic protocols (Lowe's attack on Needham–Schroeder), bus protocols, and distributed algorithms.
 
@@ -237,7 +237,7 @@ CSP supports a hierarchy of three models, each fully abstract for a different ca
 - *Stable failures model $cal(F)$:* traces plus refusal sets. Adequate for safety plus deadlock-freedom.
 - *Failures–divergences $cal(F D)$:* adequate for safety, deadlock-freedom, and divergence-freedom (the typical "total correctness" notion for reactive systems).
 
-Each finer model refines the coarser by adding information and a corresponding class of distinguishing observers — the CSP analogue of van Glabbeek's spectrum.
+Each finer model refines the coarser by adding information and a corresponding class of distinguishing observers, the CSP analogue of van Glabbeek's spectrum.
 
 == The $pi$-calculus
 
@@ -250,7 +250,7 @@ $ P, Q ::= 0 | overline(x) chevron.l y chevron.r. P | x(y). P | P bar Q | (nu x)
 - $overline(x) chevron.l y chevron.r. P$: send name $y$ on channel $x$, then continue as $P$.
 - $x(y). P$: receive a name on $x$, bind it to $y$, then continue as $P$. Here $y$ is binding in $P$.
 - $(nu x) P$: create a fresh name $x$, scoped within $P$.
-- $!P$: replication — semantically equivalent to $P bar !P$, providing unbounded copies of $P$.
+- $!P$: replication, semantically equivalent to $P bar !P$, providing unbounded copies of $P$.
 
 Free names $"fn"(P)$ and bound names $"bn"(P)$ are defined as usual. We work up to $alpha$-equivalence.
 
@@ -358,7 +358,7 @@ Sangiorgi (1992) showed that HO$pi$ has no extra expressive power: there is a fa
 
 $ [| overline(x) chevron.l R chevron.r. P |] = (nu r)(overline(x) chevron.l r chevron.r. ([| P |] bar !r(y). [| R |])) $
 
-that replaces each process value by a *trigger name* — a fresh channel whose activation launches a copy of the process. The receiver, upon obtaining the trigger, can spawn the process by sending on it. This translation is fully abstract with respect to barbed bisimulation, establishing the first-order $pi$-calculus as the canonical core.
+that replaces each process value by a *trigger name*, a fresh channel whose activation launches a copy of the process. The receiver, upon obtaining the trigger, can spawn the process by sending on it. This translation is fully abstract with respect to barbed bisimulation, establishing the first-order $pi$-calculus as the canonical core.
 
 === Encoding the $lambda$-calculus
 
@@ -368,11 +368,11 @@ $ chevron.l chevron.l x chevron.r chevron.r_v p &= overline(p) chevron.l x chevr
 chevron.l chevron.l lambda x. M chevron.r chevron.r_v p &= (nu f)(overline(p) chevron.l f chevron.r. !f(x, q). chevron.l chevron.l M chevron.r chevron.r_v q) \
 chevron.l chevron.l M N chevron.r chevron.r_v p &= (nu q)(chevron.l chevron.l M chevron.r chevron.r_v q bar q(f). (nu r)(chevron.l chevron.l N chevron.r chevron.r_v r bar r(v). overline(f) chevron.l v, p chevron.r)) $
 
-The encoding's correctness theorem: $M arrow.r.long^*_(beta v) V$ <==> $chevron.l chevron.l M chevron.r chevron.r_v p$ converges to a process that emits the encoding of $V$ on $p$. The CBN encoding is structurally similar but transmits *thunks* (replicated processes) rather than evaluated values. The two encodings differ exactly where CBV and CBN differ semantically — a satisfying coincidence.
+The encoding's correctness theorem: $M arrow.r.long^*_(beta v) V$ <==> $chevron.l chevron.l M chevron.r chevron.r_v p$ converges to a process that emits the encoding of $V$ on $p$. The CBN encoding is structurally similar but transmits *thunks* (replicated processes) rather than evaluated values. The two encodings differ exactly where CBV and CBN differ semantically, a satisfying coincidence.
 
 === Asynchronous $pi$-calculus
 
-Honda–Tokoro (1991) and Boudol (1992) independently observed that *output prefix* (the ability to write $overline(x) chevron.l y chevron.r. P$ for any $P$) requires the sender to know when the message has been received — an inherently synchronous primitive. Restricting outputs to the form $overline(x) chevron.l y chevron.r$ (with no continuation, i.e. continuation forced to $0$) yields the *asynchronous $pi$-calculus*:
+Honda–Tokoro (1991) and Boudol (1992) independently observed that *output prefix* (the ability to write $overline(x) chevron.l y chevron.r. P$ for any $P$) requires the sender to know when the message has been received, an inherently synchronous primitive. Restricting outputs to the form $overline(x) chevron.l y chevron.r$ (with no continuation, i.e. continuation forced to $0$) yields the *asynchronous $pi$-calculus*:
 
 $ P ::= 0 | overline(x) chevron.l y chevron.r | x(y). P | P bar Q | (nu x) P | !P $
 
@@ -398,7 +398,7 @@ with $sharp^i$ *covariant* in $T$ (a channel typed $sharp^i T$ may be used at $s
 
 IO types support powerful information-hiding patterns: a server publishes only the input capability of a request channel and only the output capability of a reply channel, ensuring clients cannot impersonate the server or eavesdrop on responses.
 
-*Linearity (Kobayashi–Pierce–Turner 1996).* A *linear* channel is one used exactly once. Linearity is encoded by counting uses and prohibiting parallel sharing of linear capabilities. Linear $pi$ (Yoshida–Berger–Honda 2004) recovers the simply-typed $lambda$-calculus as an embedded sublanguage via the encoding above — the CBV target uses precisely linear channels.
+*Linearity (Kobayashi–Pierce–Turner 1996).* A *linear* channel is one used exactly once. Linearity is encoded by counting uses and prohibiting parallel sharing of linear capabilities. Linear $pi$ (Yoshida–Berger–Honda 2004) recovers the simply-typed $lambda$-calculus as an embedded sublanguage via the encoding above; the CBV target uses precisely linear channels.
 
 *Session types (Honda–Vasconcelos–Kubo 1998)* further refine channel types into *behavioural protocols*: a session type prescribes the sequence of inputs, outputs, branchings, and selections expected on a channel. Duality of session types ensures that two endpoints behave compatibly. Session types are the subject of a separate chapter; their foundational embedding in linear $pi$ (Dardha–Giachino–Sangiorgi 2017) closes the circle by reducing sessions to linear types.
 
@@ -473,16 +473,17 @@ A coordinator $C$ and $n$ participants $P_1, dots, P_n$ communicate over private
   )
 ```
 
-This is a straightforward exercise in $pi$ but the *crash-recovery* variant — where a participant or the coordinator may fail and recover — requires the applied $pi$-calculus (to model persistent state) and is the gateway to the theory of distributed consensus treated in the systems volume.
+This is a straightforward exercise in $pi$ but the *crash-recovery* variant (where a participant or the coordinator may fail and recover) requires the applied $pi$-calculus (to model persistent state) and is the gateway to the theory of distributed consensus treated in the systems volume.
 
 === Leader Election on a Ring
 
 The Chang–Roberts algorithm on an $n$-process ring: each process $P_i$ has a unique identifier $"uid"_i$, sends its UID clockwise, forwards any received UID greater than its own and its own (once), and declares itself leader if it receives its own UID back.
 
-In $pi$, each process has an input channel from its predecessor and an output channel to its successor, both passed by the configuration step. The correctness theorem — exactly one process declares itself leader, and it is the one with the maximum UID — is provable by induction on the number of rounds, using barbed equivalence to a one-state spec process that simply emits the maximum UID on a designated channel.
+In $pi$, each process has an input channel from its predecessor and an output channel to its successor, both passed by the configuration step. The correctness theorem (exactly one process declares itself leader, and it is the one with the maximum UID) is provable by induction on the number of rounds, using barbed equivalence to a one-state spec process that simply emits the maximum UID on a designated channel.
 
 == Outlook
 
 The process-calculus tradition is unified by three commitments: *small syntax* (a handful of constructs), *compositional semantics* (the meaning of a compound is determined by the meanings of its parts), and *equational reasoning* (behavioural equivalence as the principal proof obligation). What the algebra buys is precisely the ability to substitute equals for equals in the design of concurrent systems — to verify a protocol once and reuse it under any context.
 
-Beyond the calculi surveyed here lie type systems for concurrency (session types, behavioural types, deadlock and liveness types — see the chapter on session types), probabilistic and stochastic process calculi (PEPA, the stochastic $pi$ used in systems biology), real-time extensions (timed CCS, timed CSP), and the modal $mu$-calculus and its model-checking algorithms. The concurrent semantic universe is treated in the next chapter; the database and distributed-systems volumes treat the *systems* consequences — consensus, replication, transactions — through which these algebras turn into protocols.
+
+Beyond the calculi surveyed here lie type systems for concurrency (session types, behavioural types, deadlock and liveness types; see the chapter on session types), probabilistic and stochastic process calculi (PEPA, the stochastic $pi$ used in systems biology), real-time extensions (timed CCS, timed CSP), and the modal $mu$-calculus and its model-checking algorithms. The concurrent semantic universe is treated in the next chapter; the database and distributed-systems volumes treat the *systems* consequences — consensus, replication, transactions — through which these algebras turn into protocols.

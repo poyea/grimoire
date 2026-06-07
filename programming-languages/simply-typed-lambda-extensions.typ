@@ -22,7 +22,7 @@ and reduction
 $ "rec"(e_z, e_s, 0) &arrow.r e_z \
 "rec"(e_z, e_s, S space n) &arrow.r e_s space n space "rec"(e_z, e_s, n) $
 
-System T is strongly normalising (Tait 1967; this was actually Tait's original target). The terms of $lambda^arrow.r + T$ at type $"Nat" arrow.r "Nat"$ compute exactly the *provably total functions* in first-order Peano arithmetic — a vast cal(C) including Ackermann's function, but properly contained in the $mu$-recursive functions. System T separates the *higher-order primitive recursive* from the *general recursive*.
+System T is strongly normalising (Tait 1967; this was actually Tait's original target). The terms of $lambda^arrow.r + T$ at type $"Nat" arrow.r "Nat"$ compute exactly the *provably total functions* in first-order Peano arithmetic, a vast class including Ackermann's function, but properly contained in the $mu$-recursive functions. System T separates the *higher-order primitive recursive* from the *general recursive*.
 
 === Fixed Points
 
@@ -30,11 +30,11 @@ To recover Turing completeness we add a fixed-point operator $"fix"$:
 $ Gamma tack.r e : tau arrow.r tau  /  Gamma tack.r "fix" space e : tau \
 "fix" space (lambda x : tau . e) arrow.r [x |-> "fix"(lambda x : tau . e)] e $
 
-Once $"fix"$ is added, $lambda^arrow.r + "fix"$ is Turing complete; SN fails; Curry–Howard now corresponds to a *classical* (or inconsistent) logic — every proposition is "provable" via the inhabitant $"fix"(lambda x . x)$. This is the price of general recursion: type soundness still holds (well-typed programs do not get stuck), but they may diverge, and the language is no longer a sound logic.
+Once $"fix"$ is added, $lambda^arrow.r + "fix"$ is Turing complete; SN fails; Curry–Howard now corresponds to a *classical* (or inconsistent) logic: every proposition is "provable" via the inhabitant $"fix"(lambda x . x)$. This is the price of general recursion: type soundness still holds (well-typed programs do not get stuck), but they may diverge, and the language is no longer a sound logic.
 
 == Type Checking and Inference
 
-For Church-style $lambda^arrow.r$, type checking is straightforward — every binder is annotated, so a single pass reading T-VAR, T-ABS, T-APP suffices, $O(n)$ in the term size.
+For Church-style $lambda^arrow.r$, type checking is straightforward: every binder is annotated, so a single pass reading T-VAR, T-ABS, T-APP suffices, $O(n)$ in the term size.
 
 For Curry-style $lambda^arrow.r$ (no annotations), type inference is performed by *constraint generation + unification*:
 + Assign a fresh metavariable $alpha_x$ to each variable.
@@ -42,7 +42,7 @@ For Curry-style $lambda^arrow.r$ (no annotations), type inference is performed b
 + For each application $e_1 space e_2$ producing types $tau_1, tau_2$, emit constraint $tau_1 = tau_2 arrow.r gamma$ with $gamma$ fresh.
 + Solve all constraints by Robinson unification.
 
-The result is a *principal type* — most-general type from which all valid types are substitution instances (Hindley 1969). Type inference for $lambda^arrow.r$ is linear in the term after near-linear unification (Damas–Milner 1982; see _Type Systems_ for the algorithm).
+The result is a *principal type*, the most-general type from which all valid types are substitution instances (Hindley 1969). Type inference for $lambda^arrow.r$ is linear in the term after near-linear unification (Damas–Milner 1982; see _Type Systems_ for the algorithm).
 
 ```ocaml
 (* OCaml: Curry-style lambda calculus inferred *)
@@ -85,7 +85,7 @@ These are exactly the axioms K and S of the Hilbert-style presentation of $"IPC"
 
 == $lambda$I and $lambda$K
 
-*$lambda$K-calculus* (the "K" for *constant*): the calculus we have been studying — $lambda$ is allowed even when the bound variable does not occur. $K = lambda x . lambda y . x$ is a $lambda$K term.
+*$lambda$K-calculus* (the "K" for *constant*): the calculus we have been studying, where $lambda$ is allowed even when the bound variable does not occur. $K = lambda x . lambda y . x$ is a $lambda$K term.
 
 *$lambda$I-calculus* (Church 1941): restrict $lambda x . e$ to terms with $x in "FV"(e)$. So $K$ is not a $lambda$I term, but $I$ and $S$ are. The $lambda$I-calculus has stronger termination properties:
 + Every reduction either terminates or every subterm is reduced infinitely often (no "trash collection" of erased terms).
@@ -112,8 +112,8 @@ In Church-style $lambda^arrow.r$, the annotation on every $lambda$ makes type *c
 But in elaborator design (e.g., Lean, Agda), one wants to *minimise* annotations.
 
 *Bidirectional type checking* (Pierce–Turner 2000) splits the typing judgment into two modes:
-- *Synthesis* $Gamma tack.r e => tau$ — given $e$, produce $tau$.
-- *Checking* $Gamma tack.r e arrow.l.double tau$ — given both, verify.
+- *Synthesis* $Gamma tack.r e => tau$: given $e$, produce $tau$.
+- *Checking* $Gamma tack.r e arrow.l.double tau$: given both, verify.
 
 Rules:
 ```text
@@ -258,7 +258,7 @@ at type $"Int"$.
 + Inner application is a value redex: $(lambda y . y + 1) space 0 arrow.r 0 + 1 = 1$.
 + $(lambda y . y + 1) space 1 arrow.r 1 + 1 = 2$.
 
-Total: 4 $beta$-steps (plus arithmetic) to normal form $2$. The reduction is *strongly normalising* — every path leads to $2$ in finitely many steps.
+Total: 4 $beta$-steps (plus arithmetic) to normal form $2$. The reduction is *strongly normalising*: every path leads to $2$ in finitely many steps.
 
 *CBN reduction:* reduces the leftmost-outermost redex and passes arguments unevaluated:
 + $(lambda f . ...) (lambda y . y + 1) space 0 arrow.r (lambda x . (lambda y . y + 1) ((lambda y . y + 1) space x)) space 0$.
@@ -281,7 +281,7 @@ Howard (1969, published 1980) made explicit what was already implicit in the wor
 A different but related thread, starting with Lawvere (1969) and culminating in Lambek (1980), formulated the same correspondence categorically.
 
 Tait's 1967 paper "Intensional interpretations of functionals of finite type" introduced the *computability* method (now called *reducibility*) that became the standard tool for SN proofs.
-Girard's 1972 thesis pushed reducibility to *System F* — the second-order case requires a quantification over predicates, the *reducibility candidate* refinement.
+Girard's 1972 thesis pushed reducibility to *System F*; the second-order case requires a quantification over predicates, the *reducibility candidate* refinement.
 
 == Worked Examples
 
@@ -291,7 +291,7 @@ The Church numerals
 $ overline(n) = lambda f . lambda x . underbrace(f (f (... (f space x))), n " applications") $
 encode natural numbers in pure $lambda$-calculus.
 
-In $lambda^arrow.r$ proper, $overline(n)$ types at $(iota arrow.r iota) arrow.r iota arrow.r iota$ for any type $iota$ — but each numeral has its own family of types, not a single polymorphic type.
+In $lambda^arrow.r$ proper, $overline(n)$ types at $(iota arrow.r iota) arrow.r iota arrow.r iota$ for any type $iota$; but each numeral has its own family of types, not a single polymorphic type.
 
 In *System F* (next chapter), one can give $overline(n) : forall alpha . (alpha arrow.r alpha) arrow.r alpha arrow.r alpha$.
 
@@ -318,7 +318,7 @@ $ "pair" &= lambda x . lambda y . lambda f . f space x space y \
 
 Verify: $"fst" ("pair" space a space b) arrow.r^* a$.
 
-These *Church encodings* show that products and sums are *derivable* in pure $lambda$, given enough type-theoretic power (System F suffices). $lambda^arrow.r$ proper cannot encode them — the universal property of pairs requires polymorphism.
+These *Church encodings* show that products and sums are *derivable* in pure $lambda$, given enough type-theoretic power (System F suffices). $lambda^arrow.r$ proper cannot encode them; the universal property of pairs requires polymorphism.
 
 == Equational Theory
 
@@ -348,7 +348,7 @@ This shows: SN does *not* imply efficient normalisation. The normal form exists 
 
 What does $lambda^arrow.r$ lack?
 
-*Polymorphism.* The identity $lambda x . x$ has type $iota arrow.r iota$ for each base $iota$, but $lambda^arrow.r$ cannot internalise the quantification. Adding $forall alpha$ yields *System F* — Curry–Howard with second-order intuitionistic logic. See _System F and Parametricity_.
+*Polymorphism.* The identity $lambda x . x$ has type $iota arrow.r iota$ for each base $iota$, but $lambda^arrow.r$ cannot internalise the quantification. Adding $forall alpha$ yields *System F*, giving Curry–Howard with second-order intuitionistic logic. See _System F and Parametricity_.
 
 *Type-level computation.* Types in $lambda^arrow.r$ are inert; we cannot compute on them. Adding type-level $lambda$ yields *System $F_omega$*; adding *dependent types* (types indexed by terms) yields the *Edinburgh Logical Framework* and ultimately *Martin-Löf Type Theory* and the *Calculus of Constructions*. See _Dependent Types_.
 
@@ -372,11 +372,11 @@ So $"Int"$ is order $0$; $"Int" arrow.r "Int"$ is order $1$; $("Int" arrow.r "In
 
 *Statman's $1$-section Theorem (1979).* The number-theoretic functions definable in $lambda^arrow.r$ at order $<= 2$ are exactly the *polynomially-bounded* functions; at order $<= 3$, the *Kalmar elementary* functions; at unbounded order, the higher-type primitive recursive functions.
 
-So there is a strict hierarchy by type order — a phenomenon absent in untyped or general-recursion settings.
+So there is a strict hierarchy by type order, a phenomenon absent in untyped or general-recursion settings.
 
 == Schwichtenberg's Theorem
 
-*Schwichtenberg (1976).* The functions of type $"Nat" arrow.r "Nat"$ definable in *Gödel's System T* are exactly the *provably total functions of first-order Peano Arithmetic* — equivalently, the functions whose totality is provable using transfinite induction up to $epsilon_0$.
+*Schwichtenberg (1976).* The functions of type $"Nat" arrow.r "Nat"$ definable in *Gödel's System T* are exactly the *provably total functions of first-order Peano Arithmetic*, equivalently the functions whose totality is provable using transfinite induction up to $epsilon_0$.
 
 This places System T (and hence $lambda^arrow.r$ + primitive recursion) in correspondence with PA, just as $lambda^arrow.r$ alone corresponds to $"IPC"^supset$, System F corresponds to second-order arithmetic, and the Calculus of Constructions corresponds to higher-order intuitionistic logic plus inductive types.
 
@@ -394,7 +394,7 @@ Under the Curry–Howard correspondence:
 Gentzen's original proof of cut elimination was syntactic and used induction on cut-rank.
 Tait's reducibility argument is the semantic analog: instead of reducing the proof directly, we interpret each proposition by a *reducibility predicate* and show every proof inhabits its predicate.
 
-This shift — from syntactic proof transformation to semantic interpretation — is the methodological bridge from proof theory into modern type theory.
+This shift from syntactic proof transformation to semantic interpretation is the methodological bridge from proof theory into modern type theory.
 The same reducibility technique scales to System F (with candidates), to MLTT (with logical relations and Kripke worlds), and to higher type theories.
 
 == Cartmell's Categories with Families
@@ -456,8 +456,8 @@ The simply-typed lambda calculus is small, sharp, and complete-to-itself. The tw
 - *Consistency:* the inhabitedness of $bot$ is decidable; it is uninhabited.
 - *Decidability:* type checking is decidable in $O(n)$; type inference (Curry) is decidable in $O(n alpha(n))$.
 
-The four landmark theorems — Church–Rosser (confluence), Subject Reduction (preservation), Progress, and Strong Normalisation — together with their proofs (parallel reduction, structural induction, canonical forms, and Tait reducibility) form the *standard playbook* for every typed calculus.
-Master them here, and the proofs for System F, $F_omega$, MLTT, CIC, and beyond are variations on these themes — with sharper tools (reducibility candidates, logical relations indexed by candidate assignments) but the same melody.
+The four landmark theorems (Church–Rosser (confluence), Subject Reduction (preservation), Progress, and Strong Normalisation) together with their proofs (parallel reduction, structural induction, canonical forms, and Tait reducibility) form the *standard playbook* for every typed calculus.
+Master them here, and the proofs for System F, $F_omega$, MLTT, CIC, and beyond are variations on these themes, with sharper tools (reducibility candidates, logical relations indexed by candidate assignments) but the same melody.
 
 Read this chapter as a *technical exercise* in the methodology of typed programming language theory.
-Every theorem we proved (confluence, SR, progress, SN) will recur in the chapters on System F and dependent types — usually in a stronger and harder form, but with the same skeleton of argument.
+Every theorem we proved (confluence, SR, progress, SN) will recur in the chapters on System F and dependent types, usually in a stronger and harder form, but with the same skeleton of argument.

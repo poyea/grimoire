@@ -8,7 +8,7 @@ This chapter develops dependent type theory from the ground up. We give the synt
 
 == From STLC to $Pi$ and $Sigma$
 
-In STLC, $tau_1 arrow.r tau_2$ means a function from $tau_1$-things to $tau_2$-things. Both $tau_1, tau_2$ are *closed* types — no term-level data on them. The dependent generalisation:
+In STLC, $tau_1 arrow.r tau_2$ means a function from $tau_1$-things to $tau_2$-things. Both $tau_1, tau_2$ are *closed* types, with no term-level data on them. The dependent generalisation:
 
 *Dependent function type ($Pi$, "pi-type").* $Pi x : A . B(x)$ is the type of functions $f$ such that for every $a : A$, $f(a) : B(a)$. When $B$ does not mention $x$, $Pi x : A . B = A arrow.r B$ is the ordinary arrow.
 
@@ -22,7 +22,7 @@ The constructive reading: a proof of $forall x : A . B(x)$ is a *function* deliv
 
 == $lambda P$ / LF: The Edinburgh Logical Framework
 
-We begin with the simplest dependent calculus — $lambda P$ in the Barendregt cube, also called *LF* (Harper–Honsell–Plotkin 1993). Only types may depend on terms; no polymorphism, no type operators.
+We begin with the simplest dependent calculus, $lambda P$ in the Barendregt cube, also called *LF* (Harper–Honsell–Plotkin 1993). Only types may depend on terms; no polymorphism, no type operators.
 
 *Syntax.* Three syntactic categories: kinds, types, terms.
 $ "Kinds" &space.quad K ::= * | Pi x : A . K \
@@ -37,7 +37,7 @@ We have type-level $lambda$ (for forming type families) and type-level applicati
 + $Gamma tack.r A : K$  ($A$ has kind $K$)
 + $Gamma tack.r e : A$  ($e$ has type $A$)
 
-The rules — only the essentials, the rest follow from analogues in STLC:
+The rules (only the essentials; the rest follow from analogues in STLC):
 
 ```text
   Gamma |- A : *
@@ -77,7 +77,7 @@ The rules — only the essentials, the rest follow from analogues in STLC:
   Gamma |- e : B
 ```
 
-The *conversion rule* (T-CONV) is the new ingredient: types that are $beta$-equal (in fact $beta delta iota zeta$ in CIC; see below) are interchangeable. Type checking therefore requires *deciding* equality of arbitrary terms — a notable departure from STLC.
+The *conversion rule* (T-CONV) is the new ingredient: types that are $beta$-equal (in fact $beta delta iota zeta$ in CIC; see below) are interchangeable. Type checking therefore requires *deciding* equality of arbitrary terms, a notable departure from STLC.
 
 *$beta$-rule for $Pi$.*
 $ (lambda x : A . e) space e' arrow.r_beta [x |-> e'] e $
@@ -86,14 +86,14 @@ $ (lambda x : A . e) space e' arrow.r_beta [x |-> e'] e $
 
 *Theorem.* $lambda P$ is strongly normalising. Type checking is decidable.
 
-The first dependent example: the type family $"Vec"$ of length-indexed lists. Given $A : *$ and a term $n : "Nat"$, we form $"Vec" A space n : *$. Then $"append" : Pi A : * . Pi m n : "Nat" . "Vec" A space m arrow.r "Vec" A space n arrow.r "Vec" A space (m + n)$ — the *type* of $"append"$ guarantees the length arithmetic.
+The first dependent example: the type family $"Vec"$ of length-indexed lists. Given $A : *$ and a term $n : "Nat"$, we form $"Vec" A space n : *$. Then $"append" : Pi A : * . Pi m n : "Nat" . "Vec" A space m arrow.r "Vec" A space n arrow.r "Vec" A space (m + n)$; the *type* of $"append"$ guarantees the length arithmetic.
 
 == Universes
 
-In STLC the type $tau$ is just a syntactic category; there is no question "what is the type of `Int`?" In dependent type theory, types are *also* terms — they live in a *universe*. A naïve approach $cal(U) : cal(U)$ courts paradox (see below); the standard solution is a hierarchy:
+In STLC the type $tau$ is just a syntactic category; there is no question "what is the type of `Int`?" In dependent type theory, types are *also* terms; they live in a *universe*. A naïve approach $cal(U) : cal(U)$ courts paradox (see below); the standard solution is a hierarchy:
 $ cal(U)_0 : cal(U)_1 : cal(U)_2 : cal(U)_3 : ... $
 
-with the *cumulativity* rule $cal(U)_i subset.eq cal(U)_(i+1)$ — every type in level $i$ is also in level $i+1$.
+with the *cumulativity* rule $cal(U)_i subset.eq cal(U)_(i+1)$: every type in level $i$ is also in level $i+1$.
 
 *Russell vs Tarski style.*
 - *Russell-style* (Martin-Löf 1984, Coq, Lean): membership in a universe *is* being a type. Write $A : cal(U)_i$ and use $A$ directly as the type. Simpler, but blurs the distinction between code and type.
@@ -103,7 +103,7 @@ Most production proof assistants use a hybrid: Russell-style at the surface, Tar
 
 === Predicative vs Impredicative
 
-A universe is *predicative* if $Pi x : A . B$ lives at the maximum of the levels of $A$ and $B$. *Impredicative* if $Pi x : A . B$ can live in a *fixed* universe regardless of $A$'s level — typically because $Pi$ is allowed to quantify over the universe itself.
+A universe is *predicative* if $Pi x : A . B$ lives at the maximum of the levels of $A$ and $B$. *Impredicative* if $Pi x : A . B$ can live in a *fixed* universe regardless of $A$'s level, typically because $Pi$ is allowed to quantify over the universe itself.
 
 Coq has a special *impredicative* universe $"Prop"$: $Pi A : "Type" . A arrow.r A : "Prop"$ even though "Type" is a larger universe. This is logically delicate: it works for $"Prop"$ but would be inconsistent for $"Type"$.
 
@@ -111,11 +111,11 @@ Coq has a special *impredicative* universe $"Prop"$: $Pi A : "Type" . A arrow.r 
 
 *Theorem (Girard 1972, Coquand 1986).* The system *MLTT + $cal(U) : cal(U)$* (i.e., a single universe containing itself) is inconsistent.
 
-*Sketch.* Girard's original paradox is in System U; the type-theoretic version (Coquand 1986; refined by Hurkens 1995) goes as follows. Define a *Burali-Forti–style* encoding of well-founded relations *indexed by all types*. The collection of all such relations is itself such a relation, hence its own member — producing a strictly-smaller chain $X gt X gt X gt ...$ violating well-foundedness. The contradiction is delivered as a closed term of type $bot$.
+*Sketch.* Girard's original paradox is in System U; the type-theoretic version (Coquand 1986; refined by Hurkens 1995) goes as follows. Define a *Burali-Forti–style* encoding of well-founded relations *indexed by all types*. The collection of all such relations is itself such a relation, hence its own member, producing a strictly-smaller chain $X gt X gt X gt ...$ violating well-foundedness. The contradiction is delivered as a closed term of type $bot$.
 
 *Hurkens' miniature paradox.* In 1995 Hurkens produced a *short* paradox: a 24-line term of type $bot$ in the system $* : *$. The encoding uses a Russell-style trick: define $U = forall X . ((X arrow.r *) arrow.r X) arrow.r X$, then a paradoxical inhabitant of $bot$.
 
-*Consequence.* Predicativity is essential. Coq's $"Prop"$ is impredicative without paradox not because of proof irrelevance (by default Coq's $"Prop"$ is proof-*relevant* — see below) but because elimination *out of* $"Prop"$ into $"Type"$ is restricted (*singleton elimination*) and $"Prop"$ is erased at extraction, so its impredicativity cannot leak into the computational fragment.
+*Consequence.* Predicativity is essential. Coq's $"Prop"$ is impredicative without paradox not because of proof irrelevance (by default Coq's $"Prop"$ is proof-*relevant*; see below) but because elimination *out of* $"Prop"$ into $"Type"$ is restricted (*singleton elimination*) and $"Prop"$ is erased at extraction, so its impredicativity cannot leak into the computational fragment.
 
 == Inductive Types
 
@@ -157,9 +157,9 @@ The index `n : nat` *varies* per constructor: `vnil` has index $0$, `vcons` has 
 $ "Vec_rec" : Pi A . Pi P : (Pi n . "Vec" A space n arrow.r cal(U)) . space P space 0 space "vnil" arrow.r (Pi n . Pi a . Pi v . P space n space v arrow.r P space (S space n) space ("vcons" space n space a space v)) arrow.r Pi n . Pi v . P space n space v $
 
 Other examples:
-- $"Fin" : "Nat" arrow.r cal(U)$ — the type with exactly $n$ elements. $"Fin" 0 = $ Empty; $"Fin" (n+1) = 1 + "Fin" n$.
-- $"Eq" : Pi A . A arrow.r A arrow.r cal(U)$ — the identity type, with sole constructor $"refl"_a : "Eq" A space a space a$.
-- $"Acc" : Pi A . (A arrow.r A arrow.r cal(U)) arrow.r A arrow.r cal(U)$ — the accessibility predicate for well-founded recursion.
+- $"Fin" : "Nat" arrow.r cal(U)$: the type with exactly $n$ elements. $"Fin" 0 = $ Empty; $"Fin" (n+1) = 1 + "Fin" n$.
+- $"Eq" : Pi A . A arrow.r A arrow.r cal(U)$: the identity type, with sole constructor $"refl"_a : "Eq" A space a space a$.
+- $"Acc" : Pi A . (A arrow.r A arrow.r cal(U)) arrow.r A arrow.r cal(U)$: the accessibility predicate for well-founded recursion.
 
 === Strict Positivity
 
@@ -195,10 +195,10 @@ Per Martin-Löf's intuitionistic type theory (1972, revised 1975, definitive 198
 
 === Identity Types
 
-Given $A : cal(U)$ and $a, b : A$, the *identity type* $"Id"_A (a, b)$ — also written $a =_A b$ or $"Eq" A space a space b$ — is the *proposition* that $a$ and $b$ are equal. Introduction:
+Given $A : cal(U)$ and $a, b : A$, the *identity type* $"Id"_A (a, b)$ (also written $a =_A b$ or $"Eq" A space a space b$) is the *proposition* that $a$ and $b$ are equal. Introduction:
 $ "refl"_a : "Id"_A (a, a) $
 
-Elimination — the *$J$-eliminator* (path induction):
+Elimination via the *$J$-eliminator* (path induction):
 $ J : Pi C : (Pi a, b : A . "Id"_A (a, b) arrow.r cal(U)) . space (Pi x : A . space C(x, x, "refl"_x)) arrow.r Pi a, b : A . Pi p : "Id"_A (a, b) . space C(a, b, p) $
 
 with the computation rule
@@ -222,16 +222,16 @@ Consequences of ETT:
 + Function extensionality $"funext" : (Pi x . f(x) = g(x)) arrow.r f = g$ is *provable*.
 + Uniqueness of identity proofs (UIP): all proofs of $a = b$ are equal.
 
-*Intensional MLTT* (ITT) — *omits* equality reflection. Definitional equality is only $beta$ + $eta$ + $iota$ + $delta$ (term-level reductions); propositional equality may differ. ITT has:
+*Intensional MLTT* (ITT) *omits* equality reflection. Definitional equality is only $beta$ + $eta$ + $iota$ + $delta$ (term-level reductions); propositional equality may differ. ITT has:
 + Decidable type checking.
-+ Function extensionality is *independent* — neither provable nor refutable from MLTT alone.
-+ UIP is *independent* — Hofmann–Streicher (1998) gave the *groupoid model* refuting it.
++ Function extensionality is *independent*: neither provable nor refutable from MLTT alone.
++ UIP is *independent*: Hofmann–Streicher (1998) gave the *groupoid model* refuting it.
 
 === The Hofmann–Streicher Groupoid Model
 
 *Theorem (Hofmann–Streicher 1998).* There is a model of ITT in which types are *groupoids* (categories where every morphism is invertible), terms are objects, and propositional equality is *isomorphism*. In this model, UIP fails: two different isomorphisms can yield two different "proofs" of an equality.
 
-*Consequence.* UIP is not derivable from $J$ alone — only an additional axiom (Streicher's K-rule, or equivalently UIP itself) makes it provable. This insight is the seed of *Homotopy Type Theory* (Voevodsky et al., 2009): treat types as $oo$-groupoids and add the *univalence axiom* $("Id"_(cal(U)) A space B) tilde.equiv (A tilde.equiv B)$ — equality of types *"is"* equivalence of types. See _Homotopy Type Theory_ for the full development.
+*Consequence.* UIP is not derivable from $J$ alone; only an additional axiom (Streicher's K-rule, or equivalently UIP itself) makes it provable. This insight is the seed of *Homotopy Type Theory* (Voevodsky et al., 2009): treat types as $oo$-groupoids and add the *univalence axiom* $("Id"_(cal(U)) A space B) tilde.equiv (A tilde.equiv B)$, where equality of types *"is"* equivalence of types. See _Homotopy Type Theory_ for the full development.
 
 === Transport
 
@@ -265,7 +265,7 @@ Definition list_of_3 : list nat := 1 :: 2 :: 3 :: nil.  (* Type : data *)
 CIC's *conversion* relation $arrow.r^*_(beta delta iota zeta eta)$:
 - $beta$: ordinary function application.
 - $delta$: unfolding global definitions.
-- $iota$: pattern matching on a constructor — $"match" ("vcons" a space v) "with" "vnil" => ... | "vcons" x space y => e arrow.r e[x := a, y := v]$.
+- $iota$: pattern matching on a constructor, e.g. $"match" ("vcons" a space v) "with" "vnil" => ... | "vcons" x space y => e arrow.r e[x := a, y := v]$.
 - $zeta$: $"let" x := e_1 "in" e_2 arrow.r [x |-> e_1] e_2$.
 - $eta$ (optional, controlled): $f =_eta lambda x . f space x$.
 
@@ -277,11 +277,11 @@ In CIC, the term-level $"match"$ construct is sugar for the inductive type's eli
 
 === Proof Irrelevance and SProp
 
-Coq's $"Prop"$ universe permits *proof-relevant* terms — two proofs of `True /\ True` are syntactically different terms, even though we don't observe the difference. Lean 4 and Coq (since 8.10) provide an alternative: $"SProp"$ — *definitionally proof-irrelevant* propositions. Any two proofs of $P : "SProp"$ are convertible.
+Coq's $"Prop"$ universe permits *proof-relevant* terms: two proofs of `True /\ True` are syntactically different terms, even though we don't observe the difference. Lean 4 and Coq (since 8.10) provide an alternative, $"SProp"$, for *definitionally proof-irrelevant* propositions. Any two proofs of $P : "SProp"$ are convertible.
 
 == Termination Checking
 
-A dependently-typed proof assistant must enforce *totality* — every function must terminate. Why? Because under Curry–Howard, a non-terminating "proof" yields a false judgment. The fixed-point $"fix"$ at type $bot$ would inhabit $bot$ and break consistency.
+A dependently-typed proof assistant must enforce *totality*: every function must terminate. Why? Because under Curry–Howard, a non-terminating "proof" yields a false judgment. The fixed-point $"fix"$ at type $bot$ would inhabit $bot$ and break consistency.
 
 === Structural Recursion
 
@@ -295,11 +295,11 @@ Fixpoint plus (m n : nat) : nat :=
   end.
 ```
 
-Decidable, simple, but limited — many natural functions are not structurally recursive (e.g., $"merge_sort"$, which splits in halves).
+Decidable, simple, but limited: many natural functions are not structurally recursive (e.g., $"merge_sort"$, which splits in halves).
 
 === Sized Types (Hughes–Pareto–Sabry 1996, Abel)
 
-Annotate types with *sizes* — ordinals tracking how "big" a term is. Recursive calls require size strictly smaller. Agda has experimental sized-types support; F\* uses a refinement-types variant.
+Annotate types with *sizes* (ordinals tracking how "big" a term is). Recursive calls require size strictly smaller. Agda has experimental sized-types support; F\* uses a refinement-types variant.
 
 ```agda
 data Nat : Size → Set where
@@ -326,11 +326,11 @@ This *encodes* well-foundedness in the type system: even non-structural recursio
 
 === The Guard Condition
 
-In Coq, `Fixpoint` checks the *guard condition* — a syntactic criterion ensuring termination. The check is necessarily approximate (termination is undecidable!); some terminating definitions are rejected and must be rewritten with `Program Fixpoint` or `Function`.
+In Coq, `Fixpoint` checks the *guard condition*, a syntactic criterion ensuring termination. The check is necessarily approximate (termination is undecidable!); some terminating definitions are rejected and must be rewritten with `Program Fixpoint` or `Function`.
 
 == Performance: Conversion Can Be Expensive
 
-Type-checking dependent types requires conversion checking. In CIC this means reducing terms — sometimes to normal forms. Conversion can be:
+Type-checking dependent types requires conversion checking. In CIC this means reducing terms, sometimes to normal forms. Conversion can be:
 - *Lazy*: reduce only as needed for structural comparison.
 - *Eager / Compiled*: `vm_compute` (Grégoire–Leroy 2002) compiles to a bytecode VM. `native_compute` (Boespflug–Dénès–Grégoire 2011) compiles to OCaml native code. Both can speed conversion checks by orders of magnitude.
 
@@ -359,7 +359,7 @@ Fixpoint vapp {A m n} (v1 : Vec A m) (v2 : Vec A n) : Vec A (m + n) :=
   end.
 ```
 
-The *return clause* `in Vec _ m return Vec A (m + n)` — the so-called *convoy pattern* — is necessary because the type of $v_2$ involves $n$, while the type of the result depends on $m$ which changes per branch. Without it the type checker cannot unify the branch types.
+The *return clause* `in Vec _ m return Vec A (m + n)` (the so-called *convoy pattern*) is necessary because the type of $v_2$ involves $n$, while the type of the result depends on $m$ which changes per branch. Without it the type checker cannot unify the branch types.
 
 === Decidable Propositions
 
@@ -386,7 +386,7 @@ Inductive RBTree : Color -> nat -> Type :=
   | rbblk  : forall h c1 c2, RBTree c1 h -> nat -> RBTree c2 h -> RBTree Black (S h).
 ```
 
-The type encodes both the *color invariant* (red has only black children) and the *black-height invariant* (all paths from root to leaf have the same black-height). Any constructed value automatically satisfies these — *correct by construction*.
+The type encodes both the *color invariant* (red has only black children) and the *black-height invariant* (all paths from root to leaf have the same black-height). Any constructed value automatically satisfies these, making the type *correct by construction*.
 
 === Sorted Lists
 
@@ -415,7 +415,7 @@ The slogan:
   [$a = b$], [$"Id"_A (a, b)$],
 )
 
-A *constructive* proof of $exists x : A . P(x)$ is a *witness* — a concrete $a$ together with a proof of $P(a)$. Classical existence ($not forall x . "not" P(x)$) requires the axiom of choice or excluded middle, which are not provable in MLTT.
+A *constructive* proof of $exists x : A . P(x)$ is a *witness*: a concrete $a$ together with a proof of $P(a)$. Classical existence ($not forall x . "not" P(x)$) requires the axiom of choice or excluded middle, which are not provable in MLTT.
 
 === Example: Constructive Existence
 
@@ -442,7 +442,7 @@ Qed.
 
 === Agda
 
-Pure dependently typed functional language. No tactic language — instead, *unification* + *interactive holes* + *with-clauses*. Pattern matching is more flexible than Coq's (supports advanced features like *case trees*).
+Pure dependently typed functional language. No tactic language; instead it uses *unification*, *interactive holes*, and *with-clauses*. Pattern matching is more flexible than Coq's (supports advanced features like *case trees*).
 
 ```agda
 plus-comm : (n m : ℕ) → n + m ≡ m + n
@@ -452,7 +452,7 @@ plus-comm (suc n) m = trans (cong suc (plus-comm n m)) (+-suc m n)
 
 === Lean 4
 
-CIC + powerful *metaprogramming* (macros, syntax extensions) + the *mathlib* library, one of the largest formal mathematics libraries. Lean 4 is a *general-purpose* language — its compiler is implemented in Lean itself.
+CIC + powerful *metaprogramming* (macros, syntax extensions) + the *mathlib* library, one of the largest formal mathematics libraries. Lean 4 is a *general-purpose* language whose compiler is implemented in Lean itself.
 
 ```lean
 theorem add_comm (n m : Nat) : n + m = m + n := by
@@ -492,7 +492,7 @@ Extraction Language OCaml.
 Extraction divmod.   (* yields an OCaml function nat -> nat -> nat * nat *)
 ```
 
-Letouzey's extraction (2008) — soundness theorem: the extracted program *correctly computes* what the type promised, *modulo* erasure-preserving simulation.
+Letouzey's extraction (2008) comes with a soundness theorem: the extracted program *correctly computes* what the type promised, *modulo* erasure-preserving simulation.
 
 == The Convoy Pattern
 
@@ -515,7 +515,7 @@ In CIC, *some* equalities provable propositionally are *not* definitional: e.g.,
 
 == Subject Reduction Caveats
 
-In ITT + axioms (e.g., univalence as a postulate), subject reduction can *fail*: a term might step to one whose type is provably equal but not definitionally equal. Cubical type theory (Cohen–Coquand–Huber–Mörtberg 2018) repairs this by giving univalence *computational* content — the postulate is replaced by a definitional rule.
+In ITT + axioms (e.g., univalence as a postulate), subject reduction can *fail*: a term might step to one whose type is provably equal but not definitionally equal. Cubical type theory (Cohen–Coquand–Huber–Mörtberg 2018) repairs this by giving univalence *computational* content: the postulate is replaced by a definitional rule.
 
 In Coq with `Axiom`-postulated equalities, conversion becomes incomplete; tools like `rewrite` use propositional equality and pay the price.
 
@@ -525,7 +525,7 @@ Even outside Girard's paradox, dependent type theories have subtle inconsistency
 - *Type-in-type* (already discussed).
 - *Impredicative $"Set"$* (old Coq option, now off by default): combined with classical axioms, inconsistent (Coquand–Reynolds 1986 paradox).
 - *Non-strictly-positive inductive types* (rejected by Coq, but in toy theories without the check, $bot$ is inhabited).
-- *Definitional UIP + Streicher's K + univalence* — pairwise consistent, but enabling all three is contradictory.
+- *Definitional UIP + Streicher's K + univalence*: pairwise consistent, but enabling all three is contradictory.
 
 Coq's kernel is small (~10kloc OCaml) and carefully audited; the *de Bruijn criterion* says only this kernel needs to be trusted, no matter how elaborate the surface tactic language.
 
@@ -539,7 +539,7 @@ map f []        = []
 map f (x ∷ xs)  = f x ∷ map f xs
 ```
 
-The output vector has *the same length* as the input — guaranteed by the type. No off-by-one possible.
+The output vector has *the same length* as the input, guaranteed by the type. No off-by-one possible.
 
 === Safe Head
 
@@ -548,7 +548,7 @@ head : {A : Set} {n : ℕ} → Vec A (suc n) → A
 head (x ∷ _) = x
 ```
 
-The type `Vec A (suc n)` rules out `[]` at the pattern level — the type checker observes `[] : Vec A 0` cannot unify with `Vec A (suc n)`, so the `[]` case is *impossible* and need not be written. This is *the* dependent-types selling point: invariant-violating cases are unrepresentable.
+The type `Vec A (suc n)` rules out `[]` at the pattern level: the type checker observes `[] : Vec A 0` cannot unify with `Vec A (suc n)`, so the `[]` case is *impossible* and need not be written. This is *the* dependent-types selling point: invariant-violating cases are unrepresentable.
 
 === Indexed Insertion in a BST
 

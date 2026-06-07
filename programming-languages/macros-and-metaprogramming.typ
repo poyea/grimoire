@@ -1,6 +1,6 @@
 = Macros and Metaprogramming
 
-A macro is a program that runs at compile time and emits source code. The idea is older than the high-level languages: assembler macros expanded mnemonic sequences before the assembler proper saw them. McCarthy's Lisp made the macro a *first-class* facility by making program text and runtime data the same type — *s-expressions* — so that a program that produces programs is just a program that produces lists. Three generations of language designers have since shown that this simple idea, when combined with a serious binding theory, gives a discipline that supplants nearly every other "syntactic extension" mechanism: pattern matching, async/await, do-notation, contract systems, ORM DSLs, and entire embedded languages are macros.
+A macro is a program that runs at compile time and emits source code. The idea is older than the high-level languages: assembler macros expanded mnemonic sequences before the assembler proper saw them. McCarthy's Lisp made the macro a *first-class* facility by making program text and runtime data the same type (*s-expressions*), so that a program that produces programs is just a program that produces lists. Three generations of language designers have since shown that this simple idea, when combined with a serious binding theory, gives a discipline that supplants nearly every other "syntactic extension" mechanism: pattern matching, async/await, do-notation, contract systems, ORM DSLs, and entire embedded languages are macros.
 
 *See also:* _Type Systems_, _Effects and Handlers_
 
@@ -30,7 +30,7 @@ Expansion:
 (let ((tmp 42))
   (let ((tmp tmp))      ; the macro's tmp
     (setf tmp other)
-    (setf other tmp)))  ; oops — refers to macro's tmp, which is now `other`
+    (setf other tmp)))  ; oops: refers to macro's tmp, which is now `other`
 ```
 
 The macro introduced a binding `tmp` that *captured* the user's `tmp`. The expansion is syntactically valid, but the meaning is wrong: the user's `42` is overwritten by `other`, and the swap is no swap.
@@ -45,20 +45,20 @@ The defect is that the macro's `tmp` should have been a *fresh* identifier, dist
        (setf ,b ,tmp))))
 ```
 
-This works, but the discipline is *manual*: every introduced binding must be a gensym, and every reference to a free identifier from the macro's expansion (say a call to a helper function `f`) is at risk of being shadowed by a user binding of `f`. The macro writer must continuously think about identifiers from two different *worlds* — the macro's world (the *unfolding* context) and the user's world (the *use* context) — and ensure they do not collide.
+This works, but the discipline is *manual*: every introduced binding must be a gensym, and every reference to a free identifier from the macro's expansion (say a call to a helper function `f`) is at risk of being shadowed by a user binding of `f`. The macro writer must continuously think about identifiers from two different *worlds*, the macro's world (the *unfolding* context) and the user's world (the *use* context), and ensure they do not collide.
 
 A macro system that handles this automatically is called *hygienic*. The pursuit of hygiene is the central technical narrative of macros for the past forty years.
 
 == Hygienic Macros: The Painting Algorithm
 
-(Kohlbecker–Friedman–Felleisen–Duba 1986) introduced *syntactic hygiene* and the first algorithm to achieve it. The algorithm — sometimes called the *painting* algorithm — works as follows:
+(Kohlbecker–Friedman–Felleisen–Duba 1986) introduced *syntactic hygiene* and the first algorithm to achieve it. The algorithm (sometimes called the *painting* algorithm) works as follows:
 
 1. Each macro invocation is tagged with a fresh *time-stamp* (a *paint colour*).
 2. During expansion, every identifier that *appears in the macro template* is given that time-stamp.
 3. Identifiers from the *macro's arguments* (substituted into the template) retain their original colour.
 4. When resolving identifier references after expansion, identifiers with the same name but *different colours* are treated as distinct.
 
-The result: identifiers introduced by the macro are guaranteed not to collide with identifiers from the user's context — they have different paint. Identifiers shared between macro and user (intentionally, as when the macro inserts a call to a helper `f` that the user is expected to have in scope) require explicit machinery to *break* hygiene.
+The result: identifiers introduced by the macro are guaranteed not to collide with identifiers from the user's context, since they have different paint. Identifiers shared between macro and user (intentionally, as when the macro inserts a call to a helper `f` that the user is expected to have in scope) require explicit machinery to *break* hygiene.
 
 In `syntax-rules` notation:
 
@@ -113,7 +113,7 @@ The expander's job is then to *add scopes* to the identifiers it traverses:
 
 The result: an identifier introduced by the macro has $s_"macro"$ in its scope set; the user's identifier of the same name does not. A binding of the user's identifier is *outside* the macro's introduced binding (it has a *different* scope set), so the two do not capture each other.
 
-The set-of-scopes model is *equational*: two identifiers are *the same* <==> they have the same name and the same scope set. There is no painting, no marking, no renaming — just set membership. The model handles macros, modules, separately compiled code, and recursive expansion uniformly, and it is the basis of the current Racket macro expander.
+The set-of-scopes model is *equational*: two identifiers are *the same* <==> they have the same name and the same scope set. There is no painting, no marking, no renaming; just set membership. The model handles macros, modules, separately compiled code, and recursive expansion uniformly, and it is the basis of the current Racket macro expander.
 
 *Theorem (Hygiene, Flatt 2016).* In the set-of-scopes model, a macro's expansion never causes an identifier from the macro template to capture an identifier from the macro's use site, and never causes an identifier from the use site to capture an identifier from the template.
 
@@ -128,7 +128,7 @@ Macros run *before* runtime, but a macro's expansion may itself contain macro us
 - *Phase 2:* code that runs to expand phase-1 code (a macro used inside a macro implementation).
 - ... and so on, with negative phases for *template* binding.
 
-A module imports definitions *for a particular phase*. `(require racket/list)` imports at phase 0; `(require (for-syntax racket/list))` imports the same module *at phase 1*, making `racket/list`'s functions available *inside* macro implementations. The two imports are *independent* — phase 0 and phase 1 of `racket/list` are different instantiations of the module.
+A module imports definitions *for a particular phase*. `(require racket/list)` imports at phase 0; `(require (for-syntax racket/list))` imports the same module *at phase 1*, making `racket/list`'s functions available *inside* macro implementations. The two imports are *independent*: phase 0 and phase 1 of `racket/list` are different instantiations of the module.
 
 The phase structure makes *separate compilation* of macro-using modules possible: when compiling module $A$ that uses a macro from module $B$, the compiler must instantiate $B$ at phase 1 *only*; it does not need $B$'s phase-0 code. This is the engineering breakthrough that lets Racket's macros scale to large programs.
 
@@ -205,7 +205,7 @@ def powerCode(n: Int, x: Expr[Double])(using Quotes): Expr[Double] =
   else '{ ${x} * ${powerCode(n - 1, x)} }
 ```
 
-The `'{ ... }` is quotation, `${ ... }` is splice, `Expr[T]` is the type of code of type `T`. The `Quotes` capability is required to perform splicing — a more disciplined version of TH's `Q` monad.
+The `'{ ... }` is quotation, `${ ... }` is splice, `Expr[T]` is the type of code of type `T`. The `Quotes` capability is required to perform splicing, providing a more disciplined version of TH's `Q` monad.
 
 == Rust Macros
 
@@ -227,7 +227,7 @@ let v = vec_of!(1, 2, 3);
 
 Hygiene is *span-based*: each token carries a *span* identifying where it came from (user code vs macro body), and the compiler treats spans like the scopes of the set-of-scopes model. Identifiers introduced inside the macro have a span that the user's identifiers do not, preventing capture.
 
-2. *Procedural macros* (`proc_macro`). The macro is a *Rust function* of type `TokenStream -> TokenStream` invoked at compile time. The function can do arbitrary computation — file I/O, calling out to other tools, parsing the input with `syn`, generating output with `quote`.
+2. *Procedural macros* (`proc_macro`). The macro is a *Rust function* of type `TokenStream -> TokenStream` invoked at compile time. The function can do arbitrary computation: file I/O, calling out to other tools, parsing the input with `syn`, generating output with `quote`.
 
 ```rust
 #[proc_macro_derive(MyTrait)]
@@ -243,9 +243,9 @@ pub fn derive_my_trait(input: TokenStream) -> TokenStream {
 }
 ```
 
-Procedural macros come in three flavors: `derive` (extend the `#[derive(...)]` syntax), `attribute` (introduce custom `#[my_attr]` attributes), and `function-like` (use `my_macro!(...)` like a declarative macro). They are *not hygienic by default* — the macro writer is responsible for generating fresh names where needed.
+Procedural macros come in three flavors: `derive` (extend the `#[derive(...)]` syntax), `attribute` (introduce custom `#[my_attr]` attributes), and `function-like` (use `my_macro!(...)` like a declarative macro). They are *not hygienic by default*; the macro writer is responsible for generating fresh names where needed.
 
-Rust's split — hygienic-by-default declarative macros for the common case, hygiene-as-discipline procedural macros for the heavy lifting — is the inherited wisdom of the Scheme experience.
+Rust's split (hygienic-by-default declarative macros for the common case, hygiene-as-discipline procedural macros for the heavy lifting) is the inherited wisdom of the Scheme experience.
 
 == C++ Templates and `constexpr`
 
@@ -264,9 +264,9 @@ The discipline survived for two decades because nothing else could do compile-ti
 - Concepts (C++20): named predicates on types, replacing SFINAE.
 - Reflection (C++26, in progress): structured access to the type system at compile time.
 
-The `constexpr`/`consteval` machinery is *not* a macro system — it does not let you generate code from arbitrary input syntactically; it only lets you compute values. For code generation, C++ still defers to templates or to external tools.
+The `constexpr`/`consteval` machinery is *not* a macro system: it does not let you generate code from arbitrary input syntactically; it only lets you compute values. For code generation, C++ still defers to templates or to external tools.
 
-Rust's `const fn`, Zig's `comptime`, and Nim's `static` are points in the same design space — *compile-time evaluation* without the syntactic-extension power of full macros. Zig's `comptime` is particularly aggressive: any function can be evaluated at compile time, and types are first-class values manipulable by `comptime` code. The boundary between metaprogramming and ordinary programming dissolves.
+Rust's `const fn`, Zig's `comptime`, and Nim's `static` are points in the same design space: *compile-time evaluation* without the syntactic-extension power of full macros. Zig's `comptime` is particularly aggressive: any function can be evaluated at compile time, and types are first-class values manipulable by `comptime` code. The boundary between metaprogramming and ordinary programming dissolves.
 
 == Macros as Language Extension: Major Examples
 
@@ -278,9 +278,9 @@ The reason macro systems matter is the *cumulative* power of extensions implemen
 - *List comprehensions* in Python were originally a macro-style desugar; they are now built-in but the *generator expression* desugar is unchanged.
 - *ORM DSLs.* Active Record in Ruby uses `method_missing` (a runtime variant of metaprogramming); Slick in Scala, Diesel in Rust, sqlx in Rust use macros to type-check SQL at compile time.
 - *Contract systems.* Racket's `contract-out` is a macro that wraps exported bindings in dynamic contracts.
-- *Serialisation*. `derive Serialize/Deserialize` in Rust, `deriving Generic` in Haskell with generic-deriving libraries — all macros.
+- *Serialisation*. `derive Serialize/Deserialize` in Rust, `deriving Generic` in Haskell with generic-deriving libraries: all macros.
 - *Property-based testing*. QuickCheck-style libraries use macros to generate test boilerplate.
-- *Embedded DSLs.* Halide (image processing), Accelerate (parallel arrays), TensorFlow's `tf.function`, JAX's `jit` — all macro-flavoured tools that compile a subset of the host language to a target.
+- *Embedded DSLs.* Halide (image processing), Accelerate (parallel arrays), TensorFlow's `tf.function`, JAX's `jit`: all macro-flavoured tools that compile a subset of the host language to a target.
 
 The pattern is consistent: a feature that *looks* like a language extension is implemented as a library + macro, freeing the language designer from baking it in and letting the community iterate.
 
@@ -335,7 +335,7 @@ The convergence point of macros and PE is *typed metaprogramming with reflection
 
 == An Aside on Reader Macros
 
-*Reader macros* are a Common Lisp facility separate from `defmacro`: they let the user extend the *lexer*, not just the macro expander. A character such as `#` can be associated with a reader-macro function that reads input and returns an s-expression. The pattern enables `${"`"} ... ${"`"}` quasiquotation, `#'fun` for function references, `#(1 2 3)` for vectors. Reader macros are *brittle* and *global* — they change how the entire program is parsed — and have not been imitated in most modern languages.
+*Reader macros* are a Common Lisp facility separate from `defmacro`: they let the user extend the *lexer*, not just the macro expander. A character such as `#` can be associated with a reader-macro function that reads input and returns an s-expression. The pattern enables `${"`"} ... ${"`"}` quasiquotation, `#'fun` for function references, `#(1 2 3)` for vectors. Reader macros are *brittle* and *global*: they change how the entire program is parsed, and have not been imitated in most modern languages.
 
 == Multi-Stage Programming: Soundness
 
@@ -345,15 +345,15 @@ The type system of MetaML guarantees that staged code is *well-typed at every st
 
 *Proof sketch.* By a strengthened progress-and-preservation argument that tracks the *level* of each subexpression (the stage at which it will run). At each stage, the standard arguments apply; the cross-stage operations preserve well-typedness because the type of brackets explicitly records the stage. $square$
 
-The result is *macro hygiene* in a typed setting: capture is impossible because the type system tracks free variables, and ill-typed expansions are caught at the meta-stage rather than at the object stage. This is, in a sense, the *promised land* of macros — a hygienic, typed, expressive metaprogramming facility — and it is realised in MetaOCaml and Scala 3's quoted API.
+The result is *macro hygiene* in a typed setting: capture is impossible because the type system tracks free variables, and ill-typed expansions are caught at the meta-stage rather than at the object stage. This is, in a sense, the *promised land* of macros: a hygienic, typed, expressive metaprogramming facility, realised in MetaOCaml and Scala 3's quoted API.
 
 == Where the Field Stands
 
-Macros are unevenly distributed across modern languages. The *Lisp family* (Racket, Clojure, Common Lisp) has decades-deep macro discipline. The *ML family* (Haskell, Scala, OCaml) has typed multi-stage programming and quotation systems. *Rust* has both declarative and procedural macros, with the latter widely used in the ecosystem. *Python* has no macros, by deliberate language design (Guido's "macros encourage tribal sublanguages"). *Java* and *C$hash$* have *annotation processors* — a constrained form of compile-time code generation. *C++* has templates and `constexpr`. *Go* has neither (and the `go generate` tool is an external preprocessor).
+Macros are unevenly distributed across modern languages. The *Lisp family* (Racket, Clojure, Common Lisp) has decades-deep macro discipline. The *ML family* (Haskell, Scala, OCaml) has typed multi-stage programming and quotation systems. *Rust* has both declarative and procedural macros, with the latter widely used in the ecosystem. *Python* has no macros, by deliberate language design (Guido's "macros encourage tribal sublanguages"). *Java* and *C$hash$* have *annotation processors*, a constrained form of compile-time code generation. *C++* has templates and `constexpr`. *Go* has neither (and the `go generate` tool is an external preprocessor).
 
-The trend over the past decade has been toward *typed*, *hygienic*, *introspective* macro systems with first-class IDE support. Rust's procedural macros, Scala 3's quoted API, Lean 4's macro system, and Nim's AST macros are all of this character. The C++ reflection proposal (P2996) is moving in the same direction. The endpoint — a language in which compile-time and run-time computations are unified, with first-class code values, typed quotation, and full IDE support — is approached but not yet attained.
+The trend over the past decade has been toward *typed*, *hygienic*, *introspective* macro systems with first-class IDE support. Rust's procedural macros, Scala 3's quoted API, Lean 4's macro system, and Nim's AST macros are all of this character. The C++ reflection proposal (P2996) is moving in the same direction. The endpoint (a language in which compile-time and run-time computations are unified, with first-class code values, typed quotation, and full IDE support) is approached but not yet attained.
 
-The grand bet of macros — that the right way to extend a language is to write a library, not to wait for the next compiler — has been *substantially* vindicated: a non-trivial fraction of the syntax used in every working Racket, Rust, Scala, or Haskell program comes from macros rather than from the core language. The cost has been the disciplined investment in hygiene, phases, and IDE infrastructure that the last forty years have constructed.
+The grand bet of macros, that the right way to extend a language is to write a library rather than wait for the next compiler, has been *substantially* vindicated: a non-trivial fraction of the syntax used in every working Racket, Rust, Scala, or Haskell program comes from macros rather than from the core language. The cost has been the disciplined investment in hygiene, phases, and IDE infrastructure that the last forty years have constructed.
 
-The connection to *partial evaluation* and the *Futamura projections* points toward the future: macros that are not merely syntactic transformations but *staged compilers* for embedded languages, capable of fusing user-written DSLs with the host language's optimiser. The work of *Lightweight Modular Staging* (Rompf–Odersky 2010) in Scala and the *futhark* / *accelerate* / *halide* lineage of DSL compilers in Haskell and C++ are concrete instances of this convergence — macro-flavoured tools that produce code competitive with hand-written low-level implementations.
+The connection to *partial evaluation* and the *Futamura projections* points toward the future: macros that are not merely syntactic transformations but *staged compilers* for embedded languages, capable of fusing user-written DSLs with the host language's optimiser. The work of *Lightweight Modular Staging* (Rompf–Odersky 2010) in Scala and the *futhark* / *accelerate* / *halide* lineage of DSL compilers in Haskell and C++ are concrete instances of this convergence: macro-flavoured tools that produce code competitive with hand-written low-level implementations.
 

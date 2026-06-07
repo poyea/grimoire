@@ -4,7 +4,7 @@
 
 The naïve set-theoretic interpretation does *not* work for System F: if $alpha$ ranges over all sets and $forall alpha . tau$ is interpreted as the product over all sets, the resulting set is too large to be a set. Reynolds (1984) proved:
 
-*Theorem (Reynolds 1984).* There is no set-theoretic model of polymorphism — no model in which $forall alpha . tau$ is interpreted as the set-theoretic product over all sets and $Lambda$-abstraction by ordinary function-formation.
+*Theorem (Reynolds 1984).* There is no set-theoretic model of polymorphism: no model in which $forall alpha . tau$ is interpreted as the set-theoretic product over all sets and $Lambda$-abstraction by ordinary function-formation.
 
 The standard models of System F therefore work in restricted categories:
 - *PER models* (Bruce–Longo 1990): partial equivalence relations on a fixed combinatory algebra.
@@ -21,7 +21,7 @@ In every case, the semantic universe of "types" is a small object in some catego
 - *Scala*: subtyping + higher kinds = essentially $F_(<:)^omega$. Decidability is precarious (Scala type-checking can loop).
 - *Rust*: traits and lifetimes are an HM-like fragment with subtype-like coercions.
 - *Java/C\#*: F-bounded generics. Subtype-checking undecidable in the limit (Grigore 2017 for Java).
-- *Idris/Agda/Lean*: full dependent types — strictly beyond System F (see _Dependent Types_).
+- *Idris/Agda/Lean*: full dependent types, strictly beyond System F (see _Dependent Types_).
 
 In every case the language designer chose a *fragment* that is either inferable (HM) or merely checkable (System FC). No production language requires the user to type-infer full System F.
 
@@ -64,13 +64,13 @@ System F enjoys $beta eta$-conversion at both term and type levels:
 
 *Theorem.* $beta eta$-equality is *decidable* in System F (because SN + confluence).
 
-In contrast: *contextual* equivalence (Mason–Talcott 1991) is decidable for STLC but undecidable for System F — even though *syntactic* $beta eta$ is decidable, the question "are $e_1$ and $e_2$ indistinguishable in *every* context" is harder, because contexts include type instantiations at types that may have rich inhabitants. Parametricity is a *partial* characterisation: contextual equivalence is at least as strong as parametric equivalence and conjecturally — but not provably in general — equal.
+In contrast: *contextual* equivalence (Mason–Talcott 1991) is decidable for STLC but undecidable for System F. Even though *syntactic* $beta eta$ is decidable, the question "are $e_1$ and $e_2$ indistinguishable in *every* context" is harder, because contexts include type instantiations at types that may have rich inhabitants. Parametricity is a *partial* characterisation: contextual equivalence is at least as strong as parametric equivalence and conjecturally (but not provably in general) equal.
 
 == More Free Theorems Worked in Detail
 
 === The Type $forall alpha . alpha$
 
-A closed inhabitant $e : forall alpha . alpha$ would, instantiated at $"Empty"$, produce a closed term of type $"Empty"$ — contradicting consistency. By parametricity, $[| forall alpha . alpha |] = inter_R [| alpha |]_R = inter_R R$. The intersection over *all* relations of the empty relation is empty. Hence $forall alpha . alpha$ has no closed inhabitant — it is the *false* proposition under Curry–Howard.
+A closed inhabitant $e : forall alpha . alpha$ would, instantiated at $"Empty"$, produce a closed term of type $"Empty"$, contradicting consistency. By parametricity, $[| forall alpha . alpha |] = inter_R [| alpha |]_R = inter_R R$. The intersection over *all* relations of the empty relation is empty. Hence $forall alpha . alpha$ has no closed inhabitant — it is the *false* proposition under Curry–Howard.
 
 === The Type $forall alpha . alpha arrow.r alpha arrow.r alpha$
 
@@ -84,13 +84,13 @@ In words: filtering commutes with $"map"$ provided the predicate is appropriatel
 
 === Continuation-Passing Types
 
-The type $forall alpha . (A arrow.r alpha) arrow.r alpha$ for a fixed type $A$ is the *continuation* / *Yoneda* encoding. Parametricity says: every $k : forall alpha . (A arrow.r alpha) arrow.r alpha$ is of the form $Lambda alpha . lambda c : A arrow.r alpha . c space a$ for a unique $a : A$. The map $k |-> k[A] space "id"_A$ is a bijection between $forall alpha . (A arrow.r alpha) arrow.r alpha$ and $A$ — this is the *Yoneda lemma* in functor-free disguise.
+The type $forall alpha . (A arrow.r alpha) arrow.r alpha$ for a fixed type $A$ is the *continuation* / *Yoneda* encoding. Parametricity says: every $k : forall alpha . (A arrow.r alpha) arrow.r alpha$ is of the form $Lambda alpha . lambda c : A arrow.r alpha . c space a$ for a unique $a : A$. The map $k |-> k[A] space "id"_A$ is a bijection between $forall alpha . (A arrow.r alpha) arrow.r alpha$ and $A$; this is the *Yoneda lemma* in functor-free disguise.
 
 Generalisation: $forall alpha . (A arrow.r alpha) arrow.r F alpha tilde.equiv F A$ for any *functor* $F$.
 
 == Logical Relations as Proof Technique
 
-Parametricity is the *binary* logical-relation construction. *Unary* logical relations are exactly Tait/Girard reducibility for SN. *Step-indexed* logical relations (Appel–McAllester 2001, Ahmed 2004) handle recursive types and mutable state by indexing relations by a *step count* — a relation $R_k$ guarantees behaviour up to $k$ reduction steps. Step-indexing is the bedrock of modern soundness proofs for ML-with-references (e.g., Iris, RustBelt).
+Parametricity is the *binary* logical-relation construction. *Unary* logical relations are exactly Tait/Girard reducibility for SN. *Step-indexed* logical relations (Appel–McAllester 2001, Ahmed 2004) handle recursive types and mutable state by indexing relations by a *step count*: a relation $R_k$ guarantees behaviour up to $k$ reduction steps. Step-indexing is the bedrock of modern soundness proofs for ML-with-references (e.g., Iris, RustBelt).
 
 A unifying meta-theorem: for any *open* term $Gamma tack.r e : tau$ and any logical relation $cal(L)$, if $cal(L)$ is closed under the typing rules, then $e$ respects $cal(L)$. This is the *fundamental lemma* of logical relations. SN, parametricity, contextual equivalence, type abstraction — all are instances.
 
@@ -112,7 +112,7 @@ So a System F program *runs* like an untyped $lambda$ program — types are comp
 
 The defining feature of System F is *impredicativity*: $forall alpha . tau$ may be instantiated at $forall alpha . tau$ itself. This is what gives System F its proof-theoretic strength.
 
-*Predicative System F* — restrict instantiation to types of lower *rank* — is strictly weaker. The Hindley–Milner system is the *rank-1* predicative restriction: quantifiers only at the outermost position, never in argument positions. *Rank-N polymorphism* (in GHC) allows quantifiers at any rank, requiring type annotations to be inferable.
+*Predicative System F* restricts instantiation to types of lower *rank* and is strictly weaker. The Hindley–Milner system is the *rank-1* predicative restriction: quantifiers only at the outermost position, never in argument positions. *Rank-N polymorphism* (in GHC) allows quantifiers at any rank, requiring type annotations to be inferable.
 
 ```haskell
 -- Rank-2 polymorphism
@@ -126,7 +126,7 @@ Rank-1 inference is decidable (HM); rank-$k$ inference for $k gt.eq 3$ is undeci
 
 == Implementation: From System F to GHC Core
 
-GHC's intermediate language *System FC* (Sulzmann–Chakravarty–Peyton Jones–Donnelly 2007) extends System F with *coercion variables* — runtime-free witnesses of type equalities arising from GADTs and type families. A term may carry a coercion $gamma : tau_1 tilde.eq tau_2$ and *cast* a value $e : tau_1$ to $e |> gamma : tau_2$. Coercions are themselves typed, with their own kind of arrow ($tilde.eq$), introduction (`refl`), and elimination (`sym`, `trans`, `nth`, `inst`).
+GHC's intermediate language *System FC* (Sulzmann–Chakravarty–Peyton Jones–Donnelly 2007) extends System F with *coercion variables* (runtime-free witnesses of type equalities arising from GADTs and type families). A term may carry a coercion $gamma : tau_1 tilde.eq tau_2$ and *cast* a value $e : tau_1$ to $e |> gamma : tau_2$. Coercions are themselves typed, with their own kind of arrow ($tilde.eq$), introduction (`refl`), and elimination (`sym`, `trans`, `nth`, `inst`).
 
 System FC is *just* expressive enough to type-check what GHC's source can produce, and *just* simple enough to admit a reliable type checker. It is essentially System $F_omega$ + axioms; the type system itself is decidable (GHC's core type-checker is the *one* part of the compiler that is meant to be correctness-critical).
 
@@ -210,7 +210,7 @@ Reduction:
 + $beta_2$: $"id" [forall beta . beta arrow.r beta] = lambda x : (forall beta . beta arrow.r beta) . x$.
 + $beta$: $(lambda x . x) space "id" arrow.r "id"$.
 
-Final result: $"id"$ — as expected, identity applied to identity is identity. The *impredicative* instantiation $"id" [forall beta . beta arrow.r beta]$ is the key step: System F lets $"id"$ be applied at its *own* type, which is what makes the second-order quantifier truly powerful.
+Final result: $"id"$, as expected: identity applied to identity is identity. The *impredicative* instantiation $"id" [forall beta . beta arrow.r beta]$ is the key step: System F lets $"id"$ be applied at its *own* type, which is what makes the second-order quantifier truly powerful.
 
 == Polymorphism and Type Erasure: Practical Compilation
 
@@ -259,11 +259,11 @@ A type theory's *proof-theoretic strength* is measured by the ordinal of its pro
   [$lambda^arrow.r$], [$omega^omega$],
   [Gödel's System T], [$epsilon_0$],
   [HM / ML], [$omega^omega$ (same as STLC)],
-  [System F], [far beyond $Gamma_0$ — proof strength of second-order arithmetic $"PA"_2$],
+  [System F], [far beyond $Gamma_0$; proof strength of second-order arithmetic $"PA"_2$],
   [$F_omega$], [larger, complicated],
   [Predicative MLTT (1 universe)], [Bachmann–Howard],
   [MLTT + W-types + universes], [grows with universes],
-  [CIC], [vastly larger — beyond accepted classical ordinals],
+  [CIC], [vastly larger, beyond accepted classical ordinals],
 )
 
 The take-away: System F is *enormously* stronger than HM despite a small syntactic addition — the ability to *abstract* over types and *re-apply*. The price is undecidable inference; the gain is provable totality for an enormous class of programs.
@@ -326,9 +326,9 @@ This is the *eigenvariable* condition in disguise, mirroring T-TABS.
 
 == The $forall$/$exists$ Duality
 
-A polymorphism deeply rooted in System F: every $exists$ encoding is a CPS-transform of a $forall$. Dually, $forall alpha . F alpha tilde.equiv$ ? — well, there's no clean dual; the asymmetry reflects the *intuitionistic* nature (no double-negation elimination).
+A polymorphism deeply rooted in System F: every $exists$ encoding is a CPS-transform of a $forall$. Dually, $forall alpha . F alpha tilde.equiv$ ? There is no clean dual; the asymmetry reflects the *intuitionistic* nature (no double-negation elimination).
 
-But adding *delimited control* or *call/cc* — equivalently, allowing classical reasoning — yields a richer story. *Parigot's* $lambda mu$-calculus (1992) adds named continuations and *names* $alpha, beta, ...$ at a separate level; its types are the *classical* second-order propositional formulas. SN holds (Parigot 1997, David–Nour 2003).
+But adding *delimited control* or *call/cc* (equivalently, allowing classical reasoning) yields a richer story. *Parigot's* $lambda mu$-calculus (1992) adds named continuations and *names* $alpha, beta, ...$ at a separate level; its types are the *classical* second-order propositional formulas. SN holds (Parigot 1997, David–Nour 2003).
 
 == Conservativity Results
 
@@ -336,7 +336,7 @@ But adding *delimited control* or *call/cc* — equivalently, allowing classical
 
 *Theorem.* HM is *conservative* over its predicative System F fragment.
 
-*Non-conservativity:* adding *type families* or *GADTs* to Haskell adds equations that are not derivable from system FC alone — they require the equation axioms.
+*Non-conservativity:* adding *type families* or *GADTs* to Haskell adds equations that are not derivable from system FC alone; they require the equation axioms.
 
 == Worked Example: A Polymorphic Stack
 
