@@ -1,6 +1,6 @@
 = Introduction
 
-Large Language Models (LLMs) are the defining systems of modern AI. A single model like LLaMA 3 70B encodes over 70 billion learned parameters, requires terabytes of training data, and demands hundreds of GPU-hours to serve efficiently at scale. Understanding how they work — from the mathematics of attention to the engineering of distributed training and low-latency inference — is essential for anyone building or operating AI systems today.
+Large Language Models (LLMs) are the defining systems of modern AI. A single model like LLaMA 3 70B encodes over 70 billion learned parameters, requires terabytes of training data, and demands hundreds of GPU-hours to serve efficiently at scale. Understanding how they work, from the mathematics of attention to the engineering of distributed training and low-latency inference, is essential for anyone building or operating AI systems today.
 
 *Scope of this reference:*
 
@@ -15,7 +15,7 @@ Large Language Models (LLMs) are the defining systems of modern AI. A single mod
 
 *Primary focus:* Decoder-only transformer (GPT family), the dominant architecture for generative LLMs. Encoder-only (BERT) and encoder-decoder (T5) covered where relevant.
 
-*Intended audience:* ML engineers, systems programmers, and researchers who want a precise, technical understanding of how LLMs are built and deployed — not just how to use them.
+*Intended audience:* ML engineers, systems programmers, and researchers who want a precise, technical understanding of how LLMs are built and deployed (not just how to use them).
 
 *Code conventions:* Examples use PyTorch as the primary framework (industry standard for research and production). JAX/Flax is shown where it meaningfully differs. All examples assume CUDA availability.
 
@@ -58,7 +58,7 @@ total = sum(p.numel() for p in model.parameters())
 print(f"{total/1e9:.2f}B params")   # → 8.03B params
 ```
 
-*FLOPs conventions:* one MAC = 2 FLOPs (by convention; tensor cores fuse MAC and report differently — NVIDIA marketing FLOPS counts one MAC as 2 FLOPs). Training FLOPs $approx 6 N T$ where $N$ = params, $T$ = tokens.
+*FLOPs conventions:* one MAC = 2 FLOPs (by convention; tensor cores fuse MAC and report differently; NVIDIA marketing FLOPS counts one MAC as 2 FLOPs). Training FLOPs $approx 6 N T$ where $N$ = params, $T$ = tokens.
 
 *Token conventions:*
 - 1 token $approx$ 0.75 English words
@@ -193,7 +193,7 @@ logits = model(ids)   # [1, 64, 128256]
 print(logits.shape, logits.dtype)
 ```
 
-This skeleton omits Flash Attention (use `torch.nn.functional.scaled_dot_product_attention` which dispatches to it automatically on CUDA), gradient checkpointing, and tensor parallelism — all covered in later chapters.
+This skeleton omits Flash Attention (use `torch.nn.functional.scaled_dot_product_attention` which dispatches to it automatically on CUDA), gradient checkpointing, and tensor parallelism; all are covered in later chapters.
 
 == Key Papers Timeline
 
@@ -211,7 +211,7 @@ Impact: eliminated the sequential bottleneck of RNNs; made training massively pa
 
 *Devlin et al., NAACL 2019.*
 
-Encoder-only transformer with masked language modeling (MLM). Bidirectional context — better for understanding tasks. Established pretraining + fine-tuning paradigm.
+Encoder-only transformer with masked language modeling (MLM). Bidirectional context; better for understanding tasks. Established pretraining + fine-tuning paradigm.
 
 === 2018–2020 — GPT → GPT-3
 
@@ -274,11 +274,11 @@ IO-aware attention tiling: avoids $O(L^2)$ HBM traffic. 2× faster than FA1. Now
 
 == Document Structure
 
-1. *Transformer Architecture* — attention, GQA, RoPE, SwiGLU, RMSNorm
-2. *Pretraining* — data, scaling laws, BF16/FP8, distributed training
-3. *Fine-tuning* — LoRA, QLoRA, instruction tuning
-4. *RLHF* — reward model, PPO, DPO
-5. *Inference Optimization* — speculative decoding, continuous batching, PagedAttention
-6. *Quantization* — GPTQ, AWQ, FP8, INT4, GGUF
-7. *Serving Systems* — vLLM, TensorRT-LLM, latency/throughput
-8. *Evaluation* — benchmarks, perplexity, safety
+1. *Transformer Architecture:* attention, GQA, RoPE, SwiGLU, RMSNorm
+2. *Pretraining:* data, scaling laws, BF16/FP8, distributed training
+3. *Fine-tuning:* LoRA, QLoRA, instruction tuning
+4. *RLHF:* reward model, PPO, DPO
+5. *Inference Optimization:* speculative decoding, continuous batching, PagedAttention
+6. *Quantization:* GPTQ, AWQ, FP8, INT4, GGUF
+7. *Serving Systems:* vLLM, TensorRT-LLM, latency/throughput
+8. *Evaluation:* benchmarks, perplexity, safety
