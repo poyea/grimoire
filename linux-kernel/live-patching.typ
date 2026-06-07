@@ -1,6 +1,6 @@
 = Live Patching
 
-Live patching applies critical kernel fixes — typically security CVEs — to a *running* kernel without reboot. The unit is a kernel module that redirects calls to a buggy function to a replacement implementation. Done right, the patched kernel is indistinguishable in behaviour from one booted with the fix; done wrong, you have racy in-flight callers running half-old half-new code. The Linux *livepatch* infrastructure (`kernel/livepatch/`, mainlined 4.0) and the userspace toolchains around it — kpatch (Red Hat), kGraft (SUSE, now merged into livepatch), and Ksplice (Oracle, out-of-tree) — provide the engineering rigour.
+Live patching applies critical kernel fixes (typically security CVEs) to a *running* kernel without reboot. The unit is a kernel module that redirects calls to a buggy function to a replacement implementation. Done right, the patched kernel is indistinguishable in behaviour from one booted with the fix; done wrong, you have racy in-flight callers running half-old half-new code. The Linux *livepatch* infrastructure (`kernel/livepatch/`, mainlined 4.0) and the userspace toolchains around it (kpatch from Red Hat, kGraft from SUSE now merged into livepatch, and Ksplice from Oracle out-of-tree) provide the engineering rigour.
 
 This is fleet-scale plumbing. A cloud operator with 100k hosts cannot reboot all of them for every CVE; livepatch lets them roll out a fix in minutes. The trade-off is severe constraints on what can be patched: bugs in interrupt handlers, scheduler internals, semantic changes to data layouts — all generally off-limits.
 
@@ -15,7 +15,7 @@ You discover `foo(x)` has a bug. You want every future call to invoke `foo_v2(x)
 
 == ftrace Hooks: The Substrate
 
-Modern kernels are compiled with `-pg` (or `-fpatchable-function-entry=N,M` on newer GCC/Clang), which leaves a 5-byte NOP at the entry of every non-inline function. ftrace can swap this NOP for a CALL to a trampoline — the same mechanism that powers function tracing (`/sys/kernel/debug/tracing/set_ftrace_filter`), kprobes-on-ftrace, and now livepatch.
+Modern kernels are compiled with `-pg` (or `-fpatchable-function-entry=N,M` on newer GCC/Clang), which leaves a 5-byte NOP at the entry of every non-inline function. ftrace can swap this NOP for a CALL to a trampoline, the same mechanism that powers function tracing (`/sys/kernel/debug/tracing/set_ftrace_filter`), kprobes-on-ftrace, and now livepatch.
 
 ```
 Original:           foo:
@@ -76,7 +76,7 @@ MODULE_INFO(livepatch, "Y");
 
 Naive function replacement is unsafe: an in-flight invocation of the old function might run code that assumes invariants the patch changes. Consider a patch that adds locking to a previously lockless function — the half-old, half-new race is exactly the bug you were trying to fix, reborn.
 
-Livepatch's *hybrid consistency model* (Josh Poimboeuf, merged 4.12) draws from both kpatch (per-function switch on every call) and kGraft (per-task switch when the task is safe):
+Livepatch's *hybrid consistency model* (Josh Poimboeuf, merged 4.12) draws from kpatch (per-function switch on every call) and kGraft (per-task switch when the task is safe):
 
 - Each task is in *universe 0* (old code) or *universe 1* (patched code).
 - Newly created tasks join universe 1.
@@ -85,7 +85,7 @@ Livepatch's *hybrid consistency model* (Josh Poimboeuf, merged 4.12) draws from 
   - Or it crosses a userspace boundary (syscall entry/exit) — by definition it is not inside any kernel function.
   - Or, for idle tasks, when they enter idle.
 
-Until every task has migrated, both universes coexist. ftrace trampolines consult the *current task's* universe at call time and dispatch accordingly. When all tasks have moved, the patch is "complete" and the trampoline shortens to call only the new function.
+Until every task has migrated, both universes coexist. ftrace trampolines consult the current task's universe at call time and dispatch accordingly. When all tasks have moved, the patch is "complete" and the trampoline shortens to call only the new function.
 
 ```c
 // kernel/livepatch/transition.c — the heart of it
@@ -101,15 +101,15 @@ static void klp_check_stack(struct task_struct *task, ...)
 
 The stack walk must be *reliable*: it must either return a complete trace or admit failure. Architectures need `HAVE_RELIABLE_STACKTRACE` (x86_64, arm64, s390, powerpc) — most others can't livepatch with the consistency model.
 
-Stuck tasks (a long-sleeping syscall holding a patched function) block completion. `/sys/kernel/livepatch/<patch>/transition` shows status; the operator can `kill -SIGSTOP/-SIGCONT` to nudge problem tasks, or simply wait.
+Stuck tasks (a long-sleeping syscall holding a patched function) block completion. `/sys/kernel/livepatch/<patch>/transition` shows status. The operator can `kill -SIGSTOP/-SIGCONT` to nudge problem tasks, or simply wait.
 
 == Atomic Replace
 
-`KLP_REPLACE` (`patch.replace = true`) is the modern default: enabling a new patch atomically replaces every prior livepatch. This makes cumulative patches the unit of deployment — fix 5 CVEs by loading one module that subsumes all four prior ones. Disable-and-reload races vanish.
+`KLP_REPLACE` (`patch.replace = true`) is the modern default: enabling a new patch atomically replaces every prior livepatch. This makes cumulative patches the unit of deployment. Fix 5 CVEs by loading one module that subsumes all four prior ones; disable-and-reload races vanish.
 
 == kpatch-build: From Source Diff to Module
 
-Hand-authoring `klp_func` arrays is error-prone. `kpatch-build` (Red Hat's tool) takes a patch *as a regular kernel source diff*:
+Hand-authoring `klp_func` arrays is error-prone. `kpatch-build` (Red Hat's tool) takes a patch as a regular kernel source diff:
 
 ```
 --- a/fs/proc/cmdline.c
@@ -142,7 +142,7 @@ SUSE's `klp-build` tool is the analogue for kGraft/livepatch in the SLES ecosyst
 
 Hard limits, born from the consistency model and ftrace mechanics:
 
-- *Data structure layout changes.* You can't add a field to `struct task_struct` and expect old code to use the new layout. Workaround: side-table the new field in a separately allocated map keyed by task pointer.
+- *Data structure layout changes.* You can't add a field to `struct task_struct` and expect old code to use the new layout. The workaround is to side-table the new field in a separately allocated map keyed by task pointer.
 
 - *Semantics of inline functions.* Inlined into N callers; livepatch can only redirect N call sites. `kpatch-build` either declines or generates per-caller patches.
 
@@ -154,11 +154,11 @@ Hard limits, born from the consistency model and ftrace mechanics:
 
 - *Changing module initialization*.
 
-For these cases the answer is "schedule a reboot". Live patching is a *tool to buy time*, not a substitute for reboots.
+For these cases the answer is to schedule a reboot. Live patching is a tool to buy time, not a substitute for reboots.
 
 == Shadow Variables
 
-For the "I need to add a field" pattern, livepatch provides *shadow variables*: a hashtable keyed by `(object_pointer, id)` mapping to a small extension blob.
+For the "I need to add a field" pattern, livepatch provides *shadow variables*: a hashtable keyed by `(object_pointer, id)` that maps to a small extension blob.
 
 ```c
 int *shadow_data = klp_shadow_get_or_alloc(task, SHADOW_DATA_ID,
@@ -174,7 +174,7 @@ A patch can register `pre_patch`/`post_patch` callbacks invoked when an *object*
 
 == Performance Impact
 
-A patched function pays the ftrace trampoline cost on every call: ~30-50 ns on x86-64 plus the call to the new function. After all tasks have migrated and the kernel switches the trampoline to a *direct call* into the new function (the "fast path"), overhead drops to a single indirect call (~5-10 ns).
+A patched function pays the ftrace trampoline cost on every call: ~30-50 ns on x86-64 plus the call to the new function. After all tasks have migrated and the kernel switches the trampoline to a direct call into the new function (the "fast path"), overhead drops to a single indirect call (~5-10 ns).
 
 A complete livepatch with hundreds of replaced functions can shave a percent or two off throughput while transition is in progress and converge to within noise after completion. Hot-path functions (scheduler internals, packet receive) are usually *not* patched live for this reason.
 
@@ -192,7 +192,7 @@ No state machine of "which sequence of patches did this host receive" to maintai
 - *kpatch* — Red Hat / Fedora; `dnf install kpatch-patch-<kernel-version>`.
 - *kGraft / live patching* — SUSE; `zypper patch`.
 - *Ubuntu Livepatch (Canonical)* — Ubuntu Pro subscription, separate kpatch-format modules.
-- *Ksplice* — Oracle; the original (and still out-of-tree); the only one supporting *data* patches via clever code generation.
+- *Ksplice* — Oracle; the original and still out-of-tree; the only one supporting *data* patches via clever code generation.
 - *Kpatch-cloud* — Azure, GCP, AWS-hosted services that ship custom livepatches for managed kernels.
 
 All ship security CVEs as livepatches within hours-to-days of CVE disclosure for supported kernels.
@@ -215,7 +215,7 @@ grep -L 0 /proc/*/patch_state
 cat /sys/kernel/debug/tracing/enabled_functions | head
 ```
 
-When a transition is stuck, `/proc/PID/patch_state` shows `0` (universe 0, not migrated) for the laggards. `0` for kernel threads usually means an idle worker; sending it any signal (or its workqueue any work) lets it complete its current iteration and pass through the migration point.
+When a transition is stuck, `/proc/PID/patch_state` shows `0` (universe 0, not migrated) for the laggards. A value of `0` for kernel threads usually means an idle worker; sending it any signal (or its workqueue any work) lets it complete its current iteration and pass through the migration point.
 
 == Building One End to End
 

@@ -1,6 +1,6 @@
 = eBPF Deep Dive
 
-eBPF (extended Berkeley Packet Filter) is a sandboxed in-kernel virtual machine that runs verified, JITed userspace-supplied programs at attach points throughout the kernel. It turned the kernel from a recompile-and-reboot artefact into a *programmable platform*: tracing, networking, security, observability, and even schedulers (`sched_ext`) are now things you load at runtime. The cost model — single-digit nanoseconds per instruction after JIT, with verifier-proven safety — is what makes it production-grade where kprobes alone were too dangerous and userspace tracing too slow.
+eBPF (extended Berkeley Packet Filter) is a sandboxed in-kernel virtual machine that runs verified, JITed userspace-supplied programs at attach points throughout the kernel. It turned the kernel from a recompile-and-reboot artefact into a programmable platform: tracing, networking, security, observability, and even schedulers (`sched_ext`) are now things you load at runtime. The cost model — single-digit nanoseconds per instruction after JIT, with verifier-proven safety — is what makes it production-grade where kprobes alone were too dangerous and userspace tracing too slow.
 
 This chapter assumes familiarity with the use-case-specific material in _Kernel Tracing_ (bpftrace one-liners, tracepoints) and _Networking Stack_ (XDP, TC). Here we cover the machinery beneath: the verifier, the JIT, the map menagerie, CO-RE & BTF, the loader libraries, and the modern frontier — kfuncs, sleepable programs, BPF LSM, and `struct_ops`.
 
@@ -29,15 +29,15 @@ Program *types* (`BPF_PROG_TYPE_*`) constrain what helpers and context the progr
 
 The verifier (`kernel/bpf/verifier.c`, ~25 kLoC) is what makes eBPF safe. It performs symbolic execution of every reachable path through the program, tracking for each register:
 
-- *Type*: `SCALAR_VALUE`, `PTR_TO_CTX`, `PTR_TO_STACK`, `PTR_TO_MAP_VALUE`, `PTR_TO_PACKET`, ...
+- *Type*: `SCALAR_VALUE`, `PTR_TO_CTX`, `PTR_TO_STACK`, `PTR_TO_MAP_VALUE`, `PTR_TO_PACKET`, etc.
 - *Value range*: `[umin, umax]` and `[smin, smax]` derived from constant propagation and bounded arithmetic.
 - *Alignment* and *bounds* for pointers.
 
 Key invariants enforced:
 
-- *No unbounded loops.* Originally none at all; since 5.3 `BPF_FUNC_loop` and bounded for-loops (with verifier-proved bounds) are allowed.
+- *No unbounded loops.* Originally none at all; since 5.3, `BPF_FUNC_loop` and bounded for-loops (with verifier-proved bounds) are allowed.
 - *Every memory access is bounds-checked.* `pkt->data + offset` is only allowed if the verifier proved `offset + size <= pkt->data_end` on this path.
-- *No use-after-free.* References to map values, packet data, and socket pointers have explicit lifetime bounds. `bpf_sk_release` must be called on every path that took a reference.
+- *No use-after-free.* References to map values, packet data, and socket pointers have explicit lifetime bounds; `bpf_sk_release` must be called on every path that took a reference.
 - *Stack zero-initialization* of slots before read.
 - *Helper-function ABI*: each `bpf_func_proto` declares argument types (e.g. `ARG_PTR_TO_MAP_KEY`); arguments are checked at every call site.
 
@@ -64,7 +64,7 @@ Maps are the only way eBPF programs share state — with each other, with usersp
 #table(columns: (auto, 1fr),
   [`BPF_MAP_TYPE_HASH`], [General-purpose hash table. Up to `max_entries`; per-CPU spinlock on update.],
   [`BPF_MAP_TYPE_ARRAY`], [Fixed-size array indexed by `u32`. Lock-free reads; updates are atomic at element size.],
-  [`BPF_MAP_TYPE_PERCPU_HASH` / `PERCPU_ARRAY`], [Per-CPU slot; aggregation is userspace's job. The high-throughput counter pattern.],
+  [`BPF_MAP_TYPE_PERCPU_HASH` / `PERCPU_ARRAY`], [Per-CPU slot; aggregation is userspace's job (the high-throughput counter pattern).],
   [`BPF_MAP_TYPE_LRU_HASH`], [Bounded-size hash with LRU eviction. Connection-tracking and flow-cache uses.],
   [`BPF_MAP_TYPE_RINGBUF`], [Per-map MPSC ring buffer; replaces `perf_event_array` for event streaming. Reserves space up front, allowing zero-copy `bpf_ringbuf_reserve`/`bpf_ringbuf_submit`.],
   [`BPF_MAP_TYPE_PERF_EVENT_ARRAY`], [Per-CPU `perf` ring buffers; the classic events channel, now mostly superseded by ringbuf.],
@@ -83,7 +83,7 @@ The mental model: pick `PERCPU_*` for hot counters, `RINGBUF` for events, `LRU_H
 
 == Helpers and kfuncs
 
-Programs call kernel functionality through *helpers* (`bpf_helper_defs.h` — a fixed numeric ABI) or, increasingly, *kfuncs* — kernel functions exposed by BTF type names and resolved at load time.
+Programs call kernel functionality through *helpers* (`bpf_helper_defs.h`, a fixed numeric ABI) or, increasingly, *kfuncs*: kernel functions exposed by BTF type names and resolved at load time.
 
 ```c
 // helpers vs kfuncs
@@ -102,7 +102,7 @@ kfuncs are how new kernel APIs reach eBPF without growing the frozen helper-ID s
 
 eBPF programs traditionally needed to be compiled against the exact kernel headers of the host they ran on — a packaging nightmare. *CO-RE* (Compile Once, Run Everywhere) and its enabling technology *BTF* (BPF Type Format) fix this.
 
-*BTF* is a compact debug-format dialect (essentially trimmed DWARF) embedded in the kernel image (`/sys/kernel/btf/vmlinux`) describing every type the kernel exports. The eBPF compiler (clang with `-g`) emits BTF relocations for every field access, recording "I read `task->mm->pgd` — patch this offset for whatever kernel runs me".
+*BTF* is a compact debug-format dialect (essentially trimmed DWARF) embedded in the kernel image (`/sys/kernel/btf/vmlinux`) describing every type the kernel exports. The eBPF compiler (clang with `-g`) emits BTF relocations for every field access, recording something like "I read `task->mm->pgd`; patch this offset for whatever kernel runs me".
 
 ```c
 // CO-RE field access — note BPF_CORE_READ
@@ -122,10 +122,10 @@ CO-RE also enables *field existence* checks (`bpf_core_field_exists`) and *enum/
 
 The userspace loader landscape:
 
-- *libbpf* — the canonical C library shipped in-tree. Object lifecycle, CO-RE relocations, skeleton generation (`bpftool gen skeleton`). The right answer for production tools.
-- *BCC* — older Python/C++ frontend, ships clang at runtime and compiles per host. Heavy but feature-rich; many existing tools live here.
-- *bpftrace* — high-level DSL, awk for the kernel. Built on libbpf. Best for ad-hoc tracing and one-liners; see _Kernel Tracing_.
-- *Aya* (Rust), *cilium/ebpf* (Go), *libxdp*, *libbpf-go* — language bindings of varying maturity. The Go and Rust ecosystems are now first-class.
+- *libbpf*: the canonical C library shipped in-tree. Handles object lifecycle, CO-RE relocations, and skeleton generation (`bpftool gen skeleton`). The right answer for production tools.
+- *BCC*: older Python/C++ frontend, ships clang at runtime and compiles per host. Heavy but feature-rich; many existing tools live here.
+- *bpftrace*: high-level DSL, awk for the kernel. Built on libbpf. Best for ad-hoc tracing and one-liners; see _Kernel Tracing_.
+- *Aya* (Rust), *cilium/ebpf* (Go), *libxdp*, *libbpf-go*: language bindings of varying maturity. The Go and Rust ecosystems are now first-class.
 
 libbpf skeleton workflow:
 
@@ -145,13 +145,13 @@ prog__destroy(skel);
 
 == Tail Calls and BPF-to-BPF Calls
 
-A program can call another loaded program via `bpf_tail_call(ctx, &prog_array_map, index)` — a no-return jump into the program at `prog_array[index]`. Bounded depth (33), no return — useful for state-machine-style demuxing in XDP pipelines.
+A program can call another loaded program via `bpf_tail_call(ctx, &prog_array_map, index)`, a no-return jump into the program at `prog_array[index]`. Depth is bounded at 33 with no return, useful for state-machine-style demuxing in XDP pipelines.
 
 Separately, *BPF-to-BPF function calls* (since 4.16) let a program contain multiple static functions, JITed as regular call/ret — recursion forbidden, depth bounded. This is what makes large programs (Cilium's are 10,000+ instructions) practical to verify: each function is verified independently.
 
 == Sleepable BPF
 
-Some attach points run in contexts that *can* sleep — LSM hooks, syscall fentry, iter programs. `BPF_F_SLEEPABLE` programs may call helpers that block (`bpf_copy_from_user`, `bpf_d_path`) and use `srcu_*`-protected map ops. The verifier enforces additional rules: no preempt-disabled or rcu_read_lock sections.
+Some attach points run in contexts that can sleep: LSM hooks, syscall fentry, iter programs. `BPF_F_SLEEPABLE` programs may call helpers that block (`bpf_copy_from_user`, `bpf_d_path`) and use `srcu_*`-protected map ops. The verifier enforces additional rules: no preempt-disabled or rcu_read_lock sections.
 
 This unblocks important patterns: walking user pages (path strings, syscall arguments), interacting with userspace via uprobe-style hooks without copying-and-praying, and integrating with `BPF_PROG_TYPE_LSM` for synchronous policy decisions.
 
@@ -204,7 +204,7 @@ perf report
 - *Map lookup* (hash, 10k entries): ~50-80 ns.
 - *Ringbuf submit* (uncontended): ~30-50 ns.
 - *XDP program dispatch*: ~30 ns including the indirect call.
-- *fentry vs kprobe*: fentry is ~2× faster (~50 ns vs ~120 ns) because it uses the ftrace direct-call trampoline instead of an INT3.
+- *fentry vs kprobe*: fentry is ~2× faster (~50 ns vs ~120 ns), using the ftrace direct-call trampoline instead of an INT3.
 
 == Security Posture
 
@@ -214,7 +214,7 @@ eBPF has had its share of CVEs — almost all in the verifier. Mitigations now i
 - *Spectre v1/v4* speculative-bounds checks in the verifier.
 - *Constant blinding* of immediates.
 - *JIT randomization* (`bpf_jit_harden`).
-- *Capability split*: `CAP_BPF` separates from `CAP_SYS_ADMIN`; combined with `CAP_PERFMON`, `CAP_NET_ADMIN` it lets you grant exactly the eBPF surface a tool needs.
+- *Capability split*: `CAP_BPF` separates from `CAP_SYS_ADMIN`; combined with `CAP_PERFMON` and `CAP_NET_ADMIN` it lets you grant exactly the eBPF surface a tool needs.
 
 In hardened deployments: keep unprivileged eBPF off, gate access via cgroup `bpf_program` controls (`BPF_PROG_TYPE_CGROUP_*`), and audit loaded programs via `bpftool prog`.
 

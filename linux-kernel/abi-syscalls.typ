@@ -57,14 +57,14 @@ ssize_t n = read(fd, buf, 4096);
 Step by step (modern Linux 6.x on x86-64):
 
 1. *libc wrapper.* `glibc`'s `read` is a thin asm wrapper that loads `__NR_read` (= 0) into `rax`, moves arguments into the syscall registers, and issues `syscall`.
-2. *CPU transition.* `syscall` reads `MSR_LSTAR` (kernel entry point), saves RIP to `rcx` and RFLAGS to `r11`, masks RFLAGS via `MSR_SFMASK`, switches to ring 0, and jumps. CPU does *not* automatically switch stacks; the kernel does that explicitly.
+2. *CPU transition.* `syscall` reads `MSR_LSTAR` (kernel entry point), saves RIP to `rcx` and RFLAGS to `r11`, masks RFLAGS via `MSR_SFMASK`, switches to ring 0, and jumps. The CPU does not automatically switch stacks; the kernel does that explicitly.
 3. *Kernel entry stub* (`entry_SYSCALL_64` in `arch/x86/entry/entry_64.S`). Swaps `gs` to per-CPU kernel data via `swapgs`, switches to the kernel stack, saves the user register frame on the kernel stack.
-4. *Mitigations.* On vulnerable CPUs the entry path runs IBRS/STIBP/SSBD setup, KPTI page-table swap (Meltdown mitigation), and `RET` retpoline / IBPB barriers. These can add 50-200 cycles depending on which mitigations are active.
+4. *Mitigations.* On vulnerable CPUs the entry path runs IBRS/STIBP/SSBD setup, KPTI page-table swap (Meltdown mitigation), and `RET` retpoline / IBPB barriers, adding 50-200 cycles depending on which mitigations are active.
 5. *Dispatch.* Kernel reads `rax`, range-checks it against `NR_syscalls`, and indirect-calls `sys_call_table[rax]` — which on a syscall-table-protected kernel is itself a thunked call (`__x64_sys_read`).
 6. *Handler.* `sys_read` validates `fd`, locates the `struct file*`, copies up to 4096 bytes into `buf` via `copy_to_user` (this is the actual work), and returns the byte count.
 7. *Exit stub.* Restores user registers, runs more mitigations (e.g. `verw` for L1TF), executes `sysretq` which flips back to ring 3 with RIP from `rcx` and RFLAGS from `r11`.
 
-A null syscall (`getpid` with vDSO disabled) is a useful microbenchmark: ~120 ns on a Skylake without mitigations, ~250 ns with the full Meltdown/Spectre stack on the same hardware. That overhead is per syscall — not per byte transferred — which is why batching syscalls (`io_uring`, `sendmmsg`, `readv`) is high-leverage for IO-heavy workloads.
+A null syscall (`getpid` with vDSO disabled) is a useful microbenchmark: ~120 ns on a Skylake without mitigations, ~250 ns with the full Meltdown/Spectre stack on the same hardware. That overhead is per syscall, not per byte transferred, which is why batching syscalls (`io_uring`, `sendmmsg`, `readv`) is high-leverage for IO-heavy workloads.
 
 == The Syscall Table
 
@@ -102,7 +102,7 @@ For a small set of read-only operations that the kernel can answer without any p
 
 On x86-64 Linux, the vDSO exposes:
 
-- `clock_gettime` (the big one — used by every monotonic-clock-reading hot path)
+- `clock_gettime` (used by every monotonic-clock-reading hot path)
 - `gettimeofday`
 - `time`
 - `getcpu`
@@ -123,7 +123,7 @@ clock_gettime via vDSO:        ~20 ns
 clock_gettime via syscall:     ~250 ns (with mitigations)
 ```
 
-For latency-sensitive tracing or per-request timestamping, vDSO is the difference between "free" and "actively painful." If you ever see `clock_gettime` consuming significant CPU in a profile, the vDSO is broken or disabled — check `vdso=0` is not on the kernel command line.
+For latency-sensitive tracing or per-request timestamping, vDSO is the difference between "free" and "actively painful." If you ever see `clock_gettime` consuming significant CPU in a profile, the vDSO is broken or disabled; check that `vdso=0` is not on the kernel command line.
 
 *Failure modes:* If the kernel cannot guarantee a steady TSC (e.g. unsynchronized across sockets, frequency drift, virtualization without invariant TSC), it falls back to a syscall internally. `cat /sys/devices/system/clocksource/clocksource0/current_clocksource` should be `tsc` on healthy modern hardware.
 
@@ -131,7 +131,7 @@ For latency-sensitive tracing or per-request timestamping, vDSO is the differenc
 
 `seccomp` (secure computing mode) lets a process install a BPF program that runs on every syscall and decides whether to allow, kill, log, or trap it. This is one of the most important sandboxing primitives in modern Linux — used by Chrome's renderer, Docker's default profile, systemd's `SystemCallFilter=`, and every modern container runtime.
 
-There are two modes:
+Two modes are available:
 
 - *Strict mode* (`SECCOMP_SET_MODE_STRICT`): only `read`, `write`, `_exit`, and `sigreturn` are allowed. Anything else kills the process. Mostly historical.
 - *Filter mode* (`SECCOMP_SET_MODE_FILTER`): install a classic BPF program, evaluated on every syscall. Returns a verdict.
@@ -182,7 +182,7 @@ seccomp_rule_add(ctx, SCMP_ACT_ERRNO(EACCES), SCMP_SYS(openat), 0);
 seccomp_load(ctx);
 ```
 
-*Performance:* seccomp adds 5-50 ns per syscall depending on filter complexity (it's a BPF program executed on the syscall hot path). For tight syscall loops, this matters; for normal applications, it is invisible.
+*Performance:* seccomp adds 5-50 ns per syscall depending on filter complexity (it is a BPF program executed on the syscall hot path). For tight syscall loops this matters; for normal applications it is invisible.
 
 *Caveats and pitfalls:*
 
@@ -193,9 +193,9 @@ seccomp_load(ctx);
 
 == Practical Notes
 
-- *Counting syscalls:* `perf stat -e 'raw_syscalls:sys_enter' ./prog` gives a system-wide total. `strace -c` gives a per-syscall breakdown for one process.
-- *Minimizing syscalls:* `io_uring` (5.1+) batches submission and completion across many operations. `sendmmsg`/`recvmmsg` batch network IO. `readv`/`writev` batch buffer-list IO. `MAP_POPULATE` mmap avoids page-fault syscalls later.
-- *vDSO troubleshooting:* If `clock_gettime` is suddenly slow, check the clocksource (`/sys/devices/system/clocksource/clocksource0/current_clocksource`) and `dmesg | grep -i tsc`. A clocksource fallback to `hpet` or `acpi_pm` will tank vDSO performance.
+- *Counting syscalls:* `perf stat -e 'raw_syscalls:sys_enter' ./prog` gives a system-wide total; `strace -c` gives a per-syscall breakdown for one process.
+- *Minimizing syscalls:* `io_uring` (5.1+) batches submission and completion across many operations. `sendmmsg`/`recvmmsg` batch network IO; `readv`/`writev` batch buffer-list IO. `MAP_POPULATE` avoids later page-fault syscalls.
+- *vDSO troubleshooting:* If `clock_gettime` is suddenly slow, check the clocksource (`/sys/devices/system/clocksource/clocksource0/current_clocksource`) and `dmesg | grep -i tsc`. A fallback to `hpet` or `acpi_pm` will tank vDSO performance.
 
 *See also:* _Kernel Bypass (Networking volume)_ — DPDK and AF_XDP avoid the syscall path entirely for packet IO. _Kernel Tracing_ — eBPF tracepoints on `raw_syscalls:sys_enter` give per-syscall observability.
 

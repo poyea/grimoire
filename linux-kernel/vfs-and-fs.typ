@@ -1,6 +1,6 @@
 = VFS and Filesystems
 
-The Virtual File System (VFS) is the kernel's polymorphism layer for filesystems. Every `open`, `read`, `write`, `stat`, `unlink` enters a small set of generic functions in `fs/` that dispatch through function-pointer tables (`*_operations` structs) implemented by the concrete filesystem — ext4, XFS, btrfs, F2FS, tmpfs, FUSE, procfs, overlayfs. Without the VFS, every syscall would need a `switch` on filesystem type; with it, a `cat` of `/proc/meminfo` and a `cat` of `/data/foo.txt` on XFS share exactly the same syscall fast path.
+The Virtual File System (VFS) is the kernel's polymorphism layer for filesystems. Every `open`, `read`, `write`, `stat`, `unlink` enters a small set of generic functions in `fs/` that dispatch through function-pointer tables (`*_operations` structs) implemented by the concrete filesystem (ext4, XFS, btrfs, F2FS, tmpfs, FUSE, procfs, overlayfs). Without the VFS, every syscall would need a `switch` on filesystem type; with it, a `cat` of `/proc/meminfo` and a `cat` of `/data/foo.txt` on XFS share exactly the same syscall fast path.
 
 == The Four Core Objects
 
@@ -58,11 +58,11 @@ Symlinks are followed by `inode_operations->get_link`; the walker maintains a st
 
 The dcache lives in `fs/dcache.c`. Each `struct dentry` carries:
 
-- `d_name` — the component string (inline for short names).
-- `d_parent` — back-pointer for upward walks.
-- `d_inode` — the inode it resolves to (NULL for *negative dentries*, which cache non-existence).
-- `d_lru` — link into an LRU list for reclaim.
-- `d_seq` — seqcount for RCU-walk validation.
+- `d_name`: the component string (inline for short names).
+- `d_parent`: back-pointer for upward walks.
+- `d_inode`: the inode it resolves to (NULL for *negative dentries*, which cache non-existence).
+- `d_lru`: link into an LRU list for reclaim.
+- `d_seq`: seqcount for RCU-walk validation.
 
 Negative dentries are an under-appreciated optimization: a `stat` on a missing file leaves a negative dentry behind so the next miss is a memory access, not an inode-ops lookup. Configure servers do thousands of `stat` calls on optional config files at startup; the dcache absorbs them.
 
@@ -70,7 +70,7 @@ The inode cache (`fs/inode.c`) is hashed by superblock + ino; `iget_locked` is t
 
 == File Operations
 
-`read`/`write` dispatch through `file->f_op->read_iter` / `write_iter` (the older `.read`/`.write` are deprecated). The iter form takes a `struct iov_iter` that abstracts user buffers, kernel buffers, bvec arrays, and pipe pages uniformly — the same `read_iter` services `read`, `pread`, `readv`, `preadv`, and io_uring `IORING_OP_READV`.
+`read`/`write` dispatch through `file->f_op->read_iter` / `write_iter`. The iter form takes a `struct iov_iter` that abstracts user buffers, kernel buffers, bvec arrays, and pipe pages uniformly; the same `read_iter` services `read`, `pread`, `readv`, `preadv`, and io_uring `IORING_OP_READV`.
 
 ```c
 // Minimal file_operations for a char device or pseudo-fs
@@ -91,7 +91,7 @@ Buffered reads on a regular file end up in `generic_file_read_iter` → `filemap
 
 == Page Cache Integration
 
-The page cache is the unifying performance abstraction of Linux file I/O. Every file-backed inode owns an `address_space` (`inode->i_mapping`) — an XArray (formerly radix tree) keyed by page index, storing folios. `read` copies out of folios; `write` dirties them; writeback (`fs/fs-writeback.c`) flushes them under memory pressure or `fsync`.
+The page cache is the unifying performance abstraction of Linux file I/O. Every file-backed inode owns an `address_space` (`inode->i_mapping`): an XArray (formerly radix tree) keyed by page index, storing folios. `read` copies out of folios; `write` dirties them; writeback (`fs/fs-writeback.c`) flushes them under memory pressure or `fsync`.
 
 The `address_space_operations` table (`a_ops`) lets each filesystem plug into the cache:
 
@@ -117,19 +117,19 @@ Folios — multi-page units introduced in 5.16 and dominant by 6.x — let the p
 
 == Filesystem Stacking and Mounts
 
-A *mount* binds a superblock at a path. `struct vfsmount` (and its container `struct mount` in `fs/mount.h`) hangs off a *mount namespace*; the same superblock can be mounted at multiple points. The path walker crosses mounts by detecting `DCACHE_MOUNTED` on the dentry and following `mnt_hashtable` to the child mount.
+A *mount* binds a superblock at a path. `struct vfsmount` (and its container `struct mount` in `fs/mount.h`) hangs off a *mount namespace*. The same superblock can be mounted at multiple points. The path walker crosses mounts by detecting `DCACHE_MOUNTED` on the dentry and following `mnt_hashtable` to the child mount.
 
 Stacking filesystems layer one inode-ops set over another:
 
-- *overlayfs* (`fs/overlayfs/`) — the workhorse behind container images. An `upperdir` and one or more `lowerdir`s; reads fall through to the first layer holding the file; writes to lower files trigger *copy-up* into upper.
-- *eCryptfs*, *fscrypt* — per-file encryption (fscrypt is now in-tree at `fs/crypto/`, used by ext4, F2FS, UBIFS).
-- *FUSE* (`fs/fuse/`) — userspace filesystems; requests are marshalled to a daemon over `/dev/fuse`.
+- *overlayfs* (`fs/overlayfs/`): the workhorse behind container images. An `upperdir` and one or more `lowerdir`s; reads fall through to the first layer holding the file; writes to lower files trigger *copy-up* into upper.
+- *eCryptfs* and *fscrypt* provide per-file encryption (fscrypt is now in-tree at `fs/crypto/`, used by ext4, F2FS, UBIFS).
+- *FUSE* (`fs/fuse/`) exposes userspace filesystems; requests are marshalled to a daemon over `/dev/fuse`.
 
 Bind mounts (`mount --bind src dst`) are a special case: a new `struct mount` referencing the same dentry; no new superblock. Combined with namespaces this is how container runtimes assemble rootfs trees without copying.
 
 == ext4
 
-ext4 (`fs/ext4/`) is the conservative workhorse — the default on most distros and the filesystem with the longest production history.
+ext4 (`fs/ext4/`) is the conservative workhorse, the default on most distros and the filesystem with the longest production history.
 
 - *Extents*: replaces ext3's indirect-block tree with extent trees, dramatically improving large-file performance.
 - *Journaling* (`fs/jbd2/`): metadata-only by default (`data=ordered`); optional `data=journal` for full data journaling at a steep write-amplification cost.
@@ -137,27 +137,27 @@ ext4 (`fs/ext4/`) is the conservative workhorse — the default on most distros 
 - *Inline data*: tiny files (less than 60 bytes by default) live in the inode itself.
 - *fast commits* (5.10+): a lighter-weight journal path for `fsync` of small metadata changes.
 
-Limits: 1 EiB volume, 16 TiB file, 4 G inodes (allocated at mkfs time — running out is a famously painful recovery scenario).
+Limits: 1 EiB volume, 16 TiB file, 4 G inodes (allocated at mkfs time; running out is a famously painful recovery scenario).
 
 == XFS
 
-XFS (`fs/xfs/`) — SGI's allocation-group filesystem, dominant for large volumes and parallel workloads.
+XFS (`fs/xfs/`) is SGI's allocation-group filesystem, dominant for large volumes and parallel workloads.
 
 - *Allocation groups*: the volume is divided into independent AGs (typically 1 GiB each in modern mkfs defaults); allocators in different AGs do not contend.
 - *B+tree everything*: free-space (by offset and by size), inode allocation, extent maps — all B+trees, all crc-protected on v5 (the default since 2013).
 - *Delayed logging*: the log is an in-memory accumulator flushed in batches; massively reduces journal traffic on metadata-heavy workloads (millions of `creat`/`unlink`/s).
 - *Reverse-mapping (rmap)* + *reflink*: per-AG rmap btree lets `xfs_scrub` validate ownership; reflink (4.9+) provides O(1) `cp --reflink` copies via shared extents.
-- *Online repair* (`xfs_scrub`, plus `online repair` infrastructure landing across 6.x) — the most ambitious filesystem-repair effort in the kernel.
+- *Online repair* (`xfs_scrub`, plus `online repair` infrastructure landing across 6.x): the most ambitious filesystem-repair effort in the kernel.
 
 XFS is the canonical choice for >50 TiB volumes; it is the default in RHEL 7+.
 
 == btrfs
 
-btrfs (`fs/btrfs/`) — copy-on-write, snapshots, checksums, and integrated volume management.
+btrfs (`fs/btrfs/`) provides copy-on-write, snapshots, checksums, and integrated volume management.
 
 - *CoW everywhere*: every write goes to a new location, then the metadata tree is updated atomically. Snapshots are O(1) — just a new tree root.
 - *Subvolumes*: cheap independent filesystems within one storage pool; the unit of snapshots and quotas.
-- *Built-in RAID*: 0/1/10/5/6 (RAID 5/6 still flagged unstable for metadata as of 6.x — the "write hole" problem).
+- *Built-in RAID*: 0/1/10/5/6 (RAID 5/6 still flagged unstable for metadata as of 6.x due to the "write hole" problem).
 - *Checksums*: every data block has a CRC32C (or BLAKE2b/xxhash/SHA-256) checksum; mismatches surface as `EIO` rather than silently corrupting reads.
 - *send/receive*: incremental snapshot replication, used heavily by SUSE and by backup tools.
 
@@ -165,11 +165,11 @@ The CoW model is a tradeoff: superb for snapshots and integrity, painful for ran
 
 == F2FS
 
-F2FS (`fs/f2fs/`) — Flash-Friendly File System, designed by Samsung for NAND.
+F2FS (`fs/f2fs/`) is the Flash-Friendly File System, designed by Samsung for NAND.
 
 - *Log-structured*: writes are sequential into "segments" (2 MiB by default); cleaner reclaims fragmented segments in the background, aligning with how flash translation layers prefer sequential writes.
 - *Multi-head logging*: separate hot/warm/cold logs for nodes, data, and metadata reduce garbage-collection cost.
-- *NAT/SIT*: node address table and segment-info table form the index — small, in-memory friendly.
+- *NAT/SIT*: node address table and segment-info table form the index, keeping it small and in-memory friendly.
 - *Atomic writes* and *volatile writes* for databases that want to manage their own crash consistency.
 
 F2FS dominates Android internal storage; less common on servers but increasingly used on ZNS (Zoned Namespace) SSDs where its log structure is a natural fit.
@@ -178,18 +178,18 @@ F2FS dominates Android internal storage; less common on servers but increasingly
 
 Pseudo-filesystems are VFS plumbing without a backing store:
 
-- *procfs* (`fs/proc/`) — per-process state under `/proc/<pid>/` and global state (`/proc/meminfo`, `/proc/cpuinfo`). Each entry's `read` runs a callback that formats kernel state on demand.
-- *sysfs* (`fs/sysfs/`) — the device-model export; `/sys/class/`, `/sys/block/`, `/sys/devices/`. Backed by *kernfs*.
-- *debugfs* (`fs/debugfs/`) — convention-free dump for developer use; mounted at `/sys/kernel/debug/`.
-- *tmpfs* (`mm/shmem.c`) — RAM-backed, swap-aware; the backend for `/tmp`, `/dev/shm`, and POSIX shared memory.
+- *procfs* (`fs/proc/`): per-process state under `/proc/<pid>/` and global state (`/proc/meminfo`, `/proc/cpuinfo`). Each entry's `read` runs a callback that formats kernel state on demand.
+- *sysfs* (`fs/sysfs/`): the device-model export, with `/sys/class/`, `/sys/block/`, `/sys/devices/`. Backed by *kernfs*.
+- *debugfs* (`fs/debugfs/`): convention-free dump for developer use; mounted at `/sys/kernel/debug/`.
+- *tmpfs* (`mm/shmem.c`): RAM-backed, swap-aware; the backend for `/tmp`, `/dev/shm`, and POSIX shared memory.
 
-Their `file_operations` typically use `seq_file` (`fs/seq_file.c`) — an iterator helper that handles partial reads and rendering of variable-length output (the source of `/proc/meminfo`'s formatting).
+Their `file_operations` typically use `seq_file` (`fs/seq_file.c`), an iterator helper that handles partial reads and rendering of variable-length output (the source of `/proc/meminfo`'s formatting).
 
 == FUSE
 
 FUSE (`fs/fuse/`) bridges the VFS to userspace daemons. The kernel module exposes `/dev/fuse`; a daemon reads request structures, performs them, and writes back responses. Each VFS operation that hits a FUSE inode marshalled into a request, queued, and waits.
 
-The cost is two context switches per operation. Recent work (FUSE-BPF, fuse passthrough, io_uring-based FUSE) targets this overhead. `virtiofs` (`fs/fuse/virtio_fs.c`) uses FUSE protocol over virtio rings for VM-to-host filesystem sharing in Firecracker/QEMU — far faster than 9P.
+The cost is two context switches per operation. Recent work (FUSE-BPF, fuse passthrough, io_uring-based FUSE) targets this overhead. `virtiofs` (`fs/fuse/virtio_fs.c`) uses FUSE protocol over virtio rings for VM-to-host filesystem sharing in Firecracker/QEMU, which is far faster than 9P.
 
 == Locking Summary
 
@@ -198,7 +198,7 @@ VFS locking is famously intricate. Highlights:
 - *`i_rwsem`*: per-inode read-write semaphore protecting directory operations and metadata. Held shared for lookups, exclusive for `rename`/`unlink`/`create`.
 - *`d_lock`*: per-dentry spinlock for cache manipulations.
 - *`s_umount`*: per-superblock rwsem held during mount/umount; remount takes it exclusive.
-- *Lock ordering for rename*: locks both parent inodes in inode-address order, then both target dentries — `lock_rename` and `lock_rename_child` encapsulate this.
+- *Lock ordering for rename*: locks both parent inodes in inode-address order, then both target dentries. `lock_rename` and `lock_rename_child` encapsulate this.
 
 See `Documentation/filesystems/locking.rst` for the authoritative table.
 

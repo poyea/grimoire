@@ -1,6 +1,6 @@
 = The Networking Stack
 
-The Linux networking stack handles ~30 M pps per core on commodity hardware in 2025, runs on every device with an IP address from a Raspberry Pi to a 400 GbE switch ASIC, and is the substrate beneath every container runtime's networking model. Its architecture is layered but porous — drivers, the NAPI poll loop, the IP/TCP/UDP code in `net/ipv4` and `net/ipv6`, traffic-control queueing disciplines, netfilter hooks, and the eBPF programmable data plane (XDP, TC, sk_lookup) all interlock through a single data structure: the `struct sk_buff`.
+The Linux networking stack handles ~30 M pps per core on commodity hardware in 2025, runs on every device with an IP address from a Raspberry Pi to a 400 GbE switch ASIC, and is the substrate beneath every container runtime's networking model. Its architecture is layered but porous: drivers, the NAPI poll loop, the IP/TCP/UDP code in `net/ipv4` and `net/ipv6`, traffic-control queueing disciplines, netfilter hooks, and the eBPF programmable data plane (XDP, TC, sk_lookup) all interlock through a single data structure: the `struct sk_buff`.
 
 == sk_buff: The Packet Object
 
@@ -28,7 +28,7 @@ struct sk_buff {
 };
 ```
 
-`head/data/tail/end` form a four-pointer window: `head..end` is the allocated buffer; `data..tail` is the current payload. As a packet travels up the stack, `skb_pull` advances `data` past each header; on egress `skb_push` retreats it as headers are prepended. *Headroom* (`data - head`) lets layers prepend without copying; drivers allocate enough headroom (`NET_SKB_PAD`) so the IP and L2 headers fit.
+`head/data/tail/end` form a four-pointer window: `head..end` is the allocated buffer; `data..tail` is the current payload. As a packet travels up the stack, `skb_pull` advances `data` past each header; on egress `skb_push` retreats it as headers are prepended. *Headroom* (`data - head`) lets layers prepend without copying; drivers allocate enough headroom (`NET_SKB_PAD`) to fit the IP and L2 headers.
 
 The `skb_shared_info` at `end` holds page fragments — the *non-linear* part. A 64 KiB GSO super-segment lives mostly here, with one `skb_frag_t` per page. `skb_clone` produces a new skb sharing the data area (reference-counted); `skb_copy` deep-copies.
 
@@ -39,13 +39,13 @@ The receive path runs in two contexts: hard IRQ (very short) and softirq / NAPI 
 1. NIC DMAs frame into a pre-posted rx ring buffer, raises MSI-X.
 2. Driver IRQ handler schedules NAPI (`napi_schedule`) and returns.
 3. `NET_RX_SOFTIRQ` runs, calls driver `poll()`, which builds skbs from the rx ring and hands them to `napi_gro_receive`.
-4. *GRO* (Generic Receive Offload) coalesces adjacent TCP segments into a super-skb (up to 64 KiB) — the stack's single biggest CPU win on receive.
+4. *GRO* (Generic Receive Offload) coalesces adjacent TCP segments into a super-skb (up to 64 KiB), which is the stack's single biggest CPU win on receive.
 5. `__netif_receive_skb_core` dispatches by `protocol` to `ip_rcv` / `ipv6_rcv` / `arp_rcv` ... and runs netfilter `PRE_ROUTING` hooks.
 6. Routing decision: deliver locally or forward.
 7. Local delivery walks transport handlers (`tcp_v4_rcv`, `udp_rcv`); netfilter `LOCAL_IN`. Socket lookup (`__inet_lookup_*`) finds the destination `struct sock`; payload is queued on `sk->sk_receive_queue` (or `sk_backlog` if the socket is locked).
 8. User process wakes up from `epoll_wait`/`recvmsg`/io_uring completion.
 
-GRO is implemented per-protocol via `gro_receive` and `gro_complete` callbacks; TCP, UDP-L4 (with GRO-on-UDP since 5.0 — essential for QUIC), GENEVE, and VXLAN all participate.
+GRO is implemented per-protocol via `gro_receive` and `gro_complete` callbacks; TCP, UDP-L4 (with GRO-on-UDP since 5.0, essential for QUIC), GENEVE, and VXLAN all participate.
 
 == Tx Path
 
@@ -58,16 +58,16 @@ Send is the symmetric dance:
 5. `dev_queue_xmit` selects a tx queue (`netdev_pick_tx`, using `skb->queue_mapping` or RSS/XPS), enqueues into the qdisc.
 6. Qdisc dequeues; driver's `ndo_start_xmit` posts to the tx ring; NIC DMAs and transmits; completion IRQ frees the skb (or transfers it back to a pool).
 
-*GSO* (Generic Segmentation Offload) plus *TSO* (TCP Segmentation Offload) push segmentation to the latest possible point. A `sendmsg(64K)` traverses TCP and IP exactly once instead of 44 times — the difference between 10 Gbps and 40 Gbps on the same core.
+*GSO* (Generic Segmentation Offload) plus *TSO* (TCP Segmentation Offload) push segmentation to the latest possible point. A `sendmsg(64K)` traverses TCP and IP exactly once instead of 44 times, which is the difference between 10 Gbps and 40 Gbps on the same core.
 
 == Queueing Disciplines (qdiscs)
 
-Between the protocol stack and the driver lives the *qdisc* — the kernel's traffic shaper, scheduler, and prioritizer. Per-device, configured via `tc` (`iproute2`):
+Between the protocol stack and the driver lives the *qdisc*, the kernel's traffic shaper, scheduler, and prioritizer. Per-device, configured via `tc` (`iproute2`):
 
 #table(columns: (auto, 1fr),
-  [`pfifo_fast`], [Three-band FIFO based on ToS — the legacy default.],
+  [`pfifo_fast`], [Three-band FIFO based on ToS; the legacy default.],
   [`mq` / `mq-prio`], [Multi-queue wrapper: per-tx-queue child qdiscs. Default on modern multi-queue NICs.],
-  [`fq` / `fq_codel`], [Per-flow fair queueing; `fq_codel` adds CoDel AQM. Required by TCP BBR's pacing. Default on many distros.],
+  [`fq` / `fq_codel`], [Per-flow fair queueing; `fq_codel` adds CoDel AQM. Required by TCP BBR's pacing; default on many distros.],
   [`cake`], [Modernized `fq_codel`+`htb`+DRR with traffic-class awareness. Used by router projects.],
   [`htb`], [Hierarchical Token Bucket — classic class-based shaping with borrowing.],
   [`tbf`], [Simple token-bucket rate cap.],
@@ -97,14 +97,14 @@ tc qdisc add dev eth0 clsact
 tc filter add dev eth0 ingress bpf da obj prog.o sec ingress
 ```
 
-This is the second-most-common attach point for eBPF networking (after XDP). The TC layer sees packets *with* full skb metadata, can modify them, and integrates with netfilter — making it the sweet spot for container networking (Cilium attaches both at TC and XDP).
+This is the second-most-common attach point for eBPF networking (after XDP). The TC layer sees packets with full skb metadata, can modify them, and integrates with netfilter, making it the sweet spot for container networking (Cilium attaches both at TC and XDP).
 
 == XDP: Express Data Path
 
-*XDP* runs eBPF programs at the earliest possible point — in the NIC driver's poll routine, before any skb has been allocated. The verdict is one of:
+*XDP* runs eBPF programs at the earliest possible point: in the NIC driver's poll routine, before any skb has been allocated. The verdict is one of:
 
 - `XDP_PASS` — proceed up the stack (skb is built normally).
-- `XDP_DROP` — free the rx descriptor; ~30 M pps drop rate per core, the basis of DDoS protection.
+- `XDP_DROP` — free the rx descriptor (~30 M pps drop rate per core, the basis of DDoS protection).
 - `XDP_TX` — bounce out the same NIC.
 - `XDP_REDIRECT` — forward to another interface, CPU, or `AF_XDP` socket via a `bpf_redirect_map`.
 - `XDP_ABORTED` — error path; emits a tracepoint.
@@ -130,11 +130,11 @@ int drop_udp_53(struct xdp_md *ctx)
 
 Three modes:
 
-- *Native XDP* — driver builds an `xdp_buff` from the rx descriptor and invokes the program. Lowest overhead. Requires driver support.
-- *Generic XDP* — runs after skb allocation (`netif_receive_skb`). Works on any device; ~half the throughput of native.
-- *Offloaded XDP* — program JITs into NIC firmware (Netronome). Niche.
+- *Native XDP*: driver builds an `xdp_buff` from the rx descriptor and invokes the program. Lowest overhead; requires driver support.
+- *Generic XDP*: runs after skb allocation (`netif_receive_skb`). Works on any device at ~half the throughput of native.
+- *Offloaded XDP*: program JITs into NIC firmware (Netronome). Niche.
 
-`AF_XDP` is the userspace zero-copy sibling: an XDP program redirects a frame into a userspace ring (`UMEM`), and a user process processes it without any kernel TCP/IP involvement at all — the polite alternative to DPDK. See _Kernel Bypass_ in the networking volume.
+`AF_XDP` is the userspace zero-copy sibling: an XDP program redirects a frame into a userspace ring (`UMEM`), and a user process processes it without any kernel TCP/IP involvement at all. This is the polite alternative to DPDK. See _Kernel Bypass_ in the networking volume.
 
 == Netfilter and nftables
 
@@ -152,12 +152,12 @@ eBPF program types that hook the socket layer:
   [`BPF_PROG_TYPE_XDP`], [Earliest rx hook, no skb.],
   [`BPF_PROG_TYPE_SCHED_CLS`], [TC ingress/egress with full skb.],
   [`BPF_PROG_TYPE_SCHED_ACT`], [TC action, complements `SCHED_CLS`.],
-  [`BPF_PROG_TYPE_SOCK_OPS`], [Per-connection TCP state-machine callbacks — used to tune RTO, ECN, congestion-control selection per flow.],
+  [`BPF_PROG_TYPE_SOCK_OPS`], [Per-connection TCP state-machine callbacks; used to tune RTO, ECN, and congestion-control selection per flow.],
   [`BPF_PROG_TYPE_SK_SKB`], [Stream parser/verdict for sockmap — splice packets between sockets in-kernel.],
-  [`BPF_PROG_TYPE_SK_MSG`], [`sendmsg`-time program: peek at user payload, redirect to another socket via sockmap.],
+  [`BPF_PROG_TYPE_SK_MSG`], [`sendmsg`-time program; peek at user payload and redirect to another socket via sockmap.],
   [`BPF_PROG_TYPE_SOCK_FILTER`], [Classic seccomp/SO_ATTACH_BPF socket filter.],
-  [`BPF_PROG_TYPE_CGROUP_SOCK*`], [Per-cgroup `connect`/`bind`/`sendmsg`/`recvmsg` interception — service-mesh transparent proxy without iptables.],
-  [`BPF_PROG_TYPE_SK_LOOKUP`], [Override socket-lookup decisions; build custom listener pools (e.g. SO_REUSEPORT++).],
+  [`BPF_PROG_TYPE_CGROUP_SOCK*`], [Per-cgroup `connect`/`bind`/`sendmsg`/`recvmsg` interception for service-mesh transparent proxy without iptables.],
+  [`BPF_PROG_TYPE_SK_LOOKUP`], [Override socket-lookup decisions to build custom listener pools (e.g., SO_REUSEPORT++).],
 )
 
 Cilium, Katran, Calico-eBPF, and modern service meshes are built almost entirely from this menu — XDP for L4 load balancing, TC for ingress policy, `SOCK_OPS` for TCP tuning, `CGROUP_SOCK_ADDR` for transparent service redirection.
@@ -176,7 +176,7 @@ Cilium, Katran, Calico-eBPF, and modern service meshes are built almost entirely
 
 Selection: `sysctl net.ipv4.tcp_congestion_control=bbr` (or per-route via `ip route ... congctl bbr`, or per-socket via `setsockopt TCP_CONGESTION`).
 
-TSQ (TCP Small Queues) caps the bytes in transit per socket inside the kernel's tx path, preventing bufferbloat in the qdisc layer. Pacing (with `fq`) replaces the burst behaviour of ACK-clocked sends — essential for BBR and beneficial in general.
+TSQ (TCP Small Queues) caps the bytes in transit per socket inside the kernel's tx path, preventing bufferbloat in the qdisc layer. Pacing (with `fq`) replaces the burst behaviour of ACK-clocked sends; it is essential for BBR and beneficial in general.
 
 == UDP, QUIC, and GRO-on-UDP
 
@@ -184,7 +184,7 @@ UDP was historically just "send-recv with checksums", but the rise of QUIC turne
 
 - *GRO over UDP* — coalesces consecutive UDP packets with the same 5-tuple, dramatically reducing per-packet cost on the QUIC receive path.
 - *GSO over UDP* (`UDP_SEGMENT`) — `sendmsg` of a 64 KiB buffer with `cmsg(UDP_SEGMENT, gso_size)` produces many MTU-sized packets in one call.
-- *`SO_REUSEPORT` BPF dispatcher* — for a QUIC server, route incoming packets to the worker that owns the connection ID.
+- *`SO_REUSEPORT` BPF dispatcher*: for a QUIC server, route incoming packets to the worker that owns the connection ID.
 
 This brings userspace QUIC implementations within ~80% of TCP-in-kernel throughput on the same hardware.
 
@@ -199,7 +199,7 @@ Rough, modern Linux (6.x), single core, 100 GbE NIC with multi-queue + RSS:
 - *TCP throughput (64 KiB MSS, single flow)*: 40-90 Gbps with GRO/TSO on (single core).
 - *MSG_ZEROCOPY*: ~30% CPU saving on send for >16 KiB messages.
 
-The headline: drop the right packets in XDP, do real work in TC, terminate connections with TCP, and reach for AF_XDP / DPDK only when you must.
+The takeaway: drop the right packets in XDP, do real work in TC, terminate connections with TCP, and reach for AF_XDP / DPDK only when you must.
 
 == Observability
 
@@ -210,7 +210,7 @@ ethtool -S eth0 | grep -E 'rx_|tx_'
 # qdisc stats
 tc -s qdisc show dev eth0
 
-# Live socket table (replaces ss-and-netstat)
+# Live socket table (replaces netstat)
 ss -tninp
 
 # TCP retransmits per second
