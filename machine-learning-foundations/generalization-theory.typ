@@ -2,7 +2,7 @@
 
 Why does a model that fits 60M parameters to 50K labeled examples ever generalize? Classical statistical learning theory says it should not — the model has more than enough capacity to memorize noise. The story of generalization theory over the past three decades is the gradual closing of that gap: from worst-case VC bounds, through data-dependent Rademacher complexities and PAC-Bayes, to the modern phenomena of double descent and neural scaling laws. This chapter surveys those results at the level a practitioner needs to read papers like "Reconciling modern machine-learning practice and the classical bias-variance trade-off" or the Chinchilla scaling-laws paper.
 
-*See also:* _Probability and Information_ (concentration inequalities), _Optimization_ (implicit regularization), `llm/pretraining.typ` (Chinchilla, scaling laws).
+*See also:* _Probability and Information_ (concentration inequalities), _Optimization_ (implicit regularization), _Pretraining_ (Chinchilla, scaling laws).
 
 == The Setup
 

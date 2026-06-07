@@ -2,7 +2,7 @@
 
 Machine learning is, at its most abstract, the art of using data to update beliefs about a generating process. Probability provides the calculus of uncertainty; information theory provides the units in which we measure how much a model has actually learned. This chapter covers the probabilistic primitives and information-theoretic quantities that recur throughout the rest of the volume — densities and divergences, expectations and entropies, estimators and concentration bounds — at a depth sufficient to read modern ML papers without re-deriving each result from scratch.
 
-*See also:* _Generalization Theory_ (PAC-Bayes, concentration), _Generative Models_ (KL, evidence lower bound), _Optimization_ (stochastic gradients as Monte Carlo), `llm/pretraining.typ` (cross-entropy as the training objective).
+*See also:* _Generalization Theory_ (PAC-Bayes, concentration), _Generative Models_ (KL, evidence lower bound), _Optimization_ (stochastic gradients as Monte Carlo), _Pretraining_ (cross-entropy as the training objective).
 
 == Probability Spaces and Random Variables
 
