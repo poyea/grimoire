@@ -2,7 +2,7 @@
 
 Observability begins with three classical signal types — metrics, logs, traces — but production systems require two more first-class citizens: continuous profiles and discrete events. This chapter frames each pillar by its information density, query model, retention economics, and the questions it answers, then sketches how OpenTelemetry semantic conventions stitch them into a single graph keyed by resource and span context.
 
-*See also:* _Metrics Systems_, _Distributed Tracing_, _Continuous Profiling_, _Logging Pipelines_, #emph[database/observability-and-self-driving.typ], #emph[networking/observability.typ], #emph[linux-kernel/kernel-tracing.typ]
+*See also:* _Metrics Systems_, _Distributed Tracing_, _Continuous Profiling_, _Logging Pipelines_, _Observability and Self-Driving Databases_ (database), _Network Observability_ (networking), _Kernel Tracing_ (linux-kernel)
 
 == Why "Three Pillars" Underspecifies the Problem
 

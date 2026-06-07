@@ -2,7 +2,7 @@
 
 A distributed trace tells you which service is slow; a profile tells you which line of code inside that service is consuming the CPU or memory. Continuous profiling — always-on, low-overhead profiling in production — closes the gap between aggregate metrics and individual request traces by providing a third dimension: resource attribution at the code level. This chapter covers the mechanics of CPU and memory profiling, the flame graph as the canonical visualization, eBPF-based always-on profilers, and the emerging practice of correlating profiles with traces.
 
-*See also:* _metrics-systems.typ_, _distributed-tracing.typ_, _the-three-pillars-and-beyond.typ_
+*See also:* _Metrics Systems_, _Distributed Tracing_, _The Three Pillars and Beyond_
 
 == CPU Profiling: Sampling vs Instrumentation
 

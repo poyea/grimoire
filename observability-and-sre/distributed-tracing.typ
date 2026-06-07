@@ -2,7 +2,7 @@
 
 A trace is a causally ordered tree (or DAG) of spans across processes that together represent one logical request. Tracing answers _where_ time went and _which_ downstream calls amplify latency or errors. This chapter starts from the Dapper paper, follows the evolution through Zipkin and Jaeger to OpenTelemetry, and covers the hard parts: context propagation, sampling, and tail-based decisions at scale.
 
-*See also:* _The Three Pillars and Beyond_, _Metrics Systems_, _SLO Engineering_, #emph[networking/observability.typ], #emph[networking/grpc.typ], #emph[database/observability-and-self-driving.typ]
+*See also:* _The Three Pillars and Beyond_, _Metrics Systems_, _SLO Engineering_, _Network Observability_ (networking), _gRPC (Remote Procedure Calls)_ (networking), _Observability and Self-Driving Databases_ (database)
 
 == The Span Model
 
