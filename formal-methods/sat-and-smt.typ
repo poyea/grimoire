@@ -2,7 +2,7 @@
 
 Boolean satisfiability and satisfiability modulo theories are the computational engines behind nearly every modern formal-methods tool. A $"SAT"$ solver decides whether a propositional formula in CNF has a satisfying assignment; an $"SMT"$ solver lifts this to formulas containing arithmetic, arrays, bit-vectors, and other rich theories. Together they power bounded model checking, symbolic execution, program synthesis, and compiler verification at industrial scale.
 
-*See also:* _propositional-and-fol.typ_, _model-checking.typ_, _theorem-proving.typ_, _tla-plus.typ_
+*See also:* _Propositional and First-Order Logic_, _Model Checking_, _Theorem Proving_, _TLA+_
 
 == The SAT Problem
 

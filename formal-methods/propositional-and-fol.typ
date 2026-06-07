@@ -2,7 +2,7 @@
 
 Logic is the substrate of formal methods: every model checker, $"SMT"$ solver, and theorem prover ultimately manipulates formulas in some logical language. This chapter develops propositional logic and first-order logic (FOL) at the level needed to read papers on decision procedures, define semantics of program logics, and understand what a tool like Z3 or Coq is actually computing. We focus on syntax, semantics, proof systems, and the algorithmic landscape — decidability, complexity, and normal forms.
 
-*See also:* _sat-and-smt.typ_, _model-checking.typ_, _theorem-proving.typ_, `programming-languages/operational-semantics.typ`, `programming-languages/omega-automata.typ`
+*See also:* _SAT and SMT_, _Model Checking_, _Theorem Proving_, _Operational Semantics_ (programming-languages), _Omega-Automata_ (programming-languages)
 
 == Propositional Logic: Syntax
 

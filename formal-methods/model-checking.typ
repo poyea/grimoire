@@ -2,7 +2,7 @@
 
 Model checking is the algorithmic verification of finite-state (or finitely abstractable) systems against temporal specifications. Given a Kripke structure $cal(K)$ and a property $phi$ in LTL, CTL, or the modal $mu$-calculus, the model checker either certifies $cal(K) models phi$ or returns a concrete counterexample trace. Three decades of research have produced explicit-state, symbolic (BDD-based), bounded ($"SAT"$-based), and IC3/PDR algorithms — each tuned for a different state-space regime.
 
-*See also:* _sat-and-smt.typ_, _propositional-and-fol.typ_, _tla-plus.typ_, `programming-languages/omega-automata.typ`
+*See also:* _SAT and SMT_, _Propositional and First-Order Logic_, _TLA+_, _Omega-Automata_ (programming-languages)
 
 == Kripke Structures and Transition Systems
 
