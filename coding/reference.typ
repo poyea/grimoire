@@ -107,11 +107,11 @@ struct Foo {
 alignas(32) int data[8];  // Aligned for _mm256 operations
 ```
 
-*Misaligned access — architecture differences:*
+*Misaligned access: architecture differences:*
 
 - *x86/x86-64:* Tolerates misaligned scalar loads/stores. Cost is "free" if access stays within a cache line (64 B); crossing a cache line costs ~1-2 extra cycles (a *split load*). Crossing a 4 KB page is far worse (~100+ cycles on older microarchs; mostly absorbed by the LSU on Skylake+).
-- *ARMv7/older ARM:* Trap on misaligned access unless `SCTLR.A=0` enables hardware fixup. With fixup the CPU silently does two aligned accesses — slow but works.
-- *ARMv8 (AArch64):* Allows misaligned accesses to normal memory, but Device memory still faults. Atomics and exclusives (`LDXR`/`STXR`) require natural alignment — misaligned faults.
+- *ARMv7/older ARM:* Trap on misaligned access unless `SCTLR.A=0` enables hardware fixup. With fixup the CPU silently does two aligned accesses (slow, but works).
+- *ARMv8 (AArch64):* Allows misaligned accesses to normal memory, but Device memory still faults. Atomics and exclusives (`LDXR`/`STXR`) require natural alignment; misaligned accesses fault.
 - *SPARC, MIPS, RISC-V (default):* Bus error / `SIGBUS` on misaligned access. Compiler-emitted `memcpy` is the portable escape hatch.
 
 ```cpp
@@ -120,11 +120,11 @@ uint32_t value;
 std::memcpy(&value, ptr, sizeof(value));   // No UB even if ptr misaligned
 ```
 
-The standard says reading through a misaligned `T*` is *undefined behavior* regardless of architecture — the runtime cost above only applies to UB that happens to work in practice. UBSan with `-fsanitize=alignment` will flag it.
+The standard says reading through a misaligned `T*` is *undefined behavior* regardless of architecture; the runtime cost above only applies to UB that happens to work in practice. UBSan with `-fsanitize=alignment` will flag it.
 
 == Negative Zero
 
-C++ inherits IEEE 754: `float`, `double`, and `long double` have two zero representations — `+0.0` and `-0.0`. Integer types do not (two's complement has a single zero).
+C++ inherits IEEE 754: `float`, `double`, and `long double` have two zero representations (`+0.0` and `-0.0`). Integer types do not (two's complement has a single zero).
 
 ```cpp
 double a = -0.0;
@@ -141,7 +141,7 @@ std::memcmp(&a, &b, 8);   // != 0 (bit patterns differ: sign bit)
 ```
 
 *Where it bites:*
-- Hash maps keyed on `double` — `std::hash` typically hashes the bit pattern, so `+0.0` and `-0.0` end up in *different buckets* despite `==`. Either normalize (`x + 0.0`) or use a custom hash.
+- Hash maps keyed on `double`: `std::hash` typically hashes the bit pattern, so `+0.0` and `-0.0` end up in *different buckets* despite `==`. Either normalize (`x + 0.0`) or use a custom hash.
 - `std::set`/`std::map` with default `operator<` are fine (`+0.0` and `-0.0` are equivalent under `<`).
 - Branch on `signbit` rather than `x < 0` if you need to distinguish them.
 
@@ -164,7 +164,7 @@ bool operator<(const Date& a, const Date& b) {
 }
 ```
 
-C++17 structured bindings (`auto [x, y] = compute_pair();`) replace use case (1). `std::tie` is still the idiomatic choice for (3) — it builds the comparison from member references with zero copies. Note: `std::tie` cannot bind to rvalues, so it can't be used on temporaries that need lifetime extension.
+C++17 structured bindings (`auto [x, y] = compute_pair();`) replace use case (1). `std::tie` is still the idiomatic choice for (3): it builds the comparison from member references with zero copies. Note: `std::tie` cannot bind to rvalues, so it can't be used on temporaries that need lifetime extension.
 
 == std::shared_ptr Thread-Safety
 
@@ -172,7 +172,7 @@ The C++ standard (`[util.smartptr.shared]`) gives `std::shared_ptr` a *split* th
 
 - The *control block* (reference counts, deleter, weak count) is *internally synchronized*. Multiple threads can copy, destroy, and move *distinct `shared_ptr` instances* that share the same control block without external locking.
 - The *managed object* is *not* synchronized. Accessing `*p` or `p->x` from multiple threads follows the normal data-race rules for `T`.
-- A *single `shared_ptr` object* (the same instance, not a copy) accessed from multiple threads — one reads it, another reassigns it — is a data race on the pointer + control-block pointer pair, unless every access goes through `std::atomic<std::shared_ptr<T>>` (C++20) or the now-deprecated free-function `std::atomic_load(&sp)` family.
+- A *single `shared_ptr` object* (the same instance, not a copy) accessed from multiple threads (one reads it, another reassigns it) is a data race on the pointer + control-block pointer pair, unless every access goes through `std::atomic<std::shared_ptr<T>>` (C++20) or the now-deprecated free-function `std::atomic_load(&sp)` family.
 
 ```cpp
 std::shared_ptr<Widget> global = std::make_shared<Widget>();
@@ -193,9 +193,9 @@ void reader() { auto local = atomic_global.load(); use(*local); }
 
 *Why this matters:*
 
-The mental model "shared_ptr is thread-safe" is wrong in *both* directions. People assume too much (sharing the same `shared_ptr` instance is unsafe) and too little (copying through it doesn't need a lock — the refcount is atomic).
+The mental model "shared_ptr is thread-safe" is wrong in *both* directions. People assume too much (sharing the same `shared_ptr` instance is unsafe) and too little (copying through it doesn't need a lock, since the refcount is atomic).
 
-*Performance:* the atomic refcount increment on copy costs ~20 cycles uncontended and turns into cache-line ping-pong under contention. Hot paths that copy `shared_ptr` per access — common in DI/framework code — can scale *worse* than the raw work because every copy invalidates the control block's cache line across cores. Mitigations: pass `const shared_ptr&` (no refcount touch), `std::shared_ptr<const T>` with `make_shared` (control block adjacent to object → one cache line instead of two), or switch to `intrusive_ptr` with a thread-local cache.
+*Performance:* the atomic refcount increment on copy costs ~20 cycles uncontended and turns into cache-line ping-pong under contention. Hot paths that copy `shared_ptr` per access (common in DI/framework code) can scale *worse* than the raw work because every copy invalidates the control block's cache line across cores. Mitigations: pass `const shared_ptr&` (no refcount touch), `std::shared_ptr<const T>` with `make_shared` (control block adjacent to object → one cache line instead of two), or switch to `intrusive_ptr` with a thread-local cache.
 
 *`weak_ptr::lock()`:* atomic CAS on the strong count. Same cost profile as a copy. Returns empty `shared_ptr` if the strong count is already zero.
 
@@ -260,7 +260,7 @@ n < 1.0;  n > 1.0;  n == 1.0;// all false  (unordered comparison)
 std::sort(v.begin(), v.end()); // UB if v contains NaN — strict weak order violated
 ```
 
-`std::sort` and `std::map` require a strict weak order. NaN's `<` returns false in both directions, breaking the contract — sort can read out of bounds or loop. Always strip NaNs before sorting FP arrays.
+`std::sort` and `std::map` require a strict weak order. NaN's `<` returns false in both directions, breaking the contract; sort can read out of bounds or loop. Always strip NaNs before sorting FP arrays.
 
 *Subnormals (denormals):* values smaller than `~2.2e-308` (double) lose precision and *on x86 trap into microcode*. A loop that drifts into subnormals can slow down 10-100× silently. Diagnose with `perf stat -e fp_assist.any` (Intel). Fixes: `_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON)` + `_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON)`, or compile with `-ffast-math` (see caveat below). Audio/DSP code routinely needs this.
 
@@ -272,11 +272,11 @@ std::sort(v.begin(), v.end()); // UB if v contains NaN — strict weak order vio
 - `-freciprocal-math` (`a/b → a * (1/b)`)
 - `-ffinite-math-only` (makes `isnan(x)` constant-fold to `false`)
 
-The last one is the classic production bug: a library compiled with `-ffast-math` has all its `isnan` checks compile away to `false`. Worse, on GCC `-ffast-math` sets `MXCSR.FTZ`/`DAZ` *process-wide* via a constructor in `crtfastmath.o` — linking a single TU with `-ffast-math` changes FP behavior for every other TU in the binary. Prefer `-fno-math-errno -fno-trapping-math` (the safe subset) or use `[[gnu::optimize("fast-math")]]` per-function.
+The last one is the classic production bug: a library compiled with `-ffast-math` has all its `isnan` checks compile away to `false`. Worse, on GCC `-ffast-math` sets `MXCSR.FTZ`/`DAZ` *process-wide* via a constructor in `crtfastmath.o`; linking a single TU with `-ffast-math` changes FP behavior for every other TU in the binary. Prefer `-fno-math-errno -fno-trapping-math` (the safe subset) or use `[[gnu::optimize("fast-math")]]` per-function.
 
 *Compiler reordering of FP ops is normally forbidden.* `a + b + c` is `(a+b)+c`, not `a+(b+c)`, because FP addition is not associative. Reassociation is only allowed under `-ffast-math` / `#pragma STDC FP_CONTRACT`. This is why naive parallel reduction gives different results from serial reduction on the same data.
 
-*Comparison and equality:* never compare FP for equality after arithmetic. Use a relative tolerance: `std::abs(a - b) <= eps * std::max(std::abs(a), std::abs(b))`. Absolute tolerance fails near zero; relative tolerance fails at zero — combine both for robustness. `std::numeric_limits<double>::epsilon()` is the gap at 1.0, *not* a universal "small number."
+*Comparison and equality:* never compare FP for equality after arithmetic. Use a relative tolerance: `std::abs(a - b) <= eps * std::max(std::abs(a), std::abs(b))`. Absolute tolerance fails near zero; relative tolerance fails at zero. Combine both for robustness. `std::numeric_limits<double>::epsilon()` is the gap at 1.0, *not* a universal "small number."
 
 == Bit Manipulation
 
