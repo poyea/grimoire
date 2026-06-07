@@ -110,6 +110,15 @@
 #include "database/benchmarking-and-research-methods.typ"
 #pagebreak()
 
+#include "database/columnar-storage-and-vectorization.typ"
+#pagebreak()
+
+#include "database/oltp-vs-olap.typ"
+#pagebreak()
+
+#include "database/query-processing.typ"
+#pagebreak()
+
 = Conclusion
 
 Databases sit at the intersection of theory and systems: relational algebra and AGM bounds dictate what query plans are achievable; consensus impossibility results bound what distributed transactions can guarantee; hardware trends — NVMe, RDMA, CXL, GPUs — keep redrawing the cost model. The chapters in this book cover each layer at research depth so you can reason about, design, and critique modern data systems with full understanding of the tradeoffs.
