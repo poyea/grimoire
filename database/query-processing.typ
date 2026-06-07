@@ -2,7 +2,7 @@
 
 A SQL query passes through a multi-stage pipeline before any data is touched: the engine first validates and resolves names, then builds a logical plan, optimises it with algebraic transformations and cost estimates, and finally executes it using a chosen evaluation strategy. Understanding each stage explains why the same SQL can run in 10 ms or 10 minutes depending on plan choices, and why modern engines invest heavily in compilation and adaptive re-optimisation.
 
-*See also:* _query-optimization.typ_, _sql-engines-internals.typ_, _joins-and-aggregation.typ_, _columnar-storage-and-vectorization.typ_
+*See also:* _Query Optimization_, _SQL Engine Internals_, _Joins and Aggregation_, _Columnar Storage and Vectorization_
 
 == Query Lifecycle
 

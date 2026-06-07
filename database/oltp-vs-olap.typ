@@ -2,7 +2,7 @@
 
 Databases are commonly partitioned into two workload archetypes: *OLTP* (Online Transactional Processing), which serves high-concurrency short requests against individual records, and *OLAP* (Online Analytical Processing), which executes long-running aggregations over large portions of a dataset. Understanding this divide determines the appropriate storage layout, concurrency model, index strategy, and hardware provisioning for a system. Modern *HTAP* engines blur the boundary by serving both workloads from a single system, trading some specialisation for operational simplicity.
 
-*See also:* _oltp-htap-olap-convergence.typ_, _storage-engines.typ_, `database/columnar-storage-and-vectorization.typ`, `database/transactions-distributed.typ`
+*See also:* _OLTP / HTAP / OLAP Convergence_, _Storage Engines_, _Columnar Storage and Vectorization_, _Distributed Transactions_
 
 == Workload Characteristics
 
