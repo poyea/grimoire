@@ -464,10 +464,10 @@ Hopper (H100, 2022; H200, 2024) introduced the deepest shake-up of GPU compute s
 === 4th-Gen Tensor Cores: FP8 and Transformer Engine
 
 Hopper Tensor Cores natively support FP8 with two encodings:
-- *E4M3* (1 sign, 4 exponent, 3 mantissa): narrower dynamic range, higher precision — used for weights and activations
-- *E5M2* (1 sign, 5 exponent, 2 mantissa): wider dynamic range, lower precision — used for gradients
+- *E4M3* (1 sign, 4 exponent, 3 mantissa): narrower dynamic range, higher precision; used for weights and activations
+- *E5M2* (1 sign, 5 exponent, 2 mantissa): wider dynamic range, lower precision; used for gradients
 
-FP8 peak on H100: 1979 TFLOPS sparse / 989 TFLOPS dense — 2$times$ the Ampere FP16 throughput with half the memory per weight.
+FP8 peak on H100: 1979 TFLOPS sparse / 989 TFLOPS dense, which is 2$times$ the Ampere FP16 throughput with half the memory per weight.
 
 *Transformer Engine:* software + hardware feature that dynamically manages FP8 scaling. Per-tensor amax history tracked in hardware; scale factors recomputed every iteration to keep values in the representable range. Exposed via the `transformer_engine` library:
 ```cpp
@@ -574,11 +574,11 @@ nvcc -arch=sm_90a my_kernel.cu -o my_kernel
 ```
 
 Hopper PTX cheat sheet:
-- `wgmma.mma_async.sync.aligned.m64n{N}k16.f32.f16.f16` — warp-group matmul, async
-- `cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes` — TMA load
-- `mbarrier.arrive.expect_tx.shared.b64` — arrive with byte count
-- `cluster.sync` — cluster-wide barrier
-- `griddepcontrol.wait` — grid-wide dependency (for kernel fusion)
+- `wgmma.mma_async.sync.aligned.m64n{N}k16.f32.f16.f16`: warp-group matmul, async
+- `cp.async.bulk.tensor.2d.shared::cluster.global.mbarrier::complete_tx::bytes`: TMA load
+- `mbarrier.arrive.expect_tx.shared.b64`: arrive with byte count
+- `cluster.sync`: cluster-wide barrier
+- `griddepcontrol.wait`: grid-wide dependency (for kernel fusion)
 
 == Blackwell Architecture (2024)
 
@@ -602,21 +602,21 @@ Blackwell (B100, B200, GB200) is NVIDIA's 2024 architecture, purpose-designed fo
   [TDP], [700 W], [1000 W],
 )
 
-*NV-HBI (NVLink High Bandwidth Interconnect):* die-to-die on-package link at 10 TB/s. The two dies are cache-coherent and present as a single logical GPU — no software changes needed vs single-die.
+*NV-HBI (NVLink High Bandwidth Interconnect):* die-to-die on-package link at 10 TB/s. The two dies are cache-coherent and present as a single logical GPU, with no software changes needed vs single-die.
 
 === 5th-Gen Tensor Cores: FP4 and Microscaling
 
 Blackwell introduces hardware FP4 (E2M1) for inference and training of quantization-tolerant models. Combined with *microscaling (MX) formats* (OCP 2024): each 32-element block shares an 8-bit exponent scale (MXFP4, MXFP6, MXFP8).
 
-Effect: accuracy competitive with FP8 at half the memory and nearly 2$times$ the throughput. Used for inference and for training with careful loss scaling. *Concretely:* B200 dense FP4 = 9 PFLOPS vs H100 dense FP8 = 1.98 PFLOPS — roughly 4.5$times$ raw throughput per GPU; sparse 2:4 doubles both columns. The marketing "7$times$ inference" figure compares B200 FP4 sparse (18 PFLOPS) against H100 FP8 dense (1.98 PFLOPS) end-to-end including memory-bandwidth gains.
+Effect: accuracy competitive with FP8 at half the memory and nearly 2$times$ the throughput. Used for inference and for training with careful loss scaling. *Concretely:* B200 dense FP4 = 9 PFLOPS vs H100 dense FP8 = 1.98 PFLOPS (roughly 4.5$times$ raw throughput per GPU); sparse 2:4 doubles both columns. The marketing "7$times$ inference" figure compares B200 FP4 sparse (18 PFLOPS) against H100 FP8 dense (1.98 PFLOPS) end-to-end including memory-bandwidth gains.
 
 *2nd-gen Transformer Engine:* per-group microscaling handled in hardware; no per-tensor amax tracking overhead. Critical for making FP4 usable in practice.
 
 === Decompression Engine
 
-Blackwell adds a dedicated hardware unit for LZ4 / Snappy / Deflate decompression directly into GPU memory. Use case: database/analytics workloads (Spark, dbt) where data on disk is compressed — avoid CPU decompression bottleneck.
+Blackwell adds a dedicated hardware unit for LZ4 / Snappy / Deflate decompression directly into GPU memory. Use case: database/analytics workloads (Spark, dbt) where data on disk is compressed, avoiding the CPU decompression bottleneck.
 
-Throughput: up to 800 GB/s of decompressed output per GPU [NVIDIA Blackwell Architecture Whitepaper, 2024]. Real throughput depends on codec and compression ratio — Snappy/LZ4 (byte-level) approach peak; Deflate is several × slower because of its bit-level Huffman stage.
+Throughput: up to 800 GB/s of decompressed output per GPU [NVIDIA Blackwell Architecture Whitepaper, 2024]. Real throughput depends on codec and compression ratio; Snappy/LZ4 (byte-level) approach peak, Deflate is several × slower because of its bit-level Huffman stage.
 
 === RAS (Reliability, Availability, Serviceability)
 
@@ -630,13 +630,13 @@ For rack-scale clusters (GB200 NVL72), silent data corruption is a statistical c
 The flagship Blackwell platform:
 - 72 B200 GPUs + 36 Grace CPUs (72 ARM Neoverse V2 cores each)
 - Single NVLink 5 fabric: 130 TB/s aggregate bisection bandwidth, 1800 GB/s per GPU, all-to-all non-blocking
-- 13.4 TB HBM3e (total GPU memory) + 17 TB LPDDR5X (Grace CPU memory) — all cache-coherent via NVLink-C2C
+- 13.4 TB HBM3e (total GPU memory) + 17 TB LPDDR5X (Grace CPU memory), all cache-coherent via NVLink-C2C
 - Peak per rack (sparse 2:4, NVIDIA marketing): 720 PFLOPS FP8 / 1.44 EFLOPS FP4. Computed from book's per-GPU spec (4.5 PFLOPS FP8 dense / 9 PFLOPS FP8 sparse; 9 PFLOPS FP4 dense / 18 PFLOPS FP4 sparse): 72 GPUs $times$ sparse throughput $=$ 648 PFLOPS FP8 / 1.30 EFLOPS FP4. The marketing 720 / 1.44 figures assume slightly higher per-GPU sparse throughput (10 / 20 PFLOPS) than the conservative table above. Dense throughput is half: 324 PFLOPS FP8 / 648 PFLOPS FP4.
 - Programming model: presents as an extended single node; cross-GPU NVSHMEM at near-single-GPU latencies
 
 === MIG v2 (Multi-Instance GPU)
 
-Blackwell refines MIG (introduced on A100): same maximum slice count (7) as H100, but each slice now gets a private partition of HBM3e bandwidth and a dedicated NVLink share — H100 partitioned compute and memory capacity but shared the NVLink interface across slices. Better isolation for multi-tenant inference serving where one slice's collective traffic used to interfere with another's.
+Blackwell refines MIG (introduced on A100): same maximum slice count (7) as H100, but each slice now gets a private partition of HBM3e bandwidth and a dedicated NVLink share (H100 partitioned compute and memory capacity but shared the NVLink interface across slices). Better isolation for multi-tenant inference serving where one slice's collective traffic used to interfere with another's.
 
 === Compiling for Blackwell
 
@@ -658,7 +658,7 @@ AMD's datacenter GPU line (CDNA = Compute DNA, distinct from RDNA consumer lines
 - Infinity Fabric 4 intra-chiplet, PCIe Gen5 + 896 GB/s 7-link Infinity Fabric external
 - Peak FP8 matrix: 2614 TFLOPS dense / 5229 TFLOPS sparse
 - Peak FP16 matrix: 1307 TFLOPS
-- FP64 matrix: 163 TFLOPS (vs H100 67 TFLOPS — MI300X stronger in HPC)
+- FP64 matrix: 163 TFLOPS (vs H100 67 TFLOPS; MI300X stronger in HPC)
 - TDP 750 W
 
 === MI300A: CPU+GPU APU
@@ -666,7 +666,7 @@ AMD's datacenter GPU line (CDNA = Compute DNA, distinct from RDNA consumer lines
 First production *cache-coherent CPU+GPU APU* at datacenter scale:
 - 3 Zen 4 CCDs (24 CPU cores) + 6 XCDs (228 CUs) in one package
 - 128 GB shared HBM3 addressable by both CPU and GPU without explicit transfers
-- Deployed in El Capitan (LLNL, 2024) — exascale HPC system, peak $>$ 2 EFLOPS
+- Deployed in El Capitan (LLNL, 2024), an exascale HPC system with peak $>$ 2 EFLOPS
 
 Programming: unified virtual address space, pointer-equivalence between CPU and GPU code. Eliminates the host/device copy boundary.
 
@@ -744,7 +744,7 @@ Equivalent library mapping:
   [TDP], [700 W], [750 W],
 )
 
-*Trade-off:* MI300X wins on memory and raw peak numbers (especially FP64 and FP8), but NVIDIA's software ecosystem — CUTLASS, TensorRT-LLM, cuDNN, Triton — currently delivers higher achieved performance on ML workloads. The gap is narrowing with Composable Kernel and vLLM's ROCm backend.
+*Trade-off:* MI300X wins on memory and raw peak numbers (especially FP64 and FP8), but NVIDIA's software ecosystem (CUTLASS, TensorRT-LLM, cuDNN, Triton) currently delivers higher achieved performance on ML workloads. The gap is narrowing with Composable Kernel and vLLM's ROCm backend.
 
 == GPU Compute Generations Comparison
 
