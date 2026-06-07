@@ -125,6 +125,9 @@ Each section includes practical code examples, specific hardware numbers, and re
 #include "gpu-architecture/memory-hierarchy.typ"
 #pagebreak()
 
+#include "gpu-architecture/memory-advanced.typ"
+#pagebreak()
+
 #include "gpu-architecture/compute-architecture.typ"
 #pagebreak()
 
