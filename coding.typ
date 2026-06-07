@@ -116,6 +116,9 @@
 #include "coding/advanced-systems.typ"
 #pagebreak()
 
+#include "coding/distributed-algorithms.typ"
+#pagebreak()
+
 #include "coding/probabilistic-data-structures.typ"
 #pagebreak()
 
@@ -151,7 +154,4 @@
 #pagebreak()
 
 #include "coding/interview-systems-design.typ"
-#pagebreak()
-
-#include "coding/advanced-java-sections.typ"
 ]
