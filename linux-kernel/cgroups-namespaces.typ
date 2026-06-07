@@ -283,4 +283,4 @@ lsns                                             # list namespaces and their mem
 
 If a containerized workload has tail-latency outliers, `cpu.stat`'s `nr_throttled` is the first thing to check. If memory ballooning is suspect, `memory.events` shows whether `memory.high` reclaim is firing.
 
-*See also:* _cpu-affinity.typ_ (cpuset partitions overlap with `isolcpus`), _scheduler.typ_ (cpu controller integrates with CFS bandwidth), _abi-syscalls.typ_ (seccomp, the syscall-filter complement to cgroup limits).
+*See also:* _CPU Affinity, Isolation, and NUMA_ (cpuset partitions overlap with `isolcpus`), _The Scheduler_ (cpu controller integrates with CFS bandwidth), _ABI and Syscalls_ (seccomp, the syscall-filter complement to cgroup limits).

@@ -401,4 +401,4 @@ Most things you'd reach for a kernel module for in 2026 are better solved in use
 
 A kernel module is the right answer when you genuinely need ring 0 — a new bus driver, a new filesystem implementation, a new hardware accelerator integration, a feature with strict latency requirements that BPF can't meet. For everything else, the user-space tooling is now mature enough that staying out of the kernel is the right default.
 
-*See also:* _interrupts.typ_ (`request_irq`, NAPI, threaded IRQs), _kernel-tracing.typ_ (eBPF as the alternative to writing a probe-style module), _abi-syscalls.typ_ (adding a new syscall is a special case of kernel modification).
+*See also:* _Interrupts and Bottom Halves_ (`request_irq`, NAPI, threaded IRQs), _Kernel Tracing_ (eBPF as the alternative to writing a probe-style module), _ABI and Syscalls_ (adding a new syscall is a special case of kernel modification).

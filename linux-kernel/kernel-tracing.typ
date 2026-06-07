@@ -276,4 +276,4 @@ cat /sys/kernel/debug/tracing/available_filter_functions | wc -l   # kprobeable 
 
 If `bpftrace` complains about kheaders or BTF, install `linux-headers-$(uname -r)` and `linux-image-$(uname -r)-dbg` (or distro equivalent). Most modern kernels (5.4+) embed BTF and don't require headers.
 
-*See also:* _Performance Analysis and Measurement (CPU Architecture volume)_ (PMU counters, TMAM), _NAT & Firewalls (Networking volume)_ (eBPF/XDP packet filtering — the original BPF use case), _scheduler.typ_ (sched_ext lets eBPF *implement* the scheduler, not just observe it).
+*See also:* _Performance Analysis and Measurement (CPU Architecture volume)_ (PMU counters, TMAM), _NAT & Firewalls (Networking volume)_ (eBPF/XDP packet filtering — the original BPF use case), _The Scheduler_ (sched_ext lets eBPF *implement* the scheduler, not just observe it).
