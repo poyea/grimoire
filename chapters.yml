@@ -11,7 +11,7 @@ chapters:
   - subject: cloud-and-infrastructure
     slug: cost-engineering
     path: cloud-and-infrastructure/cost-engineering.typ
-    lines: 17
+    lines: 256
     status: draft
   - subject: cloud-and-infrastructure
     slug: iaas-fundamentals
@@ -31,7 +31,7 @@ chapters:
   - subject: cloud-and-infrastructure
     slug: multi-tenancy
     path: cloud-and-infrastructure/multi-tenancy.typ
-    lines: 17
+    lines: 365
     status: draft
   - subject: cloud-and-infrastructure
     slug: serverless
@@ -42,117 +42,117 @@ chapters:
     slug: advanced-graphs
     path: coding/advanced-graphs.typ
     lines: 572
-    status: draft
+    status: reviewed
   - subject: coding
     slug: advanced-string-algorithms
     path: coding/advanced-string-algorithms.typ
     lines: 726
-    status: draft
+    status: reviewed
   - subject: coding
     slug: advanced-systems
     path: coding/advanced-systems.typ
     lines: 503
-    status: draft
+    status: reviewed
   - subject: coding
     slug: approximation-algorithms
     path: coding/approximation-algorithms.typ
     lines: 202
-    status: draft
+    status: reviewed
   - subject: coding
     slug: arrays
     path: coding/arrays.typ
     lines: 281
-    status: draft
+    status: reviewed
   - subject: coding
     slug: backtracking
     path: coding/backtracking.typ
     lines: 157
-    status: draft
+    status: reviewed
   - subject: coding
     slug: binary-search
     path: coding/binary-search.typ
     lines: 356
-    status: draft
+    status: reviewed
   - subject: coding
     slug: bit-manipulation
     path: coding/bit-manipulation.typ
     lines: 688
-    status: draft
+    status: reviewed
   - subject: coding
     slug: computational-geometry
     path: coding/computational-geometry.typ
     lines: 689
-    status: draft
+    status: reviewed
   - subject: coding
     slug: distributed-algorithms
     path: coding/distributed-algorithms.typ
     lines: 405
-    status: draft
+    status: reviewed
   - subject: coding
     slug: dynamic-programming
     path: coding/dynamic-programming.typ
     lines: 590
-    status: draft
+    status: reviewed
   - subject: coding
     slug: flows-and-matching
     path: coding/flows-and-matching.typ
     lines: 367
-    status: draft
+    status: reviewed
   - subject: coding
     slug: graphs
     path: coding/graphs.typ
     lines: 232
-    status: draft
+    status: reviewed
   - subject: coding
     slug: greedy
     path: coding/greedy.typ
     lines: 339
-    status: draft
+    status: reviewed
   - subject: coding
     slug: hashing
     path: coding/hashing.typ
     lines: 675
-    status: draft
+    status: reviewed
   - subject: coding
     slug: heap-priority-queue
     path: coding/heap-priority-queue.typ
     lines: 398
-    status: draft
+    status: reviewed
   - subject: coding
     slug: interview-systems-design
     path: coding/interview-systems-design.typ
     lines: 242
-    status: draft
+    status: reviewed
   - subject: coding
     slug: linear-programming-and-simplex
     path: coding/linear-programming-and-simplex.typ
     lines: 222
-    status: draft
+    status: reviewed
   - subject: coding
     slug: linked-list
     path: coding/linked-list.typ
     lines: 426
-    status: draft
+    status: reviewed
   - subject: coding
     slug: math-number-theory
     path: coding/math-number-theory.typ
     lines: 373
-    status: draft
+    status: reviewed
   - subject: coding
     slug: online-algorithms
     path: coding/online-algorithms.typ
     lines: 190
-    status: draft
+    status: reviewed
   - subject: coding
     slug: parallel-algorithms
     path: coding/parallel-algorithms.typ
     lines: 254
-    status: draft
+    status: reviewed
   - subject: coding
     slug: probabilistic-data-structures
     path: coding/probabilistic-data-structures.typ
     lines: 665
-    status: draft
+    status: reviewed
   - subject: coding
     slug: problem-solving
     path: coding/problem-solving.typ
@@ -162,57 +162,57 @@ chapters:
     slug: randomized-algorithms
     path: coding/randomized-algorithms.typ
     lines: 210
-    status: draft
+    status: reviewed
   - subject: coding
     slug: reference
     path: coding/reference.typ
     lines: 737
-    status: draft
+    status: reviewed
   - subject: coding
     slug: segment-trees
     path: coding/segment-trees.typ
     lines: 709
-    status: draft
+    status: reviewed
   - subject: coding
     slug: sliding-window
     path: coding/sliding-window.typ
     lines: 460
-    status: draft
+    status: reviewed
   - subject: coding
     slug: stack
     path: coding/stack.typ
     lines: 373
-    status: draft
+    status: reviewed
   - subject: coding
     slug: streaming-algorithms
     path: coding/streaming-algorithms.typ
     lines: 725
-    status: draft
+    status: reviewed
   - subject: coding
     slug: string-algorithms
     path: coding/string-algorithms.typ
     lines: 640
-    status: draft
+    status: reviewed
   - subject: coding
     slug: trees
     path: coding/trees.typ
     lines: 588
-    status: draft
+    status: reviewed
   - subject: coding
     slug: tries
     path: coding/tries.typ
     lines: 345
-    status: draft
+    status: reviewed
   - subject: coding
     slug: two-pointers
     path: coding/two-pointers.typ
     lines: 449
-    status: draft
+    status: reviewed
   - subject: coding
     slug: union-find
     path: coding/union-find.typ
     lines: 468
-    status: draft
+    status: reviewed
   - subject: compilers
     slug: dataflow-analysis
     path: compilers/dataflow-analysis.typ
@@ -232,92 +232,92 @@ chapters:
     slug: accelerators
     path: cpu-architecture/accelerators.typ
     lines: 179
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: arm-deep-dive
     path: cpu-architecture/arm-deep-dive.typ
     lines: 203
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: branch-prediction
     path: cpu-architecture/branch-prediction.typ
     lines: 355
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: cache-hierarchy
     path: cpu-architecture/cache-hierarchy.typ
     lines: 590
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: cpu-fundamentals
     path: cpu-architecture/cpu-fundamentals.typ
     lines: 539
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: interconnects
     path: cpu-architecture/interconnects.typ
     lines: 179
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: memory-system
     path: cpu-architecture/memory-system.typ
     lines: 314
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: multicore
     path: cpu-architecture/multicore.typ
     lines: 530
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: out-of-order-deep-dive
     path: cpu-architecture/out-of-order-deep-dive.typ
     lines: 216
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: performance-analysis
     path: cpu-architecture/performance-analysis.typ
     lines: 480
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: pipelining
     path: cpu-architecture/pipelining.typ
     lines: 438
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: power-and-dvfs
     path: cpu-architecture/power-and-dvfs.typ
     lines: 190
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: risc-v
     path: cpu-architecture/risc-v.typ
     lines: 210
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: simd
     path: cpu-architecture/simd.typ
     lines: 421
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: speculative-execution-security
     path: cpu-architecture/speculative-execution-security.typ
     lines: 177
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: superscalar
     path: cpu-architecture/superscalar.typ
     lines: 380
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: synchronization
     path: cpu-architecture/synchronization.typ
     lines: 373
-    status: draft
+    status: reviewed
   - subject: cpu-architecture
     slug: virtual-memory
     path: cpu-architecture/virtual-memory.typ
     lines: 520
-    status: draft
+    status: reviewed
   - subject: cryptography-and-security
     slug: asymmetric
     path: cryptography-and-security/asymmetric.typ
@@ -337,7 +337,7 @@ chapters:
     slug: symmetric-primitives
     path: cryptography-and-security/symmetric-primitives.typ
     lines: 214
-    status: draft
+    status: reviewed
   - subject: data-engineering
     slug: batch-processing
     path: data-engineering/batch-processing.typ
@@ -352,7 +352,7 @@ chapters:
     slug: lakehouse-engineering
     path: data-engineering/lakehouse-engineering.typ
     lines: 177
-    status: draft
+    status: reviewed
   - subject: data-engineering
     slug: orchestration
     path: data-engineering/orchestration.typ
@@ -367,162 +367,162 @@ chapters:
     slug: benchmarking-and-research-methods
     path: database/benchmarking-and-research-methods.typ
     lines: 289
-    status: draft
+    status: reviewed
   - subject: database
     slug: buffer-pool-and-io
     path: database/buffer-pool-and-io.typ
     lines: 272
-    status: draft
+    status: reviewed
   - subject: database
     slug: cloud-native-databases
     path: database/cloud-native-databases.typ
     lines: 234
-    status: draft
+    status: reviewed
   - subject: database
     slug: column-stores-and-vectorized-execution
     path: database/column-stores-and-vectorized-execution.typ
     lines: 254
-    status: draft
+    status: reviewed
   - subject: database
     slug: columnar-storage-and-vectorization
     path: database/columnar-storage-and-vectorization.typ
-    lines: 5
+    lines: 310
     status: draft
   - subject: database
     slug: concurrency-control
     path: database/concurrency-control.typ
     lines: 301
-    status: draft
+    status: reviewed
   - subject: database
     slug: consensus-and-replication
     path: database/consensus-and-replication.typ
     lines: 247
-    status: draft
+    status: reviewed
   - subject: database
     slug: embedded-databases
     path: database/embedded-databases.typ
     lines: 215
-    status: draft
+    status: reviewed
   - subject: database
     slug: foundations
     path: database/foundations.typ
     lines: 233
-    status: draft
+    status: reviewed
   - subject: database
     slug: geospatial
     path: database/geospatial.typ
     lines: 232
-    status: draft
+    status: reviewed
   - subject: database
     slug: hardware-aware-design
     path: database/hardware-aware-design.typ
     lines: 253
-    status: draft
+    status: reviewed
   - subject: database
     slug: isolation-and-consistency-models
     path: database/isolation-and-consistency-models.typ
     lines: 214
-    status: draft
+    status: reviewed
   - subject: database
     slug: joins-and-aggregation
     path: database/joins-and-aggregation.typ
     lines: 261
-    status: draft
+    status: reviewed
   - subject: database
     slug: lakehouses-and-open-formats
     path: database/lakehouses-and-open-formats.typ
     lines: 250
-    status: draft
+    status: reviewed
   - subject: database
     slug: multi-model
     path: database/multi-model.typ
     lines: 262
-    status: draft
+    status: reviewed
   - subject: database
     slug: observability-and-self-driving
     path: database/observability-and-self-driving.typ
     lines: 291
-    status: draft
+    status: reviewed
   - subject: database
     slug: oltp-htap-olap-convergence
     path: database/oltp-htap-olap-convergence.typ
     lines: 256
-    status: draft
+    status: reviewed
   - subject: database
     slug: oltp-vs-olap
     path: database/oltp-vs-olap.typ
-    lines: 5
+    lines: 247
     status: draft
   - subject: database
     slug: partitioning-and-elasticity
     path: database/partitioning-and-elasticity.typ
     lines: 269
-    status: draft
+    status: reviewed
   - subject: database
     slug: query-compilation
     path: database/query-compilation.typ
     lines: 237
-    status: draft
+    status: reviewed
   - subject: database
     slug: query-languages
     path: database/query-languages.typ
     lines: 287
-    status: draft
+    status: reviewed
   - subject: database
     slug: query-optimization
     path: database/query-optimization.typ
     lines: 247
-    status: draft
+    status: reviewed
   - subject: database
     slug: query-processing
     path: database/query-processing.typ
-    lines: 5
+    lines: 420
     status: draft
   - subject: database
     slug: recovery-and-logging
     path: database/recovery-and-logging.typ
     lines: 230
-    status: draft
+    status: reviewed
   - subject: database
     slug: security-and-privacy
     path: database/security-and-privacy.typ
     lines: 294
-    status: draft
+    status: reviewed
   - subject: database
     slug: sql-engines-internals
     path: database/sql-engines-internals.typ
     lines: 251
-    status: draft
+    status: reviewed
   - subject: database
     slug: storage-engines
     path: database/storage-engines.typ
     lines: 295
-    status: draft
+    status: reviewed
   - subject: database
     slug: streaming-and-incremental-computation
     path: database/streaming-and-incremental-computation.typ
     lines: 292
-    status: draft
+    status: reviewed
   - subject: database
     slug: time-series-and-graph
     path: database/time-series-and-graph.typ
     lines: 329
-    status: draft
+    status: reviewed
   - subject: database
     slug: transactions-distributed
     path: database/transactions-distributed.typ
     lines: 230
-    status: draft
+    status: reviewed
   - subject: database
     slug: vector-and-similarity-search
     path: database/vector-and-similarity-search.typ
     lines: 242
-    status: draft
+    status: reviewed
   - subject: database
     slug: weakly-consistent-systems
     path: database/weakly-consistent-systems.typ
     lines: 260
-    status: draft
+    status: reviewed
   - subject: distributed-systems
     slug: consensus-deep-dive
     path: distributed-systems/consensus-deep-dive.typ
@@ -556,7 +556,7 @@ chapters:
   - subject: distributed-systems
     slug: log-based-systems
     path: distributed-systems/log-based-systems.typ
-    lines: 5
+    lines: 218
     status: draft
   - subject: distributed-systems
     slug: time-and-order
@@ -571,7 +571,7 @@ chapters:
   - subject: distributed-systems
     slug: workflow-engines
     path: distributed-systems/workflow-engines.typ
-    lines: 5
+    lines: 288
     status: draft
   - subject: embedded-and-realtime
     slug: mcus-and-soc
@@ -617,77 +617,77 @@ chapters:
     slug: compute-architecture
     path: gpu-architecture/compute-architecture.typ
     lines: 775
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: cuda-programming-model
     path: gpu-architecture/cuda-programming-model.typ
     lines: 270
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: execution-model
     path: gpu-architecture/execution-model.typ
     lines: 545
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: gpu-fundamentals
     path: gpu-architecture/gpu-fundamentals.typ
     lines: 424
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: gpu-virtualization
     path: gpu-architecture/gpu-virtualization.typ
     lines: 187
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: memory-advanced
     path: gpu-architecture/memory-advanced.typ
     lines: 417
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: memory-hierarchy
     path: gpu-architecture/memory-hierarchy.typ
     lines: 436
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: ml-workloads
     path: gpu-architecture/ml-workloads.typ
     lines: 305
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: multi-gpu
     path: gpu-architecture/multi-gpu.typ
     lines: 268
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: nccl-and-collectives
     path: gpu-architecture/nccl-and-collectives.typ
     lines: 183
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: non-nvidia
     path: gpu-architecture/non-nvidia.typ
     lines: 208
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: performance-optimization
     path: gpu-architecture/performance-optimization.typ
     lines: 684
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: profiling
     path: gpu-architecture/profiling.typ
     lines: 620
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: tensor-cores-and-mma
     path: gpu-architecture/tensor-cores-and-mma.typ
     lines: 217
-    status: draft
+    status: reviewed
   - subject: gpu-architecture
     slug: triton-and-dsls
     path: gpu-architecture/triton-and-dsls.typ
     lines: 213
-    status: draft
+    status: reviewed
   - subject: graphics-and-rendering
     slug: gi-techniques
     path: graphics-and-rendering/gi-techniques.typ
@@ -722,202 +722,202 @@ chapters:
     slug: abi-syscalls
     path: linux-kernel/abi-syscalls.typ
     lines: 322
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: block-layer
     path: linux-kernel/block-layer.typ
     lines: 229
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: cgroups-namespaces
     path: linux-kernel/cgroups-namespaces.typ
     lines: 286
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: containers-in-the-kernel
     path: linux-kernel/containers-in-the-kernel.typ
     lines: 247
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: cpu-affinity
     path: linux-kernel/cpu-affinity.typ
     lines: 255
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: ebpf-deep-dive
     path: linux-kernel/ebpf-deep-dive.typ
     lines: 239
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: interrupts
     path: linux-kernel/interrupts.typ
     lines: 239
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: io-uring
     path: linux-kernel/io-uring.typ
     lines: 316
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: kernel-modules
     path: linux-kernel/kernel-modules.typ
     lines: 404
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: kernel-tracing
     path: linux-kernel/kernel-tracing.typ
     lines: 279
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: live-patching
     path: linux-kernel/live-patching.typ
     lines: 272
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: memory-reclaim
     path: linux-kernel/memory-reclaim.typ
     lines: 237
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: mmap-memory
     path: linux-kernel/mmap-memory.typ
     lines: 261
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: networking-stack
     path: linux-kernel/networking-stack.typ
     lines: 253
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: rcu-and-locking
     path: linux-kernel/rcu-and-locking.typ
     lines: 233
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: scheduler
     path: linux-kernel/scheduler.typ
     lines: 216
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: security-modules
     path: linux-kernel/security-modules.typ
     lines: 233
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: vfs-and-fs
     path: linux-kernel/vfs-and-fs.typ
     lines: 248
-    status: draft
+    status: reviewed
   - subject: llm
     slug: agents-and-tool-use
     path: llm/agents-and-tool-use.typ
     lines: 266
-    status: draft
+    status: reviewed
   - subject: llm
     slug: data-curation
     path: llm/data-curation.typ
     lines: 263
-    status: draft
+    status: reviewed
   - subject: llm
     slug: distillation
     path: llm/distillation.typ
     lines: 166
-    status: draft
+    status: reviewed
   - subject: llm
     slug: evaluation
     path: llm/evaluation.typ
     lines: 771
-    status: draft
+    status: reviewed
   - subject: llm
     slug: finetuning
     path: llm/finetuning.typ
     lines: 778
-    status: draft
+    status: reviewed
   - subject: llm
     slug: inference-optimization
     path: llm/inference-optimization.typ
     lines: 425
-    status: draft
+    status: reviewed
   - subject: llm
     slug: inference-serving
     path: llm/inference-serving.typ
     lines: 438
-    status: draft
+    status: reviewed
   - subject: llm
     slug: interpretability
     path: llm/interpretability.typ
     lines: 200
-    status: draft
+    status: reviewed
   - subject: llm
     slug: introduction
     path: llm/introduction.typ
     lines: 284
-    status: draft
+    status: reviewed
   - subject: llm
     slug: long-context
     path: llm/long-context.typ
     lines: 208
-    status: draft
+    status: reviewed
   - subject: llm
     slug: mixture-of-experts
     path: llm/mixture-of-experts.typ
     lines: 204
-    status: draft
+    status: reviewed
   - subject: llm
     slug: multimodal
     path: llm/multimodal.typ
     lines: 177
-    status: draft
+    status: reviewed
   - subject: llm
     slug: pretraining-infrastructure
     path: llm/pretraining-infrastructure.typ
     lines: 417
-    status: draft
+    status: reviewed
   - subject: llm
     slug: pretraining
     path: llm/pretraining.typ
     lines: 430
-    status: draft
+    status: reviewed
   - subject: llm
     slug: quantization
     path: llm/quantization.typ
     lines: 619
-    status: draft
+    status: reviewed
   - subject: llm
     slug: rag
     path: llm/rag.typ
     lines: 223
-    status: draft
+    status: reviewed
   - subject: llm
     slug: reasoning-models
     path: llm/reasoning-models.typ
     lines: 200
-    status: draft
+    status: reviewed
   - subject: llm
     slug: rlhf
     path: llm/rlhf.typ
     lines: 714
-    status: draft
+    status: reviewed
   - subject: llm
     slug: safety-and-alignment
     path: llm/safety-and-alignment.typ
     lines: 194
-    status: draft
+    status: reviewed
   - subject: llm
     slug: serving-systems
     path: llm/serving-systems.typ
     lines: 742
-    status: draft
+    status: reviewed
   - subject: llm
     slug: tokenization
     path: llm/tokenization.typ
     lines: 247
-    status: draft
+    status: reviewed
   - subject: llm
     slug: transformer-architecture
     path: llm/transformer-architecture.typ
     lines: 492
-    status: draft
+    status: reviewed
   - subject: machine-learning-foundations
     slug: generalization-theory
     path: machine-learning-foundations/generalization-theory.typ
@@ -947,102 +947,102 @@ chapters:
     slug: bgp-routing
     path: networking/bgp-routing.typ
     lines: 417
-    status: draft
+    status: reviewed
   - subject: networking
     slug: concurrency-models
     path: networking/concurrency-models.typ
     lines: 178
-    status: draft
+    status: reviewed
   - subject: networking
     slug: congestion-control
     path: networking/congestion-control.typ
     lines: 228
-    status: draft
+    status: reviewed
   - subject: networking
     slug: connection-pooling
     path: networking/connection-pooling.typ
     lines: 524
-    status: draft
+    status: reviewed
   - subject: networking
     slug: container-networking
     path: networking/container-networking.typ
     lines: 481
-    status: draft
+    status: reviewed
   - subject: networking
     slug: data-center-networking
     path: networking/data-center-networking.typ
     lines: 211
-    status: draft
+    status: reviewed
   - subject: networking
     slug: debugging
     path: networking/debugging.typ
     lines: 519
-    status: draft
+    status: reviewed
   - subject: networking
     slug: dns
     path: networking/dns.typ
     lines: 309
-    status: draft
+    status: reviewed
   - subject: networking
     slug: grpc
     path: networking/grpc.typ
     lines: 443
-    status: draft
+    status: reviewed
   - subject: networking
     slug: io-multiplexing
     path: networking/io-multiplexing.typ
     lines: 187
-    status: draft
+    status: reviewed
   - subject: networking
     slug: ipv6
     path: networking/ipv6.typ
     lines: 303
-    status: draft
+    status: reviewed
   - subject: networking
     slug: kernel-bypass
     path: networking/kernel-bypass.typ
     lines: 267
-    status: draft
+    status: reviewed
   - subject: networking
     slug: link-layer
     path: networking/link-layer.typ
     lines: 532
-    status: draft
+    status: reviewed
   - subject: networking
     slug: load-balancing
     path: networking/load-balancing.typ
     lines: 538
-    status: draft
+    status: reviewed
   - subject: networking
     slug: lock-free
     path: networking/lock-free.typ
     lines: 464
-    status: draft
+    status: reviewed
   - subject: networking
     slug: message-queues
     path: networking/message-queues.typ
     lines: 220
-    status: draft
+    status: reviewed
   - subject: networking
     slug: multipath
     path: networking/multipath.typ
     lines: 218
-    status: draft
+    status: reviewed
   - subject: networking
     slug: nat
     path: networking/nat.typ
     lines: 307
-    status: draft
+    status: reviewed
   - subject: networking
     slug: network-security
     path: networking/network-security.typ
     lines: 676
-    status: draft
+    status: reviewed
   - subject: networking
     slug: observability
     path: networking/observability.typ
     lines: 641
-    status: draft
+    status: reviewed
   - subject: networking
     slug: performance-reference
     path: networking/performance-reference.typ
@@ -1052,72 +1052,72 @@ chapters:
     slug: programmable-data-planes
     path: networking/programmable-data-planes.typ
     lines: 311
-    status: draft
+    status: reviewed
   - subject: networking
     slug: quic-and-http3
     path: networking/quic-and-http3.typ
     lines: 213
-    status: draft
+    status: reviewed
   - subject: networking
     slug: realtime-protocols
     path: networking/realtime-protocols.typ
     lines: 697
-    status: draft
+    status: reviewed
   - subject: networking
     slug: resilience-patterns
     path: networking/resilience-patterns.typ
     lines: 425
-    status: draft
+    status: reviewed
   - subject: networking
     slug: sdn-programmable-networks
     path: networking/sdn-programmable-networks.typ
     lines: 484
-    status: draft
+    status: reviewed
   - subject: networking
     slug: service-discovery
     path: networking/service-discovery.typ
     lines: 425
-    status: draft
+    status: reviewed
   - subject: networking
     slug: service-mesh
     path: networking/service-mesh.typ
     lines: 441
-    status: draft
+    status: reviewed
   - subject: networking
     slug: sockets-api
     path: networking/sockets-api.typ
     lines: 474
-    status: draft
+    status: reviewed
   - subject: networking
     slug: stateful-firewalls
     path: networking/stateful-firewalls.typ
     lines: 478
-    status: draft
+    status: reviewed
   - subject: networking
     slug: tls
     path: networking/tls.typ
     lines: 425
-    status: draft
+    status: reviewed
   - subject: networking
     slug: transport-layer
     path: networking/transport-layer.typ
     lines: 459
-    status: draft
+    status: reviewed
   - subject: networking
     slug: websockets
     path: networking/websockets.typ
     lines: 414
-    status: draft
+    status: reviewed
   - subject: networking
     slug: wireless-protocols
     path: networking/wireless-protocols.typ
     lines: 616
-    status: draft
+    status: reviewed
   - subject: networking
     slug: zero-copy
     path: networking/zero-copy.typ
     lines: 278
-    status: draft
+    status: reviewed
   - subject: observability-and-sre
     slug: continuous-profiling
     path: observability-and-sre/continuous-profiling.typ
@@ -1156,12 +1156,12 @@ chapters:
   - subject: operating-systems
     slug: memory-management
     path: operating-systems/memory-management.typ
-    lines: 114
+    lines: 194
     status: draft
   - subject: operating-systems
     slug: processes-and-threads
     path: operating-systems/processes-and-threads.typ
-    lines: 108
+    lines: 171
     status: draft
   - subject: operating-systems
     slug: scheduling-theory
@@ -1177,212 +1177,212 @@ chapters:
     slug: storage-stack
     path: operating-systems/storage-stack.typ
     lines: 250
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: automata-learning
     path: programming-languages/automata-learning.typ
     lines: 566
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: axiomatic-semantics
     path: programming-languages/axiomatic-semantics.typ
     lines: 295
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: build-a-compiler
     path: programming-languages/build-a-compiler.typ
     lines: 705
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: categorical-semantics
     path: programming-languages/categorical-semantics.typ
     lines: 226
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: complexity
     path: programming-languages/complexity.typ
     lines: 782
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: computability
     path: programming-languages/computability.typ
     lines: 800
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: concurrency-models
     path: programming-languages/concurrency-models.typ
     lines: 412
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: context-free-languages
     path: programming-languages/context-free-languages.typ
     lines: 341
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: denotational-semantics
     path: programming-languages/denotational-semantics.typ
     lines: 234
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: dependent-types-proof-engineering
     path: programming-languages/dependent-types-proof-engineering.typ
     lines: 288
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: dependent-types
     path: programming-languages/dependent-types.typ
     lines: 578
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: effects-and-handlers
     path: programming-languages/effects-and-handlers.typ
     lines: 450
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: effects-handlers-implementation
     path: programming-languages/effects-handlers-implementation.typ
     lines: 455
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: foundations
     path: programming-languages/foundations.typ
     lines: 214
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: gradual-and-hybrid
     path: programming-languages/gradual-and-hybrid.typ
     lines: 343
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: homotopy-type-theory
     path: programming-languages/homotopy-type-theory.typ
     lines: 309
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: infinite-trees-and-games
     path: programming-languages/infinite-trees-and-games.typ
     lines: 361
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: lexing
     path: programming-languages/lexing.typ
     lines: 243
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: linear-and-substructural
     path: programming-languages/linear-and-substructural.typ
     lines: 419
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: macros-and-metaprogramming
     path: programming-languages/macros-and-metaprogramming.typ
     lines: 359
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: macros-metaprogramming-formalism
     path: programming-languages/macros-metaprogramming-formalism.typ
     lines: 540
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: omega-automata-constructions
     path: programming-languages/omega-automata-constructions.typ
     lines: 510
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: omega-automata
     path: programming-languages/omega-automata.typ
     lines: 293
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: operational-semantics
     path: programming-languages/operational-semantics.typ
     lines: 315
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: parsing
     path: programming-languages/parsing.typ
     lines: 287
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: process-calculi
     path: programming-languages/process-calculi.typ
     lines: 488
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: pushdown-and-beyond
     path: programming-languages/pushdown-and-beyond.typ
     lines: 334
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: pushdown-cfg
     path: programming-languages/pushdown-cfg.typ
     lines: 216
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: regular-languages-proofs
     path: programming-languages/regular-languages-proofs.typ
     lines: 627
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: regular-languages
     path: programming-languages/regular-languages.typ
     lines: 299
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: semantics
     path: programming-languages/semantics.typ
     lines: 286
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: simply-typed-lambda-extensions
     path: programming-languages/simply-typed-lambda-extensions.typ
     lines: 463
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: simply-typed-lambda
     path: programming-languages/simply-typed-lambda.typ
     lines: 340
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: subtyping-and-polymorphism
     path: programming-languages/subtyping-and-polymorphism.typ
     lines: 376
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: system-f-and-parametricity
     path: programming-languages/system-f-and-parametricity.typ
     lines: 417
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: system-f-categorical-models
     path: programming-languages/system-f-categorical-models.typ
     lines: 398
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: timed-and-hybrid-automata
     path: programming-languages/timed-and-hybrid-automata.typ
     lines: 477
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: tree-automata
     path: programming-languages/tree-automata.typ
     lines: 458
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: turing-computability
     path: programming-languages/turing-computability.typ
     lines: 210
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: type-systems
     path: programming-languages/type-systems.typ
     lines: 271
-    status: draft
+    status: reviewed
   - subject: programming-languages
     slug: weighted-and-probabilistic-automata
     path: programming-languages/weighted-and-probabilistic-automata.typ
     lines: 512
-    status: draft
+    status: reviewed
   - subject: quantum-computing
     slug: error-correction
     path: quantum-computing/error-correction.typ
@@ -1392,7 +1392,7 @@ chapters:
     slug: hardware-architectures
     path: quantum-computing/hardware-architectures.typ
     lines: 177
-    status: draft
+    status: reviewed
   - subject: quantum-computing
     slug: quantum-algorithms
     path: quantum-computing/quantum-algorithms.typ
