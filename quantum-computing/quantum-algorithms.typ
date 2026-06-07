@@ -8,7 +8,7 @@ Quantum algorithms exploit interference — amplitudes can cancel, not just add 
 
 Given $f: {0,1}^n -> {0,1}$ promised to be either *constant* or *balanced* (half zeros, half ones), determine which. Classically, the worst case requires $2^(n-1) + 1$ queries; Deutsch-Jozsa answers with a *single* quantum query.
 
-Circuit: prepare $|0 angle.r^(times.o n) |1 angle.r$, apply $H^(times.o n+1)$, query the phase oracle $U_f: |x angle.r |y angle.r -> |x angle.r |y plus.o f(x) angle.r$, apply $H^(times.o n)$ to the first register, measure. The output is $|0 angle.r^n$ iff $f$ is constant.
+Circuit: prepare $|0 chevron.r^(times.o n) |1 chevron.r$, apply $H^(times.o n+1)$, query the phase oracle $U_f: |x chevron.r |y chevron.r -> |x chevron.r |y plus.o f(x) chevron.r$, apply $H^(times.o n)$ to the first register, measure. The output is $|0 chevron.r^n$ iff $f$ is constant.
 
 ```python
 # Qiskit Deutsch-Jozsa for a balanced oracle f(x) = x_0
@@ -27,7 +27,7 @@ The lesson: phase kickback turns a function-evaluation oracle into a *phase* ora
 
 Grover (1996) finds a marked element in an unstructured list of $N$ items with $O(sqrt(N))$ oracle queries — a *quadratic* speedup, provably tight (BBBV lower bound, 1997).
 
-The algorithm iterates the *Grover operator* $G = (2|s angle.r angle.l s| - II) O_f$, where $|s angle.r$ is the uniform superposition and $O_f$ phase-flips marked states. Geometrically, $G$ rotates $|s angle.r$ toward the target by $2 theta$ per step where $sin theta = sqrt(M/N)$. Optimal iteration count: $k^* = floor(pi/4 sqrt(N/M))$.
+The algorithm iterates the *Grover operator* $G = (2|s chevron.r angle.l s| - II) O_f$, where $|s chevron.r$ is the uniform superposition and $O_f$ phase-flips marked states. Geometrically, $G$ rotates $|s chevron.r$ toward the target by $2 theta$ per step where $sin theta = sqrt(M/N)$. Optimal iteration count: $k^* = floor(pi/4 sqrt(N/M))$.
 
 ```python
 # Grover for one marked item in n=3 qubits (N=8), marked = |101>
@@ -57,13 +57,13 @@ qc.measure(range(n), range(n))
 
 The QFT on $n$ qubits implements
 
-$ "QFT" |x angle.r = 1 / sqrt(2^n) sum_(y=0)^(2^n - 1) e^(2 pi i x y / 2^n) |y angle.r. $
+$ "QFT" |x chevron.r = 1 / sqrt(2^n) sum_(y=0)^(2^n - 1) e^(2 pi i x y / 2^n) |y chevron.r. $
 
 The classical FFT costs $O(N log N)$ time; the QFT uses $O(n^2) = O(log^2 N)$ gates. The catch: the output is encoded in *amplitudes*, not values you can read out — QFT is useful as a subroutine that feeds into phase estimation, not as a black-box DFT replacement.
 
 == Phase Estimation
 
-Given a unitary $U$ and an eigenstate $|u angle.r$ with $U |u angle.r = e^(2 pi i phi) |u angle.r$, *quantum phase estimation* (QPE) extracts $phi$ to $t$ bits using $t$ ancillae, $2^t - 1$ controlled-$U$ applications, and an inverse QFT.
+Given a unitary $U$ and an eigenstate $|u chevron.r$ with $U |u chevron.r = e^(2 pi i phi) |u chevron.r$, *quantum phase estimation* (QPE) extracts $phi$ to $t$ bits using $t$ ancillae, $2^t - 1$ controlled-$U$ applications, and an inverse QFT.
 
 QPE is the workhorse behind Shor, HHL, quantum chemistry energy estimation, and quantum-enhanced Monte Carlo.
 
@@ -71,7 +71,7 @@ QPE is the workhorse behind Shor, HHL, quantum chemistry energy estimation, and 
 
 Shor (1994) factors an $n$-bit integer $N$ in $tilde(O)(n^3)$ quantum time by reducing factoring to *order finding*: find the smallest $r$ with $a^r equiv 1 mod N$. Classical reduction handles the rest (via $gcd(a^(r/2) plus.minus 1, N)$).
 
-Order-finding uses QPE on $U_a |y angle.r = |a y mod N angle.r$. The output bits, post-processed with continued fractions, yield $r$ with constant probability.
+Order-finding uses QPE on $U_a |y chevron.r = |a y mod N chevron.r$. The output bits, post-processed with continued fractions, yield $r$ with constant probability.
 
 ```
         [t ancillae] -- H^t ----o------o----o----- QFT^-1 -- measure
@@ -83,13 +83,13 @@ Cost: $O(n^2 log n log log n)$ modular multiplications via fast arithmetic, tota
 
 == HHL: Quantum Linear Systems
 
-Harrow-Hassidim-Lloyd (2009): given a sparse $s$-sparse, well-conditioned (condition number $kappa$) $N times N$ matrix $A$ and $|b angle.r$ encoded as a state, produce $|x angle.r prop A^(-1) |b angle.r$ in $tilde(O)(log(N) s^2 kappa^2 / epsilon)$ time vs classical $O(N s sqrt(kappa) log(1/epsilon))$ with conjugate gradient.
+Harrow-Hassidim-Lloyd (2009): given a sparse $s$-sparse, well-conditioned (condition number $kappa$) $N times N$ matrix $A$ and $|b chevron.r$ encoded as a state, produce $|x chevron.r prop A^(-1) |b chevron.r$ in $tilde(O)(log(N) s^2 kappa^2 / epsilon)$ time vs classical $O(N s sqrt(kappa) log(1/epsilon))$ with conjugate gradient.
 
-*Caveats* (Aaronson 2015): (1) state preparation of $|b angle.r$ may itself be expensive; (2) you cannot read out $|x angle.r$ entry-wise without paying $O(N)$; (3) only specific functionals $angle.l x | M | x angle.r$ are extractable cheaply. HHL gives exponential speedup only when these match the application.
+*Caveats* (Aaronson 2015): (1) state preparation of $|b chevron.r$ may itself be expensive; (2) you cannot read out $|x chevron.r$ entry-wise without paying $O(N)$; (3) only specific functionals $angle.l x | M | x chevron.r$ are extractable cheaply. HHL gives exponential speedup only when these match the application.
 
 == Variational Quantum Eigensolver (VQE)
 
-NISQ-era algorithm: minimize $E(theta) = angle.l psi(theta) | H | psi(theta) angle.r$ over a parameterized ansatz $|psi(theta) angle.r$ using a classical optimizer. Decompose $H = sum_i c_i P_i$ into Pauli strings, measure each term, aggregate.
+NISQ-era algorithm: minimize $E(theta) = angle.l psi(theta) | H | psi(theta) chevron.r$ over a parameterized ansatz $|psi(theta) chevron.r$ using a classical optimizer. Decompose $H = sum_i c_i P_i$ into Pauli strings, measure each term, aggregate.
 
 ```python
 # Qiskit VQE for H2 (sketch)
