@@ -8,9 +8,9 @@ Every protection system answers one question: *which subject may perform which o
 
 Anderson's 1972 study gave the field its organizing abstraction: a *reference monitor* mediates every access by a subject to an object, consulting an authorization database to permit or deny. To be trustworthy it must satisfy three properties:
 
-- *Complete mediation* — no access path bypasses it. A check that one syscall enforces and another forgets is not a reference monitor.
-- *Tamperproof* — the monitor and its policy database cannot be modified by the subjects it governs. This is why policy lives in the kernel, not in a user-writable file the subject controls.
-- *Verifiable* — small and simple enough that its correctness can be established, ideally by proof. The implementation of a verified monitor is the *security kernel*; its trusted surface is the *trusted computing base* (TCB).
+- *Complete mediation*: no access path bypasses it. A check that one syscall enforces and another forgets is not a reference monitor.
+- *Tamperproof*: the monitor and its policy database cannot be modified by the subjects it governs. This is why policy lives in the kernel, not in a user-writable file the subject controls.
+- *Verifiable*: small and simple enough that its correctness can be established, ideally by proof. The implementation of a verified monitor is the *security kernel*; its trusted surface is the *trusted computing base* (TCB).
 
 These three are in tension with everything a real OS wants to do. Performance pushes toward caching decisions (violating mediation if the cache is stale); features push toward complexity (violating verifiability). The art is keeping the TCB small while the system grows.
 
@@ -82,7 +82,7 @@ Biba (1977) is the exact dual for *integrity*: no read down, no write up. A high
 
 Generalizing to *multi-level security* (MLS), levels form a lattice $(L, prec.eq)$ under a dominates relation, with a least upper bound for any pair of labels. Information may flow from label $a$ to label $b$ only when $a prec.eq b$. A category set turns the chain into a lattice: $("Secret", {"NUCLEAR"})$ and $("Secret", {"CRYPTO"})$ are incomparable.
 
-The *Chinese Wall* model (Brewer-Nash, 1989) is history-sensitive: an analyst may access any dataset initially, but once they read data from one company in a conflict-of-interest class, all competing datasets in that class become forbidden. The accessible set shrinks based on prior accesses — policy as a function of history, not just labels.
+The *Chinese Wall* model (Brewer-Nash, 1989) is history-sensitive: an analyst may access any dataset initially, but once they read data from one company in a conflict-of-interest class, all competing datasets in that class become forbidden. The accessible set shrinks based on prior accesses: policy is a function of history, not just labels.
 
 == MAC Implementations
 
@@ -94,7 +94,7 @@ SELinux implements *type enforcement*. Every subject and object gets a *security
 allow httpd_t httpd_sys_content_t : file { read getattr open };
 ```
 
-The web server domain `httpd_t` may read files of type `httpd_sys_content_t` — and nothing else, because SELinux is default-deny. Domain transitions (e.g. `init_t` exec'ing the httpd binary transitions to `httpd_t`) are themselves policy-governed. The result is fine-grained but the policy is enormous (the Fedora reference policy is tens of thousands of rules). The central trade-off is precise confinement at the cost of a steep authoring and debugging burden.
+The web server domain `httpd_t` may read files of type `httpd_sys_content_t` and nothing else, because SELinux is default-deny. Domain transitions (e.g. `init_t` exec'ing the httpd binary transitions to `httpd_t`) are themselves policy-governed. The result is fine-grained but the policy is enormous (the Fedora reference policy is tens of thousands of rules). The central trade-off is precise confinement at the cost of a steep authoring and debugging burden.
 
 === AppArmor
 
@@ -120,9 +120,9 @@ This is far easier to write and reason about, and needs no filesystem labelling,
 
 == The LSM Framework
 
-Linux does not bake any one MAC model into the kernel. The *Linux Security Modules* framework places hooks at every security-relevant decision point — `inode_permission`, `bprm_check_security`, `socket_connect`, and hundreds more. A hook is a callback the core kernel invokes after its own DAC checks pass but before it acts; the module returns allow or `-EACCES`. This keeps policy logic out of the core and lets SELinux, AppArmor, Smack, or TOMOYO be the decision-maker.
+Linux does not bake any one MAC model into the kernel. The *Linux Security Modules* framework places hooks at every security-relevant decision point: `inode_permission`, `bprm_check_security`, `socket_connect`, and hundreds more. A hook is a callback the core kernel invokes after its own DAC checks pass but before it acts; the module returns allow or `-EACCES`. This keeps policy logic out of the core and lets SELinux, AppArmor, Smack, or TOMOYO be the decision-maker.
 
-Originally exactly one "major" module could be active. Modern kernels support *stacking*: capability and the small "minor" modules (Yama, LoadPin, SafeSetID, Landlock) always compose, and stacking of the larger modules has been progressively enabled. A request must satisfy *every* stacked module — the hooks are conjunctive, consistent with the reference-monitor ideal that any module may deny.
+Originally exactly one "major" module could be active. Modern kernels support *stacking*: capability and the small "minor" modules (Yama, LoadPin, SafeSetID, Landlock) always compose, and stacking of the larger modules has been progressively enabled. A request must satisfy *every* stacked module; the hooks are conjunctive, consistent with the reference-monitor ideal that any module may deny.
 
 == Capability-Based Security
 
@@ -130,7 +130,7 @@ This is *object*-capabilities, distinct from POSIX capability bits. A capability
 
 The Unix file descriptor is already a near-capability: an opaque, unforgeable, per-process handle that grants the access negotiated at `open`. Capability designs generalize this to *everything*.
 
-- *Capsicum* (FreeBSD) adds a *capability mode* — after `cap_enter()` a process loses all global namespaces (no open-by-path, no PIDs, no sysctls) and may act only through file descriptors, each narrowed by a *rights* mask via `cap_rights_limit()`. A process can sandbox itself incrementally.
+- *Capsicum* (FreeBSD) adds a *capability mode*: after `cap_enter()` a process loses all global namespaces (no open-by-path, no PIDs, no sysctls) and may act only through file descriptors, each narrowed by a *rights* mask via `cap_rights_limit()`. A process can sandbox itself incrementally.
 - *seL4* is a microkernel whose entire API is capability-invocation, with a machine-checked proof that the implementation matches its specification and enforces its access-control model, the strongest realization of "verifiable."
 - *Fuchsia* builds its userspace on *handles* to kernel objects; a component receives a bundle of handles at startup and can reach nothing else.
 
@@ -165,11 +165,11 @@ A crucial limitation: seccomp filters argument registers, not memory the pointer
 
 === Namespaces and cgroups
 
-Isolation also comes from *not sharing*. Namespaces virtualize a global resource (PID, mount, network, user, ...) so a process sees its own instance; cgroups bound resource consumption. Together they are the substrate of containers — confinement by restricting the *namespace* a process can even name, complementary to restricting *operations*. The details are in `linux-kernel/cgroups-namespaces.typ`.
+Isolation also comes from *not sharing*. Namespaces virtualize a global resource (PID, mount, network, user, ...) so a process sees its own instance; cgroups bound resource consumption. Together they are the substrate of containers, providing confinement by restricting the *namespace* a process can even name, complementary to restricting *operations*. The details are in `linux-kernel/cgroups-namespaces.typ`.
 
 === pledge and unveil
 
-OpenBSD's `pledge()` declares the set of operation classes a program promises to stay within ("stdio", "rpath", "inet"); a violation kills the process. `unveil()` makes most of the filesystem invisible, revealing only named paths with named permissions. The design wins on ergonomics — a few lines, no policy file — at the cost of OpenBSD's coarser, hand-curated classes.
+OpenBSD's `pledge()` declares the set of operation classes a program promises to stay within ("stdio", "rpath", "inet"); a violation kills the process. `unveil()` makes most of the filesystem invisible, revealing only named paths with named permissions. The design wins on ergonomics (a few lines, no policy file) at the cost of OpenBSD's coarser, hand-curated classes.
 
 === Case study: OpenSSH privilege separation
 
@@ -179,9 +179,9 @@ OpenBSD's `pledge()` declares the set of operation classes a program promises to
 
 Confidentiality and access control assume the code itself is genuine. Several mechanisms anchor that assumption:
 
-- *IMA/EVM* — the Integrity Measurement Architecture measures (hashes) files as they are opened and can appraise them against signed reference values; EVM protects the security xattrs (including those measurements and SELinux labels) with an HMAC or signature so they cannot be tampered with offline.
-- *dm-verity* — a read-only block device backed by a Merkle tree of block hashes rooted in a signed value; any modified block fails verification on read. It underpins verified boot on Android and ChromeOS.
-- *Signed kernel modules* — the kernel refuses to load modules whose signature does not chain to a trusted key, closing an obvious path to kernel-level code injection.
+- *IMA/EVM*: the Integrity Measurement Architecture measures (hashes) files as they are opened and can appraise them against signed reference values; EVM protects the security xattrs (including those measurements and SELinux labels) with an HMAC or signature so they cannot be tampered with offline.
+- *dm-verity*: a read-only block device backed by a Merkle tree of block hashes rooted in a signed value; any modified block fails verification on read. It underpins verified boot on Android and ChromeOS.
+- *Signed kernel modules*: the kernel refuses to load modules whose signature does not chain to a trusted key, closing an obvious path to kernel-level code injection.
 
 These extend the tamperproof property from the running monitor down to the bytes on disk it was loaded from.
 
@@ -189,7 +189,7 @@ These extend the tamperproof property from the running monitor down to the bytes
 
 - *setuid is a loaded gun.* A `setuid-root` binary inherits the caller's environment, file descriptors, `umask`, and resource limits while running as root; forgetting to sanitize any of them (`LD_PRELOAD`, an inherited fd 2) is a classic escalation. Prefer fine-grained file capabilities or a privsep monitor.
 - *The confused deputy is not a Unix bug, it is an ambient-authority bug.* Adding more checks to the deputy rarely fixes it; removing the ambient authority (capabilities) does.
-- *"Just set it permissive."* Disabling SELinux enforcement to make an app work converts a deny into a logged warning — the access still happens. The fix is an `audit2allow`-derived policy delta, not abandonment.
+- *"Just set it permissive."* Disabling SELinux enforcement to make an app work converts a deny into a logged warning; the access still happens. The fix is an `audit2allow`-derived policy delta, not abandonment.
 - *seccomp allowlists miss syscall variants.* Filtering `open` but not `openat`/`openat2`, or `select` but not `pselect6`, leaves an escape. libc may transparently choose the variant you forgot; allowlist by behavior, deny by default.
 - *Capability inheritance surprises.* Inheritable POSIX capabilities do nothing without a matching file-inheritable set; people expect them to propagate like ambient bits and silently get an unprivileged process. Conversely, `CAP_SYS_ADMIN` is so broad that granting it "to bind a mount" effectively re-grants root.
 - *Path-based confinement and hard links.* An AppArmor profile keyed on `/var/www/**` does not constrain the same inode reached via a hard link elsewhere; label-based MAC does.
