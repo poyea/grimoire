@@ -2,7 +2,7 @@
 
 Shaders are the programmable spine of every modern $"GPU"$ pipeline. They evolved from fixed-function combiners in the late 1990s into Turing-complete $"SIMT"$ programs that today drive rasterization, ray tracing, $"ML"$ inference, and general compute. Understanding $"HLSL"$, $"GLSL"$, and the underlying execution model (warps, divergence, occupancy) is mandatory before tackling $"PBR"$ or global illumination.
 
-*See also:* _rasterization-pipeline.typ_ (where shaders attach), _ray-tracing.typ_ (RT shader stages), _physically-based-rendering.typ_ (BRDF shader code), `gpu-architecture/execution-model.typ` (warps, divergence), `gpu-architecture/cuda-programming-model.typ` (compute analog).
+*See also:* _The Rasterization Pipeline_ (where shaders attach), _Ray Tracing_ (RT shader stages), _Physically Based Rendering_ (BRDF shader code), _SIMT Execution Model_ (gpu-architecture framing; warps, divergence), _CUDA Programming Model_ (gpu-architecture framing; compute analog).
 
 == Shader Languages: a Comparison
 

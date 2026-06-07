@@ -2,7 +2,7 @@
 
 Rasterization remains the dominant real-time rendering paradigm because GPUs are organized — at every level from the SM down to the ROP — to scan-convert triangles in massively parallel batches. Understanding the fixed-function stages and their programmable hooks is the prerequisite for everything that follows: shaders, $"PBR"$, deferred lighting, and even hybrid ray-traced effects.
 
-*See also:* _shaders.typ_ (programmable stages), _realtime-engines.typ_ (Nanite virtualized geometry), `gpu-architecture/compute-architecture.typ` (SM, ROPs), `gpu-architecture/memory-hierarchy.typ` (tile caches).
+*See also:* _Shaders and Shading Languages_ (programmable stages), _Real-Time Engine Architecture_ (Nanite virtualized geometry), _Compute Units and Specialized Cores_ (gpu-architecture framing; SM, ROPs), _GPU Memory Hierarchy_ (gpu-architecture framing; tile caches).
 
 == Pipeline Overview
 

@@ -2,7 +2,7 @@
 
 Global illumination ($"GI"$) accounts for indirect light — photons that bounce one or more times before reaching the camera. The gap between a rasterized local-illumination model and a physically accurate $"GI"$ solution is precisely the gap between a flat studio render and a scene that looks like it belongs in its environment.
 
-*See also:* _physically-based-rendering.typ_ (rendering equation, BRDF theory), _ray-tracing.typ_ (BVH, DXR shader stages, denoising), _realtime-engines.typ_ (Lumen engine integration, DDGI probes), `gpu-architecture/compute-architecture.typ` (wave-level intrinsics).
+*See also:* _Physically Based Rendering_ (rendering equation, BRDF theory), _Ray Tracing_ (BVH, DXR shader stages, denoising), _Real-Time Engine Architecture_ (Lumen engine integration, DDGI probes), _Compute Units and Specialized Cores_ (gpu-architecture framing; wave-level intrinsics).
 
 == Classical Methods
 

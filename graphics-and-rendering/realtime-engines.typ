@@ -2,7 +2,7 @@
 
 Modern real-time engines like Unreal Engine 5 and Unity's High Definition Render Pipeline have moved well beyond fixed forward-rendering loops. They are software-defined rendering systems that schedule heterogeneous work — compute, async, and traditional graphics — through explicit graph abstractions, while managing virtualized geometry, temporal image reconstruction, and dynamic streaming of assets that exceed $"VRAM"$ budget.
 
-*See also:* _rasterization-pipeline.typ_ (mesh shaders, visibility buffer), _gi-techniques.typ_ (Lumen GI, DDGI probes), _ray-tracing.typ_ (BVH, DXR, denoising), `gpu-architecture/memory-hierarchy.typ` (tile caches, $"VRAM"$ bandwidth).
+*See also:* _The Rasterization Pipeline_ (mesh shaders, visibility buffer), _Global Illumination Techniques_ (Lumen GI, DDGI probes), _Ray Tracing_ (BVH, DXR, denoising), _GPU Memory Hierarchy_ (gpu-architecture framing; tile caches, $"VRAM"$ bandwidth).
 
 == Nanite: Virtualized Geometry
 
