@@ -2,7 +2,7 @@
 
 A SQL query passes through a multi-stage pipeline before any data is touched: the engine first validates and resolves names, then builds a logical plan, optimises it with algebraic transformations and cost estimates, and finally executes it using a chosen evaluation strategy. Understanding each stage explains why the same SQL can run in 10 ms or 10 minutes depending on plan choices, and why modern engines invest heavily in compilation and adaptive re-optimisation.
 
-*See also:* _query-optimization.typ_, _sql-engines-internals.typ_, `database/joins-and-aggregation.typ`, `database/columnar-storage-and-vectorization.typ`
+*See also:* _query-optimization.typ_, _sql-engines-internals.typ_, _joins-and-aggregation.typ_, _columnar-storage-and-vectorization.typ_
 
 == Query Lifecycle
 
@@ -46,7 +46,7 @@ Modern systems track source locations for each AST node so that error messages c
 
 === Bind
 
-The *binder* (or analyser) walks the AST and resolves every name against the *catalog* (schema metadata): table names, column names, function signatures, and type information. It produces a *bound logical plan* where every node carries resolved types. Semantic errors ("column `foor` does not exist") are raised here.
+The *binder* (or analyser) walks the AST and resolves every name against the *catalog* (schema metadata): table names, column names, function signatures, and type information. It produces a *bound logical plan* where every node carries resolved types. Semantic errors ("column `foo` does not exist") are raised here.
 
 Binding involves: (1) resolving table references including CTEs, subqueries, and views by inlining their definitions; (2) column disambiguation — figuring out which table a bare `id` refers to when multiple tables are in scope; (3) function overload resolution matching argument types; (4) implicit cast insertion where the type system allows (e.g., promoting an integer literal to DECIMAL for comparison). The output is a fully-typed, unambiguous logical plan tree ready for optimisation.
 
