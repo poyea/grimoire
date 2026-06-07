@@ -2,7 +2,7 @@
 
 Multi-tenancy is the practice of serving multiple customers or teams from a shared infrastructure pool while providing isolation strong enough that each tenant experiences the system as if it were dedicated to them. Kubernetes has become the dominant substrate for cloud-native multi-tenancy, offering isolation at progressively stronger levels — namespace, virtual cluster, and physical cluster — each with a distinct cost, operational overhead, and threat-model profile. This chapter works through the full stack: isolation models, threat model, RBAC design, network policy, resource governance, security admission, audit logging, and fleet management.
 
-*See also:* _kubernetes-internals.typ_, _containers.typ_, _iac.typ_, `cloud-and-infrastructure/iaas-fundamentals.typ`.
+*See also:* _Kubernetes Internals_, _Containers: OCI, runc, containerd, Image Layers_, _Infrastructure as Code_, _IaaS Fundamentals_.
 
 == Isolation Models
 

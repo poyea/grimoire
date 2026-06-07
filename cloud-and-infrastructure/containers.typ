@@ -2,7 +2,7 @@
 
 Containers are not a kernel feature but a *user-space packaging convention* over kernel features — namespaces, cgroups, seccomp, capabilities, mount propagation, and union filesystems. The OCI standards (runtime-spec, image-spec, distribution-spec) define the contract between image builders, registries, and runtimes so that an image produced by Docker, Buildah, or Bazel runs unchanged under runc, crun, youki, or gVisor. This chapter follows a container from `docker push` through registry, kubelet pull, image unpacking, runc invocation, and finally the `clone()` that creates the container's first process.
 
-*See also:* _kubernetes-internals.typ_, `linux-kernel/cgroups-namespaces.typ`, `linux-kernel/containers-in-the-kernel.typ`, _serverless.typ_, `networking/container-networking.typ`.
+*See also:* _Kubernetes Internals_, _cgroups and Namespaces_ (linux-kernel), _Containers in the Kernel_ (linux-kernel), _Serverless Computing_, _Container Networking_ (networking).
 
 == The OCI Stack
 

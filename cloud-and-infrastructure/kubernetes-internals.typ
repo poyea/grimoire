@@ -2,7 +2,7 @@
 
 Kubernetes is best understood as a *control loop platform built around a strongly-consistent key-value store*. The apiserver is the only client of etcd; everything else — controllers, schedulers, kubelets — watches the apiserver and writes back desired state through it. This level-triggered, declarative model is the deep structural decision that makes the system extensible (CRDs and custom controllers are first-class) and self-healing (every reconciliation step recomputes from current state, never from deltas).
 
-*See also:* _containers.typ_, `networking/service-mesh.typ`, _iac.typ_, _multi-tenancy.typ_, `networking/container-networking.typ`, `linux-kernel/cgroups-namespaces.typ`.
+*See also:* _Containers: OCI, runc, containerd, Image Layers_, _Service Mesh_ (networking), _Infrastructure as Code_, _Multi-Tenancy_, _Container Networking_ (networking), _cgroups and Namespaces_ (linux-kernel).
 
 == Architectural Overview
 
