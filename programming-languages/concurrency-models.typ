@@ -4,7 +4,7 @@ When a program runs on more than one thread of control, the question "what does 
 
 *See also:* _Process Calculi_, _Program Semantics_
 
-The previous chapter studied algebraic theories — CCS, CSP, the $pi$-calculus — that take *interaction* as primitive. This chapter takes a different vantage: rather than designing a calculus, we ask how the operational semantics of an existing programming language is to be extended when multiple threads execute concurrently, what mathematical structures underlie the resulting behaviours, and how the dominant programming models — actors, channels, transactions, async/await, dataflow — fit into the semantic picture. The treatment is deliberately language-pluralist: Erlang, Go, Rust, Haskell, OCaml 5, and Scala each embody a distinct point in the design space.
+The previous chapter studied algebraic theories (CCS, CSP, the $pi$-calculus) that take *interaction* as primitive. This chapter takes a different vantage: rather than designing a calculus, we ask how the operational semantics of an existing programming language is to be extended when multiple threads execute concurrently, what mathematical structures underlie the resulting behaviours, and how the dominant programming models (actors, channels, transactions, async/await, dataflow) fit into the semantic picture. The treatment is deliberately language-pluralist: Erlang, Go, Rust, Haskell, OCaml 5, and Scala each embody a distinct point in the design space.
 
 == Interleaving Semantics
 
@@ -27,17 +27,17 @@ This *interleaving model* is the implicit semantics of all introductory concurre
 
 Equivalently: there exists a total order on memory operations such that (i) each processor's operations appear in program order, and (ii) every read returns the value written by the most recent write in the total order.
 
-SC is the strongest reasonable concurrency model and the one most programmers intuit. It is also unachievable on modern hardware without prohibitive cost: store buffers, write-back caches, speculative execution, and instruction reordering all violate SC. The PL semantics community responded by building weaker models — and then attempting to recover SC for *well-behaved* programs (the data-race-freedom theorem below).
+SC is the strongest reasonable concurrency model and the one most programmers intuit. It is also unachievable on modern hardware without prohibitive cost: store buffers, write-back caches, speculative execution, and instruction reordering all violate SC. The PL semantics community responded by building weaker models, then attempting to recover SC for *well-behaved* programs (the data-race-freedom theorem below).
 
 == True Concurrency: Event Structures
 
-Interleaving identifies two concurrent actions $a$ and $b$ with the two-element set ${a b, b a}$ of interleavings. A *true-concurrency* semantics records that $a$ and $b$ were *concurrent* — neither preceded the other — without flattening to a choice between orders.
+Interleaving identifies two concurrent actions $a$ and $b$ with the two-element set ${a b, b a}$ of interleavings. A *true-concurrency* semantics records that $a$ and $b$ were *concurrent* (neither preceded the other) without flattening to a choice between orders.
 
 *Event structures* (Winskel 1986) are the canonical such model. A *prime event structure* is a triple $cal(E) = (E, lt.eq, sharp)$ where:
 
 - $E$ is a set of *events*.
-- $lt.eq subset.eq E times E$ is a partial order — the *causality* relation.
-- $sharp subset.eq E times E$ is a symmetric irreflexive relation — the *conflict* relation.
+- $lt.eq subset.eq E times E$ is a partial order (*causality*).
+- $sharp subset.eq E times E$ is a symmetric irreflexive relation (*conflict*).
 
 with two axioms:
 
@@ -49,7 +49,7 @@ A *configuration* of $cal(E)$ is a subset $X subset.eq E$ that is
 - *causally closed:* $e in X and e' lt.eq e => e' in X$;
 - *conflict-free:* $forall e_1, e_2 in X. "not" (e_1 sharp e_2)$.
 
-The set $cal(C)(cal(E))$ of configurations, ordered by inclusion, is a *Scott domain*; computations are interpreted as paths through this domain. The crucial point: $X union { e_1 } in cal(C)(cal(E))$ and $X union { e_2 } in cal(C)(cal(E))$ with $X union { e_1, e_2 } in cal(C)(cal(E))$ encodes that $e_1$ and $e_2$ are *concurrent at $X$* — both enabled, neither dependent on the other, neither in conflict.
+The set $cal(C)(cal(E))$ of configurations, ordered by inclusion, is a *Scott domain*; computations are interpreted as paths through this domain. The crucial point: $X union { e_1 } in cal(C)(cal(E))$ and $X union { e_2 } in cal(C)(cal(E))$ with $X union { e_1, e_2 } in cal(C)(cal(E))$ encodes that $e_1$ and $e_2$ are *concurrent at $X$*: both enabled, neither dependent on the other, neither in conflict.
 
 Variants in the literature: *flow event structures* (Boudol–Castellani 1988) relax the conflict-heredity axiom; *stable event structures* (Winskel 1986) replace conflict with a stability condition allowing multiple possible "histories" for each event; *asymmetric event structures* (Baldan–Corradini–Montanari 1999) replace symmetric conflict with a precedence relation suited to read–write conflicts in concurrent systems.
 
@@ -73,11 +73,11 @@ A transition $t$ is *enabled* at marking $M$ if every input place $p$ (with $(p,
 
 *Theorem (Mayr 1981, Kosaraju 1982, Lambert 1992).* Reachability for Petri nets is decidable.
 
-The proof — a multi-decade effort — uses the *Karp–Miller tree* generalised to a coverability graph, but reachability itself requires a more sophisticated argument. The latest complexity bounds are striking.
+The proof (a multi-decade effort) uses the *Karp–Miller tree* generalised to a coverability graph, but reachability itself requires a more sophisticated argument. The latest complexity bounds are striking.
 
 *Theorem (Czerwiński–Orlikowski 2021, Leroux 2021).* Reachability for Petri nets is Ackermann-complete.
 
-*Theorem (Lipton 1976).* Reachability requires at least $2^(Omega(sqrt(n)))$ space — i.e., is EXPSPACE-hard.
+*Theorem (Lipton 1976).* Reachability requires at least $2^(Omega(sqrt(n)))$ space (i.e., is EXPSPACE-hard).
 
 *Theorem (Rackoff 1978).* *Coverability* (given $M$, is some $M' gt.eq M$ reachable?) is EXPSPACE-complete.
 
@@ -85,7 +85,7 @@ The gap between coverability (EXPSPACE) and reachability (Ackermann) is one of t
 
 === Workflow Nets
 
-A *workflow net* (van der Aalst 1997) is a Petri net with a designated source place, a designated sink place, and the property that every node lies on some path from source to sink. Soundness of a workflow net — every reachable marking can reach the terminal marking with exactly one token on the sink — is decidable in polynomial time, and is the standard correctness criterion for business-process models.
+A *workflow net* (van der Aalst 1997) is a Petri net with a designated source place, a designated sink place, and the property that every node lies on some path from source to sink. Soundness of a workflow net (every reachable marking can reach the terminal marking with exactly one token on the sink) is decidable in polynomial time, and is the standard correctness criterion for business-process models.
 
 === Coloured and High-Level Nets
 
@@ -113,7 +113,7 @@ A *configuration* is a multiset of actors and undelivered messages. Each actor i
 
 ```text
         a gt.triple v   on the wire
-        actor at a is ready (mailbox empty? — or, append to mailbox)
+        actor at a is ready (mailbox empty, or append to mailbox)
         --------------------------------------------------       (DELIVER)
         ... | <a, b, q> | (a gt.triple v) -->
         ... | <a, b, q ++ [v]>
@@ -126,7 +126,7 @@ A *configuration* is a multiset of actors and undelivered messages. Each actor i
                           <c_1, b_{c_1}, []> | ...
 ```
 
-The semantics is *asynchronous* (sends do not block), *fair* (every message is eventually delivered — usually formalised as a fairness constraint on the scheduler), and *location-transparent* (the address $a$ uniquely identifies an actor regardless of physical location).
+The semantics is *asynchronous* (sends do not block), *fair* (every message is eventually delivered, usually formalised as a fairness constraint on the scheduler), and *location-transparent* (the address $a$ uniquely identifies an actor regardless of physical location).
 
 Address creation gives the actor model dynamic topology equivalent to the $pi$-calculus's name passing. The faithful encoding of asynchronous $pi$ into actors and vice versa (Agha–Mason–Smith–Talcott 1997) makes the two models intertranslatable as theories of concurrency, though the engineering tradeoffs differ: actors emphasise *locality* (one mailbox per actor, scheduled by one thread) while asynchronous $pi$ is symmetric in inputs and outputs.
 
@@ -213,7 +213,7 @@ Go's concurrency is widely loved but the operational semantics has sharp edges. 
 
 == Rust: Ownership for Concurrency
 
-Rust's contribution to the concurrency landscape is the use of an affine type system — *ownership* — to statically eliminate data races. The two marker traits `Send` (a type whose values may safely transfer between threads) and `Sync` (a type whose `&T` references may safely be shared between threads) are auto-derived for all types whose fields are themselves `Send`/`Sync`. Primitive types are `Send + Sync`; `Rc<T>` (non-atomic reference counting) is neither; `Arc<T>` is `Send + Sync` when $T$ is.
+Rust's contribution to the concurrency landscape is the use of an affine type system (*ownership*) to statically eliminate data races. The two marker traits `Send` (a type whose values may safely transfer between threads) and `Sync` (a type whose `&T` references may safely be shared between threads) are auto-derived for all types whose fields are themselves `Send`/`Sync`. Primitive types are `Send + Sync`; `Rc<T>` (non-atomic reference counting) is neither; `Arc<T>` is `Send + Sync` when $T$ is.
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -240,7 +240,7 @@ fn main() {
 }
 ```
 
-The type checker enforces that the closure passed to `thread::spawn` captures only `Send` values, that `Mutex<T>` requires `T: Send`, and that the lock guard's lifetime statically prevents use of the protected data outside the critical section. The *soundness* theorem — well-typed Rust programs are data-race-free — is non-trivial because the type system is enforced over a language with mutable references and unsafe escape hatches. *RustBelt* (Jung–Jourdan–Krebbers–Dreyer 2018) gives a machine-checked semantic safety proof using the Iris separation logic.
+The type checker enforces that the closure passed to `thread::spawn` captures only `Send` values, that `Mutex<T>` requires `T: Send`, and that the lock guard's lifetime statically prevents use of the protected data outside the critical section. The *soundness* theorem (well-typed Rust programs are data-race-free) is non-trivial because the type system is enforced over a language with mutable references and unsafe escape hatches. *RustBelt* (Jung–Jourdan–Krebbers–Dreyer 2018) gives a machine-checked semantic safety proof using the Iris separation logic.
 
 == Software Transactional Memory
 
@@ -265,7 +265,7 @@ main = do
     atomically (transfer a b 30)
 ```
 
-The `STM` monad type prevents arbitrary IO from leaking into a transaction (an aborted IO action would be impossible to roll back). The `retry` combinator blocks the current transaction until at least one of the `TVar`s read so far has been modified — implementing *condition synchronisation* without explicit wait queues. `orElse` composes two alternatives: `t1 ` then `t2` runs $t_1$ and, if it retries, runs $t_2$ instead.
+The `STM` monad type prevents arbitrary IO from leaking into a transaction (an aborted IO action would be impossible to roll back). The `retry` combinator blocks the current transaction until at least one of the `TVar`s read so far has been modified, implementing *condition synchronisation* without explicit wait queues. `orElse` composes two alternatives: `t1 ` then `t2` runs $t_1$ and, if it retries, runs $t_2$ instead.
 
 === Opacity
 
@@ -289,7 +289,7 @@ A subtlety: Hoare's original semantics has `signal` *immediately* transfer the l
 
 == Reactive Programming and Dataflow
 
-A separate concurrency tradition treats time as the primitive and computation as the propagation of values through a network of operators. *Synchronous dataflow* languages — Lustre (Halbwachs–Caspi–Raymond–Pilaud 1991), Esterel (Berry–Gonthier 1992), Signal — model a system as a network of operators that fire in lock-step with a global clock. Each tick, every operator consumes one value on each input and produces one on each output. The semantics is deterministic and verifiable; Lustre/SCADE is certified for use in avionics (Airbus fly-by-wire).
+A separate concurrency tradition treats time as the primitive and computation as the propagation of values through a network of operators. *Synchronous dataflow* languages (Lustre, Esterel, Signal) model a system as a network of operators that fire in lock-step with a global clock. Each tick, every operator consumes one value on each input and produces one on each output. The semantics is deterministic and verifiable; Lustre/SCADE is certified for use in avionics (Airbus fly-by-wire).
 
 *Functional Reactive Programming* (Elliott–Hudak 1997) treats time-varying values (*signals*) and discrete events as first-class. A signal $s : "Time" arrow.r alpha$ models a continuously varying quantity; an event $e : "Time" arrow.r "Maybe" alpha$ models a sporadic occurrence. Combinators such as `lift`, `integral`, and `accumulate` build complex behaviours from primitive signals. The pure-functional version of FRP suffers from the *space leak* problem (retaining histories that are never used); push–pull FRP (Elliott 2009) and the more recent *arrowised FRP* (Yampa) ameliorate this.
 
@@ -306,7 +306,7 @@ async fn fetch_and_parse(url: &str) -> Result<Data, Error> {
 }
 ```
 
-desugars to a state machine implementing the `Future` trait. Each `.await` is a suspension point at which the function returns control to its caller along with a *continuation* — the remainder of the function — to be resumed when the awaited future completes.
+desugars to a state machine implementing the `Future` trait. Each `.await` is a suspension point at which the function returns control to its caller along with a *continuation* (the remainder of the function) to be resumed when the awaited future completes.
 
 === Semantic View
 
@@ -382,7 +382,7 @@ The standard establishes a *happens-before* relation built from program order, r
 
 === Subtleties and Bugs
 
-*Theorem (Batty–Memarian–Owens–Sarkar–Sewell 2011).* The C11/C++11 memory model as standardised contains several inconsistencies — most notably around "out-of-thin-air" reads — that no compiler or hardware implements correctly and that no straightforward patch resolves.
+*Theorem (Batty–Memarian–Owens–Sarkar–Sewell 2011).* The C11/C++11 memory model as standardised contains several inconsistencies (most notably around "out-of-thin-air" reads) that no compiler or hardware implements correctly and that no straightforward patch resolves.
 
 The OOTA problem: the relaxed memory model permits *self-justifying* executions in which a read returns a value only because a later write produces it. This is theoretically permitted but operationally absurd and outlaws important compiler optimisations. The Java memory model (Manson–Pugh–Adve 2005) attempted a global fix via the *causality* requirement; it was subsequently shown to have its own subtle flaws.
 
@@ -405,8 +405,8 @@ OCaml 5 (2022) introduced shared-memory parallelism with a deliberately small me
 
 == Echoes of Distributed Systems
 
-The concurrency theory of this chapter is local — multiple threads on one machine, sharing memory. Move to multiple machines and partial failure becomes the dominant constraint. The fundamental impossibility results — *FLP* (Fischer–Lynch–Paterson 1985: no asynchronous deterministic consensus tolerates even one crash) and *CAP* (Gilbert–Lynch 2002: no system simultaneously provides consistency, availability, and partition-tolerance) — are treated in the distributed-systems volume. The PL discipline contributes to that conversation through *causal models* (vector clocks, conflict-free replicated data types), *consensus-aware type systems*, and *deterministic parallel languages* (LVish, FlowPools) that give back determinism by restricting the operations.
+The concurrency theory of this chapter is local: multiple threads on one machine, sharing memory. Move to multiple machines and partial failure becomes the dominant constraint. The fundamental impossibility results (*FLP*: Fischer–Lynch–Paterson 1985, no asynchronous deterministic consensus tolerates even one crash; and *CAP*: Gilbert–Lynch 2002, no system simultaneously provides consistency, availability, and partition-tolerance) are treated in the distributed-systems volume. The PL discipline contributes to that conversation through *causal models* (vector clocks, conflict-free replicated data types), *consensus-aware type systems*, and *deterministic parallel languages* (LVish, FlowPools) that give back determinism by restricting the operations.
 
 == Outlook
 
-The concurrent semantic landscape is unified by a small set of questions repeatedly asked at different scales: which interleavings are observable? Which behaviours does the implementation guarantee? How do we compose programs without losing the guarantees? Event structures, Petri nets, traces, actors, channels, transactions, and memory models each answer a slice of these questions. The discipline's most productive direction now lies in *combining* these models — session types over actors, transactions over channels, structured concurrency over async — into composite frameworks that bring local guarantees into global view. The next chapters on session types, effects and handlers, and distributed systems pursue precisely this synthesis.
+The concurrent semantic landscape is unified by a small set of questions repeatedly asked at different scales: which interleavings are observable? Which behaviours does the implementation guarantee? How do we compose programs without losing the guarantees? Event structures, Petri nets, traces, actors, channels, transactions, and memory models each answer a slice of these questions. The discipline's most productive direction now lies in *combining* these models (session types over actors, transactions over channels, structured concurrency over async) into composite frameworks that bring local guarantees into global view. The next chapters on session types, effects and handlers, and distributed systems pursue precisely this synthesis.

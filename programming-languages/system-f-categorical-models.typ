@@ -70,7 +70,7 @@ In contrast: *contextual* equivalence (Mason–Talcott 1991) is decidable for ST
 
 === The Type $forall alpha . alpha$
 
-A closed inhabitant $e : forall alpha . alpha$ would, instantiated at $"Empty"$, produce a closed term of type $"Empty"$, contradicting consistency. By parametricity, $[| forall alpha . alpha |] = inter_R [| alpha |]_R = inter_R R$. The intersection over *all* relations of the empty relation is empty. Hence $forall alpha . alpha$ has no closed inhabitant — it is the *false* proposition under Curry–Howard.
+A closed inhabitant $e : forall alpha . alpha$ would, instantiated at $"Empty"$, produce a closed term of type $"Empty"$, contradicting consistency. By parametricity, $[| forall alpha . alpha |] = inter_R [| alpha |]_R = inter_R R$. The intersection over *all* relations of the empty relation is empty. Hence $forall alpha . alpha$ has no closed inhabitant; it is the *false* proposition under Curry–Howard.
 
 === The Type $forall alpha . alpha arrow.r alpha arrow.r alpha$
 
@@ -78,7 +78,7 @@ This is $"Bool"$ in Church encoding. The free theorem: for $b : forall alpha . a
 
 === The Type $forall alpha . (alpha arrow.r "Bool") arrow.r "List" alpha arrow.r "List" alpha$
 
-A $"filter"$-like type. The free theorem: for $f : forall alpha . (alpha arrow.r "Bool") arrow.r "List" alpha arrow.r "List" alpha$, every $h : A arrow.r B$ yields $f[B] (p circle.small "..." h^(-1) ?) ...$ — the technical formulation requires $h$ to be a function, $p_A = p_B circle.small h$, and yields $f[B] space p_B space ("map" h space "xs") = "map" h space (f[A] space p_A space "xs")$.
+A $"filter"$-like type. The free theorem: for $f : forall alpha . (alpha arrow.r "Bool") arrow.r "List" alpha arrow.r "List" alpha$, every $h : A arrow.r B$ yields $f[B] (p circle.small "..." h^(-1) ?) ...$; the technical formulation requires $h$ to be a function with $p_A = p_B circle.small h$, and yields $f[B] space p_B space ("map" h space "xs") = "map" h space (f[A] space p_A space "xs")$.
 
 In words: filtering commutes with $"map"$ provided the predicate is appropriately transformed.
 
@@ -92,21 +92,21 @@ Generalisation: $forall alpha . (A arrow.r alpha) arrow.r F alpha tilde.equiv F 
 
 Parametricity is the *binary* logical-relation construction. *Unary* logical relations are exactly Tait/Girard reducibility for SN. *Step-indexed* logical relations (Appel–McAllester 2001, Ahmed 2004) handle recursive types and mutable state by indexing relations by a *step count*: a relation $R_k$ guarantees behaviour up to $k$ reduction steps. Step-indexing is the bedrock of modern soundness proofs for ML-with-references (e.g., Iris, RustBelt).
 
-A unifying meta-theorem: for any *open* term $Gamma tack.r e : tau$ and any logical relation $cal(L)$, if $cal(L)$ is closed under the typing rules, then $e$ respects $cal(L)$. This is the *fundamental lemma* of logical relations. SN, parametricity, contextual equivalence, type abstraction — all are instances.
+A unifying meta-theorem: for any *open* term $Gamma tack.r e : tau$ and any logical relation $cal(L)$, if $cal(L)$ is closed under the typing rules, then $e$ respects $cal(L)$. This is the *fundamental lemma* of logical relations. SN, parametricity, contextual equivalence, and type abstraction are all instances.
 
 == Operational Semantics Variants
 
 === CBV vs CBN in System F
 
-The polymorphic identity $"id" = Lambda alpha . lambda x : alpha . x$ behaves identically under CBV and CBN: $"id" ["Int"] space (3 + 4)$ reduces to $3 + 4$ then $7$ (CBV) or to $3 + 4$ then $7$ (CBN). Type abstraction is *always* a value — $Lambda alpha . e$ does not evaluate $e$, by analogy with $lambda x . e$.
+The polymorphic identity $"id" = Lambda alpha . lambda x : alpha . x$ behaves identically under CBV and CBN: $"id" ["Int"] space (3 + 4)$ reduces to $3 + 4$ then $7$ (CBV) or to $3 + 4$ then $7$ (CBN). Type abstraction is *always* a value: $Lambda alpha . e$ does not evaluate $e$, by analogy with $lambda x . e$.
 
-A subtle point in *predicative* extensions: when type instantiation triggers further reduction inside $e$, evaluation strategies matter. Practical systems (Haskell, OCaml) treat $Lambda alpha$ as type-erasable — it disappears at runtime.
+A subtle point in *predicative* extensions: when type instantiation triggers further reduction inside $e$, evaluation strategies matter. Practical systems (Haskell, OCaml) treat $Lambda alpha$ as type-erasable; it disappears at runtime.
 
 === Erasure
 
 *Theorem (Mitchell, Girard, others).* A typed System F term $e$ and its *type-erasure* $|e|$ (delete all $Lambda$ and $[tau]$) have the same untyped reduction behaviour on the corresponding term-level redexes.
 
-So a System F program *runs* like an untyped $lambda$ program — types are computationally inert. This justifies *type erasure* in compilers: GHC erases types between Core and STG/Cmm; OCaml erases at the back end. The exception: features like Haskell's `Typeable` or polymorphic recursion with type-class dictionaries pass *runtime representations*, breaking pure erasure.
+So a System F program *runs* like an untyped $lambda$ program; types are computationally inert. This justifies *type erasure* in compilers: GHC erases types between Core and STG/Cmm; OCaml erases at the back end. The exception: features like Haskell's `Typeable` or polymorphic recursion with type-class dictionaries pass *runtime representations*, breaking pure erasure.
 
 == Predicative vs Impredicative System F
 
@@ -155,7 +155,7 @@ zoo :: [Showable]
 zoo = [MkShowable 42, MkShowable "hi", MkShowable True]
 ```
 
-Here `Showable` is essentially `exists a. (Show a, a)`. The constraint `Show a` is part of the existential package — packed in, opened out. Such *heterogeneous lists* are a typical use of Haskell existentials.
+Here `Showable` is essentially `exists a. (Show a, a)`. The constraint `Show a` is part of the existential package, packed in and opened out. Such *heterogeneous lists* are a typical use of Haskell existentials.
 
 In OCaml, *first-class modules* play a similar role:
 
@@ -176,7 +176,7 @@ The module type *"is"* the existential; module values pack a concrete type with 
 
 == Connection to Category Theory
 
-System F has a beautiful interpretation in terms of *dinatural transformations*. A polymorphic function $f : forall alpha . F(alpha) arrow.r G(alpha)$, where $F, G$ are functors, corresponds to a *dinatural transformation* from $F$ to $G$. Parametricity is the statement that polymorphic terms are *automatically* dinatural — naturality holds for *free*.
+System F has a beautiful interpretation in terms of *dinatural transformations*. A polymorphic function $f : forall alpha . F(alpha) arrow.r G(alpha)$, where $F, G$ are functors, corresponds to a *dinatural transformation* from $F$ to $G$. Parametricity is the statement that polymorphic terms are *automatically* dinatural: naturality holds for *free*.
 
 Wadler's free theorems are dinaturality squares:
 ```text
@@ -229,7 +229,7 @@ $ T = forall alpha . (A_1 arrow.r ... arrow.r alpha) arrow.r ... arrow.r (B_1 ar
 
 with recursive references to $T$ in argument types replaced by $alpha$. A value is its own *fold*.
 
-*Theorem (Geuvers 2001).* The *full induction principle* — yielding *dependent* eliminators — is *not* derivable in System F from Church encodings. Only the *non-dependent* recursor is.
+*Theorem (Geuvers 2001).* The *full induction principle* (yielding *dependent* eliminators) is *not* derivable in System F from Church encodings. Only the *non-dependent* recursor is.
 
 This is one of the main motivations for moving to dependent type theory: there one can both define and *reason about* inductive data.
 
@@ -266,17 +266,17 @@ A type theory's *proof-theoretic strength* is measured by the ordinal of its pro
   [CIC], [vastly larger, beyond accepted classical ordinals],
 )
 
-The take-away: System F is *enormously* stronger than HM despite a small syntactic addition — the ability to *abstract* over types and *re-apply*. The price is undecidable inference; the gain is provable totality for an enormous class of programs.
+The take-away: System F is *enormously* stronger than HM despite a small syntactic addition: the ability to *abstract* over types and *re-apply*. The price is undecidable inference; the gain is provable totality for an enormous class of programs.
 
 == Parametricity Limits
 
 Parametricity holds in *pure* System F but breaks under common extensions:
-- *Reference cells* (`ref`) — destroys parametricity since references expose representation.
-- *Exceptions* (in some forms) — observing a thrown exception reveals control flow.
-- *`seq`* in Haskell — observing whether a value is bottom breaks the "free" naturality.
-- *`unsafeCoerce`* — patently breaks everything.
-- *Typecase* / *Typeable* — runtime type inspection contradicts the assumption that the type is unknown to the function.
-- *Non-termination* — even pure non-termination weakens parametricity to a *step-indexed* analogue.
+- *Reference cells* (`ref`): destroys parametricity since references expose representation.
+- *Exceptions* (in some forms): observing a thrown exception reveals control flow.
+- *`seq`* in Haskell: observing whether a value is bottom breaks the "free" naturality.
+- *`unsafeCoerce`*: patently breaks everything.
+- *Typecase* / *Typeable*: runtime type inspection contradicts the assumption that the type is unknown to the function.
+- *Non-termination*: even pure non-termination weakens parametricity to a *step-indexed* analogue.
 
 This is one of the reasons functional programmers value purity: *pure* polymorphic types come with strong free theorems; *impure* ones do not.
 
@@ -312,7 +312,7 @@ The *kinding rules* of $F_omega$:
   Delta |- forall alpha : kappa. tau : *
 ```
 
-Note that *only* kind $*$ types appear in arrow / forall positions — proper types are inhabited; higher-kinded types are operators.
+Note that *only* kind $*$ types appear in arrow / forall positions: proper types are inhabited; higher-kinded types are operators.
 
 Worked example: $"State" : * arrow.r * arrow.r *$, defined as $"State" = lambda s : * . lambda a : * . s arrow.r s times a$. Then $"State" "Int" "Bool" = "Int" arrow.r "Int" times "Bool"$ by $beta$ at the type level.
 
@@ -320,7 +320,7 @@ Worked example: $"State" : * arrow.r * arrow.r *$, defined as $"State" = lambda 
 
 Under Curry–Howard, $exists alpha . P(alpha)$ corresponds to $exists$ at the propositional level (second-order). The Church encoding's *unpack* matches the elimination rule of $exists$:
 
-If $exists alpha . P(alpha)$ and from any $alpha$ together with a proof of $P(alpha)$ one can derive $Q$, then $Q$ — provided $alpha$ does not appear in $Q$.
+If $exists alpha . P(alpha)$ and from any $alpha$ together with a proof of $P(alpha)$ one can derive $Q$, then $Q$, provided $alpha$ does not appear in $Q$.
 
 This is the *eigenvariable* condition in disguise, mirroring T-TABS.
 
@@ -357,7 +357,7 @@ module ListStack : STACK = struct
 end
 ```
 
-By parametricity, *no* client of `STACK` can distinguish `ListStack` from any other implementation respecting the spec. This is *representation independence* — the cornerstone of modular programming.
+By parametricity, *no* client of `STACK` can distinguish `ListStack` from any other implementation respecting the spec. This is *representation independence*, the cornerstone of modular programming.
 
 == Worked Example: Existential Counters
 
@@ -381,18 +381,18 @@ let pairC : (module COUNTER) =
    end)
 ```
 
-Both `intC` and `pairC` have type `(module COUNTER)`. Any client function `f : (module COUNTER) -> int` cannot distinguish them by *behavioural observation* — by parametricity. This is *representation independence* in action.
+Both `intC` and `pairC` have type `(module COUNTER)`. Any client function `f : (module COUNTER) -> int` cannot distinguish them by *behavioural observation* (by parametricity): this is *representation independence* in action.
 
 == Historical Notes
 
-Jean-Yves Girard discovered System F in 1971, presented in his thesis (1972) as *Système F*, in the context of proving the *Takeuti conjecture* — the cut-elimination theorem (and hence consistency) for second-order arithmetic. Girard's main technical contribution was the *reducibility candidates* method, generalising Tait's reducibility from STLC to handle impredicative quantification.
+Jean-Yves Girard discovered System F in 1971, presented in his thesis (1972) as *Système F*, in the context of proving the *Takeuti conjecture* (the cut-elimination theorem, and hence consistency, for second-order arithmetic). Girard's main technical contribution was the *reducibility candidates* method, generalising Tait's reducibility from STLC to handle impredicative quantification.
 
-John Reynolds, working independently in the programming-languages tradition, arrived at the same calculus in 1974 as the type-theoretic foundation of *parametric polymorphism* in his paper "Towards a Theory of Type Structure". Reynolds' (1983) *abstraction theorem* — relational parametricity — provided the semantic justification for the slogan "polymorphic functions don't inspect their arguments".
+John Reynolds, working independently in the programming-languages tradition, arrived at the same calculus in 1974 as the type-theoretic foundation of *parametric polymorphism* in his paper "Towards a Theory of Type Structure". Reynolds' (1983) *abstraction theorem* (relational parametricity) provided the semantic justification for the slogan "polymorphic functions don't inspect their arguments".
 
 Philip Wadler's 1989 paper "Theorems for Free!" popularised parametricity among programmers, deriving practical equations from polymorphic types alone.
 
 The undecidability of $F_(<:)$ subtyping was a surprise: Pierce (1994) found the encoding of two-counter machines that finally proved the long-standing open question. The undecidability of System F type inference (Wells 1994; published 1999) closed another open problem with a beautiful reduction to semi-unification.
 
-System $F_omega$ — adding type operators — was already present in Girard's thesis. The Barendregt cube was introduced by Barendregt (1991) as a unifying framework for the pure type systems (Berardi–Terlouw 1989).
+System $F_omega$ (adding type operators) was already present in Girard's thesis. The Barendregt cube was introduced by Barendregt (1991) as a unifying framework for the pure type systems (Berardi–Terlouw 1989).
 
-The legacy of System F is everywhere in modern type theory: Haskell, Coq, Agda, Lean, Idris, F\* — all of them descend from System F. Parametricity remains an active research area; recent work on *internal parametricity* (Bernardy–Lasson 2011, Bernardy–Coquand–Moulin 2015) bakes Reynolds' theorem *into* the type theory itself, so free theorems become provable inside the system rather than only in its metatheory.
+The legacy of System F is everywhere in modern type theory: Haskell, Coq, Agda, Lean, Idris, F\*: all descend from System F. Parametricity remains an active research area; recent work on *internal parametricity* (Bernardy–Lasson 2011, Bernardy–Coquand–Moulin 2015) bakes Reynolds' theorem *into* the type theory itself, so free theorems become provable inside the system rather than only in its metatheory.

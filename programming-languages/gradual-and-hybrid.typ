@@ -28,7 +28,7 @@ The mechanism that does this work is the *consistency relation* $tau_1 tilde tau
   tau1 -> tau2 ~ tau1' -> tau2'
 ```
 
-Consistency is reflexive ($tau tilde tau$), symmetric ($tau_1 tilde tau_2 => tau_2 tilde tau_1$), and a congruence with respect to type constructors — but it is *not* transitive. The standard counterexample is $"Int" tilde "?"$ and $"?" tilde "Bool"$ but $"Int" tilde."not" "Bool"$. Transitivity would collapse the whole hierarchy and make every two types interchangeable.
+Consistency is reflexive ($tau tilde tau$), symmetric ($tau_1 tilde tau_2 => tau_2 tilde tau_1$), and a congruence with respect to type constructors, but it is *not* transitive. The standard counterexample is $"Int" tilde "?"$ and $"?" tilde "Bool"$ but $"Int" tilde."not" "Bool"$. Transitivity would collapse the whole hierarchy and make every two types interchangeable.
 
 Gradual typing replaces the equality $tau_1 = tau_2$ that appears in the premise of the static T-APP rule with consistency:
 
@@ -48,7 +48,7 @@ There is also a rule that lets an application target a dynamically typed functio
 
 This pair of rules captures the working programmer's intuition. A static function applied to a dynamic argument should typecheck (the argument might at run time be the right thing). A dynamic function applied to anything should typecheck (we just trust the call). When two static parts meet, the ordinary rule fires and the ordinary error reports a mismatch.
 
-A subtle consequence: the consistency rule for arrows is *covariant on both sides*, not contravariant on the domain. This is correct because consistency is symmetric — it is not subtyping. Gradual *subtyping* (Siek–Taha 2007) layers ordinary contravariance on top, yielding a relation $tau_1 lt.tilde tau_2$ defined as the composition $tau_1 tilde tau_1' lt.eq tau_2$ for some intermediate $tau_1'$.
+A subtle consequence: the consistency rule for arrows is *covariant on both sides*, not contravariant on the domain. This is correct because consistency is symmetric; it is not subtyping. Gradual *subtyping* (Siek–Taha 2007) layers ordinary contravariance on top, yielding a relation $tau_1 lt.tilde tau_2$ defined as the composition $tau_1 tilde tau_1' lt.eq tau_2$ for some intermediate $tau_1'$.
 
 == Static Becomes Dynamic via Casts
 
@@ -62,7 +62,7 @@ The typing relation describes what programs are *accepted*. To give those progra
 
 When $tau_1 = tau_3$ the cast is the identity; when one side is "?" the cast becomes an *injection* (static-to-dynamic) or a *projection* (dynamic-to-static); when both sides are higher-order it becomes a *wrapper* that defers the check to argument and result positions.
 
-The operational semantics of casts is the heart of the system. Injection is simple — tag a value with its static type and inject it into a universal sum:
+The operational semantics of casts is the heart of the system. Injection is simple: tag a value with its static type and inject it into a universal sum:
 
 $ chevron.l "?" arrow.l "Int" chevron.r 7 arrow.r "Inj"_"Int" 7 $
 
@@ -72,7 +72,7 @@ $ chevron.l "Int" arrow.l "?" chevron.r ("Inj"_"Int" 7) arrow.r 7 $
 
 $ chevron.l "Bool" arrow.l "?" chevron.r ("Inj"_"Int" 7) arrow.r "blame" $
 
-For function values the cast cannot be discharged eagerly — we do not know all future arguments. Instead it factors:
+For function values the cast cannot be discharged eagerly, as we do not know all future arguments. Instead it factors:
 
 $ chevron.l tau_1' arrow.r tau_2' arrow.l tau_1 arrow.r tau_2 chevron.r v arrow.r lambda x : tau_1' . chevron.l tau_2' arrow.l tau_2 chevron.r (v (chevron.l tau_1 arrow.l tau_1' chevron.r x)) $
 
@@ -88,7 +88,7 @@ $ (chevron.l tau_1' arrow.r tau_2' arrow.l^ell tau_1 arrow.r tau_2 chevron.r v) 
 
 where $macron(ell)$ denotes the *negation* (complementary blame) of $ell$. Negative blame falls on the *caller* when an argument fails its precondition; positive blame falls on the *callee* when the result fails its postcondition.
 
-*Theorem (Blame, Wadler–Findler 2009).* In a cast calculus annotated with *positive* and *negative* labels, the "more typed" side of a failing cast is never blamed. Formally, if a closed program $e$ in $lambda_C$ reduces to $"blame" space ell^+$ (positive blame at $ell$), then the type that originated the cast labelled $ell$ is *not* a refinement of the actually-flowing value's type — the dynamically typed side is the one that violated the contract.
+*Theorem (Blame, Wadler–Findler 2009).* In a cast calculus annotated with *positive* and *negative* labels, the "more typed" side of a failing cast is never blamed. Formally, if a closed program $e$ in $lambda_C$ reduces to $"blame" space ell^+$ (positive blame at $ell$), then the type that originated the cast labelled $ell$ is *not* a refinement of the actually-flowing value's type; the dynamically typed side is the one that violated the contract.
 
 *Proof sketch.* The proof proceeds by a logical relation indexed by *subtyping* (more precisely, by the *naive subtyping* $lt.eq$ that treats "?" as bottom on the positive side and as top on the negative side). One shows: if $tau_1 lt.eq tau_2$ then a cast $chevron.l tau_2 arrow.l^ell tau_1 chevron.r$ never blames $ell^+$, and dually for $ell^-$. The arrow case is the interesting one: contravariance of the function space requires flipping the polarity of the blame label, which is exactly what the operational rule above does. Closure under reduction gives the theorem. $square$
 
@@ -120,7 +120,7 @@ A further refinement, the *coercion calculus* of Henglein (1994), expresses cast
 
 == Abstracting Gradual Typing (AGT)
 
-(Garcia–Clark–Tanter 2016) gave a *general recipe* — *abstracting gradual typing* (AGT) — for deriving a gradual type system from any static one. The recipe makes the leap from "design ad hoc" to "compute from the static system".
+(Garcia–Clark–Tanter 2016) gave a *general recipe*, *abstracting gradual typing* (AGT), for deriving a gradual type system from any static one. The recipe makes the leap from "design ad hoc" to "compute from the static system".
 
 The recipe in four steps:
 
@@ -138,7 +138,7 @@ The remarkable feature of AGT is that *the gradual guarantee is automatic*: it f
 - *Gradual effects* (Bañados Schwerter–Garcia–Tanter 2014): effect annotations on functions become gradual.
 - *Gradual dependent types* (Eremondi–Tanter–Garcia 2019; Lennon-Bertrand–Maillard–Tabareau–Tanter 2022): refinement types and dependent function types are made gradual; proofs become casts.
 
-The AGT methodology has not entirely replaced ad hoc designs — sometimes the derived semantics is too conservative or too eager to blame — but it provides a *baseline* against which any proposed gradual system can be measured.
+The AGT methodology has not entirely replaced ad hoc designs (sometimes the derived semantics is too conservative or too eager to blame), but it provides a *baseline* against which any proposed gradual system can be measured.
 
 == Operational Semantics in Detail
 
@@ -150,7 +150,7 @@ Values:
 
 $ v ::= n | "true" | "false" | lambda x : tau . e | chevron.l tau_1' arrow.r tau_2' arrow.l^ell tau_1 arrow.r tau_2 chevron.r v $
 
-Note that the last form is the *wrapped function value* — a value that has not yet had its enclosed cast discharged. Reduction:
+Note that the last form is the *wrapped function value*, i.e., a value that has not yet had its enclosed cast discharged. Reduction:
 
 ```text
   (lam x:tau. e) v  -->  [x |-> v] e
@@ -191,7 +191,7 @@ The findings provoked a research programme on *sound efficient gradual typing*. 
 1. *Cast erasure.* If type inference can prove that a value never crosses a boundary, the cast is unnecessary. *Type-Tailored* gradual typing (Kuhlenschmidt–Almahallawi–Siek 2019) does aggressive monomorphisation.
 2. *Transient checks* (Vitousek–Swords–Siek 2017). Replace deep wrappers with *shallow* tag checks at every operation that consumes a value. Transient semantics gives weaker blame (it cannot blame the original contract violator, only the immediate operation), but the run-time overhead is bounded and predictable.
 3. *Type-directed unboxing.* Where the type checker has a static type, the run time uses an unboxed representation; the boundary inserts a single box/unbox. This is the strategy used in Reticulated Python.
-4. *Optional types without soundness* (TypeScript, mypy). The compiler erases types entirely; checks happen only at compile time. The cost at run time is zero, but the type system makes no soundness promise about programs at all — the *gradual guarantee* and *blame theorem* are sacrificed.
+4. *Optional types without soundness* (TypeScript, mypy). The compiler erases types entirely; checks happen only at compile time. The cost at run time is zero, but the type system makes no soundness promise about programs at all; the *gradual guarantee* and *blame theorem* are sacrificed.
 
 The TypeScript decision is significant: it has been *enormously* successful in industry but is technically not "sound" gradual typing. The compiler accepts implicit `"any"` and never inserts a run-time cast. This is sometimes called *optional* typing rather than gradual typing.
 
@@ -213,7 +213,7 @@ Typed Racket (Tobin-Hochstadt–Felleisen 2008) is the canonical sound gradual l
   (if (null? xs) '() (cons (f (car xs)) (map* f (cdr xs)))))
 ```
 
-Untyped modules can import typed ones and vice versa; the contract layer interposes at the boundary. The contract on a polymorphic function uses *parametricity-preserving* sealing (Matthews–Findler 2009) — the untyped side cannot inspect a sealed value, and the typed side cannot accidentally observe a value that should have been polymorphic.
+Untyped modules can import typed ones and vice versa; the contract layer interposes at the boundary. The contract on a polymorphic function uses *parametricity-preserving* sealing (Matthews–Findler 2009): the untyped side cannot inspect a sealed value, and the typed side cannot accidentally observe a value that should have been polymorphic.
 
 === TypeScript
 
@@ -293,7 +293,7 @@ A *threesome* is a triple $(tau_1, tau_"mid", tau_2)$ where $tau_"mid"$ is the m
 
 $ (tau_1, m_1, tau_2) ; (tau_2, m_2, tau_3) = (tau_1, m_1 inter.sq m_2, tau_3) $
 
-The composition fails — and the program raises blame — if and only if $m_1 inter.sq m_2$ fails. This is exactly when an inconsistency would have been discovered in the naïve sequence.
+The composition fails (and the program raises blame) if and only if $m_1 inter.sq m_2$ fails. This is exactly when an inconsistency would have been discovered in the naïve sequence.
 
 *Theorem (Space Efficiency, Herman–Tomb–Flanagan 2010, Siek–Wadler 2010).* In a cast calculus with threesomes, the size of any value is bounded by a constant times the size of its type. Hence the heap usage of a gradually typed program is asymptotically the same as the corresponding statically typed program.
 
@@ -301,19 +301,19 @@ The composition fails — and the program raises blame — if and only if $m_1 i
 
 == Gradual Session Types
 
-(Igarashi–Thiemann–Vasconcelos–Wadler 2017) extended gradual typing to *session types* — protocols on communication channels. A session type describes the sequence of sends and receives expected on a channel: $!"Int". ?"Bool". "end"$ means "send an integer, receive a boolean, terminate". The "?" session type allows a fragment of code to be ignorant of the protocol; casts to a more specific session type insert run-time protocol checks.
+(Igarashi–Thiemann–Vasconcelos–Wadler 2017) extended gradual typing to *session types*, i.e., protocols on communication channels. A session type describes the sequence of sends and receives expected on a channel ($!"Int". ?"Bool". "end"$ means "send an integer, receive a boolean, terminate"). The "?" session type allows a fragment of code to be ignorant of the protocol; casts to a more specific session type insert run-time protocol checks.
 
 Soundness is subtle because session types are *linear*: a channel must be used exactly as described. Mixing typed and untyped channel users requires *delegation*: when a typed process hands off a channel to an untyped one, the untyped one acquires the protocol obligation, monitored at run time. The framework has been mechanised in Coq.
 
 == Gradual Dependent Types
 
-(Lennon-Bertrand–Maillard–Tabareau–Tanter 2022) constructed *Gradual CIC* (GCIC): a gradual extension of the Calculus of Inductive Constructions. The dynamic type "?" becomes a proof-relevant *unknown term* $"?"_A$ at each type $A$. The cast $chevron.l B arrow.l A chevron.r$ on dependent types becomes a unifier that may produce blame, and Gradual CIC enjoys both the gradual guarantee and *strong normalisation* — proofs do not loop, but they may fail to typecheck only after computation.
+(Lennon-Bertrand–Maillard–Tabareau–Tanter 2022) constructed *Gradual CIC* (GCIC): a gradual extension of the Calculus of Inductive Constructions. The dynamic type "?" becomes a proof-relevant *unknown term* $"?"_A$ at each type $A$. The cast $chevron.l B arrow.l A chevron.r$ on dependent types becomes a unifier that may produce blame, and Gradual CIC enjoys both the gradual guarantee and *strong normalisation*: proofs do not loop, but they may fail to typecheck only after computation.
 
-The construction reveals a deep tension: *univalence* (see _Homotopy Type Theory_) and *gradual guarantee* are *incompatible* in their natural strongest forms. GCIC must weaken one or the other. The chosen weakening — *propositional* gradual guarantee rather than definitional — has consequences for what proofs survive the gradualisation.
+The construction reveals a deep tension: *univalence* (see _Homotopy Type Theory_) and *gradual guarantee* are *incompatible* in their natural strongest forms. GCIC must weaken one or the other. The chosen weakening (*propositional* gradual guarantee rather than definitional) has consequences for what proofs survive the gradualisation.
 
 == Soft Typing: The Predecessor
 
-(Cartwright–Fagan 1991) wrote down the first system in this family. *Soft typing* infers a type for *every* expression in an untyped Scheme program; the inferencer is non-rejecting — if it cannot find a satisfying type, it inserts a check and records a warning. The inferred types are *"set"-based*: each type variable ranges over a set of *concrete* types observed at the call sites. The algorithm performs *"set"-based analysis* (Heintze 1994) and dispatches on the smallest set consistent with the observed flow.
+(Cartwright–Fagan 1991) wrote down the first system in this family. *Soft typing* infers a type for *every* expression in an untyped Scheme program; the inferencer is non-rejecting: if it cannot find a satisfying type, it inserts a check and records a warning. The inferred types are *"set"-based*: each type variable ranges over a set of *concrete* types observed at the call sites. The algorithm performs *"set"-based analysis* (Heintze 1994) and dispatches on the smallest set consistent with the observed flow.
 
 The descendants of soft typing are: *flow analysis* in dynamic languages (Shivers's CFA, Henglein's $tau$-trees), the inferencer in *DRuby* and *PyType*, and the *occurrence typing* of Typed Racket (Tobin-Hochstadt–Felleisen 2010), which narrows types inside conditional branches by *propagating predicates* through the syntax.
 
@@ -340,4 +340,4 @@ Three open problems remain prominent:
 
 Hybrid type checking is alive in *Liquid Haskell*, *F${star.op}$*, and *Dafny*: tools that combine SMT discharge of subtyping with run-time residual checks where needed. The dividing line between "gradual" and "hybrid" has blurred: both are points on a continuum where the type checker decides at compile time how much work to defer to run time, and the run time honours the deferred obligations.
 
-The grand bet of gradual typing — that programmers can migrate large codebases from untyped to typed incrementally — has been *partially* vindicated. The migration happens; the soundness costs have been the main obstacle; and the design space of how much soundness to insist upon is still being explored, three decades after the first soft-typing paper.
+The grand bet of gradual typing (that programmers can migrate large codebases from untyped to typed incrementally) has been *partially* vindicated. The migration happens; the soundness costs have been the main obstacle; and the design space of how much soundness to insist upon is still being explored, three decades after the first soft-typing paper.
