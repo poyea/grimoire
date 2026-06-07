@@ -51,6 +51,9 @@
 #include "programming-languages/regular-languages.typ"
 #pagebreak()
 
+#include "programming-languages/regular-languages-proofs.typ"
+#pagebreak()
+
 #include "programming-languages/context-free-languages.typ"
 #pagebreak()
 
@@ -58,6 +61,9 @@
 #pagebreak()
 
 #include "programming-languages/omega-automata.typ"
+#pagebreak()
+
+#include "programming-languages/omega-automata-constructions.typ"
 #pagebreak()
 
 #include "programming-languages/infinite-trees-and-games.typ"
@@ -110,16 +116,28 @@
 #include "programming-languages/simply-typed-lambda.typ"
 #pagebreak()
 
+#include "programming-languages/simply-typed-lambda-extensions.typ"
+#pagebreak()
+
 #include "programming-languages/system-f-and-parametricity.typ"
 #pagebreak()
 
+#include "programming-languages/system-f-categorical-models.typ"
+#pagebreak()
+
 #include "programming-languages/dependent-types.typ"
+#pagebreak()
+
+#include "programming-languages/dependent-types-proof-engineering.typ"
 #pagebreak()
 
 #include "programming-languages/linear-and-substructural.typ"
 #pagebreak()
 
 #include "programming-languages/effects-and-handlers.typ"
+#pagebreak()
+
+#include "programming-languages/effects-handlers-implementation.typ"
 #pagebreak()
 
 #include "programming-languages/subtyping-and-polymorphism.typ"
@@ -136,6 +154,9 @@
 // ============================================================================
 
 #include "programming-languages/macros-and-metaprogramming.typ"
+#pagebreak()
+
+#include "programming-languages/macros-metaprogramming-formalism.typ"
 #pagebreak()
 
 #include "programming-languages/process-calculi.typ"
