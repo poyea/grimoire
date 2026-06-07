@@ -12,7 +12,7 @@ chapters:
     slug: cost-engineering
     path: cloud-and-infrastructure/cost-engineering.typ
     lines: 256
-    status: draft
+    status: reviewed
   - subject: cloud-and-infrastructure
     slug: iaas-fundamentals
     path: cloud-and-infrastructure/iaas-fundamentals.typ
@@ -32,7 +32,7 @@ chapters:
     slug: multi-tenancy
     path: cloud-and-infrastructure/multi-tenancy.typ
     lines: 365
-    status: draft
+    status: reviewed
   - subject: cloud-and-infrastructure
     slug: serverless
     path: cloud-and-infrastructure/serverless.typ
@@ -157,7 +157,7 @@ chapters:
     slug: problem-solving
     path: coding/problem-solving.typ
     lines: 127
-    status: draft
+    status: reviewed
   - subject: coding
     slug: randomized-algorithms
     path: coding/randomized-algorithms.typ
@@ -387,7 +387,7 @@ chapters:
     slug: columnar-storage-and-vectorization
     path: database/columnar-storage-and-vectorization.typ
     lines: 310
-    status: draft
+    status: reviewed
   - subject: database
     slug: concurrency-control
     path: database/concurrency-control.typ
@@ -452,7 +452,7 @@ chapters:
     slug: oltp-vs-olap
     path: database/oltp-vs-olap.typ
     lines: 247
-    status: draft
+    status: reviewed
   - subject: database
     slug: partitioning-and-elasticity
     path: database/partitioning-and-elasticity.typ
@@ -477,7 +477,7 @@ chapters:
     slug: query-processing
     path: database/query-processing.typ
     lines: 420
-    status: draft
+    status: reviewed
   - subject: database
     slug: recovery-and-logging
     path: database/recovery-and-logging.typ
@@ -557,7 +557,7 @@ chapters:
     slug: log-based-systems
     path: distributed-systems/log-based-systems.typ
     lines: 218
-    status: draft
+    status: reviewed
   - subject: distributed-systems
     slug: time-and-order
     path: distributed-systems/time-and-order.typ
@@ -572,7 +572,7 @@ chapters:
     slug: workflow-engines
     path: distributed-systems/workflow-engines.typ
     lines: 288
-    status: draft
+    status: reviewed
   - subject: embedded-and-realtime
     slug: mcus-and-soc
     path: embedded-and-realtime/mcus-and-soc.typ
@@ -942,7 +942,7 @@ chapters:
     slug: application-protocols
     path: networking/application-protocols.typ
     lines: 122
-    status: draft
+    status: reviewed
   - subject: networking
     slug: bgp-routing
     path: networking/bgp-routing.typ
@@ -1047,7 +1047,7 @@ chapters:
     slug: performance-reference
     path: networking/performance-reference.typ
     lines: 139
-    status: draft
+    status: reviewed
   - subject: networking
     slug: programmable-data-planes
     path: networking/programmable-data-planes.typ
@@ -1157,17 +1157,17 @@ chapters:
     slug: memory-management
     path: operating-systems/memory-management.typ
     lines: 194
-    status: draft
+    status: reviewed
   - subject: operating-systems
     slug: processes-and-threads
     path: operating-systems/processes-and-threads.typ
     lines: 171
-    status: draft
+    status: reviewed
   - subject: operating-systems
     slug: scheduling-theory
     path: operating-systems/scheduling-theory.typ
     lines: 121
-    status: draft
+    status: reviewed
   - subject: operating-systems
     slug: security-models
     path: operating-systems/security-models.typ
