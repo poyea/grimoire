@@ -35,4 +35,10 @@
   #include "distributed-systems/transactions.typ"
   #pagebreak()
 
+  #include "distributed-systems/log-based-systems.typ"
+  #pagebreak()
+
+  #include "distributed-systems/workflow-engines.typ"
+  #pagebreak()
+
 ]
