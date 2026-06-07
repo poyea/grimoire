@@ -2,7 +2,7 @@
 
 $"ETL"$ (extract, transform, load) and $"ELT"$ (extract, load, transform) describe where transformation runs. In the warehouse era of the 1990s and 2000s, compute on the target system was scarce and transformation happened in a separate engine (Informatica, Talend) before loading curated rows. The cloud warehouse and lakehouse era inverted that economics: storage is cheap, compute is elastic, and $"SQL"$ engines (BigQuery, Snowflake, Databricks, Trino) can run transformations on raw data at scale.
 
-*See also:* _Batch Processing_ (the engines that run the transforms), _Lakehouse Engineering_ (the storage layer that made $"ELT"$ cheap), _Orchestration_ (how the steps are scheduled), `database/oltp-vs-olap.typ`.
+*See also:* _Batch Processing_ (the engines that run the transforms), _Lakehouse Engineering_ (the storage layer that made $"ELT"$ cheap), _Orchestration_ (how the steps are scheduled), _OLTP vs OLAP_ (database framing).
 
 == A Concrete Distinction
 

@@ -2,7 +2,7 @@
 
 Batch processing is the workhorse of analytics: read a large bounded dataset, transform it through a $"DAG"$ of operators, write the result. The lineage runs MapReduce (2004) → Hive → Spark → Photon-class vectorized engines. This chapter covers Spark internals — Catalyst, Tungsten, Adaptive Query Execution ($"AQE"$), the shuffle, and the vectorized successors — because Spark remains the dominant engine for petabyte-scale jobs.
 
-*See also:* _ETL vs ELT_, _Lakehouse Engineering_ (the storage layer Spark reads), _Orchestration_ (how batch jobs are scheduled), `database/query-processing.typ`, `database/columnar-storage-and-vectorization.typ`.
+*See also:* _ETL vs ELT_, _Lakehouse Engineering_ (the storage layer Spark reads), _Orchestration_ (how batch jobs are scheduled), _Query Processing_ (database framing), _Columnar Storage and Vectorization_ (database framing).
 
 == The MapReduce Heritage
 

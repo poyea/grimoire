@@ -2,7 +2,7 @@
 
 An orchestrator schedules and supervises the $"DAG"$ of jobs that move and transform data. The classical concern is "run this Spark job at 02:00, then this dbt job, then this load." Modern systems extend that with backfill management, asset awareness, durable execution, and event-driven triggers. The four major schools are Airflow (task-centric), Dagster (asset-centric), Prefect (Python-first dynamic), and Temporal (durable workflows).
 
-*See also:* _ETL vs ELT_ (what the orchestrator runs), _Batch Processing_, _Streaming_ (for hybrid event $+$ batch flows), `distributed-systems/workflow-engines.typ`.
+*See also:* _ETL vs ELT_ (what the orchestrator runs), _Batch Processing_, _Streaming_ (for hybrid event $+$ batch flows), _Workflow Engines_ (distributed-systems framing).
 
 == What an Orchestrator Provides
 
