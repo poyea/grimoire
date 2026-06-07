@@ -86,9 +86,17 @@ Co-scheduling (gang scheduling) is required for parallel applications whose thre
 
 == Energy and Heterogeneous Schedulers
 
-Big.LITTLE / Intel hybrid CPUs add the *which-core* question on top of *which-task*. *DVFS* (Dynamic Voltage and Frequency Scaling) trades performance for energy; the OS exposes governors (`ondemand`, `schedutil`) that bias toward energy-proportional execution.
+Big.LITTLE / Intel hybrid CPUs add the *which-core* question on top of *which-task*. *DVFS* (Dynamic Voltage and Frequency Scaling) trades performance for energy quadratically — halving voltage cuts dynamic power by ~4× at the expense of lower frequency. The OS exposes frequency governors (`ondemand`, `conservative`, `schedutil`) that adjust P-states based on utilization signals.
 
-Linux's *EAS* (Energy-Aware Scheduling) and Apple's GCD QoS classes both annotate threads with intent (foreground, background) and use a CPU energy model — predicted joules per task for placement decisions — to migrate work to small cores when latency budgets allow.
+Linux's *EAS* (Energy-Aware Scheduling) extends the CFS load-balancer with an *energy model*: a per-CPU table mapping OPP (Operating Performance Point) to capacity and power draw (milliwatts). When deciding whether to migrate a task from a small core to a big core, the scheduler queries the model — "will this save energy net of the migration cost?" — and prefers the placement with the lower predicted joule/op ratio. EAS is activated only on asymmetric topologies with a registered energy model; on symmetric SMP systems CFS's load-based balancer remains in effect.
+
+Apple's Grand Central Dispatch *QoS classes* (`userInteractive`, `userInitiated`, `utility`, `background`) map directly to the P-core / E-core placement policy on Apple Silicon: background tasks run exclusively on E-cores unless CPU pressure forces promotion. The scheduler tracks *thermal headroom* from the System Management Controller (SMC) and throttles P-core boosts before the die temperature reaches a limit.
+
+*Scheduling on heterogeneous CPUs raises three distinct problems:*
+
+1. *Capacity asymmetry.* A runnable task on an E-core may complete at half the IPC of a P-core. The scheduler must express load as a normalized fraction of each core's capacity, not raw PELT utilization. Linux uses `arch_scale_cpu_capacity` to normalize.
+2. *Cache topology.* P-cores and E-cores may share an LLC or have separate caches. Task migration between clusters forces a cache refill; EAS accounts for this via the `migration_cost` term.
+3. *Thermal and power limits (TDP burst).* Modern CPUs can exceed their rated TDP for short bursts (Intel Turbo Boost, AMD Precision Boost). The scheduler cannot directly control TDP; it interacts with the platform via RAPL (Running Average Power Limit) counters and the cpufreq layer.
 
 == Pitfalls
 
