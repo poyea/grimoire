@@ -253,7 +253,7 @@ The FFN runs independently on each token. ~2/3 of total parameters.
 
 === SwiGLU (LLaMA, PaLM, Gemma — standard in 2024)
 
-$ "SwiGLU"(x) = W_"down" dot ("SiLU"(W_"gate" x) times.circle W_"up" x) $
+$ "SwiGLU"(x) = W_"down" dot ("SiLU"(W_"gate" x) times.o W_"up" x) $
 
 Three weight matrices; $d_"ff" approx 8/3 dot d_"model"$ (rounded to multiple of 256).
 

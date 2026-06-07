@@ -38,6 +38,9 @@
 #include "llm/pretraining.typ"
 #pagebreak()
 
+#include "llm/pretraining-infrastructure.typ"
+#pagebreak()
+
 #include "llm/mixture-of-experts.typ"
 #pagebreak()
 
@@ -69,6 +72,9 @@
 #pagebreak()
 
 #include "llm/inference-optimization.typ"
+#pagebreak()
+
+#include "llm/inference-serving.typ"
 #pagebreak()
 
 #include "llm/quantization.typ"
