@@ -1,14 +1,14 @@
 = Security Modules
 
-Linux's DAC (discretionary access control: uid/gid + mode bits) is necessary but insufficient — a compromised process running as `root` ignores it, a vulnerable service running as a user can still touch everything that user owns, and there is no fine-grained mediation of network, IPC, or capability operations. The *Linux Security Module* (LSM) framework, added in 2.6 to host SELinux, is the kernel's hook architecture for stacking *mandatory* access control on top of DAC. Today it hosts SELinux, AppArmor, Landlock, SMACK, TOMOYO, Yama, the integrity modules (IMA/EVM), and the modern programmable plug-in *BPF LSM*.
+Linux's DAC (discretionary access control: uid/gid + mode bits) is necessary but insufficient: a compromised process running as `root` ignores it, a vulnerable service running as a user can still touch everything that user owns, and there is no fine-grained mediation of network, IPC, or capability operations. The *Linux Security Module* (LSM) framework, added in 2.6 to host SELinux, is the kernel's hook architecture for stacking *mandatory* access control on top of DAC. Today it hosts SELinux, AppArmor, Landlock, SMACK, TOMOYO, Yama, the integrity modules (IMA/EVM), and the modern programmable plug-in *BPF LSM*.
 
-This chapter walks the LSM hook architecture, then surveys the major modules and their use models, and ends with seccomp-bpf — the syscall-level filter that is technically not an LSM but lives in the same security mental model.
+This chapter walks the LSM hook architecture, then surveys the major modules and their use models, and ends with seccomp-bpf, the syscall-level filter that is technically not an LSM but lives in the same security mental model.
 
 == The LSM Hook Architecture
 
 LSM hooks (`include/linux/lsm_hook_defs.h`, ~250 hooks as of 6.x) are call-out points scattered through every security-relevant kernel path: `file_open`, `inode_permission`, `bprm_check_security`, `socket_connect`, `task_kill`, `ptrace_access_check`, ...
 
-Each enabled LSM registers callbacks for the hooks it cares about. The framework calls them in registration order; if any returns a non-zero (negative errno) verdict, the operation is denied. Hooks are designed to *short-circuit on deny* — a module that doesn't care simply returns 0.
+Each enabled LSM registers callbacks for the hooks it cares about. The framework calls them in registration order; if any returns a non-zero (negative errno) verdict, the operation is denied. Hooks are designed to *short-circuit on deny*; a module that doesn't care simply returns 0.
 
 ```c
 // kernel/cred.c (excerpt)
@@ -19,11 +19,11 @@ int task_kill(struct task_struct *p, struct kernel_siginfo *info,
 }
 ```
 
-LSM stacking — multiple modules active simultaneously — was a long-running project; today the major modules (SELinux + AppArmor + BPF LSM + Landlock + Yama) can all be loaded together via `CONFIG_LSM=` and the `lsm=` boot parameter.
+LSM stacking (multiple modules active simultaneously) was a long-running project; today the major modules (SELinux + AppArmor + BPF LSM + Landlock + Yama) can all be loaded together via `CONFIG_LSM=` and the `lsm=` boot parameter.
 
 == SELinux
 
-SELinux (NSA-origin, mainlined 2.6) is the most comprehensive MAC implementation in Linux. It labels every subject (process) and object (file, socket, IPC) with a *security context* — `user:role:type:level` — and decides access based on a policy that allows specific `type` pairs to perform specific permissions.
+SELinux (NSA-origin, mainlined 2.6) is the most comprehensive MAC implementation in Linux. It labels every subject (process) and object (file, socket, IPC) with a *security context* (`user:role:type:level`) and decides access based on a policy that allows specific `type` pairs to perform specific permissions.
 
 ```
 unconfined_u:unconfined_r:unconfined_t:s0
@@ -38,10 +38,10 @@ allow httpd_t http_port_t        : tcp_socket name_bind;
 type_transition httpd_t tmp_t : file httpd_tmp_t;
 ```
 
-The reference policy (used by RHEL/Fedora) ships ~10k types and ~100k rules — exhaustive coverage of every system daemon. Per-distribution tooling (`audit2allow`, `semanage`, `seinfo`) makes editing manageable. Modes:
+The reference policy (used by RHEL/Fedora) ships ~10k types and ~100k rules, providing exhaustive coverage of every system daemon. Per-distribution tooling (`audit2allow`, `semanage`, `seinfo`) makes editing manageable. Modes:
 
 - *Enforcing*: deny on violation; write AVC denial to audit.
-- *Permissive*: log but allow — the development/debug mode.
+- *Permissive*: log but allow (the development/debug mode).
 - *Disabled*: hooks not consulted.
 
 SELinux's strengths: complete coverage, mature policy ecosystem, MLS (multi-level security) support. Its weakness: complexity. Many sysadmins still `setenforce 0`, which is regrettable: AVC denials are almost always either a real misconfiguration to fix or a missing policy rule a one-liner can add.
@@ -104,7 +104,7 @@ Yama is a tiny LSM with one job: restrict `ptrace`. `kernel.yama.ptrace_scope` s
 
 ```
 0 = classic ptrace permissions
-1 = only descendants (default on Ubuntu) — gdb-attach requires sudo or yama.ptrace_scope=0 in unprivileged container
+1 = only descendants (default on Ubuntu); gdb-attach requires sudo or yama.ptrace_scope=0 in unprivileged container
 2 = admin-only
 3 = no ptrace at all (irrevocable until reboot)
 ```
@@ -145,7 +145,7 @@ int BPF_PROG(audit_open, struct file *file)
 
 BPF LSM is the modern programmable extension: ship runtime-loaded policy without a kernel module, iterate quickly, integrate with the BPF observability ecosystem (ringbuf events, maps for policy state). Falco, Tetragon (Cilium), and Tracee all use it. Sleepable BPF (see _eBPF Deep Dive_) unlocks helpers like `bpf_d_path` and `bpf_copy_from_user` inside LSM hooks.
 
-BPF LSM does not replace SELinux/AppArmor — those provide the comprehensive baseline; BPF LSM adds targeted runtime detection and policy.
+BPF LSM does not replace SELinux/AppArmor; those provide the comprehensive baseline, while BPF LSM adds targeted runtime detection and policy.
 
 == seccomp-bpf
 
@@ -172,7 +172,7 @@ prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
 syscall(SYS_seccomp, SECCOMP_SET_MODE_FILTER, 0, &prog);
 ```
 
-`PR_SET_NO_NEW_PRIVS` is mandatory — without it a setuid binary could escape the filter via execve. Filters compose: a process can install multiple; all are consulted; the most restrictive verdict wins.
+`PR_SET_NO_NEW_PRIVS` is mandatory; without it a setuid binary could escape the filter via execve. Filters compose: a process can install multiple; all are consulted; the most restrictive verdict wins.
 
 Container runtimes (Docker, containerd, podman) ship default seccomp profiles allowlisting ~330 syscalls; Kubernetes pod security uses `RuntimeDefault` profile or operator-defined ones in `/var/lib/kubelet/seccomp/`.
 
@@ -184,7 +184,7 @@ Linux split root's omnipotence into ~40 *capabilities* (`man capabilities(7)`): 
 
 A process has four capability sets: *Permitted*, *Effective*, *Inheritable*, *Ambient*, plus a *Bounding* mask. `setcap cap_net_bind_service+ep /usr/sbin/nginx` lets nginx bind to port 80 without running as root.
 
-The pathological capability is `CAP_SYS_ADMIN` — about 30% of all capability checks reference it. Stripping it is a strong sandbox; granting it to a container effectively grants root.
+The pathological capability is `CAP_SYS_ADMIN`: about 30% of all capability checks reference it. Stripping it is a strong sandbox; granting it to a container effectively grants root.
 
 `CAP_BPF` (split from CAP_SYS_ADMIN in 5.8) lets eBPF tools run without full admin. `CAP_PERFMON` is the parallel split for `perf`.
 

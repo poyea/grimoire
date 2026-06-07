@@ -1,6 +1,6 @@
 = Containers in the Kernel
 
-A "container" is a userspace fiction. The kernel knows only namespaces, cgroups, capabilities, seccomp filters, LSM labels, and bind mounts; Docker, podman, containerd, runc, and the Kubernetes kubelet are orchestrators that assemble these primitives into a coherent isolation unit. Understanding what the kernel actually does — and especially the user-namespace pitfalls and root/unprivileged trade-offs — is essential to running containers safely.
+A "container" is a userspace fiction. The kernel knows only namespaces, cgroups, capabilities, seccomp filters, LSM labels, and bind mounts; Docker, podman, containerd, runc, and the Kubernetes kubelet are orchestrators that assemble these primitives into a coherent isolation unit. Understanding what the kernel actually does (especially the user-namespace pitfalls and root/unprivileged trade-offs) is essential to running containers safely.
 
 _Cgroups and Namespaces_ introduced the namespace types at the API level. This chapter goes deeper: how each namespace virtualizes its resource, the user-namespace security model and its pitfalls, the syscalls runtimes actually issue, and the kernel paths a container runtime traverses on every `docker run`.
 
@@ -14,7 +14,7 @@ _Cgroups and Namespaces_ introduced the namespace types at the API level. This c
   [`CLONE_NEWUTS`], [UTS namespace. `hostname`, `domainname`.],
   [`CLONE_NEWUSER`], [User namespace. Per-namespace uid/gid maps; the cornerstone of unprivileged containers.],
   [`CLONE_NEWCGROUP`], [Cgroup namespace. Virtualizes the view of `/proc/self/cgroup` and `/sys/fs/cgroup`.],
-  [`CLONE_NEWTIME`], [Time namespace (5.6+). Per-namespace `CLOCK_MONOTONIC` and `CLOCK_BOOTTIME` offsets — used for checkpoint/restore.],
+  [`CLONE_NEWTIME`], [Time namespace (5.6+). Per-namespace `CLOCK_MONOTONIC` and `CLOCK_BOOTTIME` offsets, used for checkpoint/restore.],
 )
 
 `clone3` is the modern syscall (replacing `clone` for new flags) and takes a `struct clone_args` with `flags` (`CLONE_NEW*` bitmask) and a `cgroup` fd. `unshare(2)` creates new namespaces for the current process; `setns(2)` joins an existing one (via an open fd into `/proc/PID/ns/<type>`).
@@ -37,17 +37,17 @@ if (pid == 0) {
 
 A *common bug*: applications that previously ran as PID 9000 with proper signal handlers suddenly become PID 1 in a container, and the kernel's signal-blocking-for-init rule means SIGTERM is silently dropped. The fix is either a proper init (`tini`, `dumb-init`, `s6-svscan`) or explicit signal handlers in the application.
 
-`/proc` only shows processes in the current PID namespace, but PID namespaces nest — PID 1 in a child namespace also has a translated PID visible from the parent. Inspecting from outside: `readlink /proc/PID/ns/pid`.
+`/proc` only shows processes in the current PID namespace, but PID namespaces nest: PID 1 in a child namespace also has a translated PID visible from the parent. Inspecting from outside: `readlink /proc/PID/ns/pid`.
 
 == Mount Namespace and pivot_root
 
-A new mount namespace inherits the parent's mounts at creation; subsequent mount changes are private (depending on the mount's *propagation* type: `private`, `shared`, `slave`, `unbindable` — see `Documentation/filesystems/sharedsubtree.rst`).
+A new mount namespace inherits the parent's mounts at creation; subsequent mount changes are private (depending on the mount's *propagation* type: `private`, `shared`, `slave`, `unbindable`; see `Documentation/filesystems/sharedsubtree.rst`).
 
 The container rootfs construction:
 
 ```c
 unshare(CLONE_NEWNS);
-// Make every existing mount private — host won't see our changes
+// Make every existing mount private; host won't see our changes
 mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL);
 
 // Bind-mount the container rootfs at /tmp/new_root
@@ -88,7 +88,7 @@ ip netns exec foo ip route add default via 172.17.0.1
 
 The host runs SNAT (`iptables -t nat -A POSTROUTING -s 172.17.0.0/16 -j MASQUERADE`) for outbound, optional DNAT for ingress. Modern CNI plugins (Cilium, Calico) skip iptables entirely and use eBPF at TC/XDP for the data plane.
 
-Each netns has independent sockets — even loopback. `ip netns exec` is shorthand for `setns(netns_fd, CLONE_NEWNET)` then `execve`.
+Each netns has independent sockets (even loopback). `ip netns exec` is shorthand for `setns(netns_fd, CLONE_NEWNET)` then `execve`.
 
 == User Namespace: The Cornerstone of Unprivileged
 
@@ -121,11 +121,11 @@ User namespaces are powerful and have been the source of a steady CVE stream (CV
 
 - *setuid binaries inside user namespaces are dangerous.* The `setuid` bit transitions to a uid that might map to host uid 0. Modern kernels ignore setuid bits in non-init user namespaces (`MS_NOSUID` implicit) but some filesystems and corner cases have historically slipped through.
 
-- *Host filesystems mounted into containers* with `nosuid,nodev` are essential — without them, a malicious image can ship a setuid root binary.
+- *Host filesystems mounted into containers* with `nosuid,nodev` are essential; without them, a malicious image can ship a setuid root binary.
 
 - *Mapping the host's root into a container* (`uid_map: 0 0 65536`) defeats the protection entirely; the container's root is *host's* root.
 
-- *id-mapped mounts* (5.12+) let a single host mount appear with a uid/gid translation per-mountpoint — solving the "the image was tarred with uid 0, I want to run as uid 1000 inside" problem without `chown`-ing the bind mount.
+- *id-mapped mounts* (5.12+) let a single host mount appear with a uid/gid translation per-mountpoint, solving the "the image was tarred with uid 0, I want to run as uid 1000 inside" problem without `chown`-ing the bind mount.
 
 - *capabilities inside user namespaces* apply to objects *owned by the namespace* (and child namespaces' objects). A capability-laden inner root cannot touch host objects.
 
@@ -135,11 +135,11 @@ Container runtimes drop most capabilities by default. The typical Docker default
 
 `CAP_CHOWN, CAP_DAC_OVERRIDE, CAP_FSETID, CAP_FOWNER, CAP_MKNOD, CAP_NET_RAW, CAP_SETGID, CAP_SETUID, CAP_SETFCAP, CAP_SETPCAP, CAP_NET_BIND_SERVICE, CAP_SYS_CHROOT, CAP_KILL, CAP_AUDIT_WRITE`
 
-Things to drop further for hardening: `CAP_NET_RAW` (raw sockets — TCP/IP spoofing), `CAP_SYS_CHROOT` (escape via chroot tricks if you have a backup plan).
+Things to drop further for hardening: `CAP_NET_RAW` (raw sockets, enabling TCP/IP spoofing), `CAP_SYS_CHROOT` (escape via chroot tricks if you have a backup plan).
 
 Things never to grant unless absolutely necessary: `CAP_SYS_ADMIN` (the "almost root" capability), `CAP_SYS_PTRACE`, `CAP_SYS_MODULE`, `CAP_NET_ADMIN`.
 
-`--privileged` containers grant *all* capabilities plus device access plus the docker daemon's seccomp profile is disabled — effectively root on the host. Reserve for kernel development VMs.
+`--privileged` containers grant *all* capabilities plus device access; the docker daemon's seccomp profile is also disabled, making this effectively root on the host. Reserve for kernel development VMs.
 
 == seccomp Profile
 
@@ -157,14 +157,14 @@ See _Security Modules_ for seccomp internals.
 
 == cgroups in the Container
 
-`memory.max`, `cpu.max`, `pids.max`, `io.max`, `cpuset.cpus`, `cpuset.mems` — the basic resource caps. Beyond that, runtimes typically set:
+`memory.max`, `cpu.max`, `pids.max`, `io.max`, `cpuset.cpus`, `cpuset.mems` are the basic resource caps. Beyond that, runtimes typically set:
 
 - `memory.swap.max=0` to disable swap in the container.
 - `memory.oom.group=1` so OOM kills the whole cgroup atomically (avoids partial kill leaving zombie services).
 - `pids.max` to prevent fork bombs.
 - `devices.deny`/`allow` rules to gate `/dev/*` access.
 
-cgroup namespaces (`CLONE_NEWCGROUP`) make `/proc/self/cgroup` and `/sys/fs/cgroup` show paths *relative* to the container's cgroup root — so the container sees `/` instead of `/system.slice/docker-abc.scope`.
+cgroup namespaces (`CLONE_NEWCGROUP`) make `/proc/self/cgroup` and `/sys/fs/cgroup` show paths *relative* to the container's cgroup root, so the container sees `/` instead of `/system.slice/docker-abc.scope`.
 
 == Container Lifecycle: What runc Actually Does
 
@@ -184,9 +184,9 @@ The runtime keeps an *init* process holding open the namespace fds; `runc exec` 
 
 == Checkpoint/Restore (CRIU)
 
-CRIU (Checkpoint/Restore In Userspace) walks `/proc/PID/*` to snapshot the entire process tree — memory maps, open fds, sockets, signal state, namespaces — and serializes to image files. Restore re-creates the namespaces, restores memory via `process_vm_writev` and `mmap` + ptrace, reopens fds (using filesystem state), restores TCP connections (via `repair` mode that lets you set sequence numbers and the kernel believes it).
+CRIU (Checkpoint/Restore In Userspace) walks `/proc/PID/*` to snapshot the entire process tree (memory maps, open fds, sockets, signal state, namespaces) and serializes to image files. Restore re-creates the namespaces, restores memory via `process_vm_writev` and `mmap` + ptrace, reopens fds (using filesystem state), restores TCP connections (via `repair` mode that lets you set sequence numbers and the kernel believes it).
 
-Time namespace was added partly for CRIU — without per-namespace `CLOCK_MONOTONIC` offsets, a restored process's monotonic clock would jump backward.
+Time namespace was added partly for CRIU; without per-namespace `CLOCK_MONOTONIC` offsets, a restored process's monotonic clock would jump backward.
 
 CRIU underlies the "live migration" of LXC containers, Kubernetes pod migration prototypes, and some serverless cold-start optimizations.
 
@@ -195,7 +195,7 @@ CRIU underlies the "live migration" of LXC containers, Kubernetes pod migration 
 The state of the art for unprivileged containers (podman, buildah, rootless Docker):
 
 - One unprivileged user namespace per container (`newuidmap` allocates from `/etc/subuid`).
-- `slirp4netns` or `pasta` for networking (userspace TCP/IP stack — no veth pair needs root).
+- `slirp4netns` or `pasta` for networking (userspace TCP/IP stack; no veth pair needs root).
 - `fuse-overlayfs` (or kernel overlayfs since 5.11 with `userxattr` mount option) for layered rootfs without root.
 - cgroup v2 with delegation (`Delegate=yes` in the user's systemd slice) so the user owns a sub-tree.
 

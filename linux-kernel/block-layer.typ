@@ -1,8 +1,8 @@
 = The Block Layer
 
-Beneath every filesystem read and every `O_DIRECT` write sits the block layer — the kernel subsystem that batches, reorders, and dispatches I/O to storage devices. It is the home of `struct bio`, request queues, the multi-queue scheduling framework (blk-mq), and the I/O schedulers (`none`, `mq-deadline`, `bfq`, `kyber`). Its job is to bridge the gap between filesystem-level "write this folio" intent and device-level "issue this NVMe command on submission queue 7" mechanics.
+Beneath every filesystem read and every `O_DIRECT` write sits the block layer: the kernel subsystem that batches, reorders, and dispatches I/O to storage devices. It is the home of `struct bio`, request queues, the multi-queue scheduling framework (blk-mq), and the I/O schedulers (`none`, `mq-deadline`, `bfq`, `kyber`). Its job is to bridge the gap between filesystem-level "write this folio" intent and device-level "issue this NVMe command on submission queue 7" mechanics.
 
-The block layer's design has been re-thought twice. The original single-queue `request_queue` (with `elevator_*` schedulers) was built around rotational disks and a single dispatch lock. blk-mq, merged in 3.13 (2014) and made the only path by 5.0 (2019), replaced it with per-CPU software queues and per-device hardware queues — the only viable shape for NVMe devices that expect millions of IOPS.
+The block layer's design has been re-thought twice. The original single-queue `request_queue` (with `elevator_*` schedulers) was built around rotational disks and a single dispatch lock. blk-mq, merged in 3.13 (2014) and made the only path by 5.0 (2019), replaced it with per-CPU software queues and per-device hardware queues, the only viable shape for NVMe devices that expect millions of IOPS.
 
 == struct bio: The Atom of I/O
 
@@ -47,7 +47,7 @@ bio->bi_private = ctx;
 submit_bio(bio);
 ```
 
-The `GFP_NOIO` allocation flag forbids recursion back into I/O — essential, because we are *in* the I/O path; a regular `GFP_KERNEL` allocation could trigger reclaim that itself wants to issue writes, deadlocking. The same logic motivates `PF_MEMALLOC` and the bio mempool.
+The `GFP_NOIO` allocation flag forbids recursion back into I/O; this is essential because we are *in* the I/O path; a regular `GFP_KERNEL` allocation could trigger reclaim that itself wants to issue writes, deadlocking. The same logic motivates `PF_MEMALLOC` and the bio mempool.
 
 == Request Queues and blk-mq
 
@@ -56,7 +56,7 @@ A `request_queue` is the per-block-device dispatch structure. Under blk-mq it co
 - *Software queues* (`blk_mq_ctx`): one per CPU. Submissions go here first, so the per-CPU lock is uncontended on the hot path.
 - *Hardware queues* (`blk_mq_hw_ctx`): one per device hardware submission queue (an NVMe drive may expose 16, 64, or more). A mapping table assigns CPUs to hctx based on NUMA locality and IRQ affinity.
 
-A request (`struct request`) is the merged unit dispatched to the driver — it wraps one or more contiguous bios. Adjacent bios can be merged before dispatch (same device, adjacent LBAs, compatible flags) to amortize per-request overhead. The merge logic lives in `block/blk-merge.c`.
+A request (`struct request`) is the merged unit dispatched to the driver; it wraps one or more contiguous bios. Adjacent bios can be merged before dispatch (same device, adjacent LBAs, compatible flags) to amortize per-request overhead. The merge logic lives in `block/blk-merge.c`.
 
 ```c
 // Driver-side: register the per-device ops
@@ -77,7 +77,7 @@ static const struct blk_mq_ops my_mq_ops = {
 Per hardware queue, a scheduler decides which request goes next. Configured via `/sys/block/<dev>/queue/scheduler`:
 
 #table(columns: (auto, 1fr),
-  [`none`], [No reordering. The default for NVMe — the device's own queues, plus its internal scheduling, already do the work; an extra layer just adds latency.],
+  [`none`], [No reordering. The default for NVMe; the device's own queues and internal scheduling already do the work, so an extra layer just adds latency.],
   [`mq-deadline`], [Two FIFOs per direction (read/write) plus a sorted dispatch tree. Each request has a deadline; if a deadline expires, dispatch that request next regardless of position. The pragmatic choice for SATA SSDs and HDDs where preventing starvation matters.],
   [`bfq`], [Budget Fair Queueing. Per-process I/O queues with weights and budgets; designed for interactive desktop workloads where a `dd` shouldn't make the browser unresponsive. Higher CPU cost; rarely used on servers.],
   [`kyber`], [Token-bucket style: aims for fixed latency targets (`read_lat_nsec`, `write_lat_nsec`) by throttling submissions when measured latency exceeds them. Lighter than BFQ; sometimes used on NVMe when fairness *and* low latency matter.],
@@ -91,10 +91,10 @@ NVMe is the modern fast path. The driver (`drivers/nvme/host/`) maps each reques
 
 Key NVMe features the block layer plumbs:
 
-- *Multiple queues* — typically `min(nr_cpus, device_max_queues)`. Each queue gets its own MSI-X vector and per-CPU IRQ affinity.
+- *Multiple queues*: typically `min(nr_cpus, device_max_queues)`. Each queue gets its own MSI-X vector and per-CPU IRQ affinity.
 - *Polling* (`hipri` / `REQ_POLLED`) — for ultra-low-latency reads, skip interrupts entirely. io_uring's `IORING_SETUP_IOPOLL` rides this. The driver's `.poll` op checks the CQ; `blk_poll` is called by the consumer in a tight loop.
 - *Atomic writes* (NVMe 1.4+) — sector-aligned writes that the device guarantees are torn-free; databases use this to skip double-write buffers.
-- *Streams* — hints for write classification, surfaced via `WRITE_HINT_*` and `RWH_WRITE_LIFE_*` (since 4.13).
+- *Streams*: hints for write classification, surfaced via `WRITE_HINT_*` and `RWH_WRITE_LIFE_*` (since 4.13).
 - *Zoned namespaces* (ZNS) — sequential-write-required zones; the block layer's zoned support (`blk_zoned.c`) tracks zone state and exposes `report_zones`/`reset_zone`/`finish_zone`/`open_zone` operations.
 
 The kernel can issue ~1.5 M IOPS per core to a Gen4 NVMe with io_uring + `none` scheduler + registered files/buffers. The bottleneck moves to PCIe and the device's own controller, not the kernel.
@@ -198,7 +198,7 @@ echo 1024 > /sys/block/nvme0n1/queue/nr_requests
 # Disable I/O accounting (saves cycles in hot loops)
 echo 0 > /sys/block/nvme0n1/queue/iostats
 
-# Add-randomness (entropy harvesting from completions — usually disable on SSD)
+# Add-randomness (entropy harvesting from completions; usually disable on SSD)
 echo 0 > /sys/block/nvme0n1/queue/add_random
 
 # Optimal IO size hint (used by mkfs to align)
@@ -214,13 +214,13 @@ Read-ahead is double-edged: too low hurts sequential reads; too high pollutes th
 
 Kernel docs: `Documentation/block/`, especially `blk-mq.rst`, `queue-sysfs.rst`, `writeback_cache_control.rst`, `blktrace.rst`.
 
-Axboe, J. (2013). _Multi-Queue Block I/O_ — the original blk-mq design discussion.
+Axboe, J. (2013). _Multi-Queue Block I/O_. The original blk-mq design discussion.
 
 Bjørling, M. et al. (2013). _Linux Block IO: Introducing Multi-queue SSD Access on Multi-core Systems_, SYSTOR.
 
 Bjørling, M. et al. (2021). _ZNS: Avoiding the Block Interface Tax for Flash-based SSDs_, USENIX ATC.
 
-NVMe Base Spec — #link("https://nvmexpress.org/specifications/")[nvmexpress.org].
+NVMe Base Spec: #link("https://nvmexpress.org/specifications/")[nvmexpress.org].
 
 LWN: "An introduction to blk-mq" (Corbet 2014); "ublk" series (2022-2023); "Zoned namespaces" (2020).
 

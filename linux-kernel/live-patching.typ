@@ -2,16 +2,16 @@
 
 Live patching applies critical kernel fixes (typically security CVEs) to a *running* kernel without reboot. The unit is a kernel module that redirects calls to a buggy function to a replacement implementation. Done right, the patched kernel is indistinguishable in behaviour from one booted with the fix; done wrong, you have racy in-flight callers running half-old half-new code. The Linux *livepatch* infrastructure (`kernel/livepatch/`, mainlined 4.0) and the userspace toolchains around it (kpatch from Red Hat, kGraft from SUSE now merged into livepatch, and Ksplice from Oracle out-of-tree) provide the engineering rigour.
 
-This is fleet-scale plumbing. A cloud operator with 100k hosts cannot reboot all of them for every CVE; livepatch lets them roll out a fix in minutes. The trade-off is severe constraints on what can be patched: bugs in interrupt handlers, scheduler internals, semantic changes to data layouts — all generally off-limits.
+This is fleet-scale plumbing. A cloud operator with 100k hosts cannot reboot all of them for every CVE; livepatch lets them roll out a fix in minutes. The trade-off is severe constraints on what can be patched: bugs in interrupt handlers, scheduler internals, semantic changes to data layouts: all generally off-limits.
 
 == The Problem in One Picture
 
 You discover `foo(x)` has a bug. You want every future call to invoke `foo_v2(x)` instead. Two things must be true at switchover:
 
 1. *Atomically*, future callers of `foo` invoke `foo_v2`.
-2. *No in-flight call to the old `foo`* remains on any CPU's stack — otherwise you'd half-execute the patch.
+2. *No in-flight call to the old `foo`* remains on any CPU's stack (otherwise you'd half-execute the patch).
 
-(1) is solved by ftrace's function-trampoline mechanism. (2) is solved by the *consistency model* — a per-task migration discipline that waits for every thread to leave any patched function before declaring the patch complete.
+(1) is solved by ftrace's function-trampoline mechanism. (2) is solved by the *consistency model*: a per-task migration discipline that waits for every thread to leave any patched function before declaring the patch complete.
 
 == ftrace Hooks: The Substrate
 
@@ -27,7 +27,7 @@ After ftrace hook:  foo:
                       ; for livepatch, redirects RIP to foo_v2
 ```
 
-The kernel uses *text_poke* (`arch/x86/kernel/alternative.c`) to swap the bytes atomically across CPUs while threads execute the function — relying on x86's `int3` short-circuit dance to make the patch visible without stopping the world.
+The kernel uses *text_poke* (`arch/x86/kernel/alternative.c`) to swap the bytes atomically across CPUs while threads execute the function, relying on x86's `int3` short-circuit dance to make the patch visible without stopping the world.
 
 == klp_func and klp_object
 
@@ -74,7 +74,7 @@ MODULE_INFO(livepatch, "Y");
 
 == The Consistency Model
 
-Naive function replacement is unsafe: an in-flight invocation of the old function might run code that assumes invariants the patch changes. Consider a patch that adds locking to a previously lockless function — the half-old, half-new race is exactly the bug you were trying to fix, reborn.
+Naive function replacement is unsafe: an in-flight invocation of the old function might run code that assumes invariants the patch changes. Consider a patch that adds locking to a previously lockless function: the half-old, half-new race is exactly the bug you were trying to fix, reborn.
 
 Livepatch's *hybrid consistency model* (Josh Poimboeuf, merged 4.12) draws from kpatch (per-function switch on every call) and kGraft (per-task switch when the task is safe):
 
@@ -82,13 +82,13 @@ Livepatch's *hybrid consistency model* (Josh Poimboeuf, merged 4.12) draws from 
 - Newly created tasks join universe 1.
 - A task migrates from 0 → 1 when:
   - It is sleeping and a stack walk shows *no patched function on its stack* (i.e. it cannot resume into old code).
-  - Or it crosses a userspace boundary (syscall entry/exit) — by definition it is not inside any kernel function.
+  - Or it crosses a userspace boundary (syscall entry/exit); by definition it is not inside any kernel function.
   - Or, for idle tasks, when they enter idle.
 
 Until every task has migrated, both universes coexist. ftrace trampolines consult the current task's universe at call time and dispatch accordingly. When all tasks have moved, the patch is "complete" and the trampoline shortens to call only the new function.
 
 ```c
-// kernel/livepatch/transition.c — the heart of it
+// kernel/livepatch/transition.c (the heart of it)
 static void klp_check_stack(struct task_struct *task, ...)
 {
     save_stack_trace_tsk_reliable(task, &trace);
@@ -99,7 +99,7 @@ static void klp_check_stack(struct task_struct *task, ...)
 }
 ```
 
-The stack walk must be *reliable*: it must either return a complete trace or admit failure. Architectures need `HAVE_RELIABLE_STACKTRACE` (x86_64, arm64, s390, powerpc) — most others can't livepatch with the consistency model.
+The stack walk must be *reliable*: it must either return a complete trace or admit failure. Architectures need `HAVE_RELIABLE_STACKTRACE` (x86_64, arm64, s390, powerpc); most others can't livepatch with the consistency model.
 
 Stuck tasks (a long-sleeping syscall holding a patched function) block completion. `/sys/kernel/livepatch/<patch>/transition` shows status. The operator can `kill -SIGSTOP/-SIGCONT` to nudge problem tasks, or simply wait.
 
@@ -127,7 +127,7 @@ Hand-authoring `klp_func` arrays is error-prone. `kpatch-build` (Red Hat's tool)
 It builds the kernel twice (vanilla and patched), diffs the resulting `.o` files at the symbol level, generates a `.c` file with the changed functions plus the livepatch metadata, and compiles a livepatch module. The build harness also detects:
 
 - New symbol references that need to be resolved against vmlinux/module symbols via `klp_symbols`.
-- Static data changes (which generally cannot be live-patched — different `.o` for the same `.c` is a red flag).
+- Static data changes (which generally cannot be live-patched; different `.o` for the same `.c` is a red flag).
 - Init/exit code, inline functions affecting multiple call sites.
 
 ```bash
@@ -148,7 +148,7 @@ Hard limits, born from the consistency model and ftrace mechanics:
 
 - *Code in ftrace itself, or in NMI handlers.* The trampoline mechanism cannot recursively patch its own machinery; NMI cannot be safely intercepted by call indirection.
 
-- *Init code* (`__init`) — already freed.
+- *Init code* (`__init`): already freed.
 
 - *Assembly entry/exit code* without an ftrace hook (syscall entry, IRQ stubs).
 
@@ -180,12 +180,12 @@ A complete livepatch with hundreds of replaced functions can shave a percent or 
 
 == Atomic Replace and Cumulative Patches
 
-The recommended deployment model: every published livepatch is *cumulative* — it carries every prior fix plus the new one, with `replace=true`. Operations become:
+The recommended deployment model: every published livepatch is *cumulative*: it carries every prior fix plus the new one, with `replace=true`. Operations become:
 
 - Apply latest livepatch module → previous one auto-disabled.
 - Disable everything → load the empty (`replace=true`, no funcs) revert module.
 
-No state machine of "which sequence of patches did this host receive" to maintain — the host either has the latest cumulative module or it doesn't.
+No state machine of "which sequence of patches did this host receive" to maintain; the host either has the latest cumulative module or it doesn't.
 
 == Distributions and Vendors
 

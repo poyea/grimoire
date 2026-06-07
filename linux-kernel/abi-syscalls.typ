@@ -1,6 +1,6 @@
 = ABI and Syscalls
 
-Every meaningful interaction between a user-space program and the kernel goes through a syscall. The mechanics — how arguments are passed, how the CPU transitions to ring 0, how the kernel validates pointers, how it returns — are surprisingly subtle, and the cost is non-negligible: a syscall round trip on modern x86-64 is ~100-300 cycles for the privilege transition itself, plus whatever work the handler does. Understanding the path lets you predict performance and exploit shortcuts like the vDSO.
+Every meaningful interaction between a user-space program and the kernel goes through a syscall. The mechanics (how arguments are passed, how the CPU transitions to ring 0, how the kernel validates pointers, how it returns) are surprisingly subtle, and the cost is non-negligible: a syscall round trip on modern x86-64 is ~100-300 cycles for the privilege transition itself, plus whatever work the handler does. Understanding the path lets you predict performance and exploit shortcuts like the vDSO.
 
 == x86-64 System V ABI
 
@@ -34,7 +34,7 @@ x86-64 Linux uses the `syscall` instruction (introduced with AMD64) rather than 
   [`r11`], [clobbered (CPU stores RFLAGS here)],
 )
 
-Note `r10` instead of `rcx` for the 4th argument — `rcx` is unavailable because the `syscall` instruction itself uses it to save the return RIP. This is why the libc syscall wrappers contain a `mov %rcx, %r10` shuffle.
+Note `r10` instead of `rcx` for the 4th argument: `rcx` is unavailable because the `syscall` instruction itself uses it to save the return RIP. This is why the libc syscall wrappers contain a `mov %rcx, %r10` shuffle.
 
 *Return values:* On success, `rax` holds the result. On error, `rax` is in the range `[-4095, -1]` and represents `-errno`. glibc wraps this:
 
@@ -60,7 +60,7 @@ Step by step (modern Linux 6.x on x86-64):
 2. *CPU transition.* `syscall` reads `MSR_LSTAR` (kernel entry point), saves RIP to `rcx` and RFLAGS to `r11`, masks RFLAGS via `MSR_SFMASK`, switches to ring 0, and jumps. The CPU does not automatically switch stacks; the kernel does that explicitly.
 3. *Kernel entry stub* (`entry_SYSCALL_64` in `arch/x86/entry/entry_64.S`). Swaps `gs` to per-CPU kernel data via `swapgs`, switches to the kernel stack, saves the user register frame on the kernel stack.
 4. *Mitigations.* On vulnerable CPUs the entry path runs IBRS/STIBP/SSBD setup, KPTI page-table swap (Meltdown mitigation), and `RET` retpoline / IBPB barriers, adding 50-200 cycles depending on which mitigations are active.
-5. *Dispatch.* Kernel reads `rax`, range-checks it against `NR_syscalls`, and indirect-calls `sys_call_table[rax]` — which on a syscall-table-protected kernel is itself a thunked call (`__x64_sys_read`).
+5. *Dispatch.* Kernel reads `rax`, range-checks it against `NR_syscalls`, and indirect-calls `sys_call_table[rax]`, which on a syscall-table-protected kernel is itself a thunked call (`__x64_sys_read`).
 6. *Handler.* `sys_read` validates `fd`, locates the `struct file*`, copies up to 4096 bytes into `buf` via `copy_to_user` (this is the actual work), and returns the byte count.
 7. *Exit stub.* Restores user registers, runs more mitigations (e.g. `verw` for L1TF), executes `sysretq` which flips back to ring 3 with RIP from `rcx` and RFLAGS from `r11`.
 
@@ -86,13 +86,13 @@ A typical row:
 257 common  openat  sys_openat
 ```
 
-The numbers are stable ABI: once allocated, a syscall number is never reused. This is why `open` (5) and `openat` (257) coexist — `open` cannot be removed without breaking every binary that ever called it.
+The numbers are stable ABI: once allocated, a syscall number is never reused. This is why `open` (5) and `openat` (257) coexist; `open` cannot be removed without breaking every binary that ever called it.
 
 *Adding a new syscall* (rare, requires LKML acceptance):
 
 1. Reserve a number in `syscall_64.tbl` (and the equivalent table for every architecture).
 2. Implement `SYSCALL_DEFINE<n>(name, ...)` in the relevant subsystem.
-3. Add the libc wrapper (in glibc, musl, etc.) — but most tools just call `syscall(__NR_foo, ...)` directly until the wrapper lands.
+3. Add the libc wrapper (in glibc, musl, etc.); most tools just call `syscall(__NR_foo, ...)` directly until the wrapper lands.
 
 The `SYSCALL_DEFINE` macro auto-generates argument-marshaling stubs (`__x64_sys_foo`) and adds Spectre-v1 hardening on argument loads.
 
@@ -129,7 +129,7 @@ For latency-sensitive tracing or per-request timestamping, vDSO is the differenc
 
 == seccomp: Filtering Syscalls in BPF
 
-`seccomp` (secure computing mode) lets a process install a BPF program that runs on every syscall and decides whether to allow, kill, log, or trap it. This is one of the most important sandboxing primitives in modern Linux — used by Chrome's renderer, Docker's default profile, systemd's `SystemCallFilter=`, and every modern container runtime.
+`seccomp` (secure computing mode) lets a process install a BPF program that runs on every syscall and decides whether to allow, kill, log, or trap it. This is one of the most important sandboxing primitives in modern Linux, used by Chrome's renderer, Docker's default profile, systemd's `SystemCallFilter=`, and every modern container runtime.
 
 Two modes are available:
 
@@ -197,13 +197,13 @@ seccomp_load(ctx);
 - *Minimizing syscalls:* `io_uring` (5.1+) batches submission and completion across many operations. `sendmmsg`/`recvmmsg` batch network IO; `readv`/`writev` batch buffer-list IO. `MAP_POPULATE` avoids later page-fault syscalls.
 - *vDSO troubleshooting:* If `clock_gettime` is suddenly slow, check the clocksource (`/sys/devices/system/clocksource/clocksource0/current_clocksource`) and `dmesg | grep -i tsc`. A fallback to `hpet` or `acpi_pm` will tank vDSO performance.
 
-*See also:* _Kernel Bypass (Networking volume)_ — DPDK and AF_XDP avoid the syscall path entirely for packet IO. _Kernel Tracing_ — eBPF tracepoints on `raw_syscalls:sys_enter` give per-syscall observability.
+*See also:* _Kernel Bypass (Networking volume)_: DPDK and AF_XDP avoid the syscall path entirely for packet IO. _Kernel Tracing_: eBPF tracepoints on `raw_syscalls:sys_enter` give per-syscall observability.
 
 #pagebreak()
 
 === Introduction
 
-The Linux kernel is the most-deployed software artifact on Earth: it runs on the majority of internet-facing servers, every Android phone, most embedded devices, all major cloud hyperscalers, and the top 500 supercomputers without exception. For systems engineers, kernel internals are not optional knowledge — they are the substrate against which application performance, latency, and reliability are ultimately judged.
+The Linux kernel is the most-deployed software artifact on Earth: it runs on the majority of internet-facing servers, every Android phone, most embedded devices, all major cloud hyperscalers, and the top 500 supercomputers without exception. For systems engineers, kernel internals are not optional knowledge; they are the substrate against which application performance, latency, and reliability are ultimately judged.
 
 *Scope of this reference:*
 
@@ -226,7 +226,7 @@ The Linux kernel is the most-deployed software artifact on Earth: it runs on the
 
 ==== Why Kernel Internals Matter
 
-A user-space program is the tip of an iceberg. Every meaningful operation — opening a file, sending a packet, allocating memory, waking a thread — eventually traps into the kernel. When a service has a tail-latency outlier at p99.9, the explanation almost always lies below the syscall boundary:
+A user-space program is the tip of an iceberg. Every meaningful operation (opening a file, sending a packet, allocating memory, waking a thread) eventually traps into the kernel. When a service has a tail-latency outlier at p99.9, the explanation almost always lies below the syscall boundary:
 
 - A `read()` blocked on a page fault that hit a slow disk.
 - A thread that ran on the wrong NUMA node and paid 100 ns of remote-memory latency per access.
