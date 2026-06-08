@@ -707,3 +707,15 @@ public:
 *Bender, M.A. & Farach-Colton, M. (2000)*. The LCA Problem Revisited. LATIN 2000, pp. 88-94.
 
 *Sleator, D.D. & Tarjan, R.E. (1985)*. Self-Adjusting Binary Search Trees. Journal of the ACM 32(3): 652-686.
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 14 on augmenting data structures; interval trees as a related range-query structure.)
+
+Fenwick, P. M. (1994). "A New Data Structure for Cumulative Frequency Tables." _Software: Practice and Experience_ 24(3): 327--336. (The Binary Indexed Tree (Fenwick tree) as a simpler alternative for prefix-sum queries.)
+
+de Berg, M., Cheong, O., van Kreveld, M., & Overmars, M. (2008). _Computational Geometry: Algorithms and Applications_, 3rd ed. Springer. (Segment trees in their original geometric context for stabbing and range queries.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Interval search trees and range trees in the context of geometric applications.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Range minimum query and sparse tables as alternatives to segment trees for static data.)

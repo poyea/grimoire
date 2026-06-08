@@ -723,3 +723,15 @@ public:
 *Dunning, T. & Ertl, O. (2019)*. Computing Extremely Accurate Quantiles Using t-Digests. arXiv:1902.04023.
 
 *Ghashami, M. et al. (2016)*. Frequent Directions: Simple and Deterministic Matrix Sketching. SIAM Journal on Computing 45(5): 1762-1792.
+
+== Further Reading
+
+Muthukrishnan, S. (2005). "Data Streams: Algorithms and Applications." _Foundations and Trends in Theoretical Computer Science_ 1(2): 117--236. (The foundational survey of streaming algorithms and the data-stream model.)
+
+Flajolet, P., & Martin, G. N. (1985). "Probabilistic Counting Algorithms for Data Base Applications." _Journal of Computer and System Sciences_ 31(2): 182--209. (Original approximate counting paper underpinning HyperLogLog and related sketches.)
+
+Cormode, G., & Muthukrishnan, S. (2005). "An Improved Data Stream Summary: The Count-Min Sketch and its Applications." _Journal of Algorithms_ 55(1): 58--75. (Count-Min Sketch for point queries and heavy-hitter detection in streams.)
+
+Mitzenmacher, M., & Upfal, E. (2017). _Probability and Computing_, 2nd ed. Cambridge University Press. (Rigorous foundation for reservoir sampling, sketching, and randomized streaming algorithms.)
+
+Woodruff, D. P. (2014). "Sketching as a Tool for Numerical Linear Algebra." _Foundations and Trends in Theoretical Computer Science_ 10(1--2): 1--157. (Comprehensive treatment of matrix sketching and streaming linear algebra.)

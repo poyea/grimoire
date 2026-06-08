@@ -663,3 +663,15 @@ public:
 *Fan, L. et al. (2000)*. Summary Cache: A Scalable Wide-Area Web Cache Sharing Protocol. IEEE/ACM Transactions on Networking 8(3): 281-293.
 
 *Bender, M.A. et al. (2012)*. Don't Thrash: How to Cache Your Hash on Flash. PVLDB 5(11): 1627-1637.
+
+== Further Reading
+
+Flajolet, P., & Martin, G. N. (1985). "Probabilistic Counting Algorithms for Data Base Applications." _Journal of Computer and System Sciences_ 31(2): 182--209. (The pioneering paper on approximate distinct-count sketches, precursor to HyperLogLog.)
+
+Cormode, G., & Muthukrishnan, S. (2005). "An Improved Data Stream Summary: The Count-Min Sketch and its Applications." _Journal of Algorithms_ 55(1): 58--75. (Count-Min Sketch for frequency estimation in data streams.)
+
+Mitzenmacher, M., & Upfal, E. (2017). _Probability and Computing_, 2nd ed. Cambridge University Press. (Rigorous probabilistic analysis of Bloom filters, hashing, and randomized data structures.)
+
+Broder, A. Z., & Mitzenmacher, M. (2004). "Network Applications of Bloom Filters: A Survey." _Internet Mathematics_ 1(4): 485--509. (Survey of Bloom filter variants and applications in networking and distributed systems.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 3 on hashing and randomized data structures in practice.)
