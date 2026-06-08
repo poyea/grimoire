@@ -143,7 +143,7 @@ Zephyr ships a deferred logger (ISRs enqueue, a dedicated thread formats and emi
   [MMU], [Optional MPU], [Optional MPU], [Required],
   [Drivers], [Vendor HALs], [Unified DT driver model], [Linux kernel],
   [Networking], [LWIP add-on], [Native IP, BLE, Thread], [Full Linux stack],
-  [Latency floor], [Sub-microsecond], [Sub-microsecond], [Tens of microseconds],
+  [Latency floor], [Sub-microsecond], [Sub-microsecond], [20--80 µs worst-case],
   [Cert kit available], [SafeRTOS (TÜV)], [Lynx, Auterion (partial)], [ELISA, Wind River Linux],
 )
 
