@@ -2,7 +2,7 @@
 
 Application-layer protocols define message formats and communication patterns for specific services.
 
-*See also:* `networking/transport-layer.typ`, `networking/sockets-api.typ`, `networking/tls.typ`
+*See also:* _Transport Layer_ (for TCP/UDP foundations), _Sockets API_ (for implementation), _TLS_ (for encryption layer)
 
 == HTTP (Hypertext Transfer Protocol)
 
@@ -158,7 +158,7 @@ MQTT v5 added topic aliases (reduce wire size), message expiry, shared subscript
 
 *High-performance RPC framework using HTTP/2 and Protocol Buffers.*
 
-gRPC (Google, 2016) defines services and message types in `.proto` files and generates typed client/server stubs in any supported language. The wire encoding is Protocol Buffers (binary, schema-driven, ~5–10× smaller than equivalent JSON). Transport is HTTP/2, providing multiplexing, header compression, and built-in flow control.
+gRPC (Google, 2015) defines services and message types in `.proto` files and generates typed client/server stubs in any supported language. The wire encoding is Protocol Buffers (binary, schema-driven, ~5–10× smaller than equivalent JSON). Transport is HTTP/2, providing multiplexing, header compression, and built-in flow control.
 
 *Service definition:*
 ```protobuf
@@ -195,3 +195,19 @@ OASIS MQTT Version 5.0 Standard. (2019).
 Google. gRPC Documentation. https://grpc.io/docs/
 
 Grigorik, I. (2013). High Performance Browser Networking. O'Reilly Media.
+
+== Further Reading
+
+IETF. (2015). "Hypertext Transfer Protocol Version 2 (HTTP/2)." RFC 7540. Specifies binary framing, multiplexing, header compression (HPACK), and server push — the foundational changes that address HTTP/1.1's head-of-line blocking.
+
+IETF. (2022). "HTTP/3." RFC 9114. Defines HTTP semantics over QUIC, eliminating TCP-level head-of-line blocking and enabling connection migration for mobile clients.
+
+Fette, I., Melnikov, A. (2011). "The WebSocket Protocol." RFC 6455. Standardises the HTTP upgrade handshake and framing layer for full-duplex communication over a single TCP connection.
+
+OASIS. (2019). "MQTT Version 5.0." OASIS Standard. Specifies the publish-subscribe protocol for constrained IoT devices, including QoS levels, retained messages, and the v5 extensions for shared subscriptions and message expiry.
+
+Google. (2015). "gRPC: A High Performance, Open Source Universal RPC Framework." https://grpc.io/. Documents the HTTP/2-based RPC framework with Protocol Buffers encoding, deadline propagation, and bidirectional streaming.
+
+Grigorik, I. (2013). _High Performance Browser Networking._ O'Reilly Media. Covers the full network stack from TCP through HTTP/2 and WebSocket with practical performance guidance; an accessible bridge between protocol specs and real-world engineering.
+
+Iyengar, J., Thomson, M. (2021). "QUIC: A UDP-Based Multiplexed and Secure Transport." RFC 9000. Defines the QUIC transport protocol underlying HTTP/3, with integrated TLS 1.3, stream multiplexing, and loss recovery without TCP's head-of-line blocking.
