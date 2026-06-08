@@ -1,6 +1,6 @@
 = io_uring
 
-The traditional Linux I/O syscalls (`read`, `write`, `recv`, `send`, `epoll_wait`) are *synchronous from the caller's point of view*: each operation crosses the ring boundary, the kernel does the work, and control returns. At ~120-250 ns per crossing (see _ABI and Syscalls_), an IO-heavy workload doing millions of small operations per second spends a substantial fraction of its CPU on the transition itself, not the work. POSIX AIO never lived up to its name — the glibc implementation is a userspace thread pool — and the kernel `aio_*` interface is restricted to `O_DIRECT` file I/O. `io_uring`, introduced in Linux 5.1 (May 2019) by Jens Axboe, is the first truly general-purpose async I/O interface on Linux: arbitrary syscalls, batched, with zero per-operation ring transition in the fast path.
+The traditional Linux I/O syscalls (`read`, `write`, `recv`, `send`, `epoll_wait`) are *synchronous from the caller's point of view*: each operation crosses the ring boundary, the kernel does the work, and control returns. At ~120-250 ns per crossing (see _ABI and Syscalls_), an IO-heavy workload doing millions of small operations per second spends a substantial fraction of its CPU on the transition itself, not the work. POSIX AIO never lived up to its name (the glibc implementation is a userspace thread pool), and the kernel `aio_*` interface is restricted to `O_DIRECT` file I/O. `io_uring`, introduced in Linux 5.1 (May 2019) by Jens Axboe, is the first truly general-purpose async I/O interface on Linux: arbitrary syscalls, batched, with zero per-operation ring transition in the fast path.
 
 The cost model changes from "N operations = N syscalls" to "N operations = 1 syscall (or 0 with `SQPOLL`)". For Nginx-class workloads, this can be the difference between 1 M and 3 M req/s on the same hardware.
 
@@ -14,7 +14,7 @@ The userland program and the kernel communicate through *two* lock-free single-p
   [Completion Queue (CQ)], [kernel], [userspace],
 )
 
-Each entry in the SQ is a `struct io_uring_sqe` (64 bytes — one cache line on x86-64, deliberate); each entry in the CQ is a `struct io_uring_cqe` (16 bytes by default, 32 with `IORING_SETUP_CQE32`). The SQE describes a syscall to perform — opcode, fd, buffer pointer, length, plus a 64-bit `user_data` cookie that the kernel echoes back in the matching CQE.
+Each entry in the SQ is a `struct io_uring_sqe` (64 bytes, one cache line on x86-64, deliberate); each entry in the CQ is a `struct io_uring_cqe` (16 bytes by default, 32 with `IORING_SETUP_CQE32`). The SQE describes a syscall to perform: opcode, fd, buffer pointer, length, plus a 64-bit `user_data` cookie that the kernel echoes back in the matching CQE.
 
 Because both rings are in shared memory, the only thing the kernel cares about is the head/tail indices. Userspace updates the SQ tail with a release store; the kernel observes the new tail with an acquire load. There is no syscall on the submission path until the kernel needs to be woken up.
 
@@ -34,7 +34,7 @@ struct cq_ring {
 };
 ```
 
-The `array` indirection on the SQ side lets userspace fill SQEs in any order and then submit a permutation — useful for prioritizing or for keeping a pool of SQEs hot in cache.
+The `array` indirection on the SQ side lets userspace fill SQEs in any order and then submit a permutation, useful for prioritizing or for keeping a pool of SQEs hot in cache.
 
 == Setup and the Three Syscalls
 
@@ -91,7 +91,7 @@ int ring_init(struct app_ring *r, unsigned entries) {
 
 == Submission and Completion
 
-The fast-path loop is a four-step dance entirely in userland — read the head/tail, write an SQE, publish, eventually reap:
+The fast-path loop is a four-step dance entirely in userland: read the head/tail, write an SQE, publish, eventually reap:
 
 ```c
 static struct io_uring_sqe *get_sqe(struct app_ring *r) {
@@ -157,7 +157,7 @@ After `sq_thread_idle` ms of inactivity the kthread sleeps and sets `IORING_SQ_N
 Trade-offs of SQPOLL:
 
 - *Latency:* near-zero on the submission side; a CPU core is dedicated to polling.
-- *Throughput:* eliminates ~80-150 ns per submission (the syscall transition) — at 5 M ops/s that's 25-50% of a core saved on the producer.
+- *Throughput:* eliminates ~80-150 ns per submission (the syscall transition); at 5 M ops/s that is 25-50% of a core saved on the producer.
 - *Power / packing:* the dedicated poller is always-on while busy; pin it to an isolated core (`IORING_SETUP_SQ_AFF` + `sq_thread_cpu`) so it doesn't steal user time. See _CPU Affinity and Isolation_.
 - *Privilege:* before Linux 5.13, SQPOLL required `CAP_SYS_ADMIN`; since 5.13 unprivileged users can use it but the busy-polling kthread is accounted against the user's cgroup. To share one poller across multiple rings, attach via `IORING_SETUP_ATTACH_WQ`.
 
@@ -182,7 +182,7 @@ if (cqe->res < 0) fprintf(stderr, "read: %s\n", strerror(-cqe->res));
 io_uring_cqe_seen(&ring, cqe);
 ```
 
-`io_uring_submit_and_wait(&ring, n)` is the canonical batched-event-loop call — one syscall handles both submission and completion-waiting.
+`io_uring_submit_and_wait(&ring, n)` is the canonical batched-event-loop call: one syscall handles both submission and completion-waiting.
 
 == Linked, Drained, Async, and Hardlink SQEs
 
@@ -219,12 +219,12 @@ io_uring_submit(&ring);  // 1 syscall, 3 operations
 
 `io_uring_register` pre-pins resources so the kernel doesn't have to re-validate them on every operation:
 
-- *Buffers* (`IORING_REGISTER_BUFFERS`): pin user pages once. `IORING_OP_READ_FIXED` / `WRITE_FIXED` skip `get_user_pages` on each call — a ~10-20% speedup for high-rate small I/O.
+- *Buffers* (`IORING_REGISTER_BUFFERS`): pin user pages once. `IORING_OP_READ_FIXED` / `WRITE_FIXED` skip `get_user_pages` on each call, a ~10-20% speedup for high-rate small I/O.
 - *Files* (`IORING_REGISTER_FILES`): a slot table indexed by `sqe->fd` when `IOSQE_FIXED_FILE` is set. The kernel takes a reference once; per-op it's an array index instead of a hashtable lookup.
-- *Eventfd* (`IORING_REGISTER_EVENTFD`): wake an eventfd whenever a CQE arrives — bridges io_uring into an existing epoll-based event loop.
+- *Eventfd* (`IORING_REGISTER_EVENTFD`): wake an eventfd whenever a CQE arrives, bridging io_uring into an existing epoll-based event loop.
 - *Ring restrictions* (`IORING_REGISTER_RESTRICTIONS`): allowlist of opcodes/flags. Combined with a seccomp filter, used by hardened sandboxes to whitelist exactly which io_uring operations a sandboxed process may issue.
 
-Provided buffers (`IORING_OP_PROVIDE_BUFFERS` / `IORING_REGISTER_PBUF_RING`) are the dual of fixed buffers — you give the kernel a pool of receive buffers up front, and `recv` ops with `IOSQE_BUFFER_SELECT` pull one at completion time (the buffer ID is reported in `cqe->flags >> 16`). This is the foundation of zero-copy receive paths: the kernel never blocks waiting for userspace to post a buffer, and userspace never speculatively posts one per connection.
+Provided buffers (`IORING_OP_PROVIDE_BUFFERS` / `IORING_REGISTER_PBUF_RING`) are the dual of fixed buffers: you give the kernel a pool of receive buffers up front, and `recv` ops with `IOSQE_BUFFER_SELECT` pull one at completion time (the buffer ID is reported in `cqe->flags >> 16`). This is the foundation of zero-copy receive paths: the kernel never blocks waiting for userspace to post a buffer, and userspace never speculatively posts one per connection.
 
 == Multishot Operations
 
@@ -241,7 +241,7 @@ Each completion has `IORING_CQE_F_MORE` set; the absence of that flag means the 
 
 == Zero-Copy Send
 
-`IORING_OP_SEND_ZC` (Linux 6.0+) is the network equivalent of `splice` for outbound traffic: the kernel pins the user buffer, hands it directly to the NIC's tx queue, and emits *two* CQEs — one when the send is "issued" (`IORING_CQE_F_MORE` set, kernel has the data) and a second `IORING_CQE_F_NOTIF` when the NIC has actually transmitted the bytes and the buffer is safe to free or overwrite. The userspace contract is: don't touch the buffer between the two CQEs.
+`IORING_OP_SEND_ZC` (Linux 6.0+) is the network equivalent of `splice` for outbound traffic: the kernel pins the user buffer, hands it directly to the NIC's tx queue, and emits *two* CQEs: one when the send is "issued" (`IORING_CQE_F_MORE` set, kernel has the data) and a second `IORING_CQE_F_NOTIF` when the NIC has actually transmitted the bytes and the buffer is safe to free or overwrite. The userspace contract is: don't touch the buffer between the two CQEs.
 
 Microbenchmarks (loopback, 64 KB writes, modern kernel): non-zc `send` ~5.2 GB/s/core; `send_zc` ~12 GB/s/core. The win narrows on real NICs because the bottleneck shifts to PCIe and DMA, but the CPU-cycles-per-byte still drops by 30-50%.
 
@@ -295,7 +295,7 @@ Rough orders of magnitude (5.15+ kernel, modern x86-64):
 - *SQE field reuse after submit.* The SQE memory is owned by the kernel as soon as the tail is published. Treat `io_uring_get_sqe` as "allocate" and stop touching the SQE the moment you call `submit`.
 - *CQE backpressure.* If the CQ fills, the kernel sets `IORING_SQ_CQ_OVERFLOW` and starts dropping completions (or stores them in an overflow list, depending on kernel). Always size CQ entries $>=$ in-flight SQEs (`IORING_SETUP_CQSIZE`).
 - *fork(2).* The ring is not inherited safely across fork; child must not touch it. Use `IORING_SETUP_REGISTERED_FD_ONLY` and explicit teardown.
-- *Signal handling.* `io_uring_enter`'s `sig` argument plays the same role as `pselect`'s mask — use it instead of self-pipe tricks.
+- *Signal handling.* `io_uring_enter`'s `sig` argument plays the same role as `pselect`'s mask; use it instead of self-pipe tricks.
 
 == Security
 
@@ -307,10 +307,10 @@ For server-side workloads where you control the binary, the right move is the op
 
 Axboe, J. (2019). _Efficient IO with io_uring_. Available at #link("https://kernel.dk/io_uring.pdf")[kernel.dk/io_uring.pdf].
 
-liburing source: #link("https://github.com/axboe/liburing")[github.com/axboe/liburing] — examples/ directory is the best tutorial.
+liburing source: #link("https://github.com/axboe/liburing")[github.com/axboe/liburing] (examples/ directory is the best tutorial).
 
-Linux kernel `io_uring/` subtree at #link("https://elixir.bootlin.com/linux/latest/source/io_uring")[elixir.bootlin.com] — start with `io_uring.c` and `io_uring/rsrc.c`.
+Linux kernel `io_uring/` subtree at #link("https://elixir.bootlin.com/linux/latest/source/io_uring")[elixir.bootlin.com]: start with `io_uring.c` and `io_uring/rsrc.c`.
 
-Corbet, J. (2020-2024). _io_uring_ article series on LWN.net — incremental coverage of every new opcode and security event.
+Corbet, J. (2020-2024). _io_uring_ article series on LWN.net: incremental coverage of every new opcode and security event.
 
 _See also: ABI and Syscalls (syscall transition cost model), CPU Affinity and Isolation (SQPOLL placement), Interrupts and NAPI (the kernel-side path that feeds io_uring network completions)._

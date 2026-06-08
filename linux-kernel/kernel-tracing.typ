@@ -1,6 +1,6 @@
 = Kernel Tracing
 
-Modern Linux is the most observable kernel ever shipped. You can attach a probe to almost any kernel function, sample on hardware events, trace every syscall, watch every block-IO completion, all in production, with overhead measured in single-digit percentage points or less. This chapter covers the four major tracing mechanisms — kprobes, ftrace, perf, and eBPF — and the tools built on them.
+Modern Linux is the most observable kernel ever shipped. You can attach a probe to almost any kernel function, sample on hardware events, trace every syscall, watch every block-IO completion, all in production, with overhead measured in single-digit percentage points or less. This chapter covers the four major tracing mechanisms: kprobes, ftrace, perf, and eBPF, and the tools built on them.
 
 == The Tracing Stack
 
@@ -16,7 +16,7 @@ Five layers, increasingly powerful and increasingly safe:
   [*eBPF*], [Programmable, verified bytecode you attach to any of the above.],
 )
 
-eBPF (Extended Berkeley Packet Filter, despite the name unrelated to packet filtering at this point) is the dominant interface. Modern tools — `bpftrace`, BCC, `bpftop`, `pixie`, `cilium` — all generate eBPF programs and load them via `bpf()` syscall.
+eBPF (Extended Berkeley Packet Filter, despite the name unrelated to packet filtering at this point) is the dominant interface. Modern tools (`bpftrace`, BCC, `bpftop`, `pixie`, `cilium`) all generate eBPF programs and load them via `bpf()` syscall.
 
 == Tracepoints
 
@@ -45,7 +45,7 @@ format:
     field:int next_prio;               offset:60; size:4;  signed:1;
 ```
 
-Tracepoints have near-zero overhead when no probe is attached — they compile to a `nop`. When attached, they call into the registered handler.
+Tracepoints have near-zero overhead when no probe is attached — they compile to a `nop`; when attached, they call into the registered handler.
 
 == kprobes and kretprobes
 
@@ -68,12 +68,12 @@ register_kprobe(&kp);
 
 Overhead is ~1-2 µs per probe hit (a real CPU exception is involved). Modern eBPF on tracepoints uses a much cheaper path.
 
-`kretprobe` lets you fire on function *return* — useful for measuring duration. The kernel rewrites the return address on entry to a trampoline that captures the return value and re-redirects to the real caller.
+`kretprobe` lets you fire on function *return*, useful for measuring duration. The kernel rewrites the return address on entry to a trampoline that captures the return value and re-redirects to the real caller.
 
 *Caveats:*
 
 - Inlined functions can't be probed (no symbol).
-- Some functions are blacklisted (probing them would deadlock — e.g. the kprobe machinery itself).
+- Some functions are blacklisted because probing them would deadlock (e.g. the kprobe machinery itself).
 - KASLR randomizes function addresses; probe by *symbol name* not address.
 
 == ftrace
@@ -152,7 +152,7 @@ LLC miss rate:                  LLC-load-misses / LLC-loads
 Frontend stall:                 cycle_activity.stalls_total / cycles  (TMAM)
 ```
 
-For deeper PMU work see _Performance Analysis and Measurement (CPU Architecture volume)_ — TMAM, top-down methodology, microarchitectural stalls.
+For deeper PMU work see _Performance Analysis and Measurement (CPU Architecture volume)_: TMAM, top-down methodology, microarchitectural stalls.
 
 == eBPF: The Modern Tracing Substrate
 
@@ -162,9 +162,9 @@ The verifier guarantees safety: bounded loops, no out-of-bounds memory access, n
 
 *Maps* are kernel-resident data structures (hash, array, ringbuf, perf buffer, LRU, BPF queue/stack) that programs use to store state and communicate with userspace.
 
-*Helpers* are a fixed set of kernel functions an eBPF program can call: `bpf_ktime_get_ns`, `bpf_get_current_pid_tgid`, `bpf_probe_read_kernel`, `bpf_map_update_elem`, etc. 300+ helpers are exposed on a current 6.x kernel, and the set grows each release. Newer programs increasingly use *kfuncs* — directly callable kernel functions exposed via BTF — instead of helpers.
+*Helpers* are a fixed set of kernel functions an eBPF program can call: `bpf_ktime_get_ns`, `bpf_get_current_pid_tgid`, `bpf_probe_read_kernel`, `bpf_map_update_elem`, etc. 300+ helpers are exposed on a current 6.x kernel, and the set grows each release. Newer programs increasingly use *kfuncs* (directly callable kernel functions exposed via BTF) instead of helpers.
 
-Writing eBPF directly (libbpf + CO-RE — Compile Once, Run Everywhere — using BTF for type info) is the production approach. For exploration, use `bpftrace`.
+Writing eBPF directly with libbpf + CO-RE (Compile Once, Run Everywhere, using BTF for type info) is the production approach. For exploration, use `bpftrace`.
 
 === bpftrace One-Liners
 
@@ -198,7 +198,7 @@ bpftrace -e '
 '
 ```
 
-The language is awk-like — global maps with associative-array syntax, predicate filters with `/.../`, several histogram and aggregation operators (`count`, `sum`, `avg`, `hist`, `lhist`, `stats`).
+The language is awk-like: global maps with associative-array syntax, predicate filters with `/.../`, several histogram and aggregation operators (`count`, `sum`, `avg`, `hist`, `lhist`, `stats`).
 
 === BCC
 
@@ -213,7 +213,7 @@ Production-grade tools shipped with BCC (`apt install bpfcc-tools`):
   [`biolatency`], [Block-IO latency histogram. Per-disk, per-IO-type.],
   [`tcplife`], [Per-connection lifetime, bytes, latency.],
   [`tcpconnect`/`tcpaccept`], [New connections, with PID, command, addresses.],
-  [`runqlat`], [Run-queue latency histogram — how long tasks wait between wakeup and CPU.],
+  [`runqlat`], [Run-queue latency histogram: how long tasks wait between wakeup and CPU.],
   [`offcputime`], [Where threads block, and for how long.],
   [`profile`], [On-CPU sampling profiler with stack traces.],
   [`funccount`], [Count calls to any kernel function pattern.],
@@ -225,7 +225,7 @@ Production usage pattern: `runqlat` first when you suspect scheduling, `biolaten
 
 === libbpf + CO-RE
 
-The production way to ship eBPF: write a C program, compile to BPF bytecode with `clang -target bpf`, link against `libbpf`. *CO-RE* uses BTF (BPF Type Format, embedded in the kernel image) so the same compiled program runs against many kernels without recompilation — the loader rewrites struct-field offsets at load time.
+The production way to ship eBPF: write a C program, compile to BPF bytecode with `clang -target bpf`, link against `libbpf`. *CO-RE* uses BTF (BPF Type Format, embedded in the kernel image) so the same compiled program runs against many kernels without recompilation; the loader rewrites struct-field offsets at load time.
 
 ```c
 SEC("kprobe/vfs_read")
@@ -276,4 +276,4 @@ cat /sys/kernel/debug/tracing/available_filter_functions | wc -l   # kprobeable 
 
 If `bpftrace` complains about kheaders or BTF, install `linux-headers-$(uname -r)` and `linux-image-$(uname -r)-dbg` (or distro equivalent). Most modern kernels (5.4+) embed BTF and don't require headers.
 
-*See also:* _Performance Analysis and Measurement (CPU Architecture volume)_ (PMU counters, TMAM), _NAT & Firewalls (Networking volume)_ (eBPF/XDP packet filtering — the original BPF use case), _The Scheduler_ (sched_ext lets eBPF *implement* the scheduler, not just observe it).
+*See also:* _Performance Analysis and Measurement (CPU Architecture volume)_ (PMU counters, TMAM), _NAT & Firewalls (Networking volume)_ (eBPF/XDP packet filtering, the original BPF use case), _The Scheduler_ (sched_ext lets eBPF *implement* the scheduler, not just observe it).
