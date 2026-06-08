@@ -76,7 +76,7 @@ Adds a `PRE-COMMIT` phase that allows participants to infer the commit decision 
 
 == Paxos Commit
 
-Lamport (2006): replace each participant's log write with a Paxos instance. Survives coordinator failure without blocking, at the cost of more messages (2F+1 acceptors per shard for F fault tolerance).
+Gray, J., Lamport, L. (2006): replace each participant's log write with a Paxos instance. Survives coordinator failure without blocking, at the cost of more messages (2F+1 acceptors per shard for F fault tolerance).
 
 == Calvin: Deterministic Concurrency Control
 
@@ -219,7 +219,7 @@ class BookingOrchestrator:
 
 Gray, J. (1978). "Notes on Database Operating Systems." Lecture Notes in Computer Science. (2PC origin)
 
-Lamport, L. (2006). "Fast Paxos." Distributed Computing 19(2).
+Gray, J., Lamport, L. (2006). "Consensus on Transaction Commit." ACM Transactions on Database Systems 31(1).
 
 Thomson, A., Diamond, T., Weng, S., Ren, K., Shao, P., Abadi, D. (2012). "Calvin: Fast Distributed Transactions for Partitioned Database Systems." SIGMOD.
 
