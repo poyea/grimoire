@@ -371,3 +371,15 @@ int64_t fibonacci(int n, int64_t mod) {
 *Montgomery, P.L. (1985)*. Modular Multiplication Without Trial Division. Mathematics of Computation 44(170): 519-521.
 
 *Crandall, R. & Pomerance, C. (2005)*. Prime Numbers: A Computational Perspective (2nd ed.). Springer. ISBN 978-0387252827.
+
+== Further Reading
+
+Knuth, D. E. (1969). _The Art of Computer Programming_, Vol. 2: Seminumerical Algorithms. Addison-Wesley. (Comprehensive treatment of arithmetic algorithms, modular arithmetic, GCD, and primality.)
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 31 on number-theoretic algorithms: GCD, modular exponentiation, RSA, and Miller-Rabin primality.)
+
+Hardy, G. H., & Wright, E. M. (2008). _An Introduction to the Theory of Numbers_, 6th ed. Oxford University Press. (Classical mathematical foundation for number theory underlying algorithmic applications.)
+
+Shoup, V. (2009). _A Computational Introduction to Number Theory and Algebra_, 2nd ed. Cambridge University Press. (Bridges pure number theory and algorithmic implementation; freely available online.)
+
+Crandall, R., & Pomerance, C. (2005). _Prime Numbers: A Computational Perspective_, 2nd ed. Springer. (Deep coverage of primality testing, integer factorization, and cryptographic applications.)

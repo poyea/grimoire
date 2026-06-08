@@ -673,3 +673,15 @@ Traditional chaining would require following pointers and loading entire entries
 - Kulukundis, M. (2017). "Designing a Fast, Efficient, Cache-friendly Hash Table, Step by Step." CppCon 2017.
 - Alcantara, D. et al. (2011). "Building an Efficient Hash Table on the GPU." IEEE IPDPS.
 - Richter, S. et al. (2015). "A Seven-Dimensional Analysis of Hashing Methods." PVLDB 9(3).
+
+== Further Reading
+
+Knuth, D. E. (1973). _The Art of Computer Programming_, Vol. 3: Sorting and Searching. Addison-Wesley. (Section 6.4: the definitive early treatment of hashing, including collision resolution and load factor analysis.)
+
+Carter, J. L., & Wegman, M. N. (1979). "Universal Classes of Hash Functions." _Journal of Computer and System Sciences_ 18(2): 143--154. (The paper introducing universal hashing with provable collision bounds.)
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 11 on hash tables: chaining, open addressing, and perfect hashing.)
+
+Pagh, R., & Rodler, F. F. (2004). "Cuckoo Hashing." _Journal of Algorithms_ 51(2): 122--144. (Cuckoo hashing achieving $O(1)$ worst-case lookup.)
+
+Mitzenmacher, M., & Upfal, E. (2017). _Probability and Computing_, 2nd ed. Cambridge University Press. (Rigorous probabilistic analysis of randomized hashing, bloom filters, and load balancing.)
