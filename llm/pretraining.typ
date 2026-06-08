@@ -1,6 +1,6 @@
 = Pretraining
 
-Pretraining is the process of learning a general-purpose language model from raw text by predicting the next token at scale. Every capability a model has — reasoning, code generation, factual recall — is acquired here, before any fine-tuning. This chapter covers the full stack: data pipelines, the training objective, scaling laws, numerical precision, memory management, optimizers, distributed training, and stability.
+Pretraining is the process of learning a general-purpose language model from raw text by predicting the next token at scale. Every capability a model has (reasoning, code generation, factual recall) is acquired here, before any fine-tuning. This chapter covers the full stack: data pipelines, the training objective, scaling laws, numerical precision, memory management, optimizers, distributed training, and stability.
 
 *See also:* _Transformer Architecture_ (model internals), _Multi-GPU Communication and Scaling (GPU Architecture volume)_ (hardware communication primitives used in distributed training), _ML Workload Optimization on GPUs (GPU Architecture volume)_ (GEMM kernels, Flash Attention).
 
@@ -55,7 +55,7 @@ for i in range(num_merges):
 ```
 
 ```python
-# Production: tiktoken (OpenAI) — used by GPT-4 and (a related variant) by LLaMA 3
+# Production: tiktoken (OpenAI), used by GPT-4 and (a related variant) by LLaMA 3
 import tiktoken
 
 enc = tiktoken.get_encoding("cl100k_base")   # GPT-3.5 / GPT-4 (100 256 tokens)
@@ -79,7 +79,7 @@ print(enc.decode(ids))  # round-trip
 
 A larger vocabulary reduces sequence length (lower compute) but increases the embedding matrix size and makes rare tokens harder to learn.
 
-*SentencePiece and Unigram LM.* SentencePiece (Kudo & Richardson, 2018 — used by LLaMA 1/2, Gemma, T5, mT5) is a tokenizer _framework_ that operates directly on raw Unicode strings (treating whitespace as a regular symbol, prefixed `▁`), so detokenization is fully reversible and language-agnostic. It supports both BPE and the _Unigram language model_ algorithm (Kudo, 2018) as alternatives. Unigram starts from a large seed vocabulary and iteratively prunes tokens that least increase the corpus likelihood under a unigram LM, yielding probabilistic segmentations (useful for subword regularization at training time). SentencePiece additionally enables _byte-fallback_: any token that fails to encode is decomposed into raw UTF-8 bytes (256 reserved ids), guaranteeing zero out-of-vocabulary tokens even on unseen scripts or emoji — the same property tiktoken achieves by starting from a byte-level base vocabulary.
+*SentencePiece and Unigram LM.* SentencePiece (Kudo & Richardson, 2018; used by LLaMA 1/2, Gemma, T5, mT5) is a tokenizer _framework_ that operates directly on raw Unicode strings (treating whitespace as a regular symbol, prefixed `▁`), so detokenization is fully reversible and language-agnostic. It supports both BPE and the _Unigram language model_ algorithm (Kudo, 2018) as alternatives. Unigram starts from a large seed vocabulary and iteratively prunes tokens that least increase the corpus likelihood under a unigram LM, yielding probabilistic segmentations (useful for subword regularization at training time). SentencePiece additionally enables _byte-fallback_: any token that fails to encode is decomposed into raw UTF-8 bytes (256 reserved ids), guaranteeing zero out-of-vocabulary tokens even on unseen scripts or emoji, the same property tiktoken achieves by starting from a byte-level base vocabulary.
 
 === Deduplication with MinHash
 
@@ -123,7 +123,7 @@ At the scale of CommonCrawl (petabytes), this pipeline runs on Spark or Ray with
 
 === Dataset Mixture
 
-Modern LLMs train on a weighted mixture of sources. The mixture ratios profoundly affect downstream capability — code-heavy mixtures improve reasoning, book-heavy mixtures improve long-form coherence.
+Modern LLMs train on a weighted mixture of sources. The mixture ratios profoundly affect downstream capability: code-heavy mixtures improve reasoning, book-heavy mixtures improve long-form coherence.
 
 *Typical mixture for a 1T–2T token pretraining run:*
 
@@ -211,7 +211,7 @@ import torch, torch.nn.functional as F
 
 def compute_perplexity(model, input_ids: torch.Tensor) -> float:
     """
-    input_ids: [1, T] — a single document, already tokenized.
+    input_ids: [1, T] -- a single document, already tokenized.
     Returns scalar perplexity.
     """
     model.eval()
@@ -248,7 +248,7 @@ def sliding_ppl(model, enc, text: str, stride: int = 512,
 
 === The Compute-Optimal Frontier
 
-Kaplan et al. (2020) showed that loss scales as a power law in $N$ (parameters) and $D$ (training tokens). Hoffmann et al. (2022) — the _Chinchilla_ paper — refined these estimates and showed that prior models (GPT-3, Gopher) were significantly undertrained. Their key finding: for a fixed compute budget $C approx 6 N D$ FLOPs, the optimal allocation is:
+Kaplan et al. (2020) showed that loss scales as a power law in $N$ (parameters) and $D$ (training tokens). Hoffmann et al. (2022, the _Chinchilla_ paper) refined these estimates and showed that prior models (GPT-3, Gopher) were significantly undertrained. Their key finding: for a fixed compute budget $C approx 6 N D$ FLOPs, the optimal allocation is:
 
 $ N_"opt" = G_N dot C^(a) , quad D_"opt" = G_D dot C^(b) $
 
@@ -277,7 +277,7 @@ Compute $C$ is measured in FLOPs. For a dense transformer, $C approx 6 N D$ (for
 
 _Note:_ A100 numbers (312 TFLOPS BF16 dense) are kept for historical reference; H100 figures use 989 TFLOPS BF16 dense (1979 TFLOPS with 2:4 sparsity, roughly halving the H100 column when applicable). Real wall-clock days are 1.5–2$times$ these ideal-MFU numbers.
 
-_Note:_ LLaMA 3 8B trains on 15T tokens — deliberately far past Chinchilla-optimal for a small model, optimizing _inference_ cost at a fixed serving budget rather than training cost. This "overtrain small models" strategy is practical when models are deployed at scale.
+_Note:_ LLaMA 3 8B trains on 15T tokens, deliberately far past Chinchilla-optimal for a small model, optimizing _inference_ cost at a fixed serving budget rather than training cost. This "overtrain small models" strategy is practical when models are deployed at scale.
 
 ```python
 # Chinchilla optimal allocation given compute budget
@@ -304,7 +304,7 @@ for exp in [21, 22, 23, 24, 25]:
 
 === FP32, BF16, and the Master Weight Pattern
 
-Training in FP32 throughout uses 4 bytes per parameter. For a 7B model that is already 28 GB just for weights — before gradients (28 GB) and Adam states (56 GB). Mixed precision training (Micikevicius et al., 2018) dramatically reduces memory while preserving convergence:
+Training in FP32 throughout uses 4 bytes per parameter. For a 7B model that is already 28 GB just for weights (before gradients (28 GB) and Adam states (56 GB)). Mixed precision training (Micikevicius et al., 2018) dramatically reduces memory while preserving convergence:
 
 + *Master weights* are stored in FP32 (4 bytes/param). These are the source of truth updated by the optimizer.
 + *Forward and backward passes* use BF16 (2 bytes/param). BF16 has the same 8-bit exponent as FP32 and is thus more numerically stable than FP16 for large models.
@@ -368,7 +368,7 @@ for batch in dataloader:
   [*Total*],                        [*—*],  [*126 GB*],
 )
 
-This is why a 7B model requires at least two 80 GB A100s for pretraining with standard mixed precision — or sharding via FSDP/ZeRO-3.
+This is why a 7B model requires at least two 80 GB A100s for pretraining with standard mixed precision, or sharding via FSDP/ZeRO-3.
 
 == Gradient Checkpointing
 
@@ -378,9 +378,9 @@ During the forward pass, PyTorch stores all intermediate activations needed for 
 
 $ 32 times 4 times 8192 times 4096 times 2 " bytes" approx 8 " GB " $
 
-just for the residual stream — before attention matrices. Full activation memory for a forward pass is $O(B S d_"ffn") times L approx 60$–$80$ GB.
+just for the residual stream, before attention matrices. Full activation memory for a forward pass is $O(B S d_"ffn") times L approx 60$–$80$ GB.
 
-*Gradient checkpointing* (Chen et al., 2016) reduces the per-activation layer-count factor from $O(L)$ to $O(sqrt(L))$ by storing only a subset of layer outputs (the _checkpoints_) and recomputing the others during the backward pass. The full activation memory therefore scales as $O(sqrt(L) dot B dot S dot d)$ — the $sqrt(L)$ is the layer-axis savings, while batch size $B$, sequence length $S$, and hidden width $d$ still enter linearly. The tradeoff: recomputation adds approximately 33% to total FLOPs.
+*Gradient checkpointing* (Chen et al., 2016) reduces the per-activation layer-count factor from $O(L)$ to $O(sqrt(L))$ by storing only a subset of layer outputs (the _checkpoints_) and recomputing the others during the backward pass. The full activation memory therefore scales as $O(sqrt(L) dot B dot S dot d)$, where the $sqrt(L)$ is the layer-axis savings, while batch size $B$, sequence length $S$, and hidden width $d$ still enter linearly. The tradeoff: recomputation adds approximately 33% to total FLOPs.
 
 === PyTorch Example
 
