@@ -186,7 +186,7 @@ Key numbers:
 - `rows`: if estimate >> actual, planner made an error → add statistics.
 - `Buffers shared hit/read`: cache hit = no I/O, read = disk I/O.
 
-*Huge discrepancy between estimated and actual rows signals cardinality errors.*
+*Large discrepancy between estimated and actual rows signals cardinality errors.*
 
 == Learned Query Optimization
 

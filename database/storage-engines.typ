@@ -245,7 +245,16 @@ Key → f(key) → predicted position ± error bound
 
 A recursive model index (RMI) uses two-stage linear regression: a top model picks a sub-model; the sub-model predicts the position. For 200M integer keys on SSDs, RMI achieves 1.5–3× faster lookups than a cache-optimized B-Tree at 2× smaller footprint.
 
-*Limitation:* inserts require re-training; current production use is mostly read-heavy immutable datasets (e.g., ClickHouse SortedIndexes, CockroachDB experiments).
+*Limitations and production obstacles:* Learned indexes face several practical challenges that restrict their deployment.
+
+- *Re-training on distribution shifts.* A model trained on one key distribution produces large prediction errors if the data distribution changes significantly (e.g., time-series keys or monotonically growing IDs that push keys out of the trained range). Re-training is $O(N)$ over the full dataset and must happen offline, making learned indexes unsuitable for continuously mutating workloads without a triggering and retraining pipeline.
+- *Cold-start requires a fallback index.* Before sufficient training data is available, or immediately after schema/distribution changes, a conventional index (B-Tree or hash) must serve as a fallback. Hybrid architectures carry both structures during the transition window.
+- *Out-of-range inserts fall through.* Inserts whose keys lie outside the range seen during training cannot be positioned by the model and must be routed to the underlying sorted structure or cause a model rebuild. This makes purely learned indexes unsuitable as drop-in replacements for B-Trees in append-heavy workloads.
+- *Re-training cost.* Rebuilding even a two-level RMI over $N$ keys requires a full linear scan for regression fitting: $O(N)$ time. For billion-row tables this is minutes of CPU, not milliseconds.
+
+*Workloads that benefit most:* read-heavy, slow-changing or immutable data with a smooth key distribution (e.g., integer primary keys, dense time-series). OLAP query engines reading frozen sorted files are the natural fit.
+
+*Real deployments:* the Alex index (Ding et al. 2020) ships inside Microsoft SQL Server as an optional index type for read-intensive workloads. Bourbon (Dai et al. 2020) integrates a learned model into LevelDB's SSTable lookup path, reducing point-query latency on skewed workloads.
 
 ```cpp
 // Toy linear learned index (1-level, sorted keys).
