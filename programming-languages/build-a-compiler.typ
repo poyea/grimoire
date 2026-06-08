@@ -703,3 +703,17 @@ Some systems became TC without their designers intending it.
 Characters became tokens via DFA. Tokens became trees via PDA. Trees became typed trees via attribute grammars and decidable Hindley-Milner inference. Typed trees became three-address IR and bytecode via syntax-directed translation. Every layer was an automaton, and the compiler is the proof — not of a theorem on paper, but of a working system you can run.
 
 The hierarchy is not a taxonomy of historical curiosity. It is an engineering guide: choose the weakest computational model that solves your problem. Stay regular when you can. Go context-free when you must. Reach for Turing-completeness only when the problem genuinely requires it — and when you do, accept the tooling costs that come with it.
+
+== Further Reading
+
+Aho, A. V., Lam, M. S., Sethi, R., Ullman, J. D. (2006). _Compilers: Principles, Techniques, and Tools_, 2nd ed. Addison-Wesley. The Dragon Book; the standard reference for the full compilation pipeline from scanning through code generation and optimisation.
+
+Appel, A. W. (1998). _Modern Compiler Implementation in ML_. Cambridge University Press. A cleaner, more modular treatment of the same pipeline; the Tiger language is a good pedagogical vehicle.
+
+Morgensen, T. Æ. (2017). _Basics of Compiler Design_. Extended ed. Self-published (freely available). A concise treatment that follows the same arc from DFAs to code generation with minimal overhead.
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage. Provides the theoretical underpinning: regular languages for lexing, CFLs for parsing, and decidability for why certain analyses are undecidable.
+
+Peirce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapters 8–15 cover the typed IR at the heart of modern compilers, including simply-typed lambda calculus and System F.
+
+Kelsey, R., Clinger, W., Rees, J. (eds.) (1998). "Revised⁵ Report on the Algorithmic Language Scheme." Higher-Order and Symbolic Computation 11(1). The canonical spec of a language whose compiler (from Rabbit through ORBIT to Chez) introduced continuation-passing-style and closure-conversion transformations.

@@ -212,3 +212,17 @@ linear-bounded automaton and membership is PSPACE-complete — unusable for synt
 
 _See also: Pushdown Automata and Context-Free Grammars for the full treatment of context-free
 grammars, pushdown automata, and why ${ a^n b^n c^n }$ is not context-free._
+
+== Further Reading
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage Learning. The standard introduction to automata, formal languages, and computability; the natural companion to this foundations chapter.
+
+Hopcroft, J. E., Ullman, J. D. (1979). _Introduction to Automata Theory, Languages, and Computation_. Addison-Wesley. The classical reference with complete proofs of the Chomsky hierarchy, closure properties, and decidability results.
+
+Chomsky, N. (1956). "Three Models for the Description of Language." IRE Transactions on Information Theory 2(3). The paper establishing the four-level hierarchy of formal grammars and their associated automata.
+
+Turing, A. M. (1936). "On Computable Numbers, with an Application to the Entscheidungsproblem." Proceedings of the London Mathematical Society 42. Introduces the machine model and proves the undecidability of the halting problem, grounding the top of the hierarchy.
+
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapters 1–3 situate type systems within the formal-language hierarchy; a natural bridge between automata-theoretic foundations and the language theory of this book.
+
+Aho, A. V., Lam, M. S., Sethi, R., Ullman, J. D. (2006). _Compilers: Principles, Techniques, and Tools_, 2nd ed. Addison-Wesley. Shows how the hierarchy is operationalised in compiler front-ends, from DFA-based lexers to PDA-based parsers.

@@ -208,3 +208,17 @@ become decidable. This is the design philosophy behind:
 _See also: Type Systems for how type systems deliberately
 restrict expressiveness to regain decidability -- Hindley-Milner inference is decidable
 precisely because the language of types is sub-Turing-complete._
+
+== Further Reading
+
+Turing, A. M. (1936). "On Computable Numbers, with an Application to the Entscheidungsproblem." Proceedings of the London Mathematical Society 42. The founding paper; introduces the machine model, proves the halting problem undecidable, and establishes the limits of mechanical computation.
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage Learning. Chapters 3–6 are the standard pedagogical treatment: Turing machines, the Church-Turing thesis, decidability, reducibility, and the recursion theorem.
+
+Hopcroft, J. E., Ullman, J. D. (1979). _Introduction to Automata Theory, Languages, and Computation_. Addison-Wesley. Chapters 7–9 give the classical account of recursively enumerable languages, many-one and Turing reducibility, and Rice's theorem.
+
+Post, E. L. (1944). "Recursively Enumerable Sets of Positive Integers and Their Decision Problems." Bulletin of the AMS 50(5). Develops the theory of r.e. sets and degrees; introduces Post's problem (the existence of an intermediate degree) that shaped recursion theory for decades.
+
+Rogers, H. (1967). _Theory of Recursive Functions and Effective Computability_. MIT Press. The comprehensive graduate reference for recursion theory: indices, the s-m-n theorem, the recursion theorem, and the arithmetical hierarchy.
+
+Church, A. (1936). "An Unsolvable Problem of Elementary Number Theory." American Journal of Mathematics 58(2). Proves the undecidability of the Entscheidungsproblem via lambda-definability; the companion to Turing's paper establishing the Church-Turing thesis.

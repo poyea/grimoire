@@ -285,3 +285,17 @@ A hybrid: use `std::variant` for expression nodes (frequently visited, closed se
 )
 
 _See also: Advanced String Algorithms (Coding volume) for related string-matching structures._
+
+== Further Reading
+
+Aho, A. V., Lam, M. S., Sethi, R., Ullman, J. D. (2006). _Compilers: Principles, Techniques, and Tools_, 2nd ed. Addison-Wesley. Chapters 4–5 are the standard engineering reference for LL(1), LR(1), LALR(1), and error-recovery strategies.
+
+Earley, J. (1970). "An Efficient Context-Free Parsing Algorithm." CACM 13(2). The O(n³) algorithm for arbitrary CFGs; the reference for general parsing used in NLP and for ambiguous grammars where deterministic parsers fail.
+
+Knuth, D. E. (1965). "On the Translation of Languages from Left to Right." Information and Control 8(6). Introduces LR(k) parsing and proves it is the most powerful deterministic bottom-up method for context-free grammars.
+
+Ford, B. (2004). "Parsing Expression Grammars: A Recognition-Based Syntactic Foundation." POPL. Introduces PEGs as a deterministic alternative to CFGs; the formal basis for packrat parsers and PEG-based grammars.
+
+Wright, A. K., Magnusson, L. (1995). "A Syntax for Abstract Syntax." ICFP. Discusses the design space of concrete vs. abstract syntax, motivating why the gap between the grammar and the AST matters for compiler engineering.
+
+Bird, R. (1998). _Introduction to Functional Programming Using Haskell_, 2nd ed. Prentice-Hall. Chapter 12 develops parser combinators from first principles; the functional-programming complement to the DFA/PDA parser-generator approach.

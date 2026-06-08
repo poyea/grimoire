@@ -798,3 +798,17 @@ _See also:_ _Turing Machines and Computability_ for the machine model, _Complexi
 Theory_ for the analogous classification of the *feasible* fragment of the
 recursive sets, and _Type Systems_ for syntactic restrictions designed to land
 inside the decidable fragment.
+
+== Further Reading
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage Learning. Chapters 3–6 cover Turing machines, the Church-Turing thesis, decidability, and reducibility; the clearest pedagogical treatment.
+
+Turing, A. M. (1936). "On Computable Numbers, with an Application to the Entscheidungsproblem." Proceedings of the London Mathematical Society 42. The founding paper; introduces the machine model and proves the halting problem undecidable.
+
+Rogers, H. (1967). _Theory of Recursive Functions and Effective Computability_. MIT Press. The classical reference for recursion theory; covers indices, the recursion theorem, Rice's theorem, and the arithmetical hierarchy in depth.
+
+Hopcroft, J. E., Ullman, J. D. (1979). _Introduction to Automata Theory, Languages, and Computation_. Addison-Wesley. Chapters 7–9 treat decidability, reducibility, and the recursively enumerable sets with full proofs.
+
+Cutland, N. J. (1980). _Computability: An Introduction to the Theory of Computation_. Cambridge University Press. A rigorous and concise account of partial recursive functions, numberings, and undecidability results.
+
+Odifreddi, P. (1989). _Classical Recursion Theory_, Vol. I. Elsevier. The comprehensive reference for advanced recursion theory including priority arguments and the structure of the Turing degrees.
