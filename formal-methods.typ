@@ -20,6 +20,9 @@
   #include "formal-methods/sat-and-smt.typ"
   #pagebreak()
 
+  #include "formal-methods/separation-logic.typ"
+  #pagebreak()
+
   #include "formal-methods/theorem-proving.typ"
   #pagebreak()
 
