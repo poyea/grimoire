@@ -224,3 +224,17 @@ A typical research path: identify the categorical structure your language needs 
 Categorical semantics is not a competitor to operational or denotational semantics -- it is the *organizing framework* that explains why the others are coherent. Lambek-Scott told us that simply-typed $lambda$ *is* the language of CCCs. Moggi told us that effects *are* monads. Plotkin-Power told us monads *are* algebraic theories. Fibrations and CwFs told us dependent types *are* substitution-respecting fibrations. Topos theory told us that intuitionistic higher-order logic *is* the language of an elementary topos. These are not analogies; they are precise equivalences. The internal-language paradigm -- programming a category by speaking its native syntax -- is the most powerful tool we have for relating *languages we want to design* to *mathematics we already understand*.
 
 _See also: Type Systems for the Curry-Howard-Lambek triangle in operational form; Operational Semantics for the call-by-push-value adjunction; Denotational Semantics for Scott domains as a CCC, game semantics as a fully abstract model, and powerdomain monads; Axiomatic Semantics for separation logic as a BI-algebra and Hoare monads as $T$-algebras._
+
+== Further Reading
+
+Awodey, S. (2010). _Category Theory_, 2nd ed. Oxford University Press. The most accessible graduate introduction; Chapters 1–7 cover the functors, natural transformations, adjoints, and limits needed for categorical semantics.
+
+Lambek, J., Scott, P. J. (1986). _Introduction to Higher Order Categorical Logic_. Cambridge University Press. Establishes the precise equivalence between the simply-typed lambda calculus and cartesian closed categories.
+
+Moggi, E. (1991). "Notions of Computation and Monads." Information and Computation 93(1). The categorical foundation of effect semantics; shows monads uniformly model notions of computation.
+
+Jacobs, B. (1999). _Categorical Logic and Type Theory_. Elsevier. The definitive reference for fibred categorical semantics of dependent types; comprehensive but demanding.
+
+Plotkin, G., Power, J. (2001). "Adequacy for Algebraic Effects." FoSSaCS. Connects the theory of algebraic effects to Moggi's monadic semantics via the correspondence between algebraic theories and their free monads.
+
+MacLane, S. (1971). _Categories for the Working Mathematician_. Springer. The foundational text; adjoint functors and monads (Chapter VI) are the machinery behind Moggi's interpretation of effects.

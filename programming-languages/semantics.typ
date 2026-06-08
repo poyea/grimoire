@@ -284,3 +284,17 @@ errors".
 _See also: Type Systems for the full Progress + Preservation
 proof for the simply-typed lambda calculus and the statement of type-soundness for
 Hindley-Milner._
+
+== Further Reading
+
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. The standard graduate text; Chapter 3 introduces operational semantics, and Chapters 8–9 give the progress and preservation proofs for STLC.
+
+Plotkin, G. D. (1981). "A Structural Approach to Operational Semantics." DAIMI Report FN-19. Introduces SOS; the framework through which progress, preservation, and subject reduction are typically stated.
+
+Scott, D. S., Strachey, C. (1971). "Toward a Mathematical Semantics for Computer Languages." Oxford PRG Monograph. Denotational semantics as the compositional alternative; the contrast with operational semantics clarifies what each approach proves.
+
+Milner, R. (1978). "A Theory of Type Polymorphism in Programming." JCSS 17(3). Introduces Hindley-Milner type inference and the principal-type property; the type system that bridges STLC and modern ML-family languages.
+
+Wright, A. K., Felleisen, M. (1994). "A Syntactic Approach to Type Soundness." Information and Computation 115(1). Reframes type soundness as progress + preservation for small-step semantics; the modern methodology used throughout this chapter.
+
+Winskel, G. (1993). _The Formal Semantics of Programming Languages_. MIT Press. Chapter 2 gives operational semantics in the inference-rule style; Chapter 6 covers denotational semantics with fixed points; an ideal companion to this chapter.

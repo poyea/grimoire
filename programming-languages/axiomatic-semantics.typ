@@ -293,3 +293,17 @@ Modern program logics target properties beyond input-output correctness:
 Axiomatic semantics has travelled from Floyd's annotated flowcharts to industrial verification of system kernels. The arc is: Hoare triples + relative completeness (Hoare 1969, Cook 1978); predicate transformers (Dijkstra 1975); refinement calculus (Back 1978, Morgan 1990); separation logic (Reynolds, O'Hearn, Yang 2001-2002) with its frame rule for local reasoning; concurrent separation logic (O'Hearn 2007); higher-order step-indexed separation logic with ghost state and invariants in Iris (2015-). Throughout, the methodology is the same: associate program text with logical claims; derive claims by syntactic rules; discharge any unavoidable mathematical content to a theorem prover. The reward, demonstrated in seL4, CompCert, HACL\*, and Iris-verified concurrent libraries, is software whose correctness is a *machine-checked theorem*.
 
 _See also: Operational Semantics for the operational model over which soundness is stated; Type Systems for refinement types and Hoare type theory; Categorical Semantics for the monadic structure of effectful computation; Denotational Semantics for the predicate-transformer view as a model in the category of complete lattices._
+
+== Further Reading
+
+Hoare, C. A. R. (1969). "An Axiomatic Basis for Computer Programming." CACM 12(10). The founding paper; introduces Hoare triples and the axiom schemata for assignment, sequencing, and conditionals.
+
+Dijkstra, E. W. (1976). _A Discipline of Programming_. Prentice-Hall. Introduces weakest preconditions and predicate transformers as a calculus for deriving correct programs.
+
+Reynolds, J. C. (2002). "Separation Logic: A Logic for Shared Mutable Data Structures." LICS. The definitive presentation of separation logic, the frame rule, and local reasoning about heap programs.
+
+O'Hearn, P., Reynolds, J., Yang, H. (2001). "Local Reasoning about Programs That Alter Data Structures." CSL. Introduces the key idea of the frame rule, enabling modular reasoning about heap-manipulating code.
+
+Klein, G. et al. (2009). "seL4: Formal Verification of an OS Kernel." SOSP. Demonstrates end-to-end Hoare-logic verification of a production microkernel in Isabelle/HOL.
+
+Jung, R. et al. (2018). "Iris from the Ground Up: A Modular Foundation for Higher-Order Concurrent Separation Logic." JFP 28. Presents Iris, the current state of the art in concurrent separation logic with ghost state and invariants.

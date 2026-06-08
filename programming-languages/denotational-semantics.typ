@@ -232,3 +232,17 @@ The continuous functions on $NN_bot arrow.r NN_bot$ are *exactly* the partial re
 Denotational semantics is the mathematical face of program meaning. The key technology -- CPOs, Scott continuity, Kleene fixed points, recursive domain equations, powerdomains, game semantics -- is the result of fifty years of confronting the size and self-reference problems posed by recursion and higher-order functions. The conceptual yield is the *adequacy/full abstraction* dichotomy, which sets the standard against which any compositional model must measure itself. The road from Scott's $D_infinity$ to game semantics to monadic structure is the road from "can we even give meaning to $lambda$?" to "what is the precise mathematical content of *every* effect?" That road runs straight into categorical semantics.
 
 _See also: Operational Semantics for the adequacy theorem's operational side; Categorical Semantics for monadic and algebraic-effect semantics; Type Systems for the type-soundness theorems whose meaning is fixed by the denotational model._
+
+== Further Reading
+
+Scott, D. S., Strachey, C. (1971). "Toward a Mathematical Semantics for Computer Languages." Oxford Programming Research Group Technical Monograph PRG-6. The founding paper of denotational semantics; introduces domains and the compositional meaning function.
+
+Scott, D. S. (1976). "Data Types as Lattices." SIAM Journal on Computing 5(3). Establishes the domain-theoretic foundations: complete partial orders, continuous functions, and least fixed points as program meanings.
+
+Milner, R. (1977). "Fully Abstract Models of Typed Lambda-Calculi." Theoretical Computer Science 4(1). Introduces the full abstraction problem, showing that Scott's model is adequate but not fully abstract for PCF.
+
+Abramsky, S., Jagadeesan, R., Malacaria, P. (2000). "Full Abstraction for PCF." Information and Computation 163(2). Game semantics solution to the PCF full-abstraction problem; the strategies and arenas model is the finest compositional denotational model known.
+
+Winskel, G. (1993). _The Formal Semantics of Programming Languages_. MIT Press. The standard graduate textbook; covers operational, denotational, and axiomatic semantics with full proofs, including fixed-point theory and powerdomains.
+
+Abrahamson, K. (1992). "Relating Denotational and Operational Semantics for Programming Languages with Recursion and Concurrency." Technical Report. Surveys adequacy and full abstraction results across call-by-value, call-by-name, and concurrent settings.

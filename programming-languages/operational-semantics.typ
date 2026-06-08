@@ -313,3 +313,17 @@ Cost semantics also underlies *gas analysis* in blockchain virtual machines (EVM
 Operational semantics is the *bread and butter* of programming language theory. Small-step SOS yields the cleanest accounts of concurrency and stuck states; big-step is the natural shape of an interpreter. Evaluation contexts let us pin the active position without enumerating congruence rules, and they prepare the language to host effects. Abstract machines (CK, CEK, CESK) are the deforested form of context-based reduction, and they are the bridge to implementation and to static analysis via AAM. Call-by-push-value clarifies the value/computation distinction underlying both CBV and CBN, and connects to monadic and categorical semantics. Bisimulation, contextual equivalence, and logical relations are the tools for *proving* programs equal; step-indexed and Kripke variants extend the technique to recursive types and mutable state. Together these techniques constitute the substrate over which type soundness, compiler correctness, and program logics are formulated.
 
 _See also: Type Systems for progress and preservation; Denotational Semantics for the adequacy and full abstraction results that complement operational equivalence; Axiomatic Semantics for soundness with respect to Hoare logic._
+
+== Further Reading
+
+Plotkin, G. D. (1981). "A Structural Approach to Operational Semantics." DAIMI Report FN-19, Aarhus University. The founding document of Structural Operational Semantics (SOS); introduces the inference-rule style for both small-step (SOS) and big-step (natural semantics) operational definitions.
+
+Felleisen, M., Hieb, R. (1992). "The Revised Report on the Syntactic Theories of Sequential Control and State." Theoretical Computer Science 103(2). Introduces evaluation contexts and the notion of a reduction context; the standard reference for the context-based operational semantics used in effect systems.
+
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapters 3–8 develop small-step and big-step operational semantics for the untyped and simply-typed lambda calculus with full progress and preservation proofs.
+
+Midtgaard, J. (2012). "Control-Flow Analysis of Functional Programs." ACM Computing Surveys 44(2). Surveys abstract interpretation of operational semantics (AAM and its predecessors) as a route from concrete to abstract operational models.
+
+Levy, P. B. (2004). _Call-By-Push-Value: A Functional/Imperative Synthesis_. Kluwer. Presents the CBPV calculus; the definitive treatment of the value/computation distinction underpinning both CBV and CBN operational semantics.
+
+Sangiorgi, D. (2011). _Introduction to Bisimulation and Coinduction_. Cambridge University Press. The cleanest modern treatment of bisimulation, coinduction, and their role in program equivalence for operational semantics.
