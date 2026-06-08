@@ -49,7 +49,7 @@ The surface code dominates because:
 - *Highest known threshold* among practical codes.
 - *Lattice surgery* enables logical operations without long-range moves.
 
-Google's 2023-2024 demonstrations (Nature 614, Nature 638) showed the first sub-threshold suppression: $d=3 -> d=5 -> d=7$ each cut logical error rate by $approx 2.1 times$ on Willow.
+Google's 2023-2024 demonstrations (Acharya et al. 2023, Nature 614; Acharya et al. 2024, Nature 638) showed the first sub-threshold suppression: $d=3 -> d=5 -> d=7$ each cut logical error rate by $approx 2.1 times$ on Willow.
 
 == Decoders
 
