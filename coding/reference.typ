@@ -735,3 +735,17 @@ Measurements obtained via:
 - Published vendor specifications
 
 *Note:* Performance characteristics evolve with each CPU generation. Always profile on target hardware for production workloads.
+
+== Further Reading
+
+Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. Comprehensive guide to CPU caches, NUMA, TLBs, and memory access patterns; the standard reference for cache-conscious programming.
+
+Fog, A. (2024). Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-operation Breakdowns. Copenhagen University College of Engineering. Empirical instruction timing tables for x86 processors from 8086 through Raptor Lake; essential for cycle-level analysis.
+
+Fog, A. (2024). Optimizing Software in C++: An Optimization Guide for Windows, Linux, and Mac Platforms. Copenhagen University College of Engineering. Practical guide covering branch prediction, vectorization, memory layout, and profiler-driven optimization.
+
+Intel Corporation (2024). Intel 64 and IA-32 Architectures Optimization Reference Manual. Intel. Official micro-architectural tuning guide; documents throughput, latency, and port assignments for all IA-32 instructions.
+
+Gregg, B. (2020). Systems Performance: Enterprise and the Cloud, 2nd ed. Addison-Wesley. Covers profiling methodology, hardware counters (perf, BPF), USE method, and latency analysis for Linux systems.
+
+Mytkowicz, T. et al. (2009). "Producing Wrong Data Without Doing Anything Obviously Wrong!" ASPLOS. Classic paper on measurement pitfalls -- ASLR, environment variables, and cache-set conflicts that silently corrupt microbenchmark results.
