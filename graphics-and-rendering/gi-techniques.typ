@@ -133,18 +133,18 @@ Lumen also supports hardware $"RT"$ on consoles and PC at higher quality setting
 
 == Further Reading
 
-Kajiya, J. T. (1986). "The Rendering Equation." SIGGRAPH.
+Kajiya, J. T. (1986). "The Rendering Equation." SIGGRAPH. Introduced the integral formulation of light transport that underlies all modern path tracing and GI algorithms.
 
-Jensen, H. W. (2001). _Realistic Image Synthesis Using Photon Mapping_. A K Peters.
+Jensen, H. W. (1996). "Global Illumination using Photon Maps." Rendering Techniques (EGWR). Describes photon mapping: a two-pass algorithm storing photon hits in a kd-tree for density estimation.
 
-Veach, E., Guibas, L. (1995). "Optimally Combining Sampling Techniques for Monte Carlo Rendering." SIGGRAPH.
+Ward, G. J. et al. (1988). "A Ray Tracing Solution for Diffuse Interreflection." SIGGRAPH. Introduced irradiance caching — the first practical algorithm for glossy/diffuse interreflection at interactive scales.
 
-Bitterli, B. et al. (2020). "Spatiotemporal Reservoir Resampling for Real-Time Ray Tracing with Dynamic Direct Lighting." ACM TOG / SIGGRAPH.
+Bitterli, B. et al. (2020). "Spatiotemporal Reservoir Resampling for Real-Time Ray Tracing with Dynamic Direct Lighting." SIGGRAPH. Introduces ReSTIR, now the standard algorithm for real-time denoised direct and indirect lighting on RTX hardware.
 
-Ouyang, Y. et al. (2021). "ReSTIR GI: Path Resampling for Real-Time Path Tracing." HPG.
+Majercik, Z. et al. (2019). "Dynamic Diffuse Global Illumination with Ray-Traced Irradiance Fields." JCGT 8(2). The DDGI algorithm used in RTXGI SDK: probe-grid irradiance fields with real-time ray-traced updates.
 
-Majercik, Z. et al. (2019). "Dynamic Diffuse Global Illumination with Ray-Traced Irradiance Fields." JCGT.
+Laine, S. et al. (2020). "Megakernels Considered Harmful: Wavefront Path Tracing on GPUs." HPG. Analyses why monolithic path-tracing kernels under-utilize GPUs and shows wavefront/stream compaction as the solution.
 
-Heitz, E. (2018). "Sampling the GGX Distribution of Visible Normals." JCGT.
+Pharr, M., Jakob, W., Humphreys, G. (2023). _Physically Based Rendering: From Theory to Implementation_, 4th ed. MIT Press. The authoritative textbook on light transport theory, Monte Carlo integration, and BVH-accelerated path tracing.
 
-Karis, B. et al. (2021). "Lumen: Real-Time Global Illumination in Unreal Engine 5." Advances in Real-Time Rendering, SIGGRAPH.
+Christensen, P., Jarosz, W. (2016). "The Path to Path-Traced Movies." Foundations and Trends in Computer Graphics and Vision 10(2). Survey of production rendering evolution from Reyes to path tracing at Pixar/Disney.
