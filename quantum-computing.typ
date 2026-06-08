@@ -20,6 +20,9 @@
   #include "quantum-computing/quantum-algorithms.typ"
   #pagebreak()
 
+  #include "quantum-computing/nisq-and-benchmarking.typ"
+  #pagebreak()
+
   #include "quantum-computing/qubits-and-gates.typ"
   #pagebreak()
 
