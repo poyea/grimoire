@@ -277,6 +277,8 @@ def generate(
     return torch.tensor(generated, device=device)
 ```
 
+The prefill phase is *compute-bound*: all prompt tokens are processed in a single forward pass as a dense matrix multiplication, making efficient use of tensor cores. The decode phase is *memory-bandwidth-bound*: each step processes one token but must read the entire KV cache from HBM, so throughput scales with memory bandwidth rather than compute. This asymmetry drives batching strategy: large batch sizes help prefill throughput by amortizing the matrix multiplications over more sequences, while decode latency is dominated by KV cache size and available memory bandwidth regardless of batch size.
+
 == Speculative Decoding
 
 === Motivation
