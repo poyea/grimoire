@@ -1,14 +1,14 @@
 = Reasoning Models
 
-A "reasoning model" allocates substantial *inference-time compute* to a chain of intermediate steps before emitting a final answer. The transformation from a one-shot generator to a deliberate reasoner — through prompting, training, or both — defines the o1 / R1 generation of models. This chapter covers chain-of-thought prompting and its variants, the algorithms (self-consistency, ToT, GoT, MCTS-style search), the RL training that produces "native" reasoners (DeepSeek-R1, GRPO, DAPO), reward design over verifiable tasks, and the engineering implications (long reasoning traces, KV cache for thinking tokens, hidden vs. visible thoughts).
+A "reasoning model" allocates substantial *inference-time compute* to a chain of intermediate steps before emitting a final answer. The transformation from a one-shot generator to a deliberate reasoner (through prompting, training, or both) defines the o1 / R1 generation of models. This chapter covers chain-of-thought prompting and its variants, the algorithms (self-consistency, ToT, GoT, MCTS-style search), the RL training that produces "native" reasoners (DeepSeek-R1, GRPO, DAPO), reward design over verifiable tasks, and the engineering implications (long reasoning traces, KV cache for thinking tokens, hidden vs. visible thoughts).
 
 *See also:* _RLHF_ (PPO-family algorithms reasoning RL extends), _Inference Optimization_ (long reasoning traces are decode-bound), _Evaluation_ (verifiable rewards for math/code benchmarks).
 
 == Chain of Thought
 
-Wei et al. (2022) showed that simply prompting an LLM with worked examples that include intermediate steps ("Let's think step by step") dramatically improves performance on math, logic, and symbolic reasoning. The model emits intermediate tokens — "thoughts" — before its answer, and accuracy on GSM8K jumps from ~17% to ~57% for PaLM 540B.
+Wei et al. (2022) showed that simply prompting an LLM with worked examples that include intermediate steps ("Let's think step by step") dramatically improves performance on math, logic, and symbolic reasoning. The model emits intermediate tokens ("thoughts") before its answer, and accuracy on GSM8K jumps from ~17% to ~57% for PaLM 540B.
 
-*Mechanism (current understanding):* CoT lets the model use *output tokens as scratch* — each token's computation depends on all prior tokens via attention, so a chain of tokens implements a deeper effective computation than a single forward pass. The model's expressiveness goes from $"TC"^0$ (constant-depth) to something like log-depth in the number of CoT tokens (Feng et al. 2023).
+*Mechanism (current understanding):* CoT lets the model use *output tokens as scratch*; each token's computation depends on all prior tokens via attention, so a chain of tokens implements a deeper effective computation than a single forward pass. The model's expressiveness goes from $"TC"^0$ (constant-depth) to something like log-depth in the number of CoT tokens (Feng et al. 2023).
 
 *Zero-shot CoT* (Kojima et al. 2022): append "Let's think step by step." with no examples. Works less reliably than few-shot but scales better as instruction-tuned models internalize the pattern.
 
@@ -53,7 +53,7 @@ Self-consistency searches independent traces. ToT (Yao et al. 2023) interleaves 
 
 GoT (Besta et al. 2024) generalizes to a DAG: branches can be *merged* by combining partial reasoning. Useful when sub-problems recur (algorithmic problems, theorem proving).
 
-Both are *test-time* algorithms — no model weights change. Compute scales with branching factor and depth; gains are large on combinatorial tasks (24-game, crossword) and small on tasks where a single coherent trace suffices.
+Both are *test-time* algorithms, with no model weights changing. Compute scales with branching factor and depth; gains are large on combinatorial tasks (24-game, crossword) and small on tasks where a single coherent trace suffices.
 
 == Process vs. Outcome Reward
 
@@ -68,7 +68,7 @@ The DeepSeek-R1 result (below) showed that ORM with verifiable tasks + scale is 
 
 == RL on Verifiable Rewards
 
-The o1 / R1 generation discovered that *RL on tasks with cheap automatic verification* (math problems with checkable answers, code with unit tests) drives the model to invent its own long, self-correcting CoT traces — without explicit step-by-step supervision.
+The o1 / R1 generation discovered that *RL on tasks with cheap automatic verification* (math problems with checkable answers, code with unit tests) drives the model to invent its own long, self-correcting CoT traces, without explicit step-by-step supervision.
 
 === Reward Design
 
@@ -78,7 +78,7 @@ $ r = cases(+1 & "if final answer matches ground truth", -0.1 & "if format inval
 For code:
 $ r = "(unit tests passed)" / "(unit tests total)" $
 
-The format reward is small but essential — it teaches the model to emit a parseable answer (`\\boxed{...}`).
+The format reward is small but essential; it teaches the model to emit a parseable answer (`\\boxed{...}`).
 
 === PPO Recap
 
@@ -90,7 +90,7 @@ DeepSeekMath (Shao et al. 2024) and DeepSeek-R1 introduced GRPO: for each prompt
 
 $ A_i = (r_i - mu) / sigma, quad mu = 1/G sum_i r_i $
 
-Update with PPO-style clipped objective on $A_i$. No critic — the group itself plays the baseline role. KL divergence to a reference model regularizes (unbiased estimator).
+Update with PPO-style clipped objective on $A_i$. No critic; the group itself plays the baseline role. KL divergence to a reference model regularizes (unbiased estimator).
 
 $ cal(L)_"GRPO" = -EE_("group") [min(r_(theta) A_i, "clip"(r_(theta), 1-epsilon, 1+epsilon) A_i)] + beta D_"KL"(pi_(theta) || pi_"ref") $
 
@@ -133,7 +133,7 @@ These behaviors are not in the SFT data. They emerge from the RL objective + div
 
 === Thought Tokens
 
-o1 separates *hidden* reasoning (not shown to user, billed but not returned) from the visible answer. Hidden tokens dominate the cost — a single hard problem can use 10–100k thought tokens.
+o1 separates *hidden* reasoning (not shown to user, billed but not returned) from the visible answer. Hidden tokens dominate the cost; a single hard problem can use 10–100k thought tokens.
 
 Open-weight reasoners (DeepSeek-R1, QwQ) emit `<think> ... </think>` blocks that callers may strip before display. The model is *trained* to use this delimiter consistently; stripping at inference does not break behavior.
 
@@ -142,8 +142,8 @@ Open-weight reasoners (DeepSeek-R1, QwQ) emit `<think> ... </think>` blocks that
 A reasoning model decoding 32k thought tokens at 50 tok/s takes ~10 minutes per query. Implications:
 
 - *Latency budgets* for production must be re-thought; chat-style "instant" responses are gone.
-- *Batching* — long traces from different users can interleave (continuous batching).
-- *Cost* — at 32k tokens × \$60/M output, a single complex query is \$2.
+- *Batching*: long traces from different users can interleave (continuous batching).
+- *Cost*: at 32k tokens × \$60/M output, a single complex query is \$2.
 
 Serving systems benefit from *budget-aware* decoding: cap thought tokens at $T_"max"$, force a final answer attempt if not produced.
 
@@ -171,11 +171,11 @@ Without length-aware rewards, models learn that *longer* traces win more rewards
 
 === Mode Collapse
 
-Group-relative methods (GRPO) zero out when all $G$ trajectories agree. After early training, models converge to one solution path per prompt — diversity collapses. Remedy: KL term to reference, temperature on rollouts, dynamic sampling (DAPO).
+Group-relative methods (GRPO) zero out when all $G$ trajectories agree. After early training, models converge to one solution path per prompt; diversity collapses. Remedy: KL term to reference, temperature on rollouts, dynamic sampling (DAPO).
 
 === Distillation From Reasoners
 
-You can SFT a smaller model on a frontier reasoner's traces (DeepSeek-R1-Distill-Qwen-7B). Gains are real but the student rarely matches the teacher on novel hard problems — it imitates the surface form of reasoning without the latent search capability. Use distillation for cost reduction, not as a substitute for RL training the small model directly.
+You can SFT a smaller model on a frontier reasoner's traces (DeepSeek-R1-Distill-Qwen-7B). Gains are real but the student rarely matches the teacher on novel hard problems; it imitates the surface form of reasoning without the latent search capability. Use distillation for cost reduction, not as a substitute for RL training the small model directly.
 
 == Further Reading
 

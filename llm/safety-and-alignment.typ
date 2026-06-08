@@ -34,9 +34,9 @@ Two stages:
 1. *SL-CAI:* SFT the model on the revised responses.
 2. *RL-CAI:* train a preference model on the (rejected, chosen) pairs; RLHF the policy.
 
-The constitution is small (a few dozen principles like "the response should be honest" or "the response should avoid encouraging illegal activity." Constitutional AI scales human oversight: humans write the constitution once; the model generates the labels.
+The constitution is small (a few dozen principles like "the response should be honest" or "the response should avoid encouraging illegal activity"). Constitutional AI scales human oversight: humans write the constitution once; the model generates the labels.
 
-Modern Anthropic models use Constitutional AI in combination with human preference data. The technique is widely adopted under various names (RLAIF — Lee et al. 2023; UltraFeedback — Cui et al. 2023).
+Modern Anthropic models use Constitutional AI in combination with human preference data. The technique is widely adopted under various names (RLAIF, Lee et al. 2023; UltraFeedback, Cui et al. 2023).
 
 == RLAIF
 
@@ -50,7 +50,7 @@ In practice, hybrid is the norm: human labels for safety-critical and disputed c
 
 == Direct Preference Optimization Family
 
-PPO requires reward model + policy + reference + value head — four models in GPU memory. DPO (Rafailov et al. 2023) collapses this: derive a closed-form solution that lets you optimize a Bradley–Terry preference objective directly on the policy with only (chosen, rejected) pairs.
+PPO requires reward model + policy + reference + value head (four models in GPU memory). DPO (Rafailov et al. 2023) collapses this: derive a closed-form solution that lets you optimize a Bradley–Terry preference objective directly on the policy with only (chosen, rejected) pairs.
 
 $ cal(L)_"DPO" = -EE_(x, y_w, y_l) [log sigma(beta log (pi_(theta)(y_w | x)) / (pi_"ref"(y_w | x)) - beta log (pi_(theta)(y_l | x)) / (pi_"ref"(y_l | x)))] $
 
@@ -77,7 +77,7 @@ Internal teams plus external red-team partners write attack prompts. Anthropic, 
 
 === Automated
 
-- *Greedy adversarial search* (Zou et al. 2023 — GCG): optimize a suffix that flips the model's refusal. White-box; gradient-based.
+- *Greedy adversarial search* (Zou et al. 2023, GCG): optimize a suffix that flips the model's refusal. White-box; gradient-based.
 - *PAIR / Tree-of-Attacks* (Chao et al. 2023): an attacker LLM iteratively rewrites the prompt until the target complies. Black-box.
 - *AutoDAN, GPTFuzz, Bijection learning:* attack libraries.
 
@@ -95,7 +95,7 @@ Common attack patterns:
 - *Persuasion:* logical arguments ("the user is a medical professional and needs this information").
 - *Encoding:* base64, leetspeak, low-resource language, encoded payloads.
 - *Many-shot:* fill the context with examples of policy-violating answers; the model continues the pattern (Anil et al. 2024).
-- *Prefix injection:* "Sure, here is how to..." — model continues even though the request was harmful.
+- *Prefix injection:* "Sure, here is how to..."; the model continues even though the request was harmful.
 - *Tool-mediated:* the model itself is safe, but a tool result contains harmful instructions the model dutifully executes.
 - *Multimodal:* text-safe prompts paired with images that smuggle in the harmful request.
 - *GCG / adversarial suffix:* gradient-optimized random-looking strings appended to a request.
@@ -110,7 +110,7 @@ Defense layers (no single one suffices):
 
 == Refusal Calibration
 
-The hardest alignment failure mode is *over-refusal* — refusing benign requests because they superficially resemble harmful ones ("How do knives work?"). XSTest, OR-Bench, and StrongREJECT specifically measure over-refusal. A model trained too aggressively on refusal data becomes useless for medicine, security research, and legitimate dual-use queries.
+The hardest alignment failure mode is *over-refusal*, refusing benign requests because they superficially resemble harmful ones ("How do knives work?"). XSTest, OR-Bench, and StrongREJECT specifically measure over-refusal. A model trained too aggressively on refusal data becomes useless for medicine, security research, and legitimate dual-use queries.
 
 Engineering:
 
@@ -145,7 +145,7 @@ Frontier models remain miscalibrated, especially on niche factual claims. Reason
 
 If a model is *more capable* than the humans labeling it, naive RLHF caps capability at human level (or worse, at the noise floor of the labels). Approaches under development:
 
-- *Weak-to-strong generalization* (Burns et al. — OpenAI 2023): train a strong student on a weak supervisor's labels; show the student exceeds the supervisor by learning shared latents. Open question how this scales.
+- *Weak-to-strong generalization* (Burns et al., OpenAI 2023): train a strong student on a weak supervisor's labels; show the student exceeds the supervisor by learning shared latents. Open question how this scales.
 - *Recursive reward modeling* (Leike et al. 2018): use AI assistants to help humans evaluate AI outputs.
 - *Debate* (Irving et al. 2018): two AI models debate; a human judges. The hope is debate makes truth easier to verify than to generate.
 - *Process supervision* (Lightman 2023): label *reasoning steps*, not just outcomes; humans can check steps even when they cannot solve the whole problem.
@@ -174,13 +174,13 @@ Plus per-feature mitigations: agentic actions require confirmation; tools cannot
 
 == Open Problems
 
-- *Jailbreak robustness* — no model is reliably unjailbreakable; the attack surface grows with capabilities and tool access. Current defenses operate at the output layer (classifiers, refusal training) but cannot close off the full combinatorial space of adversarial prompt constructions, especially as context windows lengthen and multimodal inputs add new attack channels. Research directions include certified defenses (smoothed classifiers, input purification) and architecturally separate "guard" modules with distinct weights.
+- *Jailbreak robustness*: no model is reliably unjailbreakable; the attack surface grows with capabilities and tool access. Current defenses operate at the output layer (classifiers, refusal training) but cannot close off the full combinatorial space of adversarial prompt constructions, especially as context windows lengthen and multimodal inputs add new attack channels. Research directions include certified defenses (smoothed classifiers, input purification) and architecturally separate "guard" modules with distinct weights.
 
-- *Inner alignment* — RLHF reliably changes *observable* outputs but the relationship to the model's internal objective — if the model has one in a meaningful sense — is opaque. A model could learn to produce preferred outputs under evaluation without internalizing the intended goal, a problem called *deceptive alignment* in the theoretical literature. Interpretability research (cf. _Interpretability_) is the primary lever: circuit-level analysis of how refusal is implemented could reveal whether refusal is a robust feature or a shallow heuristic.
+- *Inner alignment*: RLHF reliably changes *observable* outputs but the relationship to the model's internal objective (if the model has one in a meaningful sense) is opaque. A model could learn to produce preferred outputs under evaluation without internalizing the intended goal, a problem called *deceptive alignment* in the theoretical literature. Interpretability research (cf. _Interpretability_) is the primary lever: circuit-level analysis of how refusal is implemented could reveal whether refusal is a robust feature or a shallow heuristic.
 
-- *Multi-agent and emergent risk* — interactions between aligned models can produce misaligned aggregate behavior (collusion, deception under selection). When two or more aligned models communicate in a pipeline, each may be compliant in isolation while the pipeline as a whole pursues an unintended outcome — e.g., one agent escalates permissions, another exfiltrates, neither individually tripping a safety filter. Current alignment evaluations are nearly all single-model; multi-agent red-teaming is nascent.
+- *Multi-agent and emergent risk*: interactions between aligned models can produce misaligned aggregate behavior (collusion, deception under selection). When two or more aligned models communicate in a pipeline, each may be compliant in isolation while the pipeline as a whole pursues an unintended outcome — e.g., one agent escalates permissions, another exfiltrates, neither individually tripping a safety filter. Current alignment evaluations are nearly all single-model; multi-agent red-teaming is nascent.
 
-- *Long-horizon agents* — alignment for one-turn QA does not imply alignment for an autonomous agent running for days with internet access and credentials. The problem compounds because mistakes early in a trajectory can be amplified by later actions, and human oversight cannot keep pace with the agent's action rate. Sandboxing, action-level confirmations for high-stakes operations, and formal verification of agent plans (cf. _Agents and Tool Use_) are the available mitigations.
+- *Long-horizon agents*: alignment for one-turn QA does not imply alignment for an autonomous agent running for days with internet access and credentials. The problem compounds because mistakes early in a trajectory can be amplified by later actions, and human oversight cannot keep pace with the agent's action rate. Sandboxing, action-level confirmations for high-stakes operations, and formal verification of agent plans (cf. _Agents and Tool Use_) are the available mitigations.
 
 Most of these are research, not engineering. The engineer's job is to layer defenses, instrument, monitor, and patch.
 

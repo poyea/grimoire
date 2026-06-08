@@ -1,6 +1,6 @@
 = Fine-tuning
 
-Pre-trained LLMs encode vast world knowledge but respond poorly to instructions and specific task formats out of the box. Fine-tuning adapts the model's behavior — teaching it to follow instructions, hold multi-turn conversations, or specialize in a domain — without relearning language from scratch. This chapter covers the full spectrum from expensive full fine-tuning to the parameter-efficient methods (LoRA, QLoRA) that dominate production work, plus the data formats, alignment algorithms, and practical recipes needed to run a real training job.
+Pre-trained LLMs encode vast world knowledge but respond poorly to instructions and specific task formats out of the box. Fine-tuning adapts the model's behavior, teaching it to follow instructions, hold multi-turn conversations, or specialize in a domain, without relearning language from scratch. This chapter covers the full spectrum from expensive full fine-tuning to the parameter-efficient methods (LoRA, QLoRA) that dominate production work, plus the data formats, alignment algorithms, and practical recipes needed to run a real training job.
 
 *See also:* _Pretraining_ (how base weights are obtained), _ML Workload Optimization on GPUs (GPU Architecture volume)_ (GEMM kernels, mixed-precision training), _GPU Memory Hierarchy (GPU Architecture volume)_ (HBM bandwidth and capacity constraints).
 
@@ -8,7 +8,7 @@ Pre-trained LLMs encode vast world knowledge but respond poorly to instructions 
 
 == Full Fine-tuning vs PEFT
 
-Full fine-tuning updates every parameter. For a 7B model at BF16 that is 14 GB of weights; the Adam optimizer adds two more momentum buffers (another 28 GB), and gradients add 14 GB — over 56 GB just for optimizer state before activations. This pushes even 7B models off a single 80 GB A100 without gradient checkpointing. Parameter-Efficient Fine-Tuning (PEFT) methods freeze the base model and train only a small set of additional parameters.
+Full fine-tuning updates every parameter. For a 7B model at BF16 that is 14 GB of weights; the Adam optimizer adds two more momentum buffers (another 28 GB), and gradients add 14 GB: over 56 GB just for optimizer state before activations. This pushes even 7B models off a single 80 GB A100 without gradient checkpointing. Parameter-Efficient Fine-Tuning (PEFT) methods freeze the base model and train only a small set of additional parameters.
 
 === Memory Comparison Table
 
@@ -20,7 +20,7 @@ Full fine-tuning updates every parameter. For a 7B model at BF16 that is 14 GB o
   [QLoRA (r=16, NF4)], [~0.1–0.5%],   [~6–8 GB],        [~48 GB (2×24 GB)],[Base in 4-bit NF4; LoRA in BF16],
 )
 
-_Trainable params_ for LoRA at rank 16 targeting `q_proj` and `v_proj` in all layers of LLaMA 3 8B: approximately 6.8 M out of 8 000 M total (~0.085%). The count is below the MHA estimate because LLaMA 3 uses GQA — `v_proj` is only $4096 times 1024$, not $4096 times 4096$.
+_Trainable params_ for LoRA at rank 16 targeting `q_proj` and `v_proj` in all layers of LLaMA 3 8B: approximately 6.8 M out of 8 000 M total (~0.085%). The count is below the MHA estimate because LLaMA 3 uses GQA; `v_proj` is only $4096 times 1024$, not $4096 times 4096$.
 
 The GPU RAM column is the minimum for training with per-token batch size 1, gradient checkpointing enabled, and no Flash Attention activation recomputation overhead beyond checkpointing. Real jobs need headroom; multiply by ~1.3.
 
@@ -36,7 +36,7 @@ During forward pass the computation is:
 
 $ h = W x + (alpha / r) dot B (A x) $
 
-$A x$ costs $r dot k$ multiplications, $B(A x)$ costs $d dot r$ — a total of $r(d + k)$ versus $d dot k$ for the full update. For $d = k = 4096$ and $r = 16$: full is 16.8 M, LoRA is 131 K — a 128x reduction in the update path.
+$A x$ costs $r dot k$ multiplications, $B(A x)$ costs $d dot r$, a total of $r(d + k)$ versus $d dot k$ for the full update. For $d = k = 4096$ and $r = 16$: full is 16.8 M, LoRA is 131 K (a 128x reduction in the update path).
 
 === Rank Selection
 
@@ -210,9 +210,9 @@ The merged weight is identical in shape to the original; the serving engine (lla
 
 Dettmers et al. (2023) combined three innovations to make fine-tuning 65B (and larger) models accessible on consumer hardware:
 
-1. *NF4 quantization* — the base model is stored in 4-bit NormalFloat4, a data type that is information-theoretically optimal for weights drawn from a normal distribution. Each NF4 value maps to a quantile of the standard normal.
-2. *Double quantization* — the per-block quantization constants are themselves quantized (from FP32 to FP8), saving ~0.4 bits per parameter on top of NF4.
-3. *Paged optimizers* — NVIDIA unified memory is used to page optimizer states to CPU RAM when GPU memory is full, preventing OOM during long sequences.
+1. *NF4 quantization*: the base model is stored in 4-bit NormalFloat4, a data type that is information-theoretically optimal for weights drawn from a normal distribution. Each NF4 value maps to a quantile of the standard normal.
+2. *Double quantization*: the per-block quantization constants are themselves quantized (from FP32 to FP8), saving ~0.4 bits per parameter on top of NF4.
+3. *Paged optimizers*: NVIDIA unified memory is used to page optimizer states to CPU RAM when GPU memory is full, preventing OOM during long sequences.
 
 === Memory Calculation: 65B on 2 × 48 GB
 
@@ -227,7 +227,7 @@ $
 
 _Headroom note:_ peak memory can exceed the static estimate when paged optimizer states spill to CPU under fragmentation, when activation checkpointing is partially disabled, or when sequence length exceeds 2K. Budget +15–20% headroom per GPU to avoid OOM on long-context batches.
 
-Without QLoRA the same job at BF16 would require $65 times 2 + 65 times 2 times 3 approx 520$ GB of GPU memory — eight 80 GB A100s minimum.
+Without QLoRA the same job at BF16 would require $65 times 2 + 65 times 2 times 3 approx 520$ GB of GPU memory: eight 80 GB A100s minimum.
 
 === bitsandbytes QLoRA Setup
 
@@ -313,8 +313,8 @@ class InstructionCollator:
     """Collates tokenized conversations with assistant-only loss mask.
 
     Each example in the batch is expected to be a dict with keys:
-        input_ids:  List[int]  — full conversation token ids
-        labels:     List[int]  — same length; -100 for non-assistant tokens
+        input_ids:  List[int]  # full conversation token ids
+        labels:     List[int]  # same length; -100 for non-assistant tokens
     """
     tokenizer: PreTrainedTokenizer
     max_length: int = 2048
@@ -437,7 +437,7 @@ assistant_mask = encoding["assistant_tokens_mask"]
 
 == DPO: Direct Preference Optimization
 
-Reinforcement Learning from Human Feedback (RLHF) requires training a separate reward model and running PPO, which is complex, unstable, and memory-intensive. DPO (Rafailov et al., 2023) shows that the RLHF objective has a closed-form optimal policy that can be expressed as a supervised loss over preference pairs — no explicit reward model needed.
+Reinforcement Learning from Human Feedback (RLHF) requires training a separate reward model and running PPO, which is complex, unstable, and memory-intensive. DPO (Rafailov et al., 2023) shows that the RLHF objective has a closed-form optimal policy that can be expressed as a supervised loss over preference pairs, with no explicit reward model needed.
 
 === Derivation from the RLHF Objective
 
@@ -465,7 +465,7 @@ The DPO loss is the negative log-likelihood of this preference:
 
 $ cal(L)_"DPO"(pi_theta; pi_"ref") = -EE_((x, y_w, y_l) ~ cal(D)) lr([ log sigma lr(( beta log (pi_theta(y_w|x)) / (pi_"ref"(y_w|x)) - beta log (pi_theta(y_l|x)) / (pi_"ref"(y_l|x)) |)) ]) $
 
-This is the entire loss: four forward passes per pair (the policy and the reference, each on winner and loser — the reference passes can be precomputed and cached), no reward model, no sampling loop.
+This is the entire loss: four forward passes per pair (the policy and the reference, each on winner and loser; the reference passes can be precomputed and cached), no reward model, no sampling loop.
 
 === Why DPO Avoids an Explicit Reward Model
 
@@ -488,9 +488,9 @@ def sequence_logprob(logits: torch.Tensor,
     """Sum of log-probs over non-masked response tokens.
 
     Args:
-        logits:      [B, L, V]  — raw model output (before softmax)
-        input_ids:   [B, L]     — token ids (labels shifted by 1 from input)
-        labels_mask: [B, L]     — 1.0 for response tokens, 0.0 for prompt
+        logits:      [B, L, V]  # raw model output (before softmax)
+        input_ids:   [B, L]     # token ids (labels shifted by 1 from input)
+        labels_mask: [B, L]     # 1.0 for response tokens, 0.0 for prompt
     Returns:
         [B] sum of log-probs over response tokens
     """

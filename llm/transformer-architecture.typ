@@ -1,6 +1,6 @@
 = Transformer Architecture
 
-The transformer is a sequence-to-sequence architecture built entirely from attention and feed-forward layers. Every modern LLM — GPT, LLaMA, Mistral, Gemma, Qwen — is a decoder-only transformer. Understanding its internals precisely is prerequisite to everything that follows.
+The transformer is a sequence-to-sequence architecture built entirely from attention and feed-forward layers. Every modern LLM (GPT, LLaMA, Mistral, Gemma, Qwen) is a decoder-only transformer. Understanding its internals precisely is prerequisite to everything that follows.
 
 *See also:* _ML Workload Optimization on GPUs (GPU Architecture volume)_ (Flash Attention, GEMM kernels), _Pretraining_ (how these weights are learned).
 
@@ -77,7 +77,7 @@ AV  matmul:       2 × L² × d_model             FLOPs
 Output proj:      2 × L × d_model²             FLOPs
 ```
 
-The $O(L^2)$ term dominates for long contexts. Flash Attention avoids materializing the $L times L$ matrix in HBM — see _ML Workload Optimization on GPUs (GPU Architecture volume)_.
+The $O(L^2)$ term dominates for long contexts. Flash Attention avoids materializing the $L times L$ matrix in HBM; see _ML Workload Optimization on GPUs (GPU Architecture volume)_.
 
 *PyTorch 2.0+ dispatches to Flash Attention automatically* (Flash Attention 2 backend: PyTorch ≥ 2.2, CUDA, fp16/bf16, head_dim ≤ 256):
 ```python
@@ -90,7 +90,7 @@ out = F.scaled_dot_product_attention(
     is_causal=True,      # generates causal mask internally
     scale=None,          # defaults to 1/sqrt(d_head)
 )
-# Uses FlashAttention-2 on CUDA if available — no explicit mask materialized
+# Uses FlashAttention-2 on CUDA if available; no explicit mask materialized
 ```
 
 == Multi-Head Attention (MHA)
@@ -113,7 +113,7 @@ class MultiHeadAttention(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         B, L, _ = x.shape
-        # fused QKV projection then split — one GEMM instead of three
+        # fused QKV projection then split: one GEMM instead of three
         q, k, v = self.qkv(x).chunk(3, dim=-1)
         def reshape(t):
             return t.view(B, L, self.n_heads, self.d_head).transpose(1, 2)
@@ -184,7 +184,7 @@ $ R(theta_k, m) = mat(cos(m theta_k), -sin(m theta_k); sin(m theta_k), cos(m the
 
 $ tilde(Q)_m dot tilde(K)_n = Q_m R(Theta, m)^T R(Theta, n) K_n = Q_m R(Theta, n - m) K_n $
 
-Only the difference $n - m$ appears — true relative encoding with no explicit relative-position parameters.
+Only the difference $n - m$ appears, giving true relative encoding with no explicit relative-position parameters.
 
 *Precompute and apply in PyTorch:*
 
@@ -210,7 +210,7 @@ def apply_rope(x: torch.Tensor,
                       x1 * sin + x2 * cos], dim=-1)
 ```
 
-*C++ implementation (llama.cpp style) — used in production CPU inference:*
+*C++ implementation (llama.cpp style), used in production CPU inference:*
 
 ```cpp
 // Apply RoPE in-place; x: float[d_head], d_head must be even
@@ -230,7 +230,7 @@ void rope_inplace(float* x, int pos, int d_head,
 
 === ALiBi (Press et al. 2022)
 
-No positional vectors — adds a position penalty to attention scores:
+No positional vectors; adds a position penalty to attention scores:
 
 $ "score"_(i j) -= m_h dot (i - j), quad m_h = 2^(-8 h / n_"heads") $
 
@@ -251,7 +251,7 @@ Good extrapolation beyond training length. Used in BLOOM, MPT.
 
 The FFN runs independently on each token. ~2/3 of total parameters.
 
-=== SwiGLU (LLaMA, PaLM, Gemma — standard in 2024)
+=== SwiGLU (LLaMA, PaLM, Gemma; standard in 2024)
 
 $ "SwiGLU"(x) = W_"down" dot ("SiLU"(W_"gate" x) times.o W_"up" x) $
 
@@ -270,7 +270,7 @@ class SwiGLU(nn.Module):
         return self.down(F.silu(self.gate(x)) * self.up(x))
 ```
 
-*C++ (llama.cpp kernel) — fused for inference:*
+*C++ (llama.cpp kernel), fused for inference:*
 
 ```cpp
 // SwiGLU forward: x[d_model] → out[d_model]
@@ -292,7 +292,7 @@ void swiglu(const float* x, float* out,
 }
 ```
 
-*JAX/Flax — shows the functional purity:*
+*JAX/Flax (shows the functional purity):*
 
 ```python
 import jax.numpy as jnp
@@ -326,9 +326,9 @@ class GPT2FFN(nn.Module):
 
 == Layer Normalization
 
-=== RMSNorm (LLaMA, Mistral, Gemma — standard in 2024)
+=== RMSNorm (LLaMA, Mistral, Gemma; standard in 2024)
 
-$ "RMSNorm"(x) = (x) / (sqrt((1/d) sum_i x_i^2 + epsilon)) dot.circle g $
+$ "RMSNorm"(x) = (x) / (sqrt((1/d) sum_i x_i^2 + epsilon)) dot.o g $
 
 No mean-centering; ~15% faster than LayerNorm. $g in RR^d$ is learned.
 
@@ -433,13 +433,13 @@ for name, p in model.named_parameters():
   [DeepSeek-V3],  [671B MoE],[7 168],  [61], [128],[128],[2 048 × (256+1) exp.],
 )
 
-== Multi-Head Latent Attention (MLA) — DeepSeek-V2
+== Multi-Head Latent Attention (MLA): DeepSeek-V2
 
 Compresses the KV cache via low-rank projection. Instead of caching $n_"kv" times d_"head"$ vectors per token, a single latent vector $c_t in RR^(d_c)$ is cached ($d_c << n_"kv" d_"head"$):
 
 $ c_t = W^(D K V) h_t, quad K_t = W^(U K) c_t, quad V_t = W^(U V) c_t $
 
-DeepSeek-V2 uses $d_c = 512$ for the KV-compression latent and $d_c' = 1536$ for a separate query-compression latent (with $d_"model" = 5120$, $n_"heads" = 128$, $d_"head" = 128$). Per-token cache comparison: standard MHA stores $2 times n_"heads" times d_"head" = 2 times 128 times 128 = 32,768$ values; MLA stores $d_c + d_"head"^R = 512 + 64 = 576$ values (the $d_"head"^R = 64$ is the decoupled RoPE key) — roughly a 57× reduction, i.e. ~98% KV cache savings vs MHA at similar quality. Trade-off: additional matrix multiplies per decode step.
+DeepSeek-V2 uses $d_c = 512$ for the KV-compression latent and $d_c' = 1536$ for a separate query-compression latent (with $d_"model" = 5120$, $n_"heads" = 128$, $d_"head" = 128$). Per-token cache comparison: standard MHA stores $2 times n_"heads" times d_"head" = 2 times 128 times 128 = 32,768$ values; MLA stores $d_c + d_"head"^R = 512 + 64 = 576$ values (the $d_"head"^R = 64$ is the decoupled RoPE key), roughly a 57× reduction, i.e. ~98% KV cache savings vs MHA at similar quality. Trade-off: additional matrix multiplies per decode step.
 
 ```python
 class MultiHeadLatentAttention(nn.Module):
@@ -461,7 +461,7 @@ class MultiHeadLatentAttention(nn.Module):
         B, L, _ = x.shape
         q = self.q_proj(x).view(B, L, self.n_heads, self.d_head).transpose(1, 2)
 
-        latent = self.kv_down(x)                    # [B, L, d_c] — cache this
+        latent = self.kv_down(x)                    # [B, L, d_c] -- cache this
         k = self.k_up(latent).view(B, L, self.n_heads, self.d_head).transpose(1, 2)
         v = self.v_up(latent).view(B, L, self.n_heads, self.d_head).transpose(1, 2)
 
