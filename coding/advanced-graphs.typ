@@ -570,3 +570,15 @@ Vertices accessed together (neighbors in BFS) get consecutive IDs = better cache
 *Tarjan, R. (1972)*. Depth-First Search and Linear Graph Algorithms. SIAM Journal on Computing 1(2): 146-160.
 
 *Cormen, T.H., Leiserson, C.E., Rivest, R.L., & Stein, C. (2009)*. Introduction to Algorithms (3rd ed.). MIT Press. ISBN 978-0262033848.
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapters 25--26 on all-pairs shortest paths and maximum flow; Chapter 22 on strongly connected components.)
+
+Tarjan, R. E. (1972). "Depth-First Search and Linear Graph Algorithms." _SIAM Journal on Computing_ 1(2): 146--160. (Tarjan's SCC algorithm and the foundational role of DFS in advanced graph theory.)
+
+Ford, L. R., & Fulkerson, D. R. (1956). "Maximal Flow Through a Network." _Canadian Journal of Mathematics_ 8: 399--404. (Original max-flow / min-cut formulation.)
+
+Ahuja, R. K., Magnanti, T. L., & Orlin, J. B. (1993). _Network Flows: Theory, Algorithms, and Applications_. Prentice Hall. (Comprehensive reference for flow networks, matching, and transportation problems.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 8 on advanced graph algorithms including network flow and bipartite matching.)

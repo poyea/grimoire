@@ -230,3 +230,15 @@ Faster bitwise AND for intersection.
   [Kruskal (MST)], [$O(E log E)$], [$O(V)$],
   [Prim (MST, min-heap)], [$O((V + E) log V)$], [$O(V)$],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapters 20--24: breadth-first search, depth-first search, shortest paths, and minimum spanning trees.)
+
+Dijkstra, E. W. (1959). "A Note on Two Problems in Connexion with Graphs." _Numerische Mathematik_ 1(1): 269--271. (The original shortest-path algorithm paper.)
+
+Tarjan, R. E. (1972). "Depth-First Search and Linear Graph Algorithms." _SIAM Journal on Computing_ 1(2): 146--160. (DFS as a unifying framework; introduces SCC discovery in linear time.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapters 4.1--4.4 on undirected/directed graphs, MSTs, and shortest paths with clean implementations.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapters 7--8 on graph traversal and weighted graph algorithms; rich problem catalogue.)
