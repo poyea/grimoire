@@ -124,12 +124,16 @@ Flink's network stack uses credit-based flow control: each upstream task tracks 
 
 == Further Reading
 
-Akidau, T., Chernyak, S., Lax, R. (2018). _Streaming Systems._ O'Reilly.
+Akidau, T. et al. (2015). "The Dataflow Model: A Practical Approach to Balancing Correctness, Latency, and Cost in Massive-Scale, Unbounded, Out-of-Order Data Processing." VLDB 8(12). Introduces the unified model of event time, watermarks, windowing, and triggers that underlies Apache Beam and Flink's streaming semantics.
 
-Carbone, P. et al. (2017). "State Management in Apache Flink." VLDB.
+Zaharia, M. et al. (2013). "Discretized Streams: Fault-Tolerant Streaming Computation at Scale." SOSP. Presents Spark Streaming's micro-batch model, showing how deterministic re-execution of batch intervals achieves exactly-once semantics and fault recovery.
 
-Kreps, J. (2014). "The Log: What every software engineer should know." LinkedIn Engineering.
+Carbone, P. et al. (2015). "Apache Flink: Stream and Batch Processing in a Single Engine." IEEE Data Engineering Bulletin 38(4). Describes Flink's dataflow DAG model, asynchronous distributed snapshots (Chandy–Lamport variant), and unified batch/streaming execution.
 
-McSherry, F., Murray, D., Isaacs, R., Isard, M. (2013). "Differential Dataflow." CIDR.
+Kreps, J. (2014). "The Log: What Every Software Engineer Should Know About Real-Time Data's Unifying Abstraction." LinkedIn Engineering Blog. Argues that the append-only log is the fundamental data structure underlying databases, replication, and stream processing systems.
 
-Apache Flink documentation, https://flink.apache.org/.
+McSherry, F., Murray, D., Isaacs, R., Isard, M. (2013). "Differential Dataflow." CIDR. Introduces a framework for incremental, iterative computation over changing data collections, the theoretical basis for Materialize and Neon's streaming SQL engines.
+
+Budiu, M. et al. (2023). "DBSP: Automatic Incremental View Maintenance for Rich Query Languages." VLDB 16(7). Formalises the algebraic theory of incremental stream processing with a circuit model, providing a compositional foundation for streaming SQL.
+
+Akidau, T., Chernyak, S., Lax, R. (2018). _Streaming Systems._ O'Reilly Media. Expands the Dataflow model paper into a full treatment of the what/where/when/how framework; the standard practitioner reference for stream-processing design.
