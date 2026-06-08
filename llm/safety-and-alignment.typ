@@ -1,12 +1,12 @@
 = Safety and Alignment
 
-Alignment is the engineering discipline of getting models to *behave as intended* — follow instructions, refuse harmful requests, respect user values, remain honest about uncertainty. This chapter covers the techniques that go beyond PPO-style RLHF (introduced in the _RLHF_ chapter): Constitutional AI and RLAIF, DPO/IPO/KTO and their successors, red-teaming, jailbreak taxonomies, refusal calibration, weak-to-strong supervision, and the safety stack used in modern production systems. It is concrete about what current methods can and cannot do.
+Alignment is the engineering discipline of getting models to *behave as intended*: follow instructions, refuse harmful requests, respect user values, remain honest about uncertainty. This chapter covers the techniques that go beyond PPO-style RLHF (introduced in the _RLHF_ chapter): Constitutional AI and RLAIF, DPO/IPO/KTO and their successors, red-teaming, jailbreak taxonomies, refusal calibration, weak-to-strong supervision, and the safety stack used in modern production systems. It is concrete about what current methods can and cannot do.
 
 *See also:* _RLHF_ (PPO, reward modeling), _Reasoning Models_ (RL with verifiable rewards), _Agents and Tool Use_ (agents amplify alignment failures).
 
 == The Alignment Problem in Production
 
-A frontier model exhibits a thousand behaviors per query — formatting, refusal, factuality, tone, code style, language. Alignment must:
+A frontier model exhibits a thousand behaviors per query: formatting, refusal, factuality, tone, code style, language. Alignment must:
 
 1. *Make refusals correct:* refuse genuinely harmful requests; do not refuse benign ones (over-refusal is a real cost).
 2. *Calibrate confidence:* do not hallucinate; say "I don't know" when uncertain.
@@ -34,7 +34,7 @@ Two stages:
 1. *SL-CAI:* SFT the model on the revised responses.
 2. *RL-CAI:* train a preference model on the (rejected, chosen) pairs; RLHF the policy.
 
-The constitution is small — a few dozen principles like "the response should be honest" or "the response should avoid encouraging illegal activity." Constitutional AI scales human oversight: humans write the constitution once; the model generates the labels.
+The constitution is small (a few dozen principles like "the response should be honest" or "the response should avoid encouraging illegal activity." Constitutional AI scales human oversight: humans write the constitution once; the model generates the labels.
 
 Modern Anthropic models use Constitutional AI in combination with human preference data. The technique is widely adopted under various names (RLAIF — Lee et al. 2023; UltraFeedback — Cui et al. 2023).
 
@@ -120,14 +120,26 @@ Engineering:
 
 == Honesty and Calibration
 
-Beyond refusing harm, a model should not assert what it does not know. Techniques:
+Beyond refusing harm, a model should not assert what it does not know. Calibration is a *measurable* property: a model is well-calibrated if, among all claims it assigns probability $p$, roughly $p$ fraction are true. The standard scalar summary is *Expected Calibration Error* (ECE):
 
-- *Truthful-QA-style training data* that explicitly teaches refusal-when-unsure.
-- *Calibration loss:* train the model to output verbal probabilities that match its actual accuracy ("I'm 70% sure" → accuracy ~70%).
-- *Retrieval augmentation* for factual queries (cf. _RAG_): grounding reduces fabrication.
-- *Reflection at inference:* prompt the model to evaluate its own answer.
+$ "ECE" = sum_(b=1)^B |B_b| / n |"acc"(B_b) - "conf"(B_b)|, $
 
-Frontier models remain miscalibrated — they sound more confident than they should, especially on niche factual claims. Reasoning models partly help (the trace exposes when the model is guessing) but do not fully solve it.
+where the predicted probabilities are binned, and $"acc"$ and $"conf"$ are the average accuracy and average confidence within each bin. A well-calibrated model has ECE near zero. In practice LLMs rarely expose token probabilities directly to the user, so calibration is often assessed through *verbalized uncertainty* — whether phrases like "I'm fairly confident" predict actual accuracy.
+
+*TruthfulQA* (Lin et al. 2022) benchmarks a model's tendency to assert falsehoods that humans commonly believe. A high TruthfulQA score means the model avoids common misconceptions; it does not measure calibration on specialized facts, which requires domain-specific eval. Current top models score 80-90% on TruthfulQA with RLHF, up from around 20-30% for the base pretrained checkpoint.
+
+Approaches for improving calibration:
+
+- *Calibration loss:* add an auxiliary loss term that penalizes the divergence between expressed confidence and empirical accuracy, e.g., via a cross-entropy over verbalized probability bins.
+- *Temperature scaling:* post-hoc rescaling of logits by a scalar $T$ — divide logits by $T$ before softmax. $T > 1$ softens the distribution toward uniform; found by maximizing likelihood on a held-out calibration set. Does not change accuracy, only sharpness.
+- *Verbalized uncertainty training:* preference data that explicitly pairs "I don't know" or "I'm uncertain whether..." responses against overconfident incorrect answers, scored by an oracle.
+- *TruthfulQA-style SFT:* fine-tune on adversarial truthfulness datasets that target known failure modes.
+- *Retrieval augmentation* for factual queries (cf. _RAG_): grounding reduces fabrication by anchoring claims to retrieved passages.
+- *Reflection at inference:* prompt the model to evaluate its own answer, which can surface self-inconsistency.
+
+A genuine tension exists between *truthfulness* and *helpfulness*: a model that hedges every claim with "I'm not sure" technically improves calibration but degrades user experience. The practical target is not maximum epistemic caution but *accurate* epistemic signaling — confident where warranted, uncertain where warranted. Preference optimization must therefore use comparative data (overconfident-but-wrong vs. hedged-but-correct) rather than blanket helpfulness scores.
+
+Frontier models remain miscalibrated, especially on niche factual claims. Reasoning models partly help (the scratchpad exposes when the model is guessing) but do not fully solve it.
 
 == Weak-to-Strong and Scalable Oversight
 
@@ -162,10 +174,13 @@ Plus per-feature mitigations: agentic actions require confirmation; tools cannot
 
 == Open Problems
 
-- *Jailbreak robustness* — no model is reliably unjailbreakable; the attack surface grows with capabilities and tool access.
-- *Inner alignment* — RLHF reliably changes outputs but the relationship to the model's "actual goals" (if such a thing is well-defined) is opaque. Interpretability research (cf. _Interpretability_) is the lever.
-- *Multi-agent and emergent risk* — interactions between aligned models can produce misaligned aggregate behavior (collusion, deception under selection).
-- *Long-horizon agents* — alignment for one-turn QA does not imply alignment for an autonomous agent running for days with internet access and credentials.
+- *Jailbreak robustness* — no model is reliably unjailbreakable; the attack surface grows with capabilities and tool access. Current defenses operate at the output layer (classifiers, refusal training) but cannot close off the full combinatorial space of adversarial prompt constructions, especially as context windows lengthen and multimodal inputs add new attack channels. Research directions include certified defenses (smoothed classifiers, input purification) and architecturally separate "guard" modules with distinct weights.
+
+- *Inner alignment* — RLHF reliably changes *observable* outputs but the relationship to the model's internal objective — if the model has one in a meaningful sense — is opaque. A model could learn to produce preferred outputs under evaluation without internalizing the intended goal, a problem called *deceptive alignment* in the theoretical literature. Interpretability research (cf. _Interpretability_) is the primary lever: circuit-level analysis of how refusal is implemented could reveal whether refusal is a robust feature or a shallow heuristic.
+
+- *Multi-agent and emergent risk* — interactions between aligned models can produce misaligned aggregate behavior (collusion, deception under selection). When two or more aligned models communicate in a pipeline, each may be compliant in isolation while the pipeline as a whole pursues an unintended outcome — e.g., one agent escalates permissions, another exfiltrates, neither individually tripping a safety filter. Current alignment evaluations are nearly all single-model; multi-agent red-teaming is nascent.
+
+- *Long-horizon agents* — alignment for one-turn QA does not imply alignment for an autonomous agent running for days with internet access and credentials. The problem compounds because mistakes early in a trajectory can be amplified by later actions, and human oversight cannot keep pace with the agent's action rate. Sandboxing, action-level confirmations for high-stakes operations, and formal verification of agent plans (cf. _Agents and Tool Use_) are the available mitigations.
 
 Most of these are research, not engineering. The engineer's job is to layer defenses, instrument, monitor, and patch.
 

@@ -132,13 +132,45 @@ LLMs are stateless across calls — context is the only persistence. Agents need
 - *Episodic memory:* salient observations from past sessions (what the user told the agent yesterday, lessons learned).
 - *Tool memory:* known schemas, recent failures.
 
-Implementations:
+=== In-Context Memory
 
-- *Summarization rolling buffer:* periodically compress old turns into a summary. Lossy.
-- *Vector store:* embed each turn; retrieve top-$k$ relevant memories when needed. The retrieval call is itself a tool.
-- *Structured scratchpad:* a JSON or key-value file the agent reads/writes. More controllable than a vector store, easier to audit.
+The simplest form is keeping the full conversation in the context window. When the window fills, two approaches handle overflow:
 
-MemGPT (Packer et al. 2023) and Claude's memory feature treat memory as an OS-style hierarchy: small fast context, large slow store, the model decides what to page in.
+- *Sliding window:* drop the oldest turns. Fast and zero-cost, but loses early context permanently. Suitable when the task has short horizons and earlier turns are not load-bearing.
+- *Summarization compression:* periodically invoke the model itself to compress a sliding window of turns into a compact summary, then replace those turns with the summary. Lossy — specific facts (URLs, numbers) often survive but nuanced conversational state is degraded. Quality depends on the compressor's faithfulness; over long horizons, compression errors accumulate.
+
+=== External Memory: Vector Stores
+
+A vector store persists memory as high-dimensional embeddings and retrieves relevant chunks at query time:
+
+```
+new_observation → embed(obs) → vector DB insert
+                                    │
+at query time: embed(query) → ANN search → top-k chunks → inject into context
+```
+
+The embedding lookup uses approximate nearest-neighbor search (FAISS, HNSW, ScaNN). Retrieval quality metrics:
+
+- *Recall\@k:* fraction of ground-truth relevant memories appearing in the top-$k$ retrieved. Typical targets: Recall\@5 $>$ 0.7 for factoid tasks.
+- *MRR* (Mean Reciprocal Rank): measures how highly the first relevant result is ranked.
+- *Latency:* p99 retrieval should be under ~50 ms to avoid dominating the agent's step time; HNSW indexes at $10^7$ vectors typically achieve 5-20 ms.
+
+Embedding quality matters as much as the retrieval algorithm. Dense retrievers fine-tuned on in-domain data (E5-large, GTE, fine-tuned BGE) outperform off-the-shelf sentence encoders by 10-20 points on domain-specific recall.
+
+=== Episodic Memory: MemGPT's OS-Inspired Approach
+
+MemGPT (Packer et al. 2023) draws an explicit analogy to virtual memory. The context window is DRAM — fast, limited, currently active. The external store is disk — large, slow, persistent. The model itself acts as the OS, deciding what to page in and page out:
+
+- *Main context:* the active working window the model currently reads.
+- *External context:* a persistent store of past episodes, tool results, and user facts.
+- *Page-in:* the model issues a `memory_search(query)` tool call to retrieve relevant episodes into context before processing a new request.
+- *Page-out:* when context nears capacity, the model calls `memory_append(observation)` to write a summary of the current interaction out to the persistent store.
+
+This design is explicit and auditable: every memory read/write is a logged tool call, not an implicit compression.
+
+=== Working Memory vs Long-Term Memory Trade-offs
+
+Working memory (in-context) has zero retrieval latency and perfect fidelity but is capacity-limited ($tilde$ 1M tokens at the frontier) and lost between sessions. Long-term memory (external store) is persistent and unbounded but introduces retrieval latency, embedding approximation error, and the failure mode of *missing the relevant memory* at query time (retrieval gap). Hybrid systems maintain a structured in-context "memory ledger" of key facts extracted from long-term memory, refreshed at session start, to give the model a fast working set without requiring real-time retrieval on every turn.
 
 == Model Context Protocol (MCP)
 
