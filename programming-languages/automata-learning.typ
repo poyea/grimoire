@@ -323,10 +323,10 @@ This is the strongest lower bound in computational learning theory and explains 
     minimum DFA approximation to poly factor         NP-hard (Pitt-Warmuth 89)
     PAC-learning DFAs                                crypto-hard (KV 94, AK 95)
     PAC-learning DFAs (proper hypothesis)            NP-hard
-    L* (MAT) for DFAs                                O(|S| n^2 m) MQs, O(n) EQs
-    L* with Rivest-Schapire                          O(|S| n log m + n^2 |S|) MQs
+    L#sym.ast (MAT) for DFAs                                O(|S| n^2 m) MQs, O(n) EQs
+    L#sym.ast with Rivest-Schapire                          O(|S| n log m + n^2 |S|) MQs
     TTT for DFAs                                     O(n^2 |S| + n log m) MQs
-    NL* for canonical RFSA                           polynomial in RFSA size
+    NL#sym.ast for canonical RFSA                           polynomial in RFSA size
     register-automata L*_R                           poly in states + registers
     spectral HMM learning                            poly in n, 1/eps, 1/sigma_n
     omega-regular learning (FDFA, Angluin et al.)    polynomial
@@ -446,7 +446,7 @@ The method is *consistent* but does not in general produce a probabilistic autom
 
 *Kolmogorov complexity* $K(L)$ of a language is the length of the shortest program producing $L$'s characteristic function. Identification in the limit relates to enumeration of programs: every $L$ with finite $K(L)$ is *identifiable in the limit from text*, by Levin's universal optimal predictor (Solomonoff 1964). However, the procedure is not computable.
 
-The connection between *MDL* (minimum description length) and DFA inference yields *EDSM* (evidence-driven state merging; Lang--Pearlmutter--Price 1998), the algorithm that won the *Abbadingo One* DFA-learning competition.
+The connection between MDL (minimum description length) and DFA inference yields *EDSM* (evidence-driven state merging; Lang--Pearlmutter--Price 1998), the algorithm that won the *Abbadingo One* DFA-learning competition.
 
 == Extended Topic: Learning under Membership-Only Access
 
@@ -573,8 +573,8 @@ Hopcroft, J. E., Motwani, R., Ullman, J. D. (2006). _Introduction to Automata Th
 
 de la Higuera, C. (2010). _Grammatical Inference: Learning Automata and Grammars_. Cambridge University Press. Comprehensive treatment of the field; covers identification in the limit, query learning, and spectral methods.
 
-Anguin, D. (1987). "Learning Regular Sets from Queries and Counterexamples." Information and Computation 75(2). The paper introducing the L* algorithm; proves polynomial query complexity for exact DFA identification.
+Anguin, D. (1987). "Learning Regular Sets from Queries and Counterexamples." Information and Computation 75(2:). The paper introducing the L#sym.ast algorithm; proves polynomial query complexity for exact DFA identification.
 
-Weiss, G., Goldberg, Y., Yahav, E. (2018). "Extracting Automata from Recurrent Neural Networks Using Queries and Counterexamples." ICML. Shows L* scales to neural-network extraction, connecting classical automata learning to modern machine learning.
+Weiss, G., Goldberg, Y., Yahav, E. (2018). "Extracting Automata from Recurrent Neural Networks Using Queries and Counterexamples." ICML. Shows L#sym.ast scales to neural-network extraction, connecting classical automata learning to modern machine learning.
 
-Isberner, M., Howar, F., Steffen, B. (2015). "The Open-Source LearnLib." CAV. Documents the principal Java library for active automata learning, covering L*, TTT, and active learning for Mealy machines.
+Isberner, M., Howar, F., Steffen, B. (2015). "The Open-Source LearnLib." CAV. Documents the principal Java library for active automata learning, covering L#sym.ast, TTT, and active learning for Mealy machines.

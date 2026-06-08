@@ -399,7 +399,7 @@ The legacy of System F is everywhere in modern type theory: Haskell, Coq, Agda, 
 
 == Further Reading
 
-Awodey, S. (2010). _Category Theory_, 2nd ed. Oxford University Press. Chapters 1–7 cover functors, natural transformations, adjunctions, and limits; the prerequisite for understanding the categorical models of System F and $F_\omega$.
+Awodey, S. (2010). _Category Theory_, 2nd ed. Oxford University Press. Chapters 1–7 cover functors, natural transformations, adjunctions, and limits; the prerequisite for understanding the categorical models of System F and $F_omega$.
 
 Jacobs, B. (1999). _Categorical Logic and Type Theory_. Elsevier. Part III covers fibred models of polymorphism and dependent types, including the PL-category model of System F and the categorical semantics of bounded quantification.
 
@@ -407,6 +407,6 @@ Girard, J.-Y. (1972). _Interprétation fonctionnelle et élimination des coupure
 
 Pierce, B. C. (1994). "Bounded Quantification Is Undecidable." Information and Computation 112(1). Proves that $F_{<:}$ subtype checking is undecidable via two-counter-machine simulation; the definitive negative result on combining subtyping and System F.
 
-Barendregt, H. P. (1991). "Introduction to Generalised Type Systems." Journal of Functional Programming 1(2). Introduces the Pure Type Systems (Barendregt cube), unifying STLC, System F, $F_\omega$, and dependent types in a single parametric framework.
+Barendregt, H. P. (1991). "Introduction to Generalised Type Systems." Journal of Functional Programming 1(2). Introduces the Pure Type Systems (Barendregt cube), unifying STLC, System F, $F_omega$, and dependent types in a single parametric framework.
 
 Moggi, E. (1991). "Notions of Computation and Monads." Information and Computation 93(1). The categorical model of effects in System F's setting; shows how Kleisli categories and monads give a uniform semantics to computational effects.

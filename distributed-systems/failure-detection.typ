@@ -146,7 +146,7 @@ For consensus systems, the relevant question is not "is X alive?" but "do enough
 
 - *NTP step jumps:* A monotonic-clock-based failure detector is immune to NTP steps, but wall-clock-based heartbeat timestamps are not. A 100 ms backward NTP step makes heartbeats appear to arrive in the future, triggering false positives. Fix: always use `CLOCK_MONOTONIC` for interval measurement; record wall time only for human-readable logs.
 
-- *GC pauses:* JVM STW collection pauses of 500 ms--4 s (G1GC in worst case) routinely exceed 200--500 ms FD thresholds. G1GC improved this significantly; ZGC and Shenandoah target <10 ms even for large heaps. Go's GC achieves <1 ms pauses at 100 GB heaps; Rust avoids GC pauses entirely. Set the FD threshold above 2x your worst observed GC pause at p99.
+- *GC pauses:* JVM STW collection pauses of 500 ms--4 s (G1GC in worst case) routinely exceed 200--500 ms FD thresholds. G1GC improved this significantly; ZGC and Shenandoah target under 10 ms even for large heaps. Go's GC achieves under 1 ms pauses at 100 GB heaps; Rust avoids GC pauses entirely. Set the FD threshold above 2x your worst observed GC pause at p99.
 
 - *Container CPU throttling:* CFS bandwidth control (`cpu.cfs_period_us` / `cpu.cfs_quota_us`) can suspend a container for a full 100 ms period if it exhausts its quota. A heartbeat thread in a throttled container appears dead to the cluster even though the process is healthy. Fix: give FD/heartbeat processes dedicated CPU shares or set `cpu.cfs_quota_us = -1` (unlimited) for lease-holding processes.
 

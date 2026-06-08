@@ -299,7 +299,7 @@ For acyclic graphs over any semiring: $O(|V| + |E|)$. For Boolean semiring: BFS.
 Weighted automata over a (positive) semiring are closed under:
 
 - *Sum*: $(cal(A) + cal(B))(w) = cal(A)(w) plus.o cal(B)(w)$; disjoint union with combined initial/final vectors.
-- *Hadamard product*: $(cal(A) dot.circle cal(B))(w) = cal(A)(w) times.o cal(B)(w)$; product construction.
+- *Hadamard product*: $(cal(A) dot.o cal(B))(w) = cal(A)(w) times.o cal(B)(w)$; product construction.
 - *Scalar*: $k cal(A)$; multiply initial vector by $k$.
 - *Cauchy product / star* (when defined).
 

@@ -220,7 +220,7 @@ Here $"lift"(m, v)$ is the least element of $M union {top}$ greater than $m$ on 
 
 The *modal $mu$-calculus* $L_mu$ (Kozen 1983) adds least and greatest fixed-point operators to multimodal logic:
 $ phi ::= p | not p | phi and phi | phi or phi | diamond_a phi | square_a phi | X | mu X. phi | nu X. phi $
-with $X$ a propositional variable and $phi$ positive in $X$ under each binder. Semantics over Kripke structures: $bracket.l.double mu X. phi bracket.r.double = "lfp"(X |-> bracket.l.double phi bracket.r.double)$, $bracket.l.double nu X. phi bracket.r.double = "gfp"(X |-> bracket.l.double phi bracket.r.double)$.
+with $X$ a propositional variable and $phi$ positive in $X$ under each binder. Semantics over Kripke structures: $bracket.l.stroked mu X. phi bracket.r.stroked = "lfp"(X |-> bracket.l.stroked phi bracket.r.stroked)$, $bracket.l.stroked nu X. phi bracket.r.stroked = "gfp"(X |-> bracket.l.stroked phi bracket.r.stroked)$.
 
 The *alternation depth* of a formula counts nesting of alternating $mu / nu$ binders that share free variables. The *alternation hierarchy* is the chain
 $ Sigma_0^mu subset.eq Pi_0^mu subset.eq Sigma_1^mu subset.eq Pi_1^mu subset.eq Sigma_2^mu subset.eq dots $
@@ -302,6 +302,6 @@ Vardi, M. Y., Wolper, P. (1986). "An Automata-Theoretic Approach to Automatic Pr
 
 Büchi, J. R. (1962). "On a Decision Method in Restricted Second Order Arithmetic." Proceedings of the International Congress on Logic, Methodology, and Philosophy of Science. Introduces the automaton model for infinite words and proves decidability of S1S via it.
 
-Safra, S. (1988). "On the Complexity of omega-Automata." FOCS. The Safra construction: optimal $2^{O(n \log n)}$ determinisation of Büchi automata; the key result in omega-automata complexity.
+Safra, S. (1988). "On the Complexity of omega-Automata." FOCS. The Safra construction: optimal $2^(O(n log n))$ determinisation of Büchi automata; the key result in omega-automata complexity.
 
 Kupferman, U., Vardi, M. Y. (2001). "Weak Alternating Automata Are Not That Weak." ACM Transactions on Computational Logic 2(3). Characterises the weak, co-Büchi, and Büchi fragments of alternating automata, clarifying the expressiveness landscape.
