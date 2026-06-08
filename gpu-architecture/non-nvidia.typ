@@ -22,7 +22,7 @@ MI250X:  2 x GCD, each:
   Peak FP16/BF16 matrix: 383 TFLOPS
 ```
 
-The FP64 *matrix* engine — matrix cores delivering full-precision GEMM — is the differentiator for HPC.
+The FP64 *matrix* engine (matrix cores delivering full-precision GEMM) is the differentiator for HPC.
 
 === CDNA 3 — MI300
 
@@ -31,18 +31,18 @@ The MI300 family uses chiplets aggressively:
 #table(
   columns: 4,
   [*Part*], [*GPU CUs*], [*CPU*], [*Memory*],
-  [MI300X], [304 CDNA3 CUs], [—], [192 GB HBM3, 5.3 TB/s],
+  [MI300X], [304 CDNA3 CUs], [none], [192 GB HBM3, 5.3 TB/s],
   [MI300A], [228 CDNA3 CUs], [24 Zen 4 cores], [128 GB unified HBM3],
-  [MI325X], [304 CUs (refresh)], [—], [256 GB HBM3e, 6 TB/s],
+  [MI325X], [304 CUs (refresh)], [none], [256 GB HBM3e, 6 TB/s],
 )
 
-MI300X targets H100/H200 directly on memory-bound LLM inference; the larger HBM lets a 70B-parameter model fit on a single accelerator in FP16. MI300A is APU-style with unified GPU+CPU memory — a true successor to the discrete-accelerator model.
+MI300X targets H100/H200 directly on memory-bound LLM inference; the larger HBM lets a 70B-parameter model fit on a single accelerator in FP16. MI300A is APU-style with unified GPU+CPU memory, a true successor to the discrete-accelerator model.
 
-Tensor throughput on MI300X: ~1300 TFLOPS BF16 / FP16, ~2600 TFLOPS FP8 (peak). Real-world ratios vs H100 depend heavily on the software stack — ROCm has historically trailed CUDA in kernel maturity, though by 2024–2025 the gap on vLLM/TGI inference is small for popular models.
+Tensor throughput on MI300X: ~1300 TFLOPS BF16 / FP16, ~2600 TFLOPS FP8 (peak). Real-world ratios vs H100 depend heavily on the software stack; ROCm has historically trailed CUDA in kernel maturity, though by 2024–2025 the gap on vLLM/TGI inference is small for popular models.
 
 === RDNA
 
-RDNA emphasizes graphics features (RT cores, mesh shaders) but the same WGP/CU architecture runs compute. RDNA 3 introduces dual-issue ALUs and a new matrix engine (WMMA on Radeon — different from CDNA's matrix cores). RDNA 4 (RX 9000, 2025) adds AI accelerators per CU.
+RDNA emphasizes graphics features (RT cores, mesh shaders) but the same WGP/CU architecture runs compute. RDNA 3 introduces dual-issue ALUs and a new matrix engine (WMMA on Radeon, distinct from CDNA's matrix cores). RDNA 4 (RX 9000, 2025) adds AI accelerators per CU.
 
 === ROCm / HIP
 
@@ -81,7 +81,7 @@ Compile with `hipcc`. The same source builds for NVIDIA (HIP-over-CUDA) and AMD 
 
 === RCCL
 
-RCCL is NCCL ported to ROCm — same API (`ncclXxx` $arrow.r$ `rcclXxx`), same algorithms (ring, double-tree), Infinity Fabric in place of NVLink.
+RCCL is NCCL ported to ROCm with the same API (`ncclXxx` $arrow.r$ `rcclXxx`), same algorithms (ring, double-tree), and Infinity Fabric in place of NVLink.
 
 == Apple — Metal Performance Shaders
 
@@ -142,13 +142,13 @@ SYCL is open-standard, single-source C++, and Intel's compiler `dpcpp` can targe
 Gaudi (Habana, acquired by Intel) is a dedicated training accelerator, not a GPU. Gaudi 3 (2024):
 - 8 Matrix Math Engines, 64 TPCs (Tensor Processor Cores, VLIW SIMD).
 - 128 GB HBM2e.
-- 24 $times$ 200 Gbps RDMA-over-Ethernet *built into the die* — no separate NIC.
+- 24 $times$ 200 Gbps RDMA-over-Ethernet *built into the die*; no separate NIC.
 
 Programming via SynapseAI, the Habana graph compiler. Most users sit above it in PyTorch with `import habana_frameworks.torch.core as htcore`. The integrated RoCE makes Gaudi an unusual hyperscale option: a 16-node rack is wired without an InfiniBand fabric.
 
 == Tenstorrent
 
-Tenstorrent's Wormhole and Blackhole accelerators take a radically different approach: a 2D grid of *Tensix cores*, each with a small CPU (RISC-V) and a matrix engine, connected by a NoC. Programs are *data-flow* — tensors stream from core to core rather than being held in a shared memory hierarchy.
+Tenstorrent's Wormhole and Blackhole accelerators take a radically different approach: a 2D grid of *Tensix cores*, each with a small CPU (RISC-V) and a matrix engine, connected by a NoC. Programs are *data-flow*: tensors stream from core to core rather than being held in a shared memory hierarchy.
 
 The host-side API is *TT-Metalium* (low-level, like CUDA) and *TT-NN* (PyTorch-like). Each operator is a graph of kernel placements on the Tensix mesh; the compiler partitions tensors and inserts NoC sends.
 
@@ -185,7 +185,7 @@ Three honest paths today:
 + *Triton / Pallas / OpenAI-Triton-on-AMD:* one DSL, multiple backends. Works for common ops (GEMM, attention); falls back to vendor libraries for the rest. Increasingly viable.
 + *Framework-level only:* write PyTorch / JAX, let the backend decide. Maximum portability, minimum bare-metal control. The right choice for 90% of users.
 
-The "no-CUDA-lock-in" pitch has been told for a decade and is *finally* starting to be true for inference — vLLM, llama.cpp, and TGI all run respectably on MI300X, Gaudi 3, and Apple Silicon as of 2025.
+The "no-CUDA-lock-in" pitch has been told for a decade and is *finally* starting to be true for inference; vLLM, llama.cpp, and TGI all run respectably on MI300X, Gaudi 3, and Apple Silicon as of 2025.
 
 == Further Reading
 
