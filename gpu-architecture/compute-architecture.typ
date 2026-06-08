@@ -766,7 +766,7 @@ Tensor TFLOPS    125      130       312       660       989
 Memory           HBM2     GDDR6     HBM2e     GDDR6X    HBM3
 ```
 
-== References
+== Further Reading
 
 NVIDIA Corporation (2024). NVIDIA Ada GPU Architecture. Whitepaper. https://images.nvidia.com/aem-dam/Solutions/geforce/ada/nvidia-ada-gpu-architecture.pdf
 
