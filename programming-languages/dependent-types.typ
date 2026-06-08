@@ -576,3 +576,17 @@ toNat (SS n _) = S n
 
 Singletons bridge between *static* and *runtime* values. The pattern is heavily used in Haskell via the `singletons` library to simulate dependency.
 
+
+== Further Reading
+
+Martin-Löf, P. (1984). _Intuitionistic Type Theory_. Bibliopolis. The lecture notes that introduced Martin-Löf type theory; covers identity types, universes, and the propositions-as-types reading.
+
+Pierce, B. C. et al. (2010). _Software Foundations_, Vol. 1: Logical Foundations. Electronic textbook. The most accessible hands-on introduction to Coq and dependent types, developing program verification from first principles.
+
+Nordström, B., Petersson, K., Smith, J. M. (1990). _Programming in Martin-Löf's Type Theory_. Oxford University Press. Covers MLTT in depth with examples of dependent record types and the setoid model for extensional equality.
+
+Bradley, A. R., Manna, Z. (2007). _The Calculus of Computation_. Springer. Treats decidable fragments of first-order logic and their use in program verification via SMT; a practical complement to the proof-theoretic approach.
+
+Bove, A., Dybjer, P., Norell, U. (2009). "A Brief Overview of Agda — A Functional Language with Dependent Types." TPHOLs. Introduces Agda's syntax, totality checker, and universe polymorphism; a good entry point for the proof-assistant perspective.
+
+Univalent Foundations Program (2013). _Homotopy Type Theory: Univalent Foundations of Mathematics_. Institute for Advanced Study. Provides the modern dependent-type foundation; Chapter 1 gives the type-theoretic primitives from which all others are built.

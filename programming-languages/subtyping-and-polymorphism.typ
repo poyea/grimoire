@@ -374,3 +374,17 @@ A modern language designer's pragmatic recipe: *prefer parametric polymorphism w
 The historical lesson, repeated in Eiffel, Java, Scala 2, and TypeScript, is that subtyping is *easy* to add and *hard* to make sound, decidable, and predictable simultaneously. The pieces are well understood now; the design tasks remaining are tasteful selection from the menu, not invention of fundamentally new machinery.
 
 _See also: _Type Systems_ for the basic subsumption rule and parametric polymorphism, _Linear and Substructural Type Systems_ for the orthogonal axis of how often a value is used, _Effects and Handlers_ for the analogous question on the side-effect axis._
+
+== Further Reading
+
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapters 15–24 are the definitive pedagogical treatment of subtyping (covariance, contravariance, record types) and polymorphism (let-poly, existential types, bounded quantification).
+
+Cardelli, L., Wegner, P. (1985). "On Understanding Types, Data Abstraction, and Polymorphism." ACM Computing Surveys 17(4). The survey that first systematically unified subtyping and parametric polymorphism; introduced the "is-a" and "has-a" taxonomy.
+
+Mitchell, J. C. (1984). "Coercion and Type Inference." POPL. Proves that subtyping with coercions is undecidable for bounded quantification ($F_{<:}$); the theoretical limit on combining subtyping with polymorphism.
+
+Reynolds, J. C. (1983). "Types, Abstraction, and Parametric Polymorphism." IFIP TC 2 Working Conference. Introduces parametricity (relational interpretation of System F types) and the free theorems it implies.
+
+Remy, D. (1992). "Typing Record Concatenation for Free." POPL. Introduces row polymorphism for records; provides a sound and complete inference algorithm, avoiding the undecidability of bounded quantification.
+
+Leijen, D. (2008). "Structural Typing for Component-Oriented Programming." Journal of Functional Programming 18(3). Surveys structural vs. nominal subtyping in the context of module and component systems, with a focus on inference tractability.

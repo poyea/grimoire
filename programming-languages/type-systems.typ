@@ -269,3 +269,17 @@ Python's type hints (PEP 484, mypy) and PHP's Hack follow the same pattern. The 
 )
 
 Rust is a notable data point: it is the first mainstream systems language with a sound type system in the safe fragment. The unsound operations (raw pointer arithmetic, `unsafe` blocks) are explicitly marked, making unsafety auditable. This is a significant engineering achievement given the language's performance requirements.
+
+== Further Reading
+
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. The standard graduate reference; covers simply-typed lambda calculus, System F, recursive types, subtyping, and type inference with full proofs.
+
+Wright, A. K., Felleisen, M. (1994). "A Syntactic Approach to Type Soundness." Information and Computation 115(1). Introduces the progress + preservation proof method for type soundness; the standard methodology used in the chapter.
+
+Milner, R. (1978). "A Theory of Type Polymorphism in Programming." JCSS 17(3). Introduces Hindley-Milner type inference and the principal-type theorem; the foundation for ML-family type systems.
+
+Cardelli, L., Wegner, P. (1985). "On Understanding Types, Data Abstraction, and Polymorphism." ACM Computing Surveys 17(4). The survey unifying parametric polymorphism, ad-hoc polymorphism, and subtyping; the conceptual map of the design space.
+
+Hindley, J. R. (1969). "The Principal Type-Scheme of an Object in Combinatory Logic." Transactions of the AMS 146. Independently proves the principal-type property for the typed lambda calculus; the H in HM type inference.
+
+Damas, L., Milner, R. (1982). "Principal Type-Schemes for Functional Programs." POPL. Algorithm W for HM inference: the definitive presentation of unification-based type reconstruction with soundness and completeness proofs.

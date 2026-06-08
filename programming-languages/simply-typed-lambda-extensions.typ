@@ -461,3 +461,17 @@ Master them here, and the proofs for System F, $F_omega$, MLTT, CIC, and beyond 
 
 Read this chapter as a *technical exercise* in the methodology of typed programming language theory.
 Every theorem we proved (confluence, SR, progress, SN) will recur in the chapters on System F and dependent types, usually in a stronger and harder form, but with the same skeleton of argument.
+
+== Further Reading
+
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapters 11–15 cover the extensions treated in this chapter: let-polymorphism, references, exceptions, recursive types, and subtyping, all built on the STLC core.
+
+Milner, R. (1978). "A Theory of Type Polymorphism in Programming." JCSS 17(3). Introduces Hindley-Milner type inference; the principal-type theorem is proved here, enabling the polymorphic let-extension.
+
+Damas, L., Milner, R. (1982). "Principal Type-Schemes for Functional Programs." POPL. The algorithm W for HM type inference; the definitive paper establishing soundness and completeness of Milner-style polymorphism.
+
+Gunter, C. A. (1992). _Semantics of Programming Languages_. MIT Press. Chapters 6–8 give the denotational semantics of recursive types (iso-recursive and equi-recursive) and the domain-theoretic fixed-point models.
+
+Abadi, M., Cardelli, L. (1996). _A Theory of Objects_. Springer. Develops the object calculus as an extension of STLC capturing object-oriented patterns: method dispatch, self-reference, and subtyping.
+
+Wadler, P. (1990). "Comprehending Monads." Mathematical Structures in Computer Science 2(4). Introduces monads as the type-theoretic framework for sequencing effects; the conceptual bridge from STLC-with-state to Haskell's IO monad.

@@ -286,3 +286,17 @@ Dependent types entered logic with *de Bruijn's* *Automath* system (1968), the f
 The *Mathematical Components* library (Coq, Gonthier et al.) and *mathlib* (Lean, the community) have demonstrated that production formalisation of nontrivial mathematics (Four-Color Theorem, Feit–Thompson Odd Order Theorem, Liquid Tensor Experiment) is possible at scale.
 
 Today dependent types power both *proof assistants* (Coq/Rocq, Agda, Lean, Mizar, NuPRL — Isabelle/HOL is included though it is not properly dependently typed) and *production languages* (Idris 2, F\*, ATS, Dependent Haskell via singletons). The convergence with mainstream programming continues: Rust's `const generics`, Swift's `parameterized protocols`, Scala 3's *match types* all reach toward fragments of dependent typing without committing to the full system. The historical arc from STLC's three rules to CIC's full kernel runs through System F (polymorphism), $F_omega$ (type operators), $lambda P$ (term dependency), and the apex $lambda C$ where all three meet.
+
+== Further Reading
+
+Pierce, B. C. et al. (2010). _Software Foundations_, Vols. 1–4. Electronic textbook. The canonical Coq-based curriculum; covers logical foundations, program correctness, type systems, and verification with machine-checked proofs throughout.
+
+Gonthier, G. et al. (2013). "A Machine-Checked Proof of the Odd Order Theorem." ITP. Demonstrates large-scale mathematical formalisation; the proof of the Feit–Thompson theorem in Coq/Mathematical Components.
+
+Coquand, T., Huet, G. (1988). "The Calculus of Constructions." Information and Computation 76(2–3). Introduces CIC's predecessor; the type theory underlying Coq, unifying dependent types, polymorphism, and type operators.
+
+Abrahamsson, O. et al. (2020). "Proof-Producing Synthesis of CakeML with Verified Compilation." ITP. Shows how a verified compiler (CakeML) is built and proved correct inside a proof assistant end-to-end.
+
+Bauer, A. et al. (2017). "The HoTT Library: A Formalization of Homotopy Type Theory in Coq." CPP. Describes a large Coq library of HoTT results; a concrete case study of proof-engineering at scale.
+
+Klein, G. et al. (2009). "seL4: Formal Verification of an OS Kernel." SOSP. The landmark proof-engineering project: a full functional correctness proof of a production microkernel, demonstrating that Hoare-logic verification scales to real systems code.

@@ -307,3 +307,17 @@ The open problems are deep:
 4. *Tool maturity.* Error messages, performance, and library coverage: practical engineering still lags the theory.
 
 The grand bet of univalent foundations, that the natural setting for mathematics is a higher-dimensional type theory in which the only structure-preserving notion of equality is up to equivalence, has since 2013 accumulated enough mechanised mathematics and computational backing that it is no longer a curiosity. It is one of two viable foundational programmes (the other being set theory + classical first-order logic), with the unique selling point that *computation and equality are unified*.
+
+== Further Reading
+
+Univalent Foundations Program (2013). _Homotopy Type Theory: Univalent Foundations of Mathematics_. Institute for Advanced Study. The principal reference; covers the type-theoretic foundations, univalence, higher inductive types, and formalised mathematics.
+
+Awodey, S., Warren, M. A. (2009). "Homotopy Theoretic Models of Identity Types." Mathematical Proceedings of the Cambridge Philosophical Society 146(1). Establishes that Kan simplicial sets model MLTT, initiating the homotopy-theoretic interpretation.
+
+Voevodsky, V. (2010). "Univalent Foundations Project." Preprint. The program proposal in which Voevodsky introduces the univalence axiom and articulates the vision of type theory as a foundation for mathematics.
+
+Cohen, C. et al. (2016). "Cubical Type Theory: A Constructive Interpretation of the Univalence Axiom." TYPES. Provides a constructive model for univalence via cubical sets, giving computational content to the axiom.
+
+Bauer, A. et al. (2017). "The HoTT Library: A Formalization of Homotopy Type Theory in Coq." CPP. A large Coq formalisation demonstrating that homotopy-type-theoretic mathematics is mechanisable at scale.
+
+Rijke, E. (2022). _Introduction to Homotopy Type Theory_. Cambridge University Press (in press). A modern textbook treatment of HoTT aimed at mathematicians; covers the synthetic theory of homotopy types from first principles.

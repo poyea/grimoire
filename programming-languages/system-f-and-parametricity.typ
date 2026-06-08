@@ -415,3 +415,17 @@ The fact that System F is SN is exactly the *Hauptsatz* (cut-elimination theorem
 
 *Conservativity over $"PA"_2$.* The functions $"Nat" arrow.r "Nat"$ representable in System F are exactly the *provably total* recursive functions of second-order arithmetic ($"PA"_2$). This is a *vast* class: it goes well beyond the primitive-recursive functions, the multiply-recursive functions, the $epsilon_0$-recursive functions of Gödel's System T. It includes any function provably total in *any* finite extension of PA by induction over predicates definable in second-order logic. Practical implication: *any* function you can reasonably want to compute is expressible in System F, but you can't always type-infer the encoding.
 
+
+== Further Reading
+
+Girard, J.-Y. (1972). _Interprétation fonctionnelle et élimination des coupures de l'arithmétique d'ordre supérieur_. PhD thesis, Université Paris VII. The original source of System F and the proof of strong normalisation via reducibility candidates; the founding document of second-order type theory.
+
+Reynolds, J. C. (1983). "Types, Abstraction, and Parametric Polymorphism." IFIP TC 2 Working Conference. Introduces the relational interpretation of System F and free theorems (parametricity); the single most influential paper in polymorphism theory.
+
+Girard, J.-Y., Lafont, Y., Taylor, P. (1989). _Proofs and Types_. Cambridge University Press. The most accessible treatment of System F's proof theory; strong normalisation, the Curry-Howard correspondence, and the encoding of data types.
+
+Wadler, P. (1989). "Theorems for Free!" FPCA. The accessible presentation of parametricity and free theorems for Haskell programmers; demonstrates how type signatures alone constrain program behaviour.
+
+Wells, J. B. (1999). "Typability and Type Checking in System F Are Equivalent and Undecidable." Annals of Pure and Applied Logic 98(1–3). Proves that System F type inference is undecidable via a reduction from semi-unification.
+
+Meijer, E., Fokkinga, M., Paterson, R. (1991). "Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire." FPCA. Demonstrates System F's Church encodings as the categorical language of folds, unfolds, and hylomorphisms; the functional-programming expression of parametricity.

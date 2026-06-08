@@ -338,3 +338,17 @@ Strong normalization of $lambda^arrow.r$ is therefore the proof-theoretic statem
 
 *Logical consistency.* $bot$ (= $"Empty"$) has no closed normal term: by Inversion, a closed normal term of type $"Empty"$ would have to be an application $e_1 space e_2$ with $e_1$ of arrow type ending in $"Empty"$; but $e_1$ would have to be normal, hence a variable (none, in empty context) or an abstraction (concluding type starts with $arrow.r$). Hence $emptyset tack.r e : "Empty"$ is empty, i.e., $bot$ is unprovable — $"IPC"^supset$ is *consistent*. This is the logical content of strong normalization.
 
+
+== Further Reading
+
+Church, A. (1940). "A Formulation of the Simple Theory of Types." Journal of Symbolic Logic 5(2). Introduces the simply-typed lambda calculus as a foundation for logic; the original source of the stratification by type.
+
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapters 8–12 are the definitive pedagogical treatment of STLC: operational semantics, progress, preservation, normalisation, and the Curry-Howard correspondence.
+
+Girard, J.-Y., Lafont, Y., Taylor, P. (1989). _Proofs and Types_. Cambridge University Press. Covers STLC and System F from the proof-theoretic perspective; strong normalisation via reducibility candidates is presented here in full detail.
+
+Tait, W. W. (1967). "Intensional Interpretations of Functionals of Finite Type I." JSL 32(2). Introduces reducibility (a.k.a. logical relations) as the proof method for strong normalisation of STLC; the original source of Tait's method.
+
+Curry, H. B., Feys, R. (1958). _Combinatory Logic_, Vol. I. North-Holland. The classical treatment of combinators and the type assignment system; the source of the Curry-Howard correspondence via the isomorphism between typable terms and intuitionistic proofs.
+
+Howard, W. A. (1980). "The Formulae-as-Types Notion of Construction." In Seldin–Hindley (eds.), _To H. B. Curry: Essays on Combinatory Logic_. Academic Press. The informal notes (circulated 1969, published 1980) establishing the Curry-Howard correspondence; STLC proofs correspond to intuitionistic natural deductions.

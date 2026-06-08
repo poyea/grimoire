@@ -417,3 +417,15 @@ Pierce remarks in *Types and Programming Languages* (2002) that "linear types ar
 This is the modern face of substructural type theory: not five competing logics, but one *graded* framework parameterised by a semiring of resource accounting.
 
 _See also: Effects and Handlers for the dual question (not 'how many times is a value used' but 'what operations does a computation perform'), and Type Systems for the substrate on top of which substructurality is layered._
+
+== Further Reading
+
+Girard, J.-Y. (1987). "Linear Logic." Theoretical Computer Science 50(1). The founding paper; introduces the connectives of linear logic, the exponential modalities, and the resource interpretation of proof.
+
+Wadler, P. (1990). "Linear Types Can Change the World!" IFIP TC 2 Working Conference on Programming Concepts and Methods. The accessible introduction to linear types for programmers; shows how linearity tracks aliasing and enables safe in-place update.
+
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapter 15 covers substructural type systems and the linear lambda calculus; Chapter 16 adds recursive types, which interact subtly with linearity.
+
+Atkey, R. (2018). "Syntax and Semantics of Quantitative Type Theory." LICS. Introduces quantitative type theory (QTT), a unified semiring-graded framework that subsumes linear, affine, relevant, and relevant-irrelevant type systems.
+
+Baker, H. G. (1992). "Lively Linear Lisp — Look

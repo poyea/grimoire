@@ -396,3 +396,17 @@ The undecidability of $F_(<:)$ subtyping was a surprise: Pierce (1994) found the
 System $F_omega$ (adding type operators) was already present in Girard's thesis. The Barendregt cube was introduced by Barendregt (1991) as a unifying framework for the pure type systems (Berardi–Terlouw 1989).
 
 The legacy of System F is everywhere in modern type theory: Haskell, Coq, Agda, Lean, Idris, F\*: all descend from System F. Parametricity remains an active research area; recent work on *internal parametricity* (Bernardy–Lasson 2011, Bernardy–Coquand–Moulin 2015) bakes Reynolds' theorem *into* the type theory itself, so free theorems become provable inside the system rather than only in its metatheory.
+
+== Further Reading
+
+Awodey, S. (2010). _Category Theory_, 2nd ed. Oxford University Press. Chapters 1–7 cover functors, natural transformations, adjunctions, and limits; the prerequisite for understanding the categorical models of System F and $F_\omega$.
+
+Jacobs, B. (1999). _Categorical Logic and Type Theory_. Elsevier. Part III covers fibred models of polymorphism and dependent types, including the PL-category model of System F and the categorical semantics of bounded quantification.
+
+Girard, J.-Y. (1972). _Interprétation fonctionnelle et élimination des coupures_. PhD thesis, Paris VII. The original categorical and proof-theoretic account of System F; strong normalisation and the second-order Peano conservativity result.
+
+Pierce, B. C. (1994). "Bounded Quantification Is Undecidable." Information and Computation 112(1). Proves that $F_{<:}$ subtype checking is undecidable via two-counter-machine simulation; the definitive negative result on combining subtyping and System F.
+
+Barendregt, H. P. (1991). "Introduction to Generalised Type Systems." Journal of Functional Programming 1(2). Introduces the Pure Type Systems (Barendregt cube), unifying STLC, System F, $F_\omega$, and dependent types in a single parametric framework.
+
+Moggi, E. (1991). "Notions of Computation and Monads." Information and Computation 93(1). The categorical model of effects in System F's setting; shows how Kleisli categories and monads give a uniform semantics to computational effects.
