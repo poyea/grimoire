@@ -1,6 +1,6 @@
 = Network Address Translation (NAT)
 
-Network Address Translation rewrites IP and port headers as packets cross an administrative boundary. Originally introduced to mitigate IPv4 address exhaustion, NAT has become a de-facto security and topology hiding mechanism — and a perennial source of pain for peer-to-peer protocols.
+Network Address Translation rewrites IP and port headers as packets cross an administrative boundary. Originally introduced to mitigate IPv4 address exhaustion, NAT has become a de-facto security and topology hiding mechanism, and a perennial source of pain for peer-to-peer protocols.
 
 *See also:* _Internet Layer_ (for IP addressing), _Transport Layer_ (for TCP/UDP), _Stateful Firewalls_ (for conntrack internals), _IPv6_ (for the long-term NAT-free alternative).
 
@@ -70,9 +70,9 @@ nft add rule nat prerouting tcp dport 80 dnat to 192.168.1.10:8080
 
 == Carrier-Grade NAT (CGNAT)
 
-CGNAT (also called large-scale NAT, LSN, or NAT444) is operated by ISPs to share a small pool of public IPv4 addresses across thousands of subscribers — typically the only way mobile carriers and broadband ISPs can still deliver IPv4 service after RIR pool exhaustion (2011-2019 across regions).
+CGNAT (also called large-scale NAT, LSN, or NAT444) is operated by ISPs to share a small pool of public IPv4 addresses across thousands of subscribers, typically the only way mobile carriers and broadband ISPs can still deliver IPv4 service after RIR pool exhaustion (2011-2019 across regions).
 
-*Address space:* RFC 6598 reserves `100.64.0.0/10` (4 million addresses) specifically for CGNAT — distinct from RFC 1918 to avoid collision with subscriber LANs.
+*Address space:* RFC 6598 reserves `100.64.0.0/10` (4 million addresses) specifically for CGNAT; distinct from RFC 1918 to avoid collision with subscriber LANs.
 
 ```
 Subscriber CPE      ISP CGNAT          Internet
@@ -170,7 +170,7 @@ A ──UDP──▶ TURN ──UDP──▶ B
        (relays both directions; allocates a public port for B)
 ```
 
-TURN servers consume bandwidth proportional to all relayed flows — operators (Twilio, Cloudflare, Google Meet) run global fleets and price by GB.
+TURN servers consume bandwidth proportional to all relayed flows; operators (Twilio, Cloudflare, Google Meet) run global fleets and price by GB.
 
 === ICE — Interactive Connectivity Establishment
 
@@ -194,11 +194,11 @@ ICE connectivity checks:
 For consumer routers, the device itself can request a port mapping from the gateway:
 
 ```bash
-# UPnP — query and request port mapping
+# UPnP: query and request port mapping
 upnpc -l                    # list current mappings
 upnpc -a 192.168.1.10 8080 8080 TCP   # forward external 8080 → LAN 8080
 
-# NAT-PMP / PCP (Apple / RFC 6887) — lower overhead, no XML
+# NAT-PMP / PCP (Apple / RFC 6887): lower overhead, no XML
 pcp map tcp 8080 -d 1h
 ```
 
@@ -232,7 +232,7 @@ iptables -t nat -A PREROUTING  -d 203.0.113.50 -j DNAT --to 192.168.1.50
 iptables -t nat -A POSTROUTING -s 192.168.1.50 -j SNAT --to 203.0.113.50
 ```
 
-*Hairpin NAT* — internal hosts accessing internal server via public IP:
+*Hairpin NAT* (internal hosts accessing internal server via public IP):
 ```bash
 iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -d 192.168.1.10 \
          -p tcp --dport 80 -j MASQUERADE
@@ -250,7 +250,7 @@ iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN \
          -j TCPMSS --clamp-mss-to-pmtu
 ```
 
-*4. FTP/SIP ALG:* Active FTP and SIP embed IP addresses in payload. Requires application-layer gateway (ALG) modules — and these ALGs are themselves a frequent source of bugs.
+*4. FTP/SIP ALG:* Active FTP and SIP embed IP addresses in payload. Requires application-layer gateway (ALG) modules, and these ALGs are themselves a frequent source of bugs.
 ```bash
 modprobe nf_conntrack_ftp
 modprobe nf_nat_ftp
@@ -265,10 +265,10 @@ modprobe nf_nat_sip
 #table(
   columns: (auto, auto, auto, auto),
   [*NAT Type*], [*Mapping*], [*Filtering*], [*P2P Compatibility*],
-  [Full Cone], [Endpoint-independent], [Endpoint-independent], [Excellent — any external host can reach mapped port],
-  [Restricted Cone], [Endpoint-independent], [Address-restricted], [Good — must send outbound first],
-  [Port Restricted Cone], [Endpoint-independent], [Address + port restricted], [Moderate — STUN usually works],
-  [Symmetric], [Endpoint-dependent], [Endpoint-dependent], [Poor — requires TURN relay],
+  [Full Cone], [Endpoint-independent], [Endpoint-independent], [Excellent: any external host can reach mapped port],
+  [Restricted Cone], [Endpoint-independent], [Address-restricted], [Good: must send outbound first],
+  [Port Restricted Cone], [Endpoint-independent], [Address + port restricted], [Moderate: STUN usually works],
+  [Symmetric], [Endpoint-dependent], [Endpoint-dependent], [Poor: requires TURN relay],
 )
 
 === NAT Traversal Technique Comparison

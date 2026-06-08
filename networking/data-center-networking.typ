@@ -6,7 +6,7 @@ Data-centre fabrics are engineered for very different goals than the public inte
 
 == Clos and Fat-Tree Topologies
 
-Hierarchical "core / aggregation / access" trees with oversubscription are obsolete for high-throughput workloads — a single core-aggregation link becomes the universal bottleneck. Modern fabrics use *Clos networks* (after Charles Clos, 1953), most commonly the 3-stage *leaf-spine* and 5-stage *fat-tree* variants.
+Hierarchical "core / aggregation / access" trees with oversubscription are obsolete for high-throughput workloads; a single core-aggregation link becomes the universal bottleneck. Modern fabrics use *Clos networks* (after Charles Clos, 1953), most commonly the 3-stage *leaf-spine* and 5-stage *fat-tree* variants.
 
 ```
 Leaf-Spine (3-stage Clos):
@@ -28,14 +28,14 @@ Leaf-Spine (3-stage Clos):
 
 The original *fat-tree* (Al-Fares et al., SIGCOMM 2008) generalises to a $k$-ary structure with $k^3 / 4$ servers and full bisection bandwidth using $k$-port commodity switches throughout. Microsoft's VL2 (2009), Google's Jupiter (2015), and Meta's F16 / Disaggregated Scheduled Fabric all derive from the fat-tree.
 
-*Routing.* The fabric is a Layer-3 network with BGP unnumbered between every leaf and spine (RFC 7938 — "Use of BGP for Routing in Large-Scale Data Centers"). OSPF is also used, but BGP has won at hyperscale because of its policy expressiveness and operational maturity.
+*Routing.* The fabric is a Layer-3 network with BGP unnumbered between every leaf and spine (RFC 7938, "Use of BGP for Routing in Large-Scale Data Centers"). OSPF is also used, but BGP has won at hyperscale because of its policy expressiveness and operational maturity.
 
 == ECMP and Flow Hashing
 
 With multiple equal-cost paths between any two hosts, the switch must pick one for every packet. *Equal-Cost Multi-Path* (ECMP) distributes flows by hashing a subset of the 5-tuple:
 $ h = "hash"("src ip", "dst ip", "src port", "dst port", "proto") mod N_"paths" $
 
-*Per-flow* hashing is the default — all packets of one TCP/QUIC connection take the same path, avoiding reordering. *Per-packet* spraying is rarely used because it shreds in-order delivery.
+*Per-flow* hashing is the default: all packets of one TCP/QUIC connection take the same path, avoiding reordering. *Per-packet* spraying is rarely used because it shreds in-order delivery.
 
 *Polarisation* is a classic failure mode: identical hash functions and inputs at every tier route many flows along the same physical path, leaving others idle. Modern switches mitigate by adding a per-switch *salt* (a chassis-unique value) to the hash input. Inspecting hash distribution:
 
@@ -71,7 +71,7 @@ Wire format:  Ethernet | IP | UDP(4791) | IB-BTH | payload | ICRC | FCS
 
 *Latency:* end-to-end one-way ~1-3μs on modern 100/200/400G ConnectX-7 NICs; throughput pinned to line rate (400 Gb/s = 50 GB/s).
 
-*Lossless requirement.* The original IB transport assumes a lossless fabric. RoCEv2 over Ethernet must therefore reproduce losslessness — either by careful congestion management (DCQCN) or hop-by-hop pause (PFC).
+*Lossless requirement.* The original IB transport assumes a lossless fabric. RoCEv2 over Ethernet must therefore reproduce losslessness, either by careful congestion management (DCQCN) or hop-by-hop pause (PFC).
 
 == PFC — Priority Flow Control (IEEE 802.1Qbb)
 
@@ -100,17 +100,17 @@ Microsoft Azure's RoCEv2 deployment (Guo et al., SIGCOMM 2016) details years of 
 
 == ECN and DCQCN
 
-DCQCN (Data Center Quantized Congestion Notification — Microsoft / Mellanox, 2015) is the de-facto rate-based congestion controller for RoCEv2:
+DCQCN (Data Center Quantized Congestion Notification, Microsoft / Mellanox, 2015) is the de-facto rate-based congestion controller for RoCEv2:
 
 + Switches mark packets ECN-CE when egress queue exceeds threshold $K_min$ (typically a few hundred KB).
 + Receiver sends *Congestion Notification Packet* (CNP) back to sender when it sees marks.
 + Sender NIC reduces send rate multiplicatively (factor $α$ derived from CNP rate, similar to DCTCP).
 + Recovery: rate increases additively, then exponentially after a target duration without CNP.
 
-When DCQCN is correctly tuned, PFC fires only on transient micro-bursts — closer to the lossless ideal without the deadlock risk of relying on PFC.
+When DCQCN is correctly tuned, PFC fires only on transient micro-bursts, staying closer to the lossless ideal without the deadlock risk of relying on PFC.
 
 ```bash
-# Mellanox ConnectX — inspect RoCE counters
+# Mellanox ConnectX: inspect RoCE counters
 ethtool -S enp1s0f0 | grep -E 'roce|cnp|pause'
 
 # Per-priority pause statistics
@@ -125,7 +125,7 @@ mlnx_qos -i enp1s0f0
 InfiniBand is a purpose-built lossless fabric used in HPC and AI clusters. Speeds: SDR (8 Gb/s) → EDR (100) → HDR (200) → NDR (400) → XDR (800). Topologies are typically fat-tree.
 
 Key differences from RoCEv2:
-- Lossless by *credit-based* link-layer flow control — no PFC pause storms.
+- Lossless by *credit-based* link-layer flow control; no PFC pause storms.
 - Custom physical layer; subnet manager (`opensm`) handles addressing and routing centrally.
 - Hardware-supported verbs include *atomic operations* (fetch-and-add, compare-and-swap) on remote memory.
 - Dominant in Top500 supercomputers and Nvidia's DGX / SuperPOD AI clusters.
@@ -137,15 +137,15 @@ Modern NICs do far more than DMA. Hardware accelerators relevant to data-centre 
 #table(
   columns: (auto, auto),
   [*Offload*], [*What it does*],
-  [Checksum (TX/RX)], [NIC computes IP/TCP/UDP checksum on the wire — saves cycles],
+  [Checksum (TX/RX)], [NIC computes IP/TCP/UDP checksum on the wire; saves cycles],
   [TSO / GSO], [Kernel passes a 64 KB "super-segment"; NIC slices into MSS-sized packets],
   [LRO / GRO], [Reverse: NIC coalesces successive incoming segments before delivery],
   [VLAN insertion / strip], [Hardware adds or removes 802.1Q tag],
-  [RSS], [Receive Side Scaling — hash 5-tuple, distribute interrupts across CPU cores],
-  [SR-IOV], [NIC presents multiple PCIe virtual functions to VMs — bypasses host kernel],
+  [RSS], [Receive Side Scaling: hash 5-tuple, distribute interrupts across CPU cores],
+  [SR-IOV], [NIC presents multiple PCIe virtual functions to VMs; bypasses host kernel],
   [VXLAN / Geneve], [Tunnel encap and decap in hardware (overlay networks)],
   [TLS (kTLS offload)], [Hardware AEAD for TLS data records (Mellanox, Intel)],
-  [DPU / SmartNIC], [Arm cores + P4 + crypto engine — host offload of entire network stack (Nvidia BlueField, AMD Pensando)],
+  [DPU / SmartNIC], [Arm cores + P4 + crypto engine for host offload of entire network stack (Nvidia BlueField, AMD Pensando)],
 )
 
 ```bash
@@ -156,7 +156,7 @@ ethtool -k eth0
 # rx-checksumming: on
 # scatter-gather: on
 
-# Toggle (disable LRO for forwarding scenarios — it merges flows)
+# Toggle (disable LRO for forwarding scenarios: it merges flows)
 ethtool -K eth0 lro off
 ```
 
