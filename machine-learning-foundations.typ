@@ -23,4 +23,7 @@
   #include "machine-learning-foundations/probability-and-information.typ"
   #pagebreak()
 
+  #include "machine-learning-foundations/loss-functions.typ"
+  #pagebreak()
+
 ]
