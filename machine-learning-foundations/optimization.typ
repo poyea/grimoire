@@ -2,7 +2,7 @@
 
 Training a model is, mechanically, the act of running a numerical optimizer on a non-convex objective. The optimizer determines convergence rate, final loss, generalization (yes, really — implicit regularization is real), memory footprint, and how robust training is to hyperparameter choice. This chapter covers the optimization machinery actually used in modern ML: SGD and its momentum variants, Adam and its descendants, second-order and preconditioned methods, learning-rate schedules, and the recent wave of structured-curvature optimizers (Shampoo, Muon, Sophia).
 
-*See also:* _Deep Learning Fundamentals_ (backprop produces the gradients), _Linear Algebra for ML_ (matrix decompositions for second-order methods), _Pretraining_ (large-scale optimizer choices), _ML Workload Optimization on GPUs_ (memory/throughput tradeoffs).
+*See also:* _Deep Learning Fundamentals_ (backprop produces the gradients), _Linear Algebra for ML_ (matrix decompositions for second-order methods), _Pretraining_ (large-scale optimizer choices), _ML Workload Optimization on GPUs_ (memory/throughput tradeoffs), _Loss Functions_ (objective definitions that optimizers minimise).
 
 == Convex Optimization Primer
 
