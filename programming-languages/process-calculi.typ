@@ -487,3 +487,17 @@ The process-calculus tradition is unified by three commitments: *small syntax* (
 
 
 Beyond the calculi surveyed here lie type systems for concurrency (session types, behavioural types, deadlock and liveness types; see the chapter on session types), probabilistic and stochastic process calculi (PEPA, the stochastic $pi$ used in systems biology), real-time extensions (timed CCS, timed CSP), and the modal $mu$-calculus and its model-checking algorithms. The concurrent semantic universe is treated in the next chapter; the database and distributed-systems volumes treat the *systems* consequences — consensus, replication, transactions — through which these algebras turn into protocols.
+
+== Further Reading
+
+Milner, R. (1989). _Communication and Concurrency_. Prentice-Hall. Introduces CCS and bisimulation as an algebraic theory of concurrent processes; the foundational text of process-calculus research.
+
+Milner, R. (1999). _Communicating and Mobile Systems: the π-Calculus_. Cambridge University Press. The definitive treatment of the pi-calculus: name passing, mobility, bisimulation congruence, and the typed pi-calculus.
+
+Hoare, C. A. R. (1985). _Communicating Sequential Processes_. Prentice-Hall. Presents CSP with the traces and failures-divergences models; the process algebra closest to industrial use (FDR model checker).
+
+Bergstra, J. A., Klop, J. W. (1984). "Process Algebra for Synchronous Communication." Information and Control 60(1–3). Introduces ACP (Algebra of Communicating Processes), providing an equational axiom system for process equivalence.
+
+Sangiorgi, D., Walker, D. (2001). _The π-Calculus: A Theory of Mobile Processes_. Cambridge University Press. The comprehensive graduate reference for the pi-calculus; covers typed variants, bisimulation theory, and expressiveness results.
+
+Honda, K., Vasconcelos, V. T., Kubo, M. (1998). "Language Primitives and Type Discipline for Structured Communication-Based Programming." ESOP. Introduces session types as a type discipline for the pi-calculus; the founding paper of the session-types research programme.

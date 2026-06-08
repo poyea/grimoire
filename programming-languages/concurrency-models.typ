@@ -410,3 +410,17 @@ The concurrency theory of this chapter is local: multiple threads on one machine
 == Outlook
 
 The concurrent semantic landscape is unified by a small set of questions repeatedly asked at different scales: which interleavings are observable? Which behaviours does the implementation guarantee? How do we compose programs without losing the guarantees? Event structures, Petri nets, traces, actors, channels, transactions, and memory models each answer a slice of these questions. The discipline's most productive direction now lies in *combining* these models (session types over actors, transactions over channels, structured concurrency over async) into composite frameworks that bring local guarantees into global view. The next chapters on session types, effects and handlers, and distributed systems pursue precisely this synthesis.
+
+== Further Reading
+
+Milner, R. (1989). _Communication and Concurrency_. Prentice-Hall. Introduces CCS, bisimulation, and the algebraic theory of concurrent processes; the foundational text of the field.
+
+Hoare, C. A. R. (1985). _Communicating Sequential Processes_. Prentice-Hall. Presents CSP with its trace and failures-divergences models; readable and self-contained.
+
+Lamport, L. (2002). _Specifying Systems: The TLA+ Language and Tools for Hardware and Software Engineers_. Addison-Wesley. The practical introduction to TLA+; covers temporal logic, action specification, and model checking of concurrent protocols.
+
+Herlihy, M., Shavit, N. (2008). _The Art of Multiprocessor Programming_. Morgan Kaufmann. The engineering companion; covers lock-free data structures, memory models, and concurrent correctness criteria.
+
+Fischer, M. J., Lynch, N. A., Paterson, M. S. (1985). "Impossibility of Distributed Consensus with One Faulty Process." JACM 32(2). Proves that deterministic asynchronous consensus is impossible in the presence of even a single crash failure.
+
+Casper, T. A. et al. (2019). "Memory Models for Programming Languages." ACM SIGPLAN Notices. A tutorial survey of relaxed memory models, their formal specifications, and their interaction with type systems and compilers.

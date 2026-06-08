@@ -453,3 +453,17 @@ The `!` operator "calls" an effectful computation; pattern matching on the resul
 The practical upshot: Koka and OCaml 5 are the production systems; Eff and Frank are research vehicles exploring the design space; Helium explores the efficient restricted fragment. All share the same algebraic foundation.
 
 _See also: _Type Systems_ for the substrate of judgements $Gamma tack.r e : tau ! epsilon$, _Linear and Substructural Type Systems_ for the dual axis of resource accounting, _Subtyping and Polymorphism_ for how effect rows compose subtyping-wise._
+
+== Further Reading
+
+Plotkin, G., Pretnar, M. (2009). "Handlers of Algebraic Effects." ESOP. Introduces effect handlers as the eliminators for algebraic effects, showing they subsume exceptions, state, nondeterminism, and coroutines.
+
+Leijen, D. (2017). "Type Directed Compilation of Row-Polymorphic Effects for Practical Generic Programming." POPL. Describes the evidence-passing translation in Koka that compiles row-polymorphic effects to efficient native code without continuation capture.
+
+Sivaramakrishnan, K. C. et al. (2021). "Retrofitting Effect Handlers onto OCaml." PLDI. Details the segmented-stack implementation of algebraic effects in OCaml 5, including the interaction with the multicore memory model.
+
+Bauer, A., Pretnar, M. (2015). "Programming with Algebraic Effects and Handlers." JLAMP 80(7). Presents the Eff language as a practical realisation of the Plotkin–Pretnar theory, with concrete examples of handlers as a programming construct.
+
+Hillerstrom, D., Lindley, S. (2016). "Liberating Effects with Rows and Handlers." TyDe. Introduces the Links effect system with row types, showing how effect rows compose and how handlers interact with polymorphism.
+
+Dolan, S. et al. (2017). "Concurrent System Programming with Effect Handlers." WS-FM. Applies effect handlers to systems programming, demonstrating asynchronous I/O, cooperative threading, and backtracking as user-defined effects in a single language.

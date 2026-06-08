@@ -341,3 +341,17 @@ Three open problems remain prominent:
 Hybrid type checking is alive in *Liquid Haskell*, *F${star.op}$*, and *Dafny*: tools that combine SMT discharge of subtyping with run-time residual checks where needed. The dividing line between "gradual" and "hybrid" has blurred: both are points on a continuum where the type checker decides at compile time how much work to defer to run time, and the run time honours the deferred obligations.
 
 The grand bet of gradual typing (that programmers can migrate large codebases from untyped to typed incrementally) has been *partially* vindicated. The migration happens; the soundness costs have been the main obstacle; and the design space of how much soundness to insist upon is still being explored, three decades after the first soft-typing paper.
+
+== Further Reading
+
+Siek, J. G., Taha, W. (2006). "Gradual Typing for Functional Languages." Scheme and Functional Programming Workshop. Introduces gradual typing and the consistency relation; the founding paper of the gradual typing programme.
+
+Tobias, W., Felleisen, M. (2009). "Well-Typed Programs Can't Be Blamed." ESOP. Introduces the blame calculus, giving a formal account of which component is responsible when a dynamic type check fails.
+
+Garcia, R. et al. (2016). "Abstracting Gradual Typing." POPL. Introduces the Abstracting Gradual Typing (AGT) methodology, deriving gradual type systems from static ones via abstract interpretation.
+
+Siek, J. G. et al. (2015). "Refined Criteria for Gradual Typing." SNAPL. Refines the criteria a gradual type system must satisfy, distinguishing the gradual guarantee, blame safety, and type-directed compilation.
+
+Flickinger, R. et al. (2023). "Gradual Liquid Type Inference." OOPSLA. Extends the gradual approach to liquid/refinement types, deferring undischargeable refinement conditions to run-time checks.
+
+Tobin-Hochstadt, S., Felleisen, M. (2008). "The Design and Implementation of Typed Racket." POPL. The Typed Racket case study: a practical large-scale gradual type system with occurrence typing and contract-based interoperability.

@@ -538,3 +538,17 @@ implementation experience.
    Lightweight Modular Staging, typed Template Haskell, MetaOCaml — are in fact
    partial evaluators. The Futamura projections, applied to DSL interpreters, yield
    macro-based compilers competitive with hand-written code generators.
+
+== Further Reading
+
+Clinger, W., Rees, J. (1991). "Macros That Work." POPL. Formalises hygienic, referentially transparent macro expansion for Scheme; the key theoretical model behind the scoped-substitution semantics presented in this chapter.
+
+Kohlbecker, E., Wand, M. (1987). "Macro-by-Example: Deriving Syntactic Transformations from Their Specifications." POPL. The pattern-based macro specification model; introduces example-driven macro definitions that are the basis of syntax-rules.
+
+Culpepper, R., Felleisen, M. (2010). "Fortifying Macros." ICFP. Introduces macro contracts and blame for macro-generated code; the formal treatment of robust macros that produce well-formed output.
+
+Taha, W., Sheard, T. (1997). "Multi-Stage Programming with Explicit Annotations." PEPM. Introduces MetaML's type-directed staging; the formal foundation for typed quotation, splicing, and the bracket-escape discipline.
+
+Herman, D., Wand, M. (2008). "A Theory of Hygienic Macros." ESOP. The first complete formal theory of macro hygiene using nominal logic; proves correctness of hygienic expansion relative to alpha-equivalence.
+
+Flatt, M. (2012). "Binding as Sets of Scopes." POPL. The definitive formal model of Racket's scope-set macro system; resolves subtleties of local-expand and module-level hygiene in a single unified framework.

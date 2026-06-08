@@ -357,3 +357,17 @@ The grand bet of macros, that the right way to extend a language is to write a l
 
 The connection to *partial evaluation* and the *Futamura projections* points toward the future: macros that are not merely syntactic transformations but *staged compilers* for embedded languages, capable of fusing user-written DSLs with the host language's optimiser. The work of *Lightweight Modular Staging* (Rompf–Odersky 2010) in Scala and the *futhark* / *accelerate* / *halide* lineage of DSL compilers in Haskell and C++ are concrete instances of this convergence: macro-flavoured tools that produce code competitive with hand-written low-level implementations.
 
+
+== Further Reading
+
+Kohlbecker, E. et al. (1986). "Hygienic Macro Expansion." LISP and Functional Programming. Introduces hygienic macro expansion, the fundamental mechanism preventing unintended variable capture in macro systems.
+
+Clinger, W., Rees, J. (1991). "Macros That Work." POPL. Formalises a hygienic, referentially transparent macro system for Scheme; the theoretical basis for syntax-rules and subsequent macro systems.
+
+Flatt, M. (2002). "Composable and Compilable Macros: You Want it When?" ICFP. The Scheme/Racket definitional macro system with a two-phase (compile/run) model and hygienic scope; foundational for modern Racket macros.
+
+Rompf, T., Odersky, M. (2010). "Lightweight Modular Staging: A Pragmatic Approach to Runtime Code Generation and Compiled DSLs." GPCE. Introduces LMS in Scala; shows that type-directed staging yields DSL compilers competitive with hand-written code generators.
+
+Taha, W., Sheard, T. (1997). "Multi-Stage Programming with Explicit Annotations." PEPM. Introduces MetaML, the first typed multi-stage language; provides the theoretical foundation for code quotation and splicing in typed settings.
+
+Kiselyov, O. (2014). "The Design and Implementation of BER MetaOCaml." FLOPS. Presents MetaOCaml's type-safe staging, scope safety guarantees, and the run-time mechanics of code generation in a production ML.
