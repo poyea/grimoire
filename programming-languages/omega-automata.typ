@@ -291,3 +291,17 @@ The principal open questions of the field remain:
 
 Across these questions, the same handful of ideas recur: subset / Safra-tree constructions, positional determinacy, fixed-point iteration, and the topological structure of $Sigma^omega$. The chapter on _Infinite Trees and Games_ pushes each of these from words to trees, with consequences that include the strongest known decidable theory of arithmetic-like structures.
 
+
+== Further Reading
+
+Thomas, W. (1990). "Automata on Infinite Objects." In van Leeuwen, J. (ed.), _Handbook of Theoretical Computer Science_, Vol. B. Elsevier. The classical survey of omega-automata; covers Büchi, Muller, Rabin, Streett, and parity acceptance with their relative expressiveness and closure properties.
+
+Pnueli, A. (1977). "The Temporal Logic of Programs." FOCS. Introduces LTL for program specification; the paper that made omega-automata practically relevant to computer science.
+
+Vardi, M. Y., Wolper, P. (1986). "An Automata-Theoretic Approach to Automatic Program Verification." LICS. The automata-based LTL model-checking pipeline: LTL formula to NBA then product with system automaton; the algorithmic foundation of most model checkers.
+
+Büchi, J. R. (1962). "On a Decision Method in Restricted Second Order Arithmetic." Proceedings of the International Congress on Logic, Methodology, and Philosophy of Science. Introduces the automaton model for infinite words and proves decidability of S1S via it.
+
+Safra, S. (1988). "On the Complexity of omega-Automata." FOCS. The Safra construction: optimal $2^{O(n \log n)}$ determinisation of Büchi automata; the key result in omega-automata complexity.
+
+Kupferman, U., Vardi, M. Y. (2001). "Weak Alternating Automata Are Not That Weak." ACM Transactions on Computational Logic 2(3). Characterises the weak, co-Büchi, and Büchi fragments of alternating automata, clarifying the expressiveness landscape.

@@ -456,3 +456,17 @@ The lessons of tree-automata theory generalise the classical regular-language th
 *Practical applications* span every part of language processing: compilation of pattern matching, exhaustiveness checks, XML schema validation, XPath optimisation, term rewriting, model checking on bounded-tree-width inputs (Courcelle). Each of these applications relies on the *decidability of emptiness* and the *closure under Boolean operations* of regular tree languages -- the same two facts that make string regular languages so ubiquitously useful, ported to a richer combinatorial substrate.
 
 The story continues in _Infinite Trees and Games_, where the same algebraic and logical scaffolding survives the move to *infinite* trees, yielding Rabin's theorem and the decidability of S2S -- arguably the strongest decidable logical theory known.
+
+== Further Reading
+
+Thatcher, J. W., Wright, J. B. (1968). "Generalised Finite Automata Theory with an Application to a Decision Problem of Second-Order Logic." Mathematical Systems Theory 2(1). Introduces bottom-up tree automata and proves decidability of the associated second-order theory.
+
+Comon, H. et al. (2007). _Tree Automata Techniques and Applications_. Freely available at http://tata.gforge.inria.fr/. The comprehensive reference covering bottom-up and top-down tree automata, closure properties, decidability, and tree transducers.
+
+Doner, J. (1970). "Tree Acceptors and Some of Their Applications." JCSS 4(5). Establishes the decidability of the weak monadic second-order theory of two successors (WS2S) via tree automata; the logical cornerstone of tree-automata theory.
+
+Rabin, M. O. (1969). "Decidability of Second-Order Theories and Automata on Infinite Trees." Transactions of the AMS 141. Proves decidability of S2S via tree automata with Rabin acceptance; arguably the strongest decidable logical theory.
+
+Gécseg, F., Steinby, M. (1984). _Tree Automata_. Akadémiai Kiadó. The classical monograph on tree automata: algebraic theory, minimisation, syntactic algebras for tree languages.
+
+Courcelle, B. (1990). "The Monadic Second-Order Logic of Graphs I." Information and Computation 85(1). Courcelle's theorem: every MSO-definable property of graphs of bounded tree-width is decidable in linear time via tree-automaton evaluation.

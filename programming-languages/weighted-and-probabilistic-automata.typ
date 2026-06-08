@@ -510,3 +510,17 @@ Composing the singleton transducers $T_u : epsilon arrow.r u$ and $T_v : epsilon
 - H. Gimbert, Y. Oualhadj. *Probabilistic Automata on Finite Words: Decidable and Undecidable Problems*. ICALP 2010.
 - L. S. Shapley. *Stochastic Games*. PNAS 39, 1953.
 - M. Droste, W. Kuich, H. Vogler (eds.). *Handbook of Weighted Automata*. Springer, 2009.
+
+== Further Reading
+
+Droste, M., Kuich, W., Vogler, H. (eds.) (2009). _Handbook of Weighted Automata_. Springer. The comprehensive reference: semiring theory, weighted language equivalence, algebraic and topological aspects, and applications to NLP and formal verification.
+
+Mohri, M. (2009). "Weighted Automata Algorithms." In Droste et al. (eds.), _Handbook of Weighted Automata_. Springer. Surveys the key algorithms: shortest-distance, determinisation, minimisation, and composition of weighted transducers; the computational core of the chapter.
+
+Rabin, M. O. (1963). "Probabilistic Automata." Information and Control 6(3). The founding paper; introduces probabilistic finite automata, cut-point languages, and the undecidability of isolation (the cut-point threshold problem).
+
+Paz, A. (1971). _Introduction to Probabilistic Automata_. Academic Press. The classical monograph on probabilistic automata: matrix representations, limit languages, and decidability landscape.
+
+Courcoubetis, C., Yannakakis, M. (1995). "The Complexity of Probabilistic Verification." JACM 42(4). Establishes PSPACE and PTIME complexity bounds for model checking Markov chains and Markov decision processes against omega-regular specifications.
+
+Baier, C., Katoen, J.-P. (2008). _Principles of Model Checking_. MIT Press. Chapters 8–10 treat probabilistic model checking of DTMCs and MDPs against PCTL and LTL; the engineering complement to the theoretical treatment in this chapter.

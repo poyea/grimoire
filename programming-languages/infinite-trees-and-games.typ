@@ -359,3 +359,17 @@ Three threads connect this chapter to the rest of the volume.
 *Fixed points and computation.* The $mu$-calculus is the canonical fixed-point logic, expressively complete (modulo bisimulation) for branching-time MSO properties of transition systems. Its model checking, its synthesis, its alternation hierarchy -- all are governed by the same parity-game / tree-automaton machinery.
 
 Together with _Omega-Automata_ (the linear-time / word-shaped half) and _Tree Automata_ (the finite-word / finite-tree half), this chapter completes the picture of automata theory adapted to nonterminating and branching systems. The unifying lesson is that *infinite computation is not a degeneration of finite computation* -- it has its own rich and orderly theory, and the right algorithmic tools (Safra trees, parity games, $mu$-calculus fixed points) make it computationally tractable.
+
+== Further Reading
+
+Rutten, J. J. M. M. (2000). "Universal Coalgebra: A Theory of Systems." Theoretical Computer Science 249(1). Establishes coalgebra as the general framework for systems with state and observation; the foundational reference for coinductive and infinite-tree theory.
+
+Zielonka, W. (1998). "Infinite Games on Finitely Coloured Graphs with Applications to Automata on Infinite Trees." Theoretical Computer Science 200(1–2). Proves positional determinacy for parity games, the key structural fact underlying synthesis and mu-calculus model checking.
+
+Walukiewicz, I. (2002). "Monadic Second-Order Logic on Tree-Like Structures." Theoretical Computer Science 275(1–2). The comprehensive account of MSO logic on infinite trees, connecting Rabin's theorem to the mu-calculus.
+
+Emierson, E. A., Jutla, C. S. (1991). "Tree Automata, Mu-Calculus and Determinacy." FOCS. Shows that mu-calculus model checking reduces to parity-game solving via tree-automaton emptiness.
+
+Jurdziński, M., Paterson, M., Zwick, U. (2008). "A Deterministic Subexponential Algorithm for Solving Parity Games." SIAM Journal on Computing 38(4). The best known deterministic algorithm for parity games prior to the quasipolynomial result; introduces the small progress measures approach.
+
+Calude, C. S. et al. (2017). "Deciding Parity Games in Quasipolynomial Time." STOC. The landmark result proving parity games solvable in $n^{O(log n)}$ time, the most significant advance in automata-game theory in decades.

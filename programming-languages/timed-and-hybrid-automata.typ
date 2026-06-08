@@ -475,3 +475,17 @@ For *rectangular* over-approximations $dot(T) in [a_l, b_l]$ per location, this 
 - E. Asarin, O. Maler, A. Pnueli, J. Sifakis. *Controller Synthesis for Timed Automata*. SSC 1998.
 - K. G. Larsen, P. Pettersson, W. Yi. *UPPAAL in a Nutshell*. STTT 1(1), 1997.
 - G. Frehse et al. *SpaceEx: Scalable Verification of Hybrid Systems*. CAV 2011.
+
+== Further Reading
+
+Alur, R., Dill, D. L. (1994). "A Theory of Timed Automata." Theoretical Computer Science 126(2). The founding paper of timed automata; introduces clocks, guards, invariants, and the region-graph decision procedure.
+
+Henzinger, T. A. (1996). "The Theory of Hybrid Automata." LICS; in Kefalas (ed.), Hybrid Systems II (2000). The definitive treatment of hybrid automata, the reachability problem, and the decidable subclasses.
+
+Baier, C., Katoen, J.-P. (2008). _Principles of Model Checking_. MIT Press. Chapters 9–10 cover timed and probabilistic model checking, including TCTL model checking on timed automata via region graphs.
+
+Larsen, K. G., Pettersson, P., Yi, W. (1997). "UPPAAL in a Nutshell." International Journal on Software Tools for Technology Transfer 1(1–2). Describes the UPPAAL tool: timed automaton modelling, query language (TCTL), and the zone-based symbolic model checking algorithm.
+
+Alur, R. (1999). "Timed Automata." CAV, LNCS 1633. A concise and authoritative survey of the language-theoretic and verification aspects of timed automata, including expressiveness and decidability results.
+
+Frehse, G. et al. (2011). "SpaceEx: Scalable Verification of Hybrid Systems." CAV. The SpaceEx tool paper; describes the support function and zonotope abstractions used for scalable reachability analysis of hybrid automata.
