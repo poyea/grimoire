@@ -39,7 +39,7 @@ $square$
 $delta_L([x], a) = [x a]$ and $F_L = { [x] | x in L }$ is the *canonical* minimal DFA.
 
 *Non-constructive remark.* Condition (ii) does not, by itself, yield an algorithm
-to compute $equiv_L$ — the relation is defined by an infinite family of futures $z$.
+to compute $equiv_L$: the relation is defined by an infinite family of futures $z$.
 The constructive content of (iii) $=>$ (i) requires that the finite right-congruence be
 *explicitly given* (e.g., as a DFA or as a finitely-presented monoid quotient). This is
 why non-regularity proofs via Myhill–Nerode must exhibit an *infinite* anti-chain of
@@ -139,20 +139,20 @@ procedure yields the *minimal DFA* for $L$:
 *Proof.* The key lemma is: after subset construction, *every reachable state of the
 resulting DFA is distinct* (i.e., the DFA is already *reduced*). This holds because
 the subset construction from a *deterministic* NFA (where each state is a subset of
-the original states) produces distinguishable states — a subset $S_1$ and $S_2$ of
+the original states) produces distinguishable states: a subset $S_1$ and $S_2$ of
 original states correspond to different acceptance behaviours on the reversed language
 precisely because their original states were reachable by different histories.
 
 More precisely, for any NFA $N$, the DFA $D$ produced by subset construction from
 $N^R$ is *already* accessible (all states reachable from start) by construction. After
 a second reversal and subset construction, the resulting DFA is both accessible and
-*co-accessible* (all states reach an accepting state — dead states never appear) and
+*co-accessible* (all states reach an accepting state, with no dead states) and
 its states are exactly the equivalence classes of $equiv_(L^R)^(-1) = equiv_L$ after
 swapping. Hence $D$ is the minimal DFA. $square$
 
 *Complexity.* If $M$ has $n$ states, the intermediate NFA $D^R$ from step 2 may have
 $2^n$ states (subset construction), and the final DFA $D$ from step 4 may again
-blow up — but both blow-ups are bounded by the *minimal DFA size*, which cannot
+blow up, but both blow-ups are bounded by the *minimal DFA size*, which cannot
 exceed $2^n$. In practice the algorithm is often used with NFA inputs where Hopcroft's
 minimisation would require a DFA first.
 
@@ -196,7 +196,7 @@ of $L_k$ is exactly $k + 1$.
 *Proof outline.* Hashiguchi's proof constructs a decision procedure by translating the
 star-height question into membership in a finitely-based *finite-variable equation system*
 over the semiring of subsets of a finite monoid. The key tool is the *limitedness* of
-a regular language — a language $L$ is *limited* (Hashiguchi 1982) if there is a
+a regular language: a language $L$ is *limited* (Hashiguchi 1982) if there is a
 constant $c$ such that the pumping exponent in any star-expression for $L$ can be bounded
 by $c$. Hashiguchi showed:
 
@@ -208,7 +208,7 @@ by $c$. Hashiguchi showed:
   star-height is bounded above by the number of states (Kleene's construction), the
   procedure terminates.
 
-The algorithm is not practical — the bounds are tower-exponential — but the decidability
+The algorithm is not practical (the bounds are tower-exponential), but the decidability
 result closed a long-open question. Kirsten (2005) later gave a simpler proof via
 *nested distance desert automata*.
 
@@ -231,7 +231,7 @@ the head crosses position $i$ for the $j$-th time. Consecutive crossings alterna
 direction (right then left then right ...).
 
 *Key observation.* The final output of $M$ on $a_1 dots.c a_n$ depends only on the
-crossing sequence at position $n+1$ — i.e., whether it ever enters an accepting state
+crossing sequence at position $n+1$, i.e., whether it ever enters an accepting state
 while moving off the right end. But the crossing sequence at position $i+1$ is
 *entirely determined* by the crossing sequence at position $i$ and the symbol $a_i$:
 it is a computable function of these two inputs.
@@ -281,7 +281,7 @@ $x_j y_j in L$, we have $q_i in F <==> hat(delta)(q_i, y_i) in F$. This forces
 both $x_i y_j$ and $x_j y_i$ to be in $L$, contradicting (ii). Hence $q_i eq.not q_j$
 for all $i eq.not j$. $square$
 
-*Example.* For $L = { a^n b^n | n >= 0 }$ (non-regular — the technique also applies
+*Example.* For $L = { a^n b^n | n >= 0 }$ (non-regular; the technique also applies
 to lower-bounding witness quotients): the fooling set ${ (a^i, b^i) | i >= 0 }$ has
 infinite size, confirming non-regularity.
 
@@ -316,19 +316,19 @@ surjective homomorphism from $"Synt"(L)$.
 
 *Computing the syntactic monoid.* For the minimal DFA $M = (Q, Sigma, delta, q_0, F)$,
 the syntactic monoid is the *transition monoid* $M(M) = { hat(delta)(-, w) : Q arrow.r Q | w in Sigma^* }$
-— the set of all transition functions induced by words, under composition. It is a
+(the set of all transition functions induced by words, under composition). It is a
 submonoid of the full transformation monoid $T_Q$.
 
 *Example (parity language).* Let $L = { w in { a, b }^* | |w|_a equiv 0 mod 2 }$
 (even number of $a$'s). The minimal DFA has 2 states ${ q_0, q_1 }$ with $q_0$
 accepting. Transition functions: $a$ maps $(q_0, q_1) |-> (q_1, q_0)$ (swap); $b$
 maps $(q_0, q_1) |-> (q_0, q_1)$ (identity). The transition monoid is
-${ "id", "swap" } tilde.equiv ZZ slash 2 ZZ$ — the cyclic group of order 2. Since this is
+${ "id", "swap" } tilde.equiv ZZ slash 2 ZZ$ (the cyclic group of order 2). Since this is
 a *group* (every element has an inverse) and groups are *not* aperiodic
 (e.g., $"swap"^2 = "id"$ but $"swap"^1 eq.not "swap"^2$), $L$ is *not* star-free.
 
-*Example (star-free: threshold counting).* The language $L = { w | |w|_a >= 1 }$ —
-at least one $a$. Its syntactic monoid has three elements: ${ [epsilon], [a], [b a^(-1) b] }$
+*Example (star-free: threshold counting).* The language $L = { w | |w|_a >= 1 }$,
+requiring at least one $a$, has a syntactic monoid with three elements: ${ [epsilon], [a], [b a^(-1) b] }$
 where $[a]$ represents "has seen at least one $a$", which is *idempotent* ($[a]^2 = [a]$).
 The monoid is aperiodic (no non-trivial groups), so $L$ is star-free. Indeed
 $L = Sigma^* a Sigma^*$, which is star-free by definition.
@@ -361,11 +361,11 @@ This is a compact, totally disconnected topological monoid, denoted $hat(Sigma)^
 
 The *profinite topology* on $Sigma^*$ has basis the cosets of finite-index right
 congruences. A language $L subset.eq Sigma^*$ is *profinitely closed* <==> it is a
-union of cosets of some finite-index right congruence — equivalently, <==> $L$ is a
+union of cosets of some finite-index right congruence; equivalently, <==> $L$ is a
 finite Boolean combination of regular languages. So the regular languages are
 exactly the *clopen* (open and closed) sets in the profinite topology.
 
-*Pseudoequations.* A *pseudoword* is an element of $hat(Sigma)^*$ — an infinite "word"
+*Pseudoequations.* A *pseudoword* is an element of $hat(Sigma)^*$, an infinite "word"
 forming a coherent system of elements in every finite quotient. A *pseudoidentity*
 is an equation $u = v$ between pseudowords, interpreted in every finite monoid in a
 pseudovariety $bold(V)$. The *Reiterman theorem* (1982) states:
@@ -461,7 +461,7 @@ problem* (is the accepted language non-empty?) for 2-counter machines is undecid
 (Minsky 1961).
 
 *Relevance to regularity.* Single-counter machine languages are exactly the *semilinear
-sets* over $Sigma^*$ — precisely the *Parikh images* of regular languages. This means:
+sets* over $Sigma^*$, precisely the *Parikh images* of regular languages. This means:
 
 - If we only care about *letter counts* (Parikh images), a regular set suffices.
 - But the *positional* information in regular languages is richer than counter
@@ -469,7 +469,7 @@ sets* over $Sigma^*$ — precisely the *Parikh images* of regular languages. Thi
 
 *Corollary.* Deciding whether a regular language is *semilinear in a strong sense*
 (depends only on letter counts) reduces to checking whether its syntactic monoid is
-*commutative* — a decidable algebraic property. If $"Synt"(L)$ is commutative then
+*commutative*, a decidable algebraic property. If $"Synt"(L)$ is commutative then
 $L$ is definable by Presburger arithmetic, hence semilinear.
 
 == Practical Algorithms: OCaml and Python Implementations
@@ -568,7 +568,7 @@ $O(log n)$ times per symbol. The total work is $O(n log n |Sigma|)$.
 Both the pumping lemma and Myhill–Nerode are used to prove non-regularity, but they
 differ sharply in *what they can establish*.
 
-*Pumping lemma limitations.* The pumping lemma is *necessary but not sufficient* —
+*Pumping lemma limitations.* The pumping lemma is *necessary but not sufficient*:
 there exist non-regular languages that satisfy the pumping condition for every $w$ of
 sufficient length. Constructing such examples requires care (early attempts in the
 literature contain errors); a verified construction is Jaffe's *block-pumping*
@@ -605,7 +605,7 @@ for most applications.
 
 == Summary: The Seven Faces of Regular Languages
 
-The multiple equivalent characterisations are not redundant — each is *optimally suited*
+The multiple equivalent characterisations are not redundant; each is *optimally suited*
 to a different task:
 
 ```text

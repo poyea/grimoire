@@ -1,8 +1,8 @@
 = Lexing
 
-A compiler or interpreter sees its input as a flat stream of bytes. The lexer — also called a scanner or tokenizer — imposes the first layer of structure: it converts that stream into a sequence of *tokens*, each carrying a type (integer literal, identifier, keyword, operator) and the raw text that produced it. Everything downstream works on tokens, never on individual characters.
+A compiler or interpreter sees its input as a flat stream of bytes. The lexer (also called a scanner or tokenizer) imposes the first layer of structure: it converts that stream into a sequence of *tokens*, each carrying a type (integer literal, identifier, keyword, operator) and the raw text that produced it. Everything downstream works on tokens, never on individual characters.
 
-This separation of concerns is not just aesthetic. It isolates encoding complexity (UTF-8, byte-order marks, line endings) in one place. It lets the parser reason about a much smaller alphabet — a few dozen token types rather than 128+ ASCII codes. And it removes ambiguity that would otherwise force the parser to carry impossible amounts of lookahead: the string `<=` is a single LESS_EQ token before the parser ever sees it.
+This separation of concerns is not just aesthetic. It isolates encoding complexity (UTF-8, byte-order marks, line endings) in one place. It lets the parser reason about a much smaller alphabet: a few dozen token types rather than 128+ ASCII codes. And it removes ambiguity that would otherwise force the parser to carry impossible amounts of lookahead: the string `<=` is a single LESS_EQ token before the parser ever sees it.
 
 _See also: Regular Languages and Finite Automata for regular languages and DFA theory. The present chapter is that theory made operational._
 
@@ -27,7 +27,7 @@ SEMI      ;
 WS        [ \t\r\n]+   (discard)
 ```
 
-Keywords (`if`, `else`, `let`, `return`, ...) are a subset of `IDENT`. The standard approach is to match them as identifiers first, then look up the lexeme in a keyword table — this avoids adding one regex alternative per keyword and keeps the DFA small.
+Keywords (`if`, `else`, `let`, `return`, ...) are a subset of `IDENT`. The standard approach is to match them as identifiers first, then look up the lexeme in a keyword table; this avoids adding one regex alternative per keyword and keeps the DFA small.
 
 String literals with escape sequences deserve attention. The pattern `([^"\\] | \\.)*` accepts any non-quote, non-backslash character, or a backslash followed by any character. The escape *interpretation* (`\\n` -> newline, `\\t` -> tab, ...) is a separate pass over the raw lexeme, not part of the DFA itself.
 
@@ -40,7 +40,7 @@ A flex-style tool takes the list of (regex, action) pairs and compiles them into
 3. *Subset construction (powerset)* : convert the combined NFA to a DFA; each DFA state is a set of NFA states.
 4. *Minimization*: merge DFA states with identical futures (Hopcroft's algorithm, $O(n log n)$). This keeps the transition table small enough to fit in L1 cache.
 
-The accepting DFA states each carry a *priority* — the index of the first regex rule that caused this state to accept. This is what resolves the keyword-vs-identifier ambiguity: if both the `if`-keyword rule and the IDENT rule would accept at the same state, lower-priority (earlier-listed) rule wins.
+The accepting DFA states each carry a *priority*: the index of the first regex rule that caused this state to accept. This is what resolves the keyword-vs-identifier ambiguity: if both the `if`-keyword rule and the IDENT rule would accept at the same state, lower-priority (earlier-listed) rule wins.
 
 In practice, lexer generators emit a 2-D transition table `table[state][char_class]` where `char_class` collapses the 256 byte values into equivalence classes (typically 20-40 classes). The inner loop is:
 
@@ -52,7 +52,7 @@ while input not empty:
     if state == DEAD: emit token, reset
 ```
 
-The entire table fits in a few kilobytes. On a modern x86 core this loop sustains 100-500 MB/s of input throughput — the bottleneck is memory bandwidth, not computation.
+The entire table fits in a few kilobytes. On a modern x86 core this loop sustains 100-500 MB/s of input throughput; the bottleneck is memory bandwidth, not computation.
 
 == Maximal Munch and Longest-Match
 
@@ -60,7 +60,7 @@ The *maximal munch* rule (also called *longest match*): the lexer always produce
 
 This is why `count++` scans as `count`, `++`, not `count`, `+`, `+`. It is also why `<=` is one token and why `-->` in C is the famous "goes to" joke.
 
-Implementation: the lexer maintains a *mark* — the input position and DFA state of the last accept seen during the current scan. Whenever it enters an accepting state it updates the mark. When it enters a dead state it backs up to the mark, emits, and restarts.
+Implementation: the lexer maintains a *mark* (the input position and DFA state of the last accept seen during the current scan). Whenever it enters an accepting state it updates the mark. When it enters a dead state it backs up to the mark, emits, and restarts.
 
 == Lookahead
 
@@ -74,7 +74,7 @@ Implementation of bounded lookahead: maintain a small ring buffer (typically 1-4
 
 == flex and re2c
 
-*flex* (Fast Lexical Analyzer) is the GNU successor to lex. You write a `.l` file with `%%`-separated rules; flex generates a C file implementing the DFA as a switch over states and equivalence-class tables. Its output is competitive with hand-written code for large grammars and handles Unicode input classes when configured with `-8`. The generated file can exceed 10 000 lines for complex grammars, which is fine — you never read it.
+*flex* (Fast Lexical Analyzer) is the GNU successor to lex. You write a `.l` file with `%%`-separated rules; flex generates a C file implementing the DFA as a switch over states and equivalence-class tables. Its output is competitive with hand-written code for large grammars and handles Unicode input classes when configured with `-8`. The generated file can exceed 10 000 lines for complex grammars, which is fine; you never read it.
 
 *re2c* takes a similar approach but generates more idiomatic C/C++: instead of a monolithic switch, it emits `goto`-based code that compiles to near-optimal machine code. re2c is used in PHP's lexer and in several high-performance network protocol parsers. Its key advantage: the generated code has no function-call overhead per character and avoids the branch mispredictions that plague naive hand-rolled scanners.
 
@@ -84,11 +84,11 @@ Implementation of bounded lookahead: maintain a small ring buffer (typically 1-4
 
 Every token should carry its origin: line number, column (in code units), and byte offset from the start of the file. This is the minimum needed to emit useful error messages.
 
-The standard approach: maintain three counters in the lexer — `line`, `col`, and `byte_offset`. On each character consumed: increment `byte_offset`; if the character is `\n`, increment `line` and reset `col` to 1; otherwise increment `col`.
+The standard approach: maintain three counters in the lexer (`line`, `col`, and `byte_offset`). On each character consumed: increment `byte_offset`; if the character is `\n`, increment `line` and reset `col` to 1; otherwise increment `col`.
 
 *UTF-8 considerations:* byte offset is unambiguous and cheap to compute. Column in *characters* (Unicode code points) requires decoding multi-byte sequences; column in *grapheme clusters* (what users see as one glyph) requires the Unicode segmentation algorithm. Most compiler error messages report byte offsets or code-unit columns and leave grapheme rendering to the IDE. If the source file declares an encoding other than UTF-8, normalize to UTF-8 at the front door before lexing.
 
-Byte-order marks (U+FEFF at the start of a UTF-8 file) should be consumed silently — they are not part of the source text.
+Byte-order marks (U+FEFF at the start of a UTF-8 file) should be consumed silently; they are not part of the source text.
 
 == Error Recovery
 
