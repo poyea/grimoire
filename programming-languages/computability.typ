@@ -7,7 +7,7 @@ extensional definition of computability; the recursion-theoretic vocabulary
 arithmetical hierarchy) is the intensional language in which actual proofs about
 undecidability are written.
 
-_See also: _Turing Machines and Computability_, _Type Systems_, _Complexity Theory_._
+*See also:* _Turing Machines and Computability_, _Advanced Recursion Theory_, _Type Systems_, _Complexity Theory_
 
 == Primitive Recursive and $mu$-Recursive Functions
 
