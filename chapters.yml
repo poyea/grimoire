@@ -613,6 +613,11 @@ chapters:
     path: formal-methods/tla-plus.typ
     lines: 261
     status: reviewed
+  - subject: formal-methods
+    slug: separation-logic
+    path: formal-methods/separation-logic.typ
+    lines: 188
+    status: draft
   - subject: gpu-architecture
     slug: compute-architecture
     path: gpu-architecture/compute-architecture.typ
@@ -938,6 +943,11 @@ chapters:
     path: machine-learning-foundations/probability-and-information.typ
     lines: 217
     status: reviewed
+  - subject: machine-learning-foundations
+    slug: loss-functions
+    path: machine-learning-foundations/loss-functions.typ
+    lines: 258
+    status: draft
   - subject: networking
     slug: application-protocols
     path: networking/application-protocols.typ
@@ -1403,3 +1413,8 @@ chapters:
     path: quantum-computing/qubits-and-gates.typ
     lines: 173
     status: reviewed
+  - subject: quantum-computing
+    slug: nisq-and-benchmarking
+    path: quantum-computing/nisq-and-benchmarking.typ
+    lines: 123
+    status: draft
