@@ -588,3 +588,19 @@ Smith, A.J. (1982). "Cache Memories." ACM Computing Surveys 14(3): 473-530.
 Baer, J-L. & Wang, W-H. (1988). "On the Inclusion Properties for Multi-Level Cache Hierarchies." ISCA '88.
 
 Frigo, M., Leiserson, C.E., Prokop, H., & Ramachandran, S. (1999). "Cache-Oblivious Algorithms." FOCS '99.
+
+== Further Reading
+
+Jacob, B., Ng, S., & Wang, D. (2008). _Memory Systems: Cache, DRAM, Disk_. Morgan Kaufmann. — The most thorough single-volume treatment of cache design, replacement policies, inclusion properties, and DRAM interaction; directly complements this chapter.
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 2 (Memory Hierarchy Design) covers set-associativity trade-offs, prefetching, write policies, and multi-level AMAT analysis with real benchmarks.
+
+Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Section 2 details L1/L2/L3 capacities, line sizes, prefetch hardware, and cache-miss penalty guidance for current Intel cores.
+
+Qureshi, M. K., Patt, Y. N. (2006). "Utility-Based Cache Partitioning: A Low-Overhead, High-Performance, Runtime Mechanism to Partition Shared Caches." MICRO-39. — Foundational paper for Intel CAT (Cache Allocation Technology) and LLC partitioning in modern server processors.
+
+Frigo, M., Leiserson, C. E., Prokop, H., & Ramachandran, S. (1999). "Cache-Oblivious Algorithms." FOCS '99. — Introduces the cache-oblivious model; explains why recursive divide-and-conquer algorithms such as tiled matrix multiply achieve near-optimal cache performance without tuning.
+
+Jouppi, N. P. (1990). "Improving Direct-Mapped Cache Performance by the Addition of a Small Fully-Associative Cache and Prefetch Buffers." ISCA '90. — Original proposal of the victim cache, which remains relevant in embedded and GPU architectures.
+
+Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. — Practical, low-level guide connecting DRAM timing, cache-line mechanics, and TLB effects to real C code; invaluable for applied optimization.

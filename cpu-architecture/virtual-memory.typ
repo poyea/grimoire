@@ -518,3 +518,19 @@ Ahn, J., Kwon, Y., Kim, J., & Kim, C. (2012). "A Study on the Effects of PCID on
 Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. Section 4 (Virtual Memory).
 
 Lameter, C. (2013). "NUMA (Non-Uniform Memory Access): An Overview." Linux Symposium.
+
+== Further Reading
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix B.4 (Virtual Memory) covers page table structures, TLB organization, and the interaction between virtual memory and cache hierarchy in modern processors.
+
+Jacob, B., Ng, S., & Wang, D. (2008). _Memory Systems: Cache, DRAM, Disk_. Morgan Kaufmann. — Chapters on virtual-to-physical translation explain multi-level page tables, TLB shootdown costs, and huge-page trade-offs in detail, complementing the hardware perspective with system-level analysis.
+
+Tanenbaum, A. S. & Bos, H. (2014). _Modern Operating Systems_, 4th ed. Pearson. — Chapter 3 (Memory Management) covers page replacement algorithms, demand paging, working-set models, and OS-level mechanisms such as mmap and copy-on-write.
+
+Barr, T. W., Cox, A. L., & Rixner, S. (2010). "Translation Caching: Skip, Don't Walk (the Page Table)." ISCA '37. — Proposes partial-walk caches (PWCs) to reduce page-table walk latency; describes the structure now present in Intel and AMD TLB miss handlers.
+
+Basu, A., Gandhi, J., Chang, J., Hill, M. D., & Swift, M. M. (2013). "Efficient Virtual Memory for Big-Memory Servers." ISCA '40. — Demonstrates that TLB reach, not TLB hit rate, is the dominant virtual-memory bottleneck at server scale; motivates huge-page adoption.
+
+Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. — Section 4 (Virtual Memory) and Section 7 (Memory Performance Tools) connect page-table mechanics, TLB pressure, and huge-page configuration to measurable application performance.
+
+Gruss, D., Maurice, C., Wagner, K., & Mangard, S. (2016). "Flush+Flush: A Fast and Stealthy Cache Attack." DIMVA '16. — Illustrates how virtual-memory and cache-hierarchy interactions can be exploited as side channels; motivates KPTI, PCID, and the address-space isolation mechanisms discussed in this chapter.

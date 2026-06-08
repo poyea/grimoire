@@ -537,3 +537,19 @@ Patterson, D.A. & Hennessy, J.L. (2020). Computer Organization and Design (6th e
 Fog, A. (2023). Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-operation Breakdowns. Technical University of Denmark. https://www.agner.org/optimize/instruction_tables.pdf
 
 Fog, A. (2023). The Microarchitecture of Intel, AMD and VIA CPUs. Technical University of Denmark. https://www.agner.org/optimize/microarchitecture.pdf
+
+== Further Reading
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapters 1–2 establish the quantitative framework (CPI, Amdahl's law, power-performance trade-offs) that underpins all subsequent CPU design decisions.
+
+Patterson, D. A. & Hennessy, J. L. (2020). _Computer Organization and Design: ARM Edition_, 5th ed. Morgan Kaufmann. — Bridges high-level ISA concepts to gate-level implementation; the ARM edition pairs especially well with modern embedded and mobile CPU study.
+
+Agner Fog (2024). _The Microarchitecture of Intel, AMD and VIA CPUs_. Technical University of Denmark. — Detailed microarchitectural data for every major x86 generation; fills the gap between ISA specifications and silicon behavior.
+
+Hennessy, J. L. & Patterson, D. A. (2019). "A New Golden Age for Computer Architecture." _Communications of the ACM_ 62(2): 48–60. — Turing Award lecture; surveys where domain-specific architectures (DSAs) are displacing general-purpose designs and why the classical CPU model is being extended.
+
+Waterman, A. & Asanović, K. (eds.) (2019). _The RISC-V Instruction Set Manual, Volume I: Unprivileged ISA_. RISC-V Foundation. — Free, modern ISA specification useful for understanding clean ISA design principles without the legacy complexity of x86 or ARM.
+
+Agner Fog (2024). _Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-operation Breakdowns_. Technical University of Denmark. — The definitive reference for instruction-level timing data; essential when profiling or hand-tuning critical loops.
+
+Tanenbaum, A. S. & Austin, T. (2012). _Structured Computer Organization_, 6th ed. Pearson. — Accessible bottom-up treatment from digital logic through ISA to operating system interface; useful orientation before tackling the Hennessy–Patterson quantitative approach.

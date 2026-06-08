@@ -478,3 +478,19 @@ Gregg, B. (2013). Systems Performance: Enterprise and the Cloud. Prentice Hall. 
 Intel Corporation (2023). Intel 64 and IA-32 Architectures Optimization Reference Manual. Appendix B (Performance Monitoring Events).
 
 Levinthal, D. (2009). "Performance Analysis Guide for Intel Core i7 Processor and Intel Xeon 5500 processors." Intel Corporation.
+
+== Further Reading
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapters 1 and appendices establish the CPI model, Amdahl's law, and benchmark methodology that underpin all quantitative performance analysis.
+
+Agner Fog (2024). _Instruction Tables: Lists of Instruction Latencies, Throughpaths and Micro-operation Breakdowns_. Technical University of Denmark. — The go-to reference for instruction-level timing across x86 microarchitectures; essential when correlating PMU event counts with specific bottlenecks.
+
+Gregg, B. (2020). _Systems Performance: Enterprise and the Cloud_, 2nd ed. Addison-Wesley. — Chapters 6 (CPUs) and 13 (Benchmarking) cover Linux perf, flame graphs, USE method, and methodology for avoiding benchmarking pitfalls in production systems.
+
+Yasin, A. (2014). "A Top-Down Method for Performance Analysis and Counters Architecture." ISPASS '14. — Introduces the Top-Down Microarchitecture Analysis (TMAM) hierarchy now embedded in Intel VTune; the paper to read before using VTune's pipeline characterization views.
+
+Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Appendix B (Performance Monitoring Events) lists the hardware counter events and their precise semantics for each Intel core generation.
+
+Mytkowicz, T., Diwan, A., Hauswirth, M., & Sweeney, P. F. (2010). "Producing Wrong Data Without Doing Anything Obviously Wrong!" ASPLOS '10. — Demonstrates how environment variables, linking order, and ASLR can cause measurement variance exceeding 40%; motivates rigorous experimental methodology.
+
+Flajolet, P. & Martin, G. N. (1985). "Probabilistic Counting Algorithms for Data Base Applications." _Journal of Computer and System Sciences_ 31(2): 182–209. — Foundational algorithms underlying modern approximate PMU sampling; useful background for understanding statistical profiling and sampling-based tools.

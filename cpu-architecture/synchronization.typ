@@ -371,3 +371,27 @@ struct ShardedMap {
 )
 
 *Rule of thumb:* profile first. `perf c2c` (cache-to-cache analysis) and `perf lock` (lock contention) tell you whether the bottleneck is the lock itself, the *data* under the lock (false sharing, ping-pong), or something else entirely.
+
+== References
+
+Lamport, L. (1979). "How to Make a Multiprocessor Computer That Correctly Executes Multiprocess Programs." _IEEE Transactions on Computers_ C-28(9): 690–691. — Defines sequential consistency; the foundational paper for understanding why memory ordering matters in parallel programs.
+
+Herlihy, M. (1991). "Wait-Free Synchronization." _ACM TOPLAS_ 13(1): 124–149. — Establishes the wait-free hierarchy and proves the universality of compare-and-swap; theoretical basis for lock-free and wait-free data structure design.
+
+McKenney, P. E. (2022). _Is Parallel Programming Hard, And, If So, What Can You Do About It?_ kernel.org. — The Linux kernel RCU designer's comprehensive guide to locks, lock-free algorithms, memory barriers, and RCU; freely available and practically grounded.
+
+== Further Reading
+
+Herlihy, M. & Shavit, N. (2008). _The Art of Multiprocessor Programming_. Morgan Kaufmann. — The standard textbook on concurrent data structures, covering mutual exclusion theory, spin locks, barrier constructs, and lock-free lists and queues with correctness proofs.
+
+McKenney, P. E. (2022). _Is Parallel Programming Hard, And, If So, What Can You Do About It?_ kernel.org. — Invaluable for understanding RCU, memory ordering, and real-world parallel patterns used in the Linux kernel; includes extensive treatment of the C11/C++11 memory model.
+
+Boehm, H-J. & Adve, S. V. (2008). "Foundations of the C++ Concurrency Memory Model." PLDI '08. — The paper that defined the C++11 memory model; essential for understanding the semantics of `std::atomic` and the difference between `memory_order_seq_cst`, `acquire/release`, and `relaxed`.
+
+Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. — Section 6 (Multi-Processor Support) explains cache-line false sharing, the cost of atomic operations, and how to measure and eliminate synchronization overhead with perf.
+
+Dice, D., Shalev, O., & Shavit, N. (2006). "Transactional Locking II." DISC '06. — Describes TL2, one of the most influential software transactional memory algorithms; provides context for Intel TSX hardware transactional memory extensions.
+
+Michael, M. M. & Scott, M. L. (1996). "Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms." PODC '96. — Introduces the Michael–Scott queue, the lock-free MPMC queue used in Java's `ConcurrentLinkedQueue` and many production systems.
+
+Leis, V., Haubenschild, M., Kemper, A., & Neumann, T. (2016). "LeanStore: In-Memory Data Management Beyond Main Memory." ICDE '16. — Practical example of epoch-based reclamation and optimistic locking in a high-performance storage engine; illustrates synchronization design at the system level.

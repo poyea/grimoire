@@ -436,3 +436,19 @@ Example:
 Hennessy, J.L. & Patterson, D.A. (2017). Computer Architecture: A Quantitative Approach (6th ed.). Morgan Kaufmann. Appendix C (Pipelining).
 
 Patterson, D.A. & Hennessy, J.L. (2020). Computer Organization and Design (6th ed.). Morgan Kaufmann. Chapter 4 (The Processor).
+
+== Further Reading
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix C provides the definitive academic treatment of five-stage pipeline design, hazard detection, forwarding networks, and exception handling with full hardware diagrams.
+
+ARM (2023). _ARM Cortex-A Series Programmer's Guide_. ARM. — Describes the Cortex-A pipeline stages, branch prediction integration, and the programming implications of out-of-order execution visible through the ARM memory model.
+
+Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Sections 2–3 detail the front-end pipeline (fetch, decode, micro-op cache) and back-end execution engine for current Intel Golden Cove and Redwood Cove cores.
+
+Tomasulo, R. M. (1967). "An Efficient Algorithm for Exploiting Multiple Arithmetic Units." _IBM Journal of Research and Development_ 11(1): 25–33. — The original description of register renaming and out-of-order issue via a reservation station network; the paper that made deep pipelining practical.
+
+Kessler, R. E. (1999). "The Alpha 21264 Microprocessor." _IEEE Micro_ 19(2): 24–36. — Classic microarchitecture paper describing a high-frequency, deeply pipelined out-of-order design; an excellent concrete example to read alongside the textbook treatment.
+
+Agner Fog (2024). _The Microarchitecture of Intel, AMD and VIA CPUs_. Technical University of Denmark. — Documents pipeline depths, execution unit counts, port assignments, and forwarding paths for every major x86 generation since the Pentium.
+
+Rau, B. R. & Fisher, J. A. (1993). "Instruction-Level Parallel Processing: History, Overview, and Perspective." _Journal of Supercomputing_ 7(1-2): 9–50. — Surveys the historical arc from scalar pipelines through VLIW and superscalar; provides context for understanding which pipeline ideas succeeded in practice.

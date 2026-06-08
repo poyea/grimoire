@@ -312,3 +312,19 @@ Jacob, B., Ng, S., & Wang, D. (2007). Memory Systems: Cache, DRAM, Disk. Morgan 
 Hennessy, J.L. & Patterson, D.A. (2017). Computer Architecture: A Quantitative Approach (6th ed.). Morgan Kaufmann. Chapter 2 Appendix (Memory Technology).
 
 JEDEC Standard (2020). JESD79-4B: DDR4 SDRAM Specification.
+
+== Further Reading
+
+Jacob, B., Ng, S., & Wang, D. (2008). _Memory Systems: Cache, DRAM, Disk_. Morgan Kaufmann. — Comprehensive reference covering DRAM architecture, timing parameters, bank interleaving, refresh mechanics, and system-level memory controller design; the primary textbook for this chapter's topics.
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix B (Memory Technology and Optimizations) quantifies DRAM latency trends and motivates multi-level memory hierarchies with performance models.
+
+JEDEC Standard (2020). JESD79-5: DDR5 SDRAM Specification. JEDEC Solid State Technology Association. — The authoritative specification for DDR5 electrical characteristics, timing parameters, on-die ECC, and command encoding.
+
+Lameter, C. (2013). "NUMA (Non-Uniform Memory Access): An Overview." Linux Symposium. — Practical introduction to NUMA topology, memory policies, and the Linux kernel mechanisms (mbind, numactl) for controlling placement.
+
+Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Chapter 2 covers the interaction between the memory controller, prefetchers, and cache hierarchy; includes NUMA considerations for multi-socket Xeon platforms.
+
+Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. — Detailed, code-level guide to DRAM timing, cache-line behavior, TLB pressure, and NUMA locality; bridges specification to practical C/C++ optimization.
+
+Bojnordi, M. N. & Ipek, E. (2012). "PARDIS: A Programmable Memory Controller for the DDRx Interfacing Standards." ISCA '12. — Research paper exploring programmable memory controllers; provides insight into the complexity hidden inside commodity DRAM controllers.

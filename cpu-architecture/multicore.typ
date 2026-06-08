@@ -528,3 +528,19 @@ Boehm, H-J. & Adve, S.V. (2008). "Foundations of the C++ Concurrency Memory Mode
 Hennessy, J.L. & Patterson, D.A. (2017). Computer Architecture: A Quantitative Approach (6th ed.). Morgan Kaufmann. Chapter 5 (Thread-Level Parallelism).
 
 Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. Section 6 (Multi-Processor Support).
+
+== Further Reading
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 5 (Thread-Level Parallelism) covers cache coherence protocols (MSI, MESI, MOESI), directory coherence, and memory consistency models with worked examples.
+
+McKenney, P. E. (2022). _Is Parallel Programming Hard, And, If So, What Can You Do About It?_ kernel.org. — Comprehensive, freely available text on parallel programming from a Linux kernel developer; covers memory ordering, locking, RCU, and performance pitfalls with extensive real-world examples.
+
+Adve, S. V. & Gharachorloo, K. (1996). "Shared Memory Consistency Models: A Tutorial." _IEEE Computer_ 29(12): 66–76. — Accessible tutorial on sequential consistency, total store order, and relaxed memory models; foundational reading before studying C++11 atomics or kernel memory barriers.
+
+Jacob, B., Ng, S., & Wang, D. (2008). _Memory Systems: Cache, DRAM, Disk_. Morgan Kaufmann. — Chapter on multi-processor cache hierarchies explains coherence traffic, false sharing, and the bandwidth costs of cache-to-cache transfers.
+
+Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. — Section 6 covers multi-processor cache interaction, false sharing measurement, and practical mitigation strategies including cache-line padding.
+
+Herlihy, M. & Shavit, N. (2008). _The Art of Multiprocessor Programming_. Morgan Kaufmann. — Definitive textbook on concurrent data structures, progress conditions (wait-free, lock-free, obstruction-free), and the theory underlying practical synchronization primitives.
+
+Boyd-Wickizer, S., Clements, A. T., Mao, Y., Pesterev, A., Kaashoek, M. F., Morris, R., & Zeldovich, N. (2010). "An Analysis of Linux Scalability to Many Cores." OSDI '10. — Empirical study of where the Linux kernel bottlenecks as core count grows; illustrates multicore scaling limits at the systems software level.

@@ -419,3 +419,19 @@ Intel Corporation (2023). Intel 64 and IA-32 Architectures Software Developer's 
 Intel Corporation (2023). Intel Intrinsics Guide. https://www.intel.com/content/www/us/en/docs/intrinsics-guide/
 
 Fog, A. (2023). Optimizing Software in C++. Technical University of Denmark. Chapter 13 (Vectorization).
+
+== Further Reading
+
+Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Chapters 9–11 cover SSE, AVX2, and AVX-512 programming guidelines, alignment requirements, gather/scatter performance, and port-level throughput for vector operations.
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix F (Vector, SIMD, and GPU Architectures) places x86 SIMD in the broader landscape of data-level parallelism and compares it with GPU SIMT and traditional vector processors.
+
+Agner Fog (2024). _Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-operation Breakdowns_. Technical University of Denmark. — Per-instruction latency and throughput data for all SSE/AVX/AVX-512 instructions across Intel and AMD microarchitectures; required reading when hand-scheduling SIMD kernels.
+
+ARM (2023). _ARM Cortex-A Series Programmer's Guide_. ARM. — Chapters on NEON/SVE describe ARM's approach to SIMD: fixed-width NEON (128-bit) versus the Scalable Vector Extension that adapts to implementation-defined vector lengths.
+
+Fog, A. (2024). _Optimizing Software in C++_. Technical University of Denmark. — Chapter 13 (Vectorization) explains auto-vectorization conditions, intrinsic usage patterns, and when to prefer compiler hints over hand-written intrinsics.
+
+Nuzman, D. & Zaks, A. (2008). "Outer-Loop Vectorization: Revisited for Short SIMD Architectures." PACT '08. — Research on vectorizing outer loops; relevant for understanding the limits of auto-vectorization and why loop interchange or loop distribution is sometimes necessary.
+
+Hofstee, H. P. (2005). "Power Efficient Processor Architecture and the Cell Processor." HPCA-11. — Describes the Cell BE's eight SPEs as an early example of wide SIMD combined with explicit DMA; a useful historical contrast to implicit cache-based SIMD models.

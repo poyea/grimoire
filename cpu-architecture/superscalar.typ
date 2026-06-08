@@ -378,3 +378,19 @@ Tomasulo, R.M. (1967). "An Efficient Algorithm for Exploiting Multiple Arithmeti
 Smith, J.E. & Sohi, G.S. (1995). "The Microarchitecture of Superscalar Processors." Proceedings of the IEEE 83(12): 1609-1624.
 
 Hennessy, J.L. & Patterson, D.A. (2017). Computer Architecture: A Quantitative Approach (6th ed.). Morgan Kaufmann. Chapter 3 (Instruction-Level Parallelism).
+
+== Further Reading
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 3 (Instruction-Level Parallelism and Its Exploitation) is the canonical reference for dynamic scheduling, register renaming, speculation, and the ILP wall.
+
+Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Sections 2–3 describe the front-end (decoders, micro-op cache, loop stream detector) and back-end (scheduler, execution ports, ROB) of current superscalar cores, with throughput and latency guidance.
+
+ARM (2023). _ARM Cortex-A Series Programmer's Guide_. ARM. — Covers out-of-order issue width, reservation station sizes, and the programming model implications of multi-issue execution for the Cortex-A55 through Cortex-X series.
+
+Agner Fog (2024). _The Microarchitecture of Intel, AMD and VIA CPUs_. Technical University of Denmark. — Exhaustive documentation of decode widths, rename register counts, ROB sizes, execution port topologies, and retirement rates across x86 generations.
+
+Sohi, G. S., Breach, S., & Vijaykumar, T. N. (1995). "Multiscalar Processors." ISCA '22. — Proposes hierarchical superscalar execution beyond single-thread ILP; useful context for understanding the limits that eventually pushed the industry toward multicore.
+
+Wall, D. W. (1991). "Limits of Instruction-Level Parallelism." ASPLOS '91. — Landmark study showing that ILP in typical programs plateaus well below what idealized hardware could exploit; motivated the shift toward thread-level and data-level parallelism.
+
+Kessler, R. E. (1999). "The Alpha 21264 Microprocessor." _IEEE Micro_ 19(2): 24–36. — A detailed case study of a production four-issue out-of-order design; illustrates how textbook concepts translate to implementation constraints and area trade-offs.

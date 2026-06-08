@@ -353,3 +353,19 @@ Yeh, T-Y. & Patt, Y.N. (1991). "Two-Level Adaptive Training Branch Prediction." 
 Seznec, A. & Michaud, P. (2006). "A Case for (Partially) TAgged GEometric History Length Branch Prediction." Journal of Instruction-Level Parallelism 8: 1-23.
 
 Smith, J.E. (1981). "A Study of Branch Prediction Strategies." ISCA '81.
+
+== Further Reading
+
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter C covers pipeline hazards and branch handling in depth; essential for understanding the architectural cost of misprediction.
+
+Seznec, A. (2011). "A New Case for the TAGE Branch Predictor." MICRO-44. — Describes TAGE-SC-L, the predictor that has dominated the Championship Branch Prediction series since 2014.
+
+Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Sections 3.4–3.6 cover branch prediction resources, BTB capacity, and optimization guidance for Intel microarchitectures.
+
+Jimenez, D. A. & Lin, C. (2001). "Dynamic Branch Prediction with Perceptrons." HPCA-7. — Introduced neural branch prediction; perceptron predictors now appear in AMD Zen and other production designs.
+
+Calder, B., Grunwald, D., Jones, M., Lindsay, D., Martin, J., Mozer, M., & Zorn, B. (1997). "Evidence-Based Static Branch Prediction Using Machine Learning." ACM TOPLAS 19(1): 188–222. — Comprehensive study of static prediction heuristics and when they succeed or fail.
+
+Fog, A. (2024). _The Microarchitecture of Intel, AMD and VIA CPUs_. — Tabulates BTB capacities, predictor pipeline depths, and misprediction penalties across real microarchitectures.
+
+Chen, T. F. & Baer, J-L. (1995). "Effective Hardware-Based Data Prefetching for High-Performance Processors." IEEE TC 44(5): 609–623. — Contrasts control-flow prediction with data prefetching; useful context for understanding when branchless alternatives are preferable.
