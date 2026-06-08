@@ -142,7 +142,7 @@ Used by Facebook's Diem / Aptos, the Sui blockchain, Cypherium.
 
 === Tendermint
 
-Buchman, Kwon (2014). BFT consensus with immediate finality (no rollback). Steps: propose, prevote, precommit; advance on $2f+1$ votes. Liveness requires a partially synchronous network. Used by Cosmos SDK chains.
+Kwon, J., Buchman, E. (2014). BFT consensus with immediate finality (no rollback). Steps: propose, prevote, precommit; advance on $2f+1$ votes. Liveness requires a partially synchronous network. Used by Cosmos SDK chains.
 
 === Nakamoto Consensus
 

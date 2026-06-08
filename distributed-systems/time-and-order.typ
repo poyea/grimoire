@@ -16,7 +16,7 @@ A drift of 100 ppm equals $approx 8.6$ s/day. Without synchronization, free-runn
 
 === NTP
 
-Network Time Protocol (Mills 1985, RFC 5905) corrects offset using four timestamps in a request-response exchange:
+Network Time Protocol (Mills 1985; standardised in RFC 5905, 2010) corrects offset using four timestamps in a request-response exchange:
 
 ```
 t1 = client send time      (local clock)
