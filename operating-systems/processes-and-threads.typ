@@ -161,7 +161,7 @@ Drepper, U. (2013). "ELF Handling for Thread-Local Storage." Red Hat technical r
 
 Cox-Buday, K. (2016). "Concurrency in Go." O'Reilly. (covers goroutine scheduler internals)
 
-Goetz, B. et al. (2006). "Java Concurrency in Practice." Addison-Wesley. (and Project Loom JEPs 425/444 for virtual threads)
+Goetz, B. et al. (2006). "Java Concurrency in Practice." Addison-Wesley. (Project Loom landed in JDK 21, 2023 — JEP 444)
 
 Loewenstern, A. et al. (2022). "Linux kernel namespaces." LWN series (`https://lwn.net/Articles/531114/`).
 
