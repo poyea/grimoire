@@ -196,7 +196,7 @@ A common pattern in any DSL is a *cost model + search* outer loop. Triton's auto
 
 == Further Reading
 
-Tillet, P. et al. (2019). "Triton: An Intermediate Language and Compiler for Tiled Neural Network Computations." _MAPL_.
+Tillet, P. et al. (2019). "Triton: An Intermediate Language and Compiler for Tiled Neural Network Computations." _MAPL_. Original Triton paper introducing the tiled execution model and blocked load/store semantics.
 
 OpenAI / PyTorch (2024). _Triton Tutorials_. https://triton-lang.org/
 
@@ -211,3 +211,13 @@ Chen, T. et al. (2018). "TVM: An Automated End-to-End Optimizing Compiler for De
 Zheng, L. et al. (2020). "Ansor: Generating High-Performance Tensor Programs for Deep Learning." _OSDI_.
 
 Ansel, J. et al. (2024). "PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation." _ASPLOS_.
+
+Lattner, C. et al. (2021). "MLIR: Scaling Compiler Infrastructure for Domain Specific Computation." CGO. Describes the MLIR framework used by IREE, CIRCT, and the broader GPU compiler ecosystem.
+
+Vasilache, N. et al. (2019). "The Tensor Algebra Compiler." OOPSLA. Describes the TACO compiler for sparse tensor algebra; motivation for structured sparsity in compilers.
+
+Google (2020). "XLA: Compiling Machine Learning for Peak Performance." Google AI Blog. Overview of XLA's HLO IR, fusion, and layout assignment for TPU and GPU targets.
+
+OpenAI (2023). Triton Language Documentation. Reference for Triton's Python DSL, JIT compilation, and integration with PyTorch's `torch.compile`.
+
+Cui, H. et al. (2023). "Efficiently Programming Large-Scale Neural Networks for GPU." SOSP. Covers operator fusion strategies and how compilers like Triton and XLA schedule work across SM clusters.

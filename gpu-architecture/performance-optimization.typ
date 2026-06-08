@@ -671,14 +671,16 @@ if (use_feature_a) {
   □ Data locality maximized
 ```
 
-== References
+== Further Reading
 
-NVIDIA Corporation (2024). CUDA C++ Best Practices Guide. https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/
+NVIDIA (2023). "CUDA C++ Best Practices Guide." NVIDIA Developer Documentation. Covers memory coalescing, shared memory bank conflicts, occupancy, and async copy patterns.
 
-Volkov, V. (2010). "Better Performance at Lower Occupancy." GPU Technology Conference.
+Williams, S. et al. (2009). "Roofline: An Insightful Visual Performance Model for Multicore Architectures." Communications of the ACM 52(4). Introduces the roofline model for identifying compute vs. memory bottlenecks.
 
-Harris, M. (2007). "Optimizing Parallel Reduction in CUDA." NVIDIA Developer Technology.
+Jia, Z. et al. (2019). "Dissecting the NVIDIA Volta GPU Architecture via Microbenchmarking." arXiv:1804.06826. Reverse-engineered cache hierarchy timings and throughput limits used for empirical roofline characterization.
 
-Micikevicius, P. (2012). "GPU Performance Analysis and Optimization." GPU Technology Conference.
+Hong, S., Kim, H. (2009). "An Analytical Model for a GPU Architecture with Memory-Level and Thread-Level Parallelism Awareness." ISCA. First analytical occupancy model for GPU architectures; foundation for nvcc's occupancy calculator.
 
-NVIDIA Corporation (2024). Nsight Compute Documentation. https://docs.nvidia.com/nsight-compute/
+Volkov, V. (2010). "Better Performance at Lower Occupancy." GPU Technology Conference. Showed that low-occupancy kernels with high ILP often outperform high-occupancy kernels with low ILP.
+
+NVIDIA (2024). Nsight Compute Documentation. Profiler documentation covering source-correlated hardware counter analysis, memory chart, and warp state sampling.

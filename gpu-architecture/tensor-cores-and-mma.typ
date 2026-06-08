@@ -215,3 +215,13 @@ Micikevicius, P. et al. (2022). "FP8 Formats for Deep Learning." arXiv:2209.0543
 Thakkar, V. et al. (2023). _CUTLASS 3.0: A Hopper-Native Library_. NVIDIA GTC.
 
 Shah, J. et al. (2024). "FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision." arXiv:2407.08608.
+
+NVIDIA (2022). "A100 Tensor Core GPU Architecture." NVIDIA Technical Report. Documents third-generation Tensor Core with TF32, BF16, INT8, and structured sparsity support.
+
+Markidis, S. et al. (2018). "NVIDIA Tensor Core Programmability, Performance, and Precision." IEEE International Parallel and Distributed Processing Symposium Workshops. Early analysis of Volta wmma API accuracy and throughput.
+
+Choquette, J. et al. (2023). "NVIDIA Hopper H100 GPU: Scaling Performance." IEEE Micro 43(3). Describes fourth-generation Tensor Cores, wgmma.mma_async, and WGMMA instruction set.
+
+Weng, J. et al. (2021). "Baton: Accelerating Batch Norm with Tensor Cores." ICS. Case study of mapping batch normalization onto WMMA to saturate Tensor Core throughput.
+
+Yan, M. et al. (2020). "Demystifying Tensor Cores to Optimize Half-Precision Matrix Multiply." IPDPS. Micro-benchmarks showing how matrix tile dimensions affect Tensor Core utilization.
