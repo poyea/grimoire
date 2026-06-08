@@ -198,11 +198,31 @@ def warmup_cosine(step, total, warmup, lr_max, lr_min=0.0):
 
 == Gradient Clipping
 
-Exploding gradients are common in RNNs, RL, and large transformers. *Global-norm clipping* renormalizes:
+Exploding gradients are common in RNNs, RL, and large transformers. *Global-norm clipping* computes the Euclidean norm of the full gradient vector (concatenating all parameter gradients) and rescales uniformly:
 
-$ g <- g dot min(1, c \/ parallel g parallel). $
+$ parallel g parallel_2 = sqrt(sum_i g_i^2), quad g <- g dot min(1, c \/ parallel g parallel_2). $
 
-A typical choice is $c = 1$. Per-parameter or per-layer clipping exists but is less standard. Adaptive gradient clipping (AGC, Brock et al. 2021) scales clipping by the parameter norm and enabled training large vision models without BatchNorm.
+The operation preserves direction while bounding magnitude. Global-norm clipping is preferred over per-parameter clipping because it does not distort the *relative* size of different parameter gradients.
+
+*Why exploding gradients happen:* in RNNs and transformers, gradients propagate through repeated matrix multiplications over sequence length $T$. If the spectral radius of the recurrent weight matrix exceeds 1, gradients grow exponentially in $T$. In transformers, large attention logits cause saturated softmaxes with near-zero gradients everywhere except the argmax, causing sudden large updates when the attention pattern shifts.
+
+*Adaptive Gradient Clipping (AGC)* (Brock et al. 2021, NFNet paper): instead of a global norm threshold, AGC clips each layer's gradient relative to the layer's parameter norm:
+
+$ g_l <- g_l dot min(1, lambda dot parallel W_l parallel_F \/ parallel g_l parallel_F), $
+
+where $lambda$ is a hyperparameter (typically 0.01-0.1) and norms are per-layer Frobenius norms. This adapts the threshold per layer so that layers with small weights (often early layers in deep nets) are clipped more conservatively. AGC was the key ingredient that let NFNets train without BatchNorm at ImageNet scale.
+
+```python
+def agc_clip(params, grads, lambda_agc=0.01, eps=1e-3):
+    for p, g in zip(params, grads):
+        p_norm = p.norm(p="fro").clamp(min=eps)
+        g_norm = g.norm(p="fro").clamp(min=eps)
+        ratio = p_norm / g_norm
+        scale = (lambda_agc * ratio).clamp(max=1.0)
+        g.mul_(scale)
+```
+
+Recommended `clip_norm` values: 1.0 for standard transformer/RNN training; 0.1-0.5 for RL where gradients are particularly noisy; 0.01 (as $lambda$) for AGC. Monitor the *fraction of clipped steps* — if more than 10-20% of steps are clipped, the learning rate is too high rather than the clip threshold too low.
 
 == Implicit Regularization
 
@@ -224,11 +244,37 @@ where $Sigma$ is the gradient covariance. Above $B_("crit")$, doubling batch siz
 
 == Distributed Optimization
 
-For data-parallel training, each worker computes a local gradient on its mini-batch; gradients are averaged across workers via ring all-reduce ($O(N)$ messages, bandwidth-optimal). Communication and computation overlap when frameworks pipeline backward passes with gradient transfer.
+For data-parallel training, each worker computes a local gradient on its mini-batch; gradients are averaged across workers via ring all-reduce. In a ring topology with $N$ workers, all-reduce sends each element exactly twice (once around the ring to reduce, once to broadcast), making the total data transferred $2 (N-1)/N times P$ bytes for $P$ parameter bytes. This is bandwidth-optimal — the cost does not grow with $N$ once the ring is full. A single all-reduce for a 7B-parameter model in fp32 transfers $2 times 7 times 10^9 times 4 approx 56$ GB; at 400 Gbit/s inter-node bandwidth this takes $approx 1.1$ s, making communication overlap essential.
 
-*ZeRO* (Rajbhandari et al. 2020) partitions optimizer state (ZeRO-1), gradients (ZeRO-2), and parameters (ZeRO-3) across workers. ZeRO-3 removes the $3 Psi$ memory term per device but adds all-gather overhead per forward pass — a tradeoff controlled by `offload_optimizer` and `contiguous_gradients` flags in DeepSpeed.
+*Communication-compute overlap:* modern frameworks (PyTorch DDP, JAX pjit) bucket gradients and start all-reduce on already-computed buckets during the backward pass, overlapping communication of earlier layers with computation of later ones. Effective overlap requires that bucket boundaries align with natural layer boundaries and that the all-reduce backend (NCCL, RCCL) supports asynchronous streams.
 
-*Gradient compression* (PowerSGD, Top-K sparsification) reduces communication at the cost of a biased estimator; error feedback accumulates the residual to prevent drift. *Local SGD* communicates every $k$ steps, which reduces synchronization frequency but requires careful learning rate scaling to avoid consensus drift. See `llm/pretraining.typ` for the full pipeline-parallel + tensor-parallel stack.
+=== ZeRO Memory Partitioning
+
+Standard data parallelism replicates all state (parameters $Psi$, gradients $Psi$, optimizer states $2 Psi$ for Adam) on every worker. ZeRO (Rajbhandari et al. 2020) partitions state across $N$ workers in three stages:
+
+#table(
+  columns: 3,
+  [*Stage*], [*What is partitioned*], [*Memory per device*],
+  [ZeRO-1], [Optimizer states], [$Psi + Psi + 2 Psi \/ N$],
+  [ZeRO-2], [+ Gradients], [$Psi + Psi \/ N + 2 Psi \/ N$],
+  [ZeRO-3], [+ Parameters], [$(Psi + Psi + 2 Psi) \/ N$],
+)
+
+ZeRO-3 divides total memory by $N$ but requires an all-gather of each layer's parameters before the forward pass and a reduce-scatter of gradients after the backward pass — roughly doubling the communication volume vs. ZeRO-1. The tradeoff is controlled by `offload_optimizer` and `contiguous_gradients` flags in DeepSpeed.
+
+=== FSDP vs DDP
+
+PyTorch FSDP (Fully Sharded Data Parallel) is the PyTorch-native ZeRO-3 equivalent. Key operational differences from DDP:
+
+- *Memory:* FSDP shards parameters; DDP replicates. FSDP enables training models that do not fit on a single device.
+- *Communication:* FSDP adds all-gathers in the forward pass; the total bytes per step is higher. For small models where memory is not the bottleneck, DDP is faster.
+- *Gradient checkpointing interaction:* FSDP and activation checkpointing compose cleanly; recomputed activations are sharded on recompute.
+
+=== Gradient Compression
+
+*PowerSGD* (Vogels et al. 2019) approximates the gradient matrix with a low-rank factorization (rank $r$), reducing communication from $O(m n)$ to $O((m + n) r)$ per layer. Error feedback accumulates the approximation residual and adds it to the next step's gradient, preventing long-run drift. Top-K sparsification transmits only the $K$ largest-magnitude gradients; this is particularly effective for sparse embedding layers. Communication savings of 10-100× are achievable at modest accuracy loss.
+
+*Gradient compression* (PowerSGD, Top-K sparsification) reduces communication at the cost of a biased estimator. *Local SGD* communicates every $k$ steps, which reduces synchronization frequency but requires careful learning rate scaling to avoid consensus drift. See `llm/pretraining.typ` for the full pipeline-parallel + tensor-parallel stack.
 
 == Convergence Diagnostics
 

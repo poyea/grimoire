@@ -157,14 +157,32 @@ def hessian_top_eig(loss_fn, params, num_iter=20):
 
 == Grokking
 
-Power et al. (2022) showed certain algorithmic tasks exhibit *grokking*: long after training accuracy reaches 100%, validation accuracy is near chance, then suddenly jumps to 100%, sometimes after $100 times$ more steps. The phenomenon is robust across modular arithmetic, permutation composition, and sparse parity.
+Power et al. (2022) trained small transformers on *modular arithmetic* tasks — e.g., $a + b mod 113$ for $(a, b)$ pairs — using only a fraction (30-50%) of all possible $(a, b)$ pairs as training data. The result was striking: training loss reached near-zero almost immediately, but validation accuracy stayed at chance for thousands of additional steps before suddenly jumping to near 100%. The delay between train-loss-zero and val-accuracy-high can span $100 times$ as many gradient steps as the initial descent. The phenomenon is robust across modular addition, multiplication, permutation composition, and sparse parity problems.
 
-Mechanistic interpretations (Nanda et al. 2023): the network initially memorizes (a high-norm solution that interpolates training data), then weight decay slowly penalizes the memorizing circuit and drives the model toward a generalizing one: a low-norm Fourier-feature solution that implements modular arithmetic via structured embeddings. The transition point corresponds to the generalizing circuit becoming slightly lower loss than the memorizing one, after which the optimizer rapidly transfers weight.
+=== Mechanistic Interpretation
 
-Practical implications:
-- Weight decay is *necessary* for grokking; without regularization the memorizing solution is stable.
-- Longer training is not always wasteful; delayed generalization can occur on real tasks (code, math).
-- Grokking provides a controlled microscope for studying representation formation and phase transitions in learned circuits.
+Nanda et al. (2023) used activation patching and circuit analysis (cf. _Interpretability_) to identify two distinct learned circuits present simultaneously in a grokking model:
+
+1. *Memorizing circuit:* a high-norm lookup table that essentially caches training examples in the weights. Achieves zero training loss but generalizes not at all.
+2. *Generalizing circuit:* a low-norm Fourier-feature representation that computes modular arithmetic via structured frequency embeddings in the residual stream. The key computation is:
+   $ "embed"(a) + "embed"(b) → "project onto Fourier basis" → "read off" (a + b) mod p. $
+
+Both circuits coexist in the trained model. Weight decay slowly erodes the high-norm memorizing circuit (which is more costly to maintain under $L_2$ regularization) while the low-norm generalizing circuit, once present, is comparatively cheap. The transition point is where the generalizing circuit's lower regularization cost tips the balance: the loss on the generalizing circuit (including the weight penalty) falls below the loss on the memorizing one, and the optimizer rapidly transfers weight to the generalizing circuit.
+
+=== Role of Weight Decay
+
+Without weight decay (or equivalent regularization), grokking does not occur — the memorizing solution is a stable local minimum and the optimizer has no incentive to abandon it. Stronger weight decay accelerates the generalization transition, reducing the delay from millions of steps to thousands. This is one of the clearest experimental confirmations that *regularization drives generalization* rather than merely preventing overfitting post-hoc.
+
+=== Connection to Double Descent
+
+Grokking is a *temporal* analog of double descent. In double descent, the interpolation threshold is crossed by increasing model size or data; in grokking, it is crossed during training by continued optimization past the interpolation point. The memorizing phase corresponds to the variance-explosion regime at the interpolation threshold; the generalizing phase corresponds to the second descent. Both phenomena are explained by the optimizer's implicit bias toward lower-norm solutions.
+
+=== Practical Implications
+
+- *Do not stop training too early on small algorithmic datasets.* Training accuracy saturating at 100% is not a reliable signal that validation has converged; validation may still be many thousands of steps away.
+- *Monitor validation loss long after training loss plateaus.* A standard early-stopping criterion based on training loss will terminate training in the memorizing phase.
+- *Weight decay is critical.* In any setting where training data is small relative to the hypothesis class (few-shot fine-tuning, small-table tabular data, mathematical reasoning), the regularization hyperparameter directly controls whether delayed generalization can occur.
+- *Grokking as a diagnostic.* Observing a grokking-like curve (train collapses, val lags) in production training is a sign that the model has sufficient capacity and data is the bottleneck. It is not a pathology; it may resolve with longer training.
 
 Grokking is now a standard testbed for mechanistic interpretability and for studying the geometry of generalization decoupled from data complexity.
 
