@@ -638,3 +638,15 @@ public:
 *Aho, A.V. & Corasick, M.J. (1975)*. Efficient String Matching: An Aid to Bibliographic Search. Communications of the ACM 18(6): 333-340.
 
 *Manber, U. & Myers, G. (1993)*. Suffix Arrays: A New Method for On-Line String Searches. SIAM Journal on Computing 22(5): 935-948.
+
+== Further Reading
+
+Gusfield, D. (1997). _Algorithms on Strings, Trees, and Sequences_. Cambridge University Press. (The definitive reference for string algorithms: KMP, suffix trees, suffix arrays, sequence alignment, and approximate matching.)
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 32 on string matching: naive, Rabin-Karp, KMP, and finite-automaton algorithms.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapter 5 on string algorithms: R-way tries, ternary search tries, substring search, and regular expressions.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 21 on string problems with practical implementation guidance and problem catalogue.)
+
+Crochemore, M., Hancart, C., & Lecroq, T. (2007). _Algorithms on Strings_. Cambridge University Press. (Rigorous treatment of exact and approximate pattern matching, automata, and combinatorics on words.)

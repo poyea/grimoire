@@ -724,3 +724,15 @@ string minRotation(const string& s) {
 *Duval, J.P. (1983)*. Factorizing Words over an Ordered Alphabet. Journal of Algorithms 4(4): 363-381.
 
 *Kasai, T. et al. (2001)*. Linear-Time Longest-Common-Prefix Computation in Suffix Arrays and Its Applications. CPM 2001, pp. 181-192.
+
+== Further Reading
+
+Gusfield, D. (1997). _Algorithms on Strings, Trees, and Sequences_. Cambridge University Press. (The essential reference for suffix trees, suffix arrays, LCP arrays, and their applications in bioinformatics and text indexing.)
+
+Crochemore, M., Hancart, C., & Lecroq, T. (2007). _Algorithms on Strings_. Cambridge University Press. (Rigorous treatment of string automata, Aho-Corasick, suffix automata, and Lyndon words.)
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 32 on string matching provides the theoretical grounding for KMP and automaton-based approaches.)
+
+Ohlebusch, E. (2013). _Bioinformatics Algorithms: Sequence Analysis, Genome Rearrangements, and Phylogenetic Reconstruction_. Enno Ohlebusch. (Modern treatment of suffix arrays and BWT with applications in genome sequence analysis.)
+
+Navarro, G., & Mäkinen, V. (2007). "Compressed Full-Text Indexes." _ACM Computing Surveys_ 39(1): Article 2. (Compressed suffix arrays and FM-index for space-efficient text indexing.)
