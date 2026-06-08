@@ -1,8 +1,8 @@
 = The Scheduler
 
-The Linux scheduler decides which runnable task gets the CPU next. For most workloads its default class — CFS, the Completely Fair Scheduler — is good enough that you don't think about it. For latency-sensitive, real-time, or contended systems, understanding what it is doing is the difference between a smooth system and a system with mysterious tail latency.
+The Linux scheduler decides which runnable task gets the CPU next. For most workloads its default class (CFS, the Completely Fair Scheduler) is good enough that you don't think about it. For latency-sensitive, real-time, or contended systems, understanding what it is doing is the difference between a smooth system and a system with mysterious tail latency.
 
-Since Linux 6.6, the fair class has been progressively reworked around *EEVDF* (Earliest Eligible Virtual Deadline First), a related but more deterministic algorithm. EEVDF is now the in-tree implementation of `SCHED_OTHER`; the user-facing class names and tunables are largely unchanged. The big-picture mental model — virtual runtime accounting on a per-CPU red-black tree — survives. We start with CFS as the canonical model and call out where EEVDF differs.
+Since Linux 6.6, the fair class has been progressively reworked around *EEVDF* (Earliest Eligible Virtual Deadline First), a related but more deterministic algorithm. EEVDF is now the in-tree implementation of `SCHED_OTHER`; the user-facing class names and tunables are largely unchanged. The big-picture mental model (virtual runtime accounting on a per-CPU red-black tree) survives. We start with CFS as the canonical model and call out where EEVDF differs.
 
 == Scheduling Classes
 
@@ -40,13 +40,13 @@ where `delta_exec` is the wall-clock CPU time just consumed. A `nice 0` task acc
 
 *Data structure:* a per-CPU red-black tree of runnable tasks keyed by vruntime. The leftmost node is the next task to run. `O(log n)` insert/remove, `O(1)` peek-leftmost (via cached pointer).
 
-*Time slice:* CFS doesn't have fixed slices. The "minimum granularity" (`/proc/sys/kernel/sched_min_granularity_ns`, default 0.75 ms on most distros, but tuneable) caps how short a slice can get when many tasks are runnable. The "scheduling period" (`sched_latency_ns`, default 6 ms) is the target window within which every runnable task gets a turn — divided up by their weights.
+*Time slice:* CFS doesn't have fixed slices. The "minimum granularity" (`/proc/sys/kernel/sched_min_granularity_ns`, default 0.75 ms on most distros, but tuneable) caps how short a slice can get when many tasks are runnable. The "scheduling period" (`sched_latency_ns`, default 6 ms) is the target window within which every runnable task gets a turn, divided up by their weights.
 
 *Vruntime catch-up on wakeup:* a task that just woke from sleep would have very low vruntime (didn't accumulate while sleeping) and would otherwise dominate the CPU. CFS clamps wake-up vruntime to `min_vruntime - sched_latency`, capping the "credit" a sleeping task can earn.
 
 *Load balancing:* periodically, the scheduler walks scheduling domains (a hierarchical view: SMT siblings → physical core → NUMA node → system) and tries to even out load by pulling tasks from busy CPUs to idle ones. The domain hierarchy is built from CPU topology at boot.
 
-`CONFIG_SCHED_DEBUG=y` exposes `/proc/sched_debug` — every CPU's runqueue, every task's vruntime, every domain's load. Indispensable for diagnosing scheduling issues.
+`CONFIG_SCHED_DEBUG=y` exposes `/proc/sched_debug`: every CPU's runqueue, every task's vruntime, every domain's load. Indispensable for diagnosing scheduling issues.
 
 == EEVDF (Linux 6.6+)
 
@@ -55,7 +55,7 @@ EEVDF replaces "smallest vruntime" with "earliest virtual deadline among eligibl
 - A *virtual eligibility time* (when it becomes eligible to run).
 - A *virtual deadline* = eligibility + (request_size / weight).
 
-The scheduler picks the eligible task with the smallest deadline. The result is more deterministic latency — a task with a small request size gets a small deadline and runs sooner — and a single tunable, `sched_base_slice_ns`, replaces the latency/granularity pair.
+The scheduler picks the eligible task with the smallest deadline. The result is more deterministic latency: a task with a small request size gets a small deadline and runs sooner, and a single tunable, `sched_base_slice_ns`, replaces the latency/granularity pair.
 
 Practically: existing CFS tunables are partly deprecated, the user-visible behavior is similar to CFS but with smoother latency under load, and `nice`/`SCHED_BATCH`/`SCHED_IDLE` continue to work as before.
 
@@ -63,8 +63,8 @@ Practically: existing CFS tunables are partly deprecated, the user-visible behav
 
 Two sub-policies of the fair class:
 
-- *`SCHED_BATCH`* — like `SCHED_OTHER` but the scheduler treats the task as non-interactive. No wake-up vruntime credit, longer slices in practice. Good for build jobs, long-running compute.
-- *`SCHED_IDLE`* — extremely low priority within the fair class (effectively `nice 19` and then some). Only runs when nothing else wants the CPU. Good for housekeeping, very-low-priority backups.
+- *`SCHED_BATCH`*: like `SCHED_OTHER` but the scheduler treats the task as non-interactive. No wake-up vruntime credit, longer slices in practice. Good for build jobs, long-running compute.
+- *`SCHED_IDLE`*: extremely low priority within the fair class (effectively `nice 19` and then some). Only runs when nothing else wants the CPU. Good for housekeeping, very-low-priority backups.
 
 ```c
 struct sched_param p = { .sched_priority = 0 };           // unused for SCHED_BATCH
@@ -75,8 +75,8 @@ sched_setscheduler(0, SCHED_BATCH, &p);
 
 The classic POSIX real-time policies. Fixed priority 1-99 (higher = higher priority). Within a priority level:
 
-- *`SCHED_FIFO`* — runs until it blocks, exits, or a higher-priority task preempts. No timeslice. A `SCHED_FIFO` task in an infinite loop will hold the CPU forever.
-- *`SCHED_RR`* — runs for `/proc/sys/kernel/sched_rr_timeslice_ms` (default 100 ms), then yields to the next task at the same priority. Above its priority is still preemptive.
+- *`SCHED_FIFO`*: runs until it blocks, exits, or a higher-priority task preempts. No timeslice. A `SCHED_FIFO` task in an infinite loop will hold the CPU forever.
+- *`SCHED_RR`*: runs for `/proc/sys/kernel/sched_rr_timeslice_ms` (default 100 ms), then yields to the next task at the same priority. Above its priority is still preemptive.
 
 ```c
 struct sched_param p = { .sched_priority = 50 };
@@ -212,5 +212,17 @@ scx_rusty                  # load and run a sched_ext-based scheduler
 ```
 
 This is the most significant scheduling-architecture change in over a decade. For most systems, the default fair scheduler remains correct; for workloads with very specific patterns (e.g. tightly coupled HPC, gaming foreground/background), `sched_ext` lets you ship a tailored scheduler as user code.
+
+== Pitfalls
+
+The Linux scheduler is one of the most actively developed subsystems in the kernel: CFS gave way to EEVDF, `sched_ext` opened the door to user-defined policies, and each kernel release brings tunable changes or new tracing hooks. A few recurring mistakes are worth naming explicitly.
+
+*Assuming `SCHED_FIFO` means real-time.* A `SCHED_FIFO` thread on a vanilla kernel still shares CPUs with kernel threads, softirqs, and workqueues unless the CPU is fully isolated with `isolcpus` and `nohz_full`. Without isolation, interrupt storms can add hundreds of microseconds of latency even at RT priority.
+
+*Ignoring priority inversion.* Any shared lock between a normal and an RT task is a potential inversion. Audit every mutex, rwlock, and futex in the critical path and use PI primitives (`PTHREAD_PRIO_INHERIT`) consistently.
+
+*Over-allocating `SCHED_DEADLINE` bandwidth.* Admission control rejects new tasks once CPU bandwidth is exhausted, but the budget granted per task must be measured from actual WCET, not a guess. Overestimating runtime wastes CPU; underestimating leads to period overruns and silent throttling.
+
+The scheduler is best understood as a policy *layer*, not a guarantee: the same policy can produce very different behaviour depending on hardware topology, interrupt routing, and memory pressure. Observability tools (`perf sched`, `runqlat`, `sched_debug`) and controlled isolation are the practical path to predictable behaviour.
 
 *See also:* _CPU Affinity, Isolation, and NUMA_ (isolation, the necessary complement to RT scheduling), _Interrupts and Bottom Halves_ (IRQ jitter, threaded IRQs), _Advanced Algorithms in Modern Systems (Coding volume)_ (scheduler theory: EDF, rate-monotonic), _cgroups and Namespaces_ (cpu controller, cpuset partitions).

@@ -16,7 +16,7 @@ Every reclaim-eligible page lives on one of the per-node LRU lists. There are fi
   [`LRU_UNEVICTABLE`], [`mlock`ed, `ramfs`, or otherwise pinned; never reclaimed.],
 )
 
-Pages move between active and inactive based on access bits — the *two-list LRU* approximation of LRU/2. A page on inactive that's referenced gets promoted to active; an active page whose reference bit clears decays to inactive.
+Pages move between active and inactive based on access bits, using the *two-list LRU* approximation of LRU/2. A page on inactive that's referenced gets promoted to active; an active page whose reference bit clears decays to inactive.
 
 The split between *anon* and *file* lets the kernel control swap aggressiveness independently of cache reclaim via `vm.swappiness` (0-200): 100 means anon and file are balanced; 0 means "reclaim file first, never swap unless desperate"; 200 means "prefer swap over cache eviction".
 
@@ -56,19 +56,19 @@ When allocations outrun kswapd, the caller does the work itself in *direct recla
 Mitigations:
 
 - *Raise `min_free_kbytes`* so kswapd has more time to catch up.
-- *`vm.watermark_scale_factor`* — gap between `low` and `high`; bigger gap = more kswapd work per wake = less direct reclaim.
+- *`vm.watermark_scale_factor`*: gap between `low` and `high`; bigger gap = more kswapd work per wake = less direct reclaim.
 - *Per-cgroup `memory.low` reservations* shield critical groups from being targets.
 - *Use `MADV_DONTNEED` / `madvise(MADV_COLD)`* to demote pages voluntarily before pressure hits.
 
 == Writeback Coupling
 
-Reclaiming a dirty file page requires writing it out. The writeback threads (`mm/page-writeback.c`) cap dirty pages globally (`vm.dirty_ratio`, `vm.dirty_background_ratio`) and per-bdi. Under reclaim pressure, the scanner may *wait* on writeback (`wait_on_page_writeback`) — that's the "stalled in direct reclaim writing back dirty pages" pattern that kills tail latencies on slow disks.
+Reclaiming a dirty file page requires writing it out. The writeback threads (`mm/page-writeback.c`) cap dirty pages globally (`vm.dirty_ratio`, `vm.dirty_background_ratio`) and per-bdi. Under reclaim pressure, the scanner may *wait* on writeback (`wait_on_page_writeback`), the "stalled in direct reclaim writing back dirty pages" pattern that kills tail latencies on slow disks.
 
 Modern advice: prefer time-based limits (`vm.dirty_expire_centisecs`, `vm.dirty_writeback_centisecs`) over ratio-based on big-RAM hosts where 20% of memory is many GB of pending writes.
 
 == Shrinkers: Slab Reclaim Plugin Points
 
-Many subsystems own caches the page reclaimer cannot directly see — dcache, icache, slab caches, GPU drivers, btrfs caches. They register *shrinkers*:
+Many subsystems own caches the page reclaimer cannot directly see (dcache, icache, slab caches, GPU drivers, btrfs caches). They register *shrinkers*:
 
 ```c
 struct shrinker {
@@ -87,12 +87,12 @@ A common pathology: a shrinker that allocates memory inside `scan_objects` → d
 
 == MGLRU: Multi-Generational LRU
 
-The two-list LRU is a 20-year-old approximation. *Multi-Gen LRU* (`mm/vmscan.c`, configured via `CONFIG_LRU_GEN`, default since 6.1) replaces it with per-cgroup, per-NUMA-node *generations* and *tiers*.
+The two-list LRU is a 20-year-old approximation. *Multi-Gen LRU* (`mm/vmscan.c`, configured via `CONFIG_LRU_GEN`, available as of Linux 6.1 (2022)) replaces it with per-cgroup, per-NUMA-node *generations* and *tiers*.
 
 - *Generations* (default 4) approximate access recency. New pages enter the youngest; aging promotes pages whose page-table A bits indicate recent use; the oldest generation is the eviction candidate set.
 - *Tiers* (per-generation) approximate access *frequency* based on refault distance.
 
-The aging walk reads page-table A bits directly (`lru_gen_walk_mm`), giving far more accurate recency than the rotate-when-scanned approximation of classic LRU. The result is dramatically better behaviour under memory pressure on workloads with mixed cold/warm/hot access patterns — Google reported 7-12% throughput gains on web-serving workloads and large reductions in tail latency.
+The aging walk reads page-table A bits directly (`lru_gen_walk_mm`), giving far more accurate recency than the rotate-when-scanned approximation of classic LRU. The result is dramatically better behaviour under memory pressure on workloads with mixed cold/warm/hot access patterns; Google reported 7-12% throughput gains on web-serving workloads and large reductions in tail latency (measured 2023).
 
 Knobs:
 
@@ -108,7 +108,7 @@ MGLRU integrates with memcg: each cgroup has its own generation lists, so reclai
 
 == PSI: Pressure Stall Information
 
-PSI (`kernel/sched/psi.c`, mainlined 4.20) measures, for each resource (CPU, memory, IO), how long tasks were *stalled* waiting for it — what fraction of wall-clock time would have made forward progress with more resource.
+PSI (`kernel/sched/psi.c`, mainlined 4.20) measures, for each resource (CPU, memory, IO), how long tasks were *stalled* waiting for it: what fraction of wall-clock time would have made forward progress with more resource.
 
 `/proc/pressure/memory`:
 
@@ -135,7 +135,7 @@ score += oom_score_adj
 
 `oom_score_adj` (`/proc/<pid>/oom_score_adj`, -1000..+1000) is the operator's lever. `-1000` is "immune"; sshd typically gets `-1000`, and runtime-critical services get negative biases.
 
-The victim's tasks are SIGKILLed; if it has children sharing memory, they may go too. On systems with memcg, the OOM is scoped to the cgroup that hit its limit (`memory.max`) — only members of that group are candidates.
+The victim's tasks are SIGKILLed; if it has children sharing memory, they may go too. On systems with memcg, the OOM is scoped to the cgroup that hit its limit (`memory.max`); only members of that group are candidates.
 
 Tuning posture:
 
@@ -149,10 +149,10 @@ Tuning posture:
 
 #table(columns: (auto, 1fr),
   [`memory.current`], [Bytes currently charged.],
-  [`memory.low`], [Soft floor — reclaim avoids this group while siblings have more than their `low`.],
-  [`memory.min`], [Hard floor — never reclaim below this (counts against parent's available memory).],
-  [`memory.high`], [Throttle threshold — exceeding it forces direct reclaim in the offending task.],
-  [`memory.max`], [Hard limit — exceeding triggers cgroup OOM.],
+  [`memory.low`], [Soft floor: reclaim avoids this group while siblings have more than their `low`.],
+  [`memory.min`], [Hard floor: never reclaim below this (counts against parent's available memory).],
+  [`memory.high`], [Throttle threshold: exceeding it forces direct reclaim in the offending task.],
+  [`memory.max`], [Hard limit: exceeding triggers cgroup OOM.],
   [`memory.swap.max`], [Swap usage cap.],
   [`memory.pressure`], [PSI for this cgroup.],
   [`memory.events`], [Counters: `low`, `high`, `max`, `oom`, `oom_kill`.],
@@ -161,7 +161,7 @@ Tuning posture:
 
 The recommended pattern: set `memory.high` (soft) and `memory.max` (hard) separately. `high` produces graceful throttling visible via `memory.events:high` counter; `max` is the safety net.
 
-Memcg tracks slab allocations (`kmem` accounting, now unified in cgroup v2), kernel stacks, page-table pages — everything attributable to a task. The kernel's accounting overhead is non-trivial; for ultra-high-rate workloads `cgroup.memory=nokmem` opts out (but lets containers escape kernel-memory accounting).
+Memcg tracks slab allocations (`kmem` accounting, now unified in cgroup v2), kernel stacks, page-table pages, and everything else attributable to a task. The kernel's accounting overhead is non-trivial; for ultra-high-rate workloads `cgroup.memory=nokmem` opts out (but lets containers escape kernel-memory accounting).
 
 == Zswap and zRAM
 
@@ -187,7 +187,7 @@ Each NUMA node has its own LRU lists and kswapd. `vm.zone_reclaim_mode` controls
 
 == Damon: Data Access Monitor
 
-DAMON (`mm/damon/`, since 5.15) samples page-access patterns at low cost (regions sampled, not individual pages) and exposes them to userspace and to in-kernel schemes. `DAMOS` (DAMON-based Operation Schemes) lets you say declaratively: "any 4 MiB region untouched for 60 s, `MADV_COLD` it" — pro-active cold-page demotion to swap or to tier-2 memory (CXL).
+DAMON (`mm/damon/`, since 5.15) samples page-access patterns at low cost (regions sampled, not individual pages) and exposes them to userspace and to in-kernel schemes. `DAMOS` (DAMON-based Operation Schemes) lets you say declaratively: "any 4 MiB region untouched for 60 s, `MADV_COLD` it", enabling pro-active cold-page demotion to swap or to tier-2 memory (CXL).
 
 == Observability Cheatsheet
 
@@ -210,7 +210,7 @@ cat /sys/fs/cgroup/myservice/memory.events
 cat /sys/fs/cgroup/myservice/memory.stat
 ```
 
-`pgsteal_*` counters are reclaim victories; `pgscan_*` are work done; their ratio (`scan/steal`) is a thrashing indicator — values much above 1 mean the scanner is iterating without freeing.
+`pgsteal_*` counters are reclaim victories; `pgscan_*` are work done; their ratio (`scan/steal`) is a thrashing indicator: values much above 1 mean the scanner is iterating without freeing.
 
 == Patterns and Anti-Patterns
 
