@@ -94,7 +94,7 @@ echo 3 > /proc/sys/net/ipv4/tcp_fastopen  # 1=client, 2=server, 3=both
 - Congestion avoidance: cwnd += 1/cwnd every RTT
 - Fast retransmit/recovery: 3 duplicate ACKs → retransmit, cwnd /= 2
 
-*2. CUBIC (Linux default since 2.6.19):*
+*2. CUBIC (Linux default since 2.6.23, 2007):*
 ```cpp
 // Simplified CUBIC increase function
 double cwnd_cubic(double time_since_loss, double cwnd_max) {

@@ -33,7 +33,7 @@ Refines fast recovery: stays in recovery until *all* outstanding data at the sta
 
 === CUBIC (RFC 8312)
 
-Default in Linux since 2006, in Windows since 10 (2018). Replaces Reno's linear cwnd growth with a *cubic* function of time since the last loss:
+Default in Linux since 2007 (kernel 2.6.23), in Windows since 10 (2018). Replaces Reno's linear cwnd growth with a *cubic* function of time since the last loss:
 $ W(t) = C dot (t - K)^3 + W_max $
 where $W_max$ is the cwnd value at the last loss, $K$ is the time to return to it, and $C ≈ 0.4$. This gives a long, flat region near $W_max$ (slow probing) followed by aggressive ramp once it is exceeded.
 
