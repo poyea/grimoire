@@ -1,6 +1,6 @@
 = mmap and Memory Management
 
-`mmap` is the most important memory primitive in Linux. Almost everything in the kernel's memory subsystem — file I/O, shared libraries, `fork()`'s copy-on-write, anonymous heaps, hugepages — is either implemented as `mmap` or trivially layered on top of it. This chapter is a deep dive into what `mmap` actually does, and the family of features built around it.
+`mmap` is the most important memory primitive in Linux. Almost everything in the kernel's memory subsystem (file I/O, shared libraries, `fork()`'s copy-on-write, anonymous heaps, hugepages) is either implemented as `mmap` or trivially layered on top of it. This chapter is a deep dive into what `mmap` actually does, and the family of features built around it.
 
 == mmap Fundamentals
 
@@ -8,7 +8,7 @@
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 ```
 
-A successful `mmap` returns a pointer to a *virtual memory area* (VMA) — a contiguous range of virtual addresses backed by something the kernel will fill in on demand. Crucially, *the kernel does not (in general) allocate physical pages immediately.* It records the mapping in the process's `mm_struct` and returns. Physical pages are allocated lazily on first access via the page-fault handler.
+A successful `mmap` returns a pointer to a *virtual memory area* (VMA): a contiguous range of virtual addresses backed by something the kernel will fill in on demand. Crucially, *the kernel does not (in general) allocate physical pages immediately.* It records the mapping in the process's `mm_struct` and returns. Physical pages are allocated lazily on first access via the page-fault handler.
 
 You can confirm this with `cat /proc/<pid>/maps`:
 
@@ -35,7 +35,7 @@ The two big modes:
 *MAP_PRIVATE vs MAP_SHARED:*
 
 - `MAP_PRIVATE`: writes are *copy-on-write*. The original page is shared until you write, at which point the kernel allocates a fresh page, copies, and remaps it. Used for executables (each process gets its own COW copy of `.data`).
-- `MAP_SHARED`: writes propagate to the underlying object — for file mappings, eventually back to disk; for anonymous shared mappings, visible to other processes mapping the same region. Used for IPC (`shm_open` + `mmap`), and for direct file modification.
+- `MAP_SHARED`: writes propagate to the underlying object (for file mappings, eventually back to disk; for anonymous shared mappings, visible to other processes mapping the same region). Used for IPC (`shm_open` + `mmap`), and for direct file modification.
 
 The `MAP_ANONYMOUS | MAP_SHARED` combination is the basis of `posix_shm` and POSIX semaphores' shared state.
 
@@ -55,7 +55,7 @@ Concretely:
    - Remaps the writer's PTE to point at the new page, writable.
    - Decrements the refcount on the original page; if it reaches 1, the *other* process's PTE can be flipped back to writable on its next fault (handled lazily).
 
-Memory-overcommit considerations: if both processes scribble all over their address space post-`fork()`, you need ~2× the original RAM. This is why `vfork()` and `posix_spawn` exist — they avoid the duplication when you only need to `exec` immediately.
+Memory-overcommit considerations: if both processes scribble all over their address space post-`fork()`, you need ~2× the original RAM. This is why `vfork()` and `posix_spawn` exist: they avoid the duplication when you only need to `exec` immediately.
 
 == Huge Pages
 
@@ -104,7 +104,7 @@ echo 1024 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
 echo 4    > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
 ```
 
-*Boot-time (more reliable for 1 GiB pages — fragmentation makes runtime allocation flaky):*
+*Boot-time (more reliable for 1 GiB pages, since fragmentation makes runtime allocation flaky):*
 
 ```
 default_hugepagesz=1G hugepagesz=1G hugepages=8
@@ -146,11 +146,11 @@ This is the pattern DPDK and SPDK use for their hugepage memory pools.
 
 == Useful mmap Flags
 
-- *`MAP_POPULATE`* — pre-fault all pages now, instead of on first access. Eliminates the page-fault cost from your critical path. Historically only honored for `MAP_PRIVATE`; honored for `MAP_SHARED | MAP_ANONYMOUS` from 6.0 onwards. On older kernels you must touch the pages manually to force allocation.
-- *`MAP_LOCKED`* — equivalent to `mmap` followed by `mlock`. Pages cannot be swapped or reclaimed. Subject to `RLIMIT_MEMLOCK`.
-- *`MAP_NORESERVE`* — don't reserve swap space. Lets you mmap a sparse range much larger than RAM+swap; access beyond what's actually allocatable will SIGBUS.
-- *`MAP_FIXED_NOREPLACE`* — like `MAP_FIXED` but fails (instead of silently unmapping) if the address range is already in use. Strongly preferred over `MAP_FIXED` for anything user-controlled.
-- *`MAP_STACK`* — hint that this region will be a thread stack. On most architectures it's a no-op; the flag exists so the kernel can pick stack-friendly placement on architectures where that matters.
+- *`MAP_POPULATE`*: pre-fault all pages now, instead of on first access. Eliminates the page-fault cost from your critical path. Historically only honored for `MAP_PRIVATE`; honored for `MAP_SHARED | MAP_ANONYMOUS` from 6.0 onwards. On older kernels you must touch the pages manually to force allocation.
+- *`MAP_LOCKED`*: equivalent to `mmap` followed by `mlock`. Pages cannot be swapped or reclaimed. Subject to `RLIMIT_MEMLOCK`.
+- *`MAP_NORESERVE`*: don't reserve swap space. Lets you mmap a sparse range much larger than RAM+swap; access beyond what's actually allocatable will SIGBUS.
+- *`MAP_FIXED_NOREPLACE`*: like `MAP_FIXED` but fails (instead of silently unmapping) if the address range is already in use. Strongly preferred over `MAP_FIXED` for anything user-controlled.
+- *`MAP_STACK`*: hint that this region will be a thread stack. On most architectures it's a no-op; the flag exists so the kernel can pick stack-friendly placement on architectures where that matters.
 
 == mlock and mlockall
 

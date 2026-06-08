@@ -1,8 +1,8 @@
 = eBPF Deep Dive
 
-eBPF (extended Berkeley Packet Filter) is a sandboxed in-kernel virtual machine that runs verified, JITed userspace-supplied programs at attach points throughout the kernel. It turned the kernel from a recompile-and-reboot artefact into a programmable platform: tracing, networking, security, observability, and even schedulers (`sched_ext`) are now things you load at runtime. The cost model — single-digit nanoseconds per instruction after JIT, with verifier-proven safety — is what makes it production-grade where kprobes alone were too dangerous and userspace tracing too slow.
+eBPF (extended Berkeley Packet Filter) is a sandboxed in-kernel virtual machine that runs verified, JITed userspace-supplied programs at attach points throughout the kernel. It turned the kernel from a recompile-and-reboot artefact into a programmable platform: tracing, networking, security, observability, and even schedulers (`sched_ext`) are now things you load at runtime. The cost model (single-digit nanoseconds per instruction after JIT, with verifier-proven safety) is what makes it production-grade where kprobes alone were too dangerous and userspace tracing too slow.
 
-This chapter assumes familiarity with the use-case-specific material in _Kernel Tracing_ (bpftrace one-liners, tracepoints) and _Networking Stack_ (XDP, TC). Here we cover the machinery beneath: the verifier, the JIT, the map menagerie, CO-RE & BTF, the loader libraries, and the modern frontier — kfuncs, sleepable programs, BPF LSM, and `struct_ops`.
+This chapter assumes familiarity with the use-case-specific material in _Kernel Tracing_ (bpftrace one-liners, tracepoints) and _Networking Stack_ (XDP, TC). Here we cover the machinery beneath: the verifier, the JIT, the map menagerie, CO-RE & BTF, the loader libraries, and the modern frontier: kfuncs, sleepable programs, BPF LSM, and `struct_ops`.
 
 == The eBPF VM
 
@@ -53,13 +53,13 @@ After verification, the JIT (`arch/<arch>/net/bpf_jit_comp.c`) emits native code
 - eBPF r6-r9 → callee-saved (`rbx`, `r13`-`r15`).
 - eBPF r10 → `rbp`.
 
-ALU operations map 1-1 to host instructions; bounds-checked loads compile to single MOVs. The result is a function pointer the kernel calls like any other — overhead per instruction is essentially that of native code.
+ALU operations map 1-1 to host instructions; bounds-checked loads compile to single MOVs. The result is a function pointer the kernel calls like any other; overhead per instruction is essentially that of native code.
 
 The constant blinding pass (`bpf_jit_blinding_enabled`) XORs immediates with a per-load secret to defeat JIT-spraying. Speculative-execution mitigations (`bpf_spec_v1`, `bpf_spec_v4`) insert speculation barriers around array bounds checks.
 
 == Maps
 
-Maps are the only way eBPF programs share state — with each other, with userspace, and across invocations. The map zoo as of 6.x:
+Maps are the only way eBPF programs share state: with each other, with userspace, and across invocations. The map zoo as of 6.x:
 
 #table(columns: (auto, 1fr),
   [`BPF_MAP_TYPE_HASH`], [General-purpose hash table. Up to `max_entries`; per-CPU spinlock on update.],
@@ -68,10 +68,10 @@ Maps are the only way eBPF programs share state — with each other, with usersp
   [`BPF_MAP_TYPE_LRU_HASH`], [Bounded-size hash with LRU eviction. Connection-tracking and flow-cache uses.],
   [`BPF_MAP_TYPE_RINGBUF`], [Per-map MPSC ring buffer; replaces `perf_event_array` for event streaming. Reserves space up front, allowing zero-copy `bpf_ringbuf_reserve`/`bpf_ringbuf_submit`.],
   [`BPF_MAP_TYPE_PERF_EVENT_ARRAY`], [Per-CPU `perf` ring buffers; the classic events channel, now mostly superseded by ringbuf.],
-  [`BPF_MAP_TYPE_PROG_ARRAY`], [Indirection for `bpf_tail_call` — bounded program-to-program jumps without recursion.],
+  [`BPF_MAP_TYPE_PROG_ARRAY`], [Indirection for `bpf_tail_call`; bounded program-to-program jumps without recursion.],
   [`BPF_MAP_TYPE_HASH_OF_MAPS` / `ARRAY_OF_MAPS`], [Maps of maps; cgroup-scoped or per-namespace policy.],
   [`BPF_MAP_TYPE_SOCKMAP` / `SOCKHASH`], [Tables of `struct sock *` for stream splicing and L7 routing.],
-  [`BPF_MAP_TYPE_LPM_TRIE`], [Longest-prefix-match trie — CIDR routing in eBPF.],
+  [`BPF_MAP_TYPE_LPM_TRIE`], [Longest-prefix-match trie for CIDR routing in eBPF.],
   [`BPF_MAP_TYPE_STACK_TRACE`], [Per-id stack traces; the backbone of profiling.],
   [`BPF_MAP_TYPE_BLOOM_FILTER`], [Set membership.],
   [`BPF_MAP_TYPE_CPUMAP` / `DEVMAP` / `XSKMAP`], [Redirect targets for `XDP_REDIRECT`.],
@@ -100,12 +100,12 @@ kfuncs are how new kernel APIs reach eBPF without growing the frozen helper-ID s
 
 == BTF and CO-RE
 
-eBPF programs traditionally needed to be compiled against the exact kernel headers of the host they ran on — a packaging nightmare. *CO-RE* (Compile Once, Run Everywhere) and its enabling technology *BTF* (BPF Type Format) fix this.
+eBPF programs traditionally needed to be compiled against the exact kernel headers of the host they ran on, a packaging nightmare. *CO-RE* (Compile Once, Run Everywhere) and its enabling technology *BTF* (BPF Type Format) fix this.
 
 *BTF* is a compact debug-format dialect (essentially trimmed DWARF) embedded in the kernel image (`/sys/kernel/btf/vmlinux`) describing every type the kernel exports. The eBPF compiler (clang with `-g`) emits BTF relocations for every field access, recording something like "I read `task->mm->pgd`; patch this offset for whatever kernel runs me".
 
 ```c
-// CO-RE field access — note BPF_CORE_READ
+// CO-RE field access (note BPF_CORE_READ)
 #include <bpf/bpf_core_read.h>
 
 struct task_struct *task = (void *)bpf_get_current_task();
@@ -147,7 +147,7 @@ prog__destroy(skel);
 
 A program can call another loaded program via `bpf_tail_call(ctx, &prog_array_map, index)`, a no-return jump into the program at `prog_array[index]`. Depth is bounded at 33 with no return, useful for state-machine-style demuxing in XDP pipelines.
 
-Separately, *BPF-to-BPF function calls* (since 4.16) let a program contain multiple static functions, JITed as regular call/ret — recursion forbidden, depth bounded. This is what makes large programs (Cilium's are 10,000+ instructions) practical to verify: each function is verified independently.
+Separately, *BPF-to-BPF function calls* (since 4.16) let a program contain multiple static functions, JITed as regular call/ret; recursion is forbidden and depth is bounded. This is what makes large programs (Cilium's are 10,000+ instructions) practical to verify: each function is verified independently.
 
 == Sleepable BPF
 
@@ -208,7 +208,7 @@ perf report
 
 == Security Posture
 
-eBPF has had its share of CVEs — almost all in the verifier. Mitigations now in place:
+eBPF has had its share of CVEs, almost all in the verifier. Mitigations now in place:
 
 - *Unprivileged eBPF* disabled by default (`kernel.unprivileged_bpf_disabled = 1`).
 - *Spectre v1/v4* speculative-bounds checks in the verifier.

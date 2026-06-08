@@ -1,8 +1,8 @@
 = RCU and Locking
 
-A modern kernel running on 256 cores cannot scale with traditional locking — a single `rwlock` becomes the slowest part of the system long before the workload itself does. The Linux kernel's answer is a layered locking discipline: spinlocks and mutexes where contention is tolerable; per-CPU data wherever possible; *read-copy-update* (RCU) wherever readers vastly outnumber writers. Combined with strict lock-ordering rules and the lockdep validator, this is what lets the kernel scale linearly to hundreds of cores while remaining correct.
+A modern kernel running on 256 cores cannot scale with traditional locking; a single `rwlock` becomes the slowest part of the system long before the workload itself does. The Linux kernel's answer is a layered locking discipline: spinlocks and mutexes where contention is tolerable; per-CPU data wherever possible; *read-copy-update* (RCU) wherever readers vastly outnumber writers. Combined with strict lock-ordering rules and the lockdep validator, this is what lets the kernel scale linearly to hundreds of cores while remaining correct.
 
-This chapter covers the locking primitives at depth, then RCU's grace-period machinery — the most subtle and most important of them — followed by lockdep, futexes, and per-CPU patterns.
+This chapter covers the locking primitives at depth, then RCU's grace-period machinery (the most subtle and most important of them), followed by lockdep, futexes, and per-CPU patterns.
 
 == Locking Primitives at a Glance
 
@@ -10,7 +10,7 @@ This chapter covers the locking primitives at depth, then RCU's grace-period mac
   [*Primitive*], [*Use*], [*Cost*],
   [`spinlock_t`], [Short, atomic-context critical sections.], [~20-30 ns uncontended, scales poorly.],
   [`raw_spinlock_t`], [Same, but never converted to mutex by PREEMPT_RT.], [Same; required in IRQ paths.],
-  [`rwlock_t`], [Many readers, occasional writer. Discouraged — RCU is usually better.], [Reader fairness issues; deprecated for most uses.],
+  [`rwlock_t`], [Many readers, occasional writer. Discouraged; RCU is usually better.], [Reader fairness issues; deprecated for most uses.],
   [`mutex`], [Sleepable, single owner. Process context only.], [~30 ns uncontended, sleeps on contention.],
   [`rw_semaphore`], [Sleepable read-write. Many filesystems use it on inodes.], [~40 ns uncontended.],
   [`seqlock_t`], [Writers serialize, readers retry on conflict. Tiny read-side cost.], [Read: 2 sequence loads; write: one spinlock.],
@@ -33,7 +33,7 @@ list_add(&item, &q->head);
 spin_unlock_irqrestore(&queue_lock, flags);
 ```
 
-On PREEMPT_RT, `spin_lock` becomes a sleeping `rt_mutex` with priority inheritance. `raw_spin_lock` stays a true spinlock — required for the few code paths that *cannot* sleep (top half of IRQ handlers, scheduler core).
+On PREEMPT_RT, `spin_lock` becomes a sleeping `rt_mutex` with priority inheritance. `raw_spin_lock` stays a true spinlock, required for the few code paths that *cannot* sleep (top half of IRQ handlers, scheduler core).
 
 Spinlocks are *queued* (`qspinlock`, default since 4.2): contenders form an MCS-style queue rather than thundering on a single cacheline. The result: contention is O(1) cacheline transfers per acquire instead of O(N).
 
@@ -41,7 +41,7 @@ Spinlocks are *queued* (`qspinlock`, default since 4.2): contenders form an MCS-
 
 `mutex` is the default sleepable lock. The fast path is a `cmpxchg`; on contention, the lock *optimistically spins* if the current owner is running on another CPU (the bet: it'll release soon). Only if the owner is descheduled does the contender enqueue and sleep. This single trick makes mutex contention competitive with spinlocks on short critical sections, without the "what if we get preempted holding it" downside.
 
-`mutex_lock_killable` returns `-EINTR` on SIGKILL — required for any wait that might be a user-facing syscall.
+`mutex_lock_killable` returns `-EINTR` on SIGKILL, required for any wait that might be a user-facing syscall.
 
 == Sequence Locks (seqlock)
 
@@ -55,7 +55,7 @@ do {
 } while (read_seqretry(&timekeeper_lock, seq));
 ```
 
-Used for: `gettimeofday`/timekeeping (`kernel/time/timekeeping.c`), dcache invariants, networking statistics. Read-side cost is two atomic loads and a comparison — sub-nanosecond — but writers serialize, and readers can starve under sustained writer pressure.
+Used for: `gettimeofday`/timekeeping (`kernel/time/timekeeping.c`), dcache invariants, networking statistics. Read-side cost is two atomic loads and a comparison (sub-nanosecond), but writers serialize, and readers can starve under sustained writer pressure.
 
 == Atomics and Memory Ordering
 
@@ -71,11 +71,11 @@ smp_mb();                                  // explicit full barrier
 smp_rmb(); smp_wmb();                      // read/write halves
 ```
 
-The kernel's ordering rules are stricter than C11's — `READ_ONCE`/`WRITE_ONCE` plus explicit barriers form the kernel's portable memory model. `Documentation/memory-barriers.txt` is the canonical reference; `tools/memory-model/` carries the formal model (used by `herd7`).
+The kernel's ordering rules are stricter than C11's: `READ_ONCE`/`WRITE_ONCE` plus explicit barriers form the kernel's portable memory model. `Documentation/memory-barriers.txt` is the canonical reference; `tools/memory-model/` carries the formal model (used by `herd7`).
 
 == RCU: Read-Copy-Update
 
-RCU is the kernel's answer to the "millions of readers, occasional writer, never block readers" problem. Readers run in a *read-side critical section* delimited by `rcu_read_lock()`/`rcu_read_unlock()` — which on the default preemptible kernel is essentially `preempt_disable()` / `preempt_enable()` (no atomics, no barriers on x86). Writers publish a new version, then wait for a *grace period* — a duration after which every CPU has passed through a quiescent state — before freeing the old version. By then, no reader can possibly still hold a pointer to it.
+RCU is the kernel's answer to the "millions of readers, occasional writer, never block readers" problem. Readers run in a *read-side critical section* delimited by `rcu_read_lock()`/`rcu_read_unlock()`, which on the default preemptible kernel is essentially `preempt_disable()` / `preempt_enable()` (no atomics, no barriers on x86). Writers publish a new version, then wait for a *grace period* (a duration after which every CPU has passed through a quiescent state) before freeing the old version. By then, no reader can possibly still hold a pointer to it.
 
 ```c
 // Reader
