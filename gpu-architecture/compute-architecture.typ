@@ -768,12 +768,12 @@ Memory           HBM2     GDDR6     HBM2e     GDDR6X    HBM3
 
 == Further Reading
 
-NVIDIA Corporation (2024). NVIDIA Ada GPU Architecture. Whitepaper. https://images.nvidia.com/aem-dam/Solutions/geforce/ada/nvidia-ada-gpu-architecture.pdf
+NVIDIA Corporation (2024). "NVIDIA Ada Lovelace GPU Architecture." Technical Whitepaper. Documents the AD102 die, fourth-generation Tensor Cores with FP8 support, RT Cores, and the Ada Lovelace shader execution reorder (SER) feature.
 
-NVIDIA Corporation (2024). NVIDIA Hopper Architecture In-Depth. https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/
+NVIDIA Corporation (2024). "NVIDIA Hopper Architecture In-Depth." Developer Blog. Covers the H100 SM design, Transformer Engine, Tensor Memory Accelerator, Thread Block Clusters, and distributed shared memory at an architectural level.
 
-NVIDIA Corporation (2024). CUDA C++ Programming Guide. Chapter 7 (Tensor Cores). https://docs.nvidia.com/cuda/cuda-c-programming-guide/
+NVIDIA Corporation (2024). "CUDA C++ Programming Guide." Technical Reference, Chapter 7. The authoritative reference for warp matrix multiply-accumulate (WMMA) fragments, supported matrix sizes and precision modes, and structured sparsity APIs.
 
-NVIDIA Corporation (2023). Tensor Core Programming. https://docs.nvidia.com/deeplearning/performance/
+NVIDIA Corporation (2023). "Deep Learning Performance Guide: Tensor Core Operations." Technical Guide. Provides throughput tables, precision selection guidelines, and cuBLAS/cuDNN configuration for maximising Tensor Core utilisation.
 
-Jia, Z. et al. (2018). "Dissecting the NVIDIA Volta GPU Architecture via Microbenchmarking." Technical Report.
+Jia, Z. et al. (2018). "Dissecting the NVIDIA Volta GPU Architecture via Microbenchmarking." Technical Report, Stanford. Reverse-engineers SM microarchitecture, warp scheduling, and memory subsystem latencies through systematic microbenchmarks on V100.
