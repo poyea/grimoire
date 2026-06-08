@@ -97,7 +97,7 @@ D: m × n matrix (FP32/FP16)
 - Processes 8×8×4 per Tensor Core per cycle
 - 4 Tensor Cores per SM
 - 128 SMs = 512 Tensor Cores
-- Peak: 660 TFLOPS (sparse), 330 TFLOPS (dense)
+- Peak: 330 TFLOPS (dense), 660 TFLOPS (sparse)
 ```
 
 *WMMA API (Warp Matrix Multiply-Accumulate):*
