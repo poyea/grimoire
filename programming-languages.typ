@@ -84,6 +84,9 @@
 #include "programming-languages/computability.typ"
 #pagebreak()
 
+#include "programming-languages/computability-advanced.typ"
+#pagebreak()
+
 #include "programming-languages/complexity.typ"
 #pagebreak()
 
