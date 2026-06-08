@@ -4,7 +4,7 @@ A type system is a syntactic method for proving the absence of certain program b
 
 Why bother? Four concrete payoffs:
 
-1. *Error detection at compile time.* A null dereference, an array out of bounds, a missing case in a union — types catch entire classes of runtime errors for free.
+1. *Error detection at compile time.* A null dereference, an array out of bounds, a missing case in a union: types catch entire classes of runtime errors for free.
 2. *Documentation.* A function signature `auto serialize(const Config& cfg) -> std::string` tells you more than a comment. It is machine-checked documentation that cannot drift out of sync.
 3. *Optimization.* Knowing a value is a 32-bit integer lets the compiler choose a register and a machine instruction without a runtime tag check. Devirtualization, escape analysis, and loop vectorization all rely on type information.
 4. *Safer refactoring.* Change a type; let the type checker enumerate everywhere the change must propagate. In large codebases this is the difference between a 30-minute and a 3-day refactor.
@@ -49,9 +49,9 @@ $ forall e, tau. (dot tack.r e : tau) => ("isValue"(e) or exists e'. e arrow.r e
 *Preservation:* If a well-typed term takes a step, the result has the same type.
 $ forall e, e', tau. (dot tack.r e : tau and e arrow.r e') => (dot tack.r e' : tau) $
 
-Together, these guarantee that a well-typed program never gets *stuck* — it never reaches a state that is not a value but also cannot reduce. "Stuck" corresponds to runtime type errors (applying a non-function, pattern-matching on the wrong constructor, etc.). Type soundness says: if the type checker accepts your program, those states are unreachable.
+Together, these guarantee that a well-typed program never gets *stuck*: it never reaches a state that is not a value but also cannot reduce. "Stuck" corresponds to runtime type errors (applying a non-function, pattern-matching on the wrong constructor, etc.). Type soundness says: if the type checker accepts your program, those states are unreachable.
 
-The proofs proceed by induction on typing derivations. The critical supporting lemma is spelled out below, followed by the T-APP cases of both theorems — the cases cited in the computability and semantics chapters.
+The proofs proceed by induction on typing derivations. The critical supporting lemma is spelled out below, followed by the T-APP cases of both theorems (the cases cited in the computability and semantics chapters).
 
 _See also: Turing Machines and Computability for Rice's theorem and undecidability of type inference for unrestricted systems. Program Semantics for the operational semantics ($arrow.r$, $arrow.r^*$) used in the statement of these theorems._
 
@@ -165,17 +165,17 @@ Program:
 let f = lam x. x in (f 1, f true)
 ```
 
-*Step 1 — Assign fresh type variables.*
+*Step 1: Assign fresh type variables.*
 
 - $x$ gets type $alpha$
 - Body of lambda ($x$): type $alpha$, so $f : alpha arrow.r alpha$
 - Before generalization, $f$ has monotype $alpha_0 arrow.r alpha_0$ (a specific fresh variable)
 
-*Step 2 — Generalize at the let-binding.*
+*Step 2: Generalize at the let-binding.*
 
 $f$ is not in the body's free type variables (the environment is empty), so generalize: $f : forall alpha. alpha arrow.r alpha$.
 
-*Step 3 — Generate constraints for the body $(f space 1, space f space "true")$.*
+*Step 3: Generate constraints for the body $(f space 1, space f space "true")$.*
 
 Instantiate $f$ twice with fresh variables $alpha_1$ and $alpha_2$:
 - First use: $f : alpha_1 arrow.r alpha_1$, applied to $1 : "Int"$. Constraint: $alpha_1 = "Int"$.
@@ -188,13 +188,13 @@ Instantiate $f$ twice with fresh variables $alpha_1$ and $alpha_2$:
   [$f space "true"$], [$alpha_2 = "Bool"$], [$alpha_2 |-> "Bool"$],
 )
 
-*Step 4 — Apply substitution.*
+*Step 4: Apply substitution.*
 
 - $f space 1 : "Int"$
 - $f space "true" : "Bool"$
 - Pair type: $"Int" times "Bool"$
 
-The two uses of $f$ receive different instantiations because $forall alpha$ was introduced at the let. If $f$ had been inlined (no let), both uses would share the same $alpha$ and the constraint $alpha = "Int"$ and $alpha = "Bool"$ would clash — an error. This is why let-polymorphism is essential and why ML's value restriction governs when generalization is sound.
+The two uses of $f$ receive different instantiations because $forall alpha$ was introduced at the let. If $f$ had been inlined (no let), both uses would share the same $alpha$ and the constraint $alpha = "Int"$ and $alpha = "Bool"$ would clash (an error). This is why let-polymorphism is essential and why ML's value restriction governs when generalization is sound.
 
 == Polymorphism Flavors
 
@@ -224,15 +224,15 @@ The Curry-Howard correspondence observes that types and propositions are the sam
 
 A function of type `A -> B` is a proof that `A` implies `B`: given evidence of `A` (an argument), it constructs evidence of `B` (the return value). A pair of type `A * B` is a proof of `A and B`. A value of `Either A B` is a proof of `A or B`.
 
-This correspondence is not a metaphor — it is a precise bijection. In Coq and Agda, you write proofs as programs and the type checker verifies them. The `Prop` sort in Coq is literally the type of propositions, and a term of type `P : Prop` is a proof of `P`.
+This correspondence is not a metaphor; it is a precise bijection. In Coq and Agda, you write proofs as programs and the type checker verifies them. The `Prop` sort in Coq is literally the type of propositions, and a term of type `P : Prop` is a proof of `P`.
 
 == Dependent Types and Totality
 
-Dependent types allow types to *depend on values*: `Vec n Int` is the type of integer vectors of length exactly `n`, where `n` is a runtime value. The type `Fin n` contains exactly the natural numbers less than `n` — array indexing with `Fin n` is provably safe.
+Dependent types allow types to *depend on values*: `Vec n Int` is the type of integer vectors of length exactly `n`, where `n` is a runtime value. The type `Fin n` contains exactly the natural numbers less than `n`; array indexing with `Fin n` is provably safe.
 
 Languages with dependent types: Coq, Agda, Idris, Lean. They serve dual roles: proof assistants (writing mathematical proofs) and programming languages (writing certified programs).
 
-The trade: to keep type-checking decidable, these languages require all programs to *terminate*. The termination checker verifies that every recursive call is on a structurally smaller argument. This rules out general recursion and — by Rice's theorem — means you cannot write a self-interpreter for the full language within the language.
+The trade: to keep type-checking decidable, these languages require all programs to *terminate*. The termination checker verifies that every recursive call is on a structurally smaller argument. This rules out general recursion and, by Rice's theorem, means you cannot write a self-interpreter for the full language within the language.
 
 This is not a bug, it is a feature. A Coq proof that `sort` is correct is a machine-checked mathematical proof. The price is that you cannot write non-terminating programs. For verified systems software, theorem proving, and protocol specification, this trade is excellent.
 
@@ -244,7 +244,7 @@ A type system can track not just *what type* a computation produces but *what ef
 
 Effect systems in mainstream languages are weaker but recognizable: Java's checked exceptions are a rudimentary effect system (tracking which exceptions a method may throw). Haskell's `IO` monad is a type-level effect: any function that returns `IO a` may perform arbitrary I/O; pure functions returning `a` cannot.
 
-Rust's ownership and borrow checker is a linear/affine type system tracking aliasing and lifetime — a form of effect tracking for memory safety.
+Rust's ownership and borrow checker is a linear/affine type system tracking aliasing and lifetime, a form of effect tracking for memory safety.
 
 == Gradual Typing
 
