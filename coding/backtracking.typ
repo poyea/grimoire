@@ -155,3 +155,15 @@ if (heuristic_best(r+1, c)) {
   [Combination sum], [$O(2^t)$ where $t$ = target], [$O(t)$ recursion depth],
   [Word search], [$O(n m dot 4^L)$ where $L$ = word length], [$O(L)$ recursion depth],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 34 covers NP-completeness and exhaustive search context.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 9 on backtracking and combinatorial search.)
+
+Knuth, D. E. (2011). _The Art of Computer Programming_, Vol. 4A: Combinatorial Algorithms. Addison-Wesley. (Generating permutations, combinations, and backtracking frameworks.)
+
+Kumar, V. (1992). "Algorithms for Constraint-Satisfaction Problems: A Survey." _AI Magazine_ 13(1): 32--44. (Backtracking and constraint propagation for CSPs.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Exhaustive search and pruning strategies.)

@@ -686,3 +686,15 @@ Total: ~7-9 cycles, excellent avalanche, non-cryptographic.
 *Anderson, S.E. (2005)*. Bit Twiddling Hacks. Stanford University Graphics Lab.
 
 *Hennessy, J.L. & Patterson, D.A. (2017)*. Computer Architecture: A Quantitative Approach (6th ed.). Morgan Kaufmann. ISBN 978-0128119051.
+
+== Further Reading
+
+Warren, H. S. (2012). _Hacker's Delight_, 2nd ed. Addison-Wesley. (The definitive reference for bit manipulation tricks and low-level arithmetic algorithms.)
+
+Knuth, D. E. (1968). _The Art of Computer Programming_, Vol. 1: Fundamental Algorithms. Addison-Wesley. (Sections on binary representation, number systems, and bitwise operations.)
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 16 on greedy algorithms includes bitmask applications; Appendix A on binary arithmetic.)
+
+Hennessy, J. L., & Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. (Hardware perspective on shifts, logical operations, and instruction-level bit manipulation.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Combinatorial problems solved via bitmask DP and subset enumeration.)

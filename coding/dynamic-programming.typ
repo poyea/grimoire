@@ -588,3 +588,15 @@ int maxValue = [&]() {
   [Climbing stairs], [$O(n)$], [$O(1)$],
   [Maximum product subarray], [$O(n)$], [$O(1)$],
 )
+
+== Further Reading
+
+Bellman, R. (1957). _Dynamic Programming_. Princeton University Press. (The foundational text establishing the principle of optimality and the DP paradigm.)
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapters 14--15 on rod cutting, LCS, matrix-chain multiplication, and optimal BSTs as DP case studies.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 10 on dynamic programming with an extensive problem catalogue covering interval, sequence, and graph DP.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Context for DP in shortest paths, sequence alignment, and graph problems.)
+
+Knuth, D. E. (1973). _The Art of Computer Programming_, Vol. 3: Sorting and Searching. Addison-Wesley. (Knuth's optimization for DP on monotone cost functions, reducing $O(n^3)$ to $O(n^2)$.)

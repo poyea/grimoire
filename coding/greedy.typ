@@ -337,3 +337,15 @@ int can_complete_circuit(vector<int>& gas, vector<int>& cost) {
   [Minimize lateness (EDF)], [$O(n log n)$], [$O(n)$],
   [Gas station / circular tour], [$O(n)$], [$O(1)$],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 15 on greedy algorithms: activity selection, Huffman codes, and matroid theory underpinning greedy correctness.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 8 on graph algorithms using greedy strategies; Chapter 10 contrasting greedy with DP.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (MST algorithms as canonical greedy examples in Chapter 4.)
+
+Huffman, D. A. (1952). "A Method for the Construction of Minimum-Redundancy Codes." _Proceedings of the IRE_ 40(9): 1098--1101. (The original Huffman coding paper, one of the most elegant greedy algorithms.)
+
+Lawler, E. L. (1976). _Combinatorial Optimization: Networks and Matroids_. Holt, Rinehart and Winston. (Matroid theory providing the theoretical foundation for when greedy algorithms are provably optimal.)
