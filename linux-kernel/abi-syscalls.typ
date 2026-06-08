@@ -199,6 +199,22 @@ seccomp_load(ctx);
 
 *See also:* _Kernel Bypass (Networking volume)_: DPDK and AF_XDP avoid the syscall path entirely for packet IO. _Kernel Tracing_: eBPF tracepoints on `raw_syscalls:sys_enter` give per-syscall observability.
 
+== Further Reading
+
+- Kerrisk, M. (2010). _The Linux Programming Interface_. No Starch Press. The definitive reference for Linux system calls, POSIX APIs, and the user-kernel boundary; covers every major syscall category in depth.
+
+- Bovet, D. P., Cesati, M. (2005). _Understanding the Linux Kernel_, 3rd ed. O'Reilly. Covers system call dispatch, the `entry_64.S` entry path, and kernel-mode execution from an internals perspective.
+
+- Linux Kernel Documentation. (2024). "Adding a New System Call." `Documentation/process/adding-syscalls.rst`. Official guide covering compat wrappers, `SYSCALL_DEFINE`, and ABI stability requirements.
+
+- Drysdale, D. (2014). "Anatomy of a System Call." LWN.net. Walkthrough of the x86-64 `syscall` instruction, `LSTAR` MSR, and the kernel entry thunk chain.
+
+- Linux Kernel Documentation. (2024). "Virtual Dynamic Shared Object (vDSO)." `Documentation/arch/x86/vdso.rst`. Documents how `gettimeofday`, `clock_gettime`, and `getcpu` are implemented as user-space mappings to avoid mode switching.
+
+- Edge, J. (2018). "Spectre mitigations in the kernel." LWN.net. Covers how KPTI, retpoline, and IBRS changed the syscall entry path post-Spectre/Meltdown and the performance cost of each mitigation.
+
+- Corbet, J. (2021). "The seccomp() system call." LWN.net. Explains how seccomp-BPF allows processes to restrict their own syscall surface, commonly used in container runtimes and sandboxes.
+
 #pagebreak()
 
 === Introduction
