@@ -185,7 +185,29 @@ Spectral normalization (Miyato et al. 2018) — used in GAN discriminators — a
 
 == Matrix Functions and the Matrix Exponential
 
-For symmetric $A = Q Lambda Q^top$, $f(A) := Q f(Lambda) Q^top$ where $f$ is applied entry-wise to the diagonal. The matrix exponential $exp(A) = sum_(k=0)^infinity A^k \/ k!$ governs linear dynamical systems and shows up in state-space models (Mamba/S4, see _Sequence Models_) and in continuous-time Bayesian filtering.
+For symmetric $A = Q Lambda Q^top$, $f(A) := Q f(Lambda) Q^top$ where $f$ is applied entry-wise to the diagonal. More generally, for any square matrix $A$, the *matrix exponential* is defined by the power series
+
+$ e^A = sum_(k=0)^infinity A^k / k! = I + A + A^2/2! + A^3/3! + dots, $
+
+which converges absolutely for all square matrices because the series of operator norms $sum parallel A parallel^k \/ k! = e^(parallel A parallel)$ is always finite.
+
+The matrix exponential is the fundamental solution operator for linear ODEs: the unique solution to $dot(x)(t) = A x(t)$ with initial condition $x(0) = x_0$ is $x(t) = e^(A t) x_0$. This makes $e^A$ central to continuous-time control theory, Gaussian process ODEs, and neural ODEs.
+
+In sequence modeling, continuous-time state-space models (SSMs) such as S4 (Gu et al. 2022) and Mamba parameterize a discrete recurrence via the zero-order-hold discretization
+
+$ overline(A) = e^(A Delta), quad overline(B) = (A)^(-1)(overline(A) - I) B, $
+
+where $Delta$ is the sampling interval. The matrix exponential $overline(A) = e^(A Delta)$ is computed once at initialization and cached — the recurrence then runs in $O(n)$ per time step rather than requiring a full ODE solve at each forward pass.
+
+*Computation methods* depend on the matrix structure. The Padé approximation — a rational approximant $e^A approx R_(p q)(A)$ of matching Taylor coefficients — is used by `scipy.linalg.expm` and is backward-stable. For normal matrices (those satisfying $A A^top = A^top A$), the Schur decomposition $A = U T U^*$ reduces the exponential to $e^A = U e^T U^*$ where $e^T$ is computed on the triangular factor. For large sparse $A$, Krylov subspace methods (Expokit; Saad 1992) approximate $e^(A t) v$ for a given vector $v$ without ever forming $e^A$ explicitly.
+
+The *matrix square root* $A^(1/2)$ — the unique PSD matrix satisfying $(A^(1/2))^2 = A$ for $A succ.eq 0$ — appears in the Fréchet inception distance (FID) used to evaluate generative image models:
+
+$ "FID" = parallel mu_r - mu_g parallel^2 + tr(Sigma_r + Sigma_g - 2(Sigma_r Sigma_g)^(1/2)), $
+
+where $(mu_r, Sigma_r)$ and $(mu_g, Sigma_g)$ are the mean and covariance of Inception-v3 features for real and generated images. Computing $(Sigma_r Sigma_g)^(1/2)$ via the Schur decomposition is the numerical bottleneck in FID evaluation.
+
+In practice: `torch.matrix_exp(A)` computes the matrix exponential on GPU tensors and is differentiable through autograd; `scipy.linalg.expm` provides a CPU reference using the scaling-and-squaring Padé algorithm.
 
 == Tensor Operations
 
