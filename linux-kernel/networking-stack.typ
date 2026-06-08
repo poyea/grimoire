@@ -4,7 +4,7 @@ The Linux networking stack handles ~30 M pps per core on commodity hardware in 2
 
 == sk_buff: The Packet Object
 
-A `sk_buff` (or *skb*) describes one packet plus metadata. It is comparatively large (~232 bytes head, plus a shared `skb_shared_info` trailing the data area) and famously costly to allocate — every packet allocates and frees an skb (or recycles one from a per-CPU cache). Cutting skb allocation cost (`skb_recycle`, page-pool, page-fragment allocators) has been a recurring optimization theme.
+A `sk_buff` (or *skb*) describes one packet plus metadata. It is comparatively large (~232 bytes head, plus a shared `skb_shared_info` trailing the data area) and famously costly to allocate; every packet allocates and frees an skb (or recycles one from a per-CPU cache). Cutting skb allocation cost (`skb_recycle`, page-pool, page-fragment allocators) has been a recurring optimization theme.
 
 ```c
 // include/linux/skbuff.h (heavily simplified)
@@ -30,7 +30,7 @@ struct sk_buff {
 
 `head/data/tail/end` form a four-pointer window: `head..end` is the allocated buffer; `data..tail` is the current payload. As a packet travels up the stack, `skb_pull` advances `data` past each header; on egress `skb_push` retreats it as headers are prepended. *Headroom* (`data - head`) lets layers prepend without copying; drivers allocate enough headroom (`NET_SKB_PAD`) to fit the IP and L2 headers.
 
-The `skb_shared_info` at `end` holds page fragments — the *non-linear* part. A 64 KiB GSO super-segment lives mostly here, with one `skb_frag_t` per page. `skb_clone` produces a new skb sharing the data area (reference-counted); `skb_copy` deep-copies.
+The `skb_shared_info` at `end` holds page fragments (the *non-linear* part). A 64 KiB GSO super-segment lives mostly here, with one `skb_frag_t` per page. `skb_clone` produces a new skb sharing the data area (reference-counted); `skb_copy` deep-copies.
 
 == Rx Path: From NIC to Socket
 
@@ -69,7 +69,7 @@ Between the protocol stack and the driver lives the *qdisc*, the kernel's traffi
   [`mq` / `mq-prio`], [Multi-queue wrapper: per-tx-queue child qdiscs. Default on modern multi-queue NICs.],
   [`fq` / `fq_codel`], [Per-flow fair queueing; `fq_codel` adds CoDel AQM. Required by TCP BBR's pacing; default on many distros.],
   [`cake`], [Modernized `fq_codel`+`htb`+DRR with traffic-class awareness. Used by router projects.],
-  [`htb`], [Hierarchical Token Bucket — classic class-based shaping with borrowing.],
+  [`htb`], [Hierarchical Token Bucket: classic class-based shaping with borrowing.],
   [`tbf`], [Simple token-bucket rate cap.],
   [`netem`], [Network emulator: latency, jitter, loss, reorder. The test-fixture qdisc.],
 )
@@ -103,11 +103,11 @@ This is the second-most-common attach point for eBPF networking (after XDP). The
 
 *XDP* runs eBPF programs at the earliest possible point: in the NIC driver's poll routine, before any skb has been allocated. The verdict is one of:
 
-- `XDP_PASS` — proceed up the stack (skb is built normally).
-- `XDP_DROP` — free the rx descriptor (~30 M pps drop rate per core, the basis of DDoS protection).
-- `XDP_TX` — bounce out the same NIC.
-- `XDP_REDIRECT` — forward to another interface, CPU, or `AF_XDP` socket via a `bpf_redirect_map`.
-- `XDP_ABORTED` — error path; emits a tracepoint.
+- `XDP_PASS`: proceed up the stack (skb is built normally).
+- `XDP_DROP`: free the rx descriptor (~30 M pps drop rate per core, the basis of DDoS protection).
+- `XDP_TX`: bounce out the same NIC.
+- `XDP_REDIRECT`: forward to another interface, CPU, or `AF_XDP` socket via a `bpf_redirect_map`.
+- `XDP_ABORTED`: error path; emits a tracepoint.
 
 ```c
 SEC("xdp")
@@ -138,7 +138,7 @@ Three modes:
 
 == Netfilter and nftables
 
-Netfilter hooks live at five points: `PRE_ROUTING`, `LOCAL_IN`, `FORWARD`, `LOCAL_OUT`, `POST_ROUTING`. iptables (legacy) and nftables (modern, since 3.13) register at these hooks. nftables uses a single virtual machine (`net/netfilter/nf_tables_core.c`) with set-based matches — far faster than iptables' linear chains for large rulesets.
+Netfilter hooks live at five points: `PRE_ROUTING`, `LOCAL_IN`, `FORWARD`, `LOCAL_OUT`, `POST_ROUTING`. iptables (legacy) and nftables (modern, since 3.13) register at these hooks. nftables uses a single virtual machine (`net/netfilter/nf_tables_core.c`) with set-based matches, far faster than iptables' linear chains for large rulesets.
 
 Connection tracking (`nf_conntrack`) records 5-tuples and state for stateful firewalling and NAT. It is a CPU and memory hog at high pps; `nf_conntrack_max`, `nf_conntrack_buckets`, and the `notrack` rule on hot flows are the standard tuning knobs.
 
@@ -153,14 +153,14 @@ eBPF program types that hook the socket layer:
   [`BPF_PROG_TYPE_SCHED_CLS`], [TC ingress/egress with full skb.],
   [`BPF_PROG_TYPE_SCHED_ACT`], [TC action, complements `SCHED_CLS`.],
   [`BPF_PROG_TYPE_SOCK_OPS`], [Per-connection TCP state-machine callbacks; used to tune RTO, ECN, and congestion-control selection per flow.],
-  [`BPF_PROG_TYPE_SK_SKB`], [Stream parser/verdict for sockmap — splice packets between sockets in-kernel.],
+  [`BPF_PROG_TYPE_SK_SKB`], [Stream parser/verdict for sockmap; splices packets between sockets in-kernel.],
   [`BPF_PROG_TYPE_SK_MSG`], [`sendmsg`-time program; peek at user payload and redirect to another socket via sockmap.],
   [`BPF_PROG_TYPE_SOCK_FILTER`], [Classic seccomp/SO_ATTACH_BPF socket filter.],
   [`BPF_PROG_TYPE_CGROUP_SOCK*`], [Per-cgroup `connect`/`bind`/`sendmsg`/`recvmsg` interception for service-mesh transparent proxy without iptables.],
   [`BPF_PROG_TYPE_SK_LOOKUP`], [Override socket-lookup decisions to build custom listener pools (e.g., SO_REUSEPORT++).],
 )
 
-Cilium, Katran, Calico-eBPF, and modern service meshes are built almost entirely from this menu — XDP for L4 load balancing, TC for ingress policy, `SOCK_OPS` for TCP tuning, `CGROUP_SOCK_ADDR` for transparent service redirection.
+Cilium, Katran, Calico-eBPF, and modern service meshes are built almost entirely from this menu: XDP for L4 load balancing, TC for ingress policy, `SOCK_OPS` for TCP tuning, `CGROUP_SOCK_ADDR` for transparent service redirection.
 
 == TCP: Congestion Control and Pacing
 
@@ -170,7 +170,7 @@ Cilium, Katran, Calico-eBPF, and modern service meshes are built almost entirely
   [`reno`], [Textbook AIMD.],
   [`cubic`], [Long-time default; cubic window growth, RTT-fair.],
   [`bbr` v1-v3], [Bandwidth × RTT model, paces sends, ignores loss. Requires `fq` qdisc.],
-  [`dctcp`], [Datacenter TCP — ECN-driven; tiny queues.],
+  [`dctcp`], [Datacenter TCP; ECN-driven, tiny queues.],
   [`bbr-prague`], [L4S-aware variant.],
 )
 
@@ -182,8 +182,8 @@ TSQ (TCP Small Queues) caps the bytes in transit per socket inside the kernel's 
 
 UDP was historically just "send-recv with checksums", but the rise of QUIC turned UDP into a hot path. The kernel added:
 
-- *GRO over UDP* — coalesces consecutive UDP packets with the same 5-tuple, dramatically reducing per-packet cost on the QUIC receive path.
-- *GSO over UDP* (`UDP_SEGMENT`) — `sendmsg` of a 64 KiB buffer with `cmsg(UDP_SEGMENT, gso_size)` produces many MTU-sized packets in one call.
+- *GRO over UDP*: coalesces consecutive UDP packets with the same 5-tuple, dramatically reducing per-packet cost on the QUIC receive path.
+- *GSO over UDP* (`UDP_SEGMENT`): `sendmsg` of a 64 KiB buffer with `cmsg(UDP_SEGMENT, gso_size)` produces many MTU-sized packets in one call.
 - *`SO_REUSEPORT` BPF dispatcher*: for a QUIC server, route incoming packets to the worker that owns the connection ID.
 
 This brings userspace QUIC implementations within ~80% of TCP-in-kernel throughput on the same hardware.
@@ -232,7 +232,7 @@ Container networking is a story told entirely in this chapter's primitives:
 - *VXLAN* / *Geneve* / *WireGuard* for overlays.
 - *XDP* or *IPVS* for service load balancing.
 
-Cilium replaces iptables-based kube-proxy with XDP+TC eBPF programs and a per-CPU map for service backends — sub-microsecond service-IP rewriting.
+Cilium replaces iptables-based kube-proxy with XDP+TC eBPF programs and a per-CPU map for service backends, enabling sub-microsecond service-IP rewriting.
 
 == Further Reading
 
