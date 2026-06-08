@@ -354,3 +354,15 @@ double ternary_search(function<double(double)> f, double lo, double hi) {
   [Exponential search], [$O(1)$], [$O(log i)$], [$O(log n)$], [$O(1)$],
   [Ternary search], [$O(1)$], [$O(log n)$], [$O(log n)$], [$O(1)$],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 2 and Appendix B on binary search and loop invariants.)
+
+Knuth, D. E. (1973). _The Art of Computer Programming_, Vol. 3: Sorting and Searching. Addison-Wesley. (Section 6.2: comprehensive treatment of binary search and its variants.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Binary search trees and sorted-array search in Chapter 3.)
+
+Bentley, J. (2000). _Programming Pearls_, 2nd ed. Addison-Wesley. (Column 4: a famous account of binary search correctness and off-by-one errors.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 4 on sorting and searching, with discussion of practical binary search pitfalls.)

@@ -343,3 +343,15 @@ void insert(RadixNode* root, const string& word) {
   [Build trie ($n$ words)], [$O(n m)$], [$O(n m)$ worst, less with shared prefixes],
   [Word Search II], [$O(r c dot 4^L)$], [$O(n m)$ trie + $O(L)$ recursion],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 32 on string matching; radix trees as a related concept.)
+
+Fredkin, E. (1960). "Trie Memory." _Communications of the ACM_ 3(9): 490--499. (The original paper introducing the trie data structure.)
+
+Gusfield, D. (1997). _Algorithms on Strings, Trees, and Sequences_. Cambridge University Press. (Chapters on suffix trees and suffix arrays, which generalize trie-based indexing.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapter 5 on string algorithms, R-way tries and ternary search tries.)
+
+Aho, A. V., & Corasick, M. J. (1975). "Efficient String Matching: An Aid to Bibliographic Search." _Communications of the ACM_ 18(6): 333--340. (Aho-Corasick automaton, built on trie with failure links for multi-pattern matching.)

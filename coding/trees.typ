@@ -586,3 +586,15 @@ void iterativeInorder(TreeNode* root) {
   [Level-order traversal], [$O(n)$], [$O(n)$], [$O(n)$],
   [Morris traversal], [$O(n)$], [$O(n)$], [$O(1)$],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapters 12--13 on binary search trees and red-black trees; Chapter 18 on B-trees.)
+
+Knuth, D. E. (1973). _The Art of Computer Programming_, Vol. 3: Sorting and Searching. Addison-Wesley. (Section 6.2 on tree searching; comprehensive coverage of BST variants and balanced trees.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapter 3 on symbol tables, BSTs, and red-black BSTs with clear diagrams.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 3 on trees as data structures; Chapter 15 on graph traversal algorithms rooted in tree structure.)
+
+Adelson-Velsky, G. M., & Landis, E. M. (1962). "An Algorithm for the Organization of Information." _Soviet Mathematics Doklady_ 3: 1259--1263. (Original AVL tree paper.)

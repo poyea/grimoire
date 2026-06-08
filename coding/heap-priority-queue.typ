@@ -396,3 +396,15 @@ public:
 - No decrease-key -- insert duplicate and skip stale entries
 - Default is max-heap; use `greater<T>` comparator for min-heap
 - Backed by `vector<T>` (contiguous memory = cache-friendly)
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 6 on heapsort and priority queues; Chapter 19 on Fibonacci heaps with $O(1)$ amortized decrease-key.)
+
+Williams, J. W. J. (1964). "Algorithm 232: Heapsort." _Communications of the ACM_ 7(6): 347--348. (The original heap data structure paper.)
+
+Knuth, D. E. (1973). _The Art of Computer Programming_, Vol. 3: Sorting and Searching. Addison-Wesley. (Section 5.2.3 on sorting by selection, including heap-based methods.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapter 2 on heapsort and indexed priority queues used in Dijkstra's and Prim's algorithms.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 4 on priority queues and Chapter 8 on weighted graph algorithms using heaps.)

@@ -466,3 +466,15 @@ public:
 *Galil, Z. & Italiano, G.F. (1991)*. Data Structures and Algorithms for Disjoint Set Union Problems. Computing Surveys 23(3): 319-344.
 
 *Galler, B.A. & Fischer, M.J. (1964)*. An Improved Equivalence Algorithm. Communications of the ACM 7(5): 301-303.
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 21 on disjoint-set forests, union by rank, and path compression with inverse-Ackermann analysis.)
+
+Tarjan, R. E. (1975). "Efficiency of a Good But Not Linear Set Union Algorithm." _Journal of the ACM_ 22(2): 215--225. (The proof that path compression with union by rank achieves near-linear time.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapter 1 on Union-Find as the introductory case study, motivating weighted quick-union and path compression.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 8 on graph algorithms including minimum spanning trees built on Union-Find.)
+
+Knuth, D. E. (1968). _The Art of Computer Programming_, Vol. 1: Fundamental Algorithms. Addison-Wesley. (Equivalence algorithms as a foundational problem in data structure design.)
