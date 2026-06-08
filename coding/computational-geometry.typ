@@ -687,3 +687,15 @@ vector<Point> halfPlaneIntersection(vector<HalfPlane> planes) {
 *Shamos, M.I. & Hoey, D. (1975)*. Closest-Point Problems. FOCS 1975, pp. 151-162.
 
 *Toussaint, G.T. (1983)*. Solving Geometric Problems with the Rotating Calipers. IEEE MELECON 1983.
+
+== Further Reading
+
+de Berg, M., Cheong, O., van Kreveld, M., & Overmars, M. (2008). _Computational Geometry: Algorithms and Applications_, 3rd ed. Springer. (The standard textbook: convex hulls, line segment intersection, Voronoi diagrams, Delaunay triangulation, and range trees.)
+
+Preparata, F. P., & Shamos, M. I. (1985). _Computational Geometry: An Introduction_. Springer. (The classic foundational text establishing the field and its algorithmic complexity results.)
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 33 on computational geometry: convex hull, closest pair, and segment intersection.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 20 on computational geometry with practical problem catalogue and library pointers.)
+
+O'Rourke, J. (1998). _Computational Geometry in C_, 2nd ed. Cambridge University Press. (Hands-on implementation guide for geometric algorithms with C code.)

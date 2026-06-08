@@ -501,3 +501,15 @@ chord_node* find_closest_preceding_node(uint160_t key) {
 
 *Replication:* Store key at k successors for fault tolerance.
 
+== Further Reading
+
+Hennessy, J. L., & Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. (Cache hierarchies, NUMA, memory consistency models, and performance optimization at the hardware level.)
+
+Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, Inc. (Comprehensive practical guide to CPU caches, TLBs, NUMA, and memory latency optimization.)
+
+Love, R. (2010). _Linux Kernel Development_, 3rd ed. Addison-Wesley. (Scheduler, memory management, virtual memory, and kernel data structures as used in systems programming.)
+
+Stoica, I. et al. (2001). "Chord: A Scalable Peer-to-peer Lookup Service for Internet Applications." _SIGCOMM 2001_. (Consistent hashing and distributed hash tables as the foundation for peer-to-peer and distributed key-value systems.)
+
+McKenney, P. E. (2010). "Is Parallel Programming Hard, And, If So, What Can You Do About It?" Kernel.org. (Practical guide to lock-free programming, RCU, and memory ordering in concurrent systems.)
+

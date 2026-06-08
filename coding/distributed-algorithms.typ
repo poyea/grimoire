@@ -332,6 +332,18 @@ Tensor checkpoint_backward(Tensor grad_output) {
 
 *Chen, T. et al. (2016)*. Training Deep Nets with Sublinear Memory Cost. arXiv:1604.06174.
 
+== Further Reading
+
+Lynch, N. A. (1996). _Distributed Algorithms_. Morgan Kaufmann. (The definitive textbook on distributed computing: mutual exclusion, consensus, clock synchronization, and Byzantine fault tolerance.)
+
+Lamport, L. (1978). "Time, Clocks, and the Ordering of Events in a Distributed System." _Communications of the ACM_ 21(7): 558--565. (Logical clocks and happened-before ordering — foundational to all distributed coordination.)
+
+Fischer, M. J., Lynch, N. A., & Paterson, M. S. (1985). "Impossibility of Distributed Consensus with One Faulty Process." _Journal of the ACM_ 32(2): 374--382. (The FLP impossibility result, showing no deterministic algorithm can reach consensus in an asynchronous system with one faulty process.)
+
+Attiya, H., & Welch, J. (2004). _Distributed Computing: Fundamentals, Simulations, and Advanced Topics_, 2nd ed. Wiley. (Rigorous treatment of consistency models, wait-freedom, and linearizability.)
+
+Birman, K. P. (2012). _Guide to Reliable Distributed Systems_. Springer. (Practical perspective on fault-tolerant distributed systems, gossip protocols, and eventual consistency.)
+
 #pagebreak()
 
 == Advanced Java
