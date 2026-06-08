@@ -1,6 +1,6 @@
 = Theorem Proving
 
-Interactive theorem provers let humans and machines collaborate to construct machine-checked proofs of mathematical and software correctness claims that lie beyond the reach of fully automatic tools. Three systems dominate practice — Coq, Lean 4, and Isabelle/HOL — each grounded in a rich type-theoretic or set-theoretic foundation that doubles as both specification language and proof language. The Curry-Howard correspondence is the conceptual bridge: proofs are programs, propositions are types.
+Interactive theorem provers let humans and machines collaborate to construct machine-checked proofs of mathematical and software correctness claims that lie beyond the reach of fully automatic tools. Three systems dominate practice: Coq, Lean 4, and Isabelle/HOL, each grounded in a rich type-theoretic or set-theoretic foundation that doubles as both specification language and proof language. The Curry-Howard correspondence is the conceptual bridge: proofs are programs, propositions are types.
 
 *See also:* _Propositional and First-Order Logic_, _SAT and SMT_
 
@@ -21,22 +21,22 @@ The *Curry-Howard isomorphism* identifies:
   [$exists x : A. B(x)$], [Dependent sum $Sigma (x : A). B(x)$],
 )
 
-Under this correspondence, *proof checking* is *type checking* and *proof search* is *program synthesis*. The computation content of a proof is its *extract* — a functional program that witnesses the constructive content of the theorem. This is the basis of Coq's extraction mechanism.
+Under this correspondence, *proof checking* is *type checking* and *proof search* is *program synthesis*. The computation content of a proof is its *extract*: a functional program that witnesses the constructive content of the theorem. This is the basis of Coq's extraction mechanism.
 
 == Dependent Types
 
-*Dependent types* allow types to depend on values, expressing fine-grained correctness properties directly in types. A *dependent function type* $Pi (n : "Nat"). "Vec" A n$ is the type of functions mapping each natural number $n$ to a vector of length $n$ — the length is tracked in the type, ruling out out-of-bounds access statically.
+*Dependent types* allow types to depend on values, expressing fine-grained correctness properties directly in types. A *dependent function type* $Pi (n : "Nat"). "Vec" A n$ is the type of functions mapping each natural number $n$ to a vector of length $n$; the length is tracked in the type, statically ruling out out-of-bounds accesses.
 
 Key forms:
 - *$Pi$-types* ($forall$ in Coq/Lean): functions whose return type depends on the argument.
-- *$Sigma$-types* ($exists$ in Coq, `⟨_, _⟩` in Lean): pairs where the type of the second component depends on the first — encode existential statements.
+- *$Sigma$-types* ($exists$ in Coq, `⟨_, _⟩` in Lean): pairs where the type of the second component depends on the first, encoding existential statements.
 - *Inductive families* (`Inductive` in Coq, `inductive` in Lean): generalized algebraic data types indexed by values, e.g. `Fin n` (type with exactly $n$ elements) or `Eq : A -> A -> Prop` (propositional equality).
 
-The *Calculus of Inductive Constructions* (CIC), the foundation of Coq, layers universes ($"Prop"$, $"Set"$, $"Type"_i$), $Pi$-types, and inductive definitions, yielding a system both expressive enough for mathematics and strongly normalizing (every term reduces to a unique normal form — ensuring type checking terminates).
+The *Calculus of Inductive Constructions* (CIC), the foundation of Coq, layers universes ($"Prop"$, $"Set"$, $"Type"_i$), $Pi$-types, and inductive definitions, yielding a system both expressive enough for mathematics and strongly normalizing (every term reduces to a unique normal form, ensuring type checking terminates).
 
 == Coq: Tactics and Ltac
 
-In *Coq*, the user proves goals interactively using *tactics*. A *goal* is a pair $Gamma tack.r P$ — context $Gamma$ of hypotheses and a goal proposition $P$. Tactics transform goals:
+In *Coq*, the user proves goals interactively using *tactics*. A *goal* is a pair $Gamma tack.r P$ (context $Gamma$ of hypotheses and a goal proposition $P$). Tactics transform goals:
 
 #table(
   columns: (auto, auto),
@@ -52,7 +52,7 @@ In *Coq*, the user proves goals interactively using *tactics*. A *goal* is a pai
   [`auto` / `tauto`], [propositional / first-order automation],
 )
 
-*Ltac* is Coq's tactic meta-language — a dynamically typed language for writing proof automation. A typical Ltac macro:
+*Ltac* is Coq's tactic meta-language, a dynamically typed language for writing proof automation. A typical Ltac macro:
 
 ```coq
 Ltac crush :=
@@ -76,7 +76,7 @@ Coq can *extract* a certified program to OCaml, Haskell, or Scheme. The extracti
 
 - *Unified language:* Lean 4 programs and proofs are written in the same language; the kernel is a small, auditable type checker.
 - *Metaprogramming:* tactics, elaborators, and syntax extensions are written in Lean 4 itself (not a separate metalanguage), enabling deep reflection and macro-based proof automation.
-- *Mathlib4:* a community library containing $> 100,000$ theorems spanning undergraduate and graduate mathematics — number theory, algebra, analysis, topology, category theory.
+- *Mathlib4:* a community library containing $> 100,000$ theorems spanning undergraduate and graduate mathematics: number theory, algebra, analysis, topology, category theory.
 - *`decide` and `native_decide`*: reflect decidable propositions to Boolean functions and evaluate them, allowing proofs by computation without manual case analysis.
 
 === A Small Lean 4 Proof
@@ -107,9 +107,9 @@ Lean 4's *macro* system allows new syntax, and its *`Tactic`* monad allows defin
 
 Isabelle's distinguishing features:
 
-- *Sledgehammer:* calls external ATPs (Vampire, E, SPASS) and SMT solvers (Z3, CVC5), translates their proofs back to Isabelle, and discharges goals automatically — the most powerful automation in any proof assistant.
+- *Sledgehammer:* calls external ATPs (Vampire, E, SPASS) and SMT solvers (Z3, CVC5), translates their proofs back to Isabelle, and discharges goals automatically; it is the most powerful automation in any proof assistant.
 - *`simp` / `auto` / `blast`:* term rewriting, combined simplfication+rule application, and tableaux-based propositional reasoning. Together they close the vast majority of routine subgoals.
-- *Locales:* algebraic structuring — a *locale* parameterizes a theory over a type with operations satisfying axioms, enabling abstract algebra without universe issues.
+- *Locales:* algebraic structuring where a *locale* parameterizes a theory over a type with operations satisfying axioms, enabling abstract algebra without universe issues.
 - *AFP (Archive of Formal Proofs):* $> 800$ contributed theory entries, including verified algorithms, cryptographic protocols, and mathematical theories.
 
 ```isabelle
@@ -138,13 +138,13 @@ The proof structure: for each compilation pass (C to Clight, Clight to Cminor, .
 
 $ "semantics"("source") tilde.eq "semantics"("target") $
 
-where $tilde.eq$ is a *forward simulation* (or backward simulation when the target has more steps). The composition of all pass simulations yields the top-level theorem: if a CompCert-compiled program exhibits a defined behavior $b$, then the source C program also exhibits $b$ — bugs cannot be introduced by compilation.
+where $tilde.eq$ is a *forward simulation* (or backward simulation when the target has more steps). The composition of all pass simulations yields the top-level theorem: if a CompCert-compiled program exhibits a defined behavior $b$, then the source C program also exhibits $b$; bugs cannot be introduced by compilation.
 
 CompCert has been used in safety-critical avionics (Airbus), and no compiler bug has ever been found in the verified passes by differential testing.
 
 == seL4: Verified OS Kernel
 
-*seL4* (Klein et al., 2009) is a formally verified microkernel whose functional correctness proof — the largest mechanized proof at the time of its publication — was carried out in Isabelle/HOL.
+*seL4* (Klein et al., 2009) is a formally verified microkernel whose functional correctness proof (the largest mechanized proof at the time of its publication) was carried out in Isabelle/HOL.
 
 The proof chain:
 + *Abstract specification* (in Isabelle): a purely functional model of the kernel's API.
