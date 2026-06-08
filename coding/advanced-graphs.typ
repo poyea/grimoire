@@ -569,7 +569,7 @@ Vertices accessed together (neighbors in BFS) get consecutive IDs = better cache
 
 *Tarjan, R. (1972)*. Depth-First Search and Linear Graph Algorithms. SIAM Journal on Computing 1(2): 146-160.
 
-*Cormen, T.H., Leiserson, C.E., Rivest, R.L., & Stein, C. (2009)*. Introduction to Algorithms (3rd ed.). MIT Press. ISBN 978-0262033848.
+*Cormen, T. H., Leiserson, C. E., Rivest, R. L., Stein, C. (2022)*. Introduction to Algorithms, 4th ed.. MIT Press. ISBN 978-0262033848.
 
 == Further Reading
 
