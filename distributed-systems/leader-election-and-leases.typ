@@ -152,10 +152,13 @@ If the leader dies, all followers race to become candidate. Mitigations:
 
 == Operational Failure Modes
 
-- *Leader thrashing:* if heartbeat timeout is too tight relative to GC or network jitter, leadership rotates uselessly. Symptom: many term changes per minute. Fix: raise timeouts, fix GC, add pre-vote.
-- *Inactive leader:* a leader process is up but stuck (deadlock, fork bomb). Detection: track committed-log-index progress, not just heartbeats.
-- *Multiple believing leaders:* indicates failed fencing; data corruption likely. Audit fencing-token enforcement across all storage paths.
-- *Lease expiry under load:* if the leader is too busy to renew, it self-demotes — but worker threads may continue. Use a "leader epoch" check on every external action.
+- *Clock skew / lease expiry thrash:* When NTP steps cause wall-clock jumps >5 ms, a leader may believe its lease has expired while followers still consider it valid. This creates a window where two nodes each believe they can act as leader. Mitigation: use monotonic clocks for lease timers (not wall clock), and validate the lease with a heartbeat round-trip before issuing writes.
+
+- *Network partition with old leader:* A partitioned leader holding a lease continues issuing writes; the new leader elected in the majority partition also writes. On partition heal, conflict resolution must handle diverged log tails. Solution: the old leader must fence (fail-stop or fence-token checks) before accepting further writes.
+
+- *GC pause expiry:* JVM stop-the-world GC pauses of 500 ms--2 s (pre-ZGC) can expire a 1-second lease while the holder is frozen. The node resumes believing it holds the lease, but the cluster has already elected a new leader. Mitigation: heartbeat threads must run on separate OS threads, not user threads; use ZGC or Shenandoah on JVM.
+
+- *Cascading election storms:* Under load, election timeouts fire simultaneously across multiple nodes; each candidate votes for itself and no quorum forms. Randomized election timeouts (Raft: 150--300 ms random range) break symmetry; PBFT and Paxos use proposer backoff to prevent repeated collisions.
 
 == Combined Pattern: Lease + Fence + Replicated Log
 
