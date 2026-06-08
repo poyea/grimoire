@@ -780,3 +780,21 @@ NP-complete and PSPACE-complete are to feasible computation what $K$ and Tot are
 to general computation -- and _Omega-Automata_ for the complexity of infinite-word
 problems and parity games, whose membership in $"P"$ remains the most famous open
 question in the analysis of fixed-point logics._
+
+== Further Reading
+
+Cook, S. A. (1971). "The Complexity of Theorem-Proving Procedures." STOC. The founding paper of NP-completeness, establishing SAT as the first NP-complete problem via the tableau encoding.
+
+Ladner, R. E. (1975). "On the Structure of Polynomial Time Reducibility." JACM 22(1). Proves that if P ≠ NP the polynomial hierarchy has intermediate problems, populating the NP landscape between P and NP-complete.
+
+Razborov, A. A., Rudich, S. (1997). "Natural Proofs." JCSS 55(1). Identifies a structural barrier that blocks most known circuit lower-bound techniques from proving P ≠ NP, reshaping the field's self-understanding.
+
+Arora, S., Barak, B. (2009). _Computational Complexity: A Modern Approach._ Cambridge University Press. The standard graduate reference; covers all major complexity classes, proof techniques, and barriers in encyclopedic depth.
+
+Williams, R. (2011). "Non-Uniform ACC Circuit Lower Bounds." CCC; JACM 61(1) (2014). Proves NEXP ⊄ ACC⁰ by bypassing natural proofs, the first major circuit lower-bound breakthrough in decades.
+
+Babai, L. (2016). "Graph Isomorphism in Quasipolynomial Time." STOC. Achieves exp(polylog n) time for graph isomorphism, the most celebrated progress on a candidate NP-intermediate problem in many years.
+
+Aaronson, S. "Complexity Zoo." https://complexityzoo.net/. An authoritative online compendium of complexity classes, their relationships, and open problems; an indispensable reference companion to any complexity course.
+
+Impagliazzo, R., Paturi, R. (1999). "On the Complexity of k-SAT." JCSS 62(2). Introduces the Strong Exponential Time Hypothesis (SETH), the central conjecture underpinning the fine-grained complexity programme.

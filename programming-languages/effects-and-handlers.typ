@@ -448,3 +448,19 @@ The trajectory of the last 30 years is clear: from baked-in side effects, throug
 
 _See also: _Type Systems_ for the substrate of judgements $Gamma tack.r e : tau ! epsilon$, _Linear and Substructural Type Systems_ for the dual axis of resource accounting, _Subtyping and Polymorphism_ for how effect rows compose subtyping-wise._
 
+== Further Reading
+
+Plotkin, G., Power, J. (2001). "Adequacy for Algebraic Effects." FoSSaCS. Establishes the denotational adequacy of algebraic theories as a foundation for computational effects, connecting universal algebra to monadic semantics.
+
+Plotkin, G., Pretnar, M. (2009). "Handlers of Algebraic Effects." ESOP. Introduces effect handlers as the eliminators for algebraic effects, showing they subsume exceptions, state, nondeterminism, and coroutines in a single mechanism.
+
+Bauer, A., Pretnar, M. (2015). "Programming with Algebraic Effects and Handlers." JLAMP 80(7). Presents the Eff language as a practical realisation of the Plotkin–Pretnar theory, demonstrating handlers as a general programming construct.
+
+Leijen, D. (2017). "Type Directed Compilation of Row-Polymorphic Effects for Practical Generic Programming." POPL. Describes the evidence-passing translation in Koka that compiles row-polymorphic effects to efficient native code.
+
+Lindley, S., McBride, C. (2012). "Idioms are Oblivious, Arrows are Meticulous, Monads are Promiscuous." ENTCS 229(5). Positions applicative functors, arrows, and monads on a spectrum of effect observability, clarifying when each abstraction is appropriate.
+
+Sivaramakrishnan, K. C. et al. (2021). "Retrofitting Effect Handlers onto OCaml." PLDI. Details the design and segmented-stack implementation of algebraic effects in OCaml 5, including the interaction with the multicore memory model.
+
+Moggi, E. (1991). "Notions of Computation and Monads." Information and Computation 93(1). The categorical foundation: shows monads uniformly model notions of computation, motivating every monad-based effect system that followed.
+
