@@ -279,3 +279,15 @@ public:
   [Delete at back], [$O(1)$], [$O(1)$], [$O(1)$], [$O(1)$],
   [Delete at front/middle], [$O(n)$], [$O(n)$], [$O(n)$], [$O(1)$],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapters 10, 17 — elementary data structures and amortized analysis.)
+
+Knuth, D. E. (1968). _The Art of Computer Programming_, Vol. 1: Fundamental Algorithms. Addison-Wesley. (Sequences and arrays as foundational structures.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapter 1 on bags, queues, and stacks built atop arrays.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 3 on data structures in practice.)
+
+Bentley, J. (2000). _Programming Pearls_, 2nd ed. Addison-Wesley. (Column 2 for array manipulation techniques and invariants.)

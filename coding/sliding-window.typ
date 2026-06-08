@@ -458,3 +458,15 @@ Benchmark (1M char string):
   [Sliding window deque (min/max)], [$O(n)$], [$O(k)$],
   [SIMD character counting], [$O(n / 16)$ effective], [$O(1)$],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Amortized analysis in Chapter 17 explains why the two-pointer / sliding-window pattern achieves linear time despite nested-loop appearance.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 3 on data structures and Chapter 21 on string problems where sliding-window techniques appear naturally.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Substring search and pattern-matching chapters motivate window-based approaches.)
+
+Gusfield, D. (1997). _Algorithms on Strings, Trees, and Sequences_. Cambridge University Press. (Sliding-window ideas within the broader context of exact and approximate string matching.)
+
+Bentley, J. (2000). _Programming Pearls_, 2nd ed. Addison-Wesley. (Column 8 on maximum-subarray algorithms, the linear-time ancestor of many sliding-window patterns.)

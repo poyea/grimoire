@@ -371,3 +371,15 @@ int calculate(string s) {
   [Trapping rain water], [Decreasing], [Forward],
   [Stock span], [Decreasing], [Forward],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 10 covers stacks and queues as elementary data structures.)
+
+Knuth, D. E. (1968). _The Art of Computer Programming_, Vol. 1: Fundamental Algorithms. Addison-Wesley. (Section 2.2 on linear lists including stack-based evaluation of expressions.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapter 1 on pushdown stacks and their role in expression parsing and DFS.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Monotonic stack patterns arising in histogram, span, and next-greater-element problems.)
+
+Tarjan, R. E. (1972). "Depth-First Search and Linear Graph Algorithms." _SIAM Journal on Computing_ 1(2): 146--160. (The classic DFS formulation uses an implicit call stack; monotonic stacks are a natural extension.)

@@ -447,3 +447,15 @@ vector<vector<int>> threeSumParallel(vector<int>& nums, int num_threads = 4) {
   [SIMD palindrome check (AVX2, 32 B/iter)], [$O(n / 32)$ effective], [$O(1)$],
   [Parallel two pointers (4 cores)], [$O(n / p)$, $p$ = cores], [$O(p)$],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Sorting (Chapter 8) and medians/order statistics (Chapter 9) provide the sorted-array context in which two-pointer search is most effective.)
+
+Knuth, D. E. (1973). _The Art of Computer Programming_, Vol. 3: Sorting and Searching. Addison-Wesley. (Foundational coverage of sorted-array algorithms on which two-pointer techniques rely.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 4 on sorting and searching; practical problem catalogue including two-sum variants.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Binary search and merge routines that relate to the two-pointer invariant.)
+
+Bentley, J. (2000). _Programming Pearls_, 2nd ed. Addison-Wesley. (Loop invariants and the discipline of maintaining a correct pointer invariant throughout an algorithm.)

@@ -424,3 +424,15 @@ ListNode* sort_list(ListNode* head) {
   [Sort (merge sort)], [$O(n log n)$], [$O(1)$ bottom-up, $O(log n)$ top-down],
   [LRU Cache (get/put)], [$O(1)$], [$O(n)$ total],
 )
+
+== Further Reading
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). _Introduction to Algorithms_, 4th ed. MIT Press. (Chapter 10 on linked lists, and Chapter 17 on amortized analysis of dynamic sets.)
+
+Knuth, D. E. (1968). _The Art of Computer Programming_, Vol. 1: Fundamental Algorithms. Addison-Wesley. (Section 2.2: the original rigorous treatment of singly and doubly linked lists.)
+
+Sedgewick, R., & Wayne, K. (2011). _Algorithms_, 4th ed. Addison-Wesley. (Chapter 1 on linked-list-based stacks, queues, and bags.)
+
+Skiena, S. S. (2020). _The Algorithm Design Manual_, 3rd ed. Springer. (Chapter 3 on linked structures, and practical advice on when to prefer arrays over lists.)
+
+Floyd, R. W. (1967). "Nondeterministic Algorithms." _Journal of the ACM_ 14(4): 636--644. (Source of Floyd's tortoise-and-hare cycle detection algorithm.)
