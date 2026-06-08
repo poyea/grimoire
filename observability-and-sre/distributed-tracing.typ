@@ -258,18 +258,16 @@ Optimizing anything off the critical path does not improve user-perceived latenc
 
 == Further Reading
 
-Sigelman, B. et al. (2010). "Dapper, a Large-Scale Distributed Systems Tracing Infrastructure." Google.
+Sigelman, B. H. et al. (2010). "Dapper, a Large-Scale Distributed Systems Tracing Infrastructure." Google Technical Report. The paper that defined the modern trace-span model — trace_id, span_id, parent pointer — and demonstrated production-scale deployment with low overhead through adaptive sampling.
 
-Fonseca, R. et al. (2007). "X-Trace: A Pervasive Network Tracing Framework." NSDI.
+Uber Engineering. (2017). "Jaeger: Open Source, End-to-End Distributed Tracing." https://www.jaegertracing.io/. Describes the open-source tracing system developed at Uber, built on the Dapper model with Cassandra/Elasticsearch backends and support for both head-based and tail-based sampling.
 
-Barham, P. et al. (2003). "Magpie: Online Modelling and Performance-Aware Systems." HotOS.
+Twitter Engineering. (2012). "Zipkin: A Distributed Tracing System." https://zipkin.io/. Introduces Zipkin, one of the first open-source Dapper implementations, whose B3 propagation headers influenced the W3C Trace Context standard.
 
-Mace, J., Roelke, R., Fonseca, R. (2015). "Pivot Tracing: Dynamic Causal Monitoring for Distributed Systems." SOSP.
+OpenTelemetry Community. (2023). "OpenTelemetry Specification." https://opentelemetry.io/docs/specs/otel/. The vendor-neutral standard for traces, metrics, and logs, unifying the previously fragmented OpenCensus and OpenTracing ecosystems.
 
-W3C. (2021). "Trace Context Level 1." https://www.w3.org/TR/trace-context/
+Mace, J., Roelke, R., Fonseca, R. (2018). "Pivot Tracing: Dynamic Causal Monitoring for Distributed Systems." ACM TOCS 36(2). Enables ad-hoc causal queries across services using dynamic instrumentation and happens-before joins, answering questions not anticipated at deployment time.
 
-OpenTelemetry Specification. https://opentelemetry.io/docs/specs/otel/
+Beyer, B., Jones, C., Petoff, J., Murphy, N. R. (Eds.) (2016). _Site Reliability Engineering: How Google Runs Production Systems._ O'Reilly Media. The SRE book's monitoring and alerting chapter articulates the four golden signals framework (latency, traffic, errors, saturation) that contextualises tracing alongside metrics.
 
-Las-Casas, P. et al. (2019). "Sifter: Scalable Sampling for Distributed Traces, Using Hierarchical Clustering." SoCC.
-
-Sambasivan, R. R. et al. (2014). "So, You Want To Trace Your Distributed System? Key Design Insights from Years of Practical Experience." CMU-PDL-14-102.
+Sambasivan, R. R. et al. (2014). "So, You Want to Trace Your Distributed System? Key Design Insights from Years of Practical Experience." CMU-PDL-14-102. A practitioner survey of tracing system design decisions — instrumentation granularity, propagation mechanisms, sampling — synthesising lessons from multiple production deployments.
