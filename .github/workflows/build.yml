@@ -54,9 +54,11 @@ jobs:
         with:
           typst-version: 'latest'
       - name: Compile ${{ matrix.subject }}.typ
-        run: typst compile "${{ matrix.subject }}.typ" "${{ matrix.subject }}.pdf"
+        run: |
+          SNAKE=$(echo "${{ matrix.subject }}" | tr '-' '_')
+          typst compile "${{ matrix.subject }}.typ" "${SNAKE}.pdf"
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.subject }}-pdf
-          path: ${{ matrix.subject }}.pdf
+          path: "*.pdf"
           retention-days: 14
