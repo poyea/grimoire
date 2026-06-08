@@ -602,7 +602,7 @@ Blackwell (B100, B200, GB200) is NVIDIA's 2024 architecture, purpose-designed fo
   [TDP], [700 W], [1000 W],
 )
 
-*NV-HBI (NVLink High Bandwidth Interconnect):* die-to-die on-package link at 10 TB/s. The two dies are cache-coherent and present as a single logical GPU, with no software changes needed vs single-die.
+*NV-HBI (NVLink High Bandwidth Interconnect):* die-to-die on-package link at 10 TB/s — 7$times$ the H100's NVLink bandwidth and low enough latency to treat both dies as a single logical SM grid. The two Blackwell dies on one package share 192 GB of combined HBM3e capacity and present as a single logical GPU. The programming model is unchanged: CUDA sees one device and the runtime handles die affinity automatically, with no software changes required versus a single-die GPU.
 
 === 5th-Gen Tensor Cores: FP4 and Microscaling
 
@@ -610,7 +610,11 @@ Blackwell introduces hardware FP4 (E2M1) for inference and training of quantizat
 
 Effect: accuracy competitive with FP8 at half the memory and nearly 2$times$ the throughput. Used for inference and for training with careful loss scaling. *Concretely:* B200 dense FP4 = 9 PFLOPS vs H100 dense FP8 = 1.98 PFLOPS (roughly 4.5$times$ raw throughput per GPU); sparse 2:4 doubles both columns. The marketing "7$times$ inference" figure compares B200 FP4 sparse (18 PFLOPS) against H100 FP8 dense (1.98 PFLOPS) end-to-end including memory-bandwidth gains.
 
+*Why MX formats differ from FP8:* FP8 uses a per-value exponent, dedicating several bits of each element to tracking its own dynamic range. MX formats instead share one E8M0 (8-bit exponent, no mantissa) scale across a block of 32 values, so each FP4 element's 4 bits are spent entirely on mantissa. This is architecturally different: the Tensor Core pipeline is redesigned to read 32 FP4 values plus one shared scale per clock, achieving 2$times$ the arithmetic density of FP8. The trade-off is that values within a block must have similar magnitudes; quantization-aware training (QAT) is required to cluster weights and activations accordingly.
+
 *2nd-gen Transformer Engine:* per-group microscaling handled in hardware; no per-tensor amax tracking overhead. Critical for making FP4 usable in practice.
+
+*3rd-generation Transformer Engine (Blackwell):* adds FP8 row-wise scaling (per-row granularity vs. per-tensor in H100) and introduces a dedicated MX4 compute path. The engine handles both forward and backward passes in FP4/FP8 without user intervention for numerically stable training, using online amax history tracking with configurable delay windows to avoid stale scale factors. This removes the manual loss-scaling loop that FP16 training required.
 
 === Decompression Engine
 
@@ -629,7 +633,7 @@ For rack-scale clusters (GB200 NVL72), silent data corruption is a statistical c
 
 The flagship Blackwell platform:
 - 72 B200 GPUs + 36 Grace CPUs (72 ARM Neoverse V2 cores each)
-- Single NVLink 5 fabric: 130 TB/s aggregate bisection bandwidth, 1800 GB/s per GPU, all-to-all non-blocking
+- Single NVLink 5 fabric: 130 TB/s aggregate bisection bandwidth, 1800 GB/s per GPU, all-to-all non-blocking. NVLink 5 doubles per-port bandwidth to 400 GB/s bidirectional versus H100's 900 GB/s total across all 18 links. The NVLink Switch ASIC provides all-to-all connectivity with approximately 3 µs switch latency; NCCL's all-reduce over NVLink 5 achieves >90% bus bandwidth utilization at 72-GPU scale, making collective communication non-bottlenecking for typical LLM training batch sizes.
 - 13.4 TB HBM3e (total GPU memory) + 17 TB LPDDR5X (Grace CPU memory), all cache-coherent via NVLink-C2C
 - Peak per rack (sparse 2:4, NVIDIA marketing): 720 PFLOPS FP8 / 1.44 EFLOPS FP4. Computed from book's per-GPU spec (4.5 PFLOPS FP8 dense / 9 PFLOPS FP8 sparse; 9 PFLOPS FP4 dense / 18 PFLOPS FP4 sparse): 72 GPUs $times$ sparse throughput $=$ 648 PFLOPS FP8 / 1.30 EFLOPS FP4. The marketing 720 / 1.44 figures assume slightly higher per-GPU sparse throughput (10 / 20 PFLOPS) than the conservative table above. Dense throughput is half: 324 PFLOPS FP8 / 648 PFLOPS FP4.
 - Programming model: presents as an extended single node; cross-GPU NVSHMEM at near-single-GPU latencies
