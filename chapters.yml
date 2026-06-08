@@ -39,6 +39,11 @@ chapters:
     lines: 289
     status: reviewed
   - subject: coding
+    slug: introduction
+    path: coding/introduction.typ
+    lines: 175
+    status: reviewed
+  - subject: coding
     slug: advanced-graphs
     path: coding/advanced-graphs.typ
     lines: 572

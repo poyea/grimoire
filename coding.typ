@@ -24,7 +24,14 @@
 #pagebreak()
 
 // ============================================================================
-// CHAPTER 0: Reference & Meta-Knowledge
+// CHAPTER 0: Introduction & Orientation
+// ============================================================================
+
+#include "coding/introduction.typ"
+#pagebreak()
+
+// ============================================================================
+// CHAPTER 1: Reference & Meta-Knowledge
 // ============================================================================
 
 #include "coding/reference.typ"
