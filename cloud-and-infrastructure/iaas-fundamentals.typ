@@ -131,11 +131,19 @@ The least-privilege principle requires scoping by resource and condition; permis
 
 == Regions, Zones, and Failure Domains
 
-A *region* is a metropolitan area; an *availability zone* is an independently powered, cooled, and networked facility. Round-trip latency between AZs in the same region is ~1-2 ms; between regions, 30-200 ms. Workload designers pick a tier:
+A *region* is a metropolitan area; an *availability zone* (AZ) is an independently powered, cooled, and networked data center facility within that region. Each AZ has distinct power feeds (separate substations), separate cooling plants, and physically separate fiber paths to the backbone — meaning a power failure, network cut, or hardware failure in one AZ does not affect the others. The practical definition of "blast radius" for an AZ failure is: all resources that live exclusively in that AZ are unavailable; resources distributed across multiple AZs survive.
 
-- *Single-AZ:* cheapest, lowest latency, ~99.9% effective availability.
-- *Multi-AZ:* synchronous replication within a region, ~99.99%.
-- *Multi-region:* asynchronous replication, ~99.999% but bounded by speed of light.
+Round-trip latency between AZs in the same region is approximately 1-2 ms, making synchronous replication and distributed consensus (Raft, Paxos, ZAB) practical within a region. Cross-region round-trip latency ranges from 30 ms (neighboring regions, e.g., us-east-1 to eu-west-1) to over 200 ms (trans-Pacific), driven by the speed of light in fiber ($approx 2 times 10^8$ m/s, or 5 ms per 1000 km). At these distances, synchronous writes to a remote replica add tens of milliseconds to every write acknowledgment. This is the fundamental constraint that makes cross-region synchronous replication impractical for most OLTP workloads — it is the same physics behind Spanner's TrueTime bounded-uncertainty model and Aurora's quorum-read design.
+
+Workload designers pick a tier:
+
+- *Single-AZ:* cheapest, lowest latency, achieves roughly 99.9% effective availability. Suitable for development, batch jobs, or stateless compute behind a multi-AZ load balancer.
+- *Multi-AZ:* synchronous replication across at least two (ideally three) AZs within a region, achieves roughly 99.99% availability. The standard for production OLTP databases (RDS Multi-AZ, Cloud Spanner within a region, Azure SQL Business Critical).
+- *Multi-region:* asynchronous replication; achieves roughly 99.999% but adds write latency and requires handling replication lag for reads. Used for disaster recovery and globally distributed services.
+
+A minimum of *three AZs* is required for quorum-based systems (databases using Raft or Paxos). With two AZs and a network partition, neither side can form a majority — the system halts rather than accepting writes, defeating the purpose of distribution. With three AZs, one AZ can be completely unavailable and the remaining two still form a majority quorum.
+
+Multi-region active-active patterns (serving writes from multiple regions simultaneously) require either accepting that different regions can briefly diverge (eventual consistency) or paying the cross-region round-trip cost on every write. The cost is not only latency but also complexity: conflict resolution logic, global sequence numbers, or CRDTs are needed to merge concurrent writes. Services that have shipped active-active include Dynamo (eventual consistency with vector clocks), Spanner (TrueTime + Paxos across regions at the cost of ~5 ms commit latency floor), and Cassandra (tunable consistency levels per operation).
 
 Synchronous cross-region replication is fundamentally incompatible with low write latency; this is the same observation behind Spanner's TrueTime and Aurora's quorum reads.
 
