@@ -20,7 +20,7 @@ A process bundles an address space, a set of open resource handles (file descrip
   [Exit status / wait queue], [Reaped by parent via `wait`-family calls],
 )
 
-The classical Unix model creates new processes by `fork` (clone the caller) then `exec` (replace the image). `fork` is conceptually expensive — duplicating an address space — but copy-on-write page tables make it cheap in practice; only when a child writes a shared page does the kernel allocate a private copy. Plan 9 and Windows reject `fork` for `spawn`-style primitives (`rfork`, `CreateProcess`) that combine creation with selective inheritance and avoid the COW dance entirely.
+The classical Unix model creates new processes by `fork` (clone the caller) then `exec` (replace the image). `fork` is conceptually expensive (duplicating an address space) but copy-on-write page tables make it cheap in practice; only when a child writes a shared page does the kernel allocate a private copy. Plan 9 and Windows reject `fork` for `spawn`-style primitives (`rfork`, `CreateProcess`) that combine creation with selective inheritance and avoid the COW dance entirely.
 
 ```c
 pid_t pid = fork();
@@ -33,7 +33,7 @@ if (pid == 0) {                    // child
 }
 ```
 
-The `vfork` / `posix_spawn` variants exist precisely because the COW cost — though sublinear — still touches every page table entry, and for short-lived `exec` callees that work is wasted.
+The `vfork` / `posix_spawn` variants exist precisely because the COW cost (though sublinear) still touches every page table entry, and for short-lived `exec` callees that work is wasted.
 
 == Threads
 
@@ -64,7 +64,7 @@ The critical challenge is the *scheduler activation problem*: when a goroutine (
 
 == Linux task_struct and clone() Flags
 
-In Linux every thread and process is represented by a `task_struct`. The kernel makes no categorical distinction between processes and threads — both are "tasks." What differs is how they share resources, controlled by the flags passed to `clone(2)`:
+In Linux every thread and process is represented by a `task_struct`. The kernel makes no categorical distinction between processes and threads; both are "tasks." What differs is how they share resources, controlled by the flags passed to `clone(2)`:
 
 #table(columns: (auto, 1fr),
   [*Flag*], [*Effect*],
@@ -82,13 +82,13 @@ In Linux every thread and process is represented by a `task_struct`. The kernel 
 
 === fork() vs posix_spawn() Performance
 
-`fork` is conceptually a full address-space copy. Copy-on-write page tables make it cheap for small processes — the kernel duplicates page-table entries but not physical pages — but even a COW fork touches every PTE, which for a large process may mean millions of TLB shootdown IPIs across CPUs and substantial time in `dup_mm`. Measurements on a 1 GB heap show `fork` costing 5-15 ms on a NUMA server with many CPUs, while `posix_spawn` (which internally calls `clone` with `CLONE_VFORK` or a similar optimization and immediately `exec`s) costs tens of microseconds because it never duplicates the parent's page tables at all. The practical rule: use `posix_spawn` (or `vfork + exec`) when the goal is to start a child that immediately calls `exec`; reserve `fork` for cases where the child genuinely needs to inspect the parent's address space before exec.
+`fork` is conceptually a full address-space copy. Copy-on-write page tables make it cheap for small processes (the kernel duplicates page-table entries but not physical pages), but even a COW fork touches every PTE, which for a large process may mean millions of TLB shootdown IPIs across CPUs and substantial time in `dup_mm`. Measurements on a 1 GB heap show `fork` costing 5-15 ms on a NUMA server with many CPUs, while `posix_spawn` (which internally calls `clone` with `CLONE_VFORK` or a similar optimization and immediately `exec`s) costs tens of microseconds because it never duplicates the parent's page tables at all. The practical rule: use `posix_spawn` (or `vfork + exec`) when the goal is to start a child that immediately calls `exec`; reserve `fork` for cases where the child genuinely needs to inspect the parent's address space before exec.
 
 === PID Namespaces and PID 1
 
 A PID namespace virtualizes the process ID space. Inside a new PID namespace the first process has PID 1, fulfilling the *init* role. If PID 1 exits, the kernel sends `SIGKILL` to every other process in the namespace, making namespace lifetime tied to its init. Container runtimes exploit this: each container's init (`tini`, `s6`, or a language runtime) is PID 1 inside its namespace; killing it cleanly tears down the container.
 
-From outside the namespace, processes have their real (host-namespace) PIDs, and the kernel maintains a mapping. PID namespaces are hierarchical; a process can see PIDs in its namespace and all ancestor namespaces but not in descendants. `pidfd` handles cross namespace boundaries stably — they reference the kernel's `task_struct` directly, making them immune to PID reuse even across namespace boundaries.
+From outside the namespace, processes have their real (host-namespace) PIDs, and the kernel maintains a mapping. PID namespaces are hierarchical; a process can see PIDs in its namespace and all ancestor namespaces but not in descendants. `pidfd` handles cross namespace boundaries stably; they reference the kernel's `task_struct` directly, making them immune to PID reuse even across namespace boundaries.
 
 == Stacks, TLS, and Context Switching
 
@@ -98,7 +98,7 @@ Each thread owns a stack. Sizing is awkward: too small risks overflow; too large
 
 Thread-local storage (TLS) provides per-thread globals. The ELF TLS ABI uses a segment register (`%fs` on x86-64, `tpidr_el0` on AArch64) pointing at a per-thread *Thread Control Block* (TCB); static TLS variables live at fixed negative offsets from the TCB pointer, computed at link time. Dynamic TLS (`dlopen`-loaded modules) uses an indirection through a *DTV* (Dynamic Thread Vector), an array of pointers with one entry per module. The first time a dynamic TLS variable is accessed in a thread, the runtime allocates a per-module block and stores its address in the DTV. The cost of a static TLS access is a single segment-relative load; dynamic TLS adds a DTV dereference and may call into the allocator on first access.
 
-A context switch saves the outgoing thread's volatile state to its kernel stack, optionally switches CR3 / TTBR (if the address space changes — i.e., it's a cross-process switch), then restores the incoming thread. Costs:
+A context switch saves the outgoing thread's volatile state to its kernel stack, optionally switches CR3 / TTBR (if the address space changes, i.e., it's a cross-process switch), then restores the incoming thread. Costs:
 
 - Same-process thread switch: ~1 $mu$s (register save/restore, scheduler pick).
 - Cross-process switch: add ~200 ns for TLB shootdown amortization, plus the cost of cold instruction/data caches in the new process.
@@ -113,7 +113,7 @@ Daemonization classically uses a double-fork to detach from the controlling term
 
 == Cancellation
 
-Killing a thread cleanly is hard. POSIX defines deferred cancellation — cancellation points are syscalls and library functions where the runtime checks a flag — but this leaves resources (mutexes held, fds open) in an undefined state unless every cancellation point is wrapped in a cleanup handler (`pthread_cleanup_push`). Most modern languages reject this model entirely: Go has no goroutine cancellation, only cooperative `context.Context`; Rust's async futures cancel by dropping; structured concurrency (Trio, Kotlin coroutines) makes cancellation a structural property of nested scopes.
+Killing a thread cleanly is hard. POSIX defines deferred cancellation (cancellation points are syscalls and library functions where the runtime checks a flag), but this leaves resources (mutexes held, fds open) in an undefined state unless every cancellation point is wrapped in a cleanup handler (`pthread_cleanup_push`). Most modern languages reject this model entirely: Go has no goroutine cancellation, only cooperative `context.Context`; Rust's async futures cancel by dropping; structured concurrency (Trio, Kotlin coroutines) makes cancellation a structural property of nested scopes.
 
 The systems lesson: *abrupt* termination of a unit holding shared state is a design error; the OS gives you `SIGKILL` as a last resort, but using it routinely indicates a missing supervision protocol.
 
@@ -123,7 +123,7 @@ Classical Unix identifies the process by UID/GID (coarse and ambient). Capabilit
 
 == Async-Signal-Safety Constraints
 
-Signal handlers interrupt execution at an arbitrary instruction — including the middle of a `malloc`, a `printf`, or a `lock` operation. A signal handler that calls any non-reentrant function risks deadlock (the handler tries to lock a mutex the interrupted code already holds) or heap corruption (the handler calls `malloc` while the allocator's free-list is half-updated).
+Signal handlers interrupt execution at an arbitrary instruction, including the middle of a `malloc`, a `printf`, or a `lock` operation. A signal handler that calls any non-reentrant function risks deadlock (the handler tries to lock a mutex the interrupted code already holds) or heap corruption (the handler calls `malloc` while the allocator's free-list is half-updated).
 
 The POSIX list of *async-signal-safe* functions is deliberately short (`man 7 signal-safety`). Notably absent: `malloc`/`free`, `printf`/`fprintf`, most `<stdio.h>`, `exit` (use `_exit`), C++ STL, and all threading primitives. Safe alternatives in a handler: write to a pre-allocated pipe or `eventfd`, set a `volatile sig_atomic_t` flag, or use `signalfd` to convert signals to readable fd events handled outside an async context.
 
@@ -136,7 +136,7 @@ void handle_sigterm(int sig) {
 }
 ```
 
-The `signalfd` approach is cleaner: block all signals with `sigprocmask`, then poll the `signalfd` descriptor in the event loop — signals arrive as structured `signalfd_siginfo` structs, handled in a normal synchronous context.
+The `signalfd` approach is cleaner: block all signals with `sigprocmask`, then poll the `signalfd` descriptor in the event loop; signals arrive as structured `signalfd_siginfo` structs, handled in a normal synchronous context.
 
 == Pitfalls
 
@@ -144,7 +144,7 @@ The `signalfd` approach is cleaner: block all signals with `sigprocmask`, then p
 - *Signal-safety:* signal handlers may interrupt arbitrary code. The list of async-signal-safe functions is short (`man 7 signal-safety`); `malloc`, `printf`, and most of libc are not on it.
 - *PID reuse:* PIDs wrap. Code that stores a PID and later acts on it races with reuse; Linux 5.3+ provides `pidfd` handles that don't.
 - *Errno is thread-local* in modern libc but was once global; old code reading `errno` after thread-aware library calls is broken.
-- *clone() flag mismatches:* calling `clone` without `CLONE_SIGHAND` but with `CLONE_VM` creates a thread-like task that shares memory but has independent signal handlers — valid for some sandboxing designs but a footgun if accidental.
+- *clone() flag mismatches:* calling `clone` without `CLONE_SIGHAND` but with `CLONE_VM` creates a thread-like task that shares memory but has independent signal handlers; valid for some sandboxing designs but a footgun if accidental.
 - *Goroutine leaks:* Go's M:N scheduler never garbage-collects goroutines that are blocked on a channel or waiting for I/O that never arrives; a missing `context.Context` cancellation is the usual cause.
 
 == Further Reading
