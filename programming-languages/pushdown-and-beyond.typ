@@ -332,3 +332,17 @@ Modern formal-language theory studies subclasses *across* hierarchical levels ra
 Each generalisation interrogates which *closure properties*, *decidability results*, and *normal forms* survive; the cumulative answer is what makes formal-language theory the algorithmically richest, most cross-pollinated branch of theoretical computer science.
 
 The next chapter examines how the regular and context-free machinery developed here is operationalised in *lexers* and *parsers*, the front end of every compiler, and how the engineering compromises (LALR tables, ambiguity heuristics, error-recovery strategies) embody the theoretical limits proven in this and the preceding chapters.
+
+== Further Reading
+
+Hopcroft, J. E., Ullman, J. D. (1979). _Introduction to Automata Theory, Languages, and Computation_. Addison-Wesley. The classical reference; Chapters 5–6 cover pushdown automata, their equivalence with CFGs, the pumping lemma, and closure properties of CFLs.
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage. Chapter 2 is the modern pedagogical treatment of PDAs, CFGs, and the CFL hierarchy with clean proofs.
+
+Alur, R., Madhusudan, P. (2004). "Visibly Pushdown Languages." STOC. Introduces visibly pushdown automata, recovering regular closure properties for nested-word data structures and XML.
+
+Bracha, G., Griswold, D. (1993). "Strongtalk: Typechecking Smalltalk in a Production Environment." OOPSLA. An industrial case study showing how context-free structure (grammar of class definitions) guides type checking in an OO language.
+
+Igarashi, A., Pierce, B. C., Wadler, P. (2001). "Featherweight Java: A Minimal Core Calculus for Java and GJ." ACM TOPLAS 23(3). Demonstrates how pushdown-level syntactic structure interacts with type systems in an OO setting.
+
+Engelfiet, J., Rozenberg, G. (1980). "Fixed Point Languages, Equality Languages, and Representation of Recursively Enumerable Languages." JACM 27(3). Surveys the landscape beyond CFLs: indexed grammars, ET0L languages, and the limits of stack-based computational models.

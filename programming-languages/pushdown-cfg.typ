@@ -214,3 +214,17 @@ appears in the companion chapter.
 
 _See also: Parsing for the complete construction of LL(1) parse
 tables, LR(1) and LALR(1) automata, and Earley parsing for arbitrary CFGs._
+
+== Further Reading
+
+Hopcroft, J. E., Ullman, J. D. (1979). _Introduction to Automata Theory, Languages, and Computation_. Addison-Wesley. The classical treatment of PDAs, their equivalence with CFGs, and the full details of the conversion between the two models.
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage Learning. Chapter 2 gives the cleanest modern account of CFGs, PDAs, and the equivalence proof.
+
+Aho, A. V., Lam, M. S., Sethi, R., Ullman, J. D. (2006). _Compilers: Principles, Techniques, and Tools_, 2nd ed. Addison-Wesley. Chapters 4–5 show how pushdown automata underlie LL and LR parsers; the bridge from theory to compiler engineering.
+
+Earley, J. (1970). "An Efficient Context-Free Parsing Algorithm." CACM 13(2). The general O(n³) parsing algorithm based on Earley items, which generalise the PDA's stack configuration to handle all CFGs without prior determinisation.
+
+Knuth, D. E. (1965). "On the Translation of Languages from Left to Right." Information and Control 8(6). Introduces the LR parsing framework, proving it captures the largest deterministic PDA class for context-free languages.
+
+Alur, R., Madhusudan, P. (2004). "Visibly Pushdown Languages." STOC. Extends PDAs to the visibly-pushdown model, restoring closure properties lost in the general CFL class by disciplining the stack alphabet.

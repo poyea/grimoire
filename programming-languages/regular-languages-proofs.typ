@@ -625,3 +625,17 @@ language can be asked in *any* of the seven frameworks and the answer is the sam
 The choice of framework determines the *proof method*: algebraic questions (is $L$
 star-free?) are best answered by syntactic monoids; decidability questions (is $L$
 finite?) by DFA graph theory; expressiveness questions by logical characterisations.
+
+== Further Reading
+
+Myhill, J. (1957). "Finite Automata and the Representation of Events." WADD Technical Report 57-624. The original statement and proof of the Myhill-Nerode theorem; the foundational algebraic characterisation of regular languages.
+
+Hopcroft, J. E., Ullman, J. D. (1979). _Introduction to Automata Theory, Languages, and Computation_. Addison-Wesley. Contains full proofs of the pumping lemma, Myhill-Nerode, and the algebraic theory of regular languages including syntactic monoids.
+
+Straubing, H. (1994). _Finite Automata, Formal Logic, and Circuit Complexity_. Birkhäuser. The comprehensive algebraic treatment: variety theorem, FO and MSO definability, aperiodic monoids, and the star-free = FO[<] correspondence.
+
+Pin, J.-E. (1997). "Syntactic Semigroups." In Rozenberg–Salomaa (eds.), _Handbook of Formal Languages_, Vol. 1. Springer. The definitive survey of syntactic monoids and the Eilenberg variety theorem; the algebraic backbone of the chapter's proofs.
+
+McNaughton, R., Papert, S. (1971). _Counter-Free Automata_. MIT Press. Proves the equivalence of star-free languages, counter-free automata, and aperiodic syntactic monoids; the source of the Schützenberger theorem.
+
+Almeida, J. (1994). _Finite Semigroups and Universal Algebra_. World Scientific. A research-level account of pseudovarieties and the profinite topology on free semigroups; the algebraic tool for classifying regular language classes beyond Eilenberg's theorem.

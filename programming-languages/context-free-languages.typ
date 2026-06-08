@@ -339,3 +339,17 @@ The undecidability results above are the source of essentially every practical h
 - *Generated-parser size.* LR(1) tables for full Java syntax run to megabytes; LALR(1) coarsening reduces this by factors of 10–100 at the cost of occasional spurious conflicts.
 
 The next chapter takes up *pushdown automata* in their full operational detail, the *visibly pushdown languages* that recover regular-like closure properties for nested-word data, and the higher classes (indexed grammars, tree-adjoining grammars, context-sensitive, type-0) above the CFLs in the Chomsky hierarchy.
+
+== Further Reading
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage Learning. Chapter 2 is the definitive pedagogical treatment of context-free grammars, pushdown automata, and the CFL pumping lemma.
+
+Hopcroft, J. E., Ullman, J. D. (1979). _Introduction to Automata Theory, Languages, and Computation_. Addison-Wesley. Chapters 5–6 give the full technical development including Chomsky and Greibach normal forms, CYK, and closure properties.
+
+Aho, A. V., Lam, M. S., Sethi, R., Ullman, J. D. (2006). _Compilers: Principles, Techniques, and Tools_, 2nd ed. Addison-Wesley. Chapters 4–5 cover the engineering translation from CFGs to LL and LR parsers, including FIRST/FOLLOW sets and item-set construction.
+
+Earley, J. (1970). "An Efficient Context-Free Parsing Algorithm." CACM 13(2). Introduces the O(n³) algorithm for arbitrary CFGs; the reference for general parsing used in natural language processing and ambiguous grammars.
+
+Chomsky, N. (1956). "Three Models for the Description of Language." IRE Transactions on Information Theory 2(3). The paper establishing the Chomsky hierarchy and identifying context-free grammars as the natural model for phrase-structure languages.
+
+Scott, E. (2008). "SPPF-Style Parsing from Earley Recognisers." Electronic Notes in Theoretical Computer Science 203(2). Extends Earley parsing to produce compact shared packed parse forests, needed for efficient handling of ambiguous grammars.

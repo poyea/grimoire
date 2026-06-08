@@ -297,3 +297,17 @@ The derivative-based matcher is the basis of Owens, Reppy, and Turon's "Regular-
 
 The chapter on context-free languages takes up the next layer of the hierarchy, where decidability begins to fracture and the algebra is no longer that of a finitely-presented monoid.
 
+
+== Further Reading
+
+Hopcroft, J. E., Ullman, J. D. (1979). _Introduction to Automata Theory, Languages, and Computation_. Addison-Wesley. Chapters 2–4 give the comprehensive treatment of DFAs, NFAs, regular expressions, the pumping lemma, and the Myhill-Nerode theorem.
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage Learning. Chapter 1 is the clearest pedagogical account of the equivalence between DFAs, NFAs, and regular expressions with full proofs.
+
+Myhill, J. (1957). "Finite Automata and the Representation of Events." WADD Technical Report 57-624. Introduces the Myhill-Nerode theorem and the syntactic monoid characterisation of regular languages.
+
+McNaughton, R., Papert, S. (1971). _Counter-Free Automata_. MIT Press. Introduces star-free languages, counter-free automata, and the aperiodic monoid characterisation; the algebraic foundation for temporal-logic expressiveness results.
+
+Hopcroft, J. E. (1971). "An n log n Algorithm for Minimizing States in a Finite Automaton." Theory of Machines and Computations. The canonical DFA minimisation algorithm; the tool underlying every scanner generator and finite-state tool.
+
+Straubing, H. (1994). _Finite Automata, Formal Logic, and Circuit Complexity_. Birkhäuser. The definitive account of the algebra-logic-automata correspondence: syntactic monoids, FO definability, and connections to circuit complexity.

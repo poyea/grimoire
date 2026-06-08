@@ -564,3 +564,17 @@ After convergence: extracted DFA is the canonical $2$-state DFA for $(a b)^*$.
 - J. Oncina, P. García. *Inferring Regular Languages in Polynomial Updated Time*. World Scientific, 1992.
 - C. de la Higuera. *Grammatical Inference: Learning Automata and Grammars*. Cambridge UP, 2010.
 - M. Isberner, F. Howar, B. Steffen. *The Open-Source LearnLib*. CAV 2015.
+
+== Further Reading
+
+Sipser, M. (2013). _Introduction to the Theory of Computation_, 3rd ed. Cengage Learning. The standard undergraduate reference; Chapters 1–2 cover DFAs, NFAs, regular expressions, CFGs, and PDAs with clean proofs of the pumping lemmas.
+
+Hopcroft, J. E., Motwani, R., Ullman, J. D. (2006). _Introduction to Automata Theory, Languages, and Computation_, 3rd ed. Addison-Wesley. The canonical graduate reference; includes the Myhill-Nerode theorem, closure properties, and decidability of regular and CFL problems.
+
+de la Higuera, C. (2010). _Grammatical Inference: Learning Automata and Grammars_. Cambridge University Press. Comprehensive treatment of the field; covers identification in the limit, query learning, and spectral methods.
+
+Anguin, D. (1987). "Learning Regular Sets from Queries and Counterexamples." Information and Computation 75(2). The paper introducing the L* algorithm; proves polynomial query complexity for exact DFA identification.
+
+Weiss, G., Goldberg, Y., Yahav, E. (2018). "Extracting Automata from Recurrent Neural Networks Using Queries and Counterexamples." ICML. Shows L* scales to neural-network extraction, connecting classical automata learning to modern machine learning.
+
+Isberner, M., Howar, F., Steffen, B. (2015). "The Open-Source LearnLib." CAV. Documents the principal Java library for active automata learning, covering L*, TTT, and active learning for Mealy machines.
