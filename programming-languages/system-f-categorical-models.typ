@@ -405,7 +405,7 @@ Jacobs, B. (1999). _Categorical Logic and Type Theory_. Elsevier. Part III cover
 
 Girard, J.-Y. (1972). _Interprétation fonctionnelle et élimination des coupures_. PhD thesis, Paris VII. The original categorical and proof-theoretic account of System F; strong normalisation and the second-order Peano conservativity result.
 
-Pierce, B. C. (1994). "Bounded Quantification Is Undecidable." Information and Computation 112(1). Proves that $F_{<:}$ subtype checking is undecidable via two-counter-machine simulation; the definitive negative result on combining subtyping and System F.
+Pierce, B. C. (1994). "Bounded Quantification Is Undecidable." Information and Computation 112(1). Proves that $F_(<:)$ subtype checking is undecidable via two-counter-machine simulation; the definitive negative result on combining subtyping and System F.
 
 Barendregt, H. P. (1991). "Introduction to Generalised Type Systems." Journal of Functional Programming 1(2). Introduces the Pure Type Systems (Barendregt cube), unifying STLC, System F, $F_omega$, and dependent types in a single parametric framework.
 

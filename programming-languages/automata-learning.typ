@@ -323,10 +323,10 @@ This is the strongest lower bound in computational learning theory and explains 
     minimum DFA approximation to poly factor         NP-hard (Pitt-Warmuth 89)
     PAC-learning DFAs                                crypto-hard (KV 94, AK 95)
     PAC-learning DFAs (proper hypothesis)            NP-hard
-    L#sym.ast (MAT) for DFAs                                O(|S| n^2 m) MQs, O(n) EQs
-    L#sym.ast with Rivest-Schapire                          O(|S| n log m + n^2 |S|) MQs
+    L\* (MAT) for DFAs                                O(|S| n^2 m) MQs, O(n) EQs
+    L\* with Rivest-Schapire                          O(|S| n log m + n^2 |S|) MQs
     TTT for DFAs                                     O(n^2 |S| + n log m) MQs
-    NL#sym.ast for canonical RFSA                           polynomial in RFSA size
+    NL\* for canonical RFSA                           polynomial in RFSA size
     register-automata L*_R                           poly in states + registers
     spectral HMM learning                            poly in n, 1/eps, 1/sigma_n
     omega-regular learning (FDFA, Angluin et al.)    polynomial
@@ -573,8 +573,8 @@ Hopcroft, J. E., Motwani, R., Ullman, J. D. (2006). _Introduction to Automata Th
 
 de la Higuera, C. (2010). _Grammatical Inference: Learning Automata and Grammars_. Cambridge University Press. Comprehensive treatment of the field; covers identification in the limit, query learning, and spectral methods.
 
-Anguin, D. (1987). "Learning Regular Sets from Queries and Counterexamples." Information and Computation 75(2:). The paper introducing the L#sym.ast algorithm; proves polynomial query complexity for exact DFA identification.
+Anguin, D. (1987). "Learning Regular Sets from Queries and Counterexamples." Information and Computation 75(2). The paper introducing the L\* algorithm; proves polynomial query complexity for exact DFA identification.
 
-Weiss, G., Goldberg, Y., Yahav, E. (2018). "Extracting Automata from Recurrent Neural Networks Using Queries and Counterexamples." ICML. Shows L#sym.ast scales to neural-network extraction, connecting classical automata learning to modern machine learning.
+Weiss, G., Goldberg, Y., Yahav, E. (2018). "Extracting Automata from Recurrent Neural Networks Using Queries and Counterexamples." ICML. Shows L\* scales to neural-network extraction, connecting classical automata learning to modern machine learning.
 
-Isberner, M., Howar, F., Steffen, B. (2015). "The Open-Source LearnLib." CAV. Documents the principal Java library for active automata learning, covering L#sym.ast, TTT, and active learning for Mealy machines.
+Isberner, M., Howar, F., Steffen, B. (2015). "The Open-Source LearnLib." CAV. Documents the principal Java library for active automata learning, covering L\*, TTT, and active learning for Mealy machines.

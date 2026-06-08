@@ -372,4 +372,4 @@ Emierson, E. A., Jutla, C. S. (1991). "Tree Automata, Mu-Calculus and Determinac
 
 Jurdziński, M., Paterson, M., Zwick, U. (2008). "A Deterministic Subexponential Algorithm for Solving Parity Games." SIAM Journal on Computing 38(4). The best known deterministic algorithm for parity games prior to the quasipolynomial result; introduces the small progress measures approach.
 
-Calude, C. S. et al. (2017). "Deciding Parity Games in Quasipolynomial Time." STOC. The landmark result proving parity games solvable in $n^{O(log n)}$ time, the most significant advance in automata-game theory in decades.
+Calude, C. S. et al. (2017). "Deciding Parity Games in Quasipolynomial Time." STOC. The landmark result proving parity games solvable in $n^(O(log n))$ time, the most significant advance in automata-game theory in decades.

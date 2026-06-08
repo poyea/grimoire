@@ -381,7 +381,7 @@ Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapters 15â
 
 Cardelli, L., Wegner, P. (1985). "On Understanding Types, Data Abstraction, and Polymorphism." ACM Computing Surveys 17(4). The survey that first systematically unified subtyping and parametric polymorphism; introduced the "is-a" and "has-a" taxonomy.
 
-Mitchell, J. C. (1984). "Coercion and Type Inference." POPL. Proves that subtyping with coercions is undecidable for bounded quantification ($F_{<:}$); the theoretical limit on combining subtyping with polymorphism.
+Mitchell, J. C. (1984). "Coercion and Type Inference." POPL. Proves that subtyping with coercions is undecidable for bounded quantification ($F_(<:)$); the theoretical limit on combining subtyping with polymorphism.
 
 Reynolds, J. C. (1983). "Types, Abstraction, and Parametric Polymorphism." IFIP TC 2 Working Conference. Introduces parametricity (relational interpretation of System F types) and the free theorems it implies.
 

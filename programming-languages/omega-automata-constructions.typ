@@ -511,13 +511,13 @@ Deterministic parity automata are the sweet spot: they can represent every $omeg
 
 == Further Reading
 
-Safra, S. (1988). "On the Complexity of omega-Automata." FOCS. Introduces the Safra construction for optimal $2^{O(n log n)}$ determinisation of Büchi automata; the foundational algorithm for all subsequent determinisation work.
+Safra, S. (1988). "On the Complexity of omega-Automata." FOCS. Introduces the Safra construction for optimal $2^(O(n log n))$ determinisation of Büchi automata; the foundational algorithm for all subsequent determinisation work.
 
 Piterman, N. (2006). "From Nondeterministic Büchi and Streett Automata to Deterministic Parity Automata." LICS; LMCS 3(1). The Piterman construction: a simplified and improved Safra construction yielding parity automata directly, with better constants.
 
-Schewe, S. (2009). "Büchi Complementation Made Tight." STACS. Achieves the exact $2^{Theta(n log n)}$ bound for Büchi complementation, confirming Michel's lower bound is tight.
+Schewe, S. (2009). "Büchi Complementation Made Tight." STACS. Achieves the exact $2^(Theta(n log n))$ bound for Büchi complementation, confirming Michel's lower bound is tight.
 
-Michel, M. (1988). "Complementation Is More Difficult with Automata on Infinite Words." CNET Technical Report. Proves the $2^{Omega(n log n)}$ lower bound for Büchi determinisation and complementation; establishes the asymptotic complexity.
+Michel, M. (1988). "Complementation Is More Difficult with Automata on Infinite Words." CNET Technical Report. Proves the $2^(Omega(n log n))$ lower bound for Büchi determinisation and complementation; establishes the asymptotic complexity.
 
 Vardi, M. Y., Wolper, P. (1994). "Reasoning about Infinite Computations." Information and Computation 115(1). Extends the automata-theoretic approach to LTL verification to include the tree-automaton / alternating-automaton methods.
 
