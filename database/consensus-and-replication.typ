@@ -245,3 +245,19 @@ Moraru, I., Andersen, D., Kaminsky, M. (2013). "There Is More Consensus in Egali
 Howard, H., Malkhi, D., Spiegelman, A. (2017). "Flexible Paxos: Quorum Intersection Revisited." OPODIS.
 
 van Renesse, R., Altinbuken, D. (2015). "Paxos Made Moderately Complex." ACM CSUR 47(3).
+
+== Further Reading
+
+Lamport, L. (1998). "The Part-Time Parliament." ACM TOCS 16(2). The original Paxos paper (circulated 1989, published 1998); establishes single-decree and multi-decree consensus in a partially synchronous model.
+
+Ongaro, D., Ousterhout, J. (2014). "In Search of an Understandable Consensus Algorithm." USENIX ATC. Introduces Raft with an explicit decomposition into leader election, log replication, and safety that makes the protocol far easier to teach and implement correctly.
+
+Howard, H., Malkhi, D., Spiegelman, A. (2017). "Flexible Paxos: Quorum Intersection Revisited." OPODIS. Generalises the Paxos quorum requirement, showing Phase 1 and Phase 2 can use asymmetric quorums to trade election cost for replication latency.
+
+Corbett, J. C. et al. (2012). "Spanner: Google's Globally Distributed Database." OSDI. Deploys Paxos across data centres with TrueTime atomic clocks to achieve external consistency at planetary scale.
+
+Thomson, A. et al. (2012). "Calvin: Fast Distributed Transactions for Partitioned Database Systems." SIGMOD. Uses a deterministic sequencing layer to eliminate distributed coordination during execution, achieving high throughput without two-phase commit.
+
+Bailis, P. et al. (2014). "Highly Available Transactions: Virtues and Limitations." VLDB 7(3). Characterises exactly which isolation and consistency guarantees are achievable without sacrificing availability under network partition (HAT properties).
+
+Brewer, E. (2000). "Towards Robust Distributed Systems." PODC (keynote). Conjectures the CAP trade-off — consistency, availability, and partition tolerance cannot all be simultaneously guaranteed — shaping a decade of distributed-systems design.
