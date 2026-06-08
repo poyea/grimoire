@@ -39,7 +39,7 @@ Each downward step is a translation; each upward step a completion notification 
 The block layer presents a uniform "linear array of 512 B (or 4 KB) sectors" abstraction over heterogeneous devices. Its job:
 
 - *Request building*: package an upper-layer I/O into a `bio` (Linux) or analog (`buf` on FreeBSD).
-- *Merging*: adjacent or overlapping I/Os to the same device coalesce into a single command — vital for HDDs, useful on SSDs to reduce CPU per I/O.
+- *Merging*: adjacent or overlapping I/Os to the same device coalesce into a single command (vital for HDDs, useful on SSDs to reduce CPU per I/O).
 - *Queueing*: hold pending I/Os until the device can accept more.
 - *Completion delivery*: interrupt-driven, polled, or hybrid (NAPI-style).
 
@@ -58,7 +58,7 @@ A traditional driver fires an interrupt on each completion: CPU is freed during 
 
 *Polling* (where the driver spins waiting for completion) eliminates interrupt cost but burns a CPU. NVMe's *hybrid polling* combines: poll for the expected device latency, fall back to interrupt if it takes longer. Linux's `io_uring` `IORING_SETUP_IOPOLL` and `IORING_SETUP_SQPOLL` push this further (kernel-side polling threads, no syscall per submission).
 
-The crossover where polling wins is when the device latency is shorter than the interrupt overhead — i.e., on Optane and Gen5 NVMe.
+The crossover where polling wins is when the device latency is shorter than the interrupt overhead, i.e., on Optane and Gen5 NVMe.
 
 == NVMe
 
@@ -66,7 +66,7 @@ NVMe (Non-Volatile Memory Express) replaced SCSI/AHCI for flash. Key innovations
 
 - *Submission/completion queue pairs* in shared host memory; the device DMAs directly, no command FIFO bottleneck.
 - *No PCIe interrupts per I/O*: MSI-X interrupts can be coalesced or polled.
-- *Up to 65,536 queues* of 65,536 depth — designed for million-core futures.
+- *Up to 65,536 queues* of 65,536 depth, designed for million-core futures.
 - *Streamlined command set*: ~13 commands vs SCSI's hundreds.
 
 NVMe extensions worth knowing:
@@ -74,8 +74,8 @@ NVMe extensions worth knowing:
 #table(columns: (auto, 1fr),
   [*Feature*], [*Purpose*],
   [Namespaces], [Logical partitioning of one physical device],
-  [Zoned namespaces (ZNS)], [Append-only zones — exposes flash structure to the host],
-  [Streams], [Hint which data has correlated lifetime — improves GC],
+  [Zoned namespaces (ZNS)], [Append-only zones; exposes flash structure to the host],
+  [Streams], [Hint which data has correlated lifetime; improves GC],
   [TP4053 simple copy], [Device-side block copy without host data path],
   [NVMe-oF (over Fabrics)], [Same protocol over RDMA, TCP, or FC],
   [Computational storage (TP4091)], [Push compute to the drive],
@@ -98,14 +98,14 @@ Pitfall: a process doing `fsync` may stall for tens of seconds while a different
 A `write` returns when bytes are in the page cache, not on disk. To be durable, the application must `fsync` and the FS must issue a barrier (FLUSH + FUA) to force the controller cache. *Many* deployed systems get this wrong:
 
 - The disk controller has a volatile DRAM cache; without FUA the controller's "completion" doesn't mean "on NAND."
-- The FS journal needs ordering between journal entry, journal commit, and target write — barriers enforce this.
+- The FS journal needs ordering between journal entry, journal commit, and target write; barriers enforce this.
 - The drive may lie. Some consumer SSDs ignore FUA. Power-loss testing is the only honest verification.
 
 The PostgreSQL `fsync` bug of 2018 (Linux silently discarded dirty pages after an EIO without persisting an error to subsequent `fsync`s) demonstrated that even widely-deployed systems can be wrong about layer interactions. The fix took years.
 
 == Distributed Block Storage
 
-Cloud block devices (EBS, Persistent Disk, Azure Disk) and on-prem SAN expose the block-device API over a network. Latency goes from $mu$s to ms; the API model is unchanged. Underlying storage is typically a replicated log (chain replication, Paxos-on-each-write) — see `database/consensus-and-replication.typ` for the protocols.
+Cloud block devices (EBS, Persistent Disk, Azure Disk) and on-prem SAN expose the block-device API over a network. Latency goes from $mu$s to ms; the API model is unchanged. Underlying storage is typically a replicated log (chain replication, Paxos-on-each-write); see `database/consensus-and-replication.typ` for the protocols.
 
 == Pitfalls
 
@@ -149,7 +149,7 @@ Almost every general-purpose FS has the same conceptual layout:
   [Superblock], [Magic, size, root-inode pointer, feature flags],
   [Inode table], [Metadata records: owner, mode, timestamps, extent/block pointers],
   [Directory], [Maps names to inode numbers; itself a file],
-  [Allocation map], [Free blocks / inodes — bitmap, B-tree, or extent tree],
+  [Allocation map], [Free blocks / inodes: bitmap, B-tree, or extent tree],
   [Journal / log], [Crash-consistency record, if any],
   [Data blocks], [User payload],
 )
@@ -158,7 +158,7 @@ A file is its inode, not its name; hard links are multiple directory entries poi
 
 == Crash Consistency
 
-Without precautions, a multi-block update (e.g., "extend file: allocate block, link block to inode, update inode size") can be torn by a crash: any subset of the writes may have reached disk. The resulting FS may be inconsistent — orphan inode, dangling extent, double-allocated block.
+Without precautions, a multi-block update (e.g., "extend file: allocate block, link block to inode, update inode size") can be torn by a crash: any subset of the writes may have reached disk. The resulting FS may be inconsistent (orphan inode, dangling extent, double-allocated block).
 
 Four established techniques:
 
@@ -193,18 +193,18 @@ Four established techniques:
 
 == Caching: Buffer vs Page
 
-Early Unix kernels had a *buffer cache* (block-indexed) for FS metadata and a separate *page cache* (file-offset-indexed) for `mmap`/`read`. Modern systems unify them — the page cache is authoritative, FS metadata blocks live in it too. This makes `mmap` and `read` see the same data and removes the dual-write hazard.
+Early Unix kernels had a *buffer cache* (block-indexed) for FS metadata and a separate *page cache* (file-offset-indexed) for `mmap`/`read`. Modern systems unify them: the page cache is authoritative, FS metadata blocks live in it too. This makes `mmap` and `read` see the same data and removes the dual-write hazard.
 
-`fsync(fd)` forces dirty pages of a file plus the FS metadata needed to find them onto stable storage. `fdatasync(fd)` skips metadata that doesn't affect retrieval (e.g., mtime). Crash-safe writes require `fsync` of *both* the file and its containing directory after a `rename` — a subtlety many applications miss (the "fsync gate" controversy of 2009).
+`fsync(fd)` forces dirty pages of a file plus the FS metadata needed to find them onto stable storage. `fdatasync(fd)` skips metadata that doesn't affect retrieval (e.g., mtime). Crash-safe writes require `fsync` of *both* the file and its containing directory after a `rename`, a subtlety many applications miss (the "fsync gate" controversy of 2009).
 
 == POSIX and Its Discontents
 
 POSIX semantics impose constraints that hurt scaling:
 
-- *Atomic rename* — required for crash-safe write-then-rename idioms.
-- *Last-close unlink visibility* — a file unlinked while open persists until the last fd closes.
-- *Strong write ordering* — a `read` after a `write` in another thread must see the write (per the byte-range lock if held, otherwise undefined-but-usually-ordered).
-- *Hard links across directories* — defeats simple tree mental models.
+- *Atomic rename*: required for crash-safe write-then-rename idioms.
+- *Last-close unlink visibility*: a file unlinked while open persists until the last fd closes.
+- *Strong write ordering*: a `read` after a `write` in another thread must see the write (per the byte-range lock if held, otherwise undefined-but-usually-ordered).
+- *Hard links across directories*: defeats simple tree mental models.
 
 Distributed FS designs routinely relax these: GFS dropped atomic appends; HDFS made files write-once; object stores (S3, GCS) dropped the directory abstraction entirely (prefixes are merely a convention). The lesson is recurring: full POSIX is hard to scale; relaxed semantics buy throughput.
 
