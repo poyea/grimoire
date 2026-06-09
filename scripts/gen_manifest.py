@@ -32,6 +32,7 @@ SUBJECTS = [
     "operating-systems",
     "programming-languages",
     "quantum-computing",
+    "computer-vision",
 ]
 
 
