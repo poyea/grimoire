@@ -48,6 +48,7 @@ jobs:
           - operating-systems
           - programming-languages
           - quantum-computing
+          - computer-vision
     steps:
       - uses: actions/checkout@v4
       - uses: typst-community/setup-typst@v3

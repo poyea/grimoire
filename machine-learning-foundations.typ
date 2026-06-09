@@ -32,4 +32,10 @@
   #include "machine-learning-foundations/network-information-theory.typ"
   #pagebreak()
 
+  #include "machine-learning-foundations/reinforcement-learning.typ"
+  #pagebreak()
+
+  #include "machine-learning-foundations/diffusion-models.typ"
+  #pagebreak()
+
 ]

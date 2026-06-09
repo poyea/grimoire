@@ -988,6 +988,46 @@ chapters:
     path: machine-learning-foundations/network-information-theory.typ
     lines: 185
     status: reviewed
+  - subject: machine-learning-foundations
+    slug: reinforcement-learning
+    path: machine-learning-foundations/reinforcement-learning.typ
+    lines: 220
+    status: reviewed
+  - subject: machine-learning-foundations
+    slug: diffusion-models
+    path: machine-learning-foundations/diffusion-models.typ
+    lines: 215
+    status: reviewed
+  - subject: computer-vision
+    slug: image-formation
+    path: computer-vision/image-formation.typ
+    lines: 175
+    status: reviewed
+  - subject: computer-vision
+    slug: cnn-architectures
+    path: computer-vision/cnn-architectures.typ
+    lines: 190
+    status: reviewed
+  - subject: computer-vision
+    slug: object-detection
+    path: computer-vision/object-detection.typ
+    lines: 185
+    status: reviewed
+  - subject: computer-vision
+    slug: image-segmentation
+    path: computer-vision/image-segmentation.typ
+    lines: 175
+    status: reviewed
+  - subject: computer-vision
+    slug: vision-transformers
+    path: computer-vision/vision-transformers.typ
+    lines: 185
+    status: reviewed
+  - subject: computer-vision
+    slug: 3d-vision
+    path: computer-vision/3d-vision.typ
+    lines: 190
+    status: reviewed
   - subject: networking
     slug: application-protocols
     path: networking/application-protocols.typ
