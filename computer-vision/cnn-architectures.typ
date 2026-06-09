@@ -13,7 +13,7 @@ $ Y[i, j, c] = sum_(m=0)^(K-1) sum_(n=0)^(K-1) sum_(c'=0)^(C_"in"-1) W[m, n, c',
 where $s$ is the stride and $H' = (H - K + 2p)/s + 1$ after padding $p$.
 
 Key properties:
-- *Weight sharing*: the same kernel is applied at every spatial location — $K^2 C_"in" C_"out"$ parameters regardless of $H, W$.
+- *Weight sharing*: the same kernel is applied at every spatial location, giving $K^2 C_"in" C_"out"$ parameters regardless of $H, W$.
 - *Local connectivity*: each output depends only on a $K times K$ receptive field.
 - *Equivariance to translation*: shifting the input shifts the output.
 
@@ -49,7 +49,7 @@ Total: $K^2 C + C C'$ vs. $K^2 C C'$ for a full convolution — roughly $1/C'$ t
 
 BN (Ioffe & Szegedy, 2015) normalises each feature channel across the batch dimension, then scales and shifts:
 
-$ hat(x)^{(k)} = (x^{(k)} - mu_B^{(k)}) / sqrt(sigma_B^{(k)2} + epsilon), quad y^{(k)} = gamma^{(k)} hat(x)^{(k)} + beta^{(k)}. $
+$ hat(x)^((k)) = (x^((k)) - mu_B^((k))) / sqrt(sigma_B^((k)2) + epsilon), quad y^((k)) = gamma^((k)) hat(x)^((k)) + beta^((k)). $
 
 At inference, running statistics (computed during training) replace batch statistics. BN enables higher learning rates, reduces sensitivity to initialisation, and acts as a regulariser. It is less effective with small batch sizes.
 
@@ -65,7 +65,7 @@ The first successful deep CNN for digit recognition: two conv layers, two poolin
 
 === AlexNet (Krizhevsky et al., 2012)
 
-Won ImageNet 2012 (16.4% top-5 error, vs. 26% for the next-best). Key advances: ReLU activations, dropout regularisation, GPU training, data augmentation. Established deep learning as the dominant paradigm.
+Won ImageNet 2012 (15.3% top-5 error with ensemble, 16.4% single-model, vs. 26.2% for the next-best). Key advances: ReLU activations, dropout regularisation, GPU training, data augmentation. Established deep learning as the dominant paradigm.
 
 === VGG (Simonyan & Zisserman, 2014)
 
@@ -75,9 +75,9 @@ Showed that depth is the key factor: a homogeneous architecture of $3 times 3$ c
 
 *Inception module*: parallel $1 times 1$, $3 times 3$, $5 times 5$ convolutions and $3 times 3$ max pooling, concatenated. Captures multi-scale features efficiently. InceptionV3/V4 refactored with factorised convolutions and batch norm.
 
-=== ResNet (He et al., 2015)
+=== ResNet (He et al., 2016)
 
-Introduced the *residual connection*: $y = F(x, {W_i}) + x$. Enables training of very deep networks (50–1000+ layers) by providing gradient shortcuts. Key insight: it is easier to learn a residual mapping $F(x)$ than a direct mapping $H(x)$ when the optimal function is close to identity. ResNet-50 achieves 3.57% top-5 on ImageNet (ensemble). The skip connection is the single most impactful architectural innovation in deep learning.
+Introduced the *residual connection*: $y = F(x, {W_i}) + x$. Enables training of very deep networks (50–1000+ layers) by providing gradient shortcuts. Key insight: it is easier to learn a residual mapping $F(x)$ than a direct mapping $H(x)$ when the optimal function is close to identity. ResNet-152 (6-model ensemble) achieves 3.57% top-5 on ImageNet; ResNet-50 single-model reaches 22.9% top-1. The skip connection is the single most impactful architectural innovation in deep learning.
 
 === DenseNet (Huang et al., 2017)
 
@@ -122,7 +122,7 @@ Modern recipe (from Wightman et al.): 300 epochs, AdamW, cosine decay, timm libr
   [*Model*], [*Year*], [*Top-1 (IN-1K)*], [*Params*],
   [ResNet-50], [2015], [76.1%], [25M],
   [EfficientNet-B4], [2019], [83.0%], [19M],
-  [ConvNeXt-B], [2022], [85.8%], [89M],
+  [ConvNeXt-B], [2022], [83.8%], [89M],
   [ViT-B/16], [2020], [81.8%], [86M],
   [Swin-B], [2021], [85.2%], [88M],
   [ConvNeXt-XL], [2022], [87.0%], [350M],

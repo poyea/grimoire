@@ -42,7 +42,7 @@ Each pyramid level detects objects at an appropriate scale. FPN is the standard 
 
 === Cascade R-CNN
 
-Cascade R-CNN (Cai & Vasconcelos, 2019) trains a sequence of detectors with increasing IoU thresholds $(0.5, 0.6, 0.7)$. Each stage's output is the next stage's input. Avoids quality mismatch between training and inference IoU thresholds. Strong baseline; +2–3 AP over Faster R-CNN.
+Cascade R-CNN (Cai & Vasconcelos, 2018) trains a sequence of detectors with increasing IoU thresholds $(0.5, 0.6, 0.7)$. Each stage's output is the next stage's input. Avoids quality mismatch between training and inference IoU thresholds. Strong baseline; +2–3 AP over Faster R-CNN.
 
 == One-Stage Detectors
 
@@ -94,7 +94,7 @@ No NMS, no anchors. Slow convergence (500 epochs on COCO) and poor performance o
 
 === Deformable DETR
 
-Deformable DETR (Zhu et al., 2020) replaces full attention with *deformable attention*: each query attends to a small set of learned sampling points around a reference location, dramatically reducing computational cost ($O(H W)$ to $O(H W dot K)$ where $K$ is the number of sampling points). Converges in 50 epochs; handles multi-scale features naturally.
+Deformable DETR (Zhu et al., 2020) replaces full attention with *deformable attention*: each query attends to a small set of learned sampling points around a reference location, dramatically reducing computational cost from $O((H W)^2)$ full self-attention to $O(H W dot K)$ where $K$ is the number of sampling points). Converges in 50 epochs; handles multi-scale features naturally.
 
 === DINO and Co-DETR
 

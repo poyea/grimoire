@@ -1,6 +1,6 @@
 = Image Formation and Representation
 
-Before an algorithm can understand an image, we must understand how images form. This chapter covers the physics of image formation — projection geometry, radiometry, optics — and the digital representations and preprocessing pipelines that transform raw sensor data into arrays amenable to learning.
+Before an algorithm can understand an image, we must understand how images form. This chapter covers the physics of image formation: projection geometry, radiometry, and optics, along with the digital representations and preprocessing pipelines that transform raw sensor data into arrays amenable to learning.
 
 *See also:* _CNN Architectures_ (learned feature extraction), _Classical Vision_ (gradient-based features, filtering), _3D Vision and Neural Fields_ (multi-view geometry in depth).
 
@@ -83,7 +83,7 @@ A *linear filter* convolves the image with a kernel $h$:
 $ (I * h)(x, y) = sum_(m, n) I(x-m, y-n) h(m, n). $
 
 Common kernels:
-- *Gaussian*: $h(x,y) = (1/(2 pi sigma^2)) e^{-(x^2+y^2)/(2sigma^2)}$. Smoothing, scale-space.
+- *Gaussian*: $h(x,y) = (1/(2 pi sigma^2)) e^(-(x^2+y^2)/(2 sigma^2))$. Smoothing, scale-space.
 - *Sobel*: finite difference approximation of image gradient.
 - *Laplacian of Gaussian (LoG)*: blob detection; zero-crossings mark edges.
 
@@ -91,7 +91,7 @@ Common kernels:
 
 The bilateral filter is a *non-linear* edge-preserving smoother:
 
-$ "BF"[I]_p = (1/W_p) sum_q G_sigma_s (||p-q||) G_sigma_r (|I_p - I_q|) I_q $
+$ "BF"[I]_p = (1/W_p) sum_q G_(sigma_s) (||p-q||) G_(sigma_r) (|I_p - I_q|) I_q $
 
 where $G_sigma_s$ is a spatial Gaussian and $G_sigma_r$ a range Gaussian. Pixels spatially nearby AND photometrically similar are averaged together.
 

@@ -1,6 +1,6 @@
 = 3D Vision and Neural Fields
 
-3D vision reconstructs, represents, and reasons about the three-dimensional world from 2D images. This chapter covers structure-from-motion, depth estimation, point clouds, and the revolutionary neural field representations — NeRF, Gaussian splatting — that have transformed novel view synthesis and 3D generation.
+3D vision reconstructs, represents, and reasons about the three-dimensional world from 2D images. This chapter covers structure-from-motion, depth estimation, point clouds, and the revolutionary neural field representations (NeRF, Gaussian splatting) that have transformed novel view synthesis and 3D generation.
 
 *See also:* _Image Formation_ (camera models, epipolar geometry), _Object Detection_ (3D detection), _Diffusion Models_ (3D generation).
 
@@ -80,7 +80,7 @@ NeRF is trained by minimising the photometric reconstruction loss between render
 
 == 3D Gaussian Splatting
 
-*3D Gaussian Splatting* (3DGS, Kerbl et al., 2023) represents a scene as a set of 3D Gaussians $G = {mu_i, Sigma_i, alpha_i, c_i}$ — centre, covariance (encodes size and orientation), opacity, and spherical harmonic colour coefficients. Rendering: project Gaussians onto the image plane, sort by depth, alpha-composite front to back:
+*3D Gaussian Splatting* (3DGS, Kerbl et al., 2023) represents a scene as a set of 3D Gaussians $G = {mu_i, Sigma_i, alpha_i, c_i}$, where each Gaussian has a centre, covariance (encodes size and orientation), opacity, and spherical harmonic colour coefficients. Rendering: project Gaussians onto the image plane, sort by depth, alpha-composite front to back:
 
 $ C_"pixel" = sum_i c_i alpha_i product_(j<i) (1 - alpha_j). $
 

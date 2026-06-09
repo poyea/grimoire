@@ -62,7 +62,7 @@ $ "PQ" = underbrace((sum_("TP") "IoU"(p, g)) / (|"TP"| + 1/2 |"FP"| + 1/2 |"FN"|
 
 === SegFormer
 
-*SegFormer* (Xie et al., 2021): hierarchical transformer encoder (Mix Transformer, MiT) producing multi-scale features; simple MLP decoder fuses features from all scales with positional-encoding-free attention. SegFormer-B5 achieves 84.0 mIoU on ADE20K.
+*SegFormer* (Xie et al., 2021): hierarchical transformer encoder (Mix Transformer, MiT) producing multi-scale features; simple MLP decoder fuses features from all scales with positional-encoding-free attention. SegFormer-B5 achieves 51.8 mIoU on ADE20K.
 
 === SETR and Swin-based Segmentation
 
@@ -100,9 +100,9 @@ Medical segmentation has unique challenges: 3D volumes (CT, MRI), limited labell
   columns: 4,
   [*Model*], [*Task*], [*Dataset*], [*Score*],
   [DeepLabV3+], [Semantic], [VOC 2012], [89.0 mIoU],
-  [SegFormer-B5], [Semantic], [ADE20K], [84.0 mIoU],
+  [SegFormer-B5], [Semantic], [ADE20K], [51.8 mIoU],
   [Mask R-CNN], [Instance], [COCO], [37.1 mask AP],
-  [Mask2Former], [Instance], [COCO], [57.8 mask AP],
+  [Mask2Former], [Instance], [COCO], [50.1 mask AP],
   [Mask2Former], [Panoptic], [COCO], [57.8 PQ],
   [SAM], [Interactive], [SA-1B], [generalises zero-shot],
 )

@@ -68,7 +68,7 @@ This framework recovers DDPM (VP-SDE) and SMLD/NCSN (VE-SDE) as special cases.
 
 The choice of schedule $beta_t$ controls the signal-to-noise ratio trajectory.
 
-- *Linear schedule* (DDPM): $beta_t$ increases linearly from $10^{-4}$ to $0.02$.
+- *Linear schedule* (DDPM): $beta_t$ increases linearly from $10^(-4)$ to $0.02$.
 - *Cosine schedule* (Nichol & Dhariwal, 2021): $overline(alpha)_t = cos^2((t/T + s)/(1+s) dot pi/2)$; avoids abrupt SNR changes near $t=0$.
 - *EDM schedule* (Karras et al., 2022): frames diffusion as continuous-time Gaussian convolution; optimal preconditioning of the network inputs leads to better training stability.
 
@@ -144,6 +144,7 @@ Key practical considerations:
 
 == Further Reading
 
+- Anderson, B. D. O. (1982). Reverse-time diffusion equation models. _Stochastic Processes and Their Applications_, 12(3).
 - Ho, J., Jain, A., & Abbeel, P. (2020). Denoising diffusion probabilistic models. _NeurIPS_.
 - Song, Y. et al. (2020). Score-based generative modeling through stochastic differential equations. _ICLR 2021_.
 - Rombach, R. et al. (2022). High-resolution image synthesis with latent diffusion models. _CVPR_.

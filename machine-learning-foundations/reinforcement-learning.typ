@@ -1,6 +1,6 @@
 = Reinforcement Learning
 
-Reinforcement learning (RL) formalises the problem of an agent learning to act in an environment by trial and error. Unlike supervised learning, there is no labelled target: the agent receives a scalar reward signal and must discover, through interaction, a policy that maximises cumulative reward. This chapter develops the mathematical foundations — Markov decision processes, dynamic programming, temporal-difference learning, policy gradients — through to the modern deep RL methods that underpin current large-scale systems.
+Reinforcement learning (RL) formalises the problem of an agent learning to act in an environment by trial and error. Unlike supervised learning, there is no labelled target: the agent receives a scalar reward signal and must discover, through interaction, a policy that maximises cumulative reward. This chapter develops the mathematical foundations — Markov decision processes, dynamic programming, temporal-difference learning, policy gradients, through to the modern deep RL methods that underpin current large-scale systems.
 
 *See also:* _Optimization_ (gradient methods used in policy gradient and actor-critic), _Probability and Information_ (Bellman expectation, importance sampling), _Loss Functions_ (value regression objectives), _Reasoning Models_ (RLHF and GRPO).
 
@@ -57,8 +57,8 @@ This converges to $V^pi$ since $cal(T)^pi$ is a $gamma$-contraction in the $sup$
 === Policy Iteration
 
 *Policy iteration* alternates:
-1. *Evaluation*: compute $V^{pi_k}$ to convergence.
-2. *Improvement*: $pi_{k+1}(s) = arg max_a Q^{pi_k}(s, a)$.
+1. *Evaluation*: compute $V^(pi_k)$ to convergence.
+2. *Improvement*: $pi_(k+1)(s) = arg max_a Q^(pi_k)(s, a)$.
 
 Policy improvement is monotone; the algorithm converges in finite steps for finite MDPs.
 
@@ -181,7 +181,7 @@ Self-play (training against past versions of itself) underpins AlphaZero and Ope
 
 == RL from Human Feedback
 
-RLHF (Christiano et al., 2017) trains LLMs to follow instructions using human preferences. The pipeline: (1) supervised fine-tuning on demonstrations, (2) train a reward model from pairwise preference data, (3) run PPO against the reward model with a KL penalty against the SFT policy. GRPO (Group Relative Policy Optimisation) and DPO eliminate the reward model by directly optimising preference likelihoods. See _Reasoning Models_ for details.
+RLHF, introduced for learning from human preferences by Christiano et al. (2017) and scaled to LLMs by Ouyang et al. (2022, InstructGPT), trains language models to follow instructions. The pipeline: (1) supervised fine-tuning on demonstrations, (2) train a reward model from pairwise preference data, (3) run PPO against the reward model with a KL penalty against the SFT policy. DPO eliminates the reward model by directly optimising preference likelihoods; GRPO retains a reward signal but removes the critic network. See _Reasoning Models_ for details.
 
 == Further Reading
 

@@ -18,7 +18,7 @@ For classification, ViT-B/16 uses $L=12$ layers, $D=768$, 12 heads, MLP width $3
 
 === Scaling and Pre-training Data
 
-ViT-B trained on ImageNet-1K from scratch achieves only 77.9% top-1, far below ResNet-50 (76.1% requires far less data). But ViT-L trained on JFT-300M (Google's 300M image internal dataset) achieves 87.8% — outperforming CNN baselines.
+ViT-B trained on ImageNet-1K from scratch achieves only 77.9% top-1, below comparably-sized ResNets such as ResNet-152 (78.3%) that benefit from inductive biases. But ViT-L trained on JFT-300M (Google's 300M image internal dataset) achieves 87.8%, outperforming CNN baselines.
 
 *Key finding*: ViT requires large-scale pre-training. Without it, the lack of inductive biases (translation equivariance, local connectivity) is a disadvantage. With sufficient data, global attention is an advantage.
 
@@ -78,7 +78,7 @@ CLIP enables zero-shot classification: encode a class as "a photo of a {class}" 
 
 === OpenCLIP and SigLIP
 
-*OpenCLIP* (Ilharco et al., 2021): open reproduction of CLIP; trained on LAION-5B. *SigLIP* (Zhai et al., 2023): replaces softmax contrastive loss with sigmoid binary cross-entropy applied independently to each pair — better scaling, no global batch normalisation required. SigLIP-So400m is the vision encoder in Gemini and PaliGemma.
+*OpenCLIP* (Ilharco et al., 2021): open reproduction of CLIP; trained on LAION-5B. *SigLIP* (Zhai et al., 2023): replaces softmax contrastive loss with sigmoid binary cross-entropy applied independently to each pair, giving better scaling with no global batch normalisation required. SigLIP-So400m is the vision encoder in Gemini and PaliGemma.
 
 === Multimodal LLMs
 
