@@ -55,7 +55,7 @@ The critical challenge is the *scheduler activation problem*: when a goroutine (
 
 #table(columns: (auto, auto, auto, auto, auto),
   [*Model*], [*Example*], [*Switch cost*], [*Blocking syscall*], [*SMP*],
-  [Process], [Unix `fork`], [~5-10 $mu$s], [process only], [native],
+  [Process], [context switch between two processes], [~5-10 $mu$s], [process only], [native],
   [1:1 kernel thread], [Linux NPTL], [~1-3 $mu$s], [thread only], [native],
   [N:1 user thread], [GNU Pth], [~100 ns], [whole process], [no],
   [M:N green thread], [Go goroutine], [~100-300 ns], [needs handoff], [via M threads],
