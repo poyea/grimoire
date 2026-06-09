@@ -352,7 +352,7 @@ chapters:
     slug: digital-signatures
     path: cryptography-and-security/digital-signatures.typ
     lines: 95
-    status: draft
+    status: reviewed
   - subject: cryptography-and-security
     slug: hashing-and-macs
     path: cryptography-and-security/hashing-and-macs.typ
@@ -362,7 +362,7 @@ chapters:
     slug: key-exchange-and-pki
     path: cryptography-and-security/key-exchange-and-pki.typ
     lines: 93
-    status: draft
+    status: reviewed
   - subject: cryptography-and-security
     slug: post-quantum
     path: cryptography-and-security/post-quantum.typ
@@ -372,7 +372,7 @@ chapters:
     slug: side-channel-attacks
     path: cryptography-and-security/side-channel-attacks.typ
     lines: 79
-    status: draft
+    status: reviewed
   - subject: cryptography-and-security
     slug: symmetric-primitives
     path: cryptography-and-security/symmetric-primitives.typ
@@ -387,7 +387,7 @@ chapters:
     slug: zero-knowledge-proofs
     path: cryptography-and-security/zero-knowledge-proofs.typ
     lines: 87
-    status: draft
+    status: reviewed
   - subject: data-engineering
     slug: batch-processing
     path: data-engineering/batch-processing.typ
@@ -1497,29 +1497,29 @@ chapters:
     slug: 3d-vision
     path: computer-vision/3d-vision.typ
     lines: 121
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: cnn-architectures
     path: computer-vision/cnn-architectures.typ
     lines: 138
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: image-formation
     path: computer-vision/image-formation.typ
     lines: 145
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: image-segmentation
     path: computer-vision/image-segmentation.typ
     lines: 117
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: object-detection
     path: computer-vision/object-detection.typ
     lines: 134
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: vision-transformers
     path: computer-vision/vision-transformers.typ
     lines: 128
-    status: draft
+    status: reviewed
