@@ -1426,5 +1426,5 @@ chapters:
   - subject: quantum-computing
     slug: nisq-and-benchmarking
     path: quantum-computing/nisq-and-benchmarking.typ
-    lines: 123
-    status: draft
+    lines: 183
+    status: reviewed
