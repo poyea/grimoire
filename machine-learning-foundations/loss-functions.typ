@@ -102,11 +102,17 @@ This uses all off-diagonal pairs as negatives, improving sample efficiency over 
 
 === ArcFace and CosFace
 
-For large-scale face recognition with millions of identities, metric learning is recast as angular classification. ArcFace (Deng et al. 2019) adds an angular margin $m$ in the classification logit:
+For large-scale face recognition with millions of identities, metric learning is recast as angular classification. The key insight: normalize both feature vectors and class weight vectors to unit length, so the logit for class $k$ is $s cos theta_k$ where $theta_k$ is the angle between the feature and the $k$-th class prototype and $s$ is a fixed scale factor.
 
-$ cal(L)_"ArcFace" = -log (e^(s(cos(theta_(y_i} + m}))) / (e^(s(cos(theta_(y_i} + m}))) + sum_(j != y_i) e^(s cos theta_j))), $
+ArcFace (Deng et al. 2019) adds an additive angular margin $m$ directly in the angle of the target class before taking the cosine:
 
-where $theta_k$ is the angle between the normalized feature vector and the $k$-th class weight, and $s$ is a scaling factor. The additive angular margin enforces a stricter separation in embedding space than standard softmax, and the resulting embeddings generalize strongly to unseen identities.
+$ cal(L)_"ArcFace" = -log (e^(s cos(theta_(y_i) + m)) / (e^(s cos(theta_(y_i) + m)) + sum_(j != y_i) e^(s cos theta_j))), $
+
+where the margin $m$ is applied in angular space rather than to the logit. Typical values are $m = 0.5$ radians ($approx 28.6°$) and $s = 64$.
+
+CosFace (Wang et al. 2018) applies an equivalent margin as an additive cosine penalty instead: $s(cos theta_(y_i) - m)$, which is simpler to implement but slightly less geometrically intuitive. Both enforce a minimum angular separation between class boundaries, producing embeddings that transfer strongly to unseen identities.
+
+The resulting margin-based losses dominate open-set face verification benchmarks (LFW, IJB-C) and have been adopted for speaker recognition, person re-identification, and other fine-grained retrieval tasks where the number of identities at test time is unknown.
 
 == Contrastive and Self-Supervised Losses
 
@@ -151,7 +157,13 @@ Bardes et al. (2022) decompose the objective explicitly into three terms:
 
 $ cal(L)_"VICReg" = lambda cal(L)_"inv" + mu cal(L)_"var" + nu cal(L)_"cov", $
 
-where the *invariance* term is MSE between embeddings of two views, the *variance* term is a hinge on the per-dimension standard deviation (penalizing collapse), and the *covariance* term penalizes off-diagonal entries of the feature covariance matrix. VICReg avoids negatives and is conceptually clean; each term addresses a distinct failure mode: invariance prevents drift, variance prevents collapse, covariance prevents redundancy.
+where:
+
+- *Invariance* ($cal(L)_"inv"$): MSE between embeddings of the two augmented views of the same image, driving the encoder to produce stable representations across augmentations.
+- *Variance* ($cal(L)_"var"$): a hinge loss on the per-dimension standard deviation of embeddings within a batch, $max(0, gamma - "std"(z_j))$, penalizing any dimension that collapses to a constant.
+- *Covariance* ($cal(L)_"cov"$): penalizes squared off-diagonal entries of the feature covariance matrix, $1/d sum_(i != j) [C(Z)]_(i j)^2$, preventing dimensions from encoding redundant information.
+
+VICReg avoids negatives and is conceptually clean; each term addresses a distinct failure mode: invariance prevents drift between views, variance prevents dimensional collapse, covariance prevents redundancy. The three coefficients $lambda, mu, nu$ are typically set to $25, 25, 1$ respectively.
 
 == Generative Model Losses
 

@@ -951,8 +951,8 @@ chapters:
   - subject: machine-learning-foundations
     slug: loss-functions
     path: machine-learning-foundations/loss-functions.typ
-    lines: 258
-    status: draft
+    lines: 270
+    status: reviewed
   - subject: networking
     slug: application-protocols
     path: networking/application-protocols.typ
