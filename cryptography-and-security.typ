@@ -11,19 +11,31 @@
 
   #pagebreak()
 
-  #include "cryptography-and-security/asymmetric.typ"
+  #include "cryptography-and-security/symmetric-primitives.typ"
   #pagebreak()
 
   #include "cryptography-and-security/hashing-and-macs.typ"
   #pagebreak()
 
-  #include "cryptography-and-security/post-quantum.typ"
+  #include "cryptography-and-security/asymmetric.typ"
   #pagebreak()
 
-  #include "cryptography-and-security/symmetric-primitives.typ"
+  #include "cryptography-and-security/digital-signatures.typ"
+  #pagebreak()
+
+  #include "cryptography-and-security/key-exchange-and-pki.typ"
   #pagebreak()
 
   #include "cryptography-and-security/tls.typ"
+  #pagebreak()
+
+  #include "cryptography-and-security/zero-knowledge-proofs.typ"
+  #pagebreak()
+
+  #include "cryptography-and-security/post-quantum.typ"
+  #pagebreak()
+
+  #include "cryptography-and-security/side-channel-attacks.typ"
   #pagebreak()
 
 ]
