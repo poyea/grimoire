@@ -94,7 +94,7 @@ the same output state independently. Coordination happens at sequencing, not exe
 
 *Throughput:* Calvin achieves ~670K txns/sec on a 3-node cluster — no distributed lock contention, since the global order pre-resolves all conflicts before execution begins.
 
-*Limitation:* transactions must declare their read/write sets upfront (deterministic). Cannot handle "read-then-decide-what-to-write" patterns without a round-trip to the sequencer.
+*Calvin's central practical constraint:* Calvin requires all transactions to be declared upfront as deterministic — the full read/write set must be known before execution begins. Non-deterministic transactions (e.g., read-then-decide based on current values) are not directly supported; they require an additional *reconnaissance query* phase that issues a read-only round-trip to discover the required keys, then re-submits the transaction with a fully declared set. This adds a round-trip, partially negating the 1-RTT advantage. This is Calvin's central practical constraint versus timestamp-based approaches like Spanner, which can handle arbitrary reads inside a transaction without pre-declaration.
 
 == Spanner: External Consistency with TrueTime
 
