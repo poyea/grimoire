@@ -3,7 +3,7 @@ name: Deploy Pages
 on:
   push:
     branches: [main]
-    paths: [docs/**]
+    paths: ['docs/**', '**.typ', 'scripts/gen_homepage.py']
   workflow_dispatch:
 
 permissions:
@@ -23,6 +23,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Generate homepage from chapters
+        run: python3 scripts/gen_homepage.py
       - uses: actions/configure-pages@v4
       - uses: actions/upload-pages-artifact@v3
         with:
