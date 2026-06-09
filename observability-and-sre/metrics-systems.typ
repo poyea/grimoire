@@ -120,6 +120,8 @@ http_request_duration_seconds_count              1000
 
 Native histograms (Prometheus 2.40+, "sparse histograms") encode exponentially spaced buckets in a single sample. Schema $s$ defines bucket width $2^(2^(-s))$; $s=8$ gives $approx 0.27%$ relative error. A single native histogram is one series regardless of bucket count, so cardinality drops by 10–50$times$.
 
+*Cardinality explosion warning:* Native histograms use dynamic exponential bucketing which can cause cardinality explosion if applied to high-cardinality label combinations. Each unique label combination creates a separate histogram with up to hundreds of buckets; a metric with 10,000 unique label sets can generate millions of time series. Apply native histograms only to metrics with bounded cardinality, and use `recording rules` to pre-aggregate high-cardinality dimensions before histogramming.
+
 == Sketches: TDigest, HdrHistogram, DDSketch
 
 For aggregating quantiles across instances without exposing buckets, mergeable sketches are essential.
