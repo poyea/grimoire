@@ -20,7 +20,7 @@ The allocator must assign registers while minimising spill code and eliminating 
 The classical formulation due to Chaitin (1982) reduces register allocation to $k$-graph-colouring.
 
 - *Interference graph:* nodes represent live ranges; an edge connects two nodes if they interfere. Two nodes may share a colour (register) only if they are not adjacent.
-- *$k$-colouring:* assigning $k$ colours to the graph corresponds to allocating $k$ registers. Chaitin proved this is NP-complete in general.
+- *$k$-colouring:* assigning $k$ colours to the graph corresponds to allocating $k$ registers. Graph $k$-colouring for arbitrary $k$ is NP-complete. However, in register allocation $k$ is fixed at compile time (typically 8–32 physical registers), so the decision problem is polynomial for fixed $k$. The practical hardness arises from simultaneously optimising spilling, coalescing, and live-range splitting decisions; Chaitin's heuristic addresses this greedily rather than optimally.
 
 *Chaitin's algorithm:*
 
