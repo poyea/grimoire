@@ -93,7 +93,9 @@ Key lemmas: $"lseg"(x, "null") equiv "ls"(x)$ and the composition $"lseg"(x, z) 
 
 $ "tree"(x) equiv (x = "null" and "emp") or (exists v, l, r.\ x |-> (v, l, r) * "tree"(l) * "tree"(r)) $
 
-Each $*$ enforces that the left subtree, right subtree, and root cell occupy disjoint heap regions — ruling out DAG-sharing or back-edges without an explicit annotation.
+Each $*$ enforces that the left subtree, right subtree, and root cell occupy disjoint heap regions, ruling out DAG-sharing or back-edges without an explicit annotation. A node that appears in both subtrees would require the same cell to satisfy two disjoint heap assertions, which is impossible under $*$. This rigidity is a feature: the predicate rules out unintended aliasing by construction.
+
+To describe DAGs or graphs with sharing, practitioners either switch to *permission-based* separation logic (VeriFast's fractional permissions) or introduce explicit *abstract predicates* that encode the sharing structure. The tree predicate also composes: $"tree"(l) * "tree"(r)$ immediately implies that the left and right subtrees share no memory, a fact that classical logic can only express with an explicit reachability predicate ranging over all nodes.
 
 === In-Place List Reversal: Proof Sketch
 
@@ -120,11 +122,11 @@ Classical separation logic is sequential. O'Hearn's *concurrent separation logic
 
 *Lock/unlock:*
 
-$ { R * I }\ "lock"(m)\ { R * I } $
+$ { R }\ "lock"(m)\ { R * I } $
 
 $ { R * I }\ "unlock"(m)\ { R } $
 
-where $m$ protects invariant $I$ and $R$ is the thread's private state.
+where $m$ protects invariant $I$ and $R$ is the thread's private resources. Locking *acquires* ownership of $I$, adding it to the thread's footprint; unlocking *returns* $I$ to the lock, removing it from the thread's footprint. A thread may only access the shared state protected by $m$ while it holds the lock.
 
 *Parallel composition:*
 
@@ -144,9 +146,17 @@ $ H * X tack.r "footprint" * Y $
 
 simultaneously discovering the *anti-frame* $X$ (the smallest precondition needed to make the call succeed) and the *frame* $Y$ (the leftover heap not consumed by the callee). The solution is found by a unification procedure over symbolic heaps; when multiple solutions exist, the procedure heuristically picks the smallest.
 
-Bi-abduction enables *compositional interprocedural analysis*: procedures are analysed in isolation, their inferred summaries are cached, and callers compose summaries without re-analysing the callee. This scales to millions of lines of code where exhaustive whole-program analysis is infeasible.
+Bi-abduction enables *compositional interprocedural analysis*: procedures are analysed in isolation, their inferred summaries are cached, and callers compose summaries without re-analysing the callee. A *summary* for procedure $f$ takes the form $\{P\}\ f\ \{Q\}$ where $P$ is the inferred precondition (the anti-frame accumulated over all call paths through $f$) and $Q$ is the postcondition. Summaries are joined across branches: if $f$ has two paths with summaries $\{P_1\}\ f\ \{Q_1\}$ and $\{P_2\}\ f\ \{Q_2\}$, the tool forms the disjunctive summary $\{P_1 \lor P_2\}\ f\ \{Q_1 \lor Q_2\}$, keeping the representation finite. This scales to millions of lines of code where exhaustive whole-program analysis is infeasible.
 
 *Facebook Infer* (open-sourced 2015) implements bi-abduction and runs as a continuous-integration check on every diff at Meta, finding null dereferences, resource leaks, and memory errors in Android (Java) and iOS (Objective-C/C) code before the change lands. Infer has been deployed at Amazon, Mozilla, Spotify, and hundreds of other organizations.
+
+== Decidability and Symbolic Heap Fragment
+
+Full separation logic with arbitrary inductive predicates and quantifier alternation is undecidable. Practical tools therefore restrict to the *symbolic heap fragment*: formulas of the form $Pi and Sigma$ where $Pi$ is a conjunction of pure arithmetic or equality constraints and $Sigma$ is a separating conjunction of points-to assertions $p |-> (v_1, dots, v_k)$ and predicate calls $P(x_1, dots, x_n)$.
+
+Within the symbolic heap fragment, entailment checking for list and tree predicates is decidable in polynomial time (Berdine et al. 2004), enabling fully automated verification. The key operation is *symbolic execution*: each program statement transforms a symbolic heap by consuming its precondition and producing its postcondition, with the frame rule carrying along the untouched remainder. When a branch creates two symbolic heaps, the tool joins them via a normalization procedure that canonicalizes the heap structure and identifies common patterns.
+
+This tractability comes at a cost: properties that require counting (e.g., the length of a list equals a program variable) fall outside the basic fragment and require extending with arithmetic theories or ghost variables. Tools like VeriFast handle this by allowing user annotations that blend pure arithmetic with spatial assertions.
 
 == Tools
 
@@ -185,4 +195,6 @@ Berdine, J., Calcagno, C., O'Hearn, P. (2005). "Smallfoot: Modular Automatic Ass
 
 Jacobs, B., Smans, J., Philippaerts, P., Vogels, F., Penninckx, W., Piessens, F. (2011). "VeriFast: A Powerful, Sound, Predictable, Fast Verifier for C and Java." #emph[NASA Formal Methods].
 
-Gregg, B. (2020). #emph[Systems Performance: Enterprise and the Cloud, 2nd ed.] Pearson. (Chapter 1 discusses Infer's deployment at scale.)
+Distefano, D., Fähndrich, M., Logozzo, F., O'Hearn, P. (2019). "Scaling Static Analyses at Facebook." #emph[Communications of the ACM] 62(8). (Describes the engineering and deployment of Infer, RacerD, and related tools in Facebook's CI pipeline.)
+
+Berdine, J., Calcagno, C., O'Hearn, P. (2004). "A Decidable Fragment of Separation Logic." #emph[FSTTCS]. (Establishes polynomial-time decidability of entailment in the list/tree symbolic heap fragment.)

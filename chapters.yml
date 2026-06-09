@@ -621,8 +621,8 @@ chapters:
   - subject: formal-methods
     slug: separation-logic
     path: formal-methods/separation-logic.typ
-    lines: 188
-    status: draft
+    lines: 200
+    status: reviewed
   - subject: gpu-architecture
     slug: compute-architecture
     path: gpu-architecture/compute-architecture.typ
