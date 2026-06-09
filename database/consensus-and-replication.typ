@@ -152,6 +152,41 @@ class RaftLeader:
   [Used in], [Chubby, Zookeeper, Spanner], [etcd, CockroachDB, TiKV, Consul],
 )
 
+== Log Compaction and Snapshots
+
+In practice, a Raft or Multi-Paxos log grows unboundedly. Raft addresses this with *snapshots*: the state machine periodically serialises its full state to disk, and log entries before the snapshot point can be discarded. New followers receive the snapshot plus only the tail of the log. This is essential for production deployments — without compaction, a long-running cluster would exhaust disk.
+
+The snapshot must be taken at a consistent log index (the state machine applies all entries up to index $i$, then writes the snapshot tagged with $i$; entries $<= i$ can then be dropped). Snapshot transfer to lagging followers must be throttled to avoid overwhelming the leader.
+
+```
+Log before compaction:
+  [1][2][3][4][5][6][7][8][9]...
+  ↑ entries 1-5 captured in snapshot at index 5
+
+Log after compaction:
+  snapshot@5  [6][7][8][9]...
+
+New follower join:
+  1. Leader sends InstallSnapshot RPC → follower applies snapshot
+  2. Leader then streams log entries from index 6 onward
+  3. No need to replay the full log history
+```
+
+*Raft InstallSnapshot RPC (key fields):*
+
+```
+InstallSnapshot {
+  term          : current leader term
+  leader_id     : for follower redirect
+  last_included_index : log index of last entry in snapshot
+  last_included_term  : term of that entry
+  data          : raw snapshot bytes (chunked for large snapshots)
+  done          : true on last chunk
+}
+```
+
+Paxos-based systems use analogous mechanisms (Chubby calls this "garbage collection"; Zookeeper uses "fuzzy snapshots" that tolerate minor inconsistency by replaying the suffix on restore).
+
 == EPaxos (Egalitarian Paxos)
 
 EPaxos (Moraru et al. 2013): no stable leader — any replica can commit any command. Commands are committed with *dependencies* (what commands must precede them). Non-conflicting commands can commit in parallel.
