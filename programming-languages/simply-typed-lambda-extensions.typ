@@ -408,7 +408,7 @@ This perspective unifies the syntactic and semantic accounts and prepares the gr
 == Computational Adequacy
 
 A model $cal(M)$ of $lambda^arrow.r$ is *computationally adequate* if:
-- $emptyset tack.r e : "Bool"$ and $bracket.l.double e bracket.r.double = "true"$ in $cal(M)$ => $e arrow.r^* "true"$ (syntactically).
+- $emptyset tack.r e : "Bool"$ and $bracket.l.stroked e bracket.r.stroked = "true"$ in $cal(M)$ => $e arrow.r^* "true"$ (syntactically).
 
 The set-theoretic model is adequate for $lambda^arrow.r$.
 For $lambda^arrow.r + "fix"$, adequacy requires the *Scott model* (cpos and continuous functions, with $bot$ for divergence): Plotkin (1977) proved the seminal adequacy theorem for PCF.

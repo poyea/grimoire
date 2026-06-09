@@ -12,11 +12,11 @@ A hash function should satisfy:
 - *Second-preimage resistance:* given $x_1$, finding $x_2 != x_1$ with $H(x_1) = H(x_2)$ takes $approx 2^n$ work.
 - *Collision resistance:* finding any $(x_1, x_2)$ with $H(x_1) = H(x_2)$ takes $approx 2^(n / 2)$ work (birthday bound).
 
-Therefore 256-bit hashes offer 128-bit collision security. $"SHA"$-1 (160 bits) was broken in 2017 (SHAttered, Google + CWI) for $approx 2^63$ work — approximately 110 CPU-years of computation, estimated at ~$110,000 in cloud compute at 2017 prices. This makes SHA-1 collision resistance practically broken, not just theoretically weakened: the $2^63$ figure counts SHA-1 evaluations, and differential cryptanalysis drove the real cost far below the brute-force $2^80$ birthday bound. $"MD5"$ is dead — chosen-prefix collisions in seconds.
+Therefore 256-bit hashes offer 128-bit collision security. $"SHA"$-1 (160 bits) was broken in 2017 (SHAttered, Google + CWI) for $approx 2^63$ work — approximately 110 CPU-years of computation, estimated at approximately \$110,000 in cloud compute at 2017 prices. This makes SHA-1 collision resistance practically broken, not just theoretically weakened: the $2^63$ figure counts SHA-1 evaluations, and differential cryptanalysis drove the real cost far below the brute-force $2^80$ birthday bound. $"MD5"$ is dead — chosen-prefix collisions in seconds.
 
 == $"SHA"$-2 Family
 
-$"SHA"$-256 / $"SHA"$-512 use the Merkle–Damgård construction over a Davies–Meyer compression function. Block sizes are 512 / 1024 bits; outputs 256 / 512 bits. $"SHA"$-384 and $"SHA"$-512/256 are truncations of $"SHA"$-512 with different IVs.
+SHA-256 and SHA-512 use the Merkle–Damgård construction over a Davies–Meyer compression function. Block sizes are 512 and 1024 bits; outputs 256 and 512 bits. SHA-384 and SHA-512/256 are truncations of SHA-512 with different IVs.
 
 ```c
 // Simplified core round of SHA-256 (illustrative)
@@ -38,7 +38,7 @@ Intel $"SHA"$-NI and ARMv8 $"SHA2"$ extensions accelerate to $approx 1.5$ cycles
 
 == $"SHA"$-3 / Keccak
 
-$"SHA"$-3 (FIPS 202) uses the *sponge construction* over the Keccak-$f$[1600] permutation: absorb input into rate $r$, squeeze output. $"SHAKE"$-128 / $"SHAKE"$-256 are extendable-output functions (XOFs) — produce any output length. $"cSHAKE"$, $"KMAC"$, $"TupleHash"$, $"ParallelHash"$ (SP 800-185) build on the same permutation.
+$"SHA"$-3 (FIPS 202) uses the *sponge construction* over the Keccak-$f$[1600] permutation: absorb input into rate $r$, squeeze output. SHAKE-128 and SHAKE-256 are extendable-output functions (XOFs) — produce any output length. $"cSHAKE"$, $"KMAC"$, $"TupleHash"$, $"ParallelHash"$ (SP 800-185) build on the same permutation.
 
 ```python
 import hashlib
@@ -81,7 +81,7 @@ A MAC is a keyed function $T = "MAC"_K (M)$ such that no adversary without $K$ c
 
 === $"HMAC"$
 
-$"HMAC"$ (RFC 2104) wraps any Merkle–Damgård hash and is provably secure under PRF assumption on the compression function. Pad key to block size, XOR with $"ipad"$/$"opad"$, hash twice:
+$"HMAC"$ (RFC 2104) wraps any Merkle–Damgård hash and is provably secure under PRF assumption on the compression function. Pad key to block size, XOR with $"ipad"$ and $"opad"$, hash twice:
 
 $ "HMAC"_K (M) = H((K plus.o "opad") parallel H((K plus.o "ipad") parallel M)) $
 

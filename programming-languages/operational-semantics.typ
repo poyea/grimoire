@@ -252,7 +252,7 @@ The gold standard for program equivalence is *contextual* (or *observational*) e
 
 Contextual equivalence quantifies over *"all"* contexts. Direct proofs are infeasible. Sound proof techniques include applicative bisimulation (when Howe's method applies), logical relations (next section), and game-semantic models (see _Denotational Semantics_).
 
-A semantics $bracket.l.double dot bracket.r.double$ is *sound* if $bracket.l.double e_1 bracket.r.double = bracket.l.double e_2 bracket.r.double$ => $e_1 tilde.equiv_"ctx" e_2$, and *complete* (or *fully abstract*) if the converse holds. Full abstraction is the central yardstick connecting denotation and operation: a fully abstract model has neither too few nor too many equations.
+A semantics $bracket.l.stroked dot bracket.r.stroked$ is *sound* if $bracket.l.stroked e_1 bracket.r.stroked = bracket.l.stroked e_2 bracket.r.stroked$ => $e_1 tilde.equiv_"ctx" e_2$, and *complete* (or *fully abstract*) if the converse holds. Full abstraction is the central yardstick connecting denotation and operation: a fully abstract model has neither too few nor too many equations.
 
 == Logical Relations
 
@@ -296,7 +296,7 @@ For mutable state with higher-order references, *world-indexed* (Kripke) logical
 
 === Kripke Logical Relations for State
 
-The Kripke flavour predates step-indexing (Plotkin, Power; Pitts-Stark for ML references). A *world* $W$ is a finite map from store locations to *semantic types* -- relations themselves. The relational interpretation at reference type $"ref"(tau)$ holds when both terms produce locations $ell_1, ell_2$ such that $W(ell_1) = W(ell_2) = bracket.l.double tau bracket.r.double_cal(L)$, i.e., the locations are governed by the same invariant.
+The Kripke flavour predates step-indexing (Plotkin, Power; Pitts-Stark for ML references). A *world* $W$ is a finite map from store locations to *semantic types* -- relations themselves. The relational interpretation at reference type $"ref"(tau)$ holds when both terms produce locations $ell_1, ell_2$ such that $W(ell_1) = W(ell_2) = bracket.l.stroked tau bracket.r.stroked_cal(L)$, i.e., the locations are governed by the same invariant.
 
 Monotonicity in worlds is essential: a relation closed today must remain closed tomorrow, because new allocations may extend the world but cannot retract its commitments. Step-indexing was the breakthrough that allowed worlds to contain higher-order invariants -- relations that mention $cal(L)$ itself.
 

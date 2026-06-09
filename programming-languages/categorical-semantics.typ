@@ -98,7 +98,7 @@ These circle.small via *monad transformers* (Liang-Hudak-Jones 1995): `StateT s 
 
 The *Kleisli category* $cal(C)_T$ has the same objects as $cal(C)$; morphisms $A arrow.r B$ in $cal(C)_T$ are morphisms $A arrow.r T B$ in $cal(C)$. Composition $g compose_T f = mu circle.small T g circle.small f$ (or $g^* circle.small f$ in Kleisli triple form). Identity at $A$ is $eta_A$.
 
-The *categorical semantics of CBV with effect $T$* uses $cal(C)_T$: a typing judgement $Gamma tack.r e : tau$ denotes a morphism $bracket.l.double Gamma bracket.r.double arrow.r T bracket.l.double tau bracket.r.double$ in $cal(C)$, i.e., a morphism in $cal(C)_T$. Sequencing `let x = e1 in e2` is Kleisli composition.
+The *categorical semantics of CBV with effect $T$* uses $cal(C)_T$: a typing judgement $Gamma tack.r e : tau$ denotes a morphism $bracket.l.stroked Gamma bracket.r.stroked arrow.r T bracket.l.stroked tau bracket.r.stroked$ in $cal(C)$, i.e., a morphism in $cal(C)_T$. Sequencing `let x = e1 in e2` is Kleisli composition.
 
 For CBN, one uses the *Eilenberg-Moore category* $cal(C)^T$ instead -- the category of $T$-algebras. The CBV/CBN distinction is the choice between *free* and *forgetful* sides of the monadic adjunction.
 
