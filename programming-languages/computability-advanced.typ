@@ -17,7 +17,7 @@ jump of $emptyset^((beta))$; for limit $alpha$ given by a recursive notation
 $a$, $emptyset^((alpha)) = { chevron.l b, n chevron.r | b <_O a and n in
 emptyset^((|b|)) }$ where $<_O$ is Kleene's $cal(O)$ ordering of notations. The
 union $bold(H) = union.big_(alpha < omega_1^"CK") emptyset^((alpha))$ is the
-*hyperarithmetical* set.
+*hyperarithmetical* class.
 
 *Theorem (Suslin--Kleene).* $A$ is hyperarithmetical <==> $A in Delta^1_1$ (both
 $Sigma^1_1$ and $Pi^1_1$).
@@ -50,8 +50,9 @@ analogues. A set $A subset.eq NN^NN$ (Baire space) is:
   effectively analytic -- the projection of a $Pi^0_1$ set.
 
 *Theorem (Kleene).* $A subset.eq NN$ is $Sigma^1_1$ <==> $A$ is the set of indices
-of well-founded recursive trees. $A subset.eq NN$ is $Pi^1_1$ <==> $A$ is the
-projection of a $Sigma^1_1$ set in $NN times NN$.
+of recursive trees that are *not* well-founded (i.e., that have an infinite path).
+$A subset.eq NN$ is $Pi^1_1$ <==> $A$ is the set of indices of *well-founded*
+recursive trees -- equivalently, $A$ is the complement of a $Sigma^1_1$ set.
 
 *Theorem ($Pi^1_1$-uniformisation, Kondo--Addison).* Every $Pi^1_1$ relation $R
 subset.eq NN times NN^NN$ has a $Pi^1_1$ uniformisation: a $Pi^1_1$ function $f$
@@ -291,8 +292,8 @@ sets in $2^omega$ with $mu(U_n) lt.eq 2^(-n)$, $X in."not" inter_n U_n$.
 *Theorem (universal test).* There is a universal Martin-Löf test, so the class of
 ML-random sequences has measure $1$ and is $Pi^0_2$.
 
-*Schnorr's theorem.* $X$ is ML-random <==> its *prefix-free Kolmogorov complexity*
-satisfies $K(X harpoon.rt n) gt.eq n - O(1)$.
+*Theorem (Levin--Schnorr).* $X$ is ML-random <==> its *prefix-free Kolmogorov complexity*
+satisfies $K(X harpoon.rt n) gt.eq n - O(1)$ for all but finitely many $n$.
 
 *Chaitin's $Omega = sum_(p "halts") 2^(-|p|)$* (the halting probability) is the
 canonical Martin-Löf random real. $Omega$ is left-c.e. (its rationals approaching
@@ -300,15 +301,20 @@ from below are c.e.) and ML-random, hence not computable. Knowing $n$ bits of
 $Omega$ allows one to decide the halting problem for all programs of length
 $lt.eq n$.
 
-*Theorem (Kucera--Gács).* Every set is Turing-reducible to a ML-random set.
-Randomness does not collapse the Turing degrees -- there are ML-random sets in
-every degree above $bold(0')$.
+*Theorem (Kucera--Gács).* Every set $A$ is Turing-reducible to some ML-random
+set. Consequently ML-random sets are not all in a single degree: they spread
+across uncountably many degrees. *Theorem (Kucera 1985).* Every Turing degree
+$gt.eq bold(0')$ contains an ML-random set; moreover every non-computable r.e.
+degree contains an ML-random.
 
 The theory connects measure (almost every sequence), category (comeager many
 sequences), and computability (which random sequences a given oracle can
-recognise) into a single hierarchy: *Schnorr random* $supset$ *computably random*
-$supset$ *Martin-Löf random* $supset$ *Kurtz random*; with respect to oracles,
-$X$-random iff $K(X harpoon.rt n) gt.eq n - O(1)$ relative to $X$.
+recognise) into a single hierarchy of strength: *Martin-Löf random* $subset$
+*computably random* $subset$ *Schnorr random* $subset$ *Kurtz random* (each
+class strictly contains the next, with ML-randomness the strongest and Kurtz
+the weakest). Relativising to an oracle $A$: $X$ is $A$-ML-random iff
+$K^A(X harpoon.rt n) gt.eq n - O(1)$ for all but finitely many $n$, where
+$K^A$ is prefix-free complexity with $A$ as oracle.
 
 == Where Recursion Theory Touches Practice
 

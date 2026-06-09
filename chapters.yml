@@ -1226,8 +1226,8 @@ chapters:
   - subject: programming-languages
     slug: computability-advanced
     path: programming-languages/computability-advanced.typ
-    lines: 362
-    status: draft
+    lines: 368
+    status: reviewed
   - subject: programming-languages
     slug: concurrency-models
     path: programming-languages/concurrency-models.typ
