@@ -11,7 +11,7 @@ A signature scheme is a triple of algorithms:
 - $"Sign"("sk", m) -> sigma$: produce a signature.
 - $"Verify"("pk", m, sigma) -> {0, 1}$: accept or reject.
 
-The standard security notion is *existential unforgeability under chosen-message attack* (EUF-CMA): an adversary with access to a signing oracle must not produce a valid signature on any message it did not query. A stronger notion, *strong unforgeability* (SUF-CMA), additionally forbids producing a _new_ signature on a previously signed message — relevant when signatures are malleable (ECDSA is malleable: $(r, s)$ and $(r, -s mod n)$ both verify).
+The standard security notion is *existential unforgeability under chosen-message attack* (EUF-CMA): an adversary with access to a signing oracle must not produce a valid signature on any message it did not query. A stronger notion, *strong unforgeability* (SUF-CMA), additionally forbids producing a _new_ signature on a previously signed message — relevant when signatures are malleable (ECDSA is malleable: $(r, s)$ and $(r, n - s)$ both verify).
 
 *Hash-then-sign*: practical schemes sign $H(m)$ rather than $m$ itself. Security then also rests on the collision resistance of $H$: a collision $H(m_1) = H(m_2)$ lets an attacker transfer a signature from $m_1$ to $m_2$. This is why MD5 and SHA-1 certificates were catastrophic (the Flame malware forged a Microsoft code-signing certificate via an MD5 chosen-prefix collision).
 
@@ -23,7 +23,7 @@ Textbook RSA signing ($sigma = m^d mod N$) is insecure: it is malleable ($sigma_
 
 === PKCS#1 v1.5
 
-The legacy padding encodes $"0x00 0x01 0xFF"...."0xFF 0x00" || "DigestInfo" || H(m)$ and signs the result. It has no security proof but no practical attacks when implemented correctly. The famous *Bleichenbacher 2006 forgery* exploited verifiers that did not check the padding extended to the full modulus length, allowing forgeries against small exponents ($e = 3$) by cube-rooting a crafted value. Variants of this bug have recurred for over a decade (BERserk, recent JavaScript library CVEs).
+The legacy padding encodes $"0x00 0x01 0xFF" dots "0xFF 0x00" || "DigestInfo" || H(m)$ and signs the result. It has no security proof but no practical attacks when implemented correctly. The famous *Bleichenbacher 2006 forgery* exploited verifiers that did not check the padding extended to the full modulus length, allowing forgeries against small exponents ($e = 3$) by cube-rooting a crafted value. Variants of this bug have recurred for over a decade (BERserk, recent JavaScript library CVEs).
 
 === RSA-PSS
 
@@ -43,11 +43,11 @@ Verification: check $g^s = R y^e$. Schnorr is derived from the Schnorr identific
 
 === DSA and ECDSA
 
-DSA (NIST, 1994) is a Schnorr variant designed around the then-active Schnorr patent. ECDSA is its elliptic-curve form, ubiquitous in TLS, Bitcoin, and code signing. Signing with key $d$, nonce $k$, and base point $G$ of order $n$:
+DSA (proposed by NIST in 1991, standardised as FIPS 186 in 1994) is a Schnorr variant designed around the then-active Schnorr patent. ECDSA is its elliptic-curve form, ubiquitous in TLS, Bitcoin, and code signing. Signing with key $d$, nonce $k$, and base point $G$ of order $n$:
 
 $ r = (k G)_x mod n, quad s = k^(-1) (H(m) + r d) mod n. $
 
-*The nonce is the Achilles heel.* If $k$ repeats across two messages, the private key follows from two linear equations: this broke the Sony PS3 firmware signing key (2010, constant $k$) and numerous Bitcoin wallets. Even _partial_ nonce bias is fatal: lattice attacks (Howgrave-Graham & Smart; the Minerva and TPM-Fail attacks, 2019) recover keys from a few hundred signatures with only a few bits of bias per nonce. The standard mitigation is *RFC 6979 deterministic ECDSA*, which derives $k = "HMAC"("sk", H(m))$, removing the RNG from the hot path.
+*The nonce is the Achilles heel.* If $k$ repeats across two messages, the private key follows from two linear equations: this broke the Sony PS3 firmware signing key (2010, constant $k$) and numerous Bitcoin wallets. Even _partial_ nonce bias is fatal: lattice attacks (Howgrave-Graham & Smart; the Minerva and TPM-Fail attacks, 2019) recover keys from a few hundred signatures with only a few bits of bias per nonce. The standard mitigation is *RFC 6979 deterministic ECDSA*, which derives $k$ from the private key and $H(m)$ via HMAC-DRBG, removing the RNG from the hot path.
 
 === EdDSA and Ed25519
 
@@ -57,7 +57,7 @@ EdDSA (Bernstein et al., 2011) is a deterministic Schnorr-style scheme over twis
 - *Complete addition formulas*: no exceptional cases, easing constant-time implementation.
 - *Fast and small*: 64-byte signatures, 32-byte keys; batch verification supported.
 
-Ed25519 is the default for SSH keys, Signal, and most modern protocols. One caveat: deterministic nonces make the scheme more vulnerable to *fault attacks* (glitch one of two identical signings and the key leaks); hardened implementations add randomness to the nonce derivation ("hedged" signing, as in Ed25519ctx variants).
+Ed25519 is the default for SSH keys, Signal, and most modern protocols. One caveat: deterministic nonces make the scheme more vulnerable to *fault attacks* (glitch one of two identical signings and the key leaks); hardened implementations add randomness to the nonce derivation ("hedged" signing, as in XEdDSA and the CFRG hedged-signature drafts).
 
 == Pairing-Based and Aggregate Signatures
 
@@ -71,7 +71,7 @@ Ed25519 is the default for SSH keys, Signal, and most modern protocols. One cave
 == Post-Quantum Signatures
 
 Shor's algorithm breaks RSA, DSA, and all elliptic-curve schemes. NIST standardised (2024):
-- *ML-DSA (Dilithium)*: lattice-based (module-LWE), the general-purpose default; signatures $approx 2.4$ KB.
+- *ML-DSA (Dilithium)*: lattice-based (module-LWE), the general-purpose default; signatures $approx 2.4$–$4.6$ KB depending on security level.
 - *SLH-DSA (SPHINCS+)*: stateless hash-based; conservative security, large signatures ($approx 8$–$50$ KB).
 - *FN-DSA (Falcon)*: lattice (NTRU); compact but requires floating-point Gaussian sampling that is hard to make constant-time.
 
