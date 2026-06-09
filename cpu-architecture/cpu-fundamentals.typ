@@ -52,7 +52,7 @@ AMD Zen 4 (Ryzen 7000, 2022):
 
 AMD Zen 5 (Ryzen 9000 / EPYC Turin, 2024):
 - 8-wide decode (dual 4-wide clusters), 448-entry ROB
-- 6 ALU + 4 AGU; full-width 512-bit AVX-512 datapath (vs Zen 4's double-pumped 256-bit)
+- 6 ALU + 4 AGU; 256-bit AVX2 SIMD datapath (Zen 5 does not support AVX-512; Zen 4 added double-pumped 256-bit AVX-512 emulation, but Zen 5 retains native 256-bit AVX2 with no AVX-512 support)
 - ~16% IPC over Zen 4 (AMD claim, geomean across SPEC + apps)
 
 Apple M3 (2023) / M4 (2024):
