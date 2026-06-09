@@ -176,7 +176,7 @@ satisfies $Y space f arrow.r^* f (Y space f)$ and produces non-terminating reduc
 
 == Reynolds' Parametricity
 
-*The intuition.* A function of type $forall alpha . alpha arrow.r alpha$ knows nothing about $alpha$; the only thing it can do with its argument is return it. Hence the only inhabitant is (up to $beta eta$) the identity. Reynolds (1983) formalised this slogan via a relational interpretation, generalising the candidate construction.
+*The intuition.* A function of type $forall alpha . alpha arrow.r alpha$ knows nothing about $alpha$; the only thing it can do with its argument is return it. Hence the only inhabitant is (up to $beta eta$) the identity. Reynolds (1983) formalised this slogan via a *binary relational interpretation* — a different technique from Girard's reducibility candidates. Girard's candidates are *unary* semantic predicates over a single model, used to prove strong normalization. Reynolds' relations are *binary*, relating terms across two independent interpretations, used to prove parametricity and derive free theorems. The two results are complementary: Girard (1972) establishes that every well-typed System F term terminates; Reynolds (1983) establishes that every well-typed term behaves uniformly across all type instantiations.
 
 === The Relational Interpretation
 
