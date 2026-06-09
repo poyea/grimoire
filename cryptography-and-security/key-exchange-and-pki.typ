@@ -6,14 +6,14 @@ Key exchange lets two parties who share no secret establish one over a public ch
 
 == Diffie-Hellman Key Exchange
 
-The 1976 Diffie-Hellman protocol: over a group of prime order $q$ with generator $g$, Alice picks $a$ and sends $g^a$; Bob picks $b$ and sends $g^b$; both compute the shared secret $g^(a b)$.
+The 1976 Diffie-Hellman protocol (modern practice uses a prime-order subgroup; the original paper worked in $ZZ_p^*$): over a group of prime order $q$ with generator $g$, Alice picks $a$ and sends $g^a$; Bob picks $b$ and sends $g^b$; both compute the shared secret $g^(a b)$.
 
 Security rests on the *computational Diffie-Hellman* (CDH) assumption — given $(g, g^a, g^b)$, computing $g^(a b)$ is hard — and in practice the stronger *decisional* variant (DDH). The raw shared secret is never used directly: a *key derivation function* (HKDF, RFC 5869) extracts uniform keys and binds them to the protocol transcript.
 
 === Finite-Field vs. Elliptic-Curve DH
 
 - *FFDHE*: classic $ZZ_p^*$ groups. Require $|p| >= 2048$ bits. The *Logjam* attack (2015) exploited export-grade 512-bit groups and showed that precomputation against a single popular 1024-bit prime could break a large fraction of deployed servers.
-- *ECDH*: elliptic-curve groups give equivalent security at 256 bits with far cheaper operations. *X25519* (Bernstein's Curve25519 in Montgomery form) is the de facto standard: fast, constant-time by construction, and immune to invalid-curve attacks by design (every 32-byte string is a valid input). X448 is its higher-security sibling.
+- *ECDH*: elliptic-curve groups give equivalent security at 256 bits with far cheaper operations. *X25519* (Bernstein's Curve25519 in Montgomery form) is the de facto standard: fast, constant-time by construction, and resistant to invalid-curve attacks by design (x-only Montgomery ladder over a twist-secure curve; every 32-byte string is accepted, though low-order inputs map to a zero output and contributory protocols must reject them). X448 is its higher-security sibling.
 
 *Ephemeral vs. static*: ephemeral DH (fresh keys per session, "DHE"/"ECDHE") provides *forward secrecy* — compromise of long-term keys does not reveal past session keys. TLS 1.3 removed all non-forward-secret key exchange.
 
@@ -25,7 +25,7 @@ Unauthenticated DH falls to an active man-in-the-middle who runs separate exchan
 - *Static-DH / implicit authentication* (Noise KK/IK patterns, WireGuard): mix long-term DH shares into the key schedule; authenticity follows from the ability to compute the shared secret.
 - *PAKE* (password-authenticated KE): derive authentication from a low-entropy password without exposing it to offline guessing. SRP is the legacy scheme; *OPAQUE* (2018) is the modern asymmetric PAKE; *CPace* the symmetric one.
 
-A well-designed AKE binds identities, transcript, and keys together to prevent *unknown key-share* and *channel binding* failures — formalised in the eCK and related models.
+A well-designed AKE binds identities, transcript, and keys together to prevent *unknown key-share* attacks and provide *channel binding* — formalised in the eCK and related models.
 
 === The Noise Framework and WireGuard
 
@@ -35,11 +35,11 @@ The *Noise protocol framework* (Perrin) is a small algebra of handshake patterns
 
 The de facto standard for end-to-end encrypted messaging (Signal, WhatsApp, Google Messages):
 
-- *X3DH* (extended triple DH): asynchronous initial key agreement. The initiator combines DH operations among identity keys, a signed prekey, and a one-time prekey fetched from the server, so sessions start while the recipient is offline.
+- *X3DH* (extended triple DH): asynchronous initial key agreement. The initiator combines DH operations among identity keys, a signed prekey, and (when available) a one-time prekey fetched from the server, so sessions start while the recipient is offline.
 - *Double Ratchet*: each message advances a symmetric KDF chain (forward secrecy per message), and each round trip mixes in a fresh DH exchange (*post-compromise security*: an attacker who steals state is healed out after one honest round trip).
 - *Sealed sender, sender keys*: metadata reduction and group fan-out.
 
-Successor work: *MLS* (Messaging Layer Security, RFC 9420) scales post-compromise-secure group keying to thousands of members via the TreeKEM ratcheting tree; *PQXDH* adds an ML-KEM ciphertext to X3DH against harvest-now-decrypt-later adversaries.
+Successor work: *MLS* (Messaging Layer Security, RFC 9420) scales post-compromise-secure group keying to thousands of members via the TreeKEM ratcheting tree; *PQXDH* adds a Kyber (now ML-KEM) ciphertext to X3DH against harvest-now-decrypt-later adversaries.
 
 == Key Encapsulation Mechanisms
 
@@ -51,11 +51,11 @@ Post-quantum schemes are KEMs rather than DH: $"Encap"("pk") -> (c, K)$ and $"De
 
 An X.509 certificate binds a subject (DNS name, organisation) to a public key, signed by an issuer. Verification builds a *chain* from the end-entity certificate through intermediates to a *root CA* in the client's trust store. Standard checks: signature validity, validity period, name constraints, key usage / extended key usage, basic constraints (CA flag, path length), and hostname matching against subjectAltName.
 
-Chain building is genuinely hard: cross-signatures, expired intermediates, and multiple valid paths caused the 2021 *AddTrust root expiry* breakage across countless clients with naive path builders.
+Chain building is genuinely hard: cross-signatures, expired intermediates, and multiple valid paths caused the May 2020 *AddTrust root expiry* breakage across countless clients with naive path builders.
 
 === Certificate Issuance and ACME
 
-*ACME* (RFC 8555, the Let's Encrypt protocol) automated domain-validated issuance: the CA challenges the requester to prove control via HTTP-01 (well-known URL), DNS-01 (TXT record), or TLS-ALPN-01. Automation moved the web from yearly manual renewal to 90-day (now trending toward 45-day) certificate lifetimes. *Multi-perspective validation* counters BGP-hijack attacks on the validation path itself.
+*ACME* (RFC 8555, the Let's Encrypt protocol) automated domain-validated issuance: the CA challenges the requester to prove control via HTTP-01 (well-known URL), DNS-01 (TXT record), or TLS-ALPN-01. Automation moved the web from yearly manual renewal to 90-day (now trending toward 47-day) certificate lifetimes. *Multi-perspective validation* counters BGP-hijack attacks on the validation path itself.
 
 === Revocation
 
