@@ -242,10 +242,12 @@ Kubernetes namespaces are organisational, not security boundaries. A tenant that
   [Identity], [RBAC + ServiceAccounts], [Accidental cross-tenant API access],
   [Network], [NetworkPolicy (CNI-enforced)], [Pod-to-pod traffic across namespaces],
   [Resource], [ResourceQuota + LimitRange], [CPU/memory monopolisation],
-  [Pod security], [Pod Security Admission (PSA)], [Privileged containers, host-path mounts],
+  [Pod security], [Pod Security Standards (PSS) via PodSecurity admission controller], [Privileged containers, host-path mounts],
   [Syscall filter], [seccomp profile, AppArmor], [Container breakout via kernel exploits],
   [Audit], [kube-apiserver audit log], [Forensics after incident],
 )
+
+*Pod security history:* Pod Security Policy (PSP) was deprecated in Kubernetes 1.21 and removed in 1.25 (2022). The replacement is Pod Security Standards (PSS) — three levels: Privileged (unrestricted), Baseline (prevents known privilege escalations), and Restricted (hardened, follows current best practices) — enforced via the built-in PodSecurity admission controller (stable since 1.23). PSS is configured with namespace labels rather than RBAC-bound policy objects.
 
 Three isolation models span the cost-isolation tradeoff:
 
