@@ -20,4 +20,10 @@
   #include "compilers/ir-design.typ"
   #pagebreak()
 
+  #include "compilers/register-allocation.typ"
+  #pagebreak()
+
+  #include "compilers/backend-and-codegen.typ"
+  #pagebreak()
+
 ]

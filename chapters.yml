@@ -233,6 +233,16 @@ chapters:
     path: compilers/ir-design.typ
     lines: 265
     status: reviewed
+  - subject: compilers
+    slug: register-allocation
+    path: compilers/register-allocation.typ
+    lines: 180
+    status: reviewed
+  - subject: compilers
+    slug: backend-and-codegen
+    path: compilers/backend-and-codegen.typ
+    lines: 230
+    status: reviewed
   - subject: cpu-architecture
     slug: accelerators
     path: cpu-architecture/accelerators.typ
