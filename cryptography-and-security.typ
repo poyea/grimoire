@@ -23,4 +23,7 @@
   #include "cryptography-and-security/symmetric-primitives.typ"
   #pagebreak()
 
+  #include "cryptography-and-security/tls.typ"
+  #pagebreak()
+
 ]

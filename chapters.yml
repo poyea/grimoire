@@ -363,6 +363,11 @@ chapters:
     path: cryptography-and-security/symmetric-primitives.typ
     lines: 214
     status: reviewed
+  - subject: cryptography-and-security
+    slug: tls
+    path: cryptography-and-security/tls.typ
+    lines: 207
+    status: reviewed
   - subject: data-engineering
     slug: batch-processing
     path: data-engineering/batch-processing.typ
