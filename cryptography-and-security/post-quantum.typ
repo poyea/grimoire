@@ -83,7 +83,7 @@ FN-DSA (formerly Falcon) is a lattice signature based on NTRU lattices with smal
 
 == Other Families
 
-- *Code-based:* Classic McEliece (HQC was selected as the fifth KEM standard in 2025 (FIPS 205 covers ML-KEM; HQC was added as a code-based alternative)). McEliece has 60-year track record, very large public keys (\~ 1 MB).
+- *Code-based:* Classic McEliece and HQC. NIST finalized three PQ standards in August 2024: FIPS 203 (ML-KEM/Kyber), FIPS 204 (ML-DSA/Dilithium), and FIPS 205 (SLH-DSA/SPHINCS+). HQC is under evaluation as a potential backup KEM (code-based, complementing the lattice-based ML-KEM) but has not been standardized as a FIPS. McEliece has a 60-year track record; both McEliece and HQC have very large public keys (\~ 1 MB for McEliece).
 - *Isogeny-based:* SIDH/SIKE broken by Castryck-Decru (2022) via torsion-point attack. CSIDH and SQIsign remain candidates.
 - *Multivariate:* Rainbow broken by Beullens (2022). $"GeMSS"$ and $"UOV"$ variants survive.
 
