@@ -6,7 +6,7 @@ A zero-knowledge proof lets a prover convince a verifier that a statement is tru
 
 == Interactive Proofs and the Three Properties
 
-An interactive proof system for a language $L$ involves a prover $P$ and verifier $V$ exchanging messages. Goldwasser, Micali & Rackoff (1985) defined zero knowledge via three properties:
+An interactive proof system for a language $L$ involves a prover $P$ and verifier $V$ exchanging messages. Goldwasser, Micali & Rackoff (1985; journal version 1989) defined zero knowledge via three properties:
 
 - *Completeness*: if $x in L$, an honest prover convinces the verifier.
 - *Soundness*: if $x in.not L$, no cheating prover succeeds except with negligible probability. (*Proof of knowledge* strengthens this: a successful prover must _know_ a witness, formalised via an extractor.)
@@ -36,7 +36,7 @@ A *commitment scheme* lets one bind to a value now and reveal it later — *hidi
 
 == zk-SNARKs
 
-A *SNARK* — succinct non-interactive argument of knowledge — proves arbitrary computation with a proof that is tiny (hundreds of bytes) and verifiable in milliseconds, regardless of computation size. The pipeline:
+A *SNARK* — succinct non-interactive argument of knowledge — proves arbitrary computation with a proof that is tiny (hundreds of bytes) and verifiable in milliseconds, essentially independent of computation size. The pipeline:
 
 1. *Arithmetisation*: express the computation as constraints over a finite field — R1CS (rank-1 constraint systems, triples enforcing $chevron.l a, w chevron.r dot chevron.l b, w chevron.r = chevron.l c, w chevron.r$) or the more flexible *Plonkish* / AIR formats with custom gates and lookup tables.
 2. *Polynomial IOP*: encode constraint satisfaction as polynomial identities checked at random points.
@@ -44,7 +44,7 @@ A *SNARK* — succinct non-interactive argument of knowledge — proves arbitrar
 
 === Groth16
 
-Groth (2016) remains the smallest: 3 group elements ($approx 128$ bytes), one pairing equation to verify. Cost: a *trusted setup per circuit* — the "toxic waste" from the setup ceremony would allow forging proofs, so multi-party ceremonies (Zcash's powers-of-tau) ensure security if any one participant is honest.
+Groth (2016) remains the smallest: 3 group elements ($approx 128$ bytes), one pairing equation to verify. Cost: a *trusted setup per circuit* — the "toxic waste" from the setup ceremony would allow forging proofs, so multi-party ceremonies (Zcash's Sapling MPC, built on a circuit-independent powers-of-tau phase) ensure security if any one participant is honest.
 
 === PLONK and Universal Setups
 
@@ -61,7 +61,7 @@ StarkWare's production systems and most zkVMs (RISC Zero, SP1) are STARK-based, 
 
 === Bulletproofs
 
-Bulletproofs (Bünz et al., 2018) need no trusted setup and give logarithmic-size *range proofs* (proving a committed value lies in $[0, 2^n)$) — used in Monero's confidential transactions. Verification is linear in the statement, so they suit small statements rather than general computation.
+Bulletproofs (Bünz et al., 2018) need no trusted setup and give logarithmic-size *range proofs* (proving a committed value lies in $[0, 2^n)$) — used in Monero's confidential transactions (Bulletproofs from 2018, Bulletproofs+ since 2022). Verification is linear in the statement, so they suit small statements rather than general computation.
 
 == Applications
 
