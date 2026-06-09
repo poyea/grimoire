@@ -26,4 +26,10 @@
   #include "machine-learning-foundations/loss-functions.typ"
   #pagebreak()
 
+  #include "machine-learning-foundations/information-theory.typ"
+  #pagebreak()
+
+  #include "machine-learning-foundations/network-information-theory.typ"
+  #pagebreak()
+
 ]

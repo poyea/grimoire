@@ -978,6 +978,16 @@ chapters:
     path: machine-learning-foundations/loss-functions.typ
     lines: 270
     status: reviewed
+  - subject: machine-learning-foundations
+    slug: information-theory
+    path: machine-learning-foundations/information-theory.typ
+    lines: 190
+    status: reviewed
+  - subject: machine-learning-foundations
+    slug: network-information-theory
+    path: machine-learning-foundations/network-information-theory.typ
+    lines: 185
+    status: reviewed
   - subject: networking
     slug: application-protocols
     path: networking/application-protocols.typ
