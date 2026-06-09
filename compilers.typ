@@ -26,4 +26,10 @@
   #include "compilers/backend-and-codegen.typ"
   #pagebreak()
 
+  #include "compilers/optimisation-passes.typ"
+  #pagebreak()
+
+  #include "compilers/jit-and-runtimes.typ"
+  #pagebreak()
+
 ]

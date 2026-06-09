@@ -243,6 +243,16 @@ chapters:
     path: compilers/backend-and-codegen.typ
     lines: 230
     status: reviewed
+  - subject: compilers
+    slug: optimisation-passes
+    path: compilers/optimisation-passes.typ
+    lines: 234
+    status: reviewed
+  - subject: compilers
+    slug: jit-and-runtimes
+    path: compilers/jit-and-runtimes.typ
+    lines: 187
+    status: reviewed
   - subject: cpu-architecture
     slug: accelerators
     path: cpu-architecture/accelerators.typ
