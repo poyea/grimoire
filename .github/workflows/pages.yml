@@ -3,7 +3,7 @@ name: Deploy Pages
 on:
   push:
     branches: [main]
-    paths: ['docs/**', '**.typ', 'scripts/gen_homepage.py']
+    paths: ['docs/**', '**.typ', 'scripts/gen_homepage.py', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
