@@ -329,87 +329,87 @@
   const VOLUMES = [
     { id: '01', title: 'Coding',
       desc: 'Algorithms and data structures: a practitioner\'s reference for interviews, contests, and engineering.',
-      topics: ['Arrays & Hashing','Binary Search','Trees & Tries','Dynamic Programming','Graph Algorithms','Backtracking','Bit Manipulation','Segment Trees','Computational Geometry','Greedy & Exchange Proofs','Union-Find','Streaming Algorithms','Probabilistic Structures','String Algorithms','Complexity & Master Theorem']
+      topics: ['Algorithms and Data Structures: An Orientation','Modern C++ Performance Reference','Problem-Solving Framework','Arrays','Hashing','Two Pointers','Sliding Window','Stack','Linked List','Binary Search','Trees','Heap/Priority Queue','Tries','Backtracking','Greedy','Dynamic Programming','Graphs','Advanced Graph Algorithms','Union-Find (Disjoint Set Union)','Network Flows and Matching','Bit Manipulation','String Algorithms','Math & Number Theory','Advanced Algorithms in Modern Systems','Distributed and ML Algorithms','Probabilistic Data Structures','Segment Trees and Range Queries','Advanced String Algorithms','Streaming Algorithms','Computational Geometry','Linear Programming and the Simplex Method','Randomized Algorithms','Approximation Algorithms','Online Algorithms','Parallel Algorithms','Interview Systems Design Playbook']
     },
     { id: '02', title: 'CPU Architecture',
       desc: 'Processor design, instruction sets, and performance analysis from pipeline to silicon.',
-      topics: ['Pipelining','Superscalar Execution','Branch Prediction','Cache Hierarchy','Virtual Memory','SIMD','Multicore','Performance Analysis','Tomasulo','Spectre/Meltdown','ARM SVE & Intel AMX','MESI/MOESI/CXL','Roofline & TMAM','Apple M-series','Accelerators']
+      topics: ['CPU Fundamentals','Pipelining','Superscalar and Out-of-Order Execution','Out-of-Order Execution Deep Dive','Branch Prediction','Speculative Execution Security','Cache Hierarchy','Memory System','Virtual Memory','SIMD (Single Instruction Multiple Data)','Multicore and Cache Coherence','Synchronization Primitives','Performance Analysis and Measurement','Power Management and DVFS','Domain-Specific Accelerators','Interconnects: UPI, Infinity Fabric, CXL, NVLink, PCIe','RISC-V','ARM Deep Dive']
     },
     { id: '03', title: 'GPU Architecture',
       desc: 'Parallel computing, CUDA internals, Tensor Cores, and ML workload optimization.',
-      topics: ['SIMT Model','Warps & Threads','Memory Hierarchy','CUDA & Tensor Cores','Occupancy Tuning','Triton & DSLs','Profiling','Hopper & Blackwell','AMD CDNA 3','Multi-GPU (NVLink/NCCL)','Flash Attention','Quantization (FP8/INT4)','ML Workloads','GPU Virtualization']
+      topics: ['GPU Fundamentals','SIMT Execution Model','GPU Memory Hierarchy','GPU Memory: Caches, HBM, and Optimization','Compute Units and Specialized Cores','Performance Optimization','Multi-GPU Communication and Scaling','ML Workload Optimization on GPUs','GPU Profiling and Debugging','CUDA Programming Model','Tensor Cores and Matrix Multiply-Accumulate','NCCL and Collective Communication','GPU Virtualization and Partitioning','Triton and GPU Domain-Specific Languages','Non-NVIDIA Accelerators']
     },
     { id: '04', title: 'Networking',
       desc: 'Network protocols, congestion control, data-centre fabric, and modern application protocols.',
-      topics: ['TCP/UDP/QUIC','TLS','HTTP/2 & HTTP/3','DNS','gRPC & WebSocket','MQTT','Congestion Control','Zero-Copy & Kernel Bypass','Load Balancing','BGP Routing','Data-Centre Networking','NAT & Traversal','SDN','5G Cellular']
+      topics: ['Link Layer & Hardware','IPv6','Transport Layer','Congestion Control','Multipath Transport','POSIX Sockets API','I/O Multiplexing','Application Protocols','WebSockets','DNS (Domain Name System)','gRPC (Remote Procedure Calls)','TLS (Transport Layer Security)','QUIC and HTTP/3','Zero-Copy Networking','Kernel Bypass','Concurrency Models','Lock-Free Data Structures for Networking','Message Queues and ZeroMQ','Performance Reference','Network Debugging','Network Address Translation (NAT)','Stateful Firewalls','Load Balancing','Data Center Networking','Container Networking','Service Mesh','Service Discovery','Connection Pooling','Resilience Patterns','Network Security','BGP Routing','SDN and Programmable Networks','Programmable Data Planes and P4','Wireless Protocols','Network Observability','Real-Time Protocols']
     },
     { id: '05', title: 'Linux Kernel',
       desc: 'Internals for systems engineers: syscalls, memory, scheduling, containers, tracing, and networking.',
-      topics: ['Syscalls & ABI','vDSO & seccomp','mmap & THP','hugetlbfs','CPU Affinity & NUMA','CFS & EEVDF','SCHED_DEADLINE','cgroups v2 & Namespaces','NAPI & XDP','eBPF & bpftrace','io_uring','RCU & Locking','Security Modules','VFS & Filesystems']
+      topics: ['ABI and Syscalls','mmap and Memory Management','CPU Affinity, Isolation, and NUMA','The Scheduler','cgroups and Namespaces','Interrupts and Bottom Halves','io_uring','Kernel Tracing','Kernel Modules','VFS and Filesystems','The Block Layer','The Networking Stack','RCU and Locking','Memory Reclaim','eBPF Deep Dive','Security Modules','Containers in the Kernel','Live Patching']
     },
     { id: '06', title: 'Large Language Models',
       desc: 'Transformer internals, training, RLHF, inference optimization, agents, and safety.',
-      topics: ['Transformer Architecture','Attention & RoPE','Scaling Laws','Pretraining & Data','LoRA & QLoRA','RLHF & DPO','Reasoning Models','Speculative Decoding','PagedAttention','Quantization (GPTQ/AWQ/FP8)','MoE','Agents & Tool Use','Safety & Alignment','Evaluation']
+      topics: ['Introduction','Tokenization','Data Curation','Transformer Architecture','Pretraining','Pretraining Infrastructure','Mixture of Experts','Long Context','Multimodal Models','Fine-tuning','RLHF and Alignment','Reasoning Models','Agents and Tool Use','Retrieval-Augmented Generation','Distillation','Safety and Alignment','Inference Optimization','Inference Serving','Quantization','Serving Systems','Evaluation','Interpretability']
     },
     { id: '07', title: 'Languages & Compilers',
       desc: 'Automata, semantics, type theory, and a compiler from scratch — from Myhill–Nerode to HoTT.',
-      topics: ['Myhill–Nerode & Kleene','ω-Automata & Parity Games','Tree & Weighted Automata','Automata Learning (L*)','Computability & Hierarchies','Complexity & Cook–Levin','Operational/Denotational Semantics','Separation Logic & Iris','System F & Parametricity','Dependent Types & CIC','Linear & Effect Types','Gradual Typing & HoTT','Macros & Staging','π-Calculus','µC Compiler']
+      topics: ['Regular Languages and Finite Automata','Lexing','Parsing','Pushdown Automata and Context-Free Grammars','Turing Machines and Computability','Regular Languages','Regular Languages: Proofs, Algorithms, and Advanced Theory','Context-Free Languages','Pushdown Automata and Beyond','Omega-Automata','Omega-Automata: Detailed Constructions and Algorithms','Infinite Trees and Games','Tree Automata','Timed and Hybrid Automata','Weighted and Probabilistic Automata','Automata Learning','Computability and Recursion Theory','Advanced Recursion Theory','Complexity Theory','Program Semantics','Operational Semantics','Denotational Semantics','Axiomatic Semantics','Categorical Semantics','Type Systems','Simply-Typed Lambda Calculus','Simply-Typed Lambda Calculus: Extensions and Advanced Topics','System F and Parametricity','System F: Categorical Models and Advanced Topics','Dependent Types','Dependent Types: Proof Engineering and Advanced Topics','Linear and Substructural Type Systems','Effects and Handlers','Effects and Handlers: Implementation and Theory','Subtyping and Polymorphism','Gradual and Hybrid Type Systems','Homotopy Type Theory','Macros and Metaprogramming','Macros and Metaprogramming: Formal Foundations','Process Calculi','Concurrency Models','Build a Compiler']
     },
     { id: '08', title: 'Databases',
       desc: 'Storage engines, concurrency, query optimization, distributed transactions, and modern analytics.',
-      topics: ['Relational Model & ACID','B-Tree & LSM','ARIES Recovery','Buffer Pool','MVCC & 2PL','Isolation & SSI','Query Optimization','Worst-Case-Optimal Joins','Vector Search (HNSW/IVF)','2PC, Calvin, Spanner','Paxos/Raft/EPaxos','CRDTs','Column Stores & Vectorization','Lakehouses (Iceberg/Delta)','Streaming & DBSP']
+      topics: ['Database Foundations','Query Languages','Storage Engines','Embedded Databases','Recovery and Logging','Buffer Pool and I/O','Concurrency Control','Isolation and Consistency Models','Query Compilation','Query Optimization','SQL Engine Internals','Joins and Aggregation','Vector and Similarity Search','Distributed Transactions','Consensus and Replication','Partitioning and Elasticity','Weakly Consistent Systems','Column Stores and Vectorized Execution','Lakehouses and Open Table Formats','Cloud-Native Databases','OLTP / HTAP / OLAP Convergence','Streaming and Incremental Computation','Time-Series and Graph Databases','Geospatial Data Management','Multi-Model Databases','Hardware-Aware Database Design','Database Security and Privacy','Observability and Self-Driving Databases','Benchmarking and Research Methods','Columnar Storage and Vectorization','OLTP vs OLAP','Query Processing']
     },
     { id: '09', title: 'Distributed Systems',
       desc: 'Consensus, replication, time, transactions, failure detection, and workflow engines.',
-      topics: ['FLP & CAP','Paxos & Raft Deep Dive','Viewstamped Replication','Log-Based Systems','Gossip Protocols','Leader Election & Leases','Failure Detection (Phi/SWIM)','Logical & Hybrid Clocks','Distributed Transactions','Workflow Engines','Coordination Services','CRDTs & Causal Consistency']
+      topics: ['Consensus Deep Dive','Coordination Services','Failure Detection','Gossip Protocols','Introduction: Models and Impossibilities','Leader Election and Leases','Time and Order','Distributed Transactions','Log-Based Systems','Workflow Engines']
     },
     { id: '10', title: 'Operating Systems',
       desc: 'Processes, scheduling, memory management, storage, boot, and the system call interface.',
-      topics: ['Processes & Threads','Scheduling Theory','Memory Management','Virtual Memory','Storage Stack','Boot & Init','Synchronization Primitives','IPC','Containers & Namespaces','Real-Time Scheduling','Page Reclaim & OOM']
+      topics: ['Inter-Process Communication','Memory Management','Processes and Threads','Scheduling Theory','The Storage Stack','Boot and Init','Security Models']
     },
     { id: '11', title: 'Machine Learning',
       desc: 'Mathematical foundations, optimization, generalization theory, and modern training techniques.',
-      topics: ['Linear Algebra for ML','Probability & Information','Optimization (SGD/Adam/Shampoo)','Generalization & PAC','Loss Functions','Information Theory','Network Information Theory','Reinforcement Learning','Diffusion Models','Bayesian Methods','Kernel Methods','Dimensionality Reduction','Graph Neural Networks']
+      topics: ['Generalization Theory','Linear Algebra for ML','Optimization','Probability and Information','Loss Functions','Information Theory','Network Information Theory','Reinforcement Learning','Diffusion Models']
     },
     { id: '12', title: 'Cryptography & Security',
       desc: 'Symmetric primitives, asymmetric cryptography, hashing, and post-quantum schemes.',
-      topics: ['AES & ChaCha20','RSA & ECC','Hash Functions & MACs','Digital Signatures','Key Exchange','Zero-Knowledge Proofs','TLS Internals','Post-Quantum (CRYSTALS-Kyber/Dilithium)','Secure Enclaves','Side-Channel Attacks']
+      topics: ['Asymmetric Cryptography','Hashing and MACs','Post-Quantum Cryptography','Symmetric Primitives','TLS: Transport Layer Security']
     },
     { id: '13', title: 'Cloud & Infrastructure',
       desc: 'IaaS fundamentals, Kubernetes internals, serverless, IaC, multi-tenancy, and cost engineering.',
-      topics: ['IaaS & Regions','Kubernetes Internals','Containers & OCI','Serverless & FaaS','Infrastructure as Code','Multi-Tenancy','Cost Engineering & FinOps','Service Mesh','Observability Stack','Disaster Recovery']
+      topics: ['Containers: OCI, runc, containerd, Image Layers','Cloud Cost Engineering','Infrastructure as Code','IaaS Fundamentals','Kubernetes Internals','Multi-Tenancy','Serverless Computing']
     },
     { id: '14', title: 'Data Engineering',
       desc: 'Batch processing, streaming, ETL/ELT, orchestration, and lakehouse architecture.',
-      topics: ['Batch Processing (Spark/Flink)','Streaming (Kafka/Kinesis)','Watermarks & Windows','ETL vs ELT','Orchestration (Airflow/Prefect)','Lakehouse Engineering','Data Quality','Schema Evolution','CDC & Debezium','DBSP & Incremental Computation']
+      topics: ['Batch Processing','ETL vs ELT','Lakehouse Engineering','Orchestration','Streaming']
     },
     { id: '15', title: 'Observability & SRE',
       desc: 'Metrics, logs, distributed tracing, continuous profiling, and SRE principles.',
-      topics: ['Three Pillars & Beyond','Metrics Systems (Prometheus/OTLP)','Distributed Tracing (OTEL/Jaeger)','Continuous Profiling (pprof/eBPF)','SLOs & Error Budgets','Incident Management','Chaos Engineering','Alerting Philosophy','OpenTelemetry']
+      topics: ['Continuous Profiling','Distributed Tracing','Metrics Systems','SLO Engineering','The Three Pillars and Beyond']
     },
     { id: '16', title: 'Graphics & Rendering',
       desc: 'Rasterization, ray tracing, physically-based rendering, global illumination, and real-time engines.',
-      topics: ['Rasterization Pipeline','Ray Tracing & BVH','Physically-Based Rendering','Global Illumination (ReSTIR/DDGI/Lumen)','Shaders & SPIR-V','Real-Time Engines','Denoising','TAA & Upscaling','Bindless Resources','Mesh Shaders']
+      topics: ['Global Illumination Techniques','Physically Based Rendering','The Rasterization Pipeline','Ray Tracing','Real-Time Engine Architecture','Shaders and Shading Languages']
     },
     { id: '17', title: 'Compilers',
       desc: 'Frontend parsing, IR design, dataflow analysis, and optimization passes.',
-      topics: ['Lexing & Parsing','AST & IR Design','SSA Form','Dataflow Analysis','Register Allocation','Loop Optimizations','Alias Analysis','LLVM IR','JIT Compilation','WebAssembly']
+      topics: ['Dataflow Analysis','Frontends','IR Design','Register Allocation','Instruction Selection and Code Generation','Optimisation Passes','JIT Compilation and Runtime Systems']
     },
     { id: '18', title: 'Formal Methods',
       desc: 'Model checking, TLA+, SAT/SMT, theorem proving, and separation logic.',
-      topics: ['Model Checking (CTL/LTL)','TLA+ & PlusCal','SAT & SMT (Z3)','Theorem Proving (Coq/Lean)','Separation Logic & Iris','Abstract Interpretation','Alloy','Temporal Logic','Bisimulation','Program Synthesis']
+      topics: ['Model Checking','Propositional and First-Order Logic','SAT and SMT','Separation Logic','Theorem Proving','TLA+']
     },
     { id: '19', title: 'Embedded & Real-Time',
       desc: 'RTOS internals, hardware interfaces, scheduling, and safety-critical systems.',
-      topics: ['RTOS Fundamentals','Task Scheduling (RMS/EDF)','Interrupt Handling','Memory-Mapped I/O','DMA','SPI/I2C/UART/CAN','Bootloaders','Power Management','Safety Standards (IEC 61508)','AUTOSAR','FreeRTOS & Zephyr']
+      topics: ['Microcontrollers and Systems-on-Chip','Peripherals and Drivers','Real-Time Operating Systems']
     },
     { id: '20', title: 'Quantum Computing',
       desc: 'Qubits, quantum algorithms, error correction, NISQ devices, and hardware architectures.',
-      topics: ['Qubits & Gates','Quantum Circuits','Deutsch–Jozsa & Grover','Shor\'s Algorithm','HHL & Quantum ML','Variational Algorithms (VQE/QAOA)','Error Correction (Surface Code)','NISQ & Benchmarking','Hardware Architectures','Topological Qubits']
+      topics: ['Quantum Error Correction','Hardware Architectures','Quantum Algorithms','NISQ Devices and Benchmarking','Qubits and Gates']
     },
     { id: '21', title: 'Computer Vision',
       desc: 'Image formation, CNNs, detection, segmentation, vision transformers, and 3D neural fields.',
-      topics: ['Image Formation & Camera Models','CNN Architectures (ResNet/EfficientNet/ConvNeXt)','Object Detection (YOLO/DETR/DINO)','Image Segmentation (FCN/Mask R-CNN/SAM)','Vision Transformers (ViT/Swin/DINOv2)','CLIP & Multimodal Models','NeRF','3D Gaussian Splatting','Depth Estimation','Optical Flow','Structure from Motion','Point Clouds']
+      topics: ['Image Formation and Representation','CNN Architectures','Object Detection','Image Segmentation','Vision Transformers','3D Vision and Neural Fields']
     },
   ];
 
