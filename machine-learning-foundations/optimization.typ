@@ -115,7 +115,7 @@ Chen et al. (2023) discovered Lion via program search: the update is the *sign* 
 
 $ x_(k+1) = x_k - eta dot "sign"(beta_1 m + (1 - beta_1) g) - eta lambda x_k. $
 
-Lion uses half the memory of Adam (one moment instead of two) and matches or beats it on many tasks; it requires a smaller learning rate (typically 1/3 of Adam's) and benefits from larger batch sizes.
+Lion uses half the memory of Adam (one moment instead of two) and matches or beats it on many tasks; it requires a smaller learning rate (typically 1/3 of Adam's — this is a rule of thumb; Lion is highly sensitive to learning rate selection and benefits from retuning per-task and per-batch-size when switching from Adam) and benefits from larger batch sizes.
 
 === Shampoo and Kronecker-Factored Preconditioners
 
@@ -230,7 +230,7 @@ SGD does not just minimize the loss — it preferentially finds particular minim
 
 - *Flat minima generalize better* (Hochreiter–Schmidhuber, Keskar et al.). Large-batch training tends to find sharper minima, hurting generalization.
 - *SGD noise as regularization.* The noise covariance favors directions of low curvature; the resulting stationary distribution concentrates on flat regions.
-- *Edge of stability* (Cohen et al. 2021). Gradient descent in deep networks typically operates at the edge where the top Hessian eigenvalue equals $2 \/ eta$, oscillating but making slow progress.
+- *Edge of stability* (Cohen et al. 2021). Gradient descent often operates near the edge of stability (top Hessian eigenvalue $approx 2 \/ eta$) — this regime is observed in many deep networks but is not universal; it depends on initialization, architecture, and optimizer state. In this regime the loss oscillates but makes slow overall progress.
 
 These phenomena explain why optimizer choice affects test accuracy, not just training loss — a fact that is critical when comparing AdamW, Lion, and Muon on the same model.
 
