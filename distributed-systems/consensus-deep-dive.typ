@@ -101,7 +101,7 @@ Moraru, Andersen, Kaminsky (2013). *Egalitarian* Paxos: no leader, every replica
 
 Two cases per command $c$:
 
-- *Fast path* (1 RTT): if a fast quorum ($f + floor((f+1)/2)$) agrees on the dependencies of $c$, commit immediately.
+- *Fast path* (1 RTT): if a fast quorum ($f + floor((f+1)/2)$) agrees on the dependencies of $c$, commit immediately. This quorum is not a majority (for $f=1$, 3 nodes, 2 of 3 suffice), but correctness does not require majority intersection: any two fast-path quorums overlap in at least one node, which is sufficient because EPaxos only needs to detect conflicting commands (overlapping dependency sets), not agree on a total order.
 - *Slow path* (2 RTT): if dependencies conflict between replicas, run a Paxos-style accept.
 
 Benefits: 1-RTT commits even cross-region when commands don't conflict; load balanced across replicas. Cost: complex execution algorithm (linearize the dependency graph at apply time). Few production systems use it; SiloR and recent academic systems do.
