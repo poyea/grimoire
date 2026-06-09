@@ -94,7 +94,7 @@ Update with PPO-style clipped objective on $A_i$. No critic; the group itself pl
 
 $ cal(L)_"GRPO" = -EE_("group") [min(r_(theta) A_i, "clip"(r_(theta), 1-epsilon, 1+epsilon) A_i)] + beta D_"KL"(pi_(theta) || pi_"ref") $
 
-Practical $G = 16$ to $64$, $epsilon = 0.2$, $beta = 0.001$. Memory roughly halves vs. PPO.
+Practical $G = 16$ to $64$, $epsilon = 0.2$, $beta = 0.001$. GRPO eliminates the critic network (saving ~1 model copy in GPU memory) but requires storing G rollout trajectories; net memory reduction is typically 20–30% vs PPO in practice.
 
 === DAPO (Decoupled Clip and Dynamic Sampling)
 

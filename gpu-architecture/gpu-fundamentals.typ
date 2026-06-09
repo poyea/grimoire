@@ -69,7 +69,9 @@ Year  Architecture       Key Features
 2016  Pascal            NVLink, HBM2 support, 3584 cores
 2017  Volta             Tensor Cores, independent thread scheduling
 2020  Ampere            3rd gen Tensor Cores, sparsity, 6912 cores
-2022  Hopper            Transformer Engine, 18,432 cores
+2022  Hopper            Transformer Engine, 16,896 cores (SXM5: 132 SMs × 128)
+                        H100 SXM5: 16,896 CUDA cores across 132 SMs (128 active per SM)
+                        H100 PCIe variant has 14,592 CUDA cores (114 SMs)
 2024  Blackwell         2nd gen Transformer Engine, FP4 microscaling
                         B200 = dual-die package (~208 SMs total, 2 dies × NV-HBI)
                         ~20,480 CUDA cores active per package

@@ -146,6 +146,8 @@ Models are evaluated by selecting the answer token (A/B/C/D) with the highest pr
   [GPT-4 (2024-04)], [86.1], [86.4], [+0.3],
 )
 
+*Note:* MMLU scores vary by evaluation harness, few-shot count, and model version; treat these figures as approximate reference points rather than definitive rankings. In particular, GPT-4-turbo, GPT-4o, and GPT-4 (base) differ significantly from one another, and scores reported across papers often use different harness versions or prompt templates.
+
 === GPQA
 
 *Graduate-Level Google-Proof Q&A* (Rein et al., 2023) contains 448 PhD-level questions in biology, chemistry, and physics, verified to be non-googleable. Random baseline is 25%; expert human accuracy is around 65%. Most models below 70B parameters score near random.
