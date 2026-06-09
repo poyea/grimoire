@@ -29,7 +29,8 @@ jobs:
           # Find all .typ files in the root directory (not subdirectories)
           for typfile in *.typ; do
             if [ -f "$typfile" ] && [ "$typfile" != "template.typ" ]; then
-              pdffile="grimoire_${typfile%.typ}.pdf"
+              base="${typfile%.typ}"
+              pdffile="grimoire_$(echo "$base" | tr '-' '_').pdf"
               echo "Compiling $typfile to $pdffile"
               typst compile "$typfile" "$pdffile"
             fi
