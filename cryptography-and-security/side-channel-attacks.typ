@@ -6,17 +6,18 @@ A side-channel attack extracts secrets not from mathematical weaknesses but from
 
 == Timing Attacks
 
-Kocher (1996) showed that the running time of square-and-multiply RSA leaks the private exponent bit by bit: a multiply occurs only for 1-bits, and data-dependent timing variation per operation can be correlated across many measurements. Remote exploitation is practical: Brumley & Boneh (2003) recovered an OpenSSL RSA key across a network by timing decryption, exploiting Montgomery reduction's extra-reduction step.
+Kocher (1996) showed that the running time of square-and-multiply RSA leaks the private exponent bit by bit: the data-dependent time of each modular operation can be correlated against per-bit hypotheses across many measurements. Remote exploitation is practical: Brumley & Boneh (2003) recovered an OpenSSL RSA key across a network by timing decryption, exploiting Montgomery reduction's extra-reduction step.
 
 Two recurring non-RSA examples:
-- *Non-constant-time comparison*: `memcmp`-style early exit on MAC or token verification lets an attacker forge byte by byte (Lucky Thirteen exploited padding-time differences in TLS CBC).
+- *Non-constant-time comparison*: `memcmp`-style early exit on MAC or token verification lets an attacker forge byte by byte.
+- *Padding-dependent processing time*: Lucky Thirteen (AlFardan & Paterson, 2013) exploited the fact that TLS CBC MAC verification time depends on the plaintext padding length.
 - *Table lookups indexed by secrets*: the classic AES T-table implementation indexes memory with key-dependent bytes — directly observable through the cache.
 
 == Cache Attacks
 
-The cache is a shared, stateful resource whose latency difference (hit $approx 4$ ns, miss $approx 100$ ns) is easily measurable. Canonical techniques:
+The cache is a shared, stateful resource whose latency difference (hit $approx 1$–$4$ ns depending on level, miss $approx 100$ ns) is easily measurable. Canonical techniques:
 
-- *Prime+Probe* (Osvik, Shamir & Tromer, 2006): fill a cache set with attacker data, let the victim run, then measure which of the attacker's lines were evicted. Works without shared memory; demonstrated against AES, across VMs, and from JavaScript.
+- *Prime+Probe* (Osvik, Shamir & Tromer, 2006): fill a cache set with attacker data, let the victim run, then measure which of the attacker's lines were evicted. Works without shared memory; demonstrated against AES (2006), and in later work across VMs and from JavaScript.
 - *Flush+Reload* (Yarom & Falkner, 2014): with shared memory (deduplicated pages, shared libraries), `clflush` a line, wait, then time a reload — a fast hit means the victim touched it. Line-granularity spying; recovered GnuPG RSA keys across VM boundaries.
 - *Evict+Time, Flush+Flush, occupancy channels*: variants trading noise, speed, and stealth.
 
@@ -43,7 +44,7 @@ Countermeasures:
 Rather than observing, the attacker perturbs: voltage glitches, clock glitches, laser pulses, or electromagnetic pulses push the device outside its operating envelope at a chosen instant.
 
 - *The Bellcore attack / RSA-CRT* (Boneh, DeMillo & Lipton, 1997): a single faulty CRT-RSA signature factors $N$ — from a correct signature $s$ and faulty $s'$, $gcd(s - s', N)$ reveals a prime factor. Mandatory countermeasure: verify every signature before release.
-- *Differential Fault Analysis on AES* (Piret & Quisquater): one well-placed byte fault in round 8 narrows the key to a small brute-forceable set.
+- *Differential Fault Analysis on AES* (Piret & Quisquater, 2003): one byte fault injected before the final MixColumns narrows the key to a small brute-forceable set.
 - *Instruction skipping*: glitching a conditional branch bypasses signature checks entirely — the basis of many game-console and bootloader jailbreaks (e.g., the Nintendo Switch Tegra bootROM exploit chain combined glitching with software bugs).
 - *Rowhammer*: software-only fault injection — rapid DRAM row activation flips bits in neighbouring rows; demonstrated for privilege escalation and (as Rowhammer-based fault attacks) against co-located cryptographic keys.
 
