@@ -99,6 +99,11 @@ chapters:
     lines: 367
     status: reviewed
   - subject: coding
+    slug: game-theory
+    path: coding/game-theory.typ
+    lines: 237
+    status: draft
+  - subject: coding
     slug: graphs
     path: coding/graphs.typ
     lines: 244
@@ -199,6 +204,11 @@ chapters:
     lines: 652
     status: reviewed
   - subject: coding
+    slug: tree-decomposition
+    path: coding/tree-decomposition.typ
+    lines: 573
+    status: draft
+  - subject: coding
     slug: trees
     path: coding/trees.typ
     lines: 494
@@ -233,6 +243,11 @@ chapters:
     path: compilers/frontends.typ
     lines: 287
     status: reviewed
+  - subject: compilers
+    slug: garbage-collection
+    path: compilers/garbage-collection.typ
+    lines: 416
+    status: draft
   - subject: compilers
     slug: ir-design
     path: compilers/ir-design.typ
@@ -306,7 +321,7 @@ chapters:
   - subject: cpu-architecture
     slug: pipelining
     path: cpu-architecture/pipelining.typ
-    lines: 454
+    lines: 456
     status: reviewed
   - subject: cpu-architecture
     slug: power-and-dvfs
