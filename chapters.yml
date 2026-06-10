@@ -371,7 +371,7 @@ chapters:
   - subject: cryptography-and-security
     slug: side-channel-attacks
     path: cryptography-and-security/side-channel-attacks.typ
-    lines: 79
+    lines: 80
     status: reviewed
   - subject: cryptography-and-security
     slug: symmetric-primitives
@@ -394,6 +394,16 @@ chapters:
     lines: 148
     status: reviewed
   - subject: data-engineering
+    slug: change-data-capture
+    path: data-engineering/change-data-capture.typ
+    lines: 127
+    status: draft
+  - subject: data-engineering
+    slug: data-quality
+    path: data-engineering/data-quality.typ
+    lines: 154
+    status: draft
+  - subject: data-engineering
     slug: etl-vs-elt
     path: data-engineering/etl-vs-elt.typ
     lines: 159
@@ -409,10 +419,20 @@ chapters:
     lines: 198
     status: reviewed
   - subject: data-engineering
+    slug: schema-evolution
+    path: data-engineering/schema-evolution.typ
+    lines: 122
+    status: draft
+  - subject: data-engineering
     slug: streaming
     path: data-engineering/streaming.typ
     lines: 139
     status: reviewed
+  - subject: data-engineering
+    slug: watermarks-and-windows
+    path: data-engineering/watermarks-and-windows.typ
+    lines: 106
+    status: draft
   - subject: database
     slug: benchmarking-and-research-methods
     path: database/benchmarking-and-research-methods.typ
@@ -574,6 +594,11 @@ chapters:
     lines: 260
     status: reviewed
   - subject: distributed-systems
+    slug: causal-consistency
+    path: distributed-systems/causal-consistency.typ
+    lines: 129
+    status: draft
+  - subject: distributed-systems
     slug: consensus-deep-dive
     path: distributed-systems/consensus-deep-dive.typ
     lines: 207
@@ -583,6 +608,11 @@ chapters:
     path: distributed-systems/coordination-services.typ
     lines: 216
     status: reviewed
+  - subject: distributed-systems
+    slug: crdts
+    path: distributed-systems/crdts.typ
+    lines: 116
+    status: draft
   - subject: distributed-systems
     slug: failure-detection
     path: distributed-systems/failure-detection.typ
@@ -1199,6 +1229,16 @@ chapters:
     lines: 278
     status: reviewed
   - subject: observability-and-sre
+    slug: alerting
+    path: observability-and-sre/alerting.typ
+    lines: 108
+    status: draft
+  - subject: observability-and-sre
+    slug: chaos-engineering
+    path: observability-and-sre/chaos-engineering.typ
+    lines: 97
+    status: draft
+  - subject: observability-and-sre
     slug: continuous-profiling
     path: observability-and-sre/continuous-profiling.typ
     lines: 275
@@ -1209,10 +1249,20 @@ chapters:
     lines: 273
     status: reviewed
   - subject: observability-and-sre
+    slug: incident-management
+    path: observability-and-sre/incident-management.typ
+    lines: 122
+    status: draft
+  - subject: observability-and-sre
     slug: metrics-systems
     path: observability-and-sre/metrics-systems.typ
     lines: 281
     status: reviewed
+  - subject: observability-and-sre
+    slug: opentelemetry
+    path: observability-and-sre/opentelemetry.typ
+    lines: 96
+    status: draft
   - subject: observability-and-sre
     slug: slo-engineering
     path: observability-and-sre/slo-engineering.typ
@@ -1239,10 +1289,20 @@ chapters:
     lines: 194
     status: reviewed
   - subject: operating-systems
+    slug: page-reclaim-and-oom
+    path: operating-systems/page-reclaim-and-oom.typ
+    lines: 128
+    status: draft
+  - subject: operating-systems
     slug: processes-and-threads
     path: operating-systems/processes-and-threads.typ
     lines: 171
     status: reviewed
+  - subject: operating-systems
+    slug: real-time-scheduling
+    path: operating-systems/real-time-scheduling.typ
+    lines: 114
+    status: draft
   - subject: operating-systems
     slug: scheduling-theory
     path: operating-systems/scheduling-theory.typ
@@ -1258,6 +1318,11 @@ chapters:
     path: operating-systems/storage-stack.typ
     lines: 250
     status: reviewed
+  - subject: operating-systems
+    slug: virtual-memory
+    path: operating-systems/virtual-memory.typ
+    lines: 126
+    status: draft
   - subject: programming-languages
     slug: automata-learning
     path: programming-languages/automata-learning.typ
