@@ -461,7 +461,7 @@ chapters:
   - subject: database
     slug: concurrency-control
     path: database/concurrency-control.typ
-    lines: 301
+    lines: 324
     status: reviewed
   - subject: database
     slug: consensus-and-replication
@@ -566,7 +566,7 @@ chapters:
   - subject: database
     slug: storage-engines
     path: database/storage-engines.typ
-    lines: 304
+    lines: 324
     status: reviewed
   - subject: database
     slug: streaming-and-incremental-computation
@@ -596,7 +596,7 @@ chapters:
   - subject: distributed-systems
     slug: causal-consistency
     path: distributed-systems/causal-consistency.typ
-    lines: 129
+    lines: 149
     status: reviewed
   - subject: distributed-systems
     slug: consensus-deep-dive
@@ -611,7 +611,7 @@ chapters:
   - subject: distributed-systems
     slug: crdts
     path: distributed-systems/crdts.typ
-    lines: 116
+    lines: 136
     status: reviewed
   - subject: distributed-systems
     slug: failure-detection
@@ -673,6 +673,11 @@ chapters:
     path: formal-methods/model-checking.typ
     lines: 276
     status: reviewed
+  - subject: formal-methods
+    slug: notation
+    path: formal-methods/notation.typ
+    lines: 74
+    status: draft
   - subject: formal-methods
     slug: propositional-and-fol
     path: formal-methods/propositional-and-fol.typ
@@ -1034,6 +1039,11 @@ chapters:
     lines: 166
     status: reviewed
   - subject: machine-learning-foundations
+    slug: notation
+    path: machine-learning-foundations/notation.typ
+    lines: 77
+    status: draft
+  - subject: machine-learning-foundations
     slug: optimization
     path: machine-learning-foundations/optimization.typ
     lines: 312
@@ -1066,7 +1076,7 @@ chapters:
   - subject: networking
     slug: congestion-control
     path: networking/congestion-control.typ
-    lines: 228
+    lines: 248
     status: reviewed
   - subject: networking
     slug: connection-pooling
@@ -1549,6 +1559,11 @@ chapters:
     lines: 183
     status: reviewed
   - subject: quantum-computing
+    slug: notation
+    path: quantum-computing/notation.typ
+    lines: 59
+    status: draft
+  - subject: quantum-computing
     slug: quantum-algorithms
     path: quantum-computing/quantum-algorithms.typ
     lines: 155
@@ -1641,7 +1656,7 @@ chapters:
   - subject: performance-engineering
     slug: capacity-planning
     path: performance-engineering/capacity-planning.typ
-    lines: 99
+    lines: 128
     status: draft
   - subject: performance-engineering
     slug: concurrency-performance
@@ -1671,7 +1686,7 @@ chapters:
   - subject: performance-engineering
     slug: queueing-theory
     path: performance-engineering/queueing-theory.typ
-    lines: 97
+    lines: 118
     status: draft
   - subject: numerical-computing
     slug: eigenvalue-problems
@@ -1681,7 +1696,7 @@ chapters:
   - subject: numerical-computing
     slug: error-analysis
     path: numerical-computing/error-analysis.typ
-    lines: 131
+    lines: 155
     status: draft
   - subject: numerical-computing
     slug: fft
@@ -1691,7 +1706,7 @@ chapters:
   - subject: numerical-computing
     slug: floating-point
     path: numerical-computing/floating-point.typ
-    lines: 142
+    lines: 174
     status: draft
   - subject: numerical-computing
     slug: iterative-methods
@@ -1706,7 +1721,7 @@ chapters:
   - subject: numerical-computing
     slug: ode-integration
     path: numerical-computing/ode-integration.typ
-    lines: 75
+    lines: 101
     status: draft
   - subject: numerical-computing
     slug: optimization-algorithms
