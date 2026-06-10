@@ -41,7 +41,7 @@ Scalars are lowercase italic ($x$, $eta$), vectors lowercase ($x in RR^n$, treat
 
 == Information Theory
 
-Logarithms are natural ($log = ln$, units in nats) unless written $log_2$ (bits).
+Logarithms are natural ($log = ln$, units in nats) in optimization and probability contexts; in information-theoretic contexts (entropy, coding bounds), bare $log$ is base 2 and quantities are in bits unless stated otherwise.
 
 #table(
   columns: (auto, auto),

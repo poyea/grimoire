@@ -2,7 +2,7 @@
 
 Physical qubits decohere — typical superconducting $T_1, T_2$ sit at 100-300 $mu$s, two-qubit gate errors at $10^(-3)$. No useful algorithm fits in that window. *Quantum error correction* (QEC) encodes one logical qubit across many physical qubits so errors can be detected and reversed without measuring the encoded data. This chapter covers the stabilizer formalism, the surface code, magic-state distillation, and the resource estimates that determine when fault-tolerant quantum computing becomes practical.
 
-*See also:* _Qubits and Gates_, _Hardware Architectures_, _Complexity_, _Post-Quantum Cryptography_ (cryptography-and-security)
+*See also:* _Qubits and Gates_, _Hardware Architectures_, _Complexity Theory_ (programming-languages), _Post-Quantum Cryptography_ (cryptography-and-security)
 
 == Why Classical Codes Do Not Port
 

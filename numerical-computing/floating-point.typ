@@ -133,7 +133,7 @@ Solve $x^2 - 10^8 x + 1 = 0$ in fp64, end to end. The exact roots are $x_1 appro
 
 $ sqrt(10^16 - 4) = 10^8 sqrt(1 - 4 times 10^(-16)) approx 10^8 - 2 times 10^(-8). $
 
-Near $10^8$ the spacing is one ulp $= 2^(-26) approx 1.49 times 10^(-8)$. The two neighbors of the true value are $10^8$ (distance $2 times 10^(-8)$) and $10^8 - 2^(-26)$ (distance $0.51 times 10^(-8)$), so the correctly rounded result is
+Near $10^8$ the spacing is one ulp $= 2^(-26) approx 1.49 times 10^(-8)$. The two neighbors of the true value are $10^8 - 2^(-25)$ (distance $0.98 times 10^(-8)$) and $10^8 - 2^(-26)$ (distance $0.51 times 10^(-8)$), so the correctly rounded result is
 
 $ "fl"(sqrt(10^16 - 4)) = 10^8 - 2^(-26), $
 

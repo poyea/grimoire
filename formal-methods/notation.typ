@@ -55,7 +55,7 @@ CTL prefixes path operators with the quantifiers $bold(A)$ (all paths) and $bold
 #table(
   columns: (auto, auto),
   [*Symbol*], [*Meaning*],
-  [${ P }\ C\ { Q }$], [Hoare triple: partial correctness of command $C$],
+  [${ P } space C space { Q }$], [Hoare triple: partial correctness of command $C$],
   [$"emp"$], [empty-heap assertion],
   [$p |-> v$], [points-to: heap is exactly one cell at $p$ holding $v$],
   [$P * Q$], [separating conjunction (disjoint heap split)],
@@ -67,8 +67,8 @@ Inference rules are written as horizontal fractions, premises over conclusion. T
 
 == Decision Procedures
 
-$"SAT"$, $"SMT"$, and theory names ($"EUF"$, $"LIA"$, $"LRA"$, bit-vectors $"BV"$) follow SMT-LIB usage. A problem is *decidable* if a terminating procedure exists; complexity classes (NP, PSPACE, EXPTIME) have their standard meanings. Codes such as $[[n, k, d]]$ and asymptotic notation $O(dot)$ are standard.
+$"SAT"$, $"SMT"$, and theory names ($"EUF"$, $"LIA"$, $"LRA"$, bit-vectors $"BV"$) follow SMT-LIB usage. A problem is *decidable* if a terminating procedure exists; complexity classes (NP, PSPACE, EXPTIME) and asymptotic notation $O(dot)$ have their standard meanings.
 
 == Naming Conventions
 
-Calligraphic letters denote structures and operators: $cal(K)$ (Kripke structure), $cal(M)$ (model), $cal(A)$ (automaton), $cal(T)$ (Bellman-style operators, theories). Sans-serif or quoted names denote keywords and tool syntax (`Init`, `Next`, $"UNCHANGED"$).
+Calligraphic letters denote structures and operators: $cal(K)$ (Kripke structure), $cal(M)$ (model), $cal(A)$ (automaton), $cal(T)$ (theories, transition operators). Sans-serif or quoted names denote keywords and tool syntax (`Init`, `Next`, $"UNCHANGED"$).
