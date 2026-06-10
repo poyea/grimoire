@@ -41,12 +41,12 @@ subset.neq "DTIME"(g(n))$.
 
 *Proof sketch.* Construct a *diagonal* language
 
-$ D = { chevron.l M, w chevron.r | M "is a DTM and" M "rejects" chevron.l M, w chevron.r "within" g(n) "steps"}. $
+$ D = { angle.l M, w angle.r | M "is a DTM and" M "rejects" angle.l M, w angle.r "within" g(n) "steps"}. $
 
 A universal TM simulates an arbitrary DTM with $O(log f(n))$ overhead (each step
 costs $O(log f(n))$ for state lookup and clock maintenance with two-tape
 simulation). So $D in "DTIME"(g(n))$. If $D in "DTIME"(f(n))$ via some $M_0$, then
-running $M_0$ on $chevron.l M_0, M_0 chevron.r$ yields a contradiction by the standard
+running $M_0$ on $angle.l M_0, M_0 angle.r$ yields a contradiction by the standard
 diagonal argument. $square$
 
 The $log f$ factor is the *cost of universal simulation*. For single-tape DTMs the
@@ -606,7 +606,7 @@ clause coverage.
 
 *Theorem (Toda 1991).* $"PH" subset.eq "P"^(\#"P")$. So counting is at least as
 hard as the whole polynomial hierarchy. *Proof.* Two-stage: first show $"PH"
-subset.eq "BP" dot plus.o "P"$ (probabilistic parity), then $plus.o "P" subset.eq
+subset.eq "BP" dot plus.circle "P"$ (probabilistic parity), then $plus.circle "P" subset.eq
 #"P"$. Beneath the technicalities: counting modulo 2 plus randomisation
 simulates alternating quantifiers.
 
@@ -678,7 +678,7 @@ poly-size quantum circuits with bounded two-sided error.
   problems (BosonSampling, IQP) cannot be efficiently classically simulated
   unless PH collapses.
 
-*$"QMA"$*: quantum analogue of NP -- prover sends quantum witness $|psi chevron.r$,
+*$"QMA"$*: quantum analogue of NP -- prover sends quantum witness $|psi angle.r$,
 verifier runs poly-size quantum circuit. $"NP" subset.eq "QMA" subset.eq "PP"
 subset.eq "PSPACE"$. $k$-local Hamiltonian (estimating ground-state energy of a
 $k$-local Hamiltonian to inverse-polynomial precision) is QMA-complete for $k gt.eq

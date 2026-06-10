@@ -253,7 +253,7 @@ The FFN runs independently on each token. ~2/3 of total parameters.
 
 === SwiGLU (LLaMA, PaLM, Gemma; standard in 2024)
 
-$ "SwiGLU"(x) = W_"down" dot ("SiLU"(W_"gate" x) times.o W_"up" x) $
+$ "SwiGLU"(x) = W_"down" dot ("SiLU"(W_"gate" x) times.circle W_"up" x) $
 
 Three weight matrices; $d_"ff" approx 8/3 dot d_"model"$ (rounded to multiple of 256).
 
@@ -328,7 +328,7 @@ class GPT2FFN(nn.Module):
 
 === RMSNorm (LLaMA, Mistral, Gemma; standard in 2024)
 
-$ "RMSNorm"(x) = (x) / (sqrt((1/d) sum_i x_i^2 + epsilon)) dot.o g $
+$ "RMSNorm"(x) = (x) / (sqrt((1/d) sum_i x_i^2 + epsilon)) dot.circle g $
 
 No mean-centering; ~15% faster than LayerNorm. $g in RR^d$ is learned.
 

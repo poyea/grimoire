@@ -75,7 +75,7 @@ $P$ vs $"NP"$ question.
 
 == Universal Turing Machines
 
-A *universal TM* $U$ takes as input an encoding $chevron.l M, w chevron.r$ of a TM $M$ and
+A *universal TM* $U$ takes as input an encoding $angle.l M, w angle.r$ of a TM $M$ and
 an input $w$, and simulates $M$ on $w$:
 
 - $U$ accepts iff $M$ accepts $w$.
@@ -84,7 +84,7 @@ an input $w$, and simulates $M$ on $w$:
 
 Encoding: represent each state as a binary string, each tape symbol as a binary string,
 and each transition rule as a tuple of such strings, separated by delimiters. The encoding
-$chevron.l M chevron.r$ is a finite string over $Sigma = {0, 1}$. The existence of $U$
+$angle.l M angle.r$ is a finite string over $Sigma = {0, 1}$. The existence of $U$
 establishes that computation is *data*: a program is just another input. This is the
 foundation of every interpreter, JIT, and operating system loader.
 
@@ -102,7 +102,7 @@ many.
 == Undecidability: The Halting Problem
 
 *Theorem (Turing 1936):* The *halting problem*
-$A_"TM" = { chevron.l M, w chevron.r | M "is a TM and" M "accepts" w }$
+$A_"TM" = { angle.l M, w angle.r | M "is a TM and" M "accepts" w }$
 is undecidable.
 
 *Proof by diagonalization.* Suppose for contradiction that a DTM $H$ decides $A_"TM"$:
@@ -120,12 +120,12 @@ define D(input <M>):
         ACCEPT
 ```
 
-Now run $D$ on $chevron.l D chevron.r$:
+Now run $D$ on $angle.l D angle.r$:
 
-- If $D$ accepts $chevron.l D chevron.r$: then $H$ must have accepted $chevron.l D, chevron.l D chevron.r chevron.r$,
-  meaning $D$ accepts $chevron.l D chevron.r$ -- so $D$ should loop forever. Contradiction.
-- If $D$ loops on $chevron.l D chevron.r$: then $H$ rejected $chevron.l D, chevron.l D chevron.r chevron.r$,
-  meaning $D$ does not accept $chevron.l D chevron.r$ -- so $D$ should accept. Contradiction.
+- If $D$ accepts $angle.l D angle.r$: then $H$ must have accepted $angle.l D, angle.l D angle.r angle.r$,
+  meaning $D$ accepts $angle.l D angle.r$ -- so $D$ should loop forever. Contradiction.
+- If $D$ loops on $angle.l D angle.r$: then $H$ rejected $angle.l D, angle.l D angle.r angle.r$,
+  meaning $D$ does not accept $angle.l D angle.r$ -- so $D$ should accept. Contradiction.
 
 Both cases are impossible, so $H$ cannot exist. The diagonal argument works because we
 construct $D$ to *disagree* with $H$'s prediction on the self-referential input.
@@ -140,7 +140,7 @@ Its complement $overline(A_"TM")$ is not even recognizable.
 Formally: let $P$ be any property of TM-recognized languages such that $P$ is not
 identically true and not identically false (non-trivial), and that $P$ depends only on the
 *language* not the machine description (semantic). Then the set
-${ chevron.l M chevron.r | L(M) "has property" P }$ is undecidable.
+${ angle.l M angle.r | L(M) "has property" P }$ is undecidable.
 
 *Proof intuition:* Suppose $P$ holds of $L(M_1)$ and not of $L(M_emptyset)$ (where
 $M_emptyset$ accepts nothing). For any TM $T$ and input $w$, build a machine $M$ that
@@ -177,8 +177,8 @@ Reductions establish relative hardness:
 - If $A <=_m B$ and $B$ is decidable, then $A$ is decidable.
 - Contrapositive: if $A$ is undecidable and $A <=_m B$, then $B$ is undecidable.
 
-*Equivalence of TMs is undecidable* via halting reduction: define $f(chevron.l M, w chevron.r)
-= chevron.l M', M_emptyset chevron.r$ where $M'$ ignores its input, simulates $M$ on $w$, and
+*Equivalence of TMs is undecidable* via halting reduction: define $f(angle.l M, w angle.r)
+= angle.l M', M_emptyset angle.r$ where $M'$ ignores its input, simulates $M$ on $w$, and
 accepts if $M$ accepts. Then $M$ accepts $w$ iff $L(M') != L(M_emptyset)$, so deciding
 equivalence would decide the halting problem. Thus $"EQ"_"TM"$ is undecidable (and in
 fact not even RE or co-RE).

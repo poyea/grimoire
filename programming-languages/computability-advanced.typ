@@ -14,7 +14,7 @@ Beyond the arithmetical levels lies the *hyperarithmetical* hierarchy, indexed b
 the recursive ordinals $alpha < omega_1^"CK"$ (the Church--Kleene ordinal, the
 least non-recursive ordinal). For $alpha = beta + 1$, $emptyset^((alpha))$ is the
 jump of $emptyset^((beta))$; for limit $alpha$ given by a recursive notation
-$a$, $emptyset^((alpha)) = { chevron.l b, n chevron.r | b <_O a and n in
+$a$, $emptyset^((alpha)) = { angle.l b, n angle.r | b <_O a and n in
 emptyset^((|b|)) }$ where $<_O$ is Kleene's $cal(O)$ ordering of notations. The
 union $bold(H) = union.big_(alpha < omega_1^"CK") emptyset^((alpha))$ is the
 *hyperarithmetical* class.
@@ -249,7 +249,7 @@ recursive programs can simultaneously fix-point themselves.
 
 *Application: Smullyan's double diagonal.* In provability logic, the Gödel--
 Carnap fixed-point lemma (every $phi(x)$ has a sentence $sigma$ with $"PA" tack.r
-sigma arrow.l.r.double phi(chevron.l sigma chevron.r)$) is the proof-theoretic shadow
+sigma arrow.l.r.double phi(angle.l sigma angle.r)$) is the proof-theoretic shadow
 of the recursion theorem. The proof of Gödel's incompleteness theorem is then
 the same diagonal that proves $K$ undecidable.
 

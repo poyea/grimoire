@@ -38,7 +38,7 @@ A *commitment scheme* lets one bind to a value now and reveal it later — *hidi
 
 A *SNARK* — succinct non-interactive argument of knowledge — proves arbitrary computation with a proof that is tiny (hundreds of bytes) and verifiable in milliseconds, essentially independent of computation size. The pipeline:
 
-1. *Arithmetisation*: express the computation as constraints over a finite field — R1CS (rank-1 constraint systems, triples enforcing $chevron.l a, w chevron.r dot chevron.l b, w chevron.r = chevron.l c, w chevron.r$) or the more flexible *Plonkish* / AIR formats with custom gates and lookup tables.
+1. *Arithmetisation*: express the computation as constraints over a finite field — R1CS (rank-1 constraint systems, triples enforcing $angle.l a, w angle.r dot angle.l b, w angle.r = angle.l c, w angle.r$) or the more flexible *Plonkish* / AIR formats with custom gates and lookup tables.
 2. *Polynomial IOP*: encode constraint satisfaction as polynomial identities checked at random points.
 3. *Cryptographic compiler*: a polynomial commitment scheme plus Fiat-Shamir collapses the interaction into one proof.
 

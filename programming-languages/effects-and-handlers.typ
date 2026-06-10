@@ -231,7 +231,7 @@ How arrow.r *type* effectful computations? Naively, give each effectful function
 
 The solution is *row polymorphism*. A *row* of effects is a sequence of labelled effects, possibly extending a row variable $rho$:
 
-$ epsilon ::= chevron.l chevron.r | chevron.l ell : tau | epsilon chevron.r | rho $
+$ epsilon ::= angle.l angle.r | angle.l ell : tau | epsilon angle.r | rho $
 
 Function types carry a row: $tau_1 arrow.r^epsilon tau_2$. A polymorphic combinator like `map` has type:
 
@@ -251,7 +251,7 @@ fun safe-div(x : int, y : int) : <exn> int
   if y == 0 then throw("division by zero") else x / y
 ```
 
-The effect row is written between angle brackets in the return type. Pure functions have the empty row $chevron.l chevron.r$ (written `<>`). Effect polymorphism is the default for higher-order functions.
+The effect row is written between angle brackets in the return type. Pure functions have the empty row $angle.l angle.r$ (written `<>`). Effect polymorphism is the default for higher-order functions.
 
 ```text
 fun map( xs : list<a>, f : a -> e b ) : e list<b>

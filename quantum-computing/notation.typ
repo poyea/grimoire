@@ -4,22 +4,22 @@ This chapter fixes the Dirac notation, gate symbols, and error-correction conven
 
 == States and Dirac Notation
 
-A pure state of $n$ qubits is a unit vector in $bb(C)^(2^n)$. We write kets as $|psi chevron.r$ and bras as $chevron.l psi|$.
+A pure state of $n$ qubits is a unit vector in $bb(C)^(2^n)$. We write kets as $|psi angle.r$ and bras as $angle.l psi|$.
 
 #table(
   columns: (auto, auto),
   [*Symbol*], [*Meaning*],
-  [$|0 chevron.r$, $|1 chevron.r$], [computational basis of $bb(C)^2$],
-  [$|psi chevron.r = alpha |0 chevron.r + beta |1 chevron.r$], [single-qubit state, $|alpha|^2 + |beta|^2 = 1$],
-  [$chevron.l phi | psi chevron.r$], [inner product],
-  [$|psi chevron.r chevron.l psi|$], [outer product (projector for unit $|psi chevron.r$)],
-  [$|+ chevron.r$, $|- chevron.r$], [$(|0 chevron.r plus.minus |1 chevron.r) \/ sqrt(2)$],
-  [$|psi chevron.r times.o |phi chevron.r$], [tensor product; often abbreviated $|psi phi chevron.r$],
-  [$|0 chevron.r^(times.o n)$], [$n$-fold tensor power],
-  [$rho$], [density matrix; pure iff $rho = |psi chevron.r chevron.l psi|$, i.e. $"tr"(rho^2) = 1$],
+  [$|0 angle.r$, $|1 angle.r$], [computational basis of $bb(C)^2$],
+  [$|psi angle.r = alpha |0 angle.r + beta |1 angle.r$], [single-qubit state, $|alpha|^2 + |beta|^2 = 1$],
+  [$angle.l phi | psi angle.r$], [inner product],
+  [$|psi angle.r angle.l psi|$], [outer product (projector for unit $|psi angle.r$)],
+  [$|+ angle.r$, $|- angle.r$], [$(|0 angle.r plus.minus |1 angle.r) \/ sqrt(2)$],
+  [$|psi angle.r times.circle |phi angle.r$], [tensor product; often abbreviated $|psi phi angle.r$],
+  [$|0 angle.r^(times.circle n)$], [$n$-fold tensor power],
+  [$rho$], [density matrix; pure iff $rho = |psi angle.r angle.l psi|$, i.e. $"tr"(rho^2) = 1$],
 )
 
-Global phase is unobservable: $e^(i phi) |psi chevron.r$ and $|psi chevron.r$ are physically identical. A single-qubit pure state is parameterized on the *Bloch sphere* by $(theta, phi)$ as $cos(theta\/2) |0 chevron.r + e^(i phi) sin(theta\/2) |1 chevron.r$; mixed states fill the interior of the ball via $rho = (II + arrow(r) dot arrow(sigma)) \/ 2$.
+Global phase is unobservable: $e^(i phi) |psi angle.r$ and $|psi angle.r$ are physically identical. A single-qubit pure state is parameterized on the *Bloch sphere* by $(theta, phi)$ as $cos(theta\/2) |0 angle.r + e^(i phi) sin(theta\/2) |1 angle.r$; mixed states fill the interior of the ball via $rho = (II + arrow(r) dot arrow(sigma)) \/ 2$.
 
 == Operators and Gates
 
@@ -40,7 +40,7 @@ Qubits are indexed from 0 in code (Qiskit little-endian: qubit 0 is the least si
 
 == Measurement
 
-Measurement in the computational basis yields outcome $x$ with probability $|chevron.l x | psi chevron.r|^2$ (Born rule) and collapses the state. Expectation values are $chevron.l A chevron.r = chevron.l psi | A | psi chevron.r = "tr"(rho A)$. "Measuring in the $X$ basis" means rotating with $H$ then measuring in the computational basis.
+Measurement in the computational basis yields outcome $x$ with probability $|angle.l x | psi angle.r|^2$ (Born rule) and collapses the state. Expectation values are $angle.l A angle.r = angle.l psi | A | psi angle.r = "tr"(rho A)$. "Measuring in the $X$ basis" means rotating with $H$ then measuring in the computational basis.
 
 == Error Correction
 
@@ -49,7 +49,7 @@ Measurement in the computational basis yields outcome $x$ with probability $|che
   [*Symbol*], [*Meaning*],
   [$[[n, k, d]]$], [stabilizer code: $n$ physical qubits, $k$ logical, distance $d$],
   [$S subset cal(P)_n$], [stabilizer group; codespace is its joint $+1$ eigenspace],
-  [$|0 chevron.r_L$, $X_L$], [logical state, logical operator],
+  [$|0 angle.r_L$, $X_L$], [logical state, logical operator],
   [$p$, $p_("th")$], [physical error rate, threshold],
   [$T_1$, $T_2$], [relaxation and dephasing times],
 )

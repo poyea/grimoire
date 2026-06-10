@@ -29,7 +29,7 @@ $ f(arrow(x), 0) &= g(arrow(x)) \
   f(arrow(x), y + 1) &= h(arrow(x), y, f(arrow(x), y)) $
 
 Every primitive recursive function is total. Addition, multiplication,
-exponentiation, bounded minimisation, the Cantor pairing $chevron.l x, y chevron.r =
+exponentiation, bounded minimisation, the Cantor pairing $angle.l x, y angle.r =
 ((x + y)(x + y + 1))/2 + y$, prime enumeration, and Gödel's $beta$-function are
 primitive recursive. The class is closed under bounded quantification and bounded
 search, which is what makes it powerful enough to encode finite sequences and thus
@@ -413,8 +413,8 @@ order arithmetic (Simpson 1977, Slaman--Woodin).
 *The jump operator.* $A' = { e | Phi_e^A (e) "halts"}$, the halting problem
 *relative* to $A$. The jump is *strictly* increasing: $A <_T A'$ for every $A$, by
 the relativised diagonal argument. Iterating gives $emptyset, emptyset', emptyset'',
-..., emptyset^((n))$. The infinitary jump $emptyset^((omega)) = { chevron.l e, n
-chevron.r | e in emptyset^((n)) }$ goes beyond all finite levels.
+..., emptyset^((n))$. The infinitary jump $emptyset^((omega)) = { angle.l e, n
+angle.r | e in emptyset^((n)) }$ goes beyond all finite levels.
 
 == The Arithmetical Hierarchy
 

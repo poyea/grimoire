@@ -117,12 +117,12 @@ Real ML matrices are rarely dense and unstructured. Exploiting structure changes
   [Circulant], [$O(n log n)$ via FFT], [Convolutions on rings],
   [Toeplitz], [$O(n log n)$], [Convolutional layers],
   [Low rank], [$O((m+n) r)$], [LoRA, adapters],
-  [Kronecker $A times.o B$], [$O(p q (m+n))$], [K-FAC, KroneckerLinear],
+  [Kronecker $A times.circle B$], [$O(p q (m+n))$], [K-FAC, KroneckerLinear],
   [Sparse], [$O("nnz")$], [Mixture-of-experts, attention masks],
   [Block-diagonal], [$sum O(n_i^2)$], [Grouped convolutions, MoE],
 )
 
-The Kronecker product $A times.o B$ has the identity $"vec"(A X B^top) = (B times.o A) "vec"(X)$ which lets second-order methods like K-FAC store a $d^2 times d^2$ Fisher block as two $d times d$ factors.
+The Kronecker product $A times.circle B$ has the identity $"vec"(A X B^top) = (B times.circle A) "vec"(X)$ which lets second-order methods like K-FAC store a $d^2 times d^2$ Fisher block as two $d times d$ factors.
 
 == Random Projections and Johnson–Lindenstrauss
 

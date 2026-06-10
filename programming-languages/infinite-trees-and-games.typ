@@ -64,7 +64,7 @@ We sketch the Muller--Schupp route.
 
 An *alternating parity tree automaton* is a tuple $cal(A) = (Q, Sigma, q_0, delta, Omega)$ where
 $ delta : Q times Sigma arrow.r cal(B)^+ ({0, 1} times Q) $
-maps each (state, letter) pair to a *positive Boolean formula* over atomic propositions $chevron.l d, q chevron.r$ with $d in {0, 1}$ and $q in Q$. Intuitively, $chevron.l d, q chevron.r$ asserts "in direction $d$, send state $q$"; conjunctions branch the run, disjunctions choose.
+maps each (state, letter) pair to a *positive Boolean formula* over atomic propositions $angle.l d, q angle.r$ with $d in {0, 1}$ and $q in Q$. Intuitively, $angle.l d, q angle.r$ asserts "in direction $d$, send state $q$"; conjunctions branch the run, disjunctions choose.
 
 A *run* of $cal(A)$ on $t$ is a tree of *configurations* $(u, q) in {0,1}^* times Q$ obeying the formulas $delta(q, t(u))$. Acceptance: for every infinite branch of the run, the sequence of states satisfies the parity condition $Omega$.
 

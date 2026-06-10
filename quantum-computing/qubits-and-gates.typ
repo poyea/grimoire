@@ -8,11 +8,11 @@ A qubit is a unit vector in $bb(C)^2$, the simplest non-trivial quantum system. 
 
 A single-qubit pure state is
 
-$ |psi chevron.r = alpha |0 chevron.r + beta |1 chevron.r, quad alpha, beta in bb(C), quad |alpha|^2 + |beta|^2 = 1. $
+$ |psi angle.r = alpha |0 angle.r + beta |1 angle.r, quad alpha, beta in bb(C), quad |alpha|^2 + |beta|^2 = 1. $
 
-Global phase is unobservable: $e^(i phi) |psi chevron.r$ and $|psi chevron.r$ give identical measurement statistics. Modulo global phase, any pure single-qubit state is parameterized by two real angles $(theta, phi)$:
+Global phase is unobservable: $e^(i phi) |psi angle.r$ and $|psi angle.r$ give identical measurement statistics. Modulo global phase, any pure single-qubit state is parameterized by two real angles $(theta, phi)$:
 
-$ |psi chevron.r = cos(theta/2) |0 chevron.r + e^(i phi) sin(theta/2) |1 chevron.r. $
+$ |psi angle.r = cos(theta/2) |0 angle.r + e^(i phi) sin(theta/2) |1 angle.r. $
 
 This is the *Bloch sphere* parameterization.
 
@@ -31,7 +31,7 @@ This is the *Bloch sphere* parameterization.
                   |1>
 ```
 
-The poles are $|0 chevron.r$ and $|1 chevron.r$. The equator carries the superposition states $(|0 chevron.r + e^(i phi)|1 chevron.r) / sqrt(2)$ — including $|+ chevron.r$, $|- chevron.r$, $|"+i" chevron.r$, $|"-i" chevron.r$. Mixed states (statistical ensembles) live *inside* the ball as density matrices $rho = (II + arrow(r) dot arrow(sigma)) / 2$ with $|arrow(r)| <= 1$.
+The poles are $|0 angle.r$ and $|1 angle.r$. The equator carries the superposition states $(|0 angle.r + e^(i phi)|1 angle.r) / sqrt(2)$ — including $|+ angle.r$, $|- angle.r$, $|"+i" angle.r$, $|"-i" angle.r$. Mixed states (statistical ensembles) live *inside* the ball as density matrices $rho = (II + arrow(r) dot arrow(sigma)) / 2$ with $|arrow(r)| <= 1$.
 
 == Single-Qubit Gates
 
@@ -75,11 +75,11 @@ print(np.round(U, 3))
 
 For $n$ qubits the state is a unit vector in $bb(C)^(2^n)$ written in the computational basis:
 
-$ |psi chevron.r = sum_(x in {0,1}^n) c_x |x chevron.r, quad sum_x |c_x|^2 = 1. $
+$ |psi angle.r = sum_(x in {0,1}^n) c_x |x angle.r, quad sum_x |c_x|^2 = 1. $
 
-A state is *product* if $|psi chevron.r = |a chevron.r times.o |b chevron.r$ and *entangled* otherwise. The canonical Bell pair
+A state is *product* if $|psi angle.r = |a angle.r times.circle |b angle.r$ and *entangled* otherwise. The canonical Bell pair
 
-$ |Phi^+ chevron.r = (|00 chevron.r + |11 chevron.r) / sqrt(2) $
+$ |Phi^+ angle.r = (|00 angle.r + |11 angle.r) / sqrt(2) $
 
 has no product decomposition: measuring the first qubit instantly fixes the second, regardless of separation. The four Bell states form an orthonormal basis of $bb(C)^4$ used in teleportation, superdense coding, and entanglement-based QKD (BB84/E91).
 
@@ -89,7 +89,7 @@ The *controlled-NOT* (CNOT, CX) is the workhorse:
 
 $ "CNOT" = mat(1, 0, 0, 0; 0, 1, 0, 0; 0, 0, 0, 1; 0, 0, 1, 0). $
 
-It flips the target iff the control is $|1 chevron.r$. Equivalently, in the $|+ chevron.r, |- chevron.r$ basis the roles swap (CNOT in $Z$-basis equals CZ-with-Hadamards). CZ, iSWAP, and $sqrt("SWAP")$ are the other common natives — your hardware picks one. CNOT plus arbitrary single-qubit gates is *universal*: any unitary on $n$ qubits can be approximated to arbitrary precision.
+It flips the target iff the control is $|1 angle.r$. Equivalently, in the $|+ angle.r, |- angle.r$ basis the roles swap (CNOT in $Z$-basis equals CZ-with-Hadamards). CZ, iSWAP, and $sqrt("SWAP")$ are the other common natives — your hardware picks one. CNOT plus arbitrary single-qubit gates is *universal*: any unitary on $n$ qubits can be approximated to arbitrary precision.
 
 ```python
 # Bell pair preparation in Qiskit
@@ -103,9 +103,9 @@ bell.measure([0,1], [0,1])
 
 == Measurement and the Born Rule
 
-A projective measurement in the computational basis projects $|psi chevron.r = sum c_x |x chevron.r$ onto outcome $x$ with probability $|c_x|^2$, collapsing the state to $|x chevron.r$. More generally, a *POVM* ${E_m}$ with $sum_m E_m = II$ yields outcome $m$ with $P(m) = chevron.l psi | E_m | psi chevron.r$.
+A projective measurement in the computational basis projects $|psi angle.r = sum c_x |x angle.r$ onto outcome $x$ with probability $|c_x|^2$, collapsing the state to $|x angle.r$. More generally, a *POVM* ${E_m}$ with $sum_m E_m = II$ yields outcome $m$ with $P(m) = angle.l psi | E_m | psi angle.r$.
 
-The *no-cloning theorem* (Wootters & Zurek 1982) forbids a unitary $U$ with $U(|psi chevron.r times.o |0 chevron.r) = |psi chevron.r times.o |psi chevron.r$ for arbitrary $|psi chevron.r$ — measurement is destructive in a fundamental way, which is why classical debugging tools do not port to quantum directly.
+The *no-cloning theorem* (Wootters & Zurek 1982) forbids a unitary $U$ with $U(|psi angle.r times.circle |0 angle.r) = |psi angle.r times.circle |psi angle.r$ for arbitrary $|psi angle.r$ — measurement is destructive in a fundamental way, which is why classical debugging tools do not port to quantum directly.
 
 == Universal Gate Sets and Solovay-Kitaev
 
@@ -154,7 +154,7 @@ h q[0];
 c = measure q;
 ```
 
-OpenQASM 3 adds classical control, timing, and gate definitions over 2.x — every major stack (Qiskit, t|ket chevron.r, Cirq via interop) ingests it.
+OpenQASM 3 adds classical control, timing, and gate definitions over 2.x — every major stack (Qiskit, t|ket angle.r, Cirq via interop) ingests it.
 
 == Further Reading
 
