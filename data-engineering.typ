@@ -14,6 +14,12 @@
   #include "data-engineering/batch-processing.typ"
   #pagebreak()
 
+  #include "data-engineering/change-data-capture.typ"
+  #pagebreak()
+
+  #include "data-engineering/data-quality.typ"
+  #pagebreak()
+
   #include "data-engineering/etl-vs-elt.typ"
   #pagebreak()
 
@@ -23,7 +29,13 @@
   #include "data-engineering/orchestration.typ"
   #pagebreak()
 
+  #include "data-engineering/schema-evolution.typ"
+  #pagebreak()
+
   #include "data-engineering/streaming.typ"
+  #pagebreak()
+
+  #include "data-engineering/watermarks-and-windows.typ"
   #pagebreak()
 
 ]
