@@ -32,6 +32,12 @@
   #include "distributed-systems/time-and-order.typ"
   #pagebreak()
 
+  #include "distributed-systems/causal-consistency.typ"
+  #pagebreak()
+
+  #include "distributed-systems/crdts.typ"
+  #pagebreak()
+
   #include "distributed-systems/transactions.typ"
   #pagebreak()
 
