@@ -110,13 +110,36 @@
   <h1>Observability &amp; SRE</h1>
   <p class="desc">Metrics, logs, distributed tracing, continuous profiling, and SRE principles.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 5</span>
+    <span><strong>CHAPTERS</strong> · 9</span>
     <span><strong>FORMAT</strong> · PDF</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_observability_and_sre.pdf">Download PDF ↓</a>
   </div>
   <div class="toc">
     <details id="ch-1">
-      <summary><span class="n">01</span>Continuous Profiling</summary>
+      <summary><span class="n">01</span>Alerting</summary>
+      <ul>
+        <li>Symptoms versus Causes</li>
+        <li>Alert Quality: Precision, Recall, and Pager Fatigue</li>
+        <li>Multi-Window, Multi-Burn-Rate SLO Alerts</li>
+        <li>Routing, Deduplication, and Silences</li>
+        <li>On-Call Health Metrics</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Chaos Engineering</summary>
+      <ul>
+        <li>Principles</li>
+        <li>The Fault Injection Toolbox</li>
+        <li>Platforms</li>
+        <li>Game Days, DiRT, and the Wheel of Misfortune</li>
+        <li>Verifying Recovery Procedures</li>
+        <li>Relationship to Testing and Formal Methods</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Continuous Profiling</summary>
       <ul>
         <li>CPU Profiling: Sampling vs Instrumentation</li>
         <li>Flame Graphs</li>
@@ -129,8 +152,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-2">
-      <summary><span class="n">02</span>Distributed Tracing</summary>
+    <details id="ch-4">
+      <summary><span class="n">04</span>Distributed Tracing</summary>
       <ul>
         <li>The Span Model</li>
         <li>Context Propagation</li>
@@ -143,8 +166,20 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-3">
-      <summary><span class="n">03</span>Metrics Systems</summary>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Incident Management</summary>
+      <ul>
+        <li>The Incident Lifecycle</li>
+        <li>Roles: The Incident Command System</li>
+        <li>Paging and Escalation</li>
+        <li>Runbooks</li>
+        <li>Postmortems</li>
+        <li>Incident Tooling</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Metrics Systems</summary>
       <ul>
         <li>Data Model</li>
         <li>Architecture Comparison</li>
@@ -159,8 +194,23 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-4">
-      <summary><span class="n">04</span>SLO Engineering</summary>
+    <details id="ch-7">
+      <summary><span class="n">07</span>OpenTelemetry</summary>
+      <ul>
+        <li>The Signals Model</li>
+        <li>API versus SDK</li>
+        <li>OTLP</li>
+        <li>Semantic Conventions</li>
+        <li>Context Propagation</li>
+        <li>The Collector</li>
+        <li>Sampling Configuration</li>
+        <li>Instrumentation Strategy: Auto versus Manual</li>
+        <li>Ecosystem Status</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>SLO Engineering</summary>
       <ul>
         <li>SLI, SLO, SLA: Precise Definitions</li>
         <li>Error Budget</li>
@@ -171,8 +221,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-5">
-      <summary><span class="n">05</span>The Three Pillars and Beyond</summary>
+    <details id="ch-9">
+      <summary><span class="n">09</span>The Three Pillars and Beyond</summary>
       <ul>
         <li>Why &quot;Three Pillars&quot; Underspecifies the Problem</li>
         <li>The Resource Model</li>

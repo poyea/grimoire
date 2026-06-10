@@ -110,7 +110,7 @@
   <h1>Data Engineering</h1>
   <p class="desc">Batch processing, streaming, ETL/ELT, orchestration, and lakehouse architecture.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 5</span>
+    <span><strong>CHAPTERS</strong> · 9</span>
     <span><strong>FORMAT</strong> · PDF</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_data_engineering.pdf">Download PDF ↓</a>
   </div>
@@ -133,7 +133,36 @@
       </ul>
     </details>
     <details id="ch-2">
-      <summary><span class="n">02</span>ETL vs ELT</summary>
+      <summary><span class="n">02</span>Change Data Capture</summary>
+      <ul>
+        <li>Why Log-Based</li>
+        <li>Debezium Architecture</li>
+        <li>Postgres: Logical Decoding</li>
+        <li>MySQL: Binlog</li>
+        <li>Snapshots and the Streaming Handoff</li>
+        <li>Delivery Semantics</li>
+        <li>The Outbox Pattern</li>
+        <li>CDC to the Lakehouse</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Data Quality</summary>
+      <ul>
+        <li>Dimensions of Quality</li>
+        <li>Expectations Frameworks</li>
+        <li>Anomaly Detection on Metrics</li>
+        <li>Data Contracts</li>
+        <li>Write-Audit-Publish</li>
+        <li>Circuit Breakers</li>
+        <li>Data SLAs</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>ETL vs ELT</summary>
       <ul>
         <li>A Concrete Distinction</li>
         <li>A Minimal ELT in dbt</li>
@@ -146,8 +175,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-3">
-      <summary><span class="n">03</span>Lakehouse Engineering</summary>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Lakehouse Engineering</summary>
       <ul>
         <li>The Three Layers</li>
         <li>Writing to Iceberg from Spark</li>
@@ -162,8 +191,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-4">
-      <summary><span class="n">04</span>Orchestration</summary>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Orchestration</summary>
       <ul>
         <li>What an Orchestrator Provides</li>
         <li>Airflow: Task-Centric DAGs</li>
@@ -177,8 +206,23 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-5">
-      <summary><span class="n">05</span>Streaming</summary>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Schema Evolution</summary>
+      <ul>
+        <li>Readers, Writers, and Compatibility</li>
+        <li>Avro Semantics</li>
+        <li>Protobuf Semantics</li>
+        <li>JSON Schema Semantics</li>
+        <li>Schema Registries</li>
+        <li>Table-Format Evolution</li>
+        <li>Migrations and the Expand-Contract Pattern</li>
+        <li>Versioning Strategy</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Streaming</summary>
       <ul>
         <li>The Log as Substrate</li>
         <li>Event Time vs Processing Time</li>
@@ -188,6 +232,21 @@
         <li>Streaming SQL</li>
         <li>Watermark Pitfalls</li>
         <li>Backpressure and Scaling</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Watermarks and Windows</summary>
+      <ul>
+        <li>Two Clocks</li>
+        <li>Watermarks</li>
+        <li>Propagation</li>
+        <li>Window Types</li>
+        <li>Triggers</li>
+        <li>Allowed Lateness</li>
+        <li>Accumulation Modes</li>
+        <li>Putting It Together</li>
         <li>Pitfalls</li>
         <li>Further Reading</li>
       </ul>
