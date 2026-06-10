@@ -11,13 +11,25 @@
 
   #pagebreak()
 
+  #include "observability-and-sre/alerting.typ"
+  #pagebreak()
+
+  #include "observability-and-sre/chaos-engineering.typ"
+  #pagebreak()
+
   #include "observability-and-sre/continuous-profiling.typ"
   #pagebreak()
 
   #include "observability-and-sre/distributed-tracing.typ"
   #pagebreak()
 
+  #include "observability-and-sre/incident-management.typ"
+  #pagebreak()
+
   #include "observability-and-sre/metrics-systems.typ"
+  #pagebreak()
+
+  #include "observability-and-sre/opentelemetry.typ"
   #pagebreak()
 
   #include "observability-and-sre/slo-engineering.typ"
