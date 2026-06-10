@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Typst
         uses: typst-community/setup-typst@v3
@@ -36,12 +38,26 @@ jobs:
             fi
           done
 
+      - name: Build combined PDF
+        run: |
+          pip install pypdf
+          python3 scripts/release_merge.py
+
+      - name: Generate checksums
+        run: sha256sum grimoire_*.pdf > SHA256SUMS
+
+      - name: Generate release notes
+        run: python3 scripts/release_notes.py > release_notes.md
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: 'grimoire_*.pdf'
+          files: |
+            grimoire_*.pdf
+            SHA256SUMS
           draft: false
           prerelease: false
+          body_path: release_notes.md
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
