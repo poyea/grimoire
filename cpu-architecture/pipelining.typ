@@ -70,7 +70,7 @@ Decode stages:
 
 Intel Skylake: 14-19 stages (varies with µop-cache hits — front-end is bypassed)
 AMD Zen 3: ~19 stages
-Intel Raptor Lake: ~15-17 stages on P-cores (E-cores ~12)
+Intel Raptor Lake: ~15-17 stages on P-cores (Gracemont E-cores ~17)
 AMD Zen 4: ~19 stages (similar to Zen 3)
 Apple M3: ~16 stages (estimated)
 ```
@@ -149,7 +149,7 @@ SUB R1, R4, R5    ; writes R1
 
 _Resolution:_ cannot occur in simple 5-stage (in-order, one write per cycle). In superscalar/OoO: register renaming eliminates it.
 
-_IPC impact:_ On a 4-wide superscalar, a RAW chain like `ld rax,[mem]; add rbx,rax; sub rcx,rbx` serializes three dependent ops, dropping IPC from ~4.0 to ~1.3 for this sequence. A pipeline flush from a control hazard costs 12--20 cycles on modern x86 (Skylake: ~16 cycles, Zen 4: ~13 cycles).
+_IPC impact:_ On a 4-wide superscalar, a RAW chain like `ld rax,[mem]; add rbx,rax; sub rcx,rbx` serializes three dependent ops: with a 4-cycle L1 load latency the chain takes ~6 cycles, so IPC drops from ~4.0 to ~0.5 for this sequence. A pipeline flush from a control hazard costs 12--20 cycles on modern x86 (Skylake: ~16 cycles, Zen 4: ~13 cycles).
 
 === Control Hazards
 
@@ -164,15 +164,17 @@ add rcx, rdx      ; Fetched speculatively, may be wrong path
 
 *Branch penalty analysis:*
 
+The penalty per misprediction is set by the pipeline depth (where the branch resolves), not by the predictor --- a 5-stage in-order core pays 1-3 cycles, a deep OoO core ~15. What the predictor controls is the *rate* of mispredictions:
+
 #table(
   columns: (auto, auto, auto),
-  [*Strategy*], [*Penalty (cycles)*], [*Effective CPI impact*],
-  [Stall until resolved], [1-3], [+0.15 to +0.45 (15% branch rate)],
-  [Predict not taken], [1 on taken], [~+0.07 (50% taken)],
-  [Static predict backward taken], [1 on misprediction], [~+0.03 (loops)],
-  [Dynamic 2-bit predictor], [1 on misprediction], [~+0.015 (93% accuracy)],
-  [Tournament predictor], [~15 on misprediction], [~+0.006 (97% accuracy)],
-  [TAGE predictor], [~15 on misprediction], [~+0.003 (99%+ accuracy)],
+  [*Strategy*], [*Mispredict rate*], [*CPI impact (15% branches, ~15-cycle penalty)*],
+  [Stall until resolved], [n/a (always waits)], [+0.15 to +0.45],
+  [Predict not taken], [~50% (taken branches)], [~+1.1],
+  [Static backward-taken], [~30%], [~+0.68],
+  [Dynamic 2-bit predictor], [~7%], [~+0.16],
+  [Tournament predictor], [~3%], [~+0.07],
+  [TAGE predictor], [under 1%], [~+0.02],
 )
 
 == Forwarding (Bypassing)
@@ -259,11 +261,11 @@ taken_path:
 *Branch misprediction cost:* Flush all speculatively executed instructions.
 
 ```
-Pipeline depth = 16 stages (Intel Skylake)
-Misprediction penalty = 16-20 cycles (flush + refill)
+Pipeline depth = 14-19 stages (Intel Skylake)
+Misprediction penalty ≈ 15 cycles (flush + refill)
 
 10% mispredict rate, 1 branch per 5 instructions:
-Overhead = 0.2 branches/inst × 0.1 mispredict × 20 cycles = 0.4 CPI penalty
+Overhead = 0.2 branches/inst × 0.1 mispredict × 15 cycles = 0.3 CPI penalty
 ```
 
 *See Branch Prediction section for detailed prediction algorithms.*
