@@ -1,0 +1,71 @@
+name: Quality Gates
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  spelling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install codespell
+      - name: Run codespell
+        run: codespell --skip="*.pdf,./docs,./.git" -I .codespellignore .
+
+  citations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check Further Reading citations
+        run: python3 scripts/check_citations.py
+      - name: Report near-duplicate paragraphs (advisory)
+        run: python3 scripts/check_duplicates.py
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml
+      - name: Lint chapters and manifest
+        run: python3 scripts/lint_chapters.py
+
+  deprecation-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v3
+        with:
+          typst-version: 'latest'
+      - name: Compile all volumes and fail on warnings/deprecations
+        run: |
+          fail=0
+          for f in *.typ; do
+            [ "$f" = "template.typ" ] && continue
+            echo "::group::$f"
+            out=$(typst compile "$f" /tmp/gate.pdf 2>&1) || {
+              echo "$out"; echo "compile failed: $f"; fail=1;
+            }
+            rm -f /tmp/gate.pdf
+            if echo "$out" | grep -Eqi "deprecated|warning:"; then
+              echo "$out" | grep -Ei "deprecated|warning:"
+              echo "deprecation/warning gate failed: $f"
+              fail=1
+            fi
+            echo "::endgroup::"
+          done
+          exit $fail
