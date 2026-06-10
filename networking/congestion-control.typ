@@ -201,6 +201,26 @@ xplot.org a2b_tput.xpl
 - *ECN black-holing.* Some legacy paths drop or rewrite the ECN bits. Linux probes for ECN failure and degrades gracefully (`tcp_ecn_fallback`).
 - *Coexistence.* Mixing $"BBR"$v1 and $"CUBIC"$ on the same bottleneck favours BBR; choose v2 or v3 for fairness when interoperating.
 
+== Exercises
+
+1. A path has a bottleneck bandwidth of 100 Mb/s and a minimum RTT of 80 ms. Compute the BDP in bytes and in 1500-byte packets. What happens to queueing delay if a sender keeps twice the BDP in flight?
+  _Hint: multiply rate by delay, then convert bits to bytes; the excess inflight sits in the bottleneck queue._
+
+2. Explain why Reno's recovery from a single loss takes roughly $W/2$ RTTs of linear growth, and why CUBIC's $W(t) = C dot (t - K)^3 + W_max$ recovers a high-BDP path so much faster. What property makes CUBIC fairer across flows with different RTTs?
+  _Hint: Reno grows about one MSS per RTT; CUBIC's growth is a function of wall-clock time since the last loss, not of RTT._
+
+3. Describe the purpose of each of BBR v1's four states (STARTUP, DRAIN, PROBE_BW, PROBE_RTT). Why must PROBE_RTT periodically drop cwnd to a few packets rather than just observing passively?
+  _Hint: a standing queue of the flow's own making inflates every RTT sample; the queue must be drained to see the propagation delay._
+
+4. A BBR v1 flow shares a shallow-buffered bottleneck with a CUBIC flow. Predict the outcome and explain which v2 additions (inflight cap, loss-rate threshold, ECN response) address it.
+  _Hint: v1 ignores loss, so it keeps its model-derived rate while CUBIC backs off on every drop._
+
+5. With DCTCP's update rules $alpha arrow.l (1 - g) alpha + g dot F$ and $"cwnd" arrow.l "cwnd" (1 - alpha\/2)$, compute the cwnd reduction when the steady-state marked fraction is $F = 0.1$ versus when every packet is marked ($F = 1$). How does this differ from classic ECN's reaction?
+  _Hint: at steady state $alpha approx F$; classic ECN halves cwnd once per RTT regardless of the marked fraction._
+
+6. L4S separates traffic using the ECT(1) codepoint into a shallow-marked scalable queue and a deeper classic queue. Explain why scalable and classic flows cannot safely share a single classic AQM, using the throughput relations $prop 1\/p$ and $prop 1\/sqrt(p)$.
+  _Hint: at the same marking probability the two laws give wildly different rates; the DualPI2 coupling term equalizes them._
+
 == Further Reading
 
 RFC 5681: TCP Congestion Control. Allman et al., 2009.

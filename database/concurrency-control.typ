@@ -288,6 +288,29 @@ bool silo_commit(Transaction& txn) {
 }
 ```
 
+== Exercises
+
+1. Transaction T executes `lock(A), lock(B), unlock(B), lock(C), unlock(A), unlock(C)`. Is this schedule two-phase? If not, point to the violating step; if so, identify the lock point.
+  _Hint: a single new acquisition after any release breaks the protocol._
+
+2. Strict 2PL holds all locks until commit. Explain which anomaly this prevents compared with plain 2PL, using a two-transaction example where T1 writes a value that T2 reads before T1 aborts.
+  _Hint: think cascading aborts — what must T2 do if it already read T1's uncommitted write?_
+
+3. Using the lock compatibility table, explain why IX is compatible with IX at the table level but X is not compatible with anything. What row-level scenario do two concurrent IX holders represent?
+  _Hint: intention locks only declare intent; the real conflict check happens on the rows._
+
+4. Three transactions wait as follows: T1 waits for T2, T2 waits for T3, T3 waits for T1, and T4 waits for T1. Run the Kahn-style detection from this chapter on the waits-for graph: which transactions are reported as on a cycle, and is T4 among them?
+  _Hint: only nodes whose in-degree never reaches zero remain; check whether anything waits for T4._
+
+5. An OCC transaction with `start_ts = 100` reads keys ${x, y}$ and writes ${z}$. Concurrently committed transactions are $T_a$ (`commit_ts = 105`, wrote ${y}$) and $T_b$ (`commit_ts = 98`, wrote ${x}$). Does validation pass? Explain which rule each committed transaction triggers.
+  _Hint: only transactions that committed after our start and whose write set intersects our read set force an abort._
+
+6. Contrast where PostgreSQL and InnoDB store old row versions, and explain why a long-running transaction causes table bloat in one system and undo-segment bloat in the other.
+  _Hint: heap tuple chains plus VACUUM versus undo logs plus the purge thread._
+
+7. Under basic timestamp ordering, transaction T with $"ts"(T) = 50$ attempts to write X where $"R-TS"(X) = 60$ and $"W-TS"(X) = 40$. What happens, and how does the outcome change if instead $"R-TS"(X) = 45$ and $"W-TS"(X) = 60$?
+  _Hint: a later read forces abort; a later write alone invokes the Thomas Write Rule._
+
 == References
 
 Kung, H.T., Robinson, J.T. (1981). "On Optimistic Methods for Concurrency Control." ACM TODS 6(2).

@@ -291,6 +291,26 @@ struct LinearLearnedIndex {
 };
 ```
 
+== Exercises
+
+1. A B+Tree uses 8 KB pages, 16-byte keys, and 8-byte child pointers. Estimate the branching factor and the tree height needed to index 1 billion keys, and hence the worst-case page reads per point lookup.
+  _Hint: branching factor $approx$ page size divided by entry size; height is the base-$b$ logarithm of the key count._
+
+2. Explain why leaf sibling pointers make B+Tree range scans efficient, and describe how the same range scan is served by an LSM-Tree. Which structure pays a per-scan merge cost, and why?
+  _Hint: the LSM read path must merge iterators across the MemTable and every level._
+
+3. Using the false-positive formula $P approx (1 - e^(-k n / m))^k$, estimate the FPR for a Bloom filter with $m/n = 10$ bits per element and $k = 7$ hash functions. What fraction of lookups for non-existent keys still incur an SSTable read?
+  _Hint: compute $1 - e^(-0.7) approx 0.50$, then raise it to the 7th power._
+
+4. Compare leveled and tiered compaction on write amplification, read amplification, and space amplification. For a write-heavy time-series workload with rare point reads, argue which strategy you would pick.
+  _Hint: tiered defers merging, trading read and space amplification for fewer rewrites._
+
+5. Why does a slotted page address tuples by (page_id, slot_number) instead of a byte offset? What operation does this indirection make safe?
+  _Hint: in-page compaction can move tuple bytes without invalidating external references._
+
+6. A learned index (two-level RMI) serves a table whose primary keys are monotonically increasing order IDs. Identify two failure modes this workload triggers and the standard mitigations.
+  _Hint: new keys fall outside the trained range, and retraining is an $O(N)$ offline scan; consider fallback or hybrid structures._
+
 == References
 
 O'Neil, P. et al. (1996). "The Log-Structured Merge-Tree (LSM-Tree)." Acta Informatica.

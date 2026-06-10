@@ -102,6 +102,26 @@ Azure Cosmos DB offers session and bounded-staleness levels with consistent-pref
 
 The pattern: exact causality costs linear metadata (provably), so production systems either scope it (per key, per session) or approximate it (scalar clocks, stability cuts) and accept conservative ordering. Causal consistency is less a single protocol than a budget allocation problem over this table.
 
+== Exercises
+
+1. Explain why the photo-album anomaly (post visible before the ACL change) violates causal consistency but not eventual consistency. Which of the two store-level happens-before clauses orders the two writes?
+  _Hint: the photo post was issued in the same session after the ACL write._
+
+2. Two clients write to the same key through one server. Show, with concrete vector states, how a plain version vector makes the second write falsely dominate the first, and how a dotted version vector recognizes the writes as siblings.
+  _Hint: both writes tick the same server entry; a DVV gives each write its own dot above the shared causal past._
+
+3. A COPS remote cluster receives a replicated `put` with a dependency list. Walk through what happens if one dependency is not yet locally visible, and explain why ordering is enforced at the destination rather than at the source. What goes wrong with this design under heavy fan-out?
+  _Hint: the write is buffered until dependency checks pass; per-write dependency lists can explode in size._
+
+4. For each of the four Bayou session guarantees, give a one-sentence user-visible anomaly that occurs when that guarantee alone is missing.
+  _Hint: think of a posted-but-missing item, time-travel between refreshes, reordered edits, and a reply without its original._
+
+5. A system tracks causality with HLC scalars only. Can it detect that two writes were concurrent? Can it guarantee that a causally later write is never applied first? Justify both answers from the direction of the HLC implication.
+  _Hint: $e_1 arrow.r.hook e_2 ==> "HLC"(e_1) < "HLC"(e_2)$, but not the converse._
+
+6. A GentleRain-style store gates reads on the Global Stable Time, and one of its five datacenters goes offline for an hour. Describe the effect on read snapshot freshness and on garbage collection, and name the mitigation production systems use.
+  _Hint: stability advances at the pace of the slowest replica; consider eviction or a well-connected stability quorum._
+
 == Further Reading
 
 Ahamad, M., Neiger, G., Burns, J., Kohli, P., Hutto, P. (1995). "Causal Memory: Definitions, Implementation, and Programming." Distributed Computing 9(1).

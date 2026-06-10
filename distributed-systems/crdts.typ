@@ -95,6 +95,26 @@ When the invariant is real, use consensus for the invariant-bearing decisions an
 - *Figma, Apple Notes, and most collaborative editors:* sequence/JSON CRDTs (or close cousins) for offline-tolerant multi-user editing.
 - *Phoenix Presence (Elixir):* an OR-Set-like CRDT tracking who is online per topic, merged via gossip with no central registry.
 
+== Exercises
+
+1. State the three properties of strong eventual consistency and explain why "same set of updates implies equivalent state" is strictly stronger than plain eventual consistency. Which property rules out a reconciliation-and-rollback design?
+  _Hint: SEC removes any need for replicas to agree on an order; convergence is determined by the set alone._
+
+2. Prove that a G-Counter's merge (pointwise max over per-replica entries) forms a join semilattice, and show where the proof breaks if decrement of one's own entry were allowed.
+  _Hint: a product of max-semilattices is a semilattice; decrement violates the inflation requirement._
+
+3. Replicas $A$ and $B$ start with an OR-Set containing element $e$ with tag $t_1$. Concurrently, $A$ executes `remove(e)` while $B$ executes `add(e)` (fresh tag $t_2$). Trace the tag sets after both replicas merge, and explain why the result is add-wins. How would a remove-wins set decide instead?
+  _Hint: $A$ deletes only the tags it observed; $t_2$ was never observed by the remover._
+
+4. A team builds an LWW-Register keyed on wall-clock timestamps across servers with up to 2 seconds of clock skew. Describe the anomaly that can silently occur, and explain how HLC timestamps change the guarantee.
+  _Hint: a causally later write can carry a smaller wall-clock timestamp; HLC ensures a write never loses to an update it causally followed._
+
+5. Compare state-based, op-based, and delta-state CRDTs along two axes: payload size and required delivery guarantees. Why can deltas be duplicated and reordered safely while op-based effects cannot?
+  _Hint: deltas are lattice elements merged with an idempotent join; effects are not idempotent in general._
+
+6. Your product needs a replicated counter that must never go below zero, with replicas accepting decrements during partitions. Explain why no CRDT can provide this coordination-free, citing the relevant theorem, and sketch the escrow workaround.
+  _Hint: non-negativity is non-monotone, so CALM says coordination is required; escrow pre-partitions the budget across replicas._
+
 == Further Reading
 
 Shapiro, M., Preguiça, N., Baquero, C., Zawirski, M. (2011). "Conflict-Free Replicated Data Types." SSS; and the companion technical report "A Comprehensive Study of Convergent and Commutative Replicated Data Types." INRIA RR-7506.
