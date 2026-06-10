@@ -15,7 +15,7 @@ Linearizability prevents both but requires coordination on every write and is un
 
 == Happens-Before as the Contract
 
-Recall Lamport's relation: $e_1 arrow.r.hook e_2$ if they are ordered in one session, if $e_1$ produced a value that $e_2$ read, or transitively. A causally consistent store guarantees:
+The store-level adaptation of Lamport's relation (Ahamad et al. 1995): $e_1 arrow.r.hook e_2$ if they are ordered in one session, if $e_1$ produced a value that $e_2$ read, or transitively. A causally consistent store guarantees:
 
 - If write $w_1 arrow.r.hook w_2$, no replica applies $w_2$ before $w_1$, and no read returns $w_2$'s value while $w_1$ is invisible.
 - Concurrent writes may be applied in any order, so the store needs a convergence rule for them: last-writer-wins, multi-value (return all siblings), or a CRDT merge. *Causal+* consistency (Lloyd et al. 2011) names the combination: causal consistency plus convergent conflict handling, so replicas do not merely respect causality but also agree, eventually, on conflict outcomes.

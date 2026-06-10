@@ -51,7 +51,7 @@ Anonymous pages have no backing file; evicting them requires *swap*. Swap's repu
 
 Compressed memory inserts a tier above the device:
 
-- *zswap*: a compressed in-RAM cache in front of a real swap device. Pages swap out into the pool (~3-5 µs, typical 2-3:1 compression); when the pool fills, the LRU-oldest entries are written, still or re-expanded, to the backing device. Cold data eventually leaves RAM entirely.
+- *zswap*: a compressed in-RAM cache in front of a real swap device. Pages swap out into the pool (~3-5 µs, typical 2-3:1 compression); when the pool fills, the LRU-oldest entries are decompressed and written to the backing device. Cold data eventually leaves RAM entirely.
 - *zram*: a compressed RAM block device used *as* the swap device. No backing store: the compressed copy stays in RAM forever, so incompressible or truly cold data still occupies memory. Standard on Android, ChromeOS, and Fedora desktops.
 
 The trade: a compressed-memory refault costs microseconds of CPU instead of an I/O, shrinking the thrashing penalty by orders of magnitude, at the price of dedicating CPU cycles and a fraction of RAM to the pool.

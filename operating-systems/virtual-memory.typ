@@ -59,7 +59,7 @@ COW shares physical frames between logically distinct copies until one side writ
 
 The canonical client is `fork`: parent and child share everything, so forking a 10 GB process costs only a page-table copy. Others: `MAP_PRIVATE` file mappings (writes produce anonymous copies, the file is untouched), the shared *zero page* backing untouched anonymous memory, and kernel same-page merging (KSM) which deduplicates identical frames across VMs and re-COWs them on write.
 
-Two systemic costs deserve respect. First, *latent copy storms*: a forked snapshot (Redis `BGSAVE`) converts the parent's write rate into a copy rate, potentially doubling RSS in seconds. Second, COW interacts subtly with concurrency — the historical `vmsplice`/Dirty COW class of bugs came from racing the refcount check against page pinning.
+Two systemic costs deserve respect. First, *latent copy storms*: a forked snapshot (Redis `BGSAVE`) converts the parent's write rate into a copy rate, potentially doubling RSS in seconds. Second, COW interacts subtly with concurrency — the historical Dirty COW bug raced the COW fault path against `madvise(MADV_DONTNEED)`, and later GUP-vs-COW bugs raced the refcount check against page pinning.
 
 == Huge Pages
 
@@ -107,7 +107,7 @@ Tiered memory (CXL expanders, persistent memory) generalizes the picture: nodes 
 
 Denning, P. (1970). "Virtual Memory." ACM Computing Surveys.
 
-Liu, C. et al. (2014). "Going the Distance for TLB Prefetching: An Application-Driven Study." ISCA (TLB behavior studies).
+Kandiraju, G., Sivasubramaniam, A. (2002). "Going the Distance for TLB Prefetching: An Application-Driven Study." ISCA (TLB behavior studies).
 
 Basu, A. et al. (2013). "Efficient Virtual Memory for Big Memory Servers." ISCA (direct segments, TLB reach).
 

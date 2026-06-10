@@ -114,11 +114,11 @@ The `row_number` dedup collapses multiple changes per key per batch; ordering by
 
 == Further Reading
 
-Andreakis, A., Papapanagiotou, I. (2019). "DBLog: A Watermark Based Change-Data-Capture Framework." Netflix / arXiv:2010.12597. The lock-free chunked snapshot algorithm interleaving snapshot and log reads, adopted by Debezium incremental snapshots and Flink CDC.
+Andreakis, A., Papapanagiotou, I. (2020). "DBLog: A Watermark Based Change-Data-Capture Framework." Netflix / arXiv:2010.12597. The lock-free chunked snapshot algorithm interleaving snapshot and log reads, adopted by Debezium incremental snapshots and Flink CDC.
 
 Das, S. et al. (2012). "All Aboard the Databus! LinkedIn's Scalable Consistent Change Data Capture Platform." SoCC. The first large-scale published CDC platform; source of much of the field's vocabulary.
 
-Kreps, J. (2014). "The Log: What Every Software Engineer Should Know About Real-Time Data's Unifying Abstraction." LinkedIn Engineering Blog. Frames CDC as one instance of log-centric architecture.
+Kreps, J. (2013). "The Log: What Every Software Engineer Should Know About Real-Time Data's Unifying Abstraction." LinkedIn Engineering Blog. Frames CDC as one instance of log-centric architecture.
 
 Richardson, C. (2018). _Microservices Patterns._ Manning. Chapter 3 defines the transactional outbox and polling-publisher patterns.
 

@@ -23,7 +23,7 @@ $ "precision" = ("true pages") / ("true pages" + "false pages"), quad "recall" =
 
 A "true page" is one that required urgent human action. Add two more properties: *detection time* (how long after onset the page fires) and *reset time* (how long after recovery it stops firing). Every alerting design trades among these four; the multi-window method below exists precisely because a single threshold cannot optimize all of them.
 
-Precision matters more than intuition suggests because of *pager fatigue*, the operational cousin of alarm fatigue documented in clinical settings (where studies have found 80–99 % of clinical alarms to be non-actionable, with deadly desensitization effects). The same dynamics hold on-call: responders who learn that most pages are noise begin to acknowledge-and-ignore, and the latency of response to _real_ pages rises. Noise also hides signal directly — a real incident's page arrives interleaved with four flapping known-noisy alerts.
+Precision matters more than intuition suggests because of *pager fatigue*, the operational cousin of alarm fatigue documented in clinical settings (where studies have found 72–99 % of clinical alarms to be non-actionable, with deadly desensitization effects). The same dynamics hold on-call: responders who learn that most pages are noise begin to acknowledge-and-ignore, and the latency of response to _real_ pages rises. Noise also hides signal directly — a real incident's page arrives interleaved with four flapping known-noisy alerts.
 
 Practical hygiene that keeps the classifier honest:
 

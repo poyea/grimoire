@@ -1,6 +1,6 @@
 = OpenTelemetry
 
-OpenTelemetry (OTel) is the vendor-neutral standard for generating, processing, and exporting telemetry. Formed in 2019 from the merger of OpenTracing (2016, API-only) and OpenCensus (2018, Google's SDK-included approach), it became a CNCF incubating project and graduated in 2024; by repository activity it has been the second-most-active CNCF project after Kubernetes for years. The bet OTel makes is that instrumentation should be a write-once commodity decoupled from the backend that stores and queries the data. This chapter covers the signals model, the API/SDK split, OTLP, semantic conventions, context propagation, the Collector, sampling configuration, and instrumentation strategy.
+OpenTelemetry (OTel) is the vendor-neutral standard for generating, processing, and exporting telemetry. Formed in 2019 from the merger of OpenTracing (2016, API-only) and OpenCensus (2018, Google's SDK-included approach), it became a CNCF incubating project in 2021; by repository activity it has been the second-most-active CNCF project after Kubernetes for years. The bet OTel makes is that instrumentation should be a write-once commodity decoupled from the backend that stores and queries the data. This chapter covers the signals model, the API/SDK split, OTLP, semantic conventions, context propagation, the Collector, sampling configuration, and instrumentation strategy.
 
 *See also:* _Distributed Tracing_, _Metrics Systems_, _The Three Pillars and Beyond_, _Continuous Profiling_
 
@@ -90,7 +90,5 @@ Sigelman, B. H. et al. (2010). "Dapper, a Large-Scale Distributed Systems Tracin
 Young, T., Parker, A. (2024). _Learning OpenTelemetry._ O'Reilly. Written by two OTel co-founders; the best single treatment of Collector topology and rollout strategy.
 
 Blanco, D. G. (2023). _Practical OpenTelemetry._ Apress. SDK-level detail across languages.
-
-CNCF. (2024). "OpenTelemetry Graduation Announcement." https://www.cncf.io/
 
 Boten, A. (2022). _Cloud-Native Observability with OpenTelemetry._ Packt.

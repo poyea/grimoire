@@ -1,6 +1,6 @@
 = Incident Management
 
-An incident is an unplanned degradation of service that demands coordinated human response. Incident management is the discipline that turns that response from ad-hoc heroics into a repeatable process: detection, mobilization, mitigation, resolution, and learning. The structures here descend from FEMA's Incident Command System (developed for California wildfires in the 1970s) and were adapted by Google, PagerDuty, and Atlassian into the patterns most engineering organizations now run. This chapter covers the lifecycle, the roles, the paging machinery, and the postmortem practice — including why "MTTR" is a more fragile number than dashboards suggest.
+An incident is an unplanned degradation of service that demands coordinated human response. Incident management is the discipline that turns that response from ad-hoc heroics into a repeatable process: detection, mobilization, mitigation, resolution, and learning. The structures here descend from the Incident Command System (developed by California fire agencies in the 1970s, later adopted by FEMA) and were adapted by Google, PagerDuty, and Atlassian into the patterns most engineering organizations now run. This chapter covers the lifecycle, the roles, the paging machinery, and the postmortem practice — including why "MTTR" is a more fragile number than dashboards suggest.
 
 *See also:* _Alerting_, _SLO Engineering_, _Chaos Engineering_, _The Three Pillars and Beyond_
 
@@ -11,7 +11,7 @@ A useful decomposition of an incident's timeline:
 1. *Onset:* the fault begins affecting users (often before anyone notices).
 2. *Detection:* monitoring (or a customer) surfaces the problem. Time from onset to detection is *TTD*.
 3. *Triage and mobilization:* severity is assigned, responders are paged, an incident channel is opened.
-4. *Mitigation:* user impact is stopped or reduced — rollback, failover, feature-flag disable, traffic drain. Time to this point is *TTM* (time to mitigate).
+4. *Mitigation:* user impact is stopped or reduced — rollback, failover, feature-flag disable, traffic drain. Time from mobilization to this point is *TTM* (time to mitigate).
 5. *Resolution:* the underlying fault is fixed and the system returns to a fully healthy state.
 6. *Learning:* postmortem, action items, and follow-through.
 
@@ -64,7 +64,7 @@ A runbook (playbook) is the bridge between an alert and a mitigation. The minimu
 3. What are the known mitigations, in order of preference? (exact commands, rollback procedure)
 4. When and how do I escalate?
 
-Good runbooks are imperative and copy-pasteable; "investigate the database" is not a step. They decay quickly — a stale runbook that issues a destructive command against a renamed cluster is worse than none — so teams attach runbook review to alert review, and some validate runbook commands in game days (see _Chaos Engineering_). Transcend, Netflix, and others have pushed toward executable runbooks: scripts with confirmation prompts rather than prose, which both speeds mitigation and is a step toward automating the response away entirely. The end state of a perfect runbook is automation that makes the page unnecessary.
+Good runbooks are imperative and copy-pasteable; "investigate the database" is not a step. They decay quickly — a stale runbook that issues a destructive command against a renamed cluster is worse than none — so teams attach runbook review to alert review, and some validate runbook commands in game days (see _Chaos Engineering_). Transposit, Netflix, and others have pushed toward executable runbooks: scripts with confirmation prompts rather than prose, which both speeds mitigation and is a step toward automating the response away entirely. The end state of a perfect runbook is automation that makes the page unnecessary.
 
 == Postmortems
 

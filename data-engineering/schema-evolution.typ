@@ -119,4 +119,4 @@ Confluent. "Schema Evolution and Compatibility." https://docs.confluent.io/platf
 
 Apache Iceberg Specification, "Schema Evolution" and "Partition Evolution." https://iceberg.apache.org/spec/. Field-ID-based resolution for table formats.
 
-Sadalage, P., Fowler, M. (2012). _Refactoring Databases / Evolutionary Database Design._ Addison-Wesley. Origin of the expand-contract (parallel change) migration discipline.
+Ambler, S., Sadalage, P. (2006). _Refactoring Databases: Evolutionary Database Design._ Addison-Wesley. Origin of the expand-contract (parallel change) migration discipline.
