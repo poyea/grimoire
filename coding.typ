@@ -120,6 +120,9 @@
 #include "coding/math-number-theory.typ"
 #pagebreak()
 
+#include "coding/game-theory.typ"
+#pagebreak()
+
 #include "coding/advanced-systems.typ"
 #pagebreak()
 
