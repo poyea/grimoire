@@ -28,6 +28,12 @@
   "license": "https://opensource.org/licenses/MIT"
 }
 </script>
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -38,6 +44,26 @@
     --rule: #d4d2cc;
     --rule-soft: #e8e6e0;
     --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614;
+    --paper-dim: #211f1c;
+    --ink: #ece9e2;
+    --ink-soft: #b3aea4;
+    --rule: #3d3a35;
+    --rule-soft: #2c2a26;
+    --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614;
+      --paper-dim: #211f1c;
+      --ink: #ece9e2;
+      --ink-soft: #b3aea4;
+      --rule: #3d3a35;
+      --rule-soft: #2c2a26;
+      --accent: #e06a5c;
+    }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -268,6 +294,71 @@
   }
   footer a { color: var(--accent); text-decoration: none; }
 
+  .kicker-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+
+  .search-wrap { position: relative; margin-bottom: 2.5rem; }
+  #searchBox {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    padding: 0.75rem 1rem;
+  }
+  #searchBox:focus { outline: none; border-color: var(--ink); }
+  #searchBox::placeholder { color: var(--ink-soft); }
+  .search-results {
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 10;
+    background: var(--paper);
+    border: 1px solid var(--ink); border-top: 0;
+    max-height: 22rem; overflow-y: auto;
+  }
+  .search-results a {
+    display: block;
+    padding: 0.55rem 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 0.95rem;
+  }
+  .search-results a:last-child { border-bottom: 0; }
+  .search-results a:hover, .search-results a.active { background: var(--paper-dim); }
+  .search-results .sr-vol {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.66rem;
+    color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-right: 0.6rem;
+  }
+  .search-results .sr-sub {
+    display: block;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--ink-soft);
+  }
+  .search-results .sr-none {
+    padding: 0.55rem 1rem; color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+  }
+
+  .card-links {
+    display: flex; align-items: baseline; gap: 0.9rem;
+    margin-top: 0.7rem; padding-top: 0.7rem;
+    border-top: 1px solid var(--rule-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.06em;
+  }
+  .card-links .chap-count { color: var(--ink-soft); margin-right: auto; }
+  .card-links a { color: var(--accent); text-decoration: none; }
+  .card-links a:hover { text-decoration: underline; }
+  .ed-card h3 a { color: inherit; text-decoration: none; }
+  .ed-card h3 a:hover { color: var(--accent); }
+
   @media (max-width: 720px) {
     .wrap { padding: 2rem 1.2rem 3rem; }
     header.masthead { grid-template-columns: 1fr; }
@@ -279,7 +370,10 @@
 <body>
 
 <div class="wrap">
-  <p class="kicker">A Compendium of Technical Spellbooks · Edition 2026.06</p>
+  <div class="kicker-row">
+    <p class="kicker">A Compendium of Technical Spellbooks · Edition 2026.06</p>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
 
   <header class="masthead">
     <h1 class="title">Grim<em>oire</em>.</h1>
@@ -299,6 +393,11 @@
   <div class="disclaimer">
     <strong>Note.</strong> Contents are primarily AI-generated with limited human review. Use at your own discretion.
     Found a bug? <a href="https://github.com/poyea/grimoire/issues">File an issue →</a>
+  </div>
+
+  <div class="search-wrap">
+    <input id="searchBox" type="search" placeholder="Search volumes, chapters, headings…" aria-label="Search the library" autocomplete="off">
+    <div id="searchResults" class="search-results" hidden></div>
   </div>
 
   <div class="section-head">
@@ -327,102 +426,110 @@
 
 <script>
   const VOLUMES = [
-    { id: '01', title: 'Coding',
+    { id: '01', slug: 'coding', title: 'Coding',
       desc: 'Algorithms and data structures: a practitioner\'s reference for interviews, contests, and engineering.',
       topics: ['Algorithms and Data Structures: An Orientation','Modern C++ Performance Reference','Problem-Solving Framework','Arrays','Hashing','Two Pointers','Sliding Window','Stack','Linked List','Binary Search','Trees','Heap/Priority Queue','Tries','Backtracking','Greedy','Dynamic Programming','Graphs','Advanced Graph Algorithms','Union-Find (Disjoint Set Union)','Network Flows and Matching','Bit Manipulation','String Algorithms','Math & Number Theory','Advanced Algorithms in Modern Systems','Distributed and ML Algorithms','Probabilistic Data Structures','Segment Trees and Range Queries','Advanced String Algorithms','Streaming Algorithms','Computational Geometry','Linear Programming and the Simplex Method','Randomized Algorithms','Approximation Algorithms','Online Algorithms','Parallel Algorithms','Interview Systems Design Playbook']
     },
-    { id: '02', title: 'CPU Architecture',
+    { id: '02', slug: 'cpu-architecture', title: 'CPU Architecture',
       desc: 'Processor design, instruction sets, and performance analysis from pipeline to silicon.',
       topics: ['CPU Fundamentals','Pipelining','Superscalar and Out-of-Order Execution','Out-of-Order Execution Deep Dive','Branch Prediction','Speculative Execution Security','Cache Hierarchy','Memory System','Virtual Memory','SIMD (Single Instruction Multiple Data)','Multicore and Cache Coherence','Synchronization Primitives','Performance Analysis and Measurement','Power Management and DVFS','Domain-Specific Accelerators','Interconnects: UPI, Infinity Fabric, CXL, NVLink, PCIe','RISC-V','ARM Deep Dive']
     },
-    { id: '03', title: 'GPU Architecture',
+    { id: '03', slug: 'gpu-architecture', title: 'GPU Architecture',
       desc: 'Parallel computing, CUDA internals, Tensor Cores, and ML workload optimization.',
       topics: ['GPU Fundamentals','SIMT Execution Model','GPU Memory Hierarchy','GPU Memory: Caches, HBM, and Optimization','Compute Units and Specialized Cores','Performance Optimization','Multi-GPU Communication and Scaling','ML Workload Optimization on GPUs','GPU Profiling and Debugging','CUDA Programming Model','Tensor Cores and Matrix Multiply-Accumulate','NCCL and Collective Communication','GPU Virtualization and Partitioning','Triton and GPU Domain-Specific Languages','Non-NVIDIA Accelerators']
     },
-    { id: '04', title: 'Networking',
+    { id: '04', slug: 'networking', title: 'Networking',
       desc: 'Network protocols, congestion control, data-centre fabric, and modern application protocols.',
       topics: ['Link Layer & Hardware','IPv6','Transport Layer','Congestion Control','Multipath Transport','POSIX Sockets API','I/O Multiplexing','Application Protocols','WebSockets','DNS (Domain Name System)','gRPC (Remote Procedure Calls)','TLS (Transport Layer Security)','QUIC and HTTP/3','Zero-Copy Networking','Kernel Bypass','Concurrency Models','Lock-Free Data Structures for Networking','Message Queues and ZeroMQ','Performance Reference','Network Debugging','Network Address Translation (NAT)','Stateful Firewalls','Load Balancing','Data Center Networking','Container Networking','Service Mesh','Service Discovery','Connection Pooling','Resilience Patterns','Network Security','BGP Routing','SDN and Programmable Networks','Programmable Data Planes and P4','Wireless Protocols','Network Observability','Real-Time Protocols']
     },
-    { id: '05', title: 'Linux Kernel',
+    { id: '05', slug: 'linux-kernel', title: 'Linux Kernel',
       desc: 'Internals for systems engineers: syscalls, memory, scheduling, containers, tracing, and networking.',
       topics: ['ABI and Syscalls','mmap and Memory Management','CPU Affinity, Isolation, and NUMA','The Scheduler','cgroups and Namespaces','Interrupts and Bottom Halves','io_uring','Kernel Tracing','Kernel Modules','VFS and Filesystems','The Block Layer','The Networking Stack','RCU and Locking','Memory Reclaim','eBPF Deep Dive','Security Modules','Containers in the Kernel','Live Patching']
     },
-    { id: '06', title: 'Large Language Models',
+    { id: '06', slug: 'llm', title: 'Large Language Models',
       desc: 'Transformer internals, training, RLHF, inference optimization, agents, and safety.',
       topics: ['Introduction','Tokenization','Data Curation','Transformer Architecture','Pretraining','Pretraining Infrastructure','Mixture of Experts','Long Context','Multimodal Models','Fine-tuning','RLHF and Alignment','Reasoning Models','Agents and Tool Use','Retrieval-Augmented Generation','Distillation','Safety and Alignment','Inference Optimization','Inference Serving','Quantization','Serving Systems','Evaluation','Interpretability']
     },
-    { id: '07', title: 'Languages & Compilers',
+    { id: '07', slug: 'programming-languages', title: 'Languages & Compilers',
       desc: 'Automata, semantics, type theory, and a compiler from scratch — from Myhill–Nerode to HoTT.',
       topics: ['Regular Languages and Finite Automata','Lexing','Parsing','Pushdown Automata and Context-Free Grammars','Turing Machines and Computability','Regular Languages','Regular Languages: Proofs, Algorithms, and Advanced Theory','Context-Free Languages','Pushdown Automata and Beyond','Omega-Automata','Omega-Automata: Detailed Constructions and Algorithms','Infinite Trees and Games','Tree Automata','Timed and Hybrid Automata','Weighted and Probabilistic Automata','Automata Learning','Computability and Recursion Theory','Advanced Recursion Theory','Complexity Theory','Program Semantics','Operational Semantics','Denotational Semantics','Axiomatic Semantics','Categorical Semantics','Type Systems','Simply-Typed Lambda Calculus','Simply-Typed Lambda Calculus: Extensions and Advanced Topics','System F and Parametricity','System F: Categorical Models and Advanced Topics','Dependent Types','Dependent Types: Proof Engineering and Advanced Topics','Linear and Substructural Type Systems','Effects and Handlers','Effects and Handlers: Implementation and Theory','Subtyping and Polymorphism','Gradual and Hybrid Type Systems','Homotopy Type Theory','Macros and Metaprogramming','Macros and Metaprogramming: Formal Foundations','Process Calculi','Concurrency Models','Build a Compiler']
     },
-    { id: '08', title: 'Databases',
+    { id: '08', slug: 'database', title: 'Databases',
       desc: 'Storage engines, concurrency, query optimization, distributed transactions, and modern analytics.',
       topics: ['Database Foundations','Query Languages','Storage Engines','Embedded Databases','Recovery and Logging','Buffer Pool and I/O','Concurrency Control','Isolation and Consistency Models','Query Compilation','Query Optimization','SQL Engine Internals','Joins and Aggregation','Vector and Similarity Search','Distributed Transactions','Consensus and Replication','Partitioning and Elasticity','Weakly Consistent Systems','Column Stores and Vectorized Execution','Lakehouses and Open Table Formats','Cloud-Native Databases','OLTP / HTAP / OLAP Convergence','Streaming and Incremental Computation','Time-Series and Graph Databases','Geospatial Data Management','Multi-Model Databases','Hardware-Aware Database Design','Database Security and Privacy','Observability and Self-Driving Databases','Benchmarking and Research Methods','Columnar Storage and Vectorization','OLTP vs OLAP','Query Processing']
     },
-    { id: '09', title: 'Distributed Systems',
+    { id: '09', slug: 'distributed-systems', title: 'Distributed Systems',
       desc: 'Consensus, replication, time, transactions, failure detection, and workflow engines.',
-      topics: ['Consensus Deep Dive','Coordination Services','Failure Detection','Gossip Protocols','Introduction: Models and Impossibilities','Leader Election and Leases','Time and Order','Distributed Transactions','Log-Based Systems','Workflow Engines']
+      topics: ['Consensus Deep Dive','Coordination Services','Failure Detection','Gossip Protocols','Introduction: Models and Impossibilities','Leader Election and Leases','Time and Order','Causal Consistency','Conflict-Free Replicated Data Types','Distributed Transactions','Log-Based Systems','Workflow Engines']
     },
-    { id: '10', title: 'Operating Systems',
+    { id: '10', slug: 'operating-systems', title: 'Operating Systems',
       desc: 'Processes, scheduling, memory management, storage, boot, and the system call interface.',
       topics: ['Inter-Process Communication','Memory Management','Processes and Threads','Scheduling Theory','The Storage Stack','Boot and Init','Security Models']
     },
-    { id: '11', title: 'Machine Learning',
+    { id: '11', slug: 'machine-learning-foundations', title: 'Machine Learning',
       desc: 'Mathematical foundations, optimization, generalization theory, and modern training techniques.',
       topics: ['Generalization Theory','Linear Algebra for ML','Optimization','Probability and Information','Loss Functions','Information Theory','Network Information Theory','Reinforcement Learning','Diffusion Models']
     },
-    { id: '12', title: 'Cryptography & Security',
+    { id: '12', slug: 'cryptography-and-security', title: 'Cryptography & Security',
       desc: 'Symmetric primitives, asymmetric cryptography, hashing, and post-quantum schemes.',
       topics: ['Symmetric Primitives','Hashing and MACs','Asymmetric Cryptography','Digital Signatures','Key Exchange and PKI','TLS: Transport Layer Security','Zero-Knowledge Proofs','Post-Quantum Cryptography','Side-Channel Attacks']
     },
-    { id: '13', title: 'Cloud & Infrastructure',
+    { id: '13', slug: 'cloud-and-infrastructure', title: 'Cloud & Infrastructure',
       desc: 'IaaS fundamentals, Kubernetes internals, serverless, IaC, multi-tenancy, and cost engineering.',
       topics: ['Containers: OCI, runc, containerd, Image Layers','Cloud Cost Engineering','Infrastructure as Code','IaaS Fundamentals','Kubernetes Internals','Multi-Tenancy','Serverless Computing']
     },
-    { id: '14', title: 'Data Engineering',
+    { id: '14', slug: 'data-engineering', title: 'Data Engineering',
       desc: 'Batch processing, streaming, ETL/ELT, orchestration, and lakehouse architecture.',
       topics: ['Batch Processing','ETL vs ELT','Lakehouse Engineering','Orchestration','Streaming']
     },
-    { id: '15', title: 'Observability & SRE',
+    { id: '15', slug: 'observability-and-sre', title: 'Observability & SRE',
       desc: 'Metrics, logs, distributed tracing, continuous profiling, and SRE principles.',
       topics: ['Continuous Profiling','Distributed Tracing','Metrics Systems','SLO Engineering','The Three Pillars and Beyond']
     },
-    { id: '16', title: 'Graphics & Rendering',
+    { id: '16', slug: 'graphics-and-rendering', title: 'Graphics & Rendering',
       desc: 'Rasterization, ray tracing, physically-based rendering, global illumination, and real-time engines.',
       topics: ['Global Illumination Techniques','Physically Based Rendering','The Rasterization Pipeline','Ray Tracing','Real-Time Engine Architecture','Shaders and Shading Languages']
     },
-    { id: '17', title: 'Compilers',
+    { id: '17', slug: 'compilers', title: 'Compilers',
       desc: 'Frontend parsing, IR design, dataflow analysis, and optimization passes.',
       topics: ['Dataflow Analysis','Frontends','IR Design','Register Allocation','Instruction Selection and Code Generation','Optimisation Passes','JIT Compilation and Runtime Systems']
     },
-    { id: '18', title: 'Formal Methods',
+    { id: '18', slug: 'formal-methods', title: 'Formal Methods',
       desc: 'Model checking, TLA+, SAT/SMT, theorem proving, and separation logic.',
       topics: ['Model Checking','Propositional and First-Order Logic','SAT and SMT','Separation Logic','Theorem Proving','TLA+']
     },
-    { id: '19', title: 'Embedded & Real-Time',
+    { id: '19', slug: 'embedded-and-realtime', title: 'Embedded & Real-Time',
       desc: 'RTOS internals, hardware interfaces, scheduling, and safety-critical systems.',
       topics: ['Microcontrollers and Systems-on-Chip','Peripherals and Drivers','Real-Time Operating Systems']
     },
-    { id: '20', title: 'Quantum Computing',
+    { id: '20', slug: 'quantum-computing', title: 'Quantum Computing',
       desc: 'Qubits, quantum algorithms, error correction, NISQ devices, and hardware architectures.',
       topics: ['Quantum Error Correction','Hardware Architectures','Quantum Algorithms','NISQ Devices and Benchmarking','Qubits and Gates']
     },
-    { id: '21', title: 'Computer Vision',
+    { id: '21', slug: 'computer-vision', title: 'Computer Vision',
       desc: 'Image formation, CNNs, detection, segmentation, vision transformers, and 3D neural fields.',
       topics: ['Image Formation and Representation','CNN Architectures','Object Detection','Image Segmentation','Vision Transformers','3D Vision and Neural Fields']
     },
   ];
 
   const RELEASES = 'https://github.com/poyea/grimoire/releases';
+  const PDF_BASE = 'https://github.com/poyea/grimoire/releases/latest/download/';
+
+  function pdfUrl(slug) { return PDF_BASE + 'grimoire_' + slug.replace(/-/g, '_') + '.pdf'; }
 
   function renderCard(v) {
     return `
-      <a class="ed-card" href="${RELEASES}">
+      <div class="ed-card">
         <div class="vol">VOL. ${v.id} / NO. ${parseInt(v.id, 10)}</div>
-        <h3>${v.title}</h3>
+        <h3><a href="volumes/${v.slug}.html">${v.title}</a></h3>
         <p class="desc">${v.desc}</p>
         <div class="topics">${v.topics.map(t => `<span class="topic">${t}</span>`).join('')}</div>
-      </a>`;
+        <div class="card-links">
+          <span class="chap-count">${v.topics.length} chapters</span>
+          <a href="volumes/${v.slug}.html">Details →</a>
+          <a href="${pdfUrl(v.slug)}">PDF ↓</a>
+        </div>
+      </div>`;
   }
   const html1 = VOLUMES.map(renderCard).join('');
   const row = document.getElementById('row1');
@@ -488,6 +595,90 @@
 
   document.getElementById('prevBtn').addEventListener('click', () => nudge(-CARD_STEP));
   document.getElementById('nextBtn').addEventListener('click', () => nudge( CARD_STEP));
+
+  // THEME TOGGLE
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const rootEl = document.documentElement;
+    let cur = rootEl.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const next = cur === 'dark' ? 'light' : 'dark';
+    rootEl.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+
+  // SEARCH (search.json: [{slug, volume, chapter, anchor, headings}])
+  (function () {
+    const box = document.getElementById('searchBox');
+    const results = document.getElementById('searchResults');
+    let index = null;
+
+    function fallbackIndex() {
+      const out = [];
+      VOLUMES.forEach(v => v.topics.forEach((t, i) => out.push(
+        { slug: v.slug, volume: v.title, chapter: t, anchor: 'ch-' + (i + 1), headings: [] }
+      )));
+      return out;
+    }
+
+    function ensureIndex() {
+      if (index) return Promise.resolve(index);
+      return fetch('search.json')
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .catch(() => fallbackIndex())
+        .then(data => (index = data));
+    }
+
+    function escHtml(s) {
+      return s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    function search(q) {
+      q = q.toLowerCase();
+      const out = [];
+      for (const e of index) {
+        let hit = null;
+        if (e.chapter.toLowerCase().includes(q) || e.volume.toLowerCase().includes(q)) hit = '';
+        else {
+          const h = (e.headings || []).find(s => s.toLowerCase().includes(q));
+          if (h) hit = h;
+        }
+        if (hit !== null) {
+          out.push({ e, sub: hit });
+          if (out.length >= 20) break;
+        }
+      }
+      return out;
+    }
+
+    function render(items) {
+      if (!items.length) {
+        results.innerHTML = '<div class="sr-none">No matches.</div>';
+      } else {
+        results.innerHTML = items.map(({ e, sub }) =>
+          `<a href="volumes/${e.slug}.html#${e.anchor}">` +
+          `<span class="sr-vol">${escHtml(e.volume)}</span>${escHtml(e.chapter)}` +
+          (sub ? `<span class="sr-sub">§ ${escHtml(sub)}</span>` : '') +
+          `</a>`).join('');
+      }
+      results.hidden = false;
+    }
+
+    box.addEventListener('input', () => {
+      const q = box.value.trim();
+      if (q.length < 2) { results.hidden = true; return; }
+      ensureIndex().then(() => render(search(q)));
+    });
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { results.hidden = true; box.blur(); }
+      if (e.key === 'Enter') {
+        const first = results.querySelector('a');
+        if (first && !results.hidden) window.location.href = first.href;
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search-wrap')) results.hidden = true;
+    });
+  })();
 </script>
 
 </body>
