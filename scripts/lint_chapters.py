@@ -49,6 +49,11 @@ SUBJECTS = [
     "programming-languages",
     "quantum-computing",
     "computer-vision",
+    "software-architecture",
+    "performance-engineering",
+    "numerical-computing",
+    "web-and-browsers",
+    "search-and-ir",
 ]
 
 INCLUDE_RE = re.compile(r'#include\s+"([^"]+\.typ)"')

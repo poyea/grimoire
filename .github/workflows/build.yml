@@ -49,6 +49,11 @@ jobs:
           - programming-languages
           - quantum-computing
           - computer-vision
+          - software-architecture
+          - performance-engineering
+          - numerical-computing
+          - web-and-browsers
+          - search-and-ir
     steps:
       - uses: actions/checkout@v4
       - uses: typst-community/setup-typst@v3

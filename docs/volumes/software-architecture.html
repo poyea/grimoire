@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Architecture — Grimoire</title>
+<meta name="description" content="Architectural styles, DDD, microservices, resilience, and evolutionary architecture.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/software-architecture.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume XXII · § 22</p>
+  <h1>Software Architecture</h1>
+  <p class="desc">Architectural styles, DDD, microservices, resilience, and evolutionary architecture.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 9</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_software_architecture.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>Architectural Styles</summary>
+      <ul>
+        <li>Layered Architecture</li>
+        <li>Hexagonal Architecture (Ports and Adapters)</li>
+        <li>Clean Architecture</li>
+        <li>Pipes and Filters</li>
+        <li>Event-Driven Architecture</li>
+        <li>Microkernel (Plug-in) Architecture</li>
+        <li>Space-Based Architecture</li>
+        <li>Choosing: Trade-off Analysis</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Domain-Driven Design</summary>
+      <ul>
+        <li>Ubiquitous Language</li>
+        <li>Bounded Contexts</li>
+        <li>Context Mapping</li>
+        <li>Tactical Patterns: Aggregates, Entities, Value Objects</li>
+        <li>Domain Events</li>
+        <li>Strategic vs. Tactical: Where Teams Go Wrong</li>
+        <li>Event Storming</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Monoliths and Microservices</summary>
+      <ul>
+        <li>Definitions, Precisely</li>
+        <li>The Modular Monolith</li>
+        <li>Why Microservices: The Honest List</li>
+        <li>Conway&#x27;s Law</li>
+        <li>Decomposition Strategies</li>
+        <li>Service Granularity</li>
+        <li>The Distributed Monolith Antipattern</li>
+        <li>Case Studies</li>
+        <li>Decision Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>API Design</summary>
+      <ul>
+        <li>REST and the Richardson Maturity Model</li>
+        <li>Resource Modelling</li>
+        <li>Versioning</li>
+        <li>Pagination</li>
+        <li>Error Design and RFC 9457</li>
+        <li>gRPC and GraphQL Trade-offs</li>
+        <li>Idempotency</li>
+        <li>Backwards Compatibility</li>
+        <li>OpenAPI and Contract-First Development</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Event-Driven Architecture</summary>
+      <ul>
+        <li>Events, Commands, and Messages</li>
+        <li>Broker Topology</li>
+        <li>Mediator Topology</li>
+        <li>Brokers and Logs: Queues versus Streams</li>
+        <li>Delivery Semantics</li>
+        <li>Event Sourcing</li>
+        <li>CQRS</li>
+        <li>Operational Realities and Pitfalls</li>
+        <li>When to Use It</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Resilience Patterns</summary>
+      <ul>
+        <li>The Arithmetic of Partial Failure</li>
+        <li>Timeouts</li>
+        <li>Retries: Useful and Dangerous</li>
+        <li>Circuit Breaker</li>
+        <li>Bulkheads</li>
+        <li>Load Shedding and Backpressure</li>
+        <li>Graceful Degradation and Fallbacks</li>
+        <li>Health Checks, Watchdogs, and Recovery</li>
+        <li>Chaos Engineering</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Evolutionary Architecture</summary>
+      <ul>
+        <li>Fitness Functions</li>
+        <li>Incremental Change: The Deployment Pipeline as Enabler</li>
+        <li>Strangler Fig</li>
+        <li>Branch by Abstraction and Expand–Contract</li>
+        <li>Coupling, Quanta, and Reuse</li>
+        <li>Architecture Decision Records</li>
+        <li>Managing Technical Debt and Drift</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Architecture Evaluation</summary>
+      <ul>
+        <li>Quality Attributes and Why &quot;-ilities&quot; Fail</li>
+        <li>Utility Trees and Prioritisation</li>
+        <li>ATAM</li>
+        <li>Lightweight Methods</li>
+        <li>Quantitative Evaluation</li>
+        <li>Continuous Evaluation</li>
+        <li>Documenting the Evaluation</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Distributed Data Patterns</summary>
+      <ul>
+        <li>The Theoretical Bounds</li>
+        <li>Database per Service</li>
+        <li>Sagas</li>
+        <li>The Dual-Write Problem and the Transactional Outbox</li>
+        <li>Replication and Partitioning Inside a Service</li>
+        <li>Queries Across Services</li>
+        <li>Choosing: A Field Guide</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

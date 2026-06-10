@@ -76,6 +76,16 @@ VOLUMES = [
      "Qubits, quantum algorithms, error correction, NISQ devices, and hardware architectures."),
     ("computer-vision", "Computer Vision",
      "Image formation, CNNs, detection, segmentation, vision transformers, and 3D neural fields."),
+    ("software-architecture", "Software Architecture",
+     "Architectural styles, DDD, microservices, resilience, and evolutionary architecture."),
+    ("performance-engineering", "Performance Engineering",
+     "Methodology, profiling, benchmarking, queueing theory, and capacity planning."),
+    ("numerical-computing", "Numerical Computing",
+     "Floating point, error analysis, linear systems, FFT, ODEs, and optimization."),
+    ("web-and-browsers", "Web and Browser Internals",
+     "Browser architecture, rendering, JavaScript engines, WebAssembly, and web performance."),
+    ("search-and-ir", "Search and Information Retrieval",
+     "Inverted indexes, ranking, neural retrieval, vector search, and RAG systems."),
 ]
 
 INCLUDE_RE = re.compile(r'#include\s+"([^"]+\.typ)"')
