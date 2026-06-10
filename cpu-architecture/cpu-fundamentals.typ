@@ -138,7 +138,7 @@ Simpler decode: All instructions 32-bit aligned, regular format
 *Data movement:*
 ```asm
 mov rax, rbx          ; Register to register (1 cycle, 0.25 CPI)
-mov rax, [rbx]        ; Load from memory (4-5 cycles L1 hit, 1 per cycle throughput)
+mov rax, [rbx]        ; Load from memory (4-5 cycles L1 hit, 0.5 CPI - 2 load ports)
 mov [rax], rbx        ; Store to memory (1 cycle throughput, async)
 lea rax, [rbx+rcx*8]  ; Load effective address (1 cycle, addr calculation)
 ```
@@ -147,7 +147,7 @@ lea rax, [rbx+rcx*8]  ; Load effective address (1 cycle, addr calculation)
 ```asm
 add rax, rbx          ; Addition (1 cycle latency, 0.25 CPI)
 sub rax, rbx          ; Subtraction (1 cycle)
-imul rax, rbx         ; Multiply (3 cycles latency, 1 CPI on modern CPUs)
+imul rax, rbx         ; Multiply (3 cycles latency; 1 CPI Skylake, 0.5 CPI Zen 4)
 idiv rbx              ; Divide (rax / rbx → rax, 20-40 cycles, not pipelined!)
 ```
 
@@ -184,7 +184,7 @@ Modern CPUs like Zen 3 and Skylake exhibit varying latency and throughput charac
   [*Instruction*], [*Latency (cycles)*], [*Throughput (CPI)*], [*Execution Units*],
   [mov r, r], [0-1], [0.25], [Renamed away or ALU],
   [add r, r], [1], [0.25], [4 ALU ports],
-  [imul r, r], [3], [1], [1 multiplier],
+  [imul r, r], [3], [1 (Skylake) / 0.5 (Zen 4)], [1-2 multipliers],
   [load], [4-5], [0.5], [2 load ports],
   [store], [1 (ST)], [1], [1 store port + 1 data],
   [idiv], [20-40], [20-40], [1 divider, not pipelined],
@@ -212,13 +212,13 @@ add rax, r8      ; Cycle 3, waits for rax from cycle 2
 
 == Zero-Latency Idioms
 
-Modern CPUs recognize special instruction patterns that can be executed with zero latency and without using an execution unit. The patterns `xor rax, rax` and `sub rax, rax` both zero the register in 0 cycles, `mov rax, rax` is eliminated as a no-op during register renaming, and `test rax, rax` checks for zero in 0 cycles when the previous writer is known:
+Modern CPUs recognize special instruction patterns that can be executed with zero latency and without using an execution unit. The patterns `xor rax, rax` and `sub rax, rax` both zero the register in 0 cycles, and `mov rax, rax` is eliminated as a no-op during register renaming. `test rax, rax` is not free --- it still issues a μop --- but it *macro-fuses* with a following conditional jump into a single μop:
 
 ```asm
 xor rax, rax          ; Zero register (0 cycles, no execution unit)
 sub rax, rax          ; Zero register (0 cycles)
 mov rax, rax          ; No-op, eliminated during rename
-test rax, rax         ; Check if zero (0 cycles if previous writer known)
+test rax, rax         ; 1 uop; macro-fuses with following Jcc into one uop
 ```
 
 This works because register renaming tracks that the result is a constant value and eliminates the actual execution. These idioms provide dependency breaking, allowing out-of-order execution to proceed without waiting for previous operations. A false dependency where the old register value is irrelevant but the CPU waits anyway can be avoided by using the proper form that the CPU recognizes:
@@ -295,7 +295,7 @@ add rax, [rbx]
 ; Fused into load-ALU μop (if both fit in single μop cache entry)
 ```
 
-*ROB (Reorder Buffer) limit:* 224-512 μops in flight (modern CPUs). Limits instruction window for out-of-order execution.
+*ROB (Reorder Buffer) limit:* 224-576+ μops in flight (Skylake 224, Zen 4 320, Lion Cove 576). Limits instruction window for out-of-order execution.
 
 == Calling Convention (x86-64 System V ABI)
 
@@ -332,9 +332,9 @@ func:
 ```
 
 *Function call overhead:*
-- call: ~2-3 cycles (push return address, predict target)
-- ret: ~2-3 cycles (pop address, predict return)
-- Total: ~5-10 cycles depending on prediction accuracy
+- call/ret: 1 μop each; with a correct return-address-stack prediction they add no dependency-chain latency
+- The real cost is indirect: argument shuffling, callee-saved spills, and lost optimization across the call boundary
+- A mispredicted return (RAS underflow/corruption) costs a full branch-misprediction penalty (~15-20 cycles)
 
 *Inlining eliminates this overhead.* Compiler auto-inlines small functions with -O2/-O3.
 
