@@ -71,6 +71,6 @@ The canonical numbers: Amazon's "100 ms costs 1% of revenue" (2006, internal A/B
 
 - Walton, P., et al. "Web Vitals", "Optimize LCP / INP / CLS" guides (web.dev, continuously updated; INP threshold rationale in "Defining the INP metric").
 - Brutlag, J. (2009). Speed matters for Google web search. Google research memo; and Schurman, E. & Brutlag, J., "The user and business impact of server delays" (Velocity 2009).
-- Mahdavi, S., et al. _Web Almanac_, Performance chapter (httparchive.org, annual) — field-data state of the union.
+- HTTP Archive (Viscomi, R., ed.). _Web Almanac_, Performance chapter (httparchive.org, annual) — field-data state of the union.
 - Wagner, J., & Hempenius, K. "Optimize Largest Contentful Paint" and the LCP subparts model (web.dev, 2023).
 - Grigorik, I. (2013). _High Performance Browser Networking_. O'Reilly. (Free at hpbn.co; the networking half of this chapter.)

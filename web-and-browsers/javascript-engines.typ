@@ -19,7 +19,7 @@ All three major engines converged on multi-tier execution: cheap tiers start fas
   [*Engine*], [*Tier 1*], [*Middle tiers*], [*Top tier*],
   [V8], [Ignition (bytecode interpreter)], [Sparkplug (2021, baseline), Maglev (2023, mid-opt)], [TurboFan],
   [JavaScriptCore], [LLInt (interpreter)], [Baseline JIT, DFG JIT], [FTL (B3 backend)],
-  [SpiderMonkey], [interpreter], [Baseline Interpreter + Baseline JIT], [WarpMonkey/Ion],
+  [SpiderMonkey], [interpreter], [Baseline Interpreter + Baseline JIT], [Warp (Ion backend)],
 )
 
 Ignition compiles each function to a compact register-machine bytecode (designed to minimize memory: bytecode is roughly 4–8× smaller than baseline machine code). Sparkplug compiles that bytecode to machine code in a single linear pass — no IR, no register allocation — purely to eliminate dispatch overhead. Maglev builds an SSA graph with feedback-driven types but skips TurboFan's heaviest analyses, filling the gap for code that is warm but not scorching. TurboFan builds a sea-of-nodes graph (replaced by the simpler *Turboshaft* CFG-based IR for its back half, 2023–2024), performs typed lowering, escape analysis, redundancy elimination, and emits optimized code.
@@ -52,7 +52,7 @@ JavaScriptCore uses the *Riptide* concurrent collector with a "retreating wavefr
 
 == JavaScriptCore and SpiderMonkey Notes
 
-JSC's *DFG* tier speculates from value profiles, and its top tier *FTL* originally lowered to LLVM (2014) before replacing it with the bespoke *B3* backend (2016) for 5× faster compile times. JSC pioneered *concurrent JIT* compilation off the main thread. SpiderMonkey's 2020 *WarpMonkey* rewrite replaced Ion's complex global type-inference system (TI) with transpiling the same *CacheIR* (a shared IC intermediate representation) that the baseline tiers use — simpler, more predictable, and faster on real sites, a notable case of a major engine deleting cleverness for the win.
+JSC's *DFG* tier speculates from value profiles, and its top tier *FTL* originally lowered to LLVM (2014) before replacing it with the bespoke *B3* backend (2016) for 5× faster compile times. JSC pioneered *concurrent JIT* compilation off the main thread. SpiderMonkey's 2020 *Warp* rewrite replaced Ion's complex global type-inference system (TI) with transpiling the same *CacheIR* (a shared IC intermediate representation) that the baseline tiers use — simpler, more predictable, and faster on real sites, a notable case of a major engine deleting cleverness for the win.
 
 == Pitfalls
 

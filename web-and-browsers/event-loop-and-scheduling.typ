@@ -86,4 +86,4 @@ Node's loop (libuv) is phase-based: timers → pending callbacks → poll (I/O) 
 - WHATWG. _HTML Living Standard_, §8.1.7 "Event loops" (html.spec.whatwg.org).
 - Archibald, J. (2015). "Tasks, microtasks, queues and schedules" (jakearchibald.com); and his JSConf.Asia 2018 talk "In the Loop".
 - W3C/WICG. _Prioritized Task Scheduling_ spec; "Optimize long tasks" (developer.chrome.com, 2022, updated for `scheduler.yield`).
-- Chromium scheduling docs: "Blink Scheduler" and Sasha Kondrashov's "Threading and tasks in Chrome" (chromium.org).
+- Chromium scheduling docs: "Blink Scheduler" and "Threading and tasks in Chrome" (chromium.org).

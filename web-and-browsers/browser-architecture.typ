@@ -6,7 +6,7 @@ A modern browser is one of the largest pieces of software most people run: Chrom
 
 == The Multi-Process Model
 
-Early browsers (Netscape, IE6, Firefox until 2017) were single-process: one crash in any tab, plugin, or extension took down the whole browser. Chrome shipped in 2008 with a multi-process design, and every major engine has since followed (Firefox's Electrolysis/Fission, WebKit2).
+Early browsers (Netscape, IE6, Firefox until 2016) were single-process: one crash in any tab, plugin, or extension took down the whole browser. Chrome shipped in 2008 with a multi-process design, and every major engine has since followed (Firefox's Electrolysis/Fission, WebKit2).
 
 The principal process types in Chromium:
 

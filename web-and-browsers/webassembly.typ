@@ -8,7 +8,7 @@ WebAssembly (Wasm) is the web's second language: a compact, statically typed bin
 
 A Wasm *module* contains typed functions over four value types in the MVP — `i32`, `i64`, `f32`, `f64` (plus `v128` with SIMD, and reference types later) — operating on a structured *stack machine*. Control flow is structured by construction: `block`, `loop`, `if`, and branches that may only target enclosing constructs. There is no `goto`, so validation is a single linear pass, the type of every stack slot is known statically, and irreducible control flow cannot be expressed (compilers from languages that have it, like C with `goto`, relax it via the *relooper* or, in modern Binaryen/LLVM, stackifier algorithms).
 
-The binary format is dense (typically 30–50% smaller than equivalent minified asm.js) and designed for *streaming*: a module can be validated and compiled while still downloading (`WebAssembly.instantiateStreaming`, 2018), with code sections laid out so function bodies can be compiled in parallel as they arrive.
+The binary format is dense (typically 30–50% smaller than equivalent minified asm.js) and designed for *streaming*: a module can be validated and compiled while still downloading (`WebAssembly.instantiateStreaming`, 2017), with code sections laid out so function bodies can be compiled in parallel as they arrive.
 
 Wasm's lineage runs through *asm.js* (Mozilla, 2013) — a statically typeable JavaScript subset with `x|0` integer coercions that engines recognized and ahead-of-time compiled — which proved big C++ codebases (Unreal Engine, ported in a week) could run on the web, and whose limitations (parse cost, doubles-only semantics edge cases) directly motivated a real binary format.
 
@@ -39,7 +39,7 @@ Engines cache compiled machine code (keyed by module bytes) in HTTP cache metada
 - *Threads* (2019, behind cross-origin isolation): shared linear memory via `SharedArrayBuffer`, atomics, and wait/notify; pthreads compile via a worker pool.
 - *SIMD* (fixed-width 128-bit, 2021): `v128` with portable lanewise ops; *relaxed SIMD* (2023) adds FMA and platform-variant semantics for more speed.
 - *Reference types and typed function references*: opaque host references (`externref`) flow through Wasm without copying.
-- *Wasm GC* (Chrome 119 and Firefox 120, late 2023; Safari 18): structs and arrays allocated on the engine's GC heap, enabling Java (J2CL/Kotlin), Dart/Flutter, and OCaml to target Wasm without shipping a garbage collector in linear memory.
+- *Wasm GC* (Chrome 119 and Firefox 120, late 2023; Safari 18.2, late 2024): structs and arrays allocated on the engine's GC heap, enabling Java (J2CL/Kotlin), Dart/Flutter, and OCaml to target Wasm without shipping a garbage collector in linear memory.
 - *Tail calls* (2023), *exception handling* (2024, redesigned `exnref` form), *multi-value returns*, *bulk memory*, *multi-memory* (2024), *Memory64* (2025), and *JS Promise Integration (JSPI)* (2024–2025) for suspending Wasm on async host calls.
 
 == Toolchains and the Boundary

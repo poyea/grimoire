@@ -41,7 +41,7 @@ A layer is warranted when content moves independently: scrolling content, `trans
 
 == Tiling and Rasterization
 
-The compositor thread (cc, "the Chrome compositor") divides each layer into *tiles*, typically 256×256 or 512×512 pixels. Tiles are prioritized by distance from the viewport and rasterized by a pool of worker threads, which replay the recorded display lists through Skia. Since around 2020 Chromium rasterizes on the GPU by default (*GPU rasterization*, then *OOP-R*: raster in the GPU process over a command buffer), with Skia's Ganesh backend giving way to *Graphite* (Dawn/WebGPU-based, rolling out from 2024).
+The compositor thread (cc, "the Chrome compositor") divides each layer into *tiles*, typically 256×256 or 512×512 pixels. Tiles are prioritized by distance from the viewport and rasterized by a pool of worker threads, which replay the recorded display lists through Skia. Since around 2020 Chromium rasterizes on the GPU by default (*GPU rasterization*, then *OOP-R*: raster in the GPU process over a command buffer), with Skia's Ganesh backend giving way to *Graphite* (Dawn/WebGPU-based, rolling out from 2025).
 
 Key consequences of tiling:
 

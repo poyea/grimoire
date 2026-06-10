@@ -46,7 +46,7 @@ A classic `<script src>` halts tree construction until the script downloads and 
 
 Engines refuse to let a blocking script stall resource discovery. While the main parser waits, the *preload scanner* (WebKit/Blink's `HTMLPreloadScanner`, Firefox's speculative parser) tokenizes ahead on the raw input, ignoring tree construction, and issues *speculative fetches* for `src`, `href`, `srcset`, and preloadable resources it sees. Measurements at Google attributed roughly a 20% average load-time improvement to the preload scanner; it is the single reason "put scripts at the bottom" stopped being critical advice.
 
-Blink goes further with *background HTML parsing*: tokenization runs on a separate thread, shipping token batches to the main thread for tree construction. Speculation can fail — a `document.write()` that injects markup invalidates the lookahead, forcing a re-tokenize from the write point — which is one of several reasons `document.write` is effectively deprecated (Chrome ignores writes that inject blocking scripts on slow 2G connections).
+(Blink once ran tokenization on a separate thread — the *threaded HTML parser* — but removed it around 2016 after measurements showed the cross-thread overhead outweighed the wins; the preload scanner is the off-main-thread speculation that survives today.) Speculation can fail — a `document.write()` that injects markup invalidates the lookahead, forcing a re-tokenize from the write point — which is one of several reasons `document.write` is effectively deprecated (Chrome ignores writes that inject blocking scripts on slow 2G connections).
 
 == DOM Internals
 
