@@ -4,26 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grimoire: Open-Access Technical Reference Library</title>
-<meta name="description" content="Grimoire is a free, open-access technical reference library: 21 volumes on coding, CPU and GPU architecture, networking, Linux kernel, LLMs, compilers, databases, distributed systems, operating systems, cryptography, computer vision, and quantum computing.">
+<meta name="description" content="Grimoire is a free, open-access technical reference library: 26 volumes on coding, CPU and GPU architecture, networking, Linux kernel, LLMs, compilers, databases, distributed systems, operating systems, cryptography, computer vision, and quantum computing.">
 <meta name="keywords" content="computer science textbooks, systems programming, algorithms, CPU architecture, GPU computing, networking protocols, Linux kernel internals, large language models, compilers, distributed systems, database internals, cryptography, quantum computing, open access, free PDF">
 <meta name="author" content="poyea">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://poyea.github.io/grimoire/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Grimoire: Open-Access Technical Reference Library">
-<meta property="og:description" content="20 free reference volumes on systems, algorithms, compilers, databases, distributed systems, cryptography, LLMs, quantum computing, and more.">
+<meta property="og:description" content="26 free reference volumes on systems, algorithms, compilers, databases, distributed systems, cryptography, LLMs, quantum computing, and more.">
 <meta property="og:url" content="https://poyea.github.io/grimoire/">
 <meta property="og:site_name" content="Grimoire">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Grimoire: Open-Access Technical Reference Library">
-<meta name="twitter:description" content="20 free reference volumes on systems, algorithms, compilers, databases, distributed systems, cryptography, LLMs, quantum computing, and more.">
+<meta name="twitter:description" content="26 free reference volumes on systems, algorithms, compilers, databases, distributed systems, cryptography, LLMs, quantum computing, and more.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Grimoire",
   "url": "https://poyea.github.io/grimoire/",
-  "description": "Open-access technical reference library covering 20 subjects in computer science and systems engineering.",
+  "description": "Open-access technical reference library covering 26 subjects in computer science and systems engineering.",
   "author": { "@type": "Person", "name": "poyea", "url": "https://github.com/poyea" },
   "license": "https://opensource.org/licenses/MIT"
 }
@@ -259,6 +259,7 @@
   }
   .topic::after { content: ' /'; color: var(--rule); margin-left: 0.18rem; }
   .topic:last-child::after { content: ''; }
+  .topic.more { color: var(--accent); }
 
   .cta-wrap { text-align: center; margin: 4rem 0 1rem; }
   .cta {
@@ -537,13 +538,21 @@
 
   function pdfUrl(slug) { return PDF_BASE + 'grimoire_' + slug.replace(/-/g, '_') + '.pdf'; }
 
+  // Cap the topics shown per card so one large volume doesn't stretch the
+  // whole row and leave the shorter cards mostly blank.
+  const TOPIC_CAP = 12;
+
   function renderCard(v) {
+    const shown = v.topics.slice(0, TOPIC_CAP);
+    const extra = v.topics.length - shown.length;
+    const topics = shown.map(t => `<span class="topic">${t}</span>`).join('')
+      + (extra > 0 ? `<span class="topic more">+${extra} more</span>` : '');
     return `
       <div class="ed-card">
         <div class="vol">VOL. ${v.id} / NO. ${parseInt(v.id, 10)}</div>
         <h3><a href="volumes/${v.slug}.html">${v.title}</a></h3>
         <p class="desc">${v.desc}</p>
-        <div class="topics">${v.topics.map(t => `<span class="topic">${t}</span>`).join('')}</div>
+        <div class="topics">${topics}</div>
         <div class="card-links">
           <span class="chap-count">${v.topics.length} chapters</span>
           <a href="volumes/${v.slug}.html">Details →</a>

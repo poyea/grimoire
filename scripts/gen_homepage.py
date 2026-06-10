@@ -113,8 +113,8 @@ def chapters(slug: str) -> list[tuple[str, list[str]]]:
     """Return [(chapter title, [subheadings])] in include order."""
     root_typ = ROOT / f"{slug}.typ"
     out = []
-    for path in INCLUDE_RE.findall(root_typ.read_text()):
-        text = (ROOT / path).read_text()
+    for path in INCLUDE_RE.findall(root_typ.read_text(encoding="utf-8")):
+        text = (ROOT / path).read_text(encoding="utf-8")
         m = HEADING_RE.search(text)
         if not m:
             sys.exit(f"error: no `= Heading` in {path}")
@@ -354,7 +354,7 @@ def write_feed() -> None:
         '  <author><name>poyea</name></author>\n'
         + "\n".join(entries) + "\n</feed>\n"
     )
-    (DOCS / "feed.xml").write_text(feed)
+    (DOCS / "feed.xml").write_text(feed, encoding="utf-8")
 
 
 def write_sitemap() -> None:
@@ -366,7 +366,8 @@ def write_sitemap() -> None:
     (DOCS / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f"{body}\n</urlset>\n"
+        f"{body}\n</urlset>\n",
+        encoding="utf-8",
     )
 
 
@@ -385,7 +386,7 @@ def main() -> None:
         )
     block = "  const VOLUMES = [\n" + "\n".join(cards) + "\n  ];"
 
-    html = INDEX.read_text()
+    html = INDEX.read_text(encoding="utf-8")
     new_html, n = re.subn(
         r"  const VOLUMES = \[.*?\n  \];", block, html, count=1, flags=re.DOTALL
     )
@@ -398,14 +399,20 @@ def main() -> None:
         r'(<span class="index">§ I — § )[IVXLCDM]+',
         rf"\g<1>{roman(len(VOLUMES))}", new_html,
     )
-    INDEX.write_text(new_html)
+    # Keep the head metadata volume counts in sync as well.
+    new_html = re.sub(r"\d+ volumes on", f"{len(VOLUMES)} volumes on", new_html)
+    new_html = re.sub(r"\d+ free reference volumes",
+                      f"{len(VOLUMES)} free reference volumes", new_html)
+    new_html = re.sub(r"\d+ subjects in computer science",
+                      f"{len(VOLUMES)} subjects in computer science", new_html)
+    INDEX.write_text(new_html, encoding="utf-8")
     print(f"Wrote {len(VOLUMES)} volumes to {INDEX.relative_to(ROOT)}")
 
     # 2) per-volume pages
     VOLDIR.mkdir(exist_ok=True)
     for i, (slug, title, desc) in enumerate(VOLUMES, 1):
         (VOLDIR / f"{slug}.html").write_text(
-            volume_page(i, slug, title, desc, data[slug]))
+            volume_page(i, slug, title, desc, data[slug]), encoding="utf-8")
     print(f"Wrote {len(VOLUMES)} pages to {VOLDIR.relative_to(ROOT)}/")
 
     # 3) search index
@@ -415,7 +422,8 @@ def main() -> None:
             search.append({"slug": slug, "volume": title, "chapter": ctitle,
                            "anchor": f"ch-{n}", "headings": subs})
     (DOCS / "search.json").write_text(
-        json.dumps(search, ensure_ascii=False, separators=(",", ":")) + "\n")
+        json.dumps(search, ensure_ascii=False, separators=(",", ":")) + "\n",
+        encoding="utf-8")
     print(f"Wrote {len(search)} entries to docs/search.json")
 
     # 4) sitemap + feed
