@@ -11,6 +11,9 @@
 
   #pagebreak()
 
+  #include "formal-methods/notation.typ"
+  #pagebreak()
+
   #include "formal-methods/model-checking.typ"
   #pagebreak()
 

@@ -11,6 +11,9 @@
 
   #pagebreak()
 
+  #include "quantum-computing/notation.typ"
+  #pagebreak()
+
   #include "quantum-computing/error-correction.typ"
   #pagebreak()
 

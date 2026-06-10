@@ -11,6 +11,9 @@
 
   #pagebreak()
 
+  #include "machine-learning-foundations/notation.typ"
+  #pagebreak()
+
   #include "machine-learning-foundations/generalization-theory.typ"
   #pagebreak()
 
