@@ -132,6 +132,9 @@
 #include "coding/segment-trees.typ"
 #pagebreak()
 
+#include "coding/tree-decomposition.typ"
+#pagebreak()
+
 #include "coding/advanced-string-algorithms.typ"
 #pagebreak()
 
