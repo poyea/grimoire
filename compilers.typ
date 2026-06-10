@@ -32,4 +32,7 @@
   #include "compilers/jit-and-runtimes.typ"
   #pagebreak()
 
+  #include "compilers/garbage-collection.typ"
+  #pagebreak()
+
 ]
