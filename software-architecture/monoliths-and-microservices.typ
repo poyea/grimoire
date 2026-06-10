@@ -19,7 +19,7 @@ Enforcement is what separates a modular monolith from an aspirational package di
 - Schema separation: one database server, but separate schemas per module with no cross-schema foreign keys or joins.
 - Frameworks: Spring Modulith (2022) verifies module dependency rules and tests modules in isolation.
 
-Shopify is the flagship example: a Rails monolith on the order of millions of lines of code, restructured from 2017 onward into "components" with enforced boundaries (their `packwerk` tool, open-sourced 2020, checks dependency and privacy violations in CI). Shopify has repeatedly and publicly defended the choice: the monolith handles flash-sale peaks in the tens of millions of requests per minute (Black Friday 2024 peaked above 80 million rpm across the platform), scaled by *pod sharding*, running many full copies of the monolith, each serving a subset of shops, rather than by service decomposition.
+Shopify is the flagship example: a Rails monolith on the order of millions of lines of code, restructured from 2017 onward into "components" with enforced boundaries (their `packwerk` tool, open-sourced 2020, checks dependency and privacy violations in CI). Shopify has repeatedly and publicly defended the choice: the monolith handles flash-sale peaks in the tens of millions of requests per minute, scaled by *pod sharding*, running many full copies of the monolith, each serving a subset of shops, rather than by service decomposition.
 
 The pragmatic guidance, echoed by Fowler ("MonolithFirst", 2015) and Newman: a modular monolith gives you most of microservices' design benefits (clear ownership, bounded contexts) with none of the distributed-systems tax, and clean module boundaries are the best possible starting point if you later extract services.
 
