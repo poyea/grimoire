@@ -18,7 +18,7 @@ On the JVM, code starts interpreted, gets compiled by C1, then recompiled by C2 
 
 === Alignment and layout
 
-Code and data placement is a hidden variable. Mytkowicz et al. (2009), in "Producing wrong data without doing anything obviously wrong!", showed that changing the UNIX environment size (which shifts the stack and thus alignment) changes SPEC benchmark performance by up to 10%, more than many published optimizations. Link order, branch placement relative to 32-byte fetch boundaries, and heap layout all contribute. Mitigations: randomize layout across runs (the Stabilizer approach by Curtsinger & Berger) or at least vary it and report the spread.
+Code and data placement is a hidden variable. Mytkowicz et al. (2009), in "Producing wrong data without doing anything obviously wrong!", showed that changing the UNIX environment size (which shifts the stack and thus alignment) changes SPEC benchmark performance by as much as 33%, more than many published optimizations. Link order, branch placement relative to 32-byte fetch boundaries, and heap layout all contribute. Mitigations: randomize layout across runs (the Stabilizer approach by Curtsinger & Berger) or at least vary it and report the spread.
 
 === Other classics
 

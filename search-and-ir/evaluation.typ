@@ -32,7 +32,7 @@ Discounted cumulative gain handles *graded* relevance: gain from a document with
 
 $ "DCG"@k = sum_(i=1)^k (2^("rel"_i) - 1) / (log_2 (i + 1)) $
 
-(the exponential gain emphasizes highly relevant documents; the original Järvelin–Kekäläinen formulation used linear gain). Normalizing by the *ideal* DCG — the DCG of the perfect ordering of judged documents — yields $"nDCG"@k in (0, 1)$, comparable across queries with different numbers of relevant documents. nDCG\@10 is the de facto standard for web-style ranking and BEIR. ERR (Chapelle et al., 2009) is the cascade-model alternative: the expected reciprocal rank at which a user, scanning top-down and stopping with probability proportional to relevance, is satisfied — it penalizes redundancy after a perfect result more than nDCG does.
+(the exponential gain emphasizes highly relevant documents; the original Järvelin–Kekäläinen formulation used linear gain). Normalizing by the *ideal* DCG — the DCG of the perfect ordering of judged documents — yields $"nDCG"@k in [0, 1]$, with 1 for the ideal ranking, comparable across queries with different numbers of relevant documents. nDCG\@10 is the de facto standard for web-style ranking and BEIR. ERR (Chapelle et al., 2009) is the cascade-model alternative: the expected reciprocal rank at which a user, scanning top-down and stopping with probability proportional to relevance, is satisfied — it penalizes redundancy after a perfect result more than nDCG does.
 
 === Which Metric When
 

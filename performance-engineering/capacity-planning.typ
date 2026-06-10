@@ -122,7 +122,7 @@ The fit has converted a load test into a finding with a deadline: the $kappa = 0
 == Further Reading
 
 - Gunther, N. (2007). _Guerrilla Capacity Planning_. Springer.
-- Allspaw, J. (2008). _The Art of Capacity Planning_. O'Reilly (2nd ed. 2017 with Yevgeniy Sverdlik).
+- Allspaw, J. (2008). _The Art of Capacity Planning_. O'Reilly (2nd ed. 2017 with Arun Kejariwal).
 - Beyer, B., Jones, C., Petoff, J., & Murphy, N. R. (2016). _Site Reliability Engineering_, chs. on load balancing, overload, and capacity. O'Reilly.
 - Bronson, N., Aghayev, A., Charapko, A., & Zhu, T. (2021). Metastable failures in distributed systems. _HotOS_.
 - Barroso, L., Hölzle, U., & Ranganathan, P. (2018). _The Datacenter as a Computer_, 3rd ed. Morgan & Claypool.
