@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Grimoire</title>
+  <link href="https://poyea.github.io/grimoire/"/>
+  <link rel="self" href="https://poyea.github.io/grimoire/feed.xml"/>
+  <id>https://poyea.github.io/grimoire/</id>
+  <updated>2026-06-10T10:33:08Z</updated>
+  <author><name>poyea</name></author>
+  <entry>
+    <title>Grimoire v0.15.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.15.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.15.0</id>
+    <updated>2026-06-09T19:50:04Z</updated>
+    <summary>Release v0.15.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.14.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.14.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.14.0</id>
+    <updated>2026-06-09T18:27:44Z</updated>
+    <summary>Release v0.14.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.13.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.13.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.13.0</id>
+    <updated>2026-06-09T14:38:17Z</updated>
+    <summary>Release v0.13.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.12.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.12.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.12.0</id>
+    <updated>2026-06-09T13:54:15Z</updated>
+    <summary>Release v0.12.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.11.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.11.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.11.0</id>
+    <updated>2026-06-09T13:29:05Z</updated>
+    <summary>Release v0.11.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.10.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.10.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.10.0</id>
+    <updated>2026-06-08T15:09:05Z</updated>
+    <summary>Release v0.10.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.9.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.9.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.9.0</id>
+    <updated>2026-06-08T10:06:54Z</updated>
+    <summary>Release v0.9.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.8.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.8.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.8.0</id>
+    <updated>2026-06-07T13:59:17Z</updated>
+    <summary>Release v0.8.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.7.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.7.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.7.0</id>
+    <updated>2026-06-07T12:07:41Z</updated>
+    <summary>Release v0.7.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.6.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.6.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.6.0</id>
+    <updated>2026-06-06T18:57:14Z</updated>
+    <summary>Release v0.6.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.5.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.5.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.5.0</id>
+    <updated>2026-06-05T17:32:16Z</updated>
+    <summary>Release v0.5.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.4.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.4.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.4.0</id>
+    <updated>2026-06-03T01:46:53+01:00</updated>
+    <summary>Release v0.4.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.3.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.3.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.3.0</id>
+    <updated>2026-06-02T13:31:43Z</updated>
+    <summary>Release v0.3.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.2.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.2.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.2.0</id>
+    <updated>2026-06-01T18:24:41Z</updated>
+    <summary>Release v0.2.0 of the Grimoire volumes.</summary>
+  </entry>
+  <entry>
+    <title>Grimoire v0.1.22</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.1.22"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.1.22</id>
+    <updated>2026-06-01T18:03:31Z</updated>
+    <summary>Release v0.1.22 of the Grimoire volumes.</summary>
+  </entry>
+</feed>

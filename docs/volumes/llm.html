@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Large Language Models — Grimoire</title>
+<meta name="description" content="Transformer internals, training, RLHF, inference optimization, agents, and safety.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/llm.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume VI · § 06</p>
+  <h1>Large Language Models</h1>
+  <p class="desc">Transformer internals, training, RLHF, inference optimization, agents, and safety.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 22</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_llm.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>Introduction</summary>
+      <ul>
+        <li>Notation and Conventions</li>
+        <li>A Minimal Working LLM in 80 Lines</li>
+        <li>Key Papers Timeline</li>
+        <li>Document Structure</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Tokenization</summary>
+      <ul>
+        <li>Why Subwords</li>
+        <li>Byte-Pair Encoding (BPE)</li>
+        <li>Byte-Level BPE</li>
+        <li>WordPiece</li>
+        <li>Unigram and SentencePiece</li>
+        <li>tiktoken: Engineering a Fast Tokenizer</li>
+        <li>Multilingual and Code Tokenization</li>
+        <li>Failure Modes</li>
+        <li>Vocab Size Tradeoffs</li>
+        <li>Practical Workflow</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Data Curation</summary>
+      <ul>
+        <li>The Pipeline Shape</li>
+        <li>Text Extraction</li>
+        <li>Language Identification</li>
+        <li>Deduplication</li>
+        <li>Quality Filtering</li>
+        <li>PII and Safety</li>
+        <li>Decontamination</li>
+        <li>Mixing and Reweighting</li>
+        <li>Public Pipelines (Snapshot)</li>
+        <li>Workflow Notes</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>Transformer Architecture</summary>
+      <ul>
+        <li>High-Level Data Flow</li>
+        <li>Token Embeddings</li>
+        <li>Scaled Dot-Product Attention</li>
+        <li>Multi-Head Attention (MHA)</li>
+        <li>Grouped Query Attention (GQA) and Multi-Query Attention (MQA)</li>
+        <li>Rotary Position Embedding (RoPE)</li>
+        <li>Feed-Forward Network (FFN)</li>
+        <li>Layer Normalization</li>
+        <li>Full Transformer Block</li>
+        <li>Residual Connections and Gradient Flow</li>
+        <li>Model Architecture Reference</li>
+        <li>Multi-Head Latent Attention (MLA): DeepSeek-V2</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Pretraining</summary>
+      <ul>
+        <li>Data Pipeline</li>
+        <li>Causal Language Modeling Objective</li>
+        <li>Chinchilla Scaling Laws</li>
+        <li>Mixed Precision Training</li>
+        <li>Gradient Checkpointing</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Pretraining Infrastructure</summary>
+      <ul>
+        <li>Optimizer</li>
+        <li>Distributed Training</li>
+        <li>Training Stability</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Mixture of Experts</summary>
+      <ul>
+        <li>The Core Idea</li>
+        <li>Routing</li>
+        <li>Load Balancing</li>
+        <li>Capacity and Expert Dropping</li>
+        <li>Expert Parallelism</li>
+        <li>Inference</li>
+        <li>Shared and Routed Experts</li>
+        <li>Notable Models</li>
+        <li>Pitfalls</li>
+        <li>Designing an MoE Block</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Long Context</summary>
+      <ul>
+        <li>The Two Bottlenecks</li>
+        <li>Positional Encoding for Long Contexts</li>
+        <li>Sparse and Local Attention</li>
+        <li>Compressive and Recurrent State</li>
+        <li>System-Level Long-Context Training</li>
+        <li>Long-Context Evaluation</li>
+        <li>Long Context vs. RAG</li>
+        <li>Practical Setup</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Multimodal Models</summary>
+      <ul>
+        <li>Why Bolt-On Wins (Mostly)</li>
+        <li>Vision-Language: The LLaVA Pattern</li>
+        <li>Specific Architectures</li>
+        <li>Native Multimodal Training</li>
+        <li>Audio LLMs</li>
+        <li>Video</li>
+        <li>Multimodal Training Data</li>
+        <li>Evaluation</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary><span class="n">10</span>Fine-tuning</summary>
+      <ul>
+        <li>Full Fine-tuning vs PEFT</li>
+        <li>LoRA: Low-Rank Adaptation</li>
+        <li>QLoRA: 4-bit Base + BF16 LoRA</li>
+        <li>Instruction Tuning</li>
+        <li>Chat Templates</li>
+        <li>DPO: Direct Preference Optimization</li>
+        <li>Catastrophic Forgetting</li>
+        <li>Practical Recipes</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary><span class="n">11</span>RLHF and Alignment</summary>
+      <ul>
+        <li>The RLHF Pipeline</li>
+        <li>Reward Model</li>
+        <li>PPO in the LLM Context</li>
+        <li>Direct Preference Optimization (DPO)</li>
+        <li>GRPO: Group Relative Policy Optimization</li>
+        <li>Constitutional AI and RLAIF</li>
+        <li>Rejection Sampling Fine-Tuning (RST)</li>
+        <li>Safety Considerations</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary><span class="n">12</span>Reasoning Models</summary>
+      <ul>
+        <li>Chain of Thought</li>
+        <li>Self-Consistency</li>
+        <li>Tree and Graph of Thoughts</li>
+        <li>Process vs. Outcome Reward</li>
+        <li>RL on Verifiable Rewards</li>
+        <li>Reasoning Trace Engineering</li>
+        <li>Verification and Search at Inference</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-13">
+      <summary><span class="n">13</span>Agents and Tool Use</summary>
+      <ul>
+        <li>Function Calling</li>
+        <li>ReAct</li>
+        <li>Code Interpreter</li>
+        <li>Web Agents</li>
+        <li>Memory</li>
+        <li>Model Context Protocol (MCP)</li>
+        <li>Planning Patterns</li>
+        <li>Evaluation</li>
+        <li>Robustness</li>
+        <li>Practical Build</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-14">
+      <summary><span class="n">14</span>Retrieval-Augmented Generation</summary>
+      <ul>
+        <li>When RAG, When Long Context, When Fine-Tuning</li>
+        <li>Pipeline Shape</li>
+        <li>Chunking</li>
+        <li>Embedding</li>
+        <li>Indexing</li>
+        <li>Hybrid Retrieval</li>
+        <li>Reranking</li>
+        <li>Generation</li>
+        <li>Advanced Patterns</li>
+        <li>Evaluation</li>
+        <li>Engineering Notes</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-15">
+      <summary><span class="n">15</span>Distillation</summary>
+      <ul>
+        <li>Classical Knowledge Distillation</li>
+        <li>Sequence-Level Distillation (Black-Box)</li>
+        <li>White-Box Distillation</li>
+        <li>On-Policy Distillation</li>
+        <li>Reasoning-Trace Distillation</li>
+        <li>When Distillation Plateaus</li>
+        <li>Distillation in Pretraining</li>
+        <li>Engineering</li>
+        <li>Pitfalls</li>
+        <li>Recipe Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-16">
+      <summary><span class="n">16</span>Safety and Alignment</summary>
+      <ul>
+        <li>The Alignment Problem in Production</li>
+        <li>Constitutional AI</li>
+        <li>RLAIF</li>
+        <li>Direct Preference Optimization Family</li>
+        <li>Red Teaming</li>
+        <li>Jailbreak Taxonomy</li>
+        <li>Refusal Calibration</li>
+        <li>Honesty and Calibration</li>
+        <li>Weak-to-Strong and Scalable Oversight</li>
+        <li>Production Safety Stack</li>
+        <li>Open Problems</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-17">
+      <summary><span class="n">17</span>Inference Optimization</summary>
+      <ul>
+        <li>KV Cache</li>
+        <li>Decoding Strategies</li>
+        <li>Speculative Decoding</li>
+        <li>Continuous Batching</li>
+      </ul>
+    </details>
+    <details id="ch-18">
+      <summary><span class="n">18</span>Inference Serving</summary>
+      <ul>
+        <li>PagedAttention</li>
+        <li>Prefix Caching</li>
+        <li>Chunked Prefill</li>
+        <li>Tensor Parallelism for Serving</li>
+        <li>Metrics and Measurement</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-19">
+      <summary><span class="n">19</span>Quantization</summary>
+      <ul>
+        <li>Why Quantize: Memory Bandwidth Is the Bottleneck</li>
+        <li>Quantization Basics</li>
+        <li>Post-Training Quantization vs. Quantization-Aware Training</li>
+        <li>GPTQ: Layer-Wise Second-Order Quantization</li>
+        <li>AWQ: Activation-Aware Weight Quantization</li>
+        <li>SmoothQuant: Migrating Quantization Difficulty</li>
+        <li>FP8 Training and Inference</li>
+        <li>INT4/NF4 and QLoRA</li>
+        <li>KV Cache Quantization</li>
+        <li>GGUF Format and llama.cpp</li>
+        <li>Perplexity Impact</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-20">
+      <summary><span class="n">20</span>Serving Systems</summary>
+      <ul>
+        <li>Serving Stack Overview</li>
+        <li>vLLM</li>
+        <li>TensorRT-LLM</li>
+        <li>TGI (Text Generation Inference)</li>
+        <li>SGLang</li>
+        <li>Throughput vs Latency Tradeoffs</li>
+        <li>Disaggregated Prefill/Decode</li>
+        <li>Multi-LoRA Serving</li>
+        <li>SLA-Aware Scheduling</li>
+        <li>Observability</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-21">
+      <summary><span class="n">21</span>Evaluation</summary>
+      <ul>
+        <li>Perplexity</li>
+        <li>Knowledge Benchmarks</li>
+        <li>Reasoning Benchmarks</li>
+        <li>Instruction Following</li>
+        <li>LLM-as-Judge</li>
+        <li>Chatbot Arena and Elo Ratings</li>
+        <li>Calibration</li>
+        <li>Hallucination Metrics</li>
+        <li>Safety Evaluations</li>
+        <li>Contamination Detection</li>
+        <li>Practical Evaluation Setup</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-22">
+      <summary><span class="n">22</span>Interpretability</summary>
+      <ul>
+        <li>Why It Is Hard</li>
+        <li>The Residual Stream View</li>
+        <li>Probes</li>
+        <li>Causal Tracing and Activation Patching</li>
+        <li>Sparse Autoencoders (SAEs)</li>
+        <li>Circuits</li>
+        <li>Attention Head Taxonomy</li>
+        <li>Steering and Editing</li>
+        <li>Tools and Workflow</li>
+        <li>Limits</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

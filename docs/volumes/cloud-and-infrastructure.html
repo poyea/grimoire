@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud &amp; Infrastructure — Grimoire</title>
+<meta name="description" content="IaaS fundamentals, Kubernetes internals, serverless, IaC, multi-tenancy, and cost engineering.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/cloud-and-infrastructure.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume XIII · § 13</p>
+  <h1>Cloud &amp; Infrastructure</h1>
+  <p class="desc">IaaS fundamentals, Kubernetes internals, serverless, IaC, multi-tenancy, and cost engineering.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 7</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_cloud_and_infrastructure.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>Containers: OCI, runc, containerd, Image Layers</summary>
+      <ul>
+        <li>The OCI Stack</li>
+        <li>OCI Image Format</li>
+        <li>Image Layers and Union Filesystems</li>
+        <li>Registry Protocol (Distribution Spec)</li>
+        <li>runc Lifecycle</li>
+        <li>containerd Architecture</li>
+        <li>CRI Runtime Comparison</li>
+        <li>Networking Setup (CNI)</li>
+        <li>Resource Limits via Cgroups v2</li>
+        <li>Rootless Containers and User Namespaces</li>
+        <li>Build Tooling: Dockerfile, BuildKit, Bazel</li>
+        <li>Image Security</li>
+        <li>Worked Example: From Build to Run</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Cloud Cost Engineering</summary>
+      <ul>
+        <li>Cost Visibility</li>
+        <li>Unit Economics</li>
+        <li>Rightsizing</li>
+        <li>Purchase Commitment Strategy</li>
+        <li>Storage Tiering</li>
+        <li>Data Transfer and Egress Costs</li>
+        <li>FinOps Culture</li>
+        <li>Worked Optimisation Example</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Infrastructure as Code</summary>
+      <ul>
+        <li>Declarative vs Imperative IaC</li>
+        <li>Terraform</li>
+        <li>Pulumi</li>
+        <li>AWS CDK</li>
+        <li>Ansible vs Declarative IaC</li>
+        <li>Drift Detection</li>
+        <li>GitOps</li>
+        <li>Policy as Code</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>IaaS Fundamentals</summary>
+      <ul>
+        <li>The IaaS Stack</li>
+        <li>Cross-Cloud Abstraction Map</li>
+        <li>Virtual Machines and Hypervisors</li>
+        <li>Block Storage and Replication</li>
+        <li>Object Storage as the Universal Substrate</li>
+        <li>Virtual Networks</li>
+        <li>Identity and Authorization</li>
+        <li>Regions, Zones, and Failure Domains</li>
+        <li>Pricing Primitives</li>
+        <li>Quotas and Control-Plane Limits</li>
+        <li>Bare Metal and Dedicated Hosts</li>
+        <li>Worked Example: Multi-AZ Web Service</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Kubernetes Internals</summary>
+      <ul>
+        <li>Architectural Overview</li>
+        <li>etcd as the System of Record</li>
+        <li>The apiserver: REST + Admission</li>
+        <li>Controllers and the Reconciliation Pattern</li>
+        <li>The Scheduler</li>
+        <li>kubelet and the CRI</li>
+        <li>Networking: CNI</li>
+        <li>Services and kube-proxy</li>
+        <li>Storage: CSI</li>
+        <li>Custom Resources and Operators</li>
+        <li>Workload Identity</li>
+        <li>Multi-Tenancy Considerations</li>
+        <li>Scaling Limits</li>
+        <li>Worked Example: A Deployment&#x27;s Lifecycle</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Multi-Tenancy</summary>
+      <ul>
+        <li>Isolation Models</li>
+        <li>Threat Model</li>
+        <li>RBAC Design Patterns</li>
+        <li>NetworkPolicy Recipes</li>
+        <li>Resource Governance</li>
+        <li>Pod Security Admission</li>
+        <li>Audit Logging for Compliance</li>
+        <li>Virtual Cluster Architecture</li>
+        <li>Fleet Management</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Serverless Computing</summary>
+      <ul>
+        <li>The FaaS Execution Model</li>
+        <li>Lambda Internals: Firecracker and MicroVMs</li>
+        <li>Cold Start Mitigation</li>
+        <li>Event Sources and Triggers</li>
+        <li>Serverless Containers</li>
+        <li>Cost Model</li>
+        <li>Stateless Constraints and Workarounds</li>
+        <li>Vendor Comparison</li>
+        <li>Observability in Serverless</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

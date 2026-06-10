@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Languages &amp; Compilers — Grimoire</title>
+<meta name="description" content="Automata, semantics, type theory, and a compiler from scratch — from Myhill–Nerode to HoTT.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/programming-languages.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume VII · § 07</p>
+  <h1>Languages &amp; Compilers</h1>
+  <p class="desc">Automata, semantics, type theory, and a compiler from scratch — from Myhill–Nerode to HoTT.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 42</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_programming_languages.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>Regular Languages and Finite Automata</summary>
+      <ul>
+        <li>Deterministic Finite Automata</li>
+        <li>Regular Expressions</li>
+        <li>The Pumping Lemma</li>
+        <li>Closure Properties</li>
+        <li>C++ DFA: Block Comment Recognizer</li>
+        <li>The Chomsky Hierarchy</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Lexing</summary>
+      <ul>
+        <li>Token Classes and Regex Specifications</li>
+        <li>From Regex to DFA</li>
+        <li>Maximal Munch and Longest-Match</li>
+        <li>Lookahead</li>
+        <li>flex and re2c</li>
+        <li>Source-Position Tracking</li>
+        <li>Error Recovery</li>
+        <li>C++ Lexer Implementation</li>
+        <li>Performance</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Parsing</summary>
+      <ul>
+        <li>Recursive Descent</li>
+        <li>LR Parsing</li>
+        <li>Operator-Precedence and Pratt Parsing</li>
+        <li>PEG and Packrat Parsing</li>
+        <li>GLR Parsing</li>
+        <li>Error Recovery</li>
+        <li>C++ Recursive-Descent Parser</li>
+        <li>AST Design</li>
+        <li>Parsing Algorithm Comparison</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>Pushdown Automata and Context-Free Grammars</summary>
+      <ul>
+        <li>Pushdown Automata</li>
+        <li>Context-Free Grammars</li>
+        <li>Chomsky Normal Form</li>
+        <li>Pumping Lemma for Context-Free Languages</li>
+        <li>Closure Properties of Context-Free Languages</li>
+        <li>Decidability for Context-Free Languages</li>
+        <li>LL and LR Parsing: Preview</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Turing Machines and Computability</summary>
+      <ul>
+        <li>Turing Machine Definition</li>
+        <li>Multi-Tape TMs and NDTMs</li>
+        <li>Universal Turing Machines</li>
+        <li>The Church-Turing Thesis</li>
+        <li>Undecidability: The Halting Problem</li>
+        <li>Rice&#x27;s Theorem</li>
+        <li>Recursive and Recursively Enumerable Languages</li>
+        <li>Many-One Reductions</li>
+        <li>Why Static Analysis Is Forever Bounded</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Regular Languages</summary>
+      <ul>
+        <li>Words, Languages, and the Free Monoid</li>
+        <li>Regular Expressions as the Initial Kleene Algebra</li>
+        <li>Deterministic Finite Automata</li>
+        <li>Nondeterministic Finite Automata</li>
+        <li>Kleene&#x27;s Theorem</li>
+        <li>Myhill–Nerode Theorem</li>
+        <li>DFA Minimisation: Hopcroft&#x27;s Algorithm</li>
+        <li>Brzozowski Derivatives</li>
+        <li>Pumping Lemma and Its Limits</li>
+        <li>State Complexity and Communication-Complexity Lower Bounds</li>
+        <li>Eilenberg&#x27;s Variety Theorem</li>
+        <li>Star-Free Languages: Schützenberger–McNaughton–Papert</li>
+        <li>Büchi–Elgot–Trakhtenbrot Theorem</li>
+        <li>Two-Way Finite Automata</li>
+        <li>Closure Properties</li>
+        <li>Decidability of Regular Languages</li>
+        <li>Practical Implementations</li>
+        <li>Beyond the Classical Picture</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Regular Languages: Proofs, Algorithms, and Advanced Theory</summary>
+      <ul>
+        <li>Myhill–Nerode: Full Proof and Constructive Content</li>
+        <li>Quotient Languages and the Derivative View of Minimisation</li>
+        <li>Brzozowski&#x27;s Double-Reversal Minimisation</li>
+        <li>Star-Height and Hashiguchi&#x27;s Theorem</li>
+        <li>Two-Way DFA: Shepherdson&#x27;s Theorem and the Sakoda–Sipser Problem</li>
+        <li>Communication-Complexity Lower Bounds on State Complexity</li>
+        <li>Eilenberg&#x27;s Variety Theorem: Full Statement and Example</li>
+        <li>Profinite Topology and Pseudovarieties</li>
+        <li>Logic Correspondences: Büchi–Elgot–Trakhtenbrot in Full</li>
+        <li>Kannan–Lipton: Counter Machines versus DFAs</li>
+        <li>Practical Algorithms: OCaml and Python Implementations</li>
+        <li>Pumping Lemma vs Myhill–Nerode: A Comparative Analysis</li>
+        <li>Summary: The Seven Faces of Regular Languages</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Context-Free Languages</summary>
+      <ul>
+        <li>Context-Free Grammars</li>
+        <li>Chomsky Normal Form</li>
+        <li>Greibach Normal Form</li>
+        <li>Pushdown Automata</li>
+        <li>CYK Algorithm</li>
+        <li>Earley&#x27;s Algorithm</li>
+        <li>Pumping Lemma for CFLs (Bar-Hillel–Perles–Shamir 1961)</li>
+        <li>Parikh&#x27;s Theorem (1961, 1966)</li>
+        <li>Closure Properties</li>
+        <li>Inherent Ambiguity</li>
+        <li>Undecidability for CFGs</li>
+        <li>Deterministic Context-Free Languages</li>
+        <li>Greibach&#x27;s Hardest Context-Free Language</li>
+        <li>Worked-Out Constructions</li>
+        <li>Pragmatic Parsing Hierarchy</li>
+        <li>Where the Theory Breaks</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Pushdown Automata and Beyond</summary>
+      <ul>
+        <li>Pushdown Automata</li>
+        <li>PDA–CFG Equivalence</li>
+        <li>Deterministic Pushdown Automata</li>
+        <li>Visibly Pushdown Languages</li>
+        <li>Higher-Order Pushdown Automata</li>
+        <li>Indexed Grammars</li>
+        <li>Tree-Adjoining Grammars</li>
+        <li>Mildly Context-Sensitive Languages</li>
+        <li>Linear Bounded Automata and Context-Sensitive Languages</li>
+        <li>Type-0 Grammars and Recursive Enumerability</li>
+        <li>Decidability and Complexity Landscape</li>
+        <li>Worked-Out Examples</li>
+        <li>Connections to Verification and Programming Languages</li>
+        <li>Pumping Lemmas for Higher Classes</li>
+        <li>Closing the Hierarchy</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary><span class="n">10</span>Omega-Automata</summary>
+      <ul>
+        <li>Infinite Words and Omega-Regular Languages</li>
+        <li>Runs on Infinite Words</li>
+        <li>Büchi Automata</li>
+        <li>Generalized Büchi Automata</li>
+        <li>Rabin, Streett, Muller, Parity</li>
+        <li>Closure Properties</li>
+        <li>McNaughton&#x27;s Theorem and Safra&#x27;s Construction</li>
+        <li>Linear Temporal Logic and Translation to GBA</li>
+        <li>Emptiness Checking</li>
+        <li>Parity Games</li>
+        <li>The Modal Mu-Calculus</li>
+        <li>Equivalences and Reductions</li>
+        <li>Universality, Inclusion, Equivalence</li>
+        <li>Topological Hierarchy</li>
+        <li>Connections and Outlook</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary><span class="n">11</span>Omega-Automata: Detailed Constructions and Algorithms</summary>
+      <ul>
+        <li>Detailed Constructions Revisited</li>
+        <li>Worked Example: Model Checking GF p</li>
+        <li>Reactive Synthesis Pipeline</li>
+        <li>Safra Construction Worked Through in Full</li>
+        <li>GPVW Tableau on a Nontrivial Formula</li>
+        <li>McNaughton&#x27;s Theorem: Determinisability of Nondeterministic Büchi</li>
+        <li>Wadge Hierarchy and Borel Structure</li>
+        <li>Weak Büchi and Latching Automata</li>
+        <li>Mu-Calculus Alternation Hierarchy: Explicit Examples</li>
+        <li>Stutter-Invariance and LTL-X</li>
+        <li>Emptiness Check via Nested DFS: Full Worked Example</li>
+        <li>Small Progress Measures in Detail</li>
+        <li>Strategy Improvement for Parity Games</li>
+        <li>The CJKLS Quasi-Polynomial Algorithm</li>
+        <li>Summary Table: Automaton Types and Key Properties</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary><span class="n">12</span>Infinite Trees and Games</summary>
+      <ul>
+        <li>Infinite Trees</li>
+        <li>Rabin Tree Automata</li>
+        <li>Rabin&#x27;s Tree Theorem</li>
+        <li>Alternating Tree Automata</li>
+        <li>Parity Games on Infinite Graphs</li>
+        <li>Mu-Calculus on Trees and Parity Games</li>
+        <li>Synthesis from Omega-Regular Specifications</li>
+        <li>Pushdown Games</li>
+        <li>Forgetful Determinacy and Memory</li>
+        <li>Borel Determinacy in Context</li>
+        <li>Two-Player Games on the Infinite Tree</li>
+        <li>Strategy Synthesis from Mu-Calculus</li>
+        <li>Open Problems</li>
+        <li>Concluding Remarks</li>
+        <li>Worked Examples on the Infinite Binary Tree</li>
+        <li>Bisimulation and the Mu-Calculus on Trees</li>
+        <li>Pushdown Games in Detail</li>
+        <li>Strategies as Transducers</li>
+        <li>Markov Decision Processes and Stochastic Games</li>
+        <li>The Sutter--Lehmann--Pavlogiannis Threshold</li>
+        <li>The Big Picture</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-13">
+      <summary><span class="n">13</span>Tree Automata</summary>
+      <ul>
+        <li>Ranked Alphabets and Terms</li>
+        <li>Bottom-Up Tree Automata</li>
+        <li>Top-Down Tree Automata</li>
+        <li>Recognisable / Regular Tree Languages</li>
+        <li>MSO over Finite Trees</li>
+        <li>Tree Transducers</li>
+        <li>Tree-Walking Automata</li>
+        <li>Unranked Trees and Hedge Automata</li>
+        <li>Courcelle&#x27;s Theorem</li>
+        <li>Applications</li>
+        <li>Decision Problems and Complexity</li>
+        <li>Sketch: Bottom-Up Emptiness in Linear Time</li>
+        <li>Concluding Notes</li>
+        <li>Algebraic Recognition</li>
+        <li>Tree-Automata Constructions in Practice</li>
+        <li>Recognisable Tree Series</li>
+        <li>Tree Automata Completion for Reachability</li>
+        <li>Visibly Pushdown Languages and Nested-Word Automata</li>
+        <li>Tree-Automata Algorithms Summary</li>
+        <li>Connection to Type Inference</li>
+        <li>Tree Automata and Type Soundness</li>
+        <li>Open Problems</li>
+        <li>Closing Synthesis</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-14">
+      <summary><span class="n">14</span>Timed and Hybrid Automata</summary>
+      <ul>
+        <li>Motivation: From Untimed to Timed Behaviour</li>
+        <li>Timed Automata</li>
+        <li>Region Equivalence</li>
+        <li>Zones and Difference Bound Matrices</li>
+        <li>Determinization and Closure Properties</li>
+        <li>Timed Games</li>
+        <li>Tools: UPPAAL, Kronos, RED, TChecker</li>
+        <li>Hybrid Automata</li>
+        <li>Decidability Frontier: A Summary Table</li>
+        <li>Region Construction: Worked Detail</li>
+        <li>Symbolic Reachability Pseudocode</li>
+        <li>Liveness and Timed Büchi Acceptance</li>
+        <li>TCTL Model Checking</li>
+        <li>Beyond Reachability: Parametric and Weighted Extensions</li>
+        <li>Complexity Landscape</li>
+        <li>Discussion: Why Dense Time?</li>
+        <li>Exercises</li>
+        <li>Extended Topic: Time-Abstract Bisimulation and Quotient Constructions</li>
+        <li>Extended Topic: Updatable Timed Automata</li>
+        <li>Extended Topic: Timed Pushdown Automata</li>
+        <li>Extended Topic: Hybrid Automata with Inputs and Outputs</li>
+        <li>Extended Topic: Approximate Bisimulation for Hybrid Systems</li>
+        <li>Extended Topic: Bounded Model Checking of Hybrid Systems</li>
+        <li>Extended Topic: Timed Automata with Energy Constraints</li>
+        <li>Extended Topic: Compositional Verification</li>
+        <li>Extended Topic: Counter-Example Guided Abstraction Refinement</li>
+        <li>Worked Example: Train--Gate Controller (Henzinger--Manna--Pnueli)</li>
+        <li>Worked Example: Bouncing Ball (Hybrid Automaton)</li>
+        <li>Worked Example: Thermostat with Hysteresis</li>
+        <li>References (Selected)</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-15">
+      <summary><span class="n">15</span>Weighted and Probabilistic Automata</summary>
+      <ul>
+        <li>Semirings</li>
+        <li>Weighted Automata</li>
+        <li>Rational Power Series</li>
+        <li>Equivalence and Decidability</li>
+        <li>Determinization and Minimization</li>
+        <li>Finite-State Transducers</li>
+        <li>Probabilistic Automata</li>
+        <li>Markov Chains and MDPs</li>
+        <li>Quantitative Model Checking Tools</li>
+        <li>Connections to Computability and Logic</li>
+        <li>Hidden Markov Models as Weighted Automata</li>
+        <li>Behavioural Equivalences for Probabilistic Systems</li>
+        <li>Algorithmics: Shortest-Distance in Semirings</li>
+        <li>Closure Properties</li>
+        <li>Probabilistic Büchi Automata</li>
+        <li>Quantitative Languages and Mean-Payoff Automata</li>
+        <li>Complexity Landscape</li>
+        <li>Discussion: Why Algebra?</li>
+        <li>Exercises</li>
+        <li>Extended Topic: Eilenberg&#x27;s Variety Theorem for Weighted Automata</li>
+        <li>Extended Topic: Hankel Matrices and Minimization</li>
+        <li>Extended Topic: Quantitative Languages over Infinite Words</li>
+        <li>Extended Topic: Decision Problems for Linear Recurrence Sequences</li>
+        <li>Extended Topic: Cost Register Automata</li>
+        <li>Extended Topic: Tropical Semirings and Optimization</li>
+        <li>Extended Topic: Determinizability via the Twins Property</li>
+        <li>Extended Topic: Markov Decision Processes and Reward-Based Objectives</li>
+        <li>Extended Topic: Partially Observable MDPs</li>
+        <li>Extended Topic: Stochastic Petri Nets</li>
+        <li>Extended Topic: Quantitative Bisimulation and Behavioural Metrics</li>
+        <li>Worked Example: Tropical Shortest-Path Automaton</li>
+        <li>Worked Example: Markov Chain for the Drunkard&#x27;s Walk</li>
+        <li>Worked Example: PRISM Model for the Crowds Protocol</li>
+        <li>Worked Example: Weighted Transducer for Edit Distance</li>
+        <li>References (Selected)</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-16">
+      <summary><span class="n">16</span>Automata Learning</summary>
+      <ul>
+        <li>Learning Paradigms</li>
+        <li>Angluin&#x27;s L\*</li>
+        <li>Counterexample Analysis</li>
+        <li>Discrimination Trees (Kearns--Vazirani 1994)</li>
+        <li>TTT Algorithm (Isberner--Howar--Steffen 2014)</li>
+        <li>Learning Mealy Machines</li>
+        <li>Learning Register Automata</li>
+        <li>Nominal Automata</li>
+        <li>Learning NFAs and Residual Automata</li>
+        <li>Learning $omega$-Automata</li>
+        <li>Spectral Learning of Probabilistic Automata</li>
+        <li>RPNI: Passive DFA Inference</li>
+        <li>Equivalence Oracle in Practice</li>
+        <li>Tools</li>
+        <li>Application: Protocol State-Machine Inference</li>
+        <li>Application: Model Learning for Verification</li>
+        <li>Application: RNN Extraction (Weiss--Goldberg--Yahav 2018)</li>
+        <li>Connections to Cryptography and Lower Bounds</li>
+        <li>Complexity Landscape</li>
+        <li>Theoretical Frontier</li>
+        <li>Pseudocode: TTT Skeleton</li>
+        <li>Discussion: Why It Works</li>
+        <li>Exercises</li>
+        <li>Extended Topic: Observation Tables Formalized</li>
+        <li>Extended Topic: Counterexample Decomposition</li>
+        <li>Extended Topic: Active Learning for Symbolic Automata</li>
+        <li>Extended Topic: Compositional Learning</li>
+        <li>Extended Topic: Learning Visibly Pushdown Languages</li>
+        <li>Extended Topic: Learning Probabilistic Automata via Spectral Methods</li>
+        <li>Extended Topic: Algorithmic Information Theory and Minimal Models</li>
+        <li>Extended Topic: Learning under Membership-Only Access</li>
+        <li>Extended Topic: Learning Mealy Machines from Test Logs</li>
+        <li>Extended Topic: Learning with Hierarchical Abstraction</li>
+        <li>Extended Topic: Approximation Guarantees for Learned Models</li>
+        <li>Extended Topic: Conformance Testing -- W-Method</li>
+        <li>Extended Topic: Learning Stochastic Mealy Machines</li>
+        <li>Extended Topic: Lower Bounds for Equivalence Queries</li>
+        <li>Worked Example: $L^*$ on $L = $ &quot;Last symbol is $a$&quot;</li>
+        <li>Worked Example: TTT for Counter-Example Decomposition</li>
+        <li>Worked Example: Discrimination Tree</li>
+        <li>Worked Example: RNN Extraction</li>
+        <li>References (Selected)</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-17">
+      <summary><span class="n">17</span>Computability and Recursion Theory</summary>
+      <ul>
+        <li>Primitive Recursive and $mu$-Recursive Functions</li>
+        <li>Encoding Programs as Numbers</li>
+        <li>The $s$-$m$-$n$ Theorem (Parametrisation)</li>
+        <li>The Recursion Theorem</li>
+        <li>The Halting Problem and Diagonalisation</li>
+        <li>Rice&#x27;s Theorem</li>
+        <li>Rice--Shapiro: An RE Refinement</li>
+        <li>Recursively Enumerable Sets</li>
+        <li>Many-One and Turing Reductions</li>
+        <li>Post&#x27;s Problem and the Priority Method</li>
+        <li>The Structure of Turing Degrees</li>
+        <li>The Arithmetical Hierarchy</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-18">
+      <summary><span class="n">18</span>Advanced Recursion Theory</summary>
+      <ul>
+        <li>The Hyperarithmetical and Analytical Hierarchies</li>
+        <li>Effective Topology and Effective Descriptive Set Theory</li>
+        <li>Computable Analysis (Weihrauch)</li>
+        <li>Oracle Machines and Relativisation</li>
+        <li>Index Sets and Their Completeness</li>
+        <li>Limit Lemma and the $0&#x27;$-Recursive Sets</li>
+        <li>The Low and High Hierarchies</li>
+        <li>Strong Reducibilities, $1$-Completeness, Myhill&#x27;s Theorem</li>
+        <li>Forcing in Arithmetic and Effective Genericity</li>
+        <li>The Recursion Theorem with Parameters</li>
+        <li>Computable Model Theory and Reverse Mathematics</li>
+        <li>Algorithmic Randomness</li>
+        <li>Where Recursion Theory Touches Practice</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-19">
+      <summary><span class="n">19</span>Complexity Theory</summary>
+      <ul>
+        <li>Resource-Bounded Computation</li>
+        <li>Hierarchy Theorems</li>
+        <li>P, NP, coNP, and the Polynomial Hierarchy</li>
+        <li>NP-Completeness: Cook--Levin</li>
+        <li>Ladner&#x27;s Theorem</li>
+        <li>Space Hierarchy: Savitch and Immerman--Szelepcsényi</li>
+        <li>Randomised Complexity</li>
+        <li>Interactive Proofs</li>
+        <li>The PCP Theorem</li>
+        <li>Circuit Complexity</li>
+        <li>The Natural Proofs Barrier</li>
+        <li>Descriptive Complexity</li>
+        <li>Fine-Grained Complexity</li>
+        <li>Alternating Computation</li>
+        <li>Logspace and the L vs NL Frontier</li>
+        <li>Counting Classes and \#P</li>
+        <li>Cryptographic Complexity and Trapdoors</li>
+        <li>Communication Complexity</li>
+        <li>Parameterised Complexity</li>
+        <li>Quantum Complexity</li>
+        <li>Algebraic Complexity</li>
+        <li>Average-Case Complexity</li>
+        <li>Map of Major Inclusions</li>
+        <li>Why It Matters in Practice</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-20">
+      <summary><span class="n">20</span>Program Semantics</summary>
+      <ul>
+        <li>Why Syntax Is Not Enough</li>
+        <li>Attribute Grammars</li>
+        <li>Symbol Tables, Lexical and Dynamic Scope</li>
+        <li>Operational Semantics</li>
+        <li>Denotational Semantics</li>
+        <li>Axiomatic Semantics (Hoare Logic)</li>
+        <li>Choosing a Semantics</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-21">
+      <summary><span class="n">21</span>Operational Semantics</summary>
+      <ul>
+        <li>Small-Step (Structural) Semantics</li>
+        <li>Big-Step (Natural) Semantics</li>
+        <li>The Lambda Calculus and Reduction Strategies</li>
+        <li>Evaluation Contexts</li>
+        <li>Abstract Machines</li>
+        <li>Call-by-Push-Value</li>
+        <li>Bisimulation and Program Equivalence</li>
+        <li>Contextual Equivalence and Full Abstraction</li>
+        <li>Logical Relations</li>
+        <li>Cost Semantics and Resource Analysis</li>
+        <li>Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-22">
+      <summary><span class="n">22</span>Denotational Semantics</summary>
+      <ul>
+        <li>The Compositionality Principle</li>
+        <li>CPOs and Continuous Functions</li>
+        <li>Scott Topology</li>
+        <li>Kleene&#x27;s Fixed-Point Theorem</li>
+        <li>Denotational Semantics of IMP</li>
+        <li>Adequacy and Full Abstraction</li>
+        <li>Recursive Domain Equations</li>
+        <li>PCF and Plotkin&#x27;s Full Abstraction Problem</li>
+        <li>Game Semantics</li>
+        <li>Powerdomains</li>
+        <li>Continuations and the C-Translation</li>
+        <li>Stable Functions and Berry&#x27;s dI-Domains</li>
+        <li>Coherence Spaces and Linear Logic</li>
+        <li>Action Semantics and Monadic Semantics</li>
+        <li>Adequacy vs. Full Abstraction: The Trade-Off</li>
+        <li>Connection to Operational Semantics</li>
+        <li>A Note on Computability</li>
+        <li>Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-23">
+      <summary><span class="n">23</span>Axiomatic Semantics</summary>
+      <ul>
+        <li>Floyd: Assertions on Flowcharts</li>
+        <li>Hoare Triples for IMP</li>
+        <li>Partial vs. Total Correctness</li>
+        <li>Soundness and Relative Completeness</li>
+        <li>Dijkstra&#x27;s Weakest Preconditions</li>
+        <li>Predicate Transformers, Demonic and Angelic</li>
+        <li>The Refinement Calculus</li>
+        <li>Separation Logic</li>
+        <li>Concurrent Separation Logic</li>
+        <li>Iris</li>
+        <li>Verifying Linked Lists and Concurrent Stacks</li>
+        <li>Connection to Type Systems</li>
+        <li>Tool Ecosystem</li>
+        <li>Beyond Functional Correctness</li>
+        <li>Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-24">
+      <summary><span class="n">24</span>Categorical Semantics</summary>
+      <ul>
+        <li>Categories, Functors, Natural Transformations</li>
+        <li>Cartesian Closed Categories</li>
+        <li>The Lambek-Scott Correspondence</li>
+        <li>Sum Types and Bicartesian Closed Categories</li>
+        <li>Monads for Effects</li>
+        <li>Adjunctions and Monads</li>
+        <li>Lawvere Theories and Algebraic Effects</li>
+        <li>Fibrations and Dependent Types</li>
+        <li>Presheaves and Yoneda</li>
+        <li>Topos Semantics</li>
+        <li>Categorical Semantics of Linear Logic</li>
+        <li>Differential $lambda$-Calculus and Cartesian Differential Categories</li>
+        <li>Putting It Together</li>
+        <li>Closing Remarks</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-25">
+      <summary><span class="n">25</span>Type Systems</summary>
+      <ul>
+        <li>Simply-Typed Lambda Calculus</li>
+        <li>Type Soundness: Progress and Preservation</li>
+        <li>Hindley-Milner Type Inference</li>
+        <li>Polymorphism Flavors</li>
+        <li>Curry-Howard Isomorphism</li>
+        <li>Dependent Types and Totality</li>
+        <li>Effect Systems</li>
+        <li>Gradual Typing</li>
+        <li>Practical Type System Comparison</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-26">
+      <summary><span class="n">26</span>Simply-Typed Lambda Calculus</summary>
+      <ul>
+        <li>Syntax</li>
+        <li>Static Semantics</li>
+        <li>Dynamic Semantics</li>
+        <li>Confluence (Church–Rosser)</li>
+        <li>Subject Reduction (Preservation)</li>
+        <li>Progress</li>
+        <li>Strong Normalization (Tait 1967)</li>
+        <li>The Curry–Howard Isomorphism</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-27">
+      <summary><span class="n">27</span>Simply-Typed Lambda Calculus: Extensions and Advanced Topics</summary>
+      <ul>
+        <li>Extensions</li>
+        <li>Type Checking and Inference</li>
+        <li>Combinatory Logic and the SKI Calculus</li>
+        <li>$lambda$I and $lambda$K</li>
+        <li>Long Normal Forms and $eta$-Expansion</li>
+        <li>Bidirectional Type Checking</li>
+        <li>Categorical Semantics</li>
+        <li>Normalisation by Evaluation</li>
+        <li>$eta$-Equality and Extensionality</li>
+        <li>Eta and Categorical Naturality</li>
+        <li>Practical Implementation: Type Checking $lambda^arrow.r$</li>
+        <li>A Detailed Worked Reduction</li>
+        <li>Historical Notes</li>
+        <li>Worked Examples</li>
+        <li>Equational Theory</li>
+        <li>Recursion-Free Programming</li>
+        <li>Beyond $lambda^arrow.r$: A Roadmap</li>
+        <li>The Statman Hierarchy</li>
+        <li>Schwichtenberg&#x27;s Theorem</li>
+        <li>Cut Elimination and Proof Theory</li>
+        <li>Cartmell&#x27;s Categories with Families</li>
+        <li>Computational Adequacy</li>
+        <li>Comparison with Other Typed Calculi</li>
+        <li>Exercises (for the dedicated reader)</li>
+        <li>Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-28">
+      <summary><span class="n">28</span>System F and Parametricity</summary>
+      <ul>
+        <li>Syntax</li>
+        <li>Static Semantics</li>
+        <li>Dynamic Semantics</li>
+        <li>Examples and Church Encodings</li>
+        <li>Strong Normalization (Girard 1972)</li>
+        <li>The $Y$-Combinator is Not Typable</li>
+        <li>Reynolds&#x27; Parametricity</li>
+        <li>Theorems for Free (Wadler 1989)</li>
+        <li>Existential Types and Abstract Data Types</li>
+        <li>System $F_omega$: Higher Kinds</li>
+        <li>The Barendregt Cube</li>
+        <li>Decidability and Type Inference</li>
+        <li>Bounded Quantification: $F_(&lt;:)$</li>
+        <li>Implementation Notes</li>
+        <li>The Logical Reading</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-29">
+      <summary><span class="n">29</span>System F: Categorical Models and Advanced Topics</summary>
+      <ul>
+        <li>Categorical Models of System F</li>
+        <li>Practical Languages and System F</li>
+        <li>Worked Example: Fold-as-Type</li>
+        <li>Equational Theory</li>
+        <li>More Free Theorems Worked in Detail</li>
+        <li>Logical Relations as Proof Technique</li>
+        <li>Operational Semantics Variants</li>
+        <li>Predicative vs Impredicative System F</li>
+        <li>Implementation: From System F to GHC Core</li>
+        <li>Existentials in Practice</li>
+        <li>Connection to Category Theory</li>
+        <li>Boxes, Stuckness, and Type Soundness for F</li>
+        <li>A Detailed Computation</li>
+        <li>Polymorphism and Type Erasure: Practical Compilation</li>
+        <li>Inductive Types via System F</li>
+        <li>Recursive Types via Newtype + Fix</li>
+        <li>Predicativity Stratification</li>
+        <li>Parametricity Limits</li>
+        <li>Polarity and Sum Types</li>
+        <li>System F-omega and Type Constructors</li>
+        <li>Existential Quantification in Logic</li>
+        <li>The $forall$/$exists$ Duality</li>
+        <li>Conservativity Results</li>
+        <li>Worked Example: A Polymorphic Stack</li>
+        <li>Worked Example: Existential Counters</li>
+        <li>Historical Notes</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-30">
+      <summary><span class="n">30</span>Dependent Types</summary>
+      <ul>
+        <li>From STLC to $Pi$ and $Sigma$</li>
+        <li>$lambda P$ / LF: The Edinburgh Logical Framework</li>
+        <li>Universes</li>
+        <li>Inductive Types</li>
+        <li>Martin-Löf Type Theory (MLTT)</li>
+        <li>The Calculus of Constructions / CIC</li>
+        <li>Termination Checking</li>
+        <li>Performance: Conversion Can Be Expensive</li>
+        <li>Universe Polymorphism (Sozeau–Tabareau 2014)</li>
+        <li>Practical Examples</li>
+        <li>Curry–Howard for First-Order Logic</li>
+        <li>Tools</li>
+        <li>Program Extraction (Letouzey 2008)</li>
+        <li>The Convoy Pattern</li>
+        <li>Definitional vs Propositional Equality</li>
+        <li>Subject Reduction Caveats</li>
+        <li>Inconsistency Risks</li>
+        <li>Further Worked Examples</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-31">
+      <summary><span class="n">31</span>Dependent Types: Proof Engineering and Advanced Topics</summary>
+      <ul>
+        <li>Tactics and Proof Engineering</li>
+        <li>Definitional Equality, $eta$, and Surprises</li>
+        <li>Refinement Types and Subset Types</li>
+        <li>Equality up to Computation</li>
+        <li>Models of MLTT</li>
+        <li>Proof Assistants in Practice: Statistics</li>
+        <li>Quantitative Type Theory (Atkey 2018)</li>
+        <li>Cubical Type Theory (Cohen–Coquand–Huber–Mörtberg 2018)</li>
+        <li>Future Directions</li>
+        <li>Detailed Elimination Rules</li>
+        <li>The K-Rule and Streicher&#x27;s Axiom</li>
+        <li>Pattern Matching as Coq Definitions</li>
+        <li>Inductive Definitions vs Records</li>
+        <li>Type Classes in Dependent Languages</li>
+        <li>Performance Bottlenecks</li>
+        <li>Definitional Computation in Coq</li>
+        <li>Anatomy of a Coq Proof Object</li>
+        <li>Verification Case Studies</li>
+        <li>Equality Reflection vs Computational Univalence</li>
+        <li>A Worked Cubical Example</li>
+        <li>Why Bother?</li>
+        <li>Comparative Table</li>
+        <li>Historical Notes</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-32">
+      <summary><span class="n">32</span>Linear and Substructural Type Systems</summary>
+      <ul>
+        <li>The Structural Rules</li>
+        <li>Linear Logic (Girard 1987)</li>
+        <li>Proof Nets</li>
+        <li>The Linear Lambda Calculus</li>
+        <li>Affine, Relevant, and Ordered Calculi</li>
+        <li>Bunched Logic and Separation Logic</li>
+        <li>Uniqueness Types vs Linear Types</li>
+        <li>Linear Haskell (Bernardy–Boespflug–Newton–Peyton Jones–Spiwack 2018)</li>
+        <li>Rust as an Affine Type System</li>
+        <li>Session Types</li>
+        <li>The Caires–Pfenning Correspondence</li>
+        <li>Implementations</li>
+        <li>A Brief Worked Example: Safe File Handles</li>
+        <li>Theoretical Coda: What Substructurality Buys</li>
+        <li>Pierce&#x27;s Critique and the Pragmatic Middle</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-33">
+      <summary><span class="n">33</span>Effects and Handlers</summary>
+      <ul>
+        <li>The Problem of Effects in a Pure Language</li>
+        <li>Monads (Moggi 1989, 1991)</li>
+        <li>Monad Transformers (Liang–Hudak–Jones 1995)</li>
+        <li>Applicative Functors and Arrows</li>
+        <li>Algebraic Effects (Plotkin–Power 2002)</li>
+        <li>Handlers (Plotkin–Pretnar 2009, 2013)</li>
+        <li>Row-Polymorphic Effect Types (Leijen 2005)</li>
+        <li>Koka (Leijen 2014, 2017)</li>
+        <li>OCaml 5 Algebraic Effects (2022)</li>
+        <li>Eff (Bauer–Pretnar 2015)</li>
+        <li>Effect Handlers In Practice</li>
+        <li>Effect Inference and Effect Polymorphism</li>
+        <li>Historical Type-and-Effect Systems</li>
+        <li>Delimited Continuations and Algebraic Effects</li>
+        <li>Compilation Strategies</li>
+        <li>Effects and Linearity</li>
+        <li>A Worked Example: Ambiguous Computation</li>
+        <li>Algebraic Effects, Monads, Practical Verdict</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-34">
+      <summary><span class="n">34</span>Effects and Handlers: Implementation and Theory</summary>
+      <ul>
+        <li>Free Monads in Detail</li>
+        <li>Algebraic Effects: Theory Presentation</li>
+        <li>Plotkin–Pretnar Handler Semantics: Deep vs Shallow</li>
+        <li>Row Polymorphism and Effect Inference</li>
+        <li>Koka&#x27;s Evidence Translation</li>
+        <li>OCaml 5 Effects: Stack Segment Implementation</li>
+        <li>Forster–Kammar–Lindley–Pretnar 2017: Mutual Encoding</li>
+        <li>Concrete Effect Examples</li>
+        <li>Linear Handlers: One-Shot Continuations</li>
+        <li>Eff, Frank, Helium: Language Comparison</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-35">
+      <summary><span class="n">35</span>Subtyping and Polymorphism</summary>
+      <ul>
+        <li>The Subsumption Rule</li>
+        <li>Record Subtyping: Width and Depth</li>
+        <li>Variance: The Function Type</li>
+        <li>Variance Annotations</li>
+        <li>Bounded Quantification: System F$(lt.tri)$</li>
+        <li>Subtyping for Recursive Types</li>
+        <li>Intersection Types</li>
+        <li>Union Types</li>
+        <li>Refinement Types</li>
+        <li>Row Polymorphism (Rémy 1989)</li>
+        <li>Subtyping as Coercion: Categorical Semantics</li>
+        <li>Variance Polymorphism</li>
+        <li>Liskov Substitution Principle, Object Encodings</li>
+        <li>Practical Verdict and Comparison</li>
+        <li>A Worked Subsumption Trace</li>
+        <li>Polymorphism, Subtyping, and Their Synthesis</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-36">
+      <summary><span class="n">36</span>Gradual and Hybrid Type Systems</summary>
+      <ul>
+        <li>The Dynamic Type and Consistency</li>
+        <li>Static Becomes Dynamic via Casts</li>
+        <li>Blame and the Blame Theorem</li>
+        <li>The Gradual Guarantee</li>
+        <li>Cast Calculi: Lazy, Eager, and Threesomes</li>
+        <li>Abstracting Gradual Typing (AGT)</li>
+        <li>Operational Semantics in Detail</li>
+        <li>Performance: The Cost of Partial Typing</li>
+        <li>Surface Languages: A Tour</li>
+        <li>Hybrid Type Checking</li>
+        <li>Threesomes, Coercions, and Space Efficiency: Detail</li>
+        <li>Gradual Session Types</li>
+        <li>Gradual Dependent Types</li>
+        <li>Soft Typing: The Predecessor</li>
+        <li>Optimisations and Implementation</li>
+        <li>Discussion: Where Are We?</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-37">
+      <summary><span class="n">37</span>Homotopy Type Theory</summary>
+      <ul>
+        <li>The Identity Type, Read as a Path Space</li>
+        <li>Types as $oo$-Groupoids</li>
+        <li>Operations on Paths</li>
+        <li>Equivalences</li>
+        <li>The Univalence Axiom</li>
+        <li>n-Types and the Truncation Hierarchy</li>
+        <li>Higher Inductive Types</li>
+        <li>Synthetic Homotopy Theory</li>
+        <li>Cubical Type Theory</li>
+        <li>Univalent Foundations of Mathematics</li>
+        <li>Tool Ecosystem</li>
+        <li>Connections to Computer Science</li>
+        <li>Two Sample Constructions in Cubical Agda</li>
+        <li>Where the Field Stands</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-38">
+      <summary><span class="n">38</span>Macros and Metaprogramming</summary>
+      <ul>
+        <li>The Original Sin: Variable Capture</li>
+        <li>Hygienic Macros: The Painting Algorithm</li>
+        <li>Syntax-Case and Procedural Macros</li>
+        <li>The Set-of-Scopes Model</li>
+        <li>Phase Separation and Modules</li>
+        <li>MetaML and Multi-Stage Programming</li>
+        <li>Template Haskell</li>
+        <li>Scala 3 inline and quoted</li>
+        <li>Rust Macros</li>
+        <li>C++ Templates and `constexpr`</li>
+        <li>Macros as Language Extension: Major Examples</li>
+        <li>Pitfalls</li>
+        <li>Connection to Partial Evaluation</li>
+        <li>Tools and Implementations</li>
+        <li>An Aside on Reader Macros</li>
+        <li>Multi-Stage Programming: Soundness</li>
+        <li>Where the Field Stands</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-39">
+      <summary><span class="n">39</span>Macros and Metaprogramming: Formal Foundations</summary>
+      <ul>
+        <li>Hygiene Formalized: Macros That Work (Clinger--Rees)</li>
+        <li>The Ellipsis Pattern Language: Algorithm</li>
+        <li>Procedural Macros and Phase-1 Computation</li>
+        <li>Zig `comptime`, Nim Macros, and the Spectrum of Compile-Time Evaluation</li>
+        <li>Monadic do-Notation Desugaring</li>
+        <li>Async/Await Desugaring as a Macro</li>
+        <li>Macro Hygiene Comparison across Languages</li>
+        <li>Template Haskell: Full Q Monad Walkthrough</li>
+        <li>Error Messages, IDE Support, and the Cost of Macros</li>
+        <li>MetaML Type System: Full Presentation</li>
+        <li>Cross-Language Synthesis: Lessons from Forty Years</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-40">
+      <summary><span class="n">40</span>Process Calculi</summary>
+      <ul>
+        <li>Why an Algebra of Processes?</li>
+        <li>CCS: Calculus of Communicating Systems</li>
+        <li>CSP: Communicating Sequential Processes</li>
+        <li>The $pi$-calculus</li>
+        <li>Other Calculi in the $pi$-Family</li>
+        <li>Case Studies</li>
+        <li>Outlook</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-41">
+      <summary><span class="n">41</span>Concurrency Models</summary>
+      <ul>
+        <li>Interleaving Semantics</li>
+        <li>True Concurrency: Event Structures</li>
+        <li>Pomsets</li>
+        <li>Petri Nets</li>
+        <li>Mazurkiewicz Traces</li>
+        <li>The Actor Model</li>
+        <li>Channels: Go and CSP-Style Concurrency</li>
+        <li>Rust: Ownership for Concurrency</li>
+        <li>Software Transactional Memory</li>
+        <li>Monitors</li>
+        <li>Reactive Programming and Dataflow</li>
+        <li>Async/Await</li>
+        <li>Structured Concurrency</li>
+        <li>Memory Models</li>
+        <li>Echoes of Distributed Systems</li>
+        <li>Outlook</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-42">
+      <summary><span class="n">42</span>Build a Compiler</summary>
+      <ul>
+        <li>The muC Language</li>
+        <li>Phase 1: Lexing</li>
+        <li>Phase 2: Parsing and AST</li>
+        <li>Phase 3: Type Checking</li>
+        <li>Phase 4: Intermediate Representation</li>
+        <li>Phase 5: Code Generation and Stack VM</li>
+        <li>Phase 6: Optimizer Pass</li>
+        <li>Scaling Up</li>
+        <li>Epilogue: Sub-Turing-Complete by Design</li>
+        <li>Epilogue: Turing-Completeness by Accident</li>
+        <li>Closing Thought</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

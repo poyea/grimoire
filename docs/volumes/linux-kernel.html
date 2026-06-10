@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Kernel — Grimoire</title>
+<meta name="description" content="Internals for systems engineers: syscalls, memory, scheduling, containers, tracing, and networking.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/linux-kernel.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume V · § 05</p>
+  <h1>Linux Kernel</h1>
+  <p class="desc">Internals for systems engineers: syscalls, memory, scheduling, containers, tracing, and networking.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 18</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_linux_kernel.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>ABI and Syscalls</summary>
+      <ul>
+        <li>x86-64 System V ABI</li>
+        <li>Syscall Calling Convention</li>
+        <li>A `read()` from User to Kernel and Back</li>
+        <li>The Syscall Table</li>
+        <li>vDSO: Syscalls Without the Ring Transition</li>
+        <li>seccomp: Filtering Syscalls in BPF</li>
+        <li>Practical Notes</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>mmap and Memory Management</summary>
+      <ul>
+        <li>mmap Fundamentals</li>
+        <li>Anonymous vs File-Backed</li>
+        <li>Copy-on-Write and fork()</li>
+        <li>Huge Pages</li>
+        <li>Useful mmap Flags</li>
+        <li>mlock and mlockall</li>
+        <li>userfaultfd</li>
+        <li>madvise: Hints and Imperatives</li>
+        <li>Practical Recipes</li>
+        <li>Diagnostics</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>CPU Affinity, Isolation, and NUMA</summary>
+      <ul>
+        <li>Affinity Basics</li>
+        <li>CPU Topology and Sibling Awareness</li>
+        <li>Isolating Cores: isolcpus, nohz_full, rcu_nocbs</li>
+        <li>IRQ Affinity</li>
+        <li>NUMA Binding</li>
+        <li>CPU Hotplug</li>
+        <li>Real-World Recipes</li>
+        <li>Diagnostics Checklist</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>The Scheduler</summary>
+      <ul>
+        <li>Scheduling Classes</li>
+        <li>CFS Internals</li>
+        <li>EEVDF (Linux 6.6+)</li>
+        <li>SCHED_BATCH and SCHED_IDLE</li>
+        <li>SCHED_FIFO and SCHED_RR</li>
+        <li>SCHED_DEADLINE: EDF on Linux</li>
+        <li>Priority Inversion and PI Futexes</li>
+        <li>Watchdogs and Stall Detection</li>
+        <li>Scheduler Diagnostics</li>
+        <li>sched_ext: BPF-Defined Schedulers</li>
+        <li>Pitfalls</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>cgroups and Namespaces</summary>
+      <ul>
+        <li>Namespaces: Per-Process Views of the System</li>
+        <li>cgroups v2</li>
+        <li>Putting It Together: A Minimal Container</li>
+        <li>systemd Integration</li>
+        <li>Diagnostics</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Interrupts and Bottom Halves</summary>
+      <ul>
+        <li>The Two-Half Model</li>
+        <li>Registering an Interrupt Handler</li>
+        <li>Bottom Half Mechanisms</li>
+        <li>NAPI: Polling for High-Rate Networking</li>
+        <li>Interrupt Coalescing and Moderation</li>
+        <li>MSI / MSI-X</li>
+        <li>Per-CPU IRQ Cost in the Real World</li>
+        <li>/proc/interrupts</li>
+        <li>Real-Time Considerations</li>
+        <li>Diagnostics Checklist</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>io_uring</summary>
+      <ul>
+        <li>Two Rings in Shared Memory</li>
+        <li>Setup and the Three Syscalls</li>
+        <li>Submission and Completion</li>
+        <li>SQPOLL: Zero Syscalls in the Steady State</li>
+        <li>liburing Equivalents</li>
+        <li>Linked, Drained, Async, and Hardlink SQEs</li>
+        <li>Registered Resources</li>
+        <li>Multishot Operations</li>
+        <li>Zero-Copy Send</li>
+        <li>Cancellation</li>
+        <li>Comparison with epoll and POSIX AIO</li>
+        <li>Performance Numbers</li>
+        <li>Pitfalls</li>
+        <li>Security</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Kernel Tracing</summary>
+      <ul>
+        <li>The Tracing Stack</li>
+        <li>Tracepoints</li>
+        <li>kprobes and kretprobes</li>
+        <li>ftrace</li>
+        <li>perf</li>
+        <li>eBPF: The Modern Tracing Substrate</li>
+        <li>Performance Considerations</li>
+        <li>Production-Safe Tracing Workflow</li>
+        <li>Diagnostics Reference</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Kernel Modules</summary>
+      <ul>
+        <li>A Minimal Module</li>
+        <li>Module Parameters</li>
+        <li>Logging: pr_\* and dev_\*</li>
+        <li>Character Devices</li>
+        <li>procfs</li>
+        <li>sysfs</li>
+        <li>debugfs</li>
+        <li>Netfilter Hooks</li>
+        <li>Concurrency: Locks and RCU</li>
+        <li>Module Signing and Loading</li>
+        <li>DKMS: Building Across Kernel Versions</li>
+        <li>Debugging</li>
+        <li>When NOT to Write a Kernel Module</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary><span class="n">10</span>VFS and Filesystems</summary>
+      <ul>
+        <li>The Four Core Objects</li>
+        <li>The Path Walk</li>
+        <li>Dcache and Inode Cache</li>
+        <li>File Operations</li>
+        <li>Page Cache Integration</li>
+        <li>Filesystem Stacking and Mounts</li>
+        <li>ext4</li>
+        <li>XFS</li>
+        <li>btrfs</li>
+        <li>F2FS</li>
+        <li>procfs, sysfs, debugfs, tmpfs</li>
+        <li>FUSE</li>
+        <li>Locking Summary</li>
+        <li>Observability</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary><span class="n">11</span>The Block Layer</summary>
+      <ul>
+        <li>struct bio: The Atom of I/O</li>
+        <li>submit_bio and the bio_set Pool</li>
+        <li>Request Queues and blk-mq</li>
+        <li>I/O Schedulers</li>
+        <li>The NVMe Path</li>
+        <li>ublk: Userspace Block Devices Done Right</li>
+        <li>Discard, Trim, and Write Zeroes</li>
+        <li>Flushes and Barriers</li>
+        <li>Block Throttling: cgroup blkio / io.max</li>
+        <li>Polling vs Interrupt-Driven I/O</li>
+        <li>Observability</li>
+        <li>Common Tuning Knobs</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary><span class="n">12</span>The Networking Stack</summary>
+      <ul>
+        <li>sk_buff: The Packet Object</li>
+        <li>Rx Path: From NIC to Socket</li>
+        <li>Tx Path</li>
+        <li>Queueing Disciplines (qdiscs)</li>
+        <li>Traffic Control: Filters and Actions</li>
+        <li>XDP: Express Data Path</li>
+        <li>Netfilter and nftables</li>
+        <li>Socket Layer and BPF Hooks</li>
+        <li>TCP: Congestion Control and Pacing</li>
+        <li>UDP, QUIC, and GRO-on-UDP</li>
+        <li>Performance Numbers</li>
+        <li>Observability</li>
+        <li>Container Networking</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-13">
+      <summary><span class="n">13</span>RCU and Locking</summary>
+      <ul>
+        <li>Locking Primitives at a Glance</li>
+        <li>Spinlocks: Variants and IRQ Discipline</li>
+        <li>Mutexes and Optimistic Spinning</li>
+        <li>Sequence Locks (seqlock)</li>
+        <li>Atomics and Memory Ordering</li>
+        <li>RCU: Read-Copy-Update</li>
+        <li>RCU Flavours</li>
+        <li>Grace Period Mechanics</li>
+        <li>When RCU Wins (and When It Doesn&#x27;t)</li>
+        <li>Lockdep</li>
+        <li>Per-CPU Data and local_lock</li>
+        <li>Futexes</li>
+        <li>Lock-Free and Wait-Free Patterns</li>
+        <li>Common Pitfalls</li>
+        <li>Observability</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-14">
+      <summary><span class="n">14</span>Memory Reclaim</summary>
+      <ul>
+        <li>Page Classifications</li>
+        <li>Watermarks and Zones</li>
+        <li>kswapd: Background Reclaim</li>
+        <li>Direct Reclaim</li>
+        <li>Writeback Coupling</li>
+        <li>Shrinkers: Slab Reclaim Plugin Points</li>
+        <li>MGLRU: Multi-Generational LRU</li>
+        <li>PSI: Pressure Stall Information</li>
+        <li>The OOM Killer</li>
+        <li>memcg: Cgroup v2 Memory Controller</li>
+        <li>Zswap and zRAM</li>
+        <li>Transparent Huge Pages and Reclaim Interaction</li>
+        <li>NUMA and Memory Reclaim</li>
+        <li>Damon: Data Access Monitor</li>
+        <li>Observability Cheatsheet</li>
+        <li>Patterns and Anti-Patterns</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-15">
+      <summary><span class="n">15</span>eBPF Deep Dive</summary>
+      <ul>
+        <li>The eBPF VM</li>
+        <li>The Verifier</li>
+        <li>JIT Compilation</li>
+        <li>Maps</li>
+        <li>Helpers and kfuncs</li>
+        <li>BTF and CO-RE</li>
+        <li>libbpf, bpftrace, bcc, Aya</li>
+        <li>Tail Calls and BPF-to-BPF Calls</li>
+        <li>Sleepable BPF</li>
+        <li>BPF LSM</li>
+        <li>sched_ext: BPF Schedulers</li>
+        <li>Observability of eBPF Itself</li>
+        <li>Performance Numbers</li>
+        <li>Security Posture</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-16">
+      <summary><span class="n">16</span>Security Modules</summary>
+      <ul>
+        <li>The LSM Hook Architecture</li>
+        <li>SELinux</li>
+        <li>AppArmor</li>
+        <li>Landlock</li>
+        <li>SMACK and TOMOYO</li>
+        <li>Yama</li>
+        <li>IMA and EVM</li>
+        <li>BPF LSM</li>
+        <li>seccomp-bpf</li>
+        <li>Capabilities</li>
+        <li>Common Stacks in Practice</li>
+        <li>Observability</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-17">
+      <summary><span class="n">17</span>Containers in the Kernel</summary>
+      <ul>
+        <li>The Seven Namespaces</li>
+        <li>PID Namespace</li>
+        <li>Mount Namespace and pivot_root</li>
+        <li>Network Namespace</li>
+        <li>User Namespace: The Cornerstone of Unprivileged</li>
+        <li>User-Namespace Pitfalls</li>
+        <li>capabilities</li>
+        <li>seccomp Profile</li>
+        <li>cgroups in the Container</li>
+        <li>Container Lifecycle: What runc Actually Does</li>
+        <li>Checkpoint/Restore (CRIU)</li>
+        <li>rootless Containers</li>
+        <li>Common Failure Modes</li>
+        <li>Observability</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-18">
+      <summary><span class="n">18</span>Live Patching</summary>
+      <ul>
+        <li>The Problem in One Picture</li>
+        <li>ftrace Hooks: The Substrate</li>
+        <li>klp_func and klp_object</li>
+        <li>The Consistency Model</li>
+        <li>Atomic Replace</li>
+        <li>kpatch-build: From Source Diff to Module</li>
+        <li>What Livepatch *Cannot* Do</li>
+        <li>Shadow Variables</li>
+        <li>Pre/Post Callbacks</li>
+        <li>Performance Impact</li>
+        <li>Atomic Replace and Cumulative Patches</li>
+        <li>Distributions and Vendors</li>
+        <li>Observability</li>
+        <li>Building One End to End</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

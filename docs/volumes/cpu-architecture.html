@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPU Architecture — Grimoire</title>
+<meta name="description" content="Processor design, instruction sets, and performance analysis from pipeline to silicon.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/cpu-architecture.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume II · § 02</p>
+  <h1>CPU Architecture</h1>
+  <p class="desc">Processor design, instruction sets, and performance analysis from pipeline to silicon.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 18</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_cpu_architecture.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>CPU Fundamentals</summary>
+      <ul>
+        <li>Instruction Set Architecture (ISA)</li>
+        <li>x86-64 Registers</li>
+        <li>Instruction Encoding</li>
+        <li>Instruction Types</li>
+        <li>Instruction Latency vs Throughput</li>
+        <li>Zero-Latency Idioms</li>
+        <li>Addressing Modes</li>
+        <li>Micro-ops (μops)</li>
+        <li>Calling Convention (x86-64 System V ABI)</li>
+        <li>Performance Counters</li>
+        <li>Common Performance Pitfalls</li>
+        <li>Compiler Optimization Flags</li>
+        <li>Debugging Performance Issues</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Pipelining</summary>
+      <ul>
+        <li>Classic 5-Stage Pipeline</li>
+        <li>Pipeline Hazards</li>
+        <li>Forwarding (Bypassing)</li>
+        <li>Branch Prediction</li>
+        <li>Deep Pipelines and Pipeline Depth Comparison</li>
+        <li>Pipeline Stalls and Performance</li>
+        <li>Exceptions and Interrupts in Pipelines</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Superscalar and Out-of-Order Execution</summary>
+      <ul>
+        <li>Superscalar Execution</li>
+        <li>Out-of-Order Execution (OoO)</li>
+        <li>Tomasulo&#x27;s Algorithm</li>
+        <li>Register Renaming</li>
+        <li>Reorder Buffer (ROB)</li>
+        <li>Memory Ordering</li>
+        <li>Instruction Window and ILP</li>
+        <li>Speculative Execution</li>
+        <li>Performance Example</li>
+        <li>Practical Optimization for OoO</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>Out-of-Order Execution Deep Dive</summary>
+      <ul>
+        <li>Why Out-of-Order</li>
+        <li>The Tomasulo Algorithm</li>
+        <li>Reorder Buffer (ROB)</li>
+        <li>Reservation Stations vs. Unified Scheduler</li>
+        <li>Register Renaming</li>
+        <li>The Common Data Bus and Bypass Network</li>
+        <li>Memory Disambiguation</li>
+        <li>A Worked Example</li>
+        <li>Memory Ordering Models</li>
+        <li>Performance Counters</li>
+        <li>Limits of OoO</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Branch Prediction</summary>
+      <ul>
+        <li>Cost of Misprediction</li>
+        <li>Branch Types</li>
+        <li>Static Prediction</li>
+        <li>Dynamic Branch Prediction</li>
+        <li>Branch Target Buffer (BTB)</li>
+        <li>Two-Level Adaptive Predictors</li>
+        <li>TAGE Predictor (Tagged Geometric History)</li>
+        <li>Return Address Stack (RAS)</li>
+        <li>Indirect Branch Prediction</li>
+        <li>Predication (Branchless Code)</li>
+        <li>Software Hints</li>
+        <li>Measurement</li>
+        <li>Practical Optimization Techniques</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Speculative Execution Security</summary>
+      <ul>
+        <li>Threat Model</li>
+        <li>Spectre Family</li>
+        <li>Meltdown (CVE-2017-5754)</li>
+        <li>Microarchitectural Data Sampling (MDS)</li>
+        <li>L1TF — Foreshadow (CVE-2018-3615/3620/3646)</li>
+        <li>Retbleed (CVE-2022-29900/29901)</li>
+        <li>Downfall (CVE-2022-40982) and Inception/SLS</li>
+        <li>Side Channels Beyond Cache</li>
+        <li>Performance Cost Summary</li>
+        <li>Defensive Coding</li>
+        <li>Detection</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Cache Hierarchy</summary>
+      <ul>
+        <li>The Memory Wall</li>
+        <li>Cache Hierarchy Overview</li>
+        <li>Cache Organization</li>
+        <li>Cache Replacement Policies</li>
+        <li>Cache Performance Metrics</li>
+        <li>Three C&#x27;s of Cache Misses</li>
+        <li>Cache Line States (MESI Protocol)</li>
+        <li>Prefetching</li>
+        <li>Cache-Conscious Programming</li>
+        <li>Real-World Optimization Examples</li>
+        <li>Cache-Oblivious Algorithms</li>
+        <li>Cache Performance Measurement</li>
+        <li>Advanced Topics</li>
+        <li>Debugging Cache Issues</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Memory System</summary>
+      <ul>
+        <li>DRAM Organization</li>
+        <li>DRAM Hierarchy</li>
+        <li>DRAM Access</li>
+        <li>Memory Bandwidth</li>
+        <li>Memory Interleaving</li>
+        <li>Memory Controller</li>
+        <li>DRAM Timings</li>
+        <li>Memory Latency Optimization</li>
+        <li>ECC Memory</li>
+        <li>Bandwidth Optimization Strategies</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Virtual Memory</summary>
+      <ul>
+        <li>Virtual vs Physical Addresses</li>
+        <li>Page Table Structure</li>
+        <li>Page Table Walk</li>
+        <li>TLB (Translation Lookaside Buffer)</li>
+        <li>Huge Pages</li>
+        <li>Page Faults</li>
+        <li>Page Table Management</li>
+        <li>INVLPG and TLB Invalidation</li>
+        <li>Memory Types and Caching</li>
+        <li>NUMA (Non-Uniform Memory Access)</li>
+        <li>Debugging Virtual Memory Issues</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary><span class="n">10</span>SIMD (Single Instruction Multiple Data)</summary>
+      <ul>
+        <li>SIMD Evolution (x86)</li>
+        <li>Vector Registers</li>
+        <li>Intrinsics Example</li>
+        <li>Alignment Requirements</li>
+        <li>Auto-Vectorization</li>
+        <li>Performance Patterns</li>
+        <li>SIMD Width Tradeoff</li>
+        <li>Limitations</li>
+        <li>Auto-Vectorization Troubleshooting</li>
+        <li>Verifying Vectorization</li>
+        <li>Common SIMD Pitfalls</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary><span class="n">11</span>Multicore and Cache Coherence</summary>
+      <ul>
+        <li>Multicore Architecture</li>
+        <li>Cache Coherence Problem</li>
+        <li>MESI Protocol</li>
+        <li>MOESI and MESIF Extensions</li>
+        <li>Cache Coherence Overhead</li>
+        <li>False Sharing</li>
+        <li>Atomic Operations</li>
+        <li>Memory Ordering</li>
+        <li>Memory Barriers</li>
+        <li>Producer-Consumer: Where Atomics and Barriers Are Required</li>
+        <li>Scaling and Amdahl&#x27;s Law</li>
+        <li>NUMA (Non-Uniform Memory Access)</li>
+        <li>Simultaneous Multithreading (SMT / Hyper-Threading)</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary><span class="n">12</span>Synchronization Primitives</summary>
+      <ul>
+        <li>Mutex Implementation: User Space + Kernel</li>
+        <li>Where the Slow Path Lives</li>
+        <li>Concrete Branches: Where Fast Becomes Slow</li>
+        <li>Reducing Mutex Contention</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-13">
+      <summary><span class="n">13</span>Performance Analysis and Measurement</summary>
+      <ul>
+        <li>Performance Counters</li>
+        <li>Sampling and Profiling</li>
+        <li>Top-Down Microarchitecture Analysis (TMAM)</li>
+        <li>Cache Miss Analysis</li>
+        <li>Branch Prediction Analysis</li>
+        <li>Memory Bandwidth</li>
+        <li>TLB Analysis</li>
+        <li>Cycle Accounting</li>
+        <li>Bottleneck Decision Tree</li>
+        <li>Diagnostic Workflow</li>
+        <li>Microbenchmarking</li>
+        <li>Tools Summary</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-14">
+      <summary><span class="n">14</span>Power Management and DVFS</summary>
+      <ul>
+        <li>The Power Equation</li>
+        <li>P-states (Performance States)</li>
+        <li>Turbo Boost / Precision Boost</li>
+        <li>C-states (Idle States)</li>
+        <li>RAPL: Running Average Power Limit</li>
+        <li>Big.LITTLE and Hybrid Architectures</li>
+        <li>Per-Instruction Energy</li>
+        <li>Thermal Management</li>
+        <li>Race-to-Idle vs. Pace</li>
+        <li>Tooling Cheat Sheet</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-15">
+      <summary><span class="n">15</span>Domain-Specific Accelerators</summary>
+      <ul>
+        <li>Why Specialize</li>
+        <li>Systolic Arrays</li>
+        <li>Google TPU</li>
+        <li>NPUs in Consumer Silicon</li>
+        <li>Dataflow Accelerators</li>
+        <li>SambaNova RDU</li>
+        <li>Tensor Cores (in GPUs)</li>
+        <li>FPGAs as Accelerators</li>
+        <li>Programming Model Convergence</li>
+        <li>Choosing an Accelerator</li>
+        <li>Limits and Future Direction</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-16">
+      <summary><span class="n">16</span>Interconnects: UPI, Infinity Fabric, CXL, NVLink, PCIe</summary>
+      <ul>
+        <li>Why Interconnects Matter</li>
+        <li>Intel UPI (QPI&#x27;s Successor)</li>
+        <li>AMD Infinity Fabric</li>
+        <li>PCI Express</li>
+        <li>CXL (Compute Express Link)</li>
+        <li>NVLink and NVSwitch</li>
+        <li>AMD Infinity Fabric for GPUs</li>
+        <li>Choosing a Topology</li>
+        <li>Latency Engineering Tips</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-17">
+      <summary><span class="n">17</span>RISC-V</summary>
+      <ul>
+        <li>Design Philosophy</li>
+        <li>Base ISAs</li>
+        <li>Standard Extensions</li>
+        <li>Vector Extension (RVV 1.0)</li>
+        <li>Profiles: RVA22, RVA23</li>
+        <li>Privileged Architecture</li>
+        <li>Hardware Vendors</li>
+        <li>Toolchain and Software Ecosystem</li>
+        <li>Strengths and Critiques</li>
+        <li>Comparison Snapshot</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-18">
+      <summary><span class="n">18</span>ARM Deep Dive</summary>
+      <ul>
+        <li>AArch64 ISA Highlights</li>
+        <li>Apple M-Series Microarchitecture</li>
+        <li>ARM Scalable Vector Extension (SVE)</li>
+        <li>Neoverse: ARM Server Cores</li>
+        <li>Cortex Families</li>
+        <li>Memory Model and Atomics</li>
+        <li>Performance Counters and Tooling</li>
+        <li>Strengths and Tradeoffs</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

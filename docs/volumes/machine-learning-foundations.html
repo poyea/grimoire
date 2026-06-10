@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning — Grimoire</title>
+<meta name="description" content="Mathematical foundations, optimization, generalization theory, and modern training techniques.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/machine-learning-foundations.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume XI · § 11</p>
+  <h1>Machine Learning</h1>
+  <p class="desc">Mathematical foundations, optimization, generalization theory, and modern training techniques.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 9</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_machine_learning_foundations.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>Generalization Theory</summary>
+      <ul>
+        <li>The Setup</li>
+        <li>VC Dimension</li>
+        <li>Rademacher Complexity</li>
+        <li>PAC-Bayes</li>
+        <li>The Bias-Variance Decomposition</li>
+        <li>Double Descent</li>
+        <li>Neural Scaling Laws</li>
+        <li>Stability and Generalization</li>
+        <li>The Implicit Bias of SGD</li>
+        <li>The Neural Tangent Kernel</li>
+        <li>Uniform Convergence and Its Limits</li>
+        <li>Compression-Based Bounds</li>
+        <li>Practical Diagnostics</li>
+        <li>Grokking</li>
+        <li>Distribution Shift</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Linear Algebra for ML</summary>
+      <ul>
+        <li>Vector Spaces and Norms</li>
+        <li>Inner Products and Orthogonality</li>
+        <li>Decompositions</li>
+        <li>Matrix Calculus</li>
+        <li>Least Squares</li>
+        <li>Structured Matrices</li>
+        <li>Random Projections and Johnson–Lindenstrauss</li>
+        <li>Numerical Stability</li>
+        <li>Power Iteration and Lanczos</li>
+        <li>Matrix Functions and the Matrix Exponential</li>
+        <li>Tensor Operations</li>
+        <li>Pseudo-Inverses and the Four Fundamental Subspaces</li>
+        <li>Conditioning</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Optimization</summary>
+      <ul>
+        <li>Convex Optimization Primer</li>
+        <li>Gradient Descent</li>
+        <li>Stochastic Gradient Descent</li>
+        <li>Momentum</li>
+        <li>Adaptive Methods</li>
+        <li>Second-Order Methods</li>
+        <li>Learning-Rate Schedules</li>
+        <li>Gradient Clipping</li>
+        <li>Implicit Regularization</li>
+        <li>Large-Batch Training</li>
+        <li>Distributed Optimization</li>
+        <li>Convergence Diagnostics</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>Probability and Information</summary>
+      <ul>
+        <li>Probability Spaces and Random Variables</li>
+        <li>Common Distributions</li>
+        <li>Information Theory</li>
+        <li>Estimation</li>
+        <li>Concentration Inequalities</li>
+        <li>Stochastic Convergence</li>
+        <li>The Fisher Information and Score</li>
+        <li>Exchangeability and de Finetti</li>
+        <li>Worked Example: Logistic Regression as Maximum Likelihood</li>
+        <li>Numerical Caveats</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Loss Functions</summary>
+      <ul>
+        <li>Regression Losses</li>
+        <li>Classification Losses</li>
+        <li>Ranking and Metric Learning</li>
+        <li>Contrastive and Self-Supervised Losses</li>
+        <li>Generative Model Losses</li>
+        <li>Practical Considerations</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Information Theory</summary>
+      <ul>
+        <li>Entropy</li>
+        <li>Mutual Information</li>
+        <li>The Information Diagram</li>
+        <li>Data Compression</li>
+        <li>Channel Capacity</li>
+        <li>Source-Channel Separation</li>
+        <li>Differential Entropy and Gaussian Extremality</li>
+        <li>Rate-Distortion Theory</li>
+        <li>Information Theory in Machine Learning</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Network Information Theory</summary>
+      <ul>
+        <li>Multi-User Channel Models</li>
+        <li>Multiple-Access Channel</li>
+        <li>Broadcast Channel</li>
+        <li>Interference Channel</li>
+        <li>Relay Channel</li>
+        <li>Distributed Source Coding</li>
+        <li>Capacity with Feedback</li>
+        <li>Secrecy Capacity</li>
+        <li>Network Coding</li>
+        <li>Degrees of Freedom and Capacity at High SNR</li>
+        <li>Information-Theoretic Limits of Learning</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Reinforcement Learning</summary>
+      <ul>
+        <li>Markov Decision Processes</li>
+        <li>Dynamic Programming</li>
+        <li>Temporal-Difference Learning</li>
+        <li>Deep Q-Networks</li>
+        <li>Policy Gradient Methods</li>
+        <li>Proximal Policy Optimization</li>
+        <li>Soft Actor-Critic</li>
+        <li>Model-Based RL</li>
+        <li>Exploration</li>
+        <li>Multi-Agent RL</li>
+        <li>RL from Human Feedback</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Diffusion Models</summary>
+      <ul>
+        <li>The Forward Process</li>
+        <li>The Reverse Process</li>
+        <li>The DDPM Training Objective</li>
+        <li>Score-Based Generative Models</li>
+        <li>Noise Schedules</li>
+        <li>Accelerated Samplers</li>
+        <li>Classifier-Free Guidance</li>
+        <li>Latent Diffusion Models</li>
+        <li>Diffusion Transformers</li>
+        <li>Flow Matching</li>
+        <li>Video and Audio Diffusion</li>
+        <li>Training Stability and Best Practices</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

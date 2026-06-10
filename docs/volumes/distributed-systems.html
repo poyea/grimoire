@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distributed Systems — Grimoire</title>
+<meta name="description" content="Consensus, replication, time, transactions, failure detection, and workflow engines.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/distributed-systems.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume IX · § 09</p>
+  <h1>Distributed Systems</h1>
+  <p class="desc">Consensus, replication, time, transactions, failure detection, and workflow engines.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 12</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_distributed_systems.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>Consensus Deep Dive</summary>
+      <ul>
+        <li>The Consensus Problem</li>
+        <li>Single-Decree Paxos</li>
+        <li>Multi-Paxos</li>
+        <li>Vertical Paxos</li>
+        <li>Raft</li>
+        <li>EPaxos</li>
+        <li>Flexible Paxos</li>
+        <li>Generalized Paxos</li>
+        <li>Byzantine Fault Tolerance</li>
+        <li>Comparison</li>
+        <li>Multi-Group Sharding</li>
+        <li>Practical Engineering</li>
+        <li>Failure Scenarios to Reason About</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Coordination Services</summary>
+      <ul>
+        <li>ZooKeeper</li>
+        <li>etcd</li>
+        <li>Chubby</li>
+        <li>Use Cases and Recipes</li>
+        <li>Comparison</li>
+        <li>Anti-Patterns</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Failure Detection</summary>
+      <ul>
+        <li>Chandra–Toueg Classes</li>
+        <li>Heartbeats</li>
+        <li>Phi-Accrual</li>
+        <li>SWIM</li>
+        <li>Lifeguard</li>
+        <li>Asymmetric and Gray Failures</li>
+        <li>Quorum Failure Detectors</li>
+        <li>Practical Pitfalls</li>
+        <li>Tuning Example</li>
+        <li>Comparison</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>Gossip Protocols</summary>
+      <ul>
+        <li>Epidemic Spreading Models</li>
+        <li>Convergence Guarantees</li>
+        <li>Anti-Entropy</li>
+        <li>SWIM Failure Detector</li>
+        <li>CRDTs as Gossip-Friendly State</li>
+        <li>Real Systems</li>
+        <li>Performance Tuning</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Introduction: Models and Impossibilities</summary>
+      <ul>
+        <li>The Eight Fallacies</li>
+        <li>System Models</li>
+        <li>FLP Impossibility</li>
+        <li>CAP and PACELC</li>
+        <li>Linearizability Versus Serializability</li>
+        <li>A Worked Example: a Two-Node Counter</li>
+        <li>Failure Frequencies in Practice</li>
+        <li>Two Generals and the Coordinated Attack</li>
+        <li>Asynchronous Versus Eventual Consistency Spectrum</li>
+        <li>Reading Map for This Book</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Leader Election and Leases</summary>
+      <ul>
+        <li>Why Elect a Leader?</li>
+        <li>The Bully Algorithm</li>
+        <li>Ring-Based Election</li>
+        <li>Raft-Style Election</li>
+        <li>Leases</li>
+        <li>Fencing Tokens</li>
+        <li>Clock-Bounded Versus Clock-Free Leases</li>
+        <li>Co-located Leader Optimization</li>
+        <li>Avoiding Herd Effects on Election</li>
+        <li>Operational Failure Modes</li>
+        <li>Combined Pattern: Lease + Fence + Replicated Log</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Time and Order</summary>
+      <ul>
+        <li>Physical Clocks</li>
+        <li>Lamport Clocks</li>
+        <li>Vector Clocks</li>
+        <li>Version Vectors and Dotted Version Vectors</li>
+        <li>Hybrid Logical Clocks</li>
+        <li>TrueTime</li>
+        <li>Closed Timestamps</li>
+        <li>Causal Broadcast</li>
+        <li>Snapshot Algorithms</li>
+        <li>Comparison Table</li>
+        <li>Why Clock Skew Causes Real Bugs</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Causal Consistency</summary>
+      <ul>
+        <li>Why Causal, Exactly</li>
+        <li>Happens-Before as the Contract</li>
+        <li>The Metadata Question</li>
+        <li>COPS and Eiger: Scalable Causal Stores</li>
+        <li>Session Guarantees</li>
+        <li>Causal Stability</li>
+        <li>Production Systems</li>
+        <li>Choosing Your Metadata: A Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Conflict-Free Replicated Data Types</summary>
+      <ul>
+        <li>Strong Eventual Consistency</li>
+        <li>Two Formulations: State-Based and Op-Based</li>
+        <li>Canonical CRDTs</li>
+        <li>Deltas: Shrinking State-Based Payloads</li>
+        <li>Garbage Collection and Tombstones</li>
+        <li>Collaborative Text Editing in Production</li>
+        <li>Limits: No Global Invariants Without Coordination</li>
+        <li>Where CRDTs Run Today</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary><span class="n">10</span>Distributed Transactions</summary>
+      <ul>
+        <li>ACID</li>
+        <li>Distributed Atomicity: Two-Phase Commit</li>
+        <li>Saga Pattern</li>
+        <li>Isolation Levels</li>
+        <li>Multi-Version Concurrency Control</li>
+        <li>Deterministic Databases</li>
+        <li>NewSQL Comparison</li>
+        <li>Practical Failure Handling</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary><span class="n">11</span>Log-Based Systems</summary>
+      <ul>
+        <li>The Log as Central Abstraction</li>
+        <li>Apache Kafka Architecture</li>
+        <li>Log Compaction vs Retention</li>
+        <li>Exactly-Once Semantics</li>
+        <li>Kafka Streams and ksqlDB</li>
+        <li>Apache Pulsar&#x27;s Multi-Layer Storage</li>
+        <li>Broker Comparison</li>
+        <li>Change Data Capture</li>
+        <li>Log-Structured Storage: LSM Trees</li>
+        <li>Unified Batch and Stream Processing</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary><span class="n">12</span>Workflow Engines</summary>
+      <ul>
+        <li>The Durable Execution Model</li>
+        <li>Temporal</li>
+        <li>Apache Airflow</li>
+        <li>Prefect and Dagster</li>
+        <li>Sagas vs Workflows</li>
+        <li>Failure Handling Patterns</li>
+        <li>Determinism Constraints</li>
+        <li>Worked Example: Order-Processing Workflow in Temporal</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Networking — Grimoire</title>
+<meta name="description" content="Network protocols, congestion control, data-centre fabric, and modern application protocols.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/networking.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume IV · § 04</p>
+  <h1>Networking</h1>
+  <p class="desc">Network protocols, congestion control, data-centre fabric, and modern application protocols.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 36</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_networking.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>Link Layer &amp; Hardware</summary>
+      <ul>
+        <li>Ethernet Frame Structure</li>
+        <li>Network Interface Card (NIC)</li>
+        <li>Hardware Interrupts</li>
+        <li>DMA and Ring Buffers</li>
+        <li>NAPI (New API)</li>
+        <li>Hardware Offloads</li>
+        <li>RSS (Receive Side Scaling)</li>
+        <li>XPS (Transmit Packet Steering)</li>
+        <li>Latency Analysis</li>
+        <li>Performance Tuning</li>
+        <li>Limitations of Kernel Network Stack</li>
+        <li>Protocol and Frame Type Reference</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>IPv6</summary>
+      <ul>
+        <li>Addressing Architecture</li>
+        <li>Header Structure</li>
+        <li>ICMPv6 and Neighbor Discovery</li>
+        <li>SLAAC, RA, and DHCPv6</li>
+        <li>MLD (Multicast Listener Discovery)</li>
+        <li>Transition and Coexistence</li>
+        <li>Linux and Operational Snippets</li>
+        <li>Performance Notes</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Transport Layer</summary>
+      <ul>
+        <li>TCP (Transmission Control Protocol)</li>
+        <li>TCP Connection Establishment (3-Way Handshake)</li>
+        <li>TCP Congestion Control</li>
+        <li>TCP Flow Control (Receiver Window)</li>
+        <li>TCP Retransmission and Timeouts</li>
+        <li>TCP Nagle&#x27;s Algorithm and Delay</li>
+        <li>TCP_CORK (Linux-Specific)</li>
+        <li>UDP (User Datagram Protocol)</li>
+        <li>QUIC (Quick UDP Internet Connections)</li>
+        <li>TCP Performance Pathologies</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>Congestion Control</summary>
+      <ul>
+        <li>The Problem</li>
+        <li>Loss-Based Algorithms</li>
+        <li>BBR — Bottleneck Bandwidth and Round-trip propagation time</li>
+        <li>ECN — Explicit Congestion Notification (RFC 3168)</li>
+        <li>L4S — Low Latency, Low Loss, Scalable Throughput</li>
+        <li>Algorithm Comparison</li>
+        <li>Measurement and Diagnostics</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Multipath Transport</summary>
+      <ul>
+        <li>Motivation</li>
+        <li>MPTCP Architecture</li>
+        <li>Handshake and Wire Format</li>
+        <li>Schedulers</li>
+        <li>Coupled Congestion Control</li>
+        <li>Linux Upstream MPTCP</li>
+        <li>Apple&#x27;s MPTCP Deployment</li>
+        <li>MPQUIC</li>
+        <li>Performance Lessons</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>POSIX Sockets API</summary>
+      <ul>
+        <li>Socket System Calls</li>
+        <li>TCP Server Example</li>
+        <li>Non-Blocking I/O</li>
+        <li>Socket Options</li>
+        <li>Socket States and TIME_WAIT</li>
+        <li>Latency of Socket Operations</li>
+        <li>Zero-Length Recv Optimization</li>
+        <li>I/O Multiplexing with epoll</li>
+        <li>UDP Server Example</li>
+        <li>Error Handling Patterns</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>I/O Multiplexing</summary>
+      <ul>
+        <li>The C10K Problem</li>
+        <li>select()</li>
+        <li>poll()</li>
+        <li>epoll (Linux)</li>
+        <li>io_uring (Linux 5.1+)</li>
+        <li>Comparison</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Application Protocols</summary>
+      <ul>
+        <li>HTTP (Hypertext Transfer Protocol)</li>
+        <li>HTTP/2</li>
+        <li>HTTP/3 (QUIC)</li>
+        <li>DNS (Domain Name System)</li>
+        <li>TLS (Transport Layer Security)</li>
+        <li>WebSocket</li>
+        <li>MQTT</li>
+        <li>gRPC</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>WebSockets</summary>
+      <ul>
+        <li>Motivation and Use Cases</li>
+        <li>HTTP Upgrade Handshake</li>
+        <li>WebSocket Frame Format</li>
+        <li>Masking</li>
+        <li>Message Fragmentation</li>
+        <li>Ping/Pong Keepalive</li>
+        <li>Connection Closure</li>
+        <li>Comparison with Alternatives</li>
+        <li>Performance Characteristics</li>
+        <li>Scalability Considerations</li>
+        <li>Security Considerations</li>
+        <li>Implementation Notes</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary><span class="n">10</span>DNS (Domain Name System)</summary>
+      <ul>
+        <li>DNS Architecture and Hierarchy</li>
+        <li>DNS Resolution Process</li>
+        <li>DNS Record Types</li>
+        <li>DNS Message Format</li>
+        <li>DNS Caching and TTL</li>
+        <li>DNS over HTTPS (DoH) and DNS over TLS (DoT)</li>
+        <li>DNSSEC (DNS Security Extensions)</li>
+        <li>DNS Performance Optimization</li>
+        <li>DNS Security Concerns</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary><span class="n">11</span>gRPC (Remote Procedure Calls)</summary>
+      <ul>
+        <li>Overview</li>
+        <li>Protocol Buffers (Protobuf) Encoding</li>
+        <li>gRPC over HTTP/2</li>
+        <li>Streaming Modes</li>
+        <li>Deadlines and Cancellation</li>
+        <li>Metadata</li>
+        <li>Performance Characteristics</li>
+        <li>Load Balancing Considerations</li>
+        <li>Connection Management</li>
+        <li>Error Handling</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary><span class="n">12</span>TLS (Transport Layer Security)</summary>
+      <ul>
+        <li>Protocol Evolution</li>
+        <li>TLS 1.2 Full Handshake (2-RTT)</li>
+        <li>TLS 1.3 Full Handshake (1-RTT)</li>
+        <li>0-RTT Session Resumption</li>
+        <li>Cipher Suites</li>
+        <li>Cipher Suite Performance</li>
+        <li>Certificate Chains and Validation</li>
+        <li>Session Resumption Mechanisms</li>
+        <li>Handshake Latency Analysis</li>
+        <li>CPU Cost Analysis</li>
+        <li>Common Pitfalls</li>
+        <li>Security Considerations</li>
+        <li>Implementation Example (OpenSSL)</li>
+        <li>TLS Version Comparison</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-13">
+      <summary><span class="n">13</span>QUIC and HTTP/3</summary>
+      <ul>
+        <li>Why QUIC?</li>
+        <li>Packet and Frame Structure</li>
+        <li>Streams and Multiplexing</li>
+        <li>0-RTT Resumption</li>
+        <li>Connection Migration</li>
+        <li>Pluggable Congestion Control</li>
+        <li>HTTP/3 Mapping</li>
+        <li>Tooling and Observability</li>
+        <li>Real-World Deployments</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-14">
+      <summary><span class="n">14</span>Zero-Copy Networking</summary>
+      <ul>
+        <li>Traditional Copy Path</li>
+        <li>sendfile() - Kernel-to-Kernel Copy</li>
+        <li>splice() - Zero-Copy Pipe</li>
+        <li>mmap() - Shared Memory Mapping</li>
+        <li>MSG_ZEROCOPY (Linux 4.14+)</li>
+        <li>recv() Zero-Copy Challenges</li>
+        <li>io_uring Zero-Copy (Linux 5.1+)</li>
+        <li>Hardware Support - DMA</li>
+        <li>Zero-Copy Limitations</li>
+        <li>Practical Recommendations</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-15">
+      <summary><span class="n">15</span>Kernel Bypass</summary>
+      <ul>
+        <li>Why Bypass the Kernel?</li>
+        <li>DPDK (Data Plane Development Kit)</li>
+        <li>XDP (eXpress Data Path)</li>
+        <li>AF_XDP (XDP Sockets)</li>
+        <li>RDMA (Remote Direct Memory Access)</li>
+        <li>Comparison</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-16">
+      <summary><span class="n">16</span>Concurrency Models</summary>
+      <ul>
+        <li>Thread-Per-Connection</li>
+        <li>Thread Pool</li>
+        <li>Event-Driven (Reactor Pattern)</li>
+        <li>Proactor Pattern</li>
+        <li>Comparison</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-17">
+      <summary><span class="n">17</span>Lock-Free Data Structures for Networking</summary>
+      <ul>
+        <li>SPSC (Single Producer Single Consumer) Queue</li>
+        <li>Performance Measurements</li>
+        <li>Memory Ordering Deep Dive</li>
+        <li>Batch-Processing SPSC</li>
+        <li>MPSC (Multi-Producer Single Consumer) Queue</li>
+        <li>SPMC (Single Producer Multiple Consumer) Queue</li>
+        <li>Wait-Free vs Lock-Free</li>
+        <li>compare_exchange_weak vs compare_exchange_strong</li>
+        <li>ABA Problem</li>
+        <li>Practical Considerations</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-18">
+      <summary><span class="n">18</span>Message Queues and ZeroMQ</summary>
+      <ul>
+        <li>ZeroMQ Architecture</li>
+        <li>ZeroMQ Socket Types</li>
+        <li>ZeroMQ Performance</li>
+        <li>Multipart Messages</li>
+        <li>High-Water Mark (HWM)</li>
+        <li>ZeroMQ vs Raw Sockets</li>
+        <li>Practical Example: Worker Pool</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-19">
+      <summary><span class="n">19</span>Performance Reference</summary>
+      <ul>
+        <li>Latency Numbers (2025)</li>
+        <li>Throughput Limits</li>
+        <li>CPU Costs</li>
+        <li>Memory Bandwidth</li>
+        <li>TCP Window Scaling</li>
+        <li>Interrupt Coalescing Impact</li>
+        <li>Queue Depths</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-20">
+      <summary><span class="n">20</span>Network Debugging</summary>
+      <ul>
+        <li>tcpdump Essentials</li>
+        <li>Wireshark Filters</li>
+        <li>Socket Inspection (ss and netstat)</li>
+        <li>Latency and Connection Debugging</li>
+        <li>Network Stack Profiling (perf)</li>
+        <li>eBPF/bpftrace for Advanced Tracing</li>
+        <li>Common Debugging Scenarios</li>
+        <li>Performance Checklist</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-21">
+      <summary><span class="n">21</span>Network Address Translation (NAT)</summary>
+      <ul>
+        <li>NAT Overview</li>
+        <li>NAT Types</li>
+        <li>Carrier-Grade NAT (CGNAT)</li>
+        <li>NAT Traversal</li>
+        <li>Common NAT Configurations</li>
+        <li>Common Pitfalls</li>
+        <li>NAT Strategy Comparison</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-22">
+      <summary><span class="n">22</span>Stateful Firewalls</summary>
+      <ul>
+        <li>Connection Tracking (conntrack)</li>
+        <li>iptables Architecture</li>
+        <li>nftables Architecture</li>
+        <li>Zone-Based Firewalls</li>
+        <li>eBPF / XDP Firewalls</li>
+        <li>Performance Implications</li>
+        <li>Next-Generation Firewall (NGFW) Internals</li>
+        <li>Cloud-Native Firewalling</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-23">
+      <summary><span class="n">23</span>Load Balancing</summary>
+      <ul>
+        <li>L4 vs L7 Load Balancing</li>
+        <li>Load Balancing Algorithms</li>
+        <li>Health Checks and Failover</li>
+        <li>Session Persistence (Sticky Sessions)</li>
+        <li>DSR (Direct Server Return)</li>
+        <li>HAProxy Configuration Patterns</li>
+        <li>NGINX Configuration Patterns</li>
+        <li>Performance Characteristics</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-24">
+      <summary><span class="n">24</span>Data Center Networking</summary>
+      <ul>
+        <li>Clos and Fat-Tree Topologies</li>
+        <li>ECMP and Flow Hashing</li>
+        <li>RDMA over Converged Ethernet — RoCEv2</li>
+        <li>PFC — Priority Flow Control (IEEE 802.1Qbb)</li>
+        <li>ECN and DCQCN</li>
+        <li>InfiniBand</li>
+        <li>NIC Offloads</li>
+        <li>Topology and Performance Comparison</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-25">
+      <summary><span class="n">25</span>Container Networking</summary>
+      <ul>
+        <li>Linux Network Namespaces</li>
+        <li>veth Pairs and Bridges</li>
+        <li>Docker Networking Modes</li>
+        <li>Kubernetes Networking Model</li>
+        <li>CNI (Container Network Interface)</li>
+        <li>Overlay Networks</li>
+        <li>Performance Overhead</li>
+        <li>Optimization Techniques</li>
+        <li>Debugging Container Networks</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-26">
+      <summary><span class="n">26</span>Service Mesh</summary>
+      <ul>
+        <li>Sidecar Proxy Pattern</li>
+        <li>Data Plane vs Control Plane</li>
+        <li>mTLS and Zero-Trust Networking</li>
+        <li>Traffic Management</li>
+        <li>Observability</li>
+        <li>Envoy Proxy Architecture</li>
+        <li>Performance Overhead</li>
+        <li>When to Use Service Mesh</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-27">
+      <summary><span class="n">27</span>Service Discovery</summary>
+      <ul>
+        <li>Problem Statement</li>
+        <li>Discovery Patterns</li>
+        <li>DNS-Based Discovery</li>
+        <li>Consul</li>
+        <li>etcd</li>
+        <li>ZooKeeper</li>
+        <li>Kubernetes Service Discovery</li>
+        <li>Caching and Consistency</li>
+        <li>Failure Modes and Resilience</li>
+        <li>Comparison</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-28">
+      <summary><span class="n">28</span>Connection Pooling</summary>
+      <ul>
+        <li>Why Pooling Matters</li>
+        <li>Pool Sizing Strategies</li>
+        <li>Idle Connection Management</li>
+        <li>Connection Validation and Health Checks</li>
+        <li>HTTP/1.1 vs HTTP/2 Pooling Differences</li>
+        <li>Database Connection Pooling Patterns</li>
+        <li>Common Pitfalls</li>
+        <li>Performance Metrics</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-29">
+      <summary><span class="n">29</span>Resilience Patterns</summary>
+      <ul>
+        <li>Timeouts</li>
+        <li>Retries with Exponential Backoff</li>
+        <li>Circuit Breaker Pattern</li>
+        <li>Bulkhead Pattern</li>
+        <li>Fallbacks and Graceful Degradation</li>
+        <li>Rate Limiting and Throttling</li>
+        <li>Implementation Libraries</li>
+        <li>Combining Patterns</li>
+        <li>Design Considerations</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-30">
+      <summary><span class="n">30</span>Network Security</summary>
+      <ul>
+        <li>IPSec (Internet Protocol Security)</li>
+        <li>IPSec Modes: Transport vs Tunnel</li>
+        <li>IKE (Internet Key Exchange)</li>
+        <li>VPN Architectures</li>
+        <li>WireGuard</li>
+        <li>SSH Protocol Internals</li>
+        <li>Network Segmentation and Zero Trust</li>
+        <li>Common Attack Vectors and Mitigations</li>
+        <li>Performance Overhead of Encryption</li>
+        <li>Configuration Examples</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-31">
+      <summary><span class="n">31</span>BGP Routing</summary>
+      <ul>
+        <li>BGP Fundamentals</li>
+        <li>Autonomous System (AS) Architecture</li>
+        <li>BGP Message Types</li>
+        <li>BGP Path Attributes</li>
+        <li>BGP Route Selection Algorithm</li>
+        <li>BGP Communities</li>
+        <li>iBGP Scaling: Route Reflectors</li>
+        <li>eBGP Peering and Multihoming</li>
+        <li>BGP Convergence and Performance</li>
+        <li>BGP Security</li>
+        <li>BGP in the Data Center</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-32">
+      <summary><span class="n">32</span>SDN and Programmable Networks</summary>
+      <ul>
+        <li>SDN Architecture</li>
+        <li>OpenFlow Protocol</li>
+        <li>SDN Controllers</li>
+        <li>P4: Protocol-Independent Packet Processors</li>
+        <li>eBPF for Networking</li>
+        <li>Network Function Virtualization (NFV)</li>
+        <li>Segment Routing and SRv6</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-33">
+      <summary><span class="n">33</span>Programmable Data Planes and P4</summary>
+      <ul>
+        <li>Why Programmable Data Planes</li>
+        <li>PISA: The Abstract Machine</li>
+        <li>P4 Language Fundamentals</li>
+        <li>Compilation and Architectures</li>
+        <li>P4Runtime: The Control API</li>
+        <li>Hardware Targets after Tofino</li>
+        <li>In-Network Compute Applications</li>
+        <li>Putting It Together: A Tiny INT Example</li>
+        <li>Operational Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-34">
+      <summary><span class="n">34</span>Wireless Protocols</summary>
+      <ul>
+        <li>WiFi 6 (802.11ax) Architecture</li>
+        <li>WiFi 7 (802.11be) - Extremely High Throughput</li>
+        <li>3G UMTS / HSPA Architecture</li>
+        <li>4G LTE / LTE-Advanced Architecture</li>
+        <li>5G Architecture</li>
+        <li>mmWave Technology</li>
+        <li>Spectrum Management</li>
+        <li>Wireless Performance Optimization</li>
+        <li>Power Management</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-35">
+      <summary><span class="n">35</span>Network Observability</summary>
+      <ul>
+        <li>Observability Pillars</li>
+        <li>Distributed Tracing Concepts</li>
+        <li>OpenTelemetry</li>
+        <li>Jaeger Architecture</li>
+        <li>Metrics Pipelines</li>
+        <li>Log Correlation</li>
+        <li>Application Performance Monitoring (APM)</li>
+        <li>Network-Specific Observability</li>
+        <li>References</li>
+      </ul>
+    </details>
+    <details id="ch-36">
+      <summary><span class="n">36</span>Real-Time Protocols</summary>
+      <ul>
+        <li>Real-Time Communication Fundamentals</li>
+        <li>WebRTC Architecture</li>
+        <li>RTP/RTCP Protocols</li>
+        <li>Jitter Buffers</li>
+        <li>Congestion Control for Real-Time</li>
+        <li>SRT (Secure Reliable Transport)</li>
+        <li>Media Streaming Protocols</li>
+        <li>Performance Metrics</li>
+        <li>References</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>

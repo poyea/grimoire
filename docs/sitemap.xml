@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://poyea.github.io/grimoire/</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/coding.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/cpu-architecture.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/gpu-architecture.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/networking.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/linux-kernel.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/llm.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/programming-languages.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/database.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/distributed-systems.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/operating-systems.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/machine-learning-foundations.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/cryptography-and-security.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/cloud-and-infrastructure.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/data-engineering.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/observability-and-sre.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/graphics-and-rendering.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/compilers.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/formal-methods.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/embedded-and-realtime.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/quantum-computing.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://poyea.github.io/grimoire/volumes/computer-vision.html</loc><lastmod>2026-06-10</lastmod></url>
+</urlset>

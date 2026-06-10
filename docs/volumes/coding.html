@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coding — Grimoire</title>
+<meta name="description" content="Algorithms and data structures: a practitioner&#x27;s reference for interviews, contests, and engineering.">
+<link rel="canonical" href="https://poyea.github.io/grimoire/volumes/coding.html">
+<script>
+  (function () {
+    var t = localStorage.getItem('grimoire-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fafaf7; --paper-dim: #efeee8; --ink: #111; --ink-soft: #444;
+    --rule: #d4d2cc; --rule-soft: #e8e6e0; --accent: #9b1c1c;
+  }
+  :root[data-theme="dark"] {
+    --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+    --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #171614; --paper-dim: #211f1c; --ink: #ece9e2; --ink-soft: #b3aea4;
+      --rule: #3d3a35; --rule-soft: #2c2a26; --accent: #e06a5c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    min-height: 100vh; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .back {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  }
+  .theme-toggle {
+    background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    padding: 0.25rem 0.6rem; cursor: pointer; letter-spacing: 0.06em;
+  }
+  .theme-toggle:hover { border-color: var(--ink); color: var(--ink); }
+  h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 7vw, 4rem); letter-spacing: -0.02em;
+    line-height: 1.02; margin: 1rem 0 0.8rem;
+    border-bottom: 1px solid var(--ink); padding-bottom: 1.2rem;
+  }
+  .desc { font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 1.5rem; max-width: 60ch; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 0; margin-bottom: 2.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .meta strong { color: var(--ink); font-weight: 500; }
+  .meta a.pdf {
+    color: var(--paper); background: var(--ink); text-decoration: none;
+    padding: 0.35rem 1rem; transition: background 0.2s;
+  }
+  .meta a.pdf:hover { background: var(--accent); }
+  .toc details {
+    border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
+  }
+  .toc summary {
+    cursor: pointer; list-style: none;
+    font-family: 'Newsreader', serif; font-size: 1.15rem;
+    display: flex; gap: 0.9rem; align-items: baseline;
+  }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc summary .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); letter-spacing: 0.1em; min-width: 2.2em;
+  }
+  .toc summary:hover { color: var(--accent); }
+  .toc ul { margin: 0.5rem 0 0.3rem 3.1em; list-style: none; }
+  .toc li {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+    color: var(--ink-soft); letter-spacing: 0.03em; padding: 0.12rem 0;
+  }
+  footer {
+    margin-top: 3rem; border-top: 1px solid var(--rule); padding-top: 1rem;
+    color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Grimoire</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐ theme</button>
+  </div>
+  <p class="kicker" style="margin-top:1.5rem">Volume I · § 01</p>
+  <h1>Coding</h1>
+  <p class="desc">Algorithms and data structures: a practitioner&#x27;s reference for interviews, contests, and engineering.</p>
+  <div class="meta">
+    <span><strong>CHAPTERS</strong> · 36</span>
+    <span><strong>FORMAT</strong> · PDF</span>
+    <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_coding.pdf">Download PDF ↓</a>
+  </div>
+  <div class="toc">
+    <details id="ch-1">
+      <summary><span class="n">01</span>Algorithms and Data Structures: An Orientation</summary>
+      <ul>
+        <li>How to Use This Subject</li>
+        <li>The Complexity Landscape</li>
+        <li>Complexity Classes in Practice</li>
+        <li>Recurrence Relations</li>
+        <li>Space-Time Trade-offs</li>
+        <li>Interview and Contest Strategy</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary><span class="n">02</span>Modern C++ Performance Reference</summary>
+      <ul>
+        <li>Standard Library Containers</li>
+        <li>Algorithm Complexity</li>
+        <li>String Performance</li>
+        <li>Hash Table Performance</li>
+        <li>Memory Alignment</li>
+        <li>Negative Zero</li>
+        <li>std::tie</li>
+        <li>std::shared_ptr Thread-Safety</li>
+        <li>volatile vs std::atomic</li>
+        <li>Floating-Point Hazards Beyond Negative Zero</li>
+        <li>Bit Manipulation</li>
+        <li>Iterators &amp; Ranges</li>
+        <li>Avoid Common Pitfalls</li>
+        <li>Profiling &amp; Benchmarking</li>
+        <li>System-Level Performance</li>
+        <li>Compiler Optimization Deep Dive</li>
+        <li>Debugging Optimized Code</li>
+        <li>Advanced Performance Topics</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary><span class="n">03</span>Problem-Solving Framework</summary>
+      <ul>
+        <li>Pattern Recognition</li>
+        <li>Complexity Analysis Quick Reference</li>
+        <li>Common Optimization Strategies</li>
+        <li>Performance Red Flags</li>
+        <li>Edge Cases Checklist</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary><span class="n">04</span>Arrays</summary>
+      <ul>
+        <li>Product of Array Except Self</li>
+        <li>Vector Growth Strategies</li>
+        <li>Memory Layout &amp; Alignment</li>
+        <li>String Encode and Decode</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Hashing</summary>
+      <ul>
+        <li>Hashing in std::unordered_map</li>
+        <li>Contains Duplicate</li>
+        <li>Valid Anagram</li>
+        <li>Two Sum</li>
+        <li>Group Anagrams</li>
+        <li>Top K Frequent Elements</li>
+        <li>Longest Consecutive Sequence</li>
+        <li>Hash Table Deep Dive</li>
+        <li>Robin Hood Hashing (Open Addressing)</li>
+        <li>Complexity Reference</li>
+        <li>When to Use What</li>
+        <li>Hash Function Quality</li>
+        <li>Hash DOS Attack Prevention</li>
+        <li>Advanced Hash Table Variants</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Two Pointers</summary>
+      <ul>
+        <li>Valid Palindrome</li>
+        <li>Two Sum II - Sorted Array</li>
+        <li>3Sum</li>
+        <li>Container With Most Water</li>
+        <li>Two-Pointer Performance</li>
+        <li>SIMD Palindrome Check</li>
+        <li>Branchless Two Pointers</li>
+        <li>3Sum Optimization - Hash Set Alternative</li>
+        <li>Container With Most Water - SIMD Scan</li>
+        <li>Memory Access Patterns</li>
+        <li>Parallel Two Pointers (Multithreading)</li>
+        <li>When to Use Two Pointers</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Sliding Window</summary>
+      <ul>
+        <li>Best Time to Buy and Sell Stock</li>
+        <li>Longest Substring Without Repeating Characters</li>
+        <li>Longest Repeating Character Replacement</li>
+        <li>Minimum Window Substring</li>
+        <li>Out-of-Order Execution in Sliding Window</li>
+        <li>SIMD for Sliding Window</li>
+        <li>String Window - SIMD Character Counting</li>
+        <li>Advanced Window Techniques</li>
+        <li>Memory Prefetching for Large Strings</li>
+        <li>Cache-Friendly Window Implementation</li>
+        <li>When to Use Sliding Window</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary><span class="n">08</span>Stack</summary>
+      <ul>
+        <li>Valid Parentheses</li>
+        <li>Min Stack</li>
+        <li>Daily Temperatures</li>
+        <li>Monotonic Stack Pattern</li>
+        <li>Largest Rectangle in Histogram</li>
+        <li>Expression Evaluation</li>
+        <li>Stack Deep Dive</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary><span class="n">09</span>Linked List</summary>
+      <ul>
+        <li>Reverse Linked List</li>
+        <li>Merge Two Sorted Lists</li>
+        <li>Remove Nth Node From End</li>
+        <li>Linked List Cycle Detection</li>
+        <li>Copy List with Random Pointer</li>
+        <li>LRU Cache</li>
+        <li>Merge K Sorted Lists</li>
+        <li>Bottom-Up Merge Sort for Linked Lists</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary><span class="n">10</span>Binary Search</summary>
+      <ul>
+        <li>Find Minimum in Rotated Sorted Array</li>
+        <li>Search in Rotated Sorted Array</li>
+        <li>Cache-Aware Binary Search</li>
+        <li>Eytzinger (BFS) Layout</li>
+        <li>Branch-Free Binary Search</li>
+        <li>Interpolation Search</li>
+        <li>Exponential Search</li>
+        <li>Ternary Search (for Unimodal Functions)</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary><span class="n">11</span>Trees</summary>
+      <ul>
+        <li>Invert Binary Tree</li>
+        <li>Maximum Depth</li>
+        <li>Same Tree</li>
+        <li>Binary Tree Level Order Traversal</li>
+        <li>Validate Binary Search Tree</li>
+        <li>Kth Smallest in BST</li>
+        <li>Binary Tree Maximum Path Sum</li>
+        <li>Serialize/Deserialize Binary Tree</li>
+        <li>Array-Based Tree Representations</li>
+        <li>Cache-Oblivious Algorithms for Trees</li>
+        <li>Tree Traversal Optimizations</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary><span class="n">12</span>Heap/Priority Queue</summary>
+      <ul>
+        <li>Heap Fundamentals</li>
+        <li>Heap-Sort</li>
+        <li>Top-K Problems</li>
+        <li>Priority Queue Applications</li>
+        <li>Merge K Sorted Lists</li>
+        <li>Median Maintenance (Two-Heap Pattern)</li>
+        <li>Heap Variations</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-13">
+      <summary><span class="n">13</span>Tries</summary>
+      <ul>
+        <li>Implement Trie (Prefix Tree)</li>
+        <li>Trie Delete</li>
+        <li>Autocomplete (Prefix Search)</li>
+        <li>Word Search II</li>
+        <li>Compressed Trie (Radix Tree / Patricia Trie)</li>
+        <li>Trie vs HashMap</li>
+        <li>Applications</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-14">
+      <summary><span class="n">14</span>Backtracking</summary>
+      <ul>
+        <li>Combination Sum</li>
+        <li>Word Search</li>
+        <li>Backtracking Performance</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-15">
+      <summary><span class="n">15</span>Greedy</summary>
+      <ul>
+        <li>Maximum Subarray (Kadane&#x27;s Algorithm)</li>
+        <li>Interval Scheduling (Activity Selection)</li>
+        <li>Interval Partitioning</li>
+        <li>Fractional Knapsack</li>
+        <li>Huffman Coding</li>
+        <li>Jump Game Patterns</li>
+        <li>Task Scheduling -- Minimizing Lateness</li>
+        <li>Gas Station (Circular Tour)</li>
+        <li>Greedy vs DP Decision Guide</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-16">
+      <summary><span class="n">16</span>Dynamic Programming</summary>
+      <ul>
+        <li>1-D Dynamic Programming</li>
+        <li>2-D Dynamic Programming</li>
+        <li>Multi-Dimensional Dynamic Programming</li>
+        <li>Common DP Patterns Summary</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-17">
+      <summary><span class="n">17</span>Graphs</summary>
+      <ul>
+        <li>Number of Islands</li>
+        <li>Clone Graph</li>
+        <li>Course Schedule (Cycle Detection)</li>
+        <li>Pacific Atlantic Water Flow</li>
+        <li>Complexity Reference</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-18">
+      <summary><span class="n">18</span>Advanced Graph Algorithms</summary>
+      <ul>
+        <li>Dijkstra&#x27;s Algorithm (Single-Source Shortest Path)</li>
+        <li>Bellman-Ford (Negative Weights)</li>
+        <li>Floyd-Warshall (All-Pairs Shortest Path)</li>
+        <li>Minimum Spanning Tree (MST)</li>
+        <li>Topological Sort</li>
+        <li>Strongly Connected Components (SCC)</li>
+        <li>Cache-Aware Graph Traversal</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-19">
+      <summary><span class="n">19</span>Union-Find (Disjoint Set Union)</summary>
+      <ul>
+        <li>Basic Implementation</li>
+        <li>Path Compression Variants</li>
+        <li>Union Strategies</li>
+        <li>Small-Size Optimization</li>
+        <li>Applications</li>
+        <li>Cache Behavior Analysis</li>
+        <li>Persistent Union-Find</li>
+        <li>Weighted Union-Find</li>
+        <li>Complexity Proof Sketch</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-20">
+      <summary><span class="n">20</span>Network Flows and Matching</summary>
+      <ul>
+        <li>Maximum Flow: Problem Statement</li>
+        <li>Edmonds-Karp Baseline</li>
+        <li>Dinic&#x27;s Algorithm</li>
+        <li>Push-Relabel</li>
+        <li>Min-Cost Max-Flow</li>
+        <li>Bipartite Matching</li>
+        <li>Reductions Worth Knowing</li>
+        <li>Complexity Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-21">
+      <summary><span class="n">21</span>Bit Manipulation</summary>
+      <ul>
+        <li>Single Number</li>
+        <li>Number of 1 Bits (Hamming Weight)</li>
+        <li>Counting Bits</li>
+        <li>Reverse Bits</li>
+        <li>Missing Number</li>
+        <li>Sum of Two Integers (No +/- Operators)</li>
+        <li>Power of Two Check</li>
+        <li>Subset Generation (All Subsets)</li>
+        <li>Hamming Distance</li>
+        <li>Bitwise AND of Numbers Range</li>
+        <li>Bit Packing for Cache Efficiency</li>
+        <li>Advanced Bit Tricks</li>
+        <li>Bit Manipulation in Hash Functions</li>
+        <li>Complexity Reference</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-22">
+      <summary><span class="n">22</span>String Algorithms</summary>
+      <ul>
+        <li>Knuth-Morris-Pratt (KMP)</li>
+        <li>Rabin-Karp (Rolling Hash)</li>
+        <li>Z-Algorithm</li>
+        <li>String Hashing (Polynomial Rolling Hash)</li>
+        <li>Suffix Array</li>
+        <li>SIMD String Search (SSE4.2)</li>
+        <li>SIMD Substring Search (AVX2)</li>
+        <li>String Matching Benchmarks</li>
+        <li>Multiple Pattern Matching (Aho-Corasick)</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-23">
+      <summary><span class="n">23</span>Math &amp; Number Theory</summary>
+      <ul>
+        <li>Sieve of Eratosthenes</li>
+        <li>GCD (Greatest Common Divisor)</li>
+        <li>Modular Arithmetic</li>
+        <li>Fast Exponentiation</li>
+        <li>Prime Testing</li>
+        <li>Matrix Exponentiation</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-24">
+      <summary><span class="n">24</span>Advanced Algorithms in Modern Systems</summary>
+      <ul>
+        <li>Algorithms in CPU Microarchitecture</li>
+        <li>Scheduler Algorithms</li>
+        <li>Memory Management</li>
+        <li>File System Algorithms</li>
+        <li>Consensus Algorithms</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-25">
+      <summary><span class="n">25</span>Distributed and ML Algorithms</summary>
+      <ul>
+        <li>Distributed Coordination</li>
+        <li>Algorithms in LLM Inference</li>
+        <li>Training Algorithms</li>
+        <li>References</li>
+        <li>Further Reading</li>
+        <li>Advanced Java</li>
+      </ul>
+    </details>
+    <details id="ch-26">
+      <summary><span class="n">26</span>Probabilistic Data Structures</summary>
+      <ul>
+        <li>Bloom Filters</li>
+        <li>Counting Bloom Filters</li>
+        <li>Cuckoo Filters</li>
+        <li>HyperLogLog</li>
+        <li>Count-Min Sketch</li>
+        <li>Count-Min Sketch with Conservative Update</li>
+        <li>MinHash (Locality-Sensitive Hashing)</li>
+        <li>Quotient Filters</li>
+        <li>Performance Comparison</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-27">
+      <summary><span class="n">27</span>Segment Trees and Range Queries</summary>
+      <ul>
+        <li>Segment Tree Fundamentals</li>
+        <li>Iterative Segment Tree</li>
+        <li>Lazy Propagation</li>
+        <li>Fenwick Tree (Binary Indexed Tree)</li>
+        <li>Fenwick Tree: Range Update, Point Query</li>
+        <li>Fenwick Tree: Range Update, Range Query</li>
+        <li>2D Fenwick Tree</li>
+        <li>Segment Tree with Multiple Operations</li>
+        <li>Persistent Segment Tree</li>
+        <li>Merge Sort Tree</li>
+        <li>Comparison of Range Query Structures</li>
+        <li>Sparse Table (Static RMQ)</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-28">
+      <summary><span class="n">28</span>Advanced String Algorithms</summary>
+      <ul>
+        <li>Boyer-Moore Algorithm</li>
+        <li>Suffix Array Construction</li>
+        <li>Suffix Array Applications</li>
+        <li>Z-Algorithm (Extended)</li>
+        <li>Aho-Corasick Automaton</li>
+        <li>Suffix Automaton</li>
+        <li>Manacher&#x27;s Algorithm (Palindrome Finding)</li>
+        <li>Lyndon Factorization (Duval&#x27;s Algorithm)</li>
+        <li>Performance Comparison</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-29">
+      <summary><span class="n">29</span>Streaming Algorithms</summary>
+      <ul>
+        <li>Reservoir Sampling</li>
+        <li>Morris Counting (Approximate Counting)</li>
+        <li>Misra-Gries (Frequent Items)</li>
+        <li>Space-Saving Algorithm</li>
+        <li>Exponentially Decaying Window</li>
+        <li>Sliding Window Algorithms</li>
+        <li>Distinct Elements in Window</li>
+        <li>Stream Statistics</li>
+        <li>Sketches for Matrix Operations</li>
+        <li>Performance Comparison</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-30">
+      <summary><span class="n">30</span>Computational Geometry</summary>
+      <ul>
+        <li>Orientation and Cross Product</li>
+        <li>Convex Hull</li>
+        <li>Line Segment Intersection</li>
+        <li>Sweep Line Algorithm (Bentley-Ottmann)</li>
+        <li>Point in Polygon</li>
+        <li>Polygon Area</li>
+        <li>Closest Pair of Points</li>
+        <li>Rotating Calipers</li>
+        <li>Voronoi Diagram and Delaunay Triangulation</li>
+        <li>Half-Plane Intersection</li>
+        <li>Performance Summary</li>
+        <li>References</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-31">
+      <summary><span class="n">31</span>Linear Programming and the Simplex Method</summary>
+      <ul>
+        <li>Standard Form</li>
+        <li>The Simplex Method</li>
+        <li>Two-Phase Method</li>
+        <li>Duality</li>
+        <li>Integer Linear Programming (Detour)</li>
+        <li>Interior-Point Methods (Sketch)</li>
+        <li>Comparing the Two Engines</li>
+        <li>Special-Structure LPs</li>
+        <li>Modelling Tips</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-32">
+      <summary><span class="n">32</span>Randomized Algorithms</summary>
+      <ul>
+        <li>Two Flavours of Randomization</li>
+        <li>Randomized Quicksort</li>
+        <li>Karger&#x27;s Min-Cut</li>
+        <li>MinHash</li>
+        <li>Reservoir Sampling</li>
+        <li>Treaps</li>
+        <li>Skip Lists (Honourable Mention)</li>
+        <li>Bloom Filters and Count-Min (See Cross-References)</li>
+        <li>Tail Bounds Cheat-Sheet</li>
+        <li>Derandomization Sketch</li>
+        <li>Comparison Summary</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-33">
+      <summary><span class="n">33</span>Approximation Algorithms</summary>
+      <ul>
+        <li>Vocabulary</li>
+        <li>Vertex Cover: Two Simple 2-Approximations</li>
+        <li>Set Cover: $H_n$-Approximation</li>
+        <li>TSP: The Whole Spectrum</li>
+        <li>Knapsack: An FPTAS</li>
+        <li>Primal-Dual: Vertex Cover Revisited (Weighted)</li>
+        <li>Local Search: Max-Cut</li>
+        <li>Hardness Cheat Sheet</li>
+        <li>Choosing a Technique</li>
+        <li>Worked Mini-Case: Weighted Set Cover via LP Rounding</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-34">
+      <summary><span class="n">34</span>Online Algorithms</summary>
+      <ul>
+        <li>Competitive Ratio</li>
+        <li>Ski Rental: The Canonical Online Problem</li>
+        <li>Paging</li>
+        <li>$k$-Server Problem</li>
+        <li>Bin Packing (Online)</li>
+        <li>List Update (Sleator-Tarjan)</li>
+        <li>Online Convex Optimization (Sketch)</li>
+        <li>Yao&#x27;s Principle: Lower Bounds via Distributions</li>
+        <li>Recipe for Designing an Online Algorithm</li>
+        <li>Summary Table</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-35">
+      <summary><span class="n">35</span>Parallel Algorithms</summary>
+      <ul>
+        <li>The PRAM Model</li>
+        <li>Work, Span, and Brent&#x27;s Theorem</li>
+        <li>Parallel Reduction</li>
+        <li>Prefix Sum / Scan</li>
+        <li>Sample Sort</li>
+        <li>Parallel Merge</li>
+        <li>Parallel BFS</li>
+        <li>Pointer Jumping and List Ranking</li>
+        <li>Concurrency Primitives</li>
+        <li>Amdahl&#x27;s and Gustafson&#x27;s Laws</li>
+        <li>Memory and Communication Costs</li>
+        <li>Where the Patterns Live in Practice</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-36">
+      <summary><span class="n">36</span>Interview Systems Design Playbook</summary>
+      <ul>
+        <li>The Framework</li>
+        <li>Rate Limiter</li>
+        <li>URL Shortener (TinyURL / bit.ly)</li>
+        <li>Distributed Counter</li>
+        <li>News Feed (Facebook / Twitter Home Timeline)</li>
+        <li>Chat / Messaging (WhatsApp / Slack)</li>
+        <li>Search Typeahead (Autocomplete)</li>
+        <li>Cross-Cutting Concerns</li>
+        <li>Interview Anti-Patterns</li>
+        <li>Reusable Component Cheatsheet</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+  </div>
+  <footer>
+    <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span><a href="https://github.com/poyea/grimoire/releases">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
+  </footer>
+</div>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('grimoire-theme', next);
+  });
+  function openHash() {
+    if (!location.hash) return;
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); }
+  }
+  openHash();
+  window.addEventListener('hashchange', openHash);
+</script>
+</body>
+</html>
