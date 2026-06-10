@@ -17,10 +17,19 @@
   #include "operating-systems/memory-management.typ"
   #pagebreak()
 
+  #include "operating-systems/virtual-memory.typ"
+  #pagebreak()
+
+  #include "operating-systems/page-reclaim-and-oom.typ"
+  #pagebreak()
+
   #include "operating-systems/processes-and-threads.typ"
   #pagebreak()
 
   #include "operating-systems/scheduling-theory.typ"
+  #pagebreak()
+
+  #include "operating-systems/real-time-scheduling.typ"
   #pagebreak()
 
   #include "operating-systems/storage-stack.typ"
