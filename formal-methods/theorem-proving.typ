@@ -108,7 +108,7 @@ Lean 4's *macro* system allows new syntax, and its *`Tactic`* monad allows defin
 Isabelle's distinguishing features:
 
 - *Sledgehammer:* calls external ATPs (Vampire, E, SPASS) and SMT solvers (Z3, CVC5), translates their proofs back to Isabelle, and discharges goals automatically; it is the most powerful automation in any proof assistant.
-- *`simp` / `auto` / `blast`:* term rewriting, combined simplfication+rule application, and tableaux-based propositional reasoning. Together they close the vast majority of routine subgoals.
+- *`simp` / `auto` / `blast`:* term rewriting, combined simplification+rule application, and tableaux-based propositional reasoning. Together they close the vast majority of routine subgoals.
 - *Locales:* algebraic structuring where a *locale* parameterizes a theory over a type with operations satisfying axioms, enabling abstract algebra without universe issues.
 - *AFP (Archive of Formal Proofs):* $> 800$ contributed theory entries, including verified algorithms, cryptographic protocols, and mathematical theories.
 
