@@ -32,8 +32,10 @@ Port 5: ALU, Vector Shuffle
 Port 6: ALU, Branch
 Port 7: Store Address (AGU)
 
-Total: 8 execution ports → theoretical 8 μops/cycle
-Practical: 4-5 μops/cycle sustained
+Total: 8 execution ports, but the rename/retire width (4 μops/cycle
+on Skylake) caps sustained throughput — 8 ports exist so the scheduler
+can match μop types to free units, not to sustain 8 μops/cycle
+Practical: 4 μops/cycle sustained ceiling, 2-3 typical
 ```
 
 *Independent instructions can execute in parallel:*
@@ -132,7 +134,7 @@ mov rax, rbx    ; Write rax
 mov rax, rcx    ; Write rax - must preserve program order
 ```
 
-Register renaming solves this by mapping architectural registers to a larger pool of physical registers. Modern CPUs provide 128 or more physical registers (P0, P1, P2, ..., P127) to back the 16 architectural registers (rax, rbx, ..., r15). The Register Alias Table (RAT) maintains the mapping from architectural to physical registers.
+Register renaming solves this by mapping architectural registers to a larger pool of physical registers. Modern CPUs keep separate physical register files per namespace — Skylake has 180 integer and 168 vector physical registers backing the 16 architectural integer registers (rax..r15) and 16/32 vector registers (xmm/ymm/zmm). The Register Alias Table (RAT) maintains the mapping from architectural to physical registers.
 
 When `mov rax, rbx` executes, rax is mapped to physical register P10 and rbx to P20. The subsequent `mov rax, rcx` remaps rax to a different physical register P11, eliminating the WAW hazard. The following `add rdx, rax` uses the new mapping (P11), creating no dependency on the first instruction. This eliminates false dependencies and increases the instruction window for out-of-order execution.
 
@@ -219,7 +221,7 @@ Latency: ~5 cycles (vs ~200 if load misses cache)
 *Instruction window:* Number of instructions CPU can examine for out-of-order execution.
 
 ```
-Window size = ROB size = 224-512 entries (modern CPUs)
+Window size = ROB size = 224-576+ entries (Skylake 224, Zen 4 320, Lion Cove 576)
 
 Larger window:
 - More opportunities to find independent instructions
@@ -287,7 +289,7 @@ for (int i = 0; i < N; i += 4) {
     sum4 += arr[i+3];
 }
 int sum = sum1 + sum2 + sum3 + sum4;
-// IPC ~3.5 (4 independent chains, limited by load throughput)
+// IPC ~2-3 (4 independent chains; 2 loads/cycle caps throughput)
 ```
 
 == Practical Optimization for OoO
