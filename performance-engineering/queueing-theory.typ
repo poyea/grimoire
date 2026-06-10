@@ -87,6 +87,27 @@ When the formulas are insufficient (priorities, retries, timeouts, correlated fa
 - *Ignoring retries*: retries multiply $lambda$ exactly when $rho$ is highest; an unjittered retry policy converts a brief saturation into a metastable outage.
 - *Pooling heterogeneous work*: P-K says the variance, not just the mean, of service time sets the wait. Segregate the elephants.
 
+== Worked Example
+
+Size a service: requests arrive at $lambda = 160$ req/s, mean service time is $S = 20$ ms, so each server completes $mu = 1 \/ S = 50$ req/s. The offered load is $a = lambda \/ mu = 3.2$ servers' worth of work; the proposed pool is $c = 4$, giving
+
+$ rho = lambda / (c mu) = 160 / 200 = 0.80 $
+
+For M/M/c, the probability an arrival waits is Erlang C. With $a = 3.2$, $c = 4$: the terms $a^k \/ k!$ for $k = 0..3$ are $1$, $3.2$, $5.12$, $5.461$ (sum $14.781$), and $a^4 \/ 4! = 4.369$, which divided by $1 - rho = 0.2$ gives $21.845$. So
+
+$ P_"wait" = 21.845 / (14.781 + 21.845) = 0.596 $
+
+The mean wait in queue is
+
+$ W_q = P_"wait" / (c mu - lambda) = 0.596 / 40 = 14.9 "ms" $
+
+so mean response time is $W = S + W_q = 34.9$ ms, and Little's law says the system holds $L = lambda W = 160 times 0.0349 approx 5.6$ requests on average, so a connection pool of, say, 8 has margin.
+
+Two checks the formulas make cheap:
+
+- *Pooling dividend.* The same hardware as four separate M/M/1 queues, each at $lambda = 40$, $mu = 50$, $rho = 0.8$, waits $W_q = rho \/ (mu - lambda) = 0.8 \/ 10 = 80$ ms, more than five times the shared-queue wait of 14.9 ms. Idle servers next to waiting work is the entire difference.
+- *Headroom sensitivity.* Let traffic grow 12.5% to $lambda = 180$ ($rho = 0.9$). Redoing Erlang C with $a = 3.6$: terms $1, 3.6, 6.48, 7.776$ (sum $18.856$), $a^4 \/ 4! = 6.998$, over $1 - rho = 0.1$ gives $69.98$, so $P_"wait" = 69.98 \/ 88.84 = 0.788$ and $W_q = 0.788 \/ 20 = 39.4$ ms. A 12.5% load increase multiplied the queueing delay by $2.6 times$ and pushed $W$ from 34.9 ms to 59.4 ms. If the SLO is 50 ms mean, capacity is 4 servers at today's load and 5 servers at next quarter's, and the hyperbola says there is no way to "tune" around that.
+
 == Further Reading
 
 - Harchol-Balter, M. (2013). _Performance Modeling and Design of Computer Systems: Queueing Theory in Action_. Cambridge University Press.

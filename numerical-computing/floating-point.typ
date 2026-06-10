@@ -123,6 +123,38 @@ Floating-point addition is not associative: $(a + b) + c != a + (b + c)$ in gene
 
 Strategies: fix the reduction tree (deterministic all-reduce orders), use integer or fixed-point accumulation for the final reduction (reproducible BLAS, ExBLAS), or relax the requirement to *statistical* reproducibility with documented tolerances. Cross-platform bitwise reproducibility is achievable — IEEE 754 basic operations are fully specified — but every transcendental function, parallel sum, and compiler decision must be controlled.
 
+== Worked Example
+
+Solve $x^2 - 10^8 x + 1 = 0$ in fp64, end to end. The exact roots are $x_1 approx 10^8$ and $x_2 approx 10^(-8)$ (their product is $c \/ a = 1$, their sum $10^8$).
+
+*Step 1: the discriminant.* $b^2 - 4 a c = 10^16 - 4$. Near $10^16$ the fp64 spacing is one ulp $= 2$ (we are in the binade $[2^53, 2^54)$), so $10^16 - 4$ is exactly representable; no error yet.
+
+*Step 2: the square root.* The true value is
+
+$ sqrt(10^16 - 4) = 10^8 sqrt(1 - 4 times 10^(-16)) approx 10^8 - 2 times 10^(-8). $
+
+Near $10^8$ the spacing is one ulp $= 2^(-26) approx 1.49 times 10^(-8)$. The two neighbors of the true value are $10^8$ (distance $2 times 10^(-8)$) and $10^8 - 2^(-26)$ (distance $0.51 times 10^(-8)$), so the correctly rounded result is
+
+$ "fl"(sqrt(10^16 - 4)) = 10^8 - 2^(-26), $
+
+an error of about $0.34$ ulp — well within the $0.5$ ulp guarantee. The square root is nearly perfect.
+
+*Step 3: the naive small root.* Compute $(-b - sqrt(b^2 - 4 a c)) \/ (2 a)$:
+
+$ (10^8 - (10^8 - 2^(-26))) / 2 = 2^(-26) / 2 = 2^(-27) approx 7.4506 times 10^(-9). $
+
+The subtraction is exact (Sterbenz), but it cancels all fifteen matching leading digits and leaves only the square root's rounding error. The true root is $1.0000000000000000 times 10^(-8)$; the computed one is $0.74506 times 10^(-8)$ — a relative error of 25%, i.e. zero correct significant digits, from a single half-ulp-quality input.
+
+*Step 4: the stable form.* Following the rewrite above with $"sign"(b) = -1$:
+
+$ x_1 = (10^8 + (10^8 - 2^(-26))) / 2 = 10^8 - 2^(-27), $
+
+which rounds (ties-to-even) to exactly $10^8$ — an addition of like-signed numbers, so no cancellation. Then
+
+$ x_2 = c / (a x_1) = 1 / 10^8 = 10^(-8), $
+
+correct to full fp64 precision (the true root is $10^(-8)(1 + 10^(-16) + dots)$, indistinguishable at $u approx 1.1 times 10^(-16)$). Same algebra, same inputs: one arrangement loses 16 digits, the other loses none. The half ulp of error was unavoidable; handing it to a cancelling subtraction was not.
+
 == Further Reading
 
 Goldberg, D. (1991). "What Every Computer Scientist Should Know About Floating-Point Arithmetic." ACM Computing Surveys.

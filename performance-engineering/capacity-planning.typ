@@ -90,6 +90,35 @@ Capacity is denominated in money. The levers, roughly in order of leverage:
 - *Stale capacity numbers*: every release changes demand-per-unit; a quarterly capacity number with weekly deploys is a guess wearing a spreadsheet.
 - *Headroom shame*: leadership reads 50% utilization as waste; the queueing math says it is the latency SLO's purchase price. Write the policy down so the argument happens once.
 
+== Worked Example
+
+A service is load-tested (open-loop, SLO-bounded, per the procedure above) at three fleet sizes:
+
+#table(
+  columns: 3,
+  [*Replicas $n$*], [*Throughput (req/s)*], [*Speedup $C(n)$*],
+  [1], [2,000], [1.000],
+  [8], [11,380], [5.690],
+  [32], [18,069], [9.034],
+)
+
+Fit the USL. Rearranging $C(n) = n \/ (1 + sigma (n - 1) + kappa n (n - 1))$ gives one linear equation per measurement in $sigma$ and $kappa$:
+
+$ n = 8: quad 1 + 7 sigma + 56 kappa = 8 / 5.690 = 1.406 $
+$ n = 32: quad 1 + 31 sigma + 992 kappa = 32 / 9.034 = 3.542 $
+
+Subtracting, $24 sigma + 936 kappa = 2.136$, i.e. $sigma + 39 kappa = 0.0890$; the first equation gives $sigma + 8 kappa = 0.0580$. Subtracting again: $31 kappa = 0.0310$, so
+
+$ kappa = 0.0010, quad sigma = 0.050 $
+
+(With more than three points, nonlinear least squares replaces this elimination, but the arithmetic is the same idea.) Now forecast. The fitted peak is at
+
+$ n^* = sqrt((1 - sigma) / kappa) = sqrt(0.95 / 0.001) approx 31 $
+
+and the predicted ceiling is $C(31) = 31 \/ (1 + 0.05 times 30 + 0.001 times 930) = 31 \/ 3.43 = 9.04$, i.e. about $9.04 times 2000 approx 18,100$ req/s, after which adding replicas reduces throughput. The demand forecast says next year's peak is 25,000 req/s. The plan cannot be "buy more replicas": the architecture saturates at 18,100 regardless of fleet size, and at a 60% peak-utilization headroom target the usable ceiling is only about 10,900 req/s, which this quarter's peak of 9,500 req/s already crowds.
+
+The fit has converted a load test into a finding with a deadline: the $kappa = 0.001$ coherence term (some shared component, a hot row, a coordination service) must be engineered away before demand crosses the ceiling. And the fit quantifies the redesign target: halving $kappa$ to 0.0005 moves $n^*$ to $sqrt(0.95 \/ 0.0005) approx 44$ but the ceiling only to $C(44) = 44 \/ (1 + 0.05 times 43 + 0.0005 times 44 times 43) = 10.7$, about 21,500 req/s, still short of the forecast. Reaching 25,000 req/s plus headroom requires cutting the serial fraction $sigma$ as well, and the next round of load tests must validate whichever fix ships against a held-out measurement.
+
 == Further Reading
 
 - Gunther, N. (2007). _Guerrilla Capacity Planning_. Springer.

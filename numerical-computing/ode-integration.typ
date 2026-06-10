@@ -56,6 +56,32 @@ The workhorses: *semi-implicit (symplectic) Euler* — update momentum with the 
 - *Energy drift in long Hamiltonian runs.* A higher-order non-symplectic method loses to leapfrog over long horizons. Match the integrator to the structure, not just the order.
 - *Step sizes below the roundoff floor.* Below $h approx sqrt(u)$ (for order checks by differencing) or when $t + h$ rounds to $t$, "smaller $h$" increases error. Tight tolerances on long intervals can silently hit this wall.
 
+== Worked Example
+
+Take the stiff test equation $y' = -50 y$, $y(0) = 1$ (so $lambda = -50$, exact solution $y(t) = e^(-50 t)$), and step with $h = 0.05$, i.e. $h lambda = -2.5$. Forward Euler's stability disk requires $|1 + h lambda| <= 1$, i.e. $h < 2 \/ 50 = 0.04$; we are outside it. RK4's stability interval on the real axis reaches to about $-2.785$; we are (barely) inside.
+
+*Forward Euler.* Each step multiplies by $1 + h lambda = 1 - 2.5 = -1.5$:
+
+$ y_1 = -1.5, quad y_2 = 2.25, $
+
+versus the truth $y(0.05) = e^(-2.5) = 0.0821$, $y(0.10) = e^(-5) = 0.00674$. The numerical solution oscillates in sign and grows by 50% per step; ten more steps reach $y_12 approx 130$. This is instability, not inaccuracy: shrinking the local error tolerance cannot fix it, only $h < 0.04$ can.
+
+*RK4, one step in full.* With $f(t, y) = -50 y$, $y_0 = 1$, $h = 0.05$:
+
+$ k_1 = -50, quad k_2 = -50 (1 + 0.025 k_1) = -50 (-0.25) = 12.5, $
+$ k_3 = -50 (1 + 0.025 k_2) = -50 (1.3125) = -65.625, $
+$ k_4 = -50 (1 + 0.05 k_3) = -50 (-2.28125) = 114.0625, $
+
+$ y_1 = 1 + 0.05 / 6 (k_1 + 2 k_2 + 2 k_3 + k_4) = 1 + (0.05 / 6) (-42.1875) = 0.64844. $
+
+This is exactly the stability polynomial $R(z) = 1 + z + z^2 \/ 2 + z^3 \/ 6 + z^4 \/ 24$ at $z = -2.5$. A second step multiplies again: $y_2 = 0.64844^2 = 0.42047$. Stable, monotone, and wrong by a factor of 60: the true $y(0.10) = 0.00674$. Stability is not accuracy — RK4's $|R(-2.5)| < 1$ keeps the iteration bounded, but a transient that should die in one step lingers for dozens. (And at $h = 0.06$, $z = -3$ gives $R(-3) = 1.375$: RK4 blows up too, just past Euler's threshold.)
+
+*Backward Euler.* The implicit step $y_(n+1) = y_n + h lambda y_(n+1)$ solves to $y_(n+1) = y_n \/ (1 - h lambda) = y_n \/ 3.5$:
+
+$ y_1 = 0.28571, quad y_2 = 0.08163. $
+
+Only first-order accurate, and still off (versus 0.00674), but unconditionally stable and monotonically decaying — and as $h lambda arrow -infinity$ the factor $1 \/ (1 - h lambda) arrow 0$, so the stiff mode is damped in one step (L-stability) rather than tracked. This is the entire stiff trade: the explicit methods spend their step budget resolving a dead transient ($h < 0.04$ forever, even at $t = 10$ when $y approx 10^(-217)$), while the implicit method pays one linear solve per step and takes $h$ as large as accuracy of the _smooth_ part allows.
+
 == Further Reading
 
 Hairer, E., Nørsett, S., Wanner, G. (1993). _Solving Ordinary Differential Equations I: Nonstiff Problems_, 2nd ed. Springer.

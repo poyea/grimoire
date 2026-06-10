@@ -112,6 +112,30 @@ def dot_with_error_bound(x, y, u=2.0**-53):
 
 This is cheap (one extra accumulation) and far tighter than $gamma_n sum |x_i y_i|$ on benign data. Higham recommends it as the pragmatic middle ground between blind trust and full interval arithmetic.
 
+== Worked Example
+
+Take the $2 times 2$ system $A x = b$ with
+
+$ A = mat(1, 1; 1, 1.0001), quad b = vec(2, 2.0001), quad "exact solution" x = vec(1, 1). $
+
+*Condition number.* $det(A) = 10^(-4)$, so $A^(-1) = 10^4 mat(1.0001, -1; -1, 1)$. In the $infinity$-norm, $parallel A parallel_infinity = 2.0001$ and $parallel A^(-1) parallel_infinity = 10^4 times 2.0001 = 20001$, hence
+
+$ kappa_infinity (A) = 2.0001 times 20001 approx 4.0 times 10^4. $
+
+*Conditioning in action.* Perturb only $b_2$ by $10^(-8)$, a relative change of $5 times 10^(-9)$. The solution moves by $Delta x = A^(-1) (0, 10^(-8))^top = (-10^(-4), 10^(-4))^top$: a relative output change of $10^(-4)$, an amplification of $2 times 10^4 approx kappa \/ 2$. No algorithm can undo this; it is the problem's geometry (two nearly parallel lines).
+
+*Backward error and the bound.* A backward-stable solver (LU with partial pivoting; here $rho = 1$) returns $hat(x)$ with $E_("bwd") = O(u) approx 10^(-16)$. The rule of thumb then bounds the forward error:
+
+$ E_("fwd") lt.tilde kappa_infinity (A) times E_("bwd") approx (4.0 times 10^4) (1.1 times 10^(-16)) approx 4.4 times 10^(-12). $
+
+In fp64 we should expect roughly 12 correct digits in $hat(x)$, having paid about 4 of the 16 available digits to conditioning — and that is exactly what computing this system in fp64 delivers. In fp32 ($u approx 6 times 10^(-8)$) the bound is $approx 2.4 times 10^(-3)$: barely 3 digits, and a $kappa$ of $10^8$ would leave none.
+
+*Small residual, wrong answer.* Now test the candidate "solution" $hat(x) = (2, 0)^top$. Its residual is
+
+$ r = b - A hat(x) = vec(2, 2.0001) - vec(2, 2) = vec(0, 10^(-4)), $
+
+tiny: $parallel r parallel_infinity \/ parallel b parallel_infinity = 5 times 10^(-5)$. The normwise backward error $parallel r parallel_infinity \/ (parallel A parallel_infinity parallel hat(x) parallel_infinity) = 10^(-4) \/ 4.0 approx 2.5 times 10^(-5)$ is equally tiny — yet the forward error is $parallel hat(x) - x parallel_infinity \/ parallel x parallel_infinity = 1$, i.e. 100%. The bound is not even pessimistic here: $kappa times E_("bwd") = 4.0 times 10^4 times 2.5 times 10^(-5) approx 1.0$, met with equality. Small residual certifies small _backward_ error, and on an ill-conditioned problem that certifies nothing about the answer.
+
 == Further Reading
 
 Higham, N. (2002). _Accuracy and Stability of Numerical Algorithms_, 2nd ed. SIAM. The reference for everything in this chapter.
