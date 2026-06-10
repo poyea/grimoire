@@ -677,7 +677,7 @@ chapters:
     slug: notation
     path: formal-methods/notation.typ
     lines: 74
-    status: draft
+    status: reviewed
   - subject: formal-methods
     slug: propositional-and-fol
     path: formal-methods/propositional-and-fol.typ
@@ -1042,7 +1042,7 @@ chapters:
     slug: notation
     path: machine-learning-foundations/notation.typ
     lines: 77
-    status: draft
+    status: reviewed
   - subject: machine-learning-foundations
     slug: optimization
     path: machine-learning-foundations/optimization.typ
@@ -1562,7 +1562,7 @@ chapters:
     slug: notation
     path: quantum-computing/notation.typ
     lines: 59
-    status: draft
+    status: reviewed
   - subject: quantum-computing
     slug: quantum-algorithms
     path: quantum-computing/quantum-algorithms.typ
@@ -1607,204 +1607,204 @@ chapters:
     slug: api-design
     path: software-architecture/api-design.typ
     lines: 108
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: architectural-styles
     path: software-architecture/architectural-styles.typ
     lines: 107
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: architecture-evaluation
     path: software-architecture/architecture-evaluation.typ
     lines: 85
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: distributed-data-patterns
     path: software-architecture/distributed-data-patterns.typ
     lines: 103
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: domain-driven-design
     path: software-architecture/domain-driven-design.typ
     lines: 109
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: event-driven-architecture
     path: software-architecture/event-driven-architecture.typ
     lines: 104
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: evolutionary-architecture
     path: software-architecture/evolutionary-architecture.typ
     lines: 88
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: monoliths-and-microservices
     path: software-architecture/monoliths-and-microservices.typ
     lines: 116
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: resilience-patterns
     path: software-architecture/resilience-patterns.typ
     lines: 105
-    status: draft
+    status: reviewed
   - subject: performance-engineering
     slug: benchmarking
     path: performance-engineering/benchmarking.typ
     lines: 95
-    status: draft
+    status: reviewed
   - subject: performance-engineering
     slug: capacity-planning
     path: performance-engineering/capacity-planning.typ
     lines: 128
-    status: draft
+    status: reviewed
   - subject: performance-engineering
     slug: concurrency-performance
     path: performance-engineering/concurrency-performance.typ
     lines: 90
-    status: draft
+    status: reviewed
   - subject: performance-engineering
     slug: cpu-profiling
     path: performance-engineering/cpu-profiling.typ
     lines: 85
-    status: draft
+    status: reviewed
   - subject: performance-engineering
     slug: io-performance
     path: performance-engineering/io-performance.typ
     lines: 90
-    status: draft
+    status: reviewed
   - subject: performance-engineering
     slug: memory-performance
     path: performance-engineering/memory-performance.typ
     lines: 91
-    status: draft
+    status: reviewed
   - subject: performance-engineering
     slug: methodology
     path: performance-engineering/methodology.typ
     lines: 112
-    status: draft
+    status: reviewed
   - subject: performance-engineering
     slug: queueing-theory
     path: performance-engineering/queueing-theory.typ
     lines: 118
-    status: draft
+    status: reviewed
   - subject: numerical-computing
     slug: eigenvalue-problems
     path: numerical-computing/eigenvalue-problems.typ
     lines: 74
-    status: draft
+    status: reviewed
   - subject: numerical-computing
     slug: error-analysis
     path: numerical-computing/error-analysis.typ
     lines: 155
-    status: draft
+    status: reviewed
   - subject: numerical-computing
     slug: fft
     path: numerical-computing/fft.typ
     lines: 77
-    status: draft
+    status: reviewed
   - subject: numerical-computing
     slug: floating-point
     path: numerical-computing/floating-point.typ
     lines: 174
-    status: draft
+    status: reviewed
   - subject: numerical-computing
     slug: iterative-methods
     path: numerical-computing/iterative-methods.typ
     lines: 114
-    status: draft
+    status: reviewed
   - subject: numerical-computing
     slug: linear-systems
     path: numerical-computing/linear-systems.typ
     lines: 117
-    status: draft
+    status: reviewed
   - subject: numerical-computing
     slug: ode-integration
     path: numerical-computing/ode-integration.typ
     lines: 101
-    status: draft
+    status: reviewed
   - subject: numerical-computing
     slug: optimization-algorithms
     path: numerical-computing/optimization-algorithms.typ
     lines: 87
-    status: draft
+    status: reviewed
   - subject: web-and-browsers
     slug: browser-architecture
     path: web-and-browsers/browser-architecture.typ
     lines: 97
-    status: draft
+    status: reviewed
   - subject: web-and-browsers
     slug: css-and-layout
     path: web-and-browsers/css-and-layout.typ
     lines: 91
-    status: draft
+    status: reviewed
   - subject: web-and-browsers
     slug: event-loop-and-scheduling
     path: web-and-browsers/event-loop-and-scheduling.typ
     lines: 89
-    status: draft
+    status: reviewed
   - subject: web-and-browsers
     slug: html-parsing-and-dom
     path: web-and-browsers/html-parsing-and-dom.typ
     lines: 108
-    status: draft
+    status: reviewed
   - subject: web-and-browsers
     slug: javascript-engines
     path: web-and-browsers/javascript-engines.typ
     lines: 72
-    status: draft
+    status: reviewed
   - subject: web-and-browsers
     slug: rendering-pipeline
     path: web-and-browsers/rendering-pipeline.typ
     lines: 80
-    status: draft
+    status: reviewed
   - subject: web-and-browsers
     slug: web-performance
     path: web-and-browsers/web-performance.typ
     lines: 76
-    status: draft
+    status: reviewed
   - subject: web-and-browsers
     slug: webassembly
     path: web-and-browsers/webassembly.typ
     lines: 70
-    status: draft
+    status: reviewed
   - subject: search-and-ir
     slug: evaluation
     path: search-and-ir/evaluation.typ
     lines: 83
-    status: draft
+    status: reviewed
   - subject: search-and-ir
     slug: inverted-indexes
     path: search-and-ir/inverted-indexes.typ
     lines: 118
-    status: draft
+    status: reviewed
   - subject: search-and-ir
     slug: learning-to-rank
     path: search-and-ir/learning-to-rank.typ
     lines: 103
-    status: draft
+    status: reviewed
   - subject: search-and-ir
     slug: neural-retrieval
     path: search-and-ir/neural-retrieval.typ
     lines: 76
-    status: draft
+    status: reviewed
   - subject: search-and-ir
     slug: query-processing
     path: search-and-ir/query-processing.typ
     lines: 97
-    status: draft
+    status: reviewed
   - subject: search-and-ir
     slug: rag-and-search-systems
     path: search-and-ir/rag-and-search-systems.typ
     lines: 94
-    status: draft
+    status: reviewed
   - subject: search-and-ir
     slug: ranking-classical
     path: search-and-ir/ranking-classical.typ
     lines: 104
-    status: draft
+    status: reviewed
   - subject: search-and-ir
     slug: vector-search
     path: search-and-ir/vector-search.typ
     lines: 69
-    status: draft
+    status: reviewed
