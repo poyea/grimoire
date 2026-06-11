@@ -78,7 +78,9 @@ PFN (Physical Frame Number): Bits 51-12 of physical address
 5. Load PT[L1_index] → PTE (contains PFN) (DRAM access 4)
 6. Combine PFN + offset → Physical address
 
-Latency: 4 × 200 cycles = 800 cycles (without TLB!)
+Worst case: 4 dependent DRAM accesses = 4 × 200 = 800 cycles.
+In practice, page-walk caches (PWC) inside the MMU hold the upper
+page-table levels, so a typical walk costs 30-100 cycles.
 ```
 
 *Example:* Virtual address 0x0000_7f8a_b000_1234
@@ -97,13 +99,14 @@ VA: 0000 0000 0000 0000 0111 1111 1000 1010 1011 0000 0000 0001 0010 0011 0100
 
 == TLB (Translation Lookaside Buffer)
 
-Page table walks are prohibitively expensive at 800 cycles, making caching essential. The Translation Lookaside Buffer (TLB) caches virtual to physical address translations, dramatically reducing translation overhead.
+Page table walks are expensive — tens to hundreds of cycles even with page-walk caches — making translation caching essential. The Translation Lookaside Buffer (TLB) caches virtual to physical address translations, dramatically reducing translation overhead.
 
-The TLB structure varies by microarchitecture. *Intel Skylake* L1 DTLB: 64 entries (4-way) for 4 KB pages + 32 entries for 2 MB/1 GB pages; L1 ITLB: 128 entries (8-way); L2 TLB: 1536 entries (12-way), all page sizes. *AMD Zen 4* enlarges L1 DTLB to 96 entries (fully associative) and L2 TLB to 3072 entries. *Intel Raptor Lake* P-cores hold 96 L1 DTLB entries and a 2048-entry L2.
+The TLB structure varies by microarchitecture. *Intel Skylake* L1 DTLB: 64 entries (4-way) for 4 KB pages + 32 entries (4-way) for 2 MB pages + 4 entries (fully associative) for 1 GB pages — three separate structures; L1 ITLB: 128 entries (8-way); L2 TLB: 1536 entries (12-way), all page sizes. *AMD Zen 4* enlarges L1 DTLB to 96 entries (fully associative) and L2 TLB to 3072 entries. *Intel Raptor Lake* P-cores hold 96 L1 DTLB entries and a 2048-entry L2.
 
 ```
 L1 DTLB (Data):     64 entries, 4-way associative, 4 KB pages
-L1 DTLB:            32 entries, 4-way associative, 2 MB/4 MB/1 GB pages
+L1 DTLB:            32 entries, 4-way associative, 2 MB/4 MB pages
+L1 DTLB:            4 entries, fully associative, 1 GB pages
 L1 ITLB (Instruction): 128 entries, 8-way associative, 4 KB pages
 L2 TLB (Shared):    1536 entries, 12-way associative, all page sizes
 
@@ -126,7 +129,7 @@ L2 TLB (Shared):    1536 entries, 12-way associative, all page sizes
 ```
 4 KB pages:   64-96 entries × 4 KB = 256-384 KB coverage (L1 DTLB; arch-dependent)
 2 MB pages:   32 entries × 2 MB = 64 MB coverage
-1 GB pages:   32 entries × 1 GB = 32 GB coverage
+1 GB pages:   4 entries × 1 GB = 4 GB coverage (Skylake L1 DTLB)
 
 For 8 GB working set:
 - 4 KB pages: Need 2M entries → TLB miss rate ~99.9%

@@ -45,7 +45,7 @@ The row buffer acts as a cache for one row per bank, typically holding 8 KB. The
 Total random access latency: tRP + tRCD + CAS = 40-55 ns (DRAM-only). Adding memory-controller queueing, address decode, and on-die fabric crossing brings the *system-visible* DRAM latency seen at the LLC miss to ~50-70 ns on modern desktops/servers.
 ```
 
-A row buffer hit occurs when accessing the same row during sequential access. The first access requires Activate + CAS = 25-35 ns, while subsequent accesses to the same row require only CAS = 10-15 ns, providing a 2-3x speedup.
+A row buffer hit occurs when accessing the same row during sequential access. The first access requires Activate + CAS = 25-35 ns, while subsequent accesses to the same row require only CAS = 10-15 ns, providing a 2-3x speedup (these are the tRCD and CAS components of the timing breakdown above).
 
 ```
 First access: Activate + CAS = 25-35 ns
