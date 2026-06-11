@@ -23,7 +23,7 @@ For maximization, $"ALG"(I) >= "OPT"(I) / alpha$ (so $alpha >= 1$ again). The *a
   [No approximation], [No $f(n)$-approx unless P=NP], [General TSP],
 )
 
-*Lower bound source:* the *PCP theorem* (Arora-Safra 1992) gives unconditional hardness results — e.g., MAX-3SAT has no $7/8 + epsilon$ approximation unless P = NP.
+*Lower bound source:* the *PCP theorem* (Arora et al. 1992) gives unconditional hardness results — e.g., MAX-3SAT has no $7/8 + epsilon$ approximation unless P = NP.
 
 == Vertex Cover: Two Simple 2-Approximations
 
