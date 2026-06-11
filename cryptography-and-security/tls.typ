@@ -134,7 +134,7 @@ TLS authentication rests on the Web PKI:
 
 Privacy problem: SNI is visible to any network observer, revealing the destination even when the content is encrypted.
 
-*Encrypted Client Hello (ECH, RFC 9258)* solves this by splitting the ClientHello into an outer (visible) and inner (encrypted). The client fetches the server's ECH public key from a DNS HTTPS record and uses HPKE to encrypt the inner ClientHello:
+*Encrypted Client Hello (ECH, draft-ietf-tls-esni)* solves this by splitting the ClientHello into an outer (visible) and inner (encrypted). The client fetches the server's ECH public key from a DNS HTTPS record and uses HPKE to encrypt the inner ClientHello:
 
 ```text
 DNS HTTPS record → ech_config (ECH public key + metadata)
@@ -201,9 +201,9 @@ Post-quantum signatures (ML-DSA) are much larger (~2.5 KB) and not yet deployed 
 
 Rescorla, E. (2018). "The Transport Layer Security (TLS) Protocol Version 1.3." RFC 8446.
 
-Rescorla, E., Oku, K., Sullivan, N., Wood, C. A. (2024). "TLS Encrypted Client Hello." RFC 9258.
+Rescorla, E., Oku, K., Sullivan, N., Wood, C. A. "TLS Encrypted Client Hello." draft-ietf-tls-esni (IETF work in progress).
 
-Bhargavan, K. et al. (2016). "Verified Correctness and Security of mbedTLS HMAC-HMAC (and TLS 1.3)." CCS. (Formal analysis of TLS 1.3.)
+Bhargavan, K., Blanchet, B., Kobeissi, N. (2017). "Verified Models and Reference Implementations for the TLS 1.3 Standard Candidate." IEEE S&P. (Formal analysis of TLS 1.3.)
 
 Kobeissi, N., Bhargavan, K., Blanchet, B. (2017). "Automated Verification for Secure Messaging Protocols and Their Implementations." IEEE EuroS&P.
 

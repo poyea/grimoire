@@ -79,7 +79,7 @@ Use SLH-DSA when:
 
 == FN-DSA (Falcon)
 
-FN-DSA (formerly Falcon) is a lattice signature based on NTRU lattices with smaller signatures than ML-DSA ($approx 666$ B for Falcon-512) but harder constant-time implementation due to floating-point Gaussian sampling. NIST published FIPS 206 in August 2024.
+FN-DSA (formerly Falcon) is a lattice signature based on NTRU lattices with smaller signatures than ML-DSA ($approx 666$ B for Falcon-512) but harder constant-time implementation due to floating-point Gaussian sampling. FN-DSA is slated for standardization as FIPS 206, still in draft as of 2026 (only FIPS 203/204/205 were finalized in August 2024).
 
 == Other Families
 

@@ -12,7 +12,7 @@ A hash function should satisfy:
 - *Second-preimage resistance:* given $x_1$, finding $x_2 != x_1$ with $H(x_1) = H(x_2)$ takes $approx 2^n$ work.
 - *Collision resistance:* finding any $(x_1, x_2)$ with $H(x_1) = H(x_2)$ takes $approx 2^(n / 2)$ work (birthday bound).
 
-Therefore 256-bit hashes offer 128-bit collision security. $"SHA"$-1 (160 bits) was broken in 2017 (SHAttered, Google + CWI) for $approx 2^63$ work — approximately 110 CPU-years of computation, estimated at approximately \$110,000 in cloud compute at 2017 prices. This makes SHA-1 collision resistance practically broken, not just theoretically weakened: the $2^63$ figure counts SHA-1 evaluations, and differential cryptanalysis drove the real cost far below the brute-force $2^80$ birthday bound. $"MD5"$ is dead — chosen-prefix collisions in seconds.
+Therefore 256-bit hashes offer 128-bit collision security. $"SHA"$-1 (160 bits) was broken in 2017 (SHAttered, Google + CWI) for $approx 2^63$ work — approximately 110 GPU-years of computation, estimated at approximately \$110,000 in cloud compute at 2017 prices. This makes SHA-1 collision resistance practically broken, not just theoretically weakened: the $2^63$ figure counts SHA-1 evaluations, and differential cryptanalysis drove the real cost far below the brute-force $2^80$ birthday bound. $"MD5"$ is dead — chosen-prefix collisions in seconds.
 
 == $"SHA"$-2 Family
 

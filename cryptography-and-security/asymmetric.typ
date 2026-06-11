@@ -112,7 +112,7 @@ BLS (Boneh-Lynn-Shacham 2001) uses pairings $e : G_1 times G_2 -> G_T$ on pairin
 
 === Schnorr and MuSig2
 
-Schnorr signatures (revived in Bitcoin Taproot, BIP-340) enable interactive multi-signatures (MuSig2, Nick-Ruffing-Seurin 2020) that produce a single signature indistinguishable from a single-party signature.
+Schnorr signatures (revived in Bitcoin Taproot, BIP-340) enable interactive multi-signatures (MuSig2, Nick-Ruffing-Seurin 2021) that produce a single signature indistinguishable from a single-party signature.
 
 == Pairing-Based Cryptography
 
