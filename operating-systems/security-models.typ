@@ -69,7 +69,7 @@ Under MAC the policy is set by the system (the security administrator), and no s
 
 === Bell-LaPadula and Biba
 
-Bell-LaPadula (1973) is a *confidentiality* model. Subjects and objects carry a level from a totally ordered set (Unclassified $<$ Confidential $<$ Secret $<$ Top Secret), generalized to a lattice with compartments. Two rules:
+Bell-LaPadula (1976) is a *confidentiality* model. Subjects and objects carry a level from a totally ordered set (Unclassified $<$ Confidential $<$ Secret $<$ Top Secret), generalized to a lattice with compartments. Two rules:
 
 - *Simple security property* — no read up: a subject may read an object only if the subject's level dominates the object's.
 - *\*-property* (star) — no write down: a subject may write an object only if the object's level dominates the subject's.
