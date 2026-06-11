@@ -86,7 +86,7 @@ S:[X]=1      S:[X]=1     [X]=1 (writeback on transition M→S)
 
 == MOESI and MESIF Extensions
 
-*MOESI (AMD):* Adds O (Owned) state.
+*MOESI (AMD):* Adds O (Owned) state. (In MESI above, the M→S downgrade forces a memory writeback; MOESI instead transitions M→O and defers that writeback — the owner supplies the line to readers directly.)
 
 ```
 O (Owned): Dirty but shared (one cache responsible for writeback)
@@ -334,7 +334,7 @@ void consume() {
   columns: (auto, auto, auto, auto),
   [*Model*], [*Acquire load*], [*Release store*], [*seq_cst store*],
   [x86-64 (TSO)], [plain `mov`], [plain `mov`], [`mov; mfence` or `xchg`],
-  [ARMv8], [`ldar`], [`stlr`], [`stlr; dmb ish` (or `ldar` + `dmb`)],
+  [ARMv8], [`ldar`], [`stlr`], [`stlr` (LDAR/STLR pairs are seq_cst; no extra `dmb` needed)],
   [POWER], [`ld; isync`], [`lwsync; st`], [`hwsync` on both sides],
 )
 

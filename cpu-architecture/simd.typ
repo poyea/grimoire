@@ -191,7 +191,9 @@ AVX-512 (512-bit): 16× float operations
 Power: 2× AVX2 power draw
 Clock throttling: CPU may reduce frequency under AVX-512 load
 
-Intel Turbo Boost (Skylake-X server SKU example — varies widely by SKU and generation):
+Intel Turbo Boost (illustrative Skylake-X figures — varies widely by SKU,
+generation, and core count; e.g. a Xeon Gold 6148 sustains only ~2.6-3.1 GHz
+under all-core AVX-512 load):
 - Scalar code: 4.5 GHz
 - AVX2 code: 4.0 GHz
 - AVX-512 code: 3.5 GHz
@@ -381,10 +383,14 @@ __m256 vec = _mm256_loadu_ps(data);  // Always safe, 1-2 cycle penalty
 *2. Mixing vector widths:*
 
 ```c
-// BAD: Mixing AVX (256-bit) and SSE (128-bit) → transition penalty
+// BAD: Mixing AVX (256-bit) and SSE (128-bit)
 __m128 a = _mm_load_ps(data);      // SSE
 __m256 b = _mm256_load_ps(data2);  // AVX
-// Transition penalty: ~70 cycles!
+// Sandy Bridge-Haswell: ~70-cycle state transition penalty.
+// Skylake+: no transition stall, but dirty upper bits create a false
+// dependency that serializes SSE code — emit vzeroupper after AVX
+// regions (_mm256_zeroupper(); compilers do this automatically at
+// function boundaries with -mavx).
 
 // GOOD: Stick to one vector width
 __m256 a = _mm256_castps128_ps256(_mm_load_ps(data));
