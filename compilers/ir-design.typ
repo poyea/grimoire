@@ -1,8 +1,8 @@
-= IR Design
+= IR Design and SSA Form
 
 The choice of intermediate representation determines what optimizations are tractable. $"SSA"$ made dataflow sparse; $"CPS"$ made control explicit; sea-of-nodes erased the program order; $"MLIR"$ made the IR itself extensible. This chapter compares the practical tradeoffs of each.
 
-*See also:* _dataflow-analysis_, _optimization-passes_, _programming-languages/operational-semantics_
+*See also:* _Dataflow Analysis_, _Optimisation Passes_, and the _Operational Semantics_ chapter in the Languages & Compilers volume
 
 == Why an IR?
 

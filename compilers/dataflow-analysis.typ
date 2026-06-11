@@ -2,7 +2,7 @@
 
 Dataflow analysis is the engineering core of every optimizer: it answers questions of the form "at this program point, what could be true about the program state?" by propagating facts through the control-flow graph until they stabilize. This chapter focuses on the algorithms and data structures used in production — bitvectors, sparse iteration, $"SSA"$-aware variants.
 
-*See also:* _ir-design_, _optimization-passes_, _programming-languages/operational-semantics_
+*See also:* _IR Design and SSA Form_, _Optimisation Passes_, and the _Operational Semantics_ chapter in the Languages & Compilers volume
 
 == Lattices and Monotone Frameworks
 

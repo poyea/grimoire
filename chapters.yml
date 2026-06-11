@@ -286,7 +286,7 @@ chapters:
   - subject: cpu-architecture
     slug: cache-hierarchy
     path: cpu-architecture/cache-hierarchy.typ
-    lines: 606
+    lines: 609
     status: reviewed
   - subject: cpu-architecture
     slug: cpu-fundamentals
@@ -336,7 +336,7 @@ chapters:
   - subject: cpu-architecture
     slug: simd
     path: cpu-architecture/simd.typ
-    lines: 437
+    lines: 443
     status: reviewed
   - subject: cpu-architecture
     slug: speculative-execution-security
@@ -346,7 +346,7 @@ chapters:
   - subject: cpu-architecture
     slug: superscalar
     path: cpu-architecture/superscalar.typ
-    lines: 396
+    lines: 398
     status: reviewed
   - subject: cpu-architecture
     slug: synchronization
@@ -356,7 +356,7 @@ chapters:
   - subject: cpu-architecture
     slug: virtual-memory
     path: cpu-architecture/virtual-memory.typ
-    lines: 536
+    lines: 539
     status: reviewed
   - subject: cryptography-and-security
     slug: asymmetric
@@ -721,7 +721,7 @@ chapters:
   - subject: gpu-architecture
     slug: compute-architecture
     path: gpu-architecture/compute-architecture.typ
-    lines: 779
+    lines: 783
     status: reviewed
   - subject: gpu-architecture
     slug: cuda-programming-model
@@ -731,12 +731,12 @@ chapters:
   - subject: gpu-architecture
     slug: execution-model
     path: gpu-architecture/execution-model.typ
-    lines: 545
+    lines: 553
     status: reviewed
   - subject: gpu-architecture
     slug: gpu-fundamentals
     path: gpu-architecture/gpu-fundamentals.typ
-    lines: 426
+    lines: 436
     status: reviewed
   - subject: gpu-architecture
     slug: gpu-virtualization
@@ -746,17 +746,17 @@ chapters:
   - subject: gpu-architecture
     slug: memory-advanced
     path: gpu-architecture/memory-advanced.typ
-    lines: 417
+    lines: 419
     status: reviewed
   - subject: gpu-architecture
     slug: memory-hierarchy
     path: gpu-architecture/memory-hierarchy.typ
-    lines: 436
+    lines: 439
     status: reviewed
   - subject: gpu-architecture
     slug: ml-workloads
     path: gpu-architecture/ml-workloads.typ
-    lines: 305
+    lines: 310
     status: reviewed
   - subject: gpu-architecture
     slug: multi-gpu
@@ -776,7 +776,7 @@ chapters:
   - subject: gpu-architecture
     slug: performance-optimization
     path: gpu-architecture/performance-optimization.typ
-    lines: 686
+    lines: 687
     status: reviewed
   - subject: gpu-architecture
     slug: profiling
