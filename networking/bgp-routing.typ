@@ -382,7 +382,7 @@ router bgp 64500
 - Unified protocol (no OSPF+BGP complexity)
 - Mature tooling and debugging
 
-*BGP unnumbered [RFC 5765]:*
+*BGP unnumbered [RFC 5549, obs. by RFC 8950]:*
 - Use link-local IPv6 for peering
 - No IP address planning required
 - Simplifies automation
@@ -406,7 +406,7 @@ RFC 8092: BGP Large Communities Attribute. Heitz, J. et al. (2017).
 
 RFC 6480: An Infrastructure to Support Secure Internet Routing. Lepinski, M. & Kent, S. (2012).
 
-RFC 5765: Security Extensions for BGP. Lepinski, M. (2010).
+RFC 5549: Advertising IPv4 Network Layer Reachability Information with an IPv6 Next Hop. Le Faucheur, F. & Rosen, E. (2009). Obsoleted by RFC 8950 (2020).
 
 RFC 9234: Route Leak Prevention and Detection Using Roles. Azimov, A. et al. (2022).
 
