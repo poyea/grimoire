@@ -225,8 +225,8 @@ ncu --metrics \
     l1tex__average_t_sectors_per_request_pipe_lsu_mem_global_op_st.ratio \
     ./program
 
-# Ideal: 4 (128 bytes / 32-byte sector)
-# High values (>8): Poor coalescing
+# Ideal: 4 (128-byte cache line / 32-byte sector) for 32-bit accesses
+# Values >4: Poor coalescing (each extra sector = wasted bandwidth)
 
 # Check for bank conflicts
 ncu --metrics \
@@ -595,9 +595,9 @@ Profile with:
 
 ```
 GPU frequency varies with:
-- Power limits
-- Thermal throttling
-- AVX-512 usage
+- Power limits (TDP cap lowers boost clock)
+- Thermal throttling (junction temperature > limit)
+- Boost behaviour (SM activity, memory pressure)
 
 Lock frequency for consistent measurements:
 nvidia-smi -pm 1                    # Enable persistence mode

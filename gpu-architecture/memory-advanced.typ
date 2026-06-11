@@ -355,16 +355,18 @@ __global__ void reduce(float* input, float* output, int n) {
         __syncthreads();
     }
 
-    // Warp-level reduction (no sync needed)
+    // Warp-level reduction. The classic `volatile float*` version is
+    // UNSAFE on Volta+ (independent thread scheduling): lanes of a warp
+    // no longer execute in lockstep, so explicit __syncwarp() is needed.
     if (tid < 32) {
-        volatile float* vsmem = sdata;
-        vsmem[tid] += vsmem[tid + 32];
-        vsmem[tid] += vsmem[tid + 16];
-        vsmem[tid] += vsmem[tid + 8];
-        vsmem[tid] += vsmem[tid + 4];
-        vsmem[tid] += vsmem[tid + 2];
-        vsmem[tid] += vsmem[tid + 1];
+        sdata[tid] += sdata[tid + 32]; __syncwarp();
+        sdata[tid] += sdata[tid + 16]; __syncwarp();
+        sdata[tid] += sdata[tid + 8];  __syncwarp();
+        sdata[tid] += sdata[tid + 4];  __syncwarp();
+        sdata[tid] += sdata[tid + 2];  __syncwarp();
+        sdata[tid] += sdata[tid + 1];  __syncwarp();
     }
+    // (Better still: read into a register and use __shfl_down_sync.)
 
     if (tid == 0) {
         output[blockIdx.x] = sdata[0];

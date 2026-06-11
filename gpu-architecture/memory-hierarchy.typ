@@ -58,7 +58,8 @@ GPU memory hierarchy differs fundamentally from CPU caches. Understanding the di
 │    │                    Host Memory                               │  │
 │    │  ┌───────────────────────────────┐                          │  │
 │    │  │      System RAM (DDR5)        │  128+ GB                │  │
-│    │  │    PCIe: 64 GB/s (Gen5 x16)   │  ~10-20 µs latency      │  │
+│    │  │    PCIe: 64 GB/s (Gen5 x16)   │  ~1-2 µs (wire);        │  │
+│    │  │                               │  ~10-20 µs (cudaMemcpy) │  │
 │    │  └───────────────────────────────┘                          │  │
 │    └─────────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────────┘
@@ -69,9 +70,11 @@ GPU memory hierarchy differs fundamentally from CPU caches. Understanding the di
 ```
 Memory Type      Size           Latency        Bandwidth        Scope
 ─────────────────────────────────────────────────────────────────────────
-Registers        256 KB/SM      0 cycles       ~20 TB/s/SM      Thread
-Shared Memory    Up to 100 KB   ~20 cycles     ~2 TB/s/SM       Block
-L1 Cache         128 KB/SM      ~30 cycles     ~2 TB/s/SM       SM
+Registers        256 KB/SM      0 cy (issue)   ~20 TB/s/SM      Thread
+                                4-6 cy (RAW)
+Shared Memory    Up to 100 KB   ~20-30 cy      ~2 TB/s/SM       Block
+L1 Cache         128 KB/SM      ~20-30 cy      ~2 TB/s/SM       SM
+                                (Volta+: L1 and shared are the same SRAM bank)
 L2 Cache         72 MB          ~200 cycles    ~5 TB/s          Chip
 Global (GDDR6X)  24 GB          ~400 cycles    1008 GB/s        Device
 Constant Cache   64 KB          ~4 cycles      Broadcast        Device
@@ -224,7 +227,7 @@ Global memory is the main GPU memory (VRAM), accessible by all threads but with 
 
 *Access patterns and coalescing:*
 
-GPU memory transactions are 32, 64, or 128 bytes. For optimal performance, threads in a warp should access consecutive memory addresses (coalesced access).
+GPU memory transactions are 32, 64, or 128 bytes. On Volta+ (sm_70+) the L1 cache operates on 32-byte sectors; older architectures used a 128-byte granularity. For optimal performance, threads in a warp should access consecutive memory addresses (coalesced access).
 
 ```c
 // COALESCED (optimal): Threads access consecutive addresses

@@ -276,9 +276,10 @@ cudaOccupancyMaxPotentialBlockSizeVariableSMem(
 
 ```cpp
 // High occupancy, limited registers
-__global__ __launch_bounds__(256, 8)  // 256 threads, 8 blocks/SM
+__global__ __launch_bounds__(256, 6)  // 256 threads, 6 blocks/SM (= 1536 threads; Ada cap)
 void high_occupancy_kernel() { ... }
-// 8 * 256 = 2048 threads, limited to ~32 registers/thread
+// 6 * 256 = 1536 threads (Ada / consumer-Ampere GA10x cap); ~42 registers/thread
+// Note: A100 (GA100) and Hopper allow up to 2048 threads/SM.
 
 // Lower occupancy, more registers
 __global__ __launch_bounds__(128, 4)  // 128 threads, 4 blocks/SM
