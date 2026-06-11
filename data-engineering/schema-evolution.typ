@@ -37,7 +37,7 @@ Protobuf encodes fields by *tag number*, not name. Unknown tags are skipped (and
 
 - Renaming a field is wire-compatible (the tag is unchanged) but breaks JSON encoding and source code.
 - *Never reuse a tag number.* A reused tag decodes old data as the new type — silent corruption. Use `reserved 4, 9;` for removed fields.
-- proto3 has no required fields and no custom defaults: missing scalar fields decode as zero values, which makes "absent" and "zero" indistinguishable unless you use `optional` (re-added in 3.15, 2021) or wrapper types.
+- proto3 has no required fields and no custom defaults: missing scalar fields decode as zero values, which makes "absent" and "zero" indistinguishable unless you use `optional` (experimental in 3.12, 2020; generally available in 3.15, 2021) or wrapper types.
 - Changing types within a wire-format class (`int32 ↔ int64 ↔ bool`) "works" on the wire with truncation hazards; treat it as breaking.
 
 Protobuf's discipline is enforced socially and by `buf breaking` (the Buf CLI compares `.proto` files across git revisions in CI) rather than by a runtime registry, though Confluent's registry also supports Protobuf subjects.
