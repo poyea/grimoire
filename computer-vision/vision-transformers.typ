@@ -110,7 +110,7 @@ For high-resolution inputs, full self-attention is $O(N^2)$. Alternatives:
 #table(
   columns: 4,
   [*Model*], [*Pre-training*], [*IN-1K top-1*], [*Params*],
-  [ViT-B/16], [ImageNet-21K], [81.8%], [86M],
+  [ViT-B/16], [ImageNet-21K], [84.0%], [86M],
   [DeiT-B], [ImageNet-1K], [81.8%], [87M],
   [Swin-B], [ImageNet-1K], [83.5%], [88M],
   [DINOv2 ViT-L], [LVD-142M], [86.3%], [307M],
