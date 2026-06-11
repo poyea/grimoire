@@ -116,33 +116,35 @@
   </div>
   <div class="toc">
     <details id="ch-1">
-      <summary><span class="n">01</span>Consensus Deep Dive</summary>
+      <summary><span class="n">01</span>Introduction: Models and Impossibilities</summary>
       <ul>
-        <li>The Consensus Problem</li>
-        <li>Single-Decree Paxos</li>
-        <li>Multi-Paxos</li>
-        <li>Vertical Paxos</li>
-        <li>Raft</li>
-        <li>EPaxos</li>
-        <li>Flexible Paxos</li>
-        <li>Generalized Paxos</li>
-        <li>Byzantine Fault Tolerance</li>
-        <li>Comparison</li>
-        <li>Multi-Group Sharding</li>
-        <li>Practical Engineering</li>
-        <li>Failure Scenarios to Reason About</li>
+        <li>The Eight Fallacies</li>
+        <li>System Models</li>
+        <li>FLP Impossibility</li>
+        <li>CAP and PACELC</li>
+        <li>Linearizability Versus Serializability</li>
+        <li>A Worked Example: a Two-Node Counter</li>
+        <li>Failure Frequencies in Practice</li>
+        <li>Two Generals and the Coordinated Attack</li>
+        <li>Asynchronous Versus Eventual Consistency Spectrum</li>
+        <li>Reading Map for This Book</li>
         <li>Further Reading</li>
       </ul>
     </details>
     <details id="ch-2">
-      <summary><span class="n">02</span>Coordination Services</summary>
+      <summary><span class="n">02</span>Time and Order</summary>
       <ul>
-        <li>ZooKeeper</li>
-        <li>etcd</li>
-        <li>Chubby</li>
-        <li>Use Cases and Recipes</li>
-        <li>Comparison</li>
-        <li>Anti-Patterns</li>
+        <li>Physical Clocks</li>
+        <li>Lamport Clocks</li>
+        <li>Vector Clocks</li>
+        <li>Version Vectors and Dotted Version Vectors</li>
+        <li>Hybrid Logical Clocks</li>
+        <li>TrueTime</li>
+        <li>Closed Timestamps</li>
+        <li>Causal Broadcast</li>
+        <li>Snapshot Algorithms</li>
+        <li>Comparison Table</li>
+        <li>Why Clock Skew Causes Real Bugs</li>
         <li>Further Reading</li>
       </ul>
     </details>
@@ -163,36 +165,7 @@
       </ul>
     </details>
     <details id="ch-4">
-      <summary><span class="n">04</span>Gossip Protocols</summary>
-      <ul>
-        <li>Epidemic Spreading Models</li>
-        <li>Convergence Guarantees</li>
-        <li>Anti-Entropy</li>
-        <li>SWIM Failure Detector</li>
-        <li>CRDTs as Gossip-Friendly State</li>
-        <li>Real Systems</li>
-        <li>Performance Tuning</li>
-        <li>Further Reading</li>
-      </ul>
-    </details>
-    <details id="ch-5">
-      <summary><span class="n">05</span>Introduction: Models and Impossibilities</summary>
-      <ul>
-        <li>The Eight Fallacies</li>
-        <li>System Models</li>
-        <li>FLP Impossibility</li>
-        <li>CAP and PACELC</li>
-        <li>Linearizability Versus Serializability</li>
-        <li>A Worked Example: a Two-Node Counter</li>
-        <li>Failure Frequencies in Practice</li>
-        <li>Two Generals and the Coordinated Attack</li>
-        <li>Asynchronous Versus Eventual Consistency Spectrum</li>
-        <li>Reading Map for This Book</li>
-        <li>Further Reading</li>
-      </ul>
-    </details>
-    <details id="ch-6">
-      <summary><span class="n">06</span>Leader Election and Leases</summary>
+      <summary><span class="n">04</span>Leader Election and Leases</summary>
       <ul>
         <li>Why Elect a Leader?</li>
         <li>The Bully Algorithm</li>
@@ -208,20 +181,47 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-7">
-      <summary><span class="n">07</span>Time and Order</summary>
+    <details id="ch-5">
+      <summary><span class="n">05</span>Consensus Deep Dive</summary>
       <ul>
-        <li>Physical Clocks</li>
-        <li>Lamport Clocks</li>
-        <li>Vector Clocks</li>
-        <li>Version Vectors and Dotted Version Vectors</li>
-        <li>Hybrid Logical Clocks</li>
-        <li>TrueTime</li>
-        <li>Closed Timestamps</li>
-        <li>Causal Broadcast</li>
-        <li>Snapshot Algorithms</li>
-        <li>Comparison Table</li>
-        <li>Why Clock Skew Causes Real Bugs</li>
+        <li>The Consensus Problem</li>
+        <li>Single-Decree Paxos</li>
+        <li>Multi-Paxos</li>
+        <li>Vertical Paxos</li>
+        <li>Raft</li>
+        <li>EPaxos</li>
+        <li>Flexible Paxos</li>
+        <li>Generalized Paxos</li>
+        <li>Byzantine Fault Tolerance</li>
+        <li>Comparison</li>
+        <li>Multi-Group Sharding</li>
+        <li>Practical Engineering</li>
+        <li>Failure Scenarios to Reason About</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary><span class="n">06</span>Coordination Services</summary>
+      <ul>
+        <li>ZooKeeper</li>
+        <li>etcd</li>
+        <li>Chubby</li>
+        <li>Use Cases and Recipes</li>
+        <li>Comparison</li>
+        <li>Anti-Patterns</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary><span class="n">07</span>Gossip Protocols</summary>
+      <ul>
+        <li>Epidemic Spreading Models</li>
+        <li>Convergence Guarantees</li>
+        <li>Anti-Entropy</li>
+        <li>SWIM Failure Detector</li>
+        <li>CRDTs as Gossip-Friendly State</li>
+        <li>Real Systems</li>
+        <li>Performance Tuning</li>
         <li>Further Reading</li>
       </ul>
     </details>

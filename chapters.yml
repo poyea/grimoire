@@ -1411,7 +1411,7 @@ chapters:
   - subject: programming-languages
     slug: effects-and-handlers
     path: programming-languages/effects-and-handlers.typ
-    lines: 466
+    lines: 464
     status: reviewed
   - subject: programming-languages
     slug: effects-handlers-implementation
