@@ -2,7 +2,7 @@
 
 A real-time operating system ($"RTOS"$) supplies a preemptive priority-based scheduler, deterministic IPC primitives, and a memory-frugal kernel — typically a few kilobytes of code, no MMU dependency, and no dynamic allocation in the critical path. This chapter dissects the three dominant designs: *FreeRTOS* (minimal, source-available, AWS-stewarded), *Zephyr* (Apache-licensed, Linux-style infrastructure, broad driver model), and *PREEMPT_RT Linux* (full POSIX, real-time only after invasive patches).
 
-*See also:* _Real-Time Scheduling_, _Peripherals and Drivers_, _Microcontrollers and SoC_, _The Scheduler_ (implementation), _Processes and Threads_ (operating systems)
+*See also:* _Real-Time Scheduling_, _Peripherals and Drivers_, _Microcontrollers and Systems-on-Chip_, _The Scheduler_ (implementation), _Processes and Threads_ (operating systems)
 
 == What Makes an OS "Real-Time"
 
@@ -99,7 +99,7 @@ Zephyr originated at Wind River as the Rocket kernel, was donated to the Linux F
 
 === Threads, Fibers, and Work Queues
 
-Zephyr unifies tasks and fibers into *threads* with priorities split into *cooperative* (negative, never preempted by equal priority) and *preemptible* (zero or positive). Below preemptible threads sit *system work queues* — single-thread queues running deferred work; ISRs offload to them via `k_work_submit`.
+Zephyr unifies tasks and fibers into *threads* with priorities split into *cooperative* (negative, never preempted — they run until they block or yield) and *preemptible* (zero or positive). Below preemptible threads sit *system work queues* — single-thread queues running deferred work; ISRs offload to them via `k_work_submit`.
 
 ```c
 K_THREAD_STACK_DEFINE(sensor_stack, 1024);

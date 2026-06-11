@@ -66,7 +66,7 @@ void USART1_IRQHandler(void) {
     uint32_t sr = USART1->SR;
     if (sr & USART_SR_RXNE) {
         rx_buf[rx_head++ & (RX_BUF_SIZE-1)] = USART1->DR;
-        BaseType_t woken;
+        BaseType_t woken = pdFALSE;
         xSemaphoreGiveFromISR(rx_sem, &woken);
         portYIELD_FROM_ISR(woken);
     }
