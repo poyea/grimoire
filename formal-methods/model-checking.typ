@@ -20,7 +20,7 @@ Model checking asks: does every initial path satisfy $phi$? Equivalently, is the
   [$bold(X) phi$], [next: $pi_1 models phi$], [neXt],
   [$bold(F) phi$], [$exists i. pi_i models phi$], [Finally / Eventually],
   [$bold(G) phi$], [$forall i. pi_i models phi$], [Globally / Always],
-  [$phi bold(U) psi$], [$psi$ holds, $phi$ until then], [Until],
+  [$phi bold(U) psi$], [$phi$ holds until $psi$ (which must eventually hold)], [Until],
   [$phi bold(R) psi$], [release: dual of U], [Release],
 )
 

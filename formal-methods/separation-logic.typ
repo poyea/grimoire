@@ -2,7 +2,7 @@
 
 Heap-manipulating programs are notoriously hard to verify with classical Hoare logic because *aliasing* — two pointers referring to the same memory location — breaks frame reasoning. A postcondition that describes one pointer's cell may silently invalidate a hypothesis about another that happens to alias it. Separation logic, introduced by Reynolds (2002) building on O'Hearn and Pym's logic of bunched implications (1999), extends Hoare logic with a *spatial conjunction* $P * Q$ and an empty-heap predicate $"emp"$ that let you assert ownership of disjoint heap regions. The result is a calculus in which the frame rule holds unconditionally: a proof about a small piece of heap composes freely with reasoning about the rest.
 
-*See also:* _Axiomatic Semantics_, _Theorem Proving and Proof Assistants_, _Model Checking_
+*See also:* _Axiomatic Semantics_, _Theorem Proving_, _Model Checking_
 
 == The Heap Model
 
