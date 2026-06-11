@@ -33,7 +33,7 @@ After the handler returns, the environment is frozen (process paused, CPU deallo
 
 Each concurrent invocation requires its own execution environment; $"FaaS"$ platforms do not multiplex invocations within one environment. If 1000 requests arrive simultaneously, the platform launches up to 1000 parallel environments. This property, called *scale-to-zero-and-back*, is both the strength (automatic horizontal scaling) and the weakness (cold starts under burst traffic).
 
-The concurrency limit per function is configurable and subject to account quotas. For AWS Lambda the default is 1000 concurrent executions per region; bursting above the baseline is rate-limited at 500 new environments per minute.
+The concurrency limit per function is configurable and subject to account quotas. For AWS Lambda the default is 1000 concurrent executions per region; since November 2023 each function scales by up to 1000 additional concurrent executions every 10 seconds until the account limit is reached.
 
 == Lambda Internals: Firecracker and MicroVMs
 

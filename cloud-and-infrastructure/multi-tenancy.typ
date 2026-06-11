@@ -229,7 +229,7 @@ Together, `ResourceQuota` + `LimitRange` implement the noisy-neighbour guarantee
   columns: 3,
   [*Level*], [*What it blocks*], [*Typical use*],
   [`privileged`], [Nothing], [System namespaces (`kube-system`)],
-  [`baseline`], [Host namespaces, privileged containers, hostPath except explicit allow-list], [Internal teams],
+  [`baseline`], [Host namespaces, privileged containers, hostPath volumes], [Internal teams],
   [`restricted`], [Everything in baseline + requires non-root UID, drops all capabilities, disallows seccomp: Unconfined], [Tenant workloads, PCI scope],
 )
 
