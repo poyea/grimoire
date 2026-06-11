@@ -73,13 +73,13 @@ Tensor Cores perform matrix multiply-accumulate operations on small matrices (ti
 *Tensor Core evolution:*
 
 ```
-Generation   Architecture   Matrix Size      Precision           TFLOPS (dense)
-──────────────────────────────────────────────────────────────────────────────────
-1st Gen      Volta          4×4×4           FP16                125
-2nd Gen      Turing         4×4×4           FP16, INT8          130
-3rd Gen      Ampere         8×4×4           FP16, BF16, TF32    312
-4th Gen      Ada            8×4×4           FP16, BF16, FP8     330
-5th Gen      Hopper         8×4×4           FP8, FP16, INT8     989
+Generation   Architecture   PTX mma/wgmma shape      Precision           TFLOPS (dense)
+────────────────────────────────────────────────────────────────────────────────────────
+1st Gen      Volta          m8n8k4 (mma)             FP16                125
+2nd Gen      Turing         m8n8k4 (mma)             FP16, INT8          130
+3rd Gen      Ampere         m16n8k16 / m16n8k8 (mma) FP16, BF16, TF32    312
+4th Gen      Ada            m16n8k16 / m16n8k8 (mma) FP16, BF16, FP8     330
+4th Gen      Hopper         wgmma m64nNk16           FP8, FP16, INT8     989
 ```
 
 *Matrix multiply-accumulate operation:*
@@ -94,7 +94,7 @@ C: m × n matrix (FP32/FP16)
 D: m × n matrix (FP32/FP16)
 
 4th Gen Tensor Core (Ada):
-- Processes 8×8×4 per Tensor Core per cycle
+- 256 FMAs/cycle FP16→FP32 per Tensor Core
 - 4 Tensor Cores per SM
 - 128 SMs = 512 Tensor Cores
 - Peak: 330 TFLOPS (dense), 660 TFLOPS (sparse)
@@ -134,7 +134,7 @@ m16n16k16   16    16    16    half        float
 m32n8k16    32     8    16    half        float
 m8n32k16     8    32    16    half        float
 m16n16k8    16    16     8    bf16        float
-m16n16k16   16    16    16    tf32        float
+m16n16k8    16    16     8    tf32        float
 m16n16k16   16    16    16    s8/u8       int32
 ```
 
@@ -467,7 +467,7 @@ Hopper Tensor Cores natively support FP8 with two encodings:
 - *E4M3* (1 sign, 4 exponent, 3 mantissa): narrower dynamic range, higher precision; used for weights and activations
 - *E5M2* (1 sign, 5 exponent, 2 mantissa): wider dynamic range, lower precision; used for gradients
 
-FP8 peak on H100: 1979 TFLOPS sparse / 989 TFLOPS dense, which is 2$times$ the Ampere FP16 throughput with half the memory per weight.
+FP8 peak on H100: 1979 TFLOPS sparse / 989 TFLOPS dense, which is 3.2$times$ the Ampere FP16 throughput (989 / 312) with half the memory per weight.
 
 *Transformer Engine:* software + hardware feature that dynamically manages FP8 scaling. Per-tensor amax history tracked in hardware; scale factors recomputed every iteration to keep values in the representable range. Exposed via the `transformer_engine` library:
 ```cpp
@@ -510,11 +510,12 @@ Compared to Ampere `cp.async`: TMA issues entire multi-dim tile with one instruc
 
 === Distributed Shared Memory (DSMEM) and Thread Block Clusters
 
-*Thread Block Clusters:* opt-in grouping of up to 8 blocks (16 via portability hint) that are guaranteed co-resident on the same GPC (Graphics Processing Cluster). Blocks in a cluster can:
+*Thread Block Clusters:* opt-in grouping of up to 8 blocks (up to 16 via `cudaFuncAttributeNonPortableClusterSizeAllowed`, a non-portable opt-in) that are guaranteed co-resident on the same GPC (Graphics Processing Cluster). Blocks in a cluster can:
 - Access each other's shared memory via a virtual address space (DSMEM)
 - Synchronize cluster-wide via `__cluster_barrier()` or CUDA C++ `cuda::experimental::barrier`
 - Cluster-wide shared memory up to $8 times 228 = 1824$ KB
 
+// Requires: -rdc=true and a Hopper-capable toolchain (CUDA 12+, sm_90a)
 ```cpp
 __global__ void __cluster_dims__(2, 2, 1) fused_kernel(...) {
     __shared__ float smem[N];
@@ -597,7 +598,7 @@ Blackwell (B100, B200, GB200) is NVIDIA's 2024 architecture, purpose-designed fo
   [FP16 / BF16 Tensor], [1.75 PFLOPS], [2.25 PFLOPS],
   [FP64 Tensor], [30 TFLOPS], [40 TFLOPS],
   [Memory], [192 GB HBM3e], [192 GB HBM3e],
-  [Memory bandwidth], [8 TB/s], [8 TB/s],
+  [Memory bandwidth], [8 TB/s per package (dual-die; ~4 TB/s per die)], [8 TB/s],
   [NVLink (per GPU)], [1800 GB/s (NVLink 5)], [1800 GB/s],
   [TDP], [700 W], [1000 W],
 )
@@ -660,7 +661,7 @@ AMD's datacenter GPU line (CDNA = Compute DNA, distinct from RDNA consumer lines
 - 4 IOD (I/O dies) with 256 MB Infinity Cache (shared L3-like victim cache)
 - 8 HBM3 stacks = *192 GB HBM3*, *5.3 TB/s bandwidth* (2$times$ H100 capacity)
 - Infinity Fabric 4 intra-chiplet, PCIe Gen5 + 896 GB/s 7-link Infinity Fabric external
-- Peak FP8 matrix: 2614 TFLOPS dense / 5229 TFLOPS sparse
+- Peak FP8 matrix: 1307 TFLOPS dense / 2614 TFLOPS sparse (4:8 structured sparsity)
 - Peak FP16 matrix: 1307 TFLOPS
 - FP64 matrix: 163 TFLOPS (vs H100 67 TFLOPS; MI300X stronger in HPC)
 - TDP 750 W
@@ -741,7 +742,7 @@ Equivalent library mapping:
   [Transistors], [80 B], [153 B (8 dies)],
   [HBM], [80 GB HBM3], [192 GB HBM3 (2.4$times$)],
   [Memory bandwidth], [3.35 TB/s], [5.3 TB/s (1.6$times$)],
-  [FP8 Tensor (dense)], [989 TFLOPS], [2614 TFLOPS (2.6$times$)],
+  [FP8 Tensor (dense)], [989 TFLOPS], [1307 TFLOPS (1.3$times$)],
   [FP16 Tensor (dense)], [989 TFLOPS], [1307 TFLOPS (1.3$times$)],
   [FP64 Tensor], [67 TFLOPS], [163 TFLOPS (2.4$times$)],
   [Software maturity], [CUDA (mature)], [ROCm 6 (rapidly improving)],
@@ -753,17 +754,20 @@ Equivalent library mapping:
 == GPU Compute Generations Comparison
 
 ```
-Feature          Volta    Turing    Ampere    Ada       Hopper
-───────────────────────────────────────────────────────────────────────
-CUDA Cores/SM    64       64        64/128    128       128
-Tensor Cores/SM  8        8         4         4         4
-RT Cores/SM      -        1         1         1         -
-Shared Mem/SM    96 KB    64 KB     164 KB    100 KB    228 KB
-L2 Cache         6 MB     6 MB      40 MB     72 MB     50 MB
-Register/SM      256 KB   256 KB    256 KB    256 KB    256 KB
-FP32 TFLOPS      15.7     16.3      19.5      82.6      67
-Tensor TFLOPS    125      130       312       660       989
-Memory           HBM2     GDDR6     HBM2e     GDDR6X    HBM3
+Feature              Volta    Turing    Ampere    Ada       Hopper (SXM5)
+─────────────────────────────────────────────────────────────────────────────
+CUDA Cores/SM        64       64        64/128    128       128
+Tensor Cores/SM      8        8         4         4         4
+  (note: 4 Ampere/Hopper TCs ≈ 8 Volta TCs in area+throughput; not directly
+   comparable — later TCs are each ~4× larger with wider datapaths)
+RT Cores/SM          -        1         1         1         -
+Shared Mem/SM        96 KB    64 KB     164 KB    100 KB    228 KB
+L2 Cache             6 MB     6 MB      40 MB     72 MB     50 MB
+Register/SM          256 KB   256 KB    256 KB    256 KB    256 KB
+FP32 TFLOPS          15.7     16.3      19.5      82.6      67
+Tensor TFLOPS        125      130       312       660       989
+  (FP16 input / FP32 accum; Ampere+ also includes BF16/TF32/INT8)
+Memory               HBM2     GDDR6     HBM2e     GDDR6X    HBM3
 ```
 
 == Further Reading
