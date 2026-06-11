@@ -12,7 +12,7 @@ $ X_k = sum_(j=0)^(n-1) x_j omega_n^(j k), quad omega_n = e^(-2 pi i \/ n), $
 
 with inverse $x_j = 1/n sum_k X_k omega_n^(-j k)$. As a matrix, $F_n$ has entries $omega_n^(j k)$; the scaled matrix $F_n \/ sqrt(n)$ is unitary, so the DFT preserves energy (Parseval) and has condition number 1 — the transform itself amplifies nothing. Three algebraic facts do most of the work in applications:
 
-- *Convolution theorem*: the DFT diagonalizes circular convolution, $"DFT"(x convolve y) = "DFT"(x) dot.circle "DFT"(y)$ elementwise.
+- *Convolution theorem*: the DFT diagonalizes circular convolution, $"DFT"(x convolve y) = "DFT"(x) dot.o "DFT"(y)$ elementwise.
 - *Circulant diagonalization*: every circulant matrix is $F_n^(-1) D F_n$ for a diagonal $D$ holding the DFT of its first column — circulant systems solve in $O(n log n)$, the basis of circulant and Toeplitz preconditioners.
 - *Shift theorem*: translation in time is modulation in frequency, the basis of phase correlation and frequency estimation.
 

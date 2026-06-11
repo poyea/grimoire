@@ -219,7 +219,7 @@ with proper inclusions at every level:
 
 $ "Reg" subset.eq."not" "CFL" subset.eq."not" "CSL" subset.eq."not" "RE" $
 
-Properness of $"Reg" subset "CFL"$: $a^n b^n in "CFL" without "Reg"$. Of $"CFL" subset "CSL"$: $a^n b^n c^n in "CSL" without "CFL"$. Of $"CSL" subset "RE"$: by diagonalisation, since CSL membership is decidable but $"RE"$ contains undecidable sets like $H = { angle.l M, w angle.r | M "halts on" w }$.
+Properness of $"Reg" subset "CFL"$: $a^n b^n in "CFL" without "Reg"$. Of $"CFL" subset "CSL"$: $a^n b^n c^n in "CSL" without "CFL"$. Of $"CSL" subset "RE"$: by diagonalisation, since CSL membership is decidable but $"RE"$ contains undecidable sets like $H = { chevron.l M, w chevron.r | M "halts on" w }$.
 
 == Decidability and Complexity Landscape
 
@@ -258,7 +258,7 @@ Acceptance by final state with $F = { q }$ and the additional check that the sta
 
 === VPA for Well-Nested XML
 
-Let $Sigma_c = { angle.l a angle.r | a in "tag names" }$ (open tags), $Sigma_r = { angle.l \/ a angle.r }$ (close tags), $Sigma_i = "PCDATA"$. A VPA enforcing matching tag names:
+Let $Sigma_c = { chevron.l a chevron.r | a in "tag names" }$ (open tags), $Sigma_r = { chevron.l \/ a chevron.r }$ (close tags), $Sigma_i = "PCDATA"$. A VPA enforcing matching tag names:
 
 ```text
 On call ⟨a⟩:   push tag-name 'a' onto stack

@@ -149,7 +149,7 @@ Rutten (1998, 2003) observed that derivatives exhibit $cal(P)(Sigma^*)$ as the c
 
 $ F X = 2 times X^Sigma $
 
-where $2 = { 0, 1 }$. A coalgebra is a pair $(X, angle.l o, t angle.r)$ with $o : X arrow.r 2$ (output) and $t : X arrow.r X^Sigma$ (next-state). The map $L |-> angle.l [epsilon in L], a |-> partial_a L angle.r$ makes $cal(P)(Sigma^*)$ into such a coalgebra, and it is *final*: every coalgebra admits a unique homomorphism into it. DFAs are exactly finite-state $F$-coalgebras with deterministic transition, and *bisimilarity* of states coincides with Nerode equivalence, which is the categorical reason minimisation works. This perspective unifies regular and infinite-trace languages (where one replaces $cal(P)$ with finitary measures or weights).
+where $2 = { 0, 1 }$. A coalgebra is a pair $(X, chevron.l o, t chevron.r)$ with $o : X arrow.r 2$ (output) and $t : X arrow.r X^Sigma$ (next-state). The map $L |-> chevron.l [epsilon in L], a |-> partial_a L chevron.r$ makes $cal(P)(Sigma^*)$ into such a coalgebra, and it is *final*: every coalgebra admits a unique homomorphism into it. DFAs are exactly finite-state $F$-coalgebras with deterministic transition, and *bisimilarity* of states coincides with Nerode equivalence, which is the categorical reason minimisation works. This perspective unifies regular and infinite-trace languages (where one replaces $cal(P)$ with finitary measures or weights).
 
 == Pumping Lemma and Its Limits
 

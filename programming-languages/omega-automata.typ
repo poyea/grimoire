@@ -220,7 +220,7 @@ Here $"lift"(m, v)$ is the least element of $M union {top}$ greater than $m$ on 
 
 The *modal $mu$-calculus* $L_mu$ (Kozen 1983) adds least and greatest fixed-point operators to multimodal logic:
 $ phi ::= p | not p | phi and phi | phi or phi | diamond_a phi | square_a phi | X | mu X. phi | nu X. phi $
-with $X$ a propositional variable and $phi$ positive in $X$ under each binder. Semantics over Kripke structures: $bracket.l.double mu X. phi bracket.r.double = "lfp"(X |-> bracket.l.double phi bracket.r.double)$, $bracket.l.double nu X. phi bracket.r.double = "gfp"(X |-> bracket.l.double phi bracket.r.double)$.
+with $X$ a propositional variable and $phi$ positive in $X$ under each binder. Semantics over Kripke structures: $bracket.l.stroked mu X. phi bracket.r.stroked = "lfp"(X |-> bracket.l.stroked phi bracket.r.stroked)$, $bracket.l.stroked nu X. phi bracket.r.stroked = "gfp"(X |-> bracket.l.stroked phi bracket.r.stroked)$.
 
 The *alternation depth* of a formula counts nesting of alternating $mu / nu$ binders that share free variables. The *alternation hierarchy* is the chain
 $ Sigma_0^mu subset.eq Pi_0^mu subset.eq Sigma_1^mu subset.eq Pi_1^mu subset.eq Sigma_2^mu subset.eq dots $

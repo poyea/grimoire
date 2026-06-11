@@ -116,8 +116,8 @@ These remain relevant for structure-from-motion, AR tracking, and resource-const
 == Morphological Operations
 
 For binary and greyscale images, morphological operations define non-linear filters:
-- *Erosion*: $I minus.circle B = {z | B_z subset I}$. Shrinks foreground.
-- *Dilation*: $I plus.circle B = {z | B_z inter I != emptyset}$. Expands foreground.
+- *Erosion*: $I minus.o B = {z | B_z subset I}$. Shrinks foreground.
+- *Dilation*: $I plus.o B = {z | B_z inter I != emptyset}$. Expands foreground.
 - *Opening* (erosion then dilation): removes small bright protrusions.
 - *Closing* (dilation then erosion): fills small dark holes.
 

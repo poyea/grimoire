@@ -8,7 +8,7 @@ The previous chapter studied algebraic theories (CCS, CSP, the $pi$-calculus) th
 
 == Interleaving Semantics
 
-The simplest model of concurrency takes a multi-threaded program to be a set of sequential threads, and a concurrent execution to be an arbitrary *interleaving* of their atomic steps. A configuration is a tuple $angle.l T_1, dots, T_n; sigma angle.r$ where $T_i$ are the per-thread control states and $sigma$ is a shared store. The transition rule:
+The simplest model of concurrency takes a multi-threaded program to be a set of sequential threads, and a concurrent execution to be an arbitrary *interleaving* of their atomic steps. A configuration is a tuple $chevron.l T_1, dots, T_n; sigma chevron.r$ where $T_i$ are the per-thread control states and $sigma$ is a shared store. The transition rule:
 
 ```text
             T_i  ;  sigma   -->_seq   T_i'  ;  sigma'
@@ -109,7 +109,7 @@ The *actor model* (Hewitt 1973; Agha 1986) discards shared state entirely. The w
 
 === Operational Semantics
 
-A *configuration* is a multiset of actors and undelivered messages. Each actor is $angle.l a, b, q angle.r$ with address $a$, behaviour $b$, and mailbox $q$. A message is $a gt.triple v$ ("$v$ for $a$"). The transition rules:
+A *configuration* is a multiset of actors and undelivered messages. Each actor is $chevron.l a, b, q chevron.r$ with address $a$, behaviour $b$, and mailbox $q$. A message is $a gt.triple v$ ("$v$ for $a$"). The transition rules:
 
 ```text
         a gt.triple v   on the wire

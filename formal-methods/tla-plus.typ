@@ -69,9 +69,9 @@ The *leads-to* operator $P tilde.op Q$ is defined as $[](P => <> Q)$ — it is n
 
 *Weak fairness* `WF_v(A)` means: it is not the case that `A` is continuously enabled and yet never taken. Formally:
 
-$ "WF"_v(A) = []([]"Enabled"(angle.l A angle.r_v) => <>angle.l A angle.r_v) $
+$ "WF"_v(A) = []([]"Enabled"(chevron.l A chevron.r_v) => <>chevron.l A chevron.r_v) $
 
-where $angle.l A angle.r_v$ is the action $A$ ignoring stuttering on $v$. *Strong fairness* `SF_v(A)` strengthens this to: if `A` is enabled infinitely often, it must fire infinitely often.
+where $chevron.l A chevron.r_v$ is the action $A$ ignoring stuttering on $v$. *Strong fairness* `SF_v(A)` strengthens this to: if `A` is enabled infinitely often, it must fire infinitely often.
 
 == PlusCal
 

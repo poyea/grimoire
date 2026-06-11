@@ -50,7 +50,7 @@ $ K_0 rho K_0^dagger = mat(a, b sqrt(1-gamma); b^* sqrt(1-gamma), (1-a)(1-gamma)
 
 $ K_1 rho K_1^dagger = mat(gamma(1-a), 0; 0, 0). $
 
-Summing: $cal(E)_"AD"(rho) = mat(a + gamma(1-a), quad b sqrt(1-gamma); b^* sqrt(1-gamma), quad (1-a)(1-gamma))$. The excited-state population $1-a$ shrinks by factor $1-gamma$; the ground state $a$ grows by $gamma(1-a)$; coherences $b$ decay by $sqrt(1-gamma)$. In the limit $t -> infinity$ ($gamma -> 1$), all population flows to $|0 angle.r$ and coherences vanish.
+Summing: $cal(E)_"AD"(rho) = mat(a + gamma(1-a), quad b sqrt(1-gamma); b^* sqrt(1-gamma), quad (1-a)(1-gamma))$. The excited-state population $1-a$ shrinks by factor $1-gamma$; the ground state $a$ grows by $gamma(1-a)$; coherences $b$ decay by $sqrt(1-gamma)$. In the limit $t -> infinity$ ($gamma -> 1$), all population flows to $|0 chevron.r$ and coherences vanish.
 
 *Phase damping — worked example.* Models dephasing ($T_2$ process, no energy exchange):
 
@@ -62,7 +62,7 @@ $ K_0 rho K_0^dagger + K_1 rho K_1^dagger = mat(a, b sqrt(1-lambda); b^* sqrt(1-
 
 Populations on the diagonal are unchanged; coherences decay as $b -> b sqrt(1-lambda) approx b\, e^(-t\/(2 T_2))$. This captures the physical picture of random phase kicks: energy is conserved, but superpositions wash out. Combined amplitude and phase damping gives $T_2^(-1) = (2 T_1)^(-1) + T_phi^(-1)$ where $T_phi$ is the pure dephasing time.
 
-*Combining amplitude and phase damping — a worked example.* Consider a qubit initialized in $|+ angle.r = (|0 angle.r + |1 angle.r)/sqrt(2)$, so $rho_0 = mat(1/2, 1/2; 1/2, 1/2)$. After time $t$ under both processes:
+*Combining amplitude and phase damping — a worked example.* Consider a qubit initialized in $|+ chevron.r = (|0 chevron.r + |1 chevron.r)/sqrt(2)$, so $rho_0 = mat(1/2, 1/2; 1/2, 1/2)$. After time $t$ under both processes:
 
 $ rho(t) = mat(1/2 + gamma/2, quad (1/2) sqrt(1-gamma) sqrt(1-lambda); (1/2) sqrt(1-gamma) sqrt(1-lambda), quad (1/2)(1-gamma)). $
 
@@ -118,7 +118,7 @@ The recurring pattern across supremacy claims is instructive: (1) quantum team i
 
 == NISQ Algorithms and Their Limitations
 
-*VQE.* The variational quantum eigensolver minimizes $E(arrow(theta)) = angle.l psi(arrow(theta)) | H | psi(arrow(theta)) angle.r$ over a parameterized state $|psi(arrow(theta)) angle.r$. Two fundamental problems arise on NISQ hardware:
+*VQE.* The variational quantum eigensolver minimizes $E(arrow(theta)) = chevron.l psi(arrow(theta)) | H | psi(arrow(theta)) chevron.r$ over a parameterized state $|psi(arrow(theta)) chevron.r$. Two fundamental problems arise on NISQ hardware:
 
 1. *Barren plateaus (McClean et al. 2018):* For hardware-efficient ansätze drawn from the unitary $n$-design family, the gradient variance vanishes exponentially. Precisely, for any parameter $theta_k$ in a sufficiently expressive (2-design) ansatz on $n$ qubits:
 
@@ -134,7 +134,7 @@ The barren plateau and noise problems compound: a deeper ansatz needed to escape
 
 *Quantum machine learning and dequantization.* Several quantum linear-algebra algorithms (HHL for linear systems, Kerenidis-Prakash (KP) for recommendation systems) claimed exponential speedups over classical methods. These relied on *quantum RAM* (qRAM) to prepare quantum states encoding vectors in $O(text("polylog") N)$ time, and on the ability to extract useful information from the resulting quantum state.
 
-Tang (2019) introduced the concept of *sampling access* (also called $ell^2$-sampling access) and used it to dequantize the KP recommendation-system algorithm. Sampling access to a vector $v in bb(R)^N$ means: (1) query any entry $v_i$ in $O(1)$; (2) draw an index $i$ with probability proportional to $v_i^2$ in $O(1)$. This is a classical analogue of what a qRAM state $sum_i v_i |i angle.r$ allows a quantum algorithm to do.
+Tang (2019) introduced the concept of *sampling access* (also called $ell^2$-sampling access) and used it to dequantize the KP recommendation-system algorithm. Sampling access to a vector $v in bb(R)^N$ means: (1) query any entry $v_i$ in $O(1)$; (2) draw an index $i$ with probability proportional to $v_i^2$ in $O(1)$. This is a classical analogue of what a qRAM state $sum_i v_i |i chevron.r$ allows a quantum algorithm to do.
 
 Tang showed that given sampling access to input matrices $A$ and $B$, a classical algorithm can solve the same low-rank matrix approximation problem the KP algorithm solved, with runtime $O(text("poly")(k, 1/epsilon) dot text("polylog")(m, n))$ — the same asymptotic dependence on $k$ (rank) and $epsilon$ (error), and only polylogarithmic in the matrix dimensions $m, n$. The quantum speedup therefore evaporated: it was not a property of quantum mechanics but of the structured data access model (qRAM or sampling access).
 

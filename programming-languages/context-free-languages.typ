@@ -81,7 +81,7 @@ A *pushdown automaton* (PDA) is the canonical recogniser for CFLs; full treatmen
 
 *Theorem (CFG–PDA equivalence; Chomsky, Evey, Schützenberger).* A language $L$ is context-free <==> $L = L(M)$ for some nondeterministic pushdown automaton $M$.
 
-The construction *CFG $arrow.r$ PDA*: from a CFG in GNF, build a one-state PDA whose stack holds a *sentential form's tail*. The PDA pops the top nonterminal $A$, reads the next input $a$, and pushes the tail of some production $A arrow.r a alpha$, guessing $alpha$ nondeterministically. The construction *PDA $arrow.r$ CFG* introduces nonterminals $angle.l p, X, q angle.r$ standing for "the PDA goes from state $p$ to state $q$ while net popping $X$" and grammar productions encode push/pop sequences; the construction is quadratic in PDA size and produces $|Q|^2 |Gamma|$ nonterminals.
+The construction *CFG $arrow.r$ PDA*: from a CFG in GNF, build a one-state PDA whose stack holds a *sentential form's tail*. The PDA pops the top nonterminal $A$, reads the next input $a$, and pushes the tail of some production $A arrow.r a alpha$, guessing $alpha$ nondeterministically. The construction *PDA $arrow.r$ CFG* introduces nonterminals $chevron.l p, X, q chevron.r$ standing for "the PDA goes from state $p$ to state $q$ while net popping $X$" and grammar productions encode push/pop sequences; the construction is quadratic in PDA size and produces $|Q|^2 |Gamma|$ nonterminals.
 
 == CYK Algorithm
 

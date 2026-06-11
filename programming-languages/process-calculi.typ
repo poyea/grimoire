@@ -175,14 +175,14 @@ Each equivalence corresponds to a class of distinguishing observers: traces corr
 
 *Hennessy–Milner Logic* (HML, Hennessy–Milner 1985) is the modal logic of bisimulation:
 
-$ phi ::= top | "not" phi | phi and phi | angle.l alpha angle.r phi | [alpha] phi $
+$ phi ::= top | "not" phi | phi and phi | chevron.l alpha chevron.r phi | [alpha] phi $
 
 The semantics:
 
 - $P models top$ always.
 - $P models "not" phi$ <==> $P models "not" phi$.
 - $P models phi_1 and phi_2$ <==> $P models phi_1$ and $P models phi_2$.
-- $P models angle.l alpha angle.r phi$ <==> $exists P'. P arrow.r^alpha P' and P' models phi$.
+- $P models chevron.l alpha chevron.r phi$ <==> $exists P'. P arrow.r^alpha P' and P' models phi$.
 - $P models [alpha] phi$ <==> $forall P'. P arrow.r^alpha P' => P' models phi$.
 
 *Theorem (Hennessy–Milner 1985).* On image-finite processes ($forall alpha$, ${ P' : P arrow.r^alpha P' }$ is finite), $P tilde Q$ <==> $P$ and $Q$ satisfy the same HML formulae.
@@ -245,9 +245,9 @@ The $pi$-calculus (Milner–Parrow–Walker 1992) extends CCS with the ability t
 
 === Monadic Syntax
 
-$ P, Q ::= 0 | overline(x) angle.l y angle.r. P | x(y). P | P bar Q | (nu x) P | !P | P + Q $
+$ P, Q ::= 0 | overline(x) chevron.l y chevron.r. P | x(y). P | P bar Q | (nu x) P | !P | P + Q $
 
-- $overline(x) angle.l y angle.r. P$: send name $y$ on channel $x$, then continue as $P$.
+- $overline(x) chevron.l y chevron.r. P$: send name $y$ on channel $x$, then continue as $P$.
 - $x(y). P$: receive a name on $x$, bind it to $y$, then continue as $P$. Here $y$ is binding in $P$.
 - $(nu x) P$: create a fresh name $x$, scoped within $P$.
 - $!P$: replication, semantically equivalent to $P bar !P$, providing unbounded copies of $P$.
@@ -302,11 +302,11 @@ R-STRUCT folds the algebraic laws of $equiv$ into the dynamics. With it, the syn
 
 *Scope extrusion in action.* Consider
 
-$ (nu y)(overline(x) angle.l y angle.r. P) bar x(z). R $
+$ (nu y)(overline(x) chevron.l y chevron.r. P) bar x(z). R $
 
 The send wishes to transmit the private name $y$. Apply scope extrusion (after $alpha$-renaming if $y$ clashes with $"fn"(R)$):
 
-$ equiv (nu y)((overline(x) angle.l y angle.r. P) bar x(z). R) $
+$ equiv (nu y)((overline(x) chevron.l y chevron.r. P) bar x(z). R) $
 
 Then R-COM:
 
@@ -318,7 +318,7 @@ The name $y$, originally private to the sender, now scopes over both processes. 
 
 A reduction semantics is intensional; for compositional reasoning we need labels. The action set is
 
-$ alpha ::= tau | overline(x) angle.l y angle.r | x(y) | overline(x)(y) $
+$ alpha ::= tau | overline(x) chevron.l y chevron.r | x(y) | overline(x)(y) $
 
 with $overline(x)(y)$ the *bound output* indicating the extrusion of a private name $y$ on $x$. The rules include the analogues of CCS's ACT, PAR, COM, RES, SUM, with an *OPEN* rule
 
@@ -352,37 +352,37 @@ The deepest behavioural equivalence in $pi$ is *barbed congruence*: $P tilde.equ
 
 In HO$pi$, processes themselves may be communicated. Syntax adds process variables and abstraction:
 
-$ P ::= dots | overline(x) angle.l P angle.r. Q | x(X). Q | X $
+$ P ::= dots | overline(x) chevron.l P chevron.r. Q | x(X). Q | X $
 
 Sangiorgi (1992) showed that HO$pi$ has no extra expressive power: there is a faithful translation
 
-$ [| overline(x) angle.l R angle.r. P |] = (nu r)(overline(x) angle.l r angle.r. ([| P |] bar !r(y). [| R |])) $
+$ [| overline(x) chevron.l R chevron.r. P |] = (nu r)(overline(x) chevron.l r chevron.r. ([| P |] bar !r(y). [| R |])) $
 
 that replaces each process value by a *trigger name*, a fresh channel whose activation launches a copy of the process. The receiver, upon obtaining the trigger, can spawn the process by sending on it. This translation is fully abstract with respect to barbed bisimulation, establishing the first-order $pi$-calculus as the canonical core.
 
 === Encoding the $lambda$-calculus
 
-Milner (1990, 1992) showed how to encode the untyped $lambda$-calculus into $pi$. The call-by-value encoding $angle.l angle.l M angle.r angle.r_v p$ (with $p$ a result channel) is:
+Milner (1990, 1992) showed how to encode the untyped $lambda$-calculus into $pi$. The call-by-value encoding $chevron.l chevron.l M chevron.r chevron.r_v p$ (with $p$ a result channel) is:
 
-$ angle.l angle.l x angle.r angle.r_v p &= overline(p) angle.l x angle.r \
-angle.l angle.l lambda x. M angle.r angle.r_v p &= (nu f)(overline(p) angle.l f angle.r. !f(x, q). angle.l angle.l M angle.r angle.r_v q) \
-angle.l angle.l M N angle.r angle.r_v p &= (nu q)(angle.l angle.l M angle.r angle.r_v q bar q(f). (nu r)(angle.l angle.l N angle.r angle.r_v r bar r(v). overline(f) angle.l v, p angle.r)) $
+$ chevron.l chevron.l x chevron.r chevron.r_v p &= overline(p) chevron.l x chevron.r \
+chevron.l chevron.l lambda x. M chevron.r chevron.r_v p &= (nu f)(overline(p) chevron.l f chevron.r. !f(x, q). chevron.l chevron.l M chevron.r chevron.r_v q) \
+chevron.l chevron.l M N chevron.r chevron.r_v p &= (nu q)(chevron.l chevron.l M chevron.r chevron.r_v q bar q(f). (nu r)(chevron.l chevron.l N chevron.r chevron.r_v r bar r(v). overline(f) chevron.l v, p chevron.r)) $
 
-The encoding's correctness theorem: $M arrow.r.long^*_(beta v) V$ <==> $angle.l angle.l M angle.r angle.r_v p$ converges to a process that emits the encoding of $V$ on $p$. The CBN encoding is structurally similar but transmits *thunks* (replicated processes) rather than evaluated values. The two encodings differ exactly where CBV and CBN differ semantically, a satisfying coincidence.
+The encoding's correctness theorem: $M arrow.r.long^*_(beta v) V$ <==> $chevron.l chevron.l M chevron.r chevron.r_v p$ converges to a process that emits the encoding of $V$ on $p$. The CBN encoding is structurally similar but transmits *thunks* (replicated processes) rather than evaluated values. The two encodings differ exactly where CBV and CBN differ semantically, a satisfying coincidence.
 
 === Asynchronous $pi$-calculus
 
-Honda–Tokoro (1991) and Boudol (1992) independently observed that *output prefix* (the ability to write $overline(x) angle.l y angle.r. P$ for any $P$) requires the sender to know when the message has been received, an inherently synchronous primitive. Restricting outputs to the form $overline(x) angle.l y angle.r$ (with no continuation, i.e. continuation forced to $0$) yields the *asynchronous $pi$-calculus*:
+Honda–Tokoro (1991) and Boudol (1992) independently observed that *output prefix* (the ability to write $overline(x) chevron.l y chevron.r. P$ for any $P$) requires the sender to know when the message has been received, an inherently synchronous primitive. Restricting outputs to the form $overline(x) chevron.l y chevron.r$ (with no continuation, i.e. continuation forced to $0$) yields the *asynchronous $pi$-calculus*:
 
-$ P ::= 0 | overline(x) angle.l y angle.r | x(y). P | P bar Q | (nu x) P | !P $
+$ P ::= 0 | overline(x) chevron.l y chevron.r | x(y). P | P bar Q | (nu x) P | !P $
 
 An output is a "message in flight"; the sender has no way to observe its consumption. This calculus matches the actor model's semantics (asynchronous addressed messages, mailbox-style buffering when composed with a server process) and underlies Pict (Pierce–Turner 2000) and several theoretical foundations for distributed languages. It is strictly less expressive than full $pi$ in some operational senses (no synchronous handshake) but equally expressive for many practical purposes, and the encoding of full $pi$ into asynchronous $pi$ is a classic exercise.
 
 === Polyadic $pi$ and Sorting
 
-The *polyadic* $pi$-calculus admits tuples in communications: $overline(x) angle.l y_1, dots, y_n angle.r. P$ and $x(y_1, dots, y_n). P$. Encoding into the monadic calculus uses fresh channels:
+The *polyadic* $pi$-calculus admits tuples in communications: $overline(x) chevron.l y_1, dots, y_n chevron.r. P$ and $x(y_1, dots, y_n). P$. Encoding into the monadic calculus uses fresh channels:
 
-$ angle.l angle.l overline(x) angle.l y_1, y_2 angle.r. P angle.r angle.r = (nu w)(overline(x) angle.l w angle.r. overline(w) angle.l y_1 angle.r. overline(w) angle.l y_2 angle.r. angle.l angle.l P angle.r angle.r) $
+$ chevron.l chevron.l overline(x) chevron.l y_1, y_2 chevron.r. P chevron.r chevron.r = (nu w)(overline(x) chevron.l w chevron.r. overline(w) chevron.l y_1 chevron.r. overline(w) chevron.l y_2 chevron.r. chevron.l chevron.l P chevron.r chevron.r) $
 
 To prevent the receiver from desynchronising (consuming only part of the tuple before another sender intervenes), Milner introduced a *sort discipline*: each channel has a sort declaring the shape of messages it carries. Sortings are the precursor of $pi$-calculus type systems.
 
@@ -413,7 +413,7 @@ The *join calculus* (Fournet–Gonthier 1996) reformulates $pi$ around *join pat
   in ...
 ```
 
-defines two channels $"get"$ and $"put"$ that synchronise: a $"get" angle.l r angle.r$ message and a $"put" angle.l x, r' angle.r$ message together fire and produce $r angle.l x angle.r bar r' angle.l angle.r$. The semantics is given by a *chemical abstract machine* (Berry–Boudol 1992): the soup of messages and definitions rewrites by "molecular reactions" matching join patterns.
+defines two channels $"get"$ and $"put"$ that synchronise: a $"get" chevron.l r chevron.r$ message and a $"put" chevron.l x, r' chevron.r$ message together fire and produce $r chevron.l x chevron.r bar r' chevron.l chevron.r$. The semantics is given by a *chemical abstract machine* (Berry–Boudol 1992): the soup of messages and definitions rewrites by "molecular reactions" matching join patterns.
 
 The join calculus is well suited to distributed implementation because each definition is a *receptor* that can be located at a single site; no global multi-party rendezvous is required. JoCaml (Conchon–Le Fessant 1999) and Microsoft's Cω (Benton–Cardelli–Fournet 2005) implemented join patterns directly in mainstream languages.
 
@@ -423,7 +423,7 @@ There is a faithful encoding of $pi$ into join and vice versa: the calculi are e
 
 The *ambient calculus* (Cardelli–Gordon 1998) models computation in the presence of *named places* (ambients) with explicit boundaries. Syntax:
 
-$ P ::= 0 | (nu n) P | P bar Q | !P | n[P] | M.P | (x). P | angle.l M angle.r $
+$ P ::= 0 | (nu n) P | P bar Q | !P | n[P] | M.P | (x). P | chevron.l M chevron.r $
 
 where $n[P]$ is an ambient named $n$ containing process $P$, and $M$ is a *capability*: $"in" n$ (enter the ambient $n$), $"out" n$ (exit the enclosing ambient $n$), or $"open" n$ (dissolve the boundary of $n$).
 

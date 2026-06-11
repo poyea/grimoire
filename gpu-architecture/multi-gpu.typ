@@ -15,7 +15,7 @@ Modern ML training (LLMs with 100B+ parameters) and HPC simulations no longer fi
   [NVLink 4 (H100)], [900 GB/s], [$tilde$ 500 ns], [NVSwitch gen3], [DGX H100 (8-GPU)],
   [NVLink 5 (B100/B200)], [1800 GB/s], [$tilde$ 400 ns], [NVSwitch gen4], [GB200 NVL72 (72-GPU)],
   [AMD Infinity Fabric (MI300)], [896 GB/s], [$tilde$ 600 ns], [Mesh], [MI300X 8-GPU systems],
-  [InfiniBand NDR (ConnectX-7)], [400 Gb/s (50 GB/s)], [$tilde$ 600 ns], [Fat-tree / dragonfly], [Multi-node HPC/ML clusters],
+  [InfiniBand NDR (ConnectX-7)], [400 Gb/s (50 GB/s)], [$tilde$ 1-2 $mu$s end-to-end], [Fat-tree / dragonfly], [Multi-node HPC/ML clusters],
   [InfiniBand XDR], [800 Gb/s (100 GB/s)], [$tilde$ 1 $mu$s], [Fat-tree], [Blackwell-era clusters],
   [Ethernet RoCEv2 400G], [50 GB/s], [$tilde$ 2-5 $mu$s], [Any], [Hyperscaler clusters],
 )

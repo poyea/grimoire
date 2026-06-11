@@ -18,7 +18,7 @@ Scalars are lowercase italic ($x$, $eta$), vectors lowercase ($x in RR^n$, treat
   [$A succ 0$, $A succ.eq 0$], [positive definite, positive semi-definite],
   [$lambda_i (A)$, $sigma_i (A)$], [eigenvalues, singular values, ordered $lambda_1 >= lambda_2 >= ...$],
   [$kappa(A) = sigma_max \/ sigma_min$], [condition number],
-  [$A times.circle B$], [Kronecker product],
+  [$A times.o B$], [Kronecker product],
   [$delta_(i j)$], [Kronecker delta],
 )
 

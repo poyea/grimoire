@@ -64,7 +64,7 @@ In CUDA this is the *warp shuffle* pattern; in OpenMP it is `#pragma omp paralle
 
 == Prefix Sum / Scan
 
-The most important parallel primitive. Given $a_0, ..., a_(n-1)$ and an associative operator $plus.circle$, compute $b_i = a_0 plus.circle ... plus.circle a_i$ (*inclusive*) or $b_i = a_0 plus.circle ... plus.circle a_(i-1)$ (*exclusive*).
+The most important parallel primitive. Given $a_0, ..., a_(n-1)$ and an associative operator $plus.o$, compute $b_i = a_0 plus.o ... plus.o a_i$ (*inclusive*) or $b_i = a_0 plus.o ... plus.o a_(i-1)$ (*exclusive*).
 
 === Hillis-Steele (Span $O(log n)$, Work $O(n log n)$)
 

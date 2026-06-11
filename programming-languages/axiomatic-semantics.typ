@@ -74,7 +74,7 @@ The verification reduces to *three logical implications* over arithmetic. A theo
 
 == Partial vs. Total Correctness
 
-*Partial correctness*: ${P} c {Q}$ holds <==> for every state $sigma$ with $sigma tack.r P$ and every $sigma'$ with $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$, $sigma' tack.r Q$. Divergence is permitted.
+*Partial correctness*: ${P} c {Q}$ holds <==> for every state $sigma$ with $sigma tack.r P$ and every $sigma'$ with $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$, $sigma' tack.r Q$. Divergence is permitted.
 
 *Total correctness*: $[P] c [Q]$ holds <==> additionally $c$ terminates from every state in which $P$ holds.
 
@@ -95,7 +95,7 @@ The boundary between partial and total correctness is the boundary between *live
 
 Hoare logic is *sound* with respect to the operational semantics:
 
-*Theorem (Soundness).* If $tack.r {P} c {Q}$ then for every $sigma$ with $sigma tack.r P$ and every $sigma'$ with $angle.l c, sigma angle.r arrow.r^* angle.l "skip", sigma' angle.r$, $sigma' tack.r Q$.
+*Theorem (Soundness).* If $tack.r {P} c {Q}$ then for every $sigma$ with $sigma tack.r P$ and every $sigma'$ with $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$, $sigma' tack.r Q$.
 
 *Proof sketch.* Induction on the derivation of the triple, using the standard operational rules of IMP. The `H-While` case requires induction on the number of loop iterations, using the invariant. $square$
 
@@ -240,7 +240,7 @@ Key constructs:
 - *Ghost state*. Auxiliary state not present in the program, used to track logical history. Resource algebras (PCMs, *partial commutative monoids*) provide a vocabulary for ghost state: counting permissions, fractional ownership, history tokens.
 - *Invariants* $"Inv"(N)(I)$. An assertion $I$ shared by all threads, named by $N$, openable for a single atomic step.
 - *View shifts* $P => ? Q$ ("or $|=> $). Logical updates that change ghost state without affecting the physical heap; analogous to weakening in classical logic but with resource-algebra structure.
-- *Atomic triples* $angle.l P angle.r c angle.l Q angle.r$ (Svendsen-Birkedal). The pre and postcondition hold *atomically* around the linearization point of a concurrent operation.
+- *Atomic triples* $chevron.l P chevron.r c chevron.l Q chevron.r$ (Svendsen-Birkedal). The pre and postcondition hold *atomically* around the linearization point of a concurrent operation.
 
 Iris is fully formalized in Coq, with the *Iris Proof Mode* providing an interactive separation-logic-aware tactic language. It has been used to verify concurrent data structures (Michael-Scott queue, RDCSS), Rust's `Cell` and `RefCell` semantics (RustBelt, Jung et al. 2018), "and weak-memory models (iGPS).
 

@@ -112,7 +112,7 @@ Rules are applied by pattern-matching on the outermost form of the expression. T
 corresponds to deterministic evaluation order. Non-determinism would correspond to
 unspecified evaluation order.
 
-*Mutable state.* Extend the configuration to a pair $angle.l e, sigma angle.r$ where
+*Mutable state.* Extend the configuration to a pair $chevron.l e, sigma chevron.r$ where
 $sigma : "Var" -> "Val"$ is the store:
 
 ```
@@ -130,7 +130,7 @@ Small-step semantics is well-suited to concurrent languages (interleaving), lazy
 
 === Big-Step (Natural) Semantics
 
-The *big-step* relation $e arrow.b.double v$ (also written $angle.l e, sigma angle.r arrow.b.double v$ when threading a store) relates an expression directly to its final value, skipping intermediate steps:
+The *big-step* relation $e arrow.b.double v$ (also written $chevron.l e, sigma chevron.r arrow.b.double v$ when threading a store) relates an expression directly to its final value, skipping intermediate steps:
 
 ```
 [B-Int]       n => n
@@ -243,7 +243,7 @@ iteration and is bounded below by zero).
 Hoare logic is *sound* if every provable triple ${ P } c { Q }$ is true under the
 operational semantics:
 
-$forall sigma. P(sigma) -> angle.l c, sigma angle.r ->^* angle.l "skip", sigma' angle.r => Q(sigma')$
+$forall sigma. P(sigma) -> chevron.l c, sigma chevron.r ->^* chevron.l "skip", sigma' chevron.r => Q(sigma')$
 
 The proof proceeds by induction on the derivation of the Hoare triple. Soundness connects
 the proof system to the machine model; without it, a provable triple might be false.

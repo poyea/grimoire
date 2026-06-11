@@ -140,7 +140,7 @@ $lambda^arrow.r$ has a beautiful categorical model: it is the *internal language
 
 A *Cartesian closed category* $cal(C)$ has:
 - A terminal object $1$ (interpreting $"Unit"$).
-- Binary products $A times B$ with projections $pi_1, pi_2$ and pairing $angle.l f, g angle.r$ (interpreting $tau_1 times tau_2$).
+- Binary products $A times B$ with projections $pi_1, pi_2$ and pairing $chevron.l f, g chevron.r$ (interpreting $tau_1 times tau_2$).
 - Exponentials $B^A$ with an evaluation morphism $"ev" : B^A times A arrow.r B$ and currying $Lambda : "Hom"(C times A, B) arrow.r "Hom"(C, B^A)$ (interpreting $tau_1 arrow.r tau_2$).
 
 The interpretation $[| - |]$ sends:
@@ -148,7 +148,7 @@ The interpretation $[| - |]$ sends:
 - Contexts to objects: $[| x_1 : tau_1, ..., x_n : tau_n |] = [| tau_1 |] times ... times [| tau_n |]$.
 - Typing derivations $Gamma tack.r e : tau$ to morphisms $[| Gamma |] arrow.r [| tau |]$:
   + T-VAR ($x_i$): $pi_i : [| Gamma |] arrow.r [| tau_i |]$.
-  + T-APP: $"ev" circle.small angle.l [| e_1 |], [| e_2 |] angle.r$.
+  + T-APP: $"ev" circle.small chevron.l [| e_1 |], [| e_2 |] chevron.r$.
   + T-ABS: $Lambda([| e |])$.
 
 *Soundness.* $beta eta$-conversion is sound: if $e_1 =_(beta eta) e_2$ then $[| e_1 |] = [| e_2 |]$.
@@ -408,7 +408,7 @@ This perspective unifies the syntactic and semantic accounts and prepares the gr
 == Computational Adequacy
 
 A model $cal(M)$ of $lambda^arrow.r$ is *computationally adequate* if:
-- $emptyset tack.r e : "Bool"$ and $bracket.l.double e bracket.r.double = "true"$ in $cal(M)$ => $e arrow.r^* "true"$ (syntactically).
+- $emptyset tack.r e : "Bool"$ and $bracket.l.stroked e bracket.r.stroked = "true"$ in $cal(M)$ => $e arrow.r^* "true"$ (syntactically).
 
 The set-theoretic model is adequate for $lambda^arrow.r$.
 For $lambda^arrow.r + "fix"$, adequacy requires the *Scott model* (cpos and continuous functions, with $bot$ for divergence): Plotkin (1977) proved the seminal adequacy theorem for PCF.
