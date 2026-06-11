@@ -2,7 +2,7 @@
 
 Distributed systems have no global "now". What they have are *clocks* (each imperfect) and *messages* (which establish happens-before relationships). The art of this chapter is converting one into the other: using clocks to approximate causality and using causality to compensate for clock skew.
 
-*See also:* _Introduction_, _Consensus Deep Dive_, _Replication Protocols_, and _Consensus and Replication_ (TrueTime in Spanner).
+*See also:* _Introduction_, _Consensus Deep Dive_, _Causal Consistency_, and _Consensus and Replication_ (Databases volume — TrueTime in Spanner).
 
 == Physical Clocks
 
@@ -132,7 +132,7 @@ Spanner uses TrueTime for:
 - *Commit wait:* after assigning commit timestamp $s$, wait until $"TT.now().earliest" > s$ before releasing locks. Guarantees external consistency.
 - *Snapshot reads:* a read at timestamp $s$ can be served by any replica whose safe time $>= s$.
 
-Reported $epsilon$ (half-width) is typically $<10$ ms; commit wait of $2 epsilon = 14$ ms is amortized against WAN-RTT Paxos commits.
+Reported $epsilon$ (half-width) is typically $approx 7$ ms (GPS-disciplined); commit wait of $2 epsilon approx 14$ ms is amortized against WAN-RTT Paxos commits.
 
 == Closed Timestamps
 

@@ -133,7 +133,7 @@ Dagster uses *Ops* for imperative computation and *Resources* for injectable inf
 
 Both sagas and workflow engines address long-running business processes. Their scopes differ:
 
-A *saga* (Garcia-Molina and Salem 1987; Richarson 2018 popularisation) is a sequence of local transactions, each with a corresponding *compensating transaction* that semantically undoes it. Sagas provide *ACI* (no isolation) semantics: intermediate states are visible. They are implemented either *choreographically* (each service reacts to events) or *orchestrationally* (a coordinator issues commands).
+A *saga* (Garcia-Molina and Salem 1987; Richardson 2018 popularisation) is a sequence of local transactions, each with a corresponding *compensating transaction* that semantically undoes it. Sagas provide *ACI* (no isolation) semantics: intermediate states are visible. They are implemented either *choreographically* (each service reacts to events) or *orchestrationally* (a coordinator issues commands).
 
 A *workflow engine* is an orchestration framework that may implement sagas as one pattern among many. Workflow engines provide richer primitives: signals, timers, versioning, queries, and nested sub-workflows. The engine handles retry, replay, and state persistence; the saga logic is just application code.
 

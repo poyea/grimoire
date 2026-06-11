@@ -104,7 +104,7 @@ Final state: x = 1, but two increments occurred.
 
 Fixes correspond to entire subfields of this book:
 
-- *State-based CRDT* (G-Counter): each node tracks its own count, merges take element-wise max. We will cover this in _Replication Protocols_.
+- *State-based CRDT* (G-Counter): each node tracks its own count, merges take element-wise max. We will cover this in _Gossip Protocols_ and _CRDTs_.
 - *Operation-based CRDT*: deliver `inc` exactly once in causal order — requires reliable causal broadcast (_Time and Order_).
 - *Consensus*: serialize every `inc` through a leader (_Consensus Deep Dive_).
 - *Compensating transaction*: detect divergence, run a reconciliation (_Transactions Across Systems_).
@@ -153,7 +153,7 @@ Each step weaker level admits more concurrency and tolerates more failures but p
 
 - *Foundations:* this chapter, _Time and Order_, _Failure Detection_.
 - *Coordination:* _Leader Election_, _Consensus Deep Dive_, _Coordination Services_.
-- *Data:* _Replication Protocols_, _State Machine Replication_, _Gossip_, _Transactions_.
+- *Data:* _CRDTs_, _Causal Consistency_, _Gossip Protocols_, _Distributed Transactions_.
 - *Systems:* _Distributed Scheduling_, _Case Studies_.
 - *Verification:* _Formal Methods_.
 

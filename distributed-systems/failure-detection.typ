@@ -2,7 +2,7 @@
 
 A failure detector is an oracle that tells a process which peers it believes to have crashed. It is the abstraction that lets asynchronous systems make progress despite FLP. The art is balancing *completeness* (every crashed process is eventually suspected) against *accuracy* (no correct process is suspected forever).
 
-*See also:* _Introduction_ (FLP), _Leader Election and Leases_, _Gossip and Epidemics_, _Coordination Services_ (ZooKeeper session expiry).
+*See also:* _Introduction_ (FLP), _Leader Election and Leases_, _Gossip Protocols_, _Coordination Services_ (ZooKeeper session expiry).
 
 == Chandra–Toueg Classes
 
