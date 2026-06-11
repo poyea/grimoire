@@ -142,7 +142,7 @@ The cost: a PEG is not a notation for a language, it is a notation for a *parser
 
 == GLR Parsing
 
-Generalized LR (GLR, Tomita 1987) extends LR by forking the parse state whenever a conflict is encountered, exploring all possibilities in parallel, and merging branches that produce the same subtree. The result is an $O(n^3)$ parser (worst case) that handles all context-free grammars, including ambiguous ones.
+Generalized LR (GLR, Tomita 1985) extends LR by forking the parse state whenever a conflict is encountered, exploring all possibilities in parallel, and merging branches that produce the same subtree. The result is an $O(n^3)$ parser (worst case) that handles all context-free grammars, including ambiguous ones.
 
 GLR is the right tool for natural-language grammars or legacy languages (COBOL, some dialects of C++) where the grammar is genuinely ambiguous and the ambiguity is resolved by semantic context. For new language design, ambiguous grammars are a code smell; prefer LALR or Pratt.
 

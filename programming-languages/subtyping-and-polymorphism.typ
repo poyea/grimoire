@@ -73,7 +73,7 @@ The argument position is *contravariant*: to substitute for a function expecting
    tau_1 -> tau_2 <: tau_1' -> tau_2'
 ```
 
-The error of conflating the two, assuming the arrow is covariant in both positions, is the canonical broken inheritance pattern. Eiffel infamously allowed contravariant *argument* refinement; the resulting unsoundness (a `Cat::eats(Mouse)` overriding `Animal::eats(Food)`, then receiving a `Salad`) required runtime checks.
+The error of conflating the two, assuming the arrow is covariant in both positions, is the canonical broken inheritance pattern. Eiffel infamously allowed covariant *argument* refinement; the resulting unsoundness (a `Cat::eats(Mouse)` overriding `Animal::eats(Food)`, then receiving a `Salad`) required runtime checks.
 
 === References and Arrays: Invariance
 

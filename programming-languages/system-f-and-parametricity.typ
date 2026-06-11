@@ -284,7 +284,7 @@ The type equality used in T-APP, T-TAPP is now equality *modulo type-level $beta
 
 == The Barendregt Cube
 
-Barendregt (1991) organised the family of pure type systems into a *cube* indexed by three binary axes (the four kinds of dependency allowed):
+Barendregt (1991) organised the family of pure type systems into a *cube* indexed by three binary axes (the three kinds of dependency allowed):
 
 #table(
   columns: (auto, auto, auto, auto),
