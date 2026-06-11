@@ -2,7 +2,7 @@
 
 When a problem is NP-hard, polynomial-time algorithms that always return the optimum are unlikely to exist. *Approximation algorithms* trade off optimality for tractability: they run in polynomial time and produce a solution provably within a factor $alpha$ of the optimum. This chapter covers the main techniques (greedy, LP rounding, primal-dual, local search), the hierarchy from constant-factor approximations to PTAS and FPTAS, and canonical results for set cover, vertex cover, and TSP (Christofides).
 
-*See also:* _Greedy_, _Linear Programming and Simplex_, _Network Flows and Matching_, _Dynamic Programming_.
+*See also:* _Greedy_, _Linear Programming and the Simplex Method_, _Network Flows and Matching_, _Dynamic Programming_.
 
 == Vocabulary
 

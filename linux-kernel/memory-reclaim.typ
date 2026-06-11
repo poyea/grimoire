@@ -234,4 +234,4 @@ Brown, N. (2024). _zswap and friends_ — LWN.
 
 `mm/vmscan.c`, `mm/page_alloc.c`, `mm/oom_kill.c`, `mm/memcontrol.c`, `mm/damon/core.c`, `kernel/sched/psi.c`.
 
-*See also:* _MMap and Memory Mapped Files_ (where the page cache and anonymous pages originate), _Cgroups and Namespaces_ (memcg controllers), _Scheduler_ (PSI integrates with CFS load tracking), _VFS and Filesystems_ (dentry/inode shrinkers, writeback path).
+*See also:* _mmap and Memory Management_ (where the page cache and anonymous pages originate), _Cgroups and Namespaces_ (memcg controllers), _Scheduler_ (PSI integrates with CFS load tracking), _VFS and Filesystems_ (dentry/inode shrinkers, writeback path).

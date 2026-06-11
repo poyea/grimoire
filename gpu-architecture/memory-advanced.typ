@@ -2,7 +2,7 @@
 
 *Advanced GPU memory topics:* This chapter covers L1/L2 caches, constant and texture memory, unified memory, HBM, access optimization patterns, and profiling. It continues from _GPU Memory Hierarchy_ (registers, shared memory, global memory).
 
-*See also:* _GPU Memory Hierarchy_ (on-chip memory basics), _GPU Execution Model_, _Performance Optimization_.
+*See also:* _GPU Memory Hierarchy_ (on-chip memory basics), _SIMT Execution Model_, _Performance Optimization_.
 
 == L1 and L2 Caches
 

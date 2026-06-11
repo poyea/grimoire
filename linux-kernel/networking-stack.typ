@@ -250,4 +250,4 @@ LWN: Corbet's GRO, GSO, BBR, and XDP series; "A look at sockmap" (2018).
 
 Hsieh, J. et al. (2024). _Cilium: Cloud-Native Networking and Security with eBPF_, O'Reilly.
 
-*See also:* _Interrupts and NAPI_ (rx softirq path, IRQ affinity), _eBPF Deep Dive_ (the VM these XDP/TC programs target), _Cgroups and Namespaces_ (network namespaces and per-cgroup socket hooks), _IO uring_ (modern sendmsg/recvmsg path).
+*See also:* _Interrupts and Bottom Halves_ (rx softirq path, IRQ affinity), _eBPF Deep Dive_ (the VM these XDP/TC programs target), _Cgroups and Namespaces_ (network namespaces and per-cgroup socket hooks), _IO uring_ (modern sendmsg/recvmsg path).

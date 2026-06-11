@@ -2,7 +2,7 @@
 
 Between `write(2)` and a flash cell sit half a dozen layers, each with its own queueing, ordering, and failure semantics. Understanding the stack as a whole (VFS, page cache, block layer, I/O scheduler, driver, controller, media) is what separates a system that scales from one that mysteriously stalls under load. This chapter is the conceptual treatment; Linux-specific `blk-mq` and io_uring are in `linux-kernel/block-layer.typ` and `linux-kernel/io-uring.typ`.
 
-*See also:* _The Block Layer_ (linux-kernel), _io_uring_ (linux-kernel), _Buffer Pool and I/O_ (database).
+*See also:* _The Block Layer_ (linux-kernel), _io-uring_ (linux-kernel), _Buffer Pool and I/O_ (database).
 
 == Layers
 

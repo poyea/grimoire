@@ -2,7 +2,7 @@
 
 A benchmark is an experiment, and most benchmarks are bad experiments: they measure the wrong thing, on the wrong workload, with no error bars, and then generalize. This chapter covers the failure modes of microbenchmarks, the tools that mitigate them, the statistics needed to claim "A is faster than B", and how to run experiments safely in production.
 
-*See also:* _Performance Methodology_ (what to measure and why), _CPU Profiling_ (finding where time goes once a benchmark shows a regression), and the CPU Architecture volume's _Branch Prediction_ and _Caches_ chapters (the microarchitectural state that makes small benchmarks lie).
+*See also:* _Performance Methodology_ (what to measure and why), _CPU Profiling_ (finding where time goes once a benchmark shows a regression), and the CPU Architecture volume's _Branch Prediction_ and _Cache Hierarchy_ chapters (the microarchitectural state that makes small benchmarks lie).
 
 == Why Microbenchmarks Lie
 

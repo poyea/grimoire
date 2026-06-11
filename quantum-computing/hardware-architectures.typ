@@ -2,7 +2,7 @@
 
 A qubit is whatever two-level quantum system you can isolate, control, and read out faster than it decoheres. Engineering tradeoffs — coherence time, gate fidelity, connectivity, scalability, operating temperature — split the industry into four credible modalities: superconducting circuits, trapped ions, neutral atoms, and photonics. Topological qubits remain an open research bet. This chapter surveys the physical implementations, their native gate sets, and how the choice cascades up the stack into compilers and codes.
 
-*See also:* _Qubits and Gates_, _Error Correction_, _Quantum Software Stack_, `cpu-architecture/`, `linux-kernel/`
+*See also:* _Qubits and Gates_, _Error Correction_, _NISQ Devices and Benchmarking_, `cpu-architecture/`, `linux-kernel/`
 
 == DiVincenzo's Criteria
 

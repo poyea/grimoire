@@ -2,7 +2,7 @@
 
 *Linear programming* (LP) optimizes a linear objective over a polyhedron defined by linear constraints. It is the workhorse of operations research and the theoretical backbone of approximation algorithms (LP-rounding), combinatorial optimization (max-flow min-cut is LP duality), and modern machine learning (SVMs, $L^1$ regression). This chapter develops standard form, the simplex method with explicit pivots, strong duality, and a sketch of interior-point methods.
 
-*See also:* _Network Flows and Matching_, _Approximation Algorithms_, _Math and Number Theory_.
+*See also:* _Network Flows and Matching_, _Approximation Algorithms_, _Math & Number Theory_.
 
 == Standard Form
 

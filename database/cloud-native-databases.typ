@@ -2,7 +2,7 @@
 
 A cloud-native database is one designed *for* the cloud, not merely *deployed in* the cloud. The distinguishing architectural moves are: separating compute from storage, treating the log as the durable substrate, exploiting object storage for tiered cold data, and scaling read/write tiers independently. Aurora pioneered log-as-storage; Neon and AlloyDB pushed further into disaggregation; PlanetScale shipped Vitess as a managed service; TiDB and YugabyteDB rebuilt MySQL/PostgreSQL surface on top of distributed transactional KV stores.
 
-*See also:* _Transactions Distributed_, _Consensus and Replication_, _Partitioning and Elasticity_, _Lakehouses and Open Formats_
+*See also:* _Distributed Transactions_, _Consensus and Replication_, _Partitioning and Elasticity_, _Lakehouses and Open Table Formats_
 
 == Why Disaggregate?
 

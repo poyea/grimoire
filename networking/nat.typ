@@ -2,7 +2,7 @@
 
 Network Address Translation rewrites IP and port headers as packets cross an administrative boundary. Originally introduced to mitigate IPv4 address exhaustion, NAT has become a de-facto security and topology hiding mechanism, and a perennial source of pain for peer-to-peer protocols.
 
-*See also:* _Internet Layer_ (for IP addressing), _Transport Layer_ (for TCP/UDP), _Stateful Firewalls_ (for conntrack internals), _IPv6_ (for the long-term NAT-free alternative).
+*See also:* _Transport Layer_ (for TCP/UDP), _Stateful Firewalls_ (for conntrack internals), _IPv6_ (for the long-term NAT-free alternative).
 
 == NAT Overview
 

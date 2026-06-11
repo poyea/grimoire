@@ -230,4 +230,4 @@ Tools: `tools/memory-model/` (herd7-based formal kernel memory model).
 
 `kernel/rcu/tree.c`, `kernel/locking/qspinlock.c`, `kernel/locking/lockdep.c`, `kernel/locking/rwsem.c`, `kernel/futex/core.c`.
 
-*See also:* _Scheduler_ (PREEMPT_RT and priority inheritance), _Kernel Tracing_ (lock event tracepoints), _eBPF Deep Dive_ (sleepable BPF uses Tasks Trace RCU), _Interrupts and NAPI_ (IRQ-context locking constraints).
+*See also:* _Scheduler_ (PREEMPT-RT and priority inheritance), _Kernel Tracing_ (lock event tracepoints), _eBPF Deep Dive_ (sleepable BPF uses Tasks Trace RCU), _Interrupts and Bottom Halves_ (IRQ-context locking constraints).

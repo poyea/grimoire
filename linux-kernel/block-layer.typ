@@ -226,4 +226,4 @@ LWN: "An introduction to blk-mq" (Corbet 2014); "ublk" series (2022-2023); "Zone
 
 `drivers/nvme/host/pci.c`, `block/blk-mq.c`, `block/blk-flush.c`, `block/mq-deadline.c`, `block/kyber-iosched.c`, `block/bfq-iosched.c`.
 
-*See also:* _VFS and Filesystems_ (filesystems submit the bios this layer dispatches), _IO uring_ (`IORING_SETUP_IOPOLL` rides the polling path), _Cgroups and Namespaces_ (io controller), _Interrupts and NAPI_ (MSI-X delivery and IRQ affinity for completion path).
+*See also:* _VFS and Filesystems_ (filesystems submit the bios this layer dispatches), _IO uring_ (the IOPOLL mode rides the polling path), _Cgroups and Namespaces_ (io controller), _Interrupts and Bottom Halves_ (MSI-X delivery and IRQ affinity for completion path).

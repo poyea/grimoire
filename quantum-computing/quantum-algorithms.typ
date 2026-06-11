@@ -2,7 +2,7 @@
 
 Quantum algorithms exploit interference — amplitudes can cancel, not just add — to make wrong answers destructive and right answers constructive. The canonical examples (Deutsch-Jozsa, Grover, Shor) demonstrate this on structured problems; the variational family (VQE, QAOA) trades provable speedup for near-term tractability on noisy hardware. This chapter walks through each with explicit circuits and complexity bounds.
 
-*See also:* _Qubits and Gates_, _Complexity_, _Quantum Software Stack_, _Post-Quantum Cryptography_ (cryptography-and-security), _Complexity Theory_ (programming-languages), _NISQ Devices and Benchmarking_
+*See also:* _Qubits and Gates_, _Complexity_, _NISQ Devices and Benchmarking_, _Post-Quantum Cryptography_ (cryptography-and-security), _Complexity Theory_ (programming-languages), _NISQ Devices and Benchmarking_
 
 == Deutsch-Jozsa: The First Speedup
 

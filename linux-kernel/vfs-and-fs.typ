@@ -245,4 +245,4 @@ F2FS: Lee, C. et al. (2015). _F2FS: A New File System for Flash Storage_, FAST.
 
 LWN: Corbet's "folio" series (2021-2023); McKenney's coverage of RCU-walk path lookup.
 
-*See also:* _MMap and Memory Mapped Files_ (page cache shares the same folios as file-backed mappings), _IO uring_ (modern async path through the same `read_iter`/`write_iter` entry points), _Cgroups and Namespaces_ (mount namespaces, the container-rootfs primitive), _Block Layer_ (what sits beneath the page cache writeback path).
+*See also:* _mmap and Memory Management_ (page cache shares the same folios as file-backed mappings), _IO uring_ (modern async path through the same read/write iterator entry points), _Cgroups and Namespaces_ (mount namespaces, the container-rootfs primitive), _Block Layer_ (what sits beneath the page cache writeback path).

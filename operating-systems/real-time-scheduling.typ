@@ -2,7 +2,7 @@
 
 A real-time system is not a fast system; it is a *predictable* one. The defining question is not "how quickly does this usually finish?" but "can I prove it always finishes by its deadline?" That shift — from expectation to guarantee — produces a body of theory with actual theorems (utilization bounds, optimality proofs, blocking-time bounds) and a body of engineering (priority protocols, preemptible kernels, bandwidth servers) for making commodity OSes honor them. _Scheduling Theory_ surveys the general landscape; this chapter goes deep on the real-time half.
 
-*See also:* _Scheduling Theory_, _Processes and Threads_, _IPC Mechanisms_, _The Scheduler_ (linux-kernel), _Interrupts and Softirqs_ (linux-kernel).
+*See also:* _Scheduling Theory_, _Processes and Threads_, _Inter-Process Communication_, _The Scheduler_ (linux-kernel), _Interrupts and Bottom Halves_ (linux-kernel).
 
 == Hard, Firm, and Soft
 

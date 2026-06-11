@@ -197,7 +197,7 @@ seccomp_load(ctx);
 - *Minimizing syscalls:* `io_uring` (5.1+) batches submission and completion across many operations. `sendmmsg`/`recvmmsg` batch network IO; `readv`/`writev` batch buffer-list IO. `MAP_POPULATE` avoids later page-fault syscalls.
 - *vDSO troubleshooting:* If `clock_gettime` is suddenly slow, check the clocksource (`/sys/devices/system/clocksource/clocksource0/current_clocksource`) and `dmesg | grep -i tsc`. A fallback to `hpet` or `acpi_pm` will tank vDSO performance.
 
-*See also:* _Kernel Bypass (Networking volume)_: DPDK and AF_XDP avoid the syscall path entirely for packet IO. _Kernel Tracing_: eBPF tracepoints on `raw_syscalls:sys_enter` give per-syscall observability.
+*See also:* _Kernel Bypass (Networking volume)_: DPDK and AF-XDP avoid the syscall path entirely for packet IO. _Kernel Tracing_: eBPF tracepoints on raw syscall enter/exit give per-syscall observability.
 
 == Further Reading
 
@@ -238,7 +238,7 @@ The Linux kernel is the most-deployed software artifact on Earth: it runs on the
 
 *Code conventions:* C is the kernel's native language. User-space examples are C unless a particular tool is more idiomatic in another form (`bpftrace` scripts, shell). All examples target x86-64 Linux 6.x; ARM64 differences are flagged where relevant.
 
-*See also:* _Multicore and Cache Coherence (CPU Architecture volume)_ (NUMA, cache coherence), _Virtual Memory (CPU Architecture volume)_ (TLB, page tables), _Kernel Bypass (Networking volume)_ (DPDK, AF_XDP), _Advanced Algorithms in Modern Systems (Coding volume)_ (scheduler algorithms, lock-free data structures).
+*See also:* _Multicore and Cache Coherence (CPU Architecture volume)_ (NUMA, cache coherence), _Virtual Memory (CPU Architecture volume)_ (TLB, page tables), _Kernel Bypass (Networking volume)_ (DPDK, AF-XDP), _Advanced Algorithms in Modern Systems (Coding volume)_ (scheduler algorithms, lock-free data structures).
 
 ==== Why Kernel Internals Matter
 

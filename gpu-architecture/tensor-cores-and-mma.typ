@@ -2,7 +2,7 @@
 
 Tensor Cores are specialized matrix-multiply pipelines that deliver an order of magnitude more throughput than the FP32 CUDA cores beside them. Every generation since Volta has widened the tile, added new datatypes (BF16, TF32, FP8, INT8/INT4), and moved more of the data-movement burden into hardware (cp.async, TMA, wgmma).
 
-*See also:* _Compute Architecture_ (SM block diagrams), _ML Workloads_ (GEMM pipelines), _Memory Hierarchy_ (shared memory, swizzling).
+*See also:* _Compute Units and Specialized Cores_ (SM block diagrams), _ML Workload Optimization on GPUs_ (GEMM pipelines), _Memory Hierarchy_ (shared memory, swizzling).
 
 == Generational Overview
 
