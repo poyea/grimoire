@@ -115,7 +115,7 @@ Chen et al. (2023) discovered Lion via program search: the update is the *sign* 
 
 $ x_(k+1) = x_k - eta dot "sign"(beta_1 m + (1 - beta_1) g) - eta lambda x_k. $
 
-Lion uses half the memory of Adam (one moment instead of two) and matches or beats it on many tasks; it requires a smaller learning rate (typically 1/3 of Adam's — this is a rule of thumb; Lion is highly sensitive to learning rate selection and benefits from retuning per-task and per-batch-size when switching from Adam) and benefits from larger batch sizes.
+Lion uses half the memory of Adam (one moment instead of two) and matches or beats it on many tasks; it requires a smaller learning rate (typically 3--10$times$ smaller than Adam's — this is a rule of thumb; Lion is highly sensitive to learning rate selection and benefits from retuning per-task and per-batch-size when switching from Adam) and benefits from larger batch sizes.
 
 === Shampoo and Kronecker-Factored Preconditioners
 
