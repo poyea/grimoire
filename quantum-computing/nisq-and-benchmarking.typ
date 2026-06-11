@@ -112,7 +112,7 @@ gives average Clifford error per gate $r = (1 - lambda)(d-1)/d$ where $d = 2^n$.
 
 *Honest assessment.* Random circuit sampling is an artificial task with no known practical application. Classical simulation of NISQ-scale random circuits is a moving target as algorithms improve. The 2019 result demonstrated that a quantum device can execute circuits that are *hard to verify* classically, which is meaningful for device characterization but does not constitute practical quantum advantage.
 
-*Xanadu Borealis (2022).* Ryan-Anderson et al. performed Gaussian boson sampling on a 216-mode photonic chip, claiming $9000 times$ faster than the best classical algorithm at the time. As with Sycamore, subsequent classical algorithm improvements narrowed the gap. Both results are best understood as demonstrations of device capability in an adversarial benchmarking context, not as proofs of practical quantum utility.
+*Xanadu Borealis (2022).* Madsen et al. performed Gaussian boson sampling on a 216-mode photonic chip, claiming $9000 times$ faster than the best classical algorithm at the time. As with Sycamore, subsequent classical algorithm improvements narrowed the gap. Both results are best understood as demonstrations of device capability in an adversarial benchmarking context, not as proofs of practical quantum utility.
 
 The recurring pattern across supremacy claims is instructive: (1) quantum team identifies a sampling problem with no classical algorithm known to be efficient; (2) classicists improve tensor-network or polynomial methods; (3) the advantage shrinks but rarely disappears entirely. This dynamic is expected to continue until NISQ devices reach sufficient scale that classical simulation becomes thermodynamically implausible.
 
