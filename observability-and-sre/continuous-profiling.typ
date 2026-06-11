@@ -266,7 +266,7 @@ Gregg, B. (2020). _Systems Performance: Enterprise and the Cloud, 2nd ed._ Addis
 
 Gregg, B. (2019). _BPF Performance Tools._ Addison-Wesley. Chapters 4–6 (eBPF profiling).
 
-Tene, G. (2011). "asynchronous stack sampling for JVM." async-profiler project. https://github.com/async-profiler/async-profiler
+Pangin, A. "async-profiler: low-overhead sampling profiler for the JVM." https://github.com/async-profiler/async-profiler
 
 Polar Signals. "Parca: Open Source Continuous Profiling." https://www.parca.dev
 
