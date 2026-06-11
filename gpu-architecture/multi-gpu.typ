@@ -15,7 +15,7 @@ Modern ML training (LLMs with 100B+ parameters) and HPC simulations no longer fi
   [NVLink 4 (H100)], [900 GB/s], [$tilde$ 500 ns], [NVSwitch gen3], [DGX H100 (8-GPU)],
   [NVLink 5 (B100/B200)], [1800 GB/s], [$tilde$ 400 ns], [NVSwitch gen4], [GB200 NVL72 (72-GPU)],
   [AMD Infinity Fabric (MI300)], [896 GB/s], [$tilde$ 600 ns], [Mesh], [MI300X 8-GPU systems],
-  [InfiniBand NDR], [400 Gb/s (50 GB/s)], [$tilde$ 1-2 $mu$s], [Fat-tree / dragonfly], [Multi-node HPC/ML clusters],
+  [InfiniBand NDR (ConnectX-7)], [400 Gb/s (50 GB/s)], [$tilde$ 600 ns], [Fat-tree / dragonfly], [Multi-node HPC/ML clusters],
   [InfiniBand XDR], [800 Gb/s (100 GB/s)], [$tilde$ 1 $mu$s], [Fat-tree], [Blackwell-era clusters],
   [Ethernet RoCEv2 400G], [50 GB/s], [$tilde$ 2-5 $mu$s], [Any], [Hyperscaler clusters],
 )
@@ -36,7 +36,7 @@ Modern ML training (LLMs with 100B+ parameters) and HPC simulations no longer fi
          │         ConnectX-7 NIC (×8)      │ ── 400 Gb/s IB
          └───────────────────────────────────┘
 ```
-Each GPU gets 18 NVLink lanes at 50 GB/s = 900 GB/s total. NVSwitch provides non-blocking all-to-all.
+Each GPU has 18 NVLink lanes at 50 GB/s per lane = 900 GB/s bidirectional aggregate (450 GB/s unidirectional per direction). NVSwitch provides non-blocking all-to-all.
 
 *GB200 NVL72 (rack-scale):*
 - 72 Blackwell GPUs + 36 Grace CPUs in a single liquid-cooled rack
@@ -96,7 +96,7 @@ For $p$ GPUs each holding $n$ bytes:
 1. Reduce-scatter phase: $p-1$ steps, each GPU sends 1/$p$ of data to neighbor. After $p-1$ steps, each GPU has reduced 1/$p$ of the total.
 2. All-gather phase: $p-1$ steps, each GPU forwards its reduced chunk around the ring.
 
-Total data transferred per GPU: $2 (p-1) n / p$.
+Total data transferred per GPU: $2 (p-1) n / p$ (per direction; NVLink rings are bidirectional, so both directions operate simultaneously, effectively doubling usable bandwidth).
 
 $ T_"ring" = 2 (p-1) alpha + 2 (p-1) / p dot n / beta $
 
@@ -106,8 +106,8 @@ As $p -> infinity$: bandwidth term $-> 2 n / beta$ — independent of $p$ — ba
 
 *Tree all-reduce* (latency-optimal on large clusters):
 - Reduce up a binary tree, broadcast back down
-- $T_"tree" = 2 log_2 p dot alpha + 2 log_2 p dot n / beta$
-- Latency scales as $log p$ but bandwidth term multiplies by $log p$ — better for small $n$ or large $p$
+- $T_"tree" = 2 log_2 p dot alpha + 2 n / beta$
+- Latency scales as $log p$ (good for small messages); bandwidth term is $2n/beta$ regardless of $p$ — better than ring for small $n$ or large $p$
 - NCCL uses _double binary tree_ (Sanders et al. 2009): two interleaved trees, each node leaf in one tree and internal in the other — doubles effective bandwidth
 
 *SHARP (Scalable Hierarchical Aggregation and Reduction Protocol):* NVIDIA IB switches offload reduction operations in-network. The switch itself performs the reduction, sending only the reduced value to each recipient — saves $log p$ factor of traffic.

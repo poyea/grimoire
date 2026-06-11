@@ -88,9 +88,14 @@ Stage 6 — _Hopper `wgmma` + TMA_: warp-group-level async matmul (64$times$N$ti
 === Roofline for GEMM
 
 Arithmetic intensity for dense GEMM with $M = N = K$:
-$ "AI" = "FLOPs" / "bytes" = (2 M^3) / ((3 M^2) dot "sizeof"(T)) = (2 M) / (3 dot "sizeof"(T)) $
 
-For FP16 on H100 (peak 989 TFLOPS, BW 3.35 TB/s): ridge point at $989 "TFLOPS" / 3.35 "TB/s" approx 295$ FLOPs/byte. So GEMM is compute-bound once $M >> 295 dot 3 dot 2 / 2 = 885$, i.e. problem sizes beyond about 1000$times$1000.
+- *FLOPs:* $2 M^3$ (multiply-add pairs across $K$, for all $M times M$ outputs)
+- *Bytes:* $3 M^2 dot "sizeof"(T)$ (read A, B; write C; each is $M times M$)
+- *Arithmetic intensity:* $"AI" = (2 M^3) / (3 M^2 dot "sizeof"(T)) = (2 M) / (3 dot "sizeof"(T))$ FLOPs/byte
+
+For FP16 ($"sizeof"(T) = 2$): $"AI" = M / 3$ FLOPs/byte.
+
+For H100 (peak 989 TFLOPS, HBM BW 3.35 TB/s): ridge point = $989 / 3.35 approx 295$ FLOPs/byte. Substituting into the AI formula: compute-bound when $M / 3 > 295$, i.e. $M > 885$. Problem sizes beyond about $1000 times 1000$ are compute-bound; smaller problems are HBM-bandwidth-limited.
 
 Below that size, GEMM is memory-bound, which is exactly the case for small batch LLM inference (batch=1 decoding): decode is BW-limited and prefill is compute-limited.
 
@@ -123,7 +128,7 @@ HBM accesses reduced from $O(N d + N^2)$ to $O((N d)^2 / M)$ where $M$ = SRAM si
 - Warp specialization: some warps as TMA producers (load K, V), others as consumers (compute matmul)
 - FP8 support with blockwise scaling (Transformer Engine semantics)
 - Achieves 75% of H100 FP16 peak ($tilde$ 750 TFLOPS) and 1.2 PFLOPS FP8
-- $tilde$ 1.5-2x FA2 on H100
+- $tilde$ 1.5-2x FA2 on H100 (forward pass, FP16; the FP8 path yields higher multiples)
 
 ```cpp
 // Simplified FA2 forward loop (per-block view)
@@ -199,7 +204,7 @@ cublasGemmEx(handle, ..., CUDA_R_8I, ...,   // A is INT8
 
 === KV Cache: the Other Memory Hog
 
-During autoregressive decoding, every generated token appends a $d$-dim K, V vector per layer, per head. For LLaMA-70B at 8K context, 1 request: $2 times 80 "layers" times 8 "heads" times 8192 times 128 times 2 "bytes" approx 3.2$ GB. At batch 64: 200 GB; doesn't fit on a single GPU.
+During autoregressive decoding, every generated token appends a $d$-dim K, V vector per layer, per head. For LLaMA-70B at 8K context, 1 request: $underbrace(2, "K+V") times underbrace(80, "layers") times underbrace(8, "KV heads") times underbrace(8192, "tokens") times underbrace(128, "head dim") times underbrace(2, "bytes/FP16") = 2.68$ GB. At batch 64: $approx$ 171 GB; doesn't fit on a single GPU.
 
 Optimizations:
 - *MQA (Multi-Query Attention, Shazeer 2019):* single K, V shared across all query heads ($1/H$ memory)
@@ -256,7 +261,7 @@ Compute and memory should not _both_ be at peak simultaneously; if both are idle
 
 *LLM training MFU (Model FLOPs Utilization):*
 $ "MFU" = "achieved FLOPs" / "peak FLOPs" = (6 N P) / (T dot "peak") $
-where $N$ = tokens/step, $P$ = params, $T$ = step time, factor 6 = 2 (fwd) + 4 (bwd) FLOPs per param per token.
+where $N$ = tokens/step, $P$ = params, $T$ = step time, factor 6 = 2 (fwd) + 4 (bwd) FLOPs per param per token (hardware FLOPs only). With activation checkpointing, recomputing activations on the backward pass adds $approx$ 2N extra FLOPs per param, raising the effective count to $approx$ 8N; MFU should be adjusted accordingly.
 Well-tuned training hits 45-55% FP16 MFU; 60%+ with FP8 on Hopper. Below 30% usually indicates a fixable bottleneck.
 
 == Performance Targets (H100 SXM)
