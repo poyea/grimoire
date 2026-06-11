@@ -20,7 +20,7 @@ An *assignment* (or interpretation) $nu: "Var" -> {0, 1}$ extends compositionall
   columns: (auto, auto),
   [*Formula*], [*Truth condition*],
   [$nu models p$], [$nu(p) = 1$],
-  [$nu cancel(models) phi$], [$nu cancel(models) phi$],
+  [$nu models not phi$], [$nu cancel(models) phi$],
   [$nu models phi and psi$], [$nu models phi$ and $nu models psi$],
   [$nu models phi or psi$], [$nu models phi$ or $nu models psi$],
   [$nu models phi -> psi$], [if $nu models phi$ then $nu models psi$],
