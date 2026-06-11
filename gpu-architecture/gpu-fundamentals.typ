@@ -66,16 +66,18 @@ Year  Architecture       Key Features
 2010  Fermi             L1/L2 cache, ECC, 512 CUDA cores
 2012  Kepler            Dynamic parallelism, Hyper-Q
 2014  Maxwell           Power efficiency, unified memory
-2016  Pascal            NVLink, HBM2 support, 3584 cores
+2016  Pascal            NVLink, HBM2 support, 3584 cores (GP100/P100; GP102 has 3840)
 2017  Volta             Tensor Cores, independent thread scheduling
 2020  Ampere            3rd gen Tensor Cores, sparsity, 6912 cores
 2022  Hopper            Transformer Engine, 16,896 cores (SXM5: 132 SMs × 128)
                         H100 SXM5: 16,896 CUDA cores across 132 SMs (128 active per SM)
                         H100 PCIe variant has 14,592 CUDA cores (114 SMs)
 2024  Blackwell         2nd gen Transformer Engine, FP4 microscaling
-                        B200 = dual-die package (~208 SMs total, 2 dies × NV-HBI)
-                        ~20,480 CUDA cores active per package
-                        5th-gen Tensor Cores; 192 GB HBM3e @ 8 TB/s
+                        B200 = dual-die package (160 active SMs: 80 per die × 2 dies)
+                        At 128 FP32 cores/SM that is 20,480 CUDA cores per package
+                        (NVIDIA does not market an official core count for B200)
+                        5th-gen Tensor Cores; 192 GB HBM3e @ 8 TB/s per package
+                        (dual-die; ~4 TB/s per die)
 ```
 
 == GPU Architecture Overview
@@ -176,7 +178,8 @@ Per SM:
 - 4 SFUs (transcendentals: sin, cos, sqrt, rcp)
 - 128 KB configurable shared memory / L1 cache
 - 256 KB register file (65,536 × 32-bit registers)
-- Up to 64 warps (2048 threads) resident
+- Up to 48 warps (1536 threads) resident per SM (Ada Lovelace)
+  (Volta/Ampere/Hopper: up to 64 warps / 2048 threads per SM)
 ```
 
 == Compute Capability and ISA
@@ -192,7 +195,10 @@ Compute Capability   Architecture    Key Features
 7.5                  Turing          RT Cores, INT8 inference
 8.0                  Ampere          TF32, sparsity, async copy
 8.6                  Ampere (GA10x)  Consumer cards, 3rd gen Tensor
-8.9                  Ada Lovelace    4th gen Tensor, FP8, SER
+8.9                  Ada Lovelace    4th gen Tensor, FP8 (inference-oriented;
+                                     accepts FP8 input without Hopper's
+                                     FP32-accumulate Transformer Engine
+                                     training path), SER
 9.0                  Hopper          Transformer Engine, DPX
 10.0                 Blackwell       5th gen Tensor, FP4
 ```
@@ -253,9 +259,12 @@ FP32 TFLOPS = CUDA cores × 2 × clock speed
             = 16,384 × 2 × 2.52 GHz
             = 82.6 TFLOPS
 
-FP16 (with Tensor Cores):
+FP16 (with Tensor Cores, FP16 accumulate):
             = 660.6 TFLOPS (sparse)
             = 330.3 TFLOPS (dense)
+Note: NVIDIA lists 165.2 TFLOPS FP16 dense with FP32 accumulate.
+      The 330.3/660.6 figures assume FP16 accumulate (higher throughput,
+      lower precision).
 
 Memory bandwidth = bus width × memory clock × 2 (DDR)
                  = 384-bit × 21 Gbps
@@ -294,8 +303,9 @@ This is memory-bound:
                            (log scale)
 
 Ridge point = Peak TFLOPS / Peak bandwidth
-            = 82.6 / 1.008
-            = 82 FLOPs/byte
+            = 82.6 TFLOPS / 1.008 TB/s
+            = 82.6×10¹² FLOPs/s ÷ 1.008×10¹² bytes/s
+            = 82 FLOPs/byte          (TFLOPS / (TB/s) = FLOPs/byte)
 
 Below ridge: Memory-bound (increase data reuse)
 Above ridge: Compute-bound (optimize compute)

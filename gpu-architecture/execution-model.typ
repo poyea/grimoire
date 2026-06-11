@@ -44,7 +44,7 @@ int z = blockIdx.z * blockDim.z + threadIdx.z;
 Threads per block:     1024 (max)
 Block dimensions:      (1024, 1024, 64) max per dimension
 Grid dimensions:       (2^31-1, 65535, 65535) max per dimension
-Blocks per SM:         16-32 (architecture dependent)
+Blocks per SM:         16-32 (arch-dependent: Volta/Turing 16, Ada 24, Ampere/Hopper 32)
 ```
 
 == Warps: The Fundamental Execution Unit
@@ -79,8 +79,13 @@ Cycle 4:  Warp 0 resumes (data arrived)
 
 ```
 Memory latency: ~400 cycles
-Instruction latency: ~20 cycles
-Required warps for full latency hiding: 400 / 20 = 20 warps
+ALU (FFMA) latency: ~4-6 cycles (Ampere/Ada)
+
+To hide ALU latency:    latency × issue rate ≈ 4-6 warps per scheduler
+                        (×4 schedulers = ~16-24 warps/SM with no ILP)
+To hide memory latency: ~400/4 ≈ 100 independent warp-instructions in
+                        flight — from many resident warps, ILP within
+                        each warp, or both
 
 More resident warps → Better latency hiding → Higher throughput
 ```
@@ -229,7 +234,8 @@ __device__ int warp_reduce_sum(int val) {
     return val;  // All lanes have the sum
 }
 
-// Visualization (8 lanes for simplicity):
+// Visualization (8 lanes for legibility; the code above operates on all
+// 32 lanes using XOR offsets 16, 8, 4, 2, 1):
 // Initial: [a, b, c, d, e, f, g, h]
 // XOR 4:   [a+e, b+f, c+g, d+h, e+a, f+b, g+c, h+d]
 // XOR 2:   [a+e+c+g, b+f+d+h, ...]
@@ -429,7 +435,9 @@ cudaLaunchCooperativeKernel((void*)grid_sync_kernel,
 *Synchronization costs:*
 
 ```
-__syncthreads():  ~20-40 cycles (block barrier)
+__syncthreads():  ~30-100+ cycles (block barrier; scales with block size —
+                  larger blocks require more threads to converge; see Volkov
+                  2010 and Jia et al. microbenchmarks for per-arch data)
 __syncwarp():     ~4-8 cycles (warp barrier)
 Grid sync:        ~1000+ cycles (all SMs must synchronize)
 cudaDeviceSynchronize(): Host-device sync, ~5-10 µs
