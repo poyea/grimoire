@@ -452,7 +452,7 @@ The `!` operator "calls" an effectful computation; pattern matching on the resul
 
 The practical upshot: Koka and OCaml 5 are the production systems; Eff and Frank are research vehicles exploring the design space; Helium explores the efficient restricted fragment. All share the same algebraic foundation.
 
-_See also: _Type Systems_ for the substrate of judgements $Gamma tack.r e : tau ! epsilon$, _Linear and Substructural Type Systems_ for the dual axis of resource accounting, _Subtyping and Polymorphism_ for how effect rows compose subtyping-wise._
+_See also: _Effects and Handlers_ for the algebraic theory and equational semantics this chapter implements, _Operational Semantics_ for the small-step machinery underlying continuation capture, _Concurrency Models_ for handlers as schedulers._
 
 == Further Reading
 

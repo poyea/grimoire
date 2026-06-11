@@ -456,8 +456,6 @@ Plotkin, G., Pretnar, M. (2009). "Handlers of Algebraic Effects." ESOP. Introduc
 
 Bauer, A., Pretnar, M. (2015). "Programming with Algebraic Effects and Handlers." JLAMP 80(7). Presents the Eff language as a practical realisation of the Plotkin–Pretnar theory, demonstrating handlers as a general programming construct.
 
-Leijen, D. (2017). "Type Directed Compilation of Row-Polymorphic Effects for Practical Generic Programming." POPL. Describes the evidence-passing translation in Koka that compiles row-polymorphic effects to efficient native code.
-
 Lindley, S., McBride, C. (2012). "Idioms are Oblivious, Arrows are Meticulous, Monads are Promiscuous." ENTCS 229(5). Positions applicative functors, arrows, and monads on a spectrum of effect observability, clarifying when each abstraction is appropriate.
 
 Sivaramakrishnan, K. C. et al. (2021). "Retrofitting Effect Handlers onto OCaml." PLDI. Details the design and segmented-stack implementation of algebraic effects in OCaml 5, including the interaction with the multicore memory model.
