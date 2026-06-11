@@ -41,7 +41,7 @@ Without caches, every memory access would incur a 200-cycle stall, causing the C
          │
     ┌────┴────┐
     │L3 Cache │       8-64 MB shared
-    └────┬────┘       Latency: 40-80 cycles
+    └────┬────┘       Latency: 40-60 cycles (up to ~80 on large server LLCs)
          │            Bandwidth: ~20-30 GB/s (Skylake ring bus: 32 B/cycle per stop, sustained ~15 B/cycle per core ≈ 60 GB/s at 4 GHz)
     ┌────┴────┐
     │  DRAM   │       8-128 GB
@@ -69,10 +69,11 @@ Lookup: Index selects cache line, compare tag, if match → hit
 Direct-mapped caches suffer from a critical problem: when two addresses map to the same index, conflict misses occur. A pathological case arises when the stride equals the cache size, resulting in zero hit rate:
 
 ```cpp
-// Pathological case: stride = cache_size
-int arr[8192];  // 32 KB
-for (int i = 0; i < 8192; i += 512) {
-    arr[i] = 0;  // Every access maps to same cache line → 0% hit rate!
+// Pathological case: stride = cache size (32 KB direct-mapped, 64 B lines)
+// 32 KB / 64 B = 512 sets; addresses 32 KB apart map to the SAME set
+int arr[8 * 8192];  // 256 KB = 8 conflicting blocks
+for (int j = 0; j < 8; j++) {
+    arr[j * 8192] = 0;  // 32 KB stride: every access evicts the previous line
 }
 ```
 
@@ -160,9 +161,11 @@ for (int i = 0; i < 2000000; i++) {
 Conflict misses occur when multiple addresses map to the same cache set despite sufficient total capacity. This thrashing behavior can dramatically degrade performance:
 
 ```cpp
-// Two arrays, same alignment mod cache size
+// Two arrays, same alignment mod way size
+// Assume an 8 MB, 16-way L3 with 64 B lines: 8192 sets x 64 B = 512 KB
+// per way; addresses any multiple of 512 KB apart map to the same sets.
 int *a = malloc(1048576);  // 1 MB at address X
-int *b = malloc(1048576);  // 1 MB at address X + 8MB (conflicts with a)
+int *b = malloc(1048576);  // 1 MB at address X + 8MB (16 x 512 KB -> same sets as a)
 
 for (int i = 0; i < N; i++) {
     result += a[i] + b[i];  // a[i] and b[i] conflict → thrashing
@@ -277,14 +280,14 @@ for (int i = 0; i < N; i++) {
 // Matrix multiply: O(N^3) operations, O(N^2) data
 // Naive: Evicts data before reuse if N^2 > cache
 
-// Blocked: Process B×B tiles that fit in cache
-#define B 64  // Chosen to fit 3 B×B tiles in L1
-for (int ii = 0; ii < N; ii += B)
-  for (int jj = 0; jj < N; jj += B)
-    for (int kk = 0; kk < N; kk += B)
-      for (int i = ii; i < min(ii+B, N); i++)
-        for (int j = jj; j < min(jj+B, N); j++)
-          for (int k = kk; k < min(kk+B, N); k++)
+// Blocked: Process BS×BS tiles that fit in cache
+#define BS 32  // 3 tiles × 32×32 × 8 B (double) = 24 KB — fits a 32-48 KB L1D
+for (int ii = 0; ii < N; ii += BS)
+  for (int jj = 0; jj < N; jj += BS)
+    for (int kk = 0; kk < N; kk += BS)
+      for (int i = ii; i < min(ii+BS, N); i++)
+        for (int j = jj; j < min(jj+BS, N); j++)
+          for (int k = kk; k < min(kk+BS, N); k++)
             C[i][j] += A[i][k] * B[k][j];
 
 // Speedup: 5-10x for large N (cache misses reduced dramatically)
@@ -299,7 +302,7 @@ Intel Raptor Lake (13th gen, 2023):
 - L3: 36 MB shared (inclusive)
 
 Intel Arrow Lake (Core Ultra 200S, 2024) — Lion Cove P-core:
-- L1: 64 KB I-cache + 48 KB D-cache per P-core (data cache split into 48 KB L1.0 + 192 KB L1.5)
+- L1: 64 KB I-cache + 48 KB D-cache per P-core, plus a new 192 KB mid-level cache between L1D and L2 (informally "L1.5" — a separate level, not a split of L1D)
 - L2: 3 MB per P-core (up from 2 MB)
 - L3: 36 MB shared
 
@@ -542,9 +545,9 @@ void process_stream_nt(char* huge_buffer, size_t size) {
 }
 
 // 3. Power-of-2 stride conflict
-int matrix[1024][1024];  // 1024 * 4 bytes = 4096 bytes = cache size!
+int matrix[1024][1024];  // 4 KB row stride aliases the set-index bits
 for (int i = 0; i < 1024; i++)
-    sum += matrix[i][0];  // Every access conflicts in same cache set!
+    sum += matrix[i][0];  // Column walk: same set every row, only N ways survive
 
 // Fix: Add padding to break power-of-2 alignment
 int matrix[1024][1025];  // Extra column breaks alignment
