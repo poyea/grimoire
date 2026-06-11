@@ -276,7 +276,7 @@ Pratt, V. (1973). "Top Down Operator Precedence." POPL.
 
 Burke, M., Fisher, G. (1987). "A Practical Method for LR and LL Syntactic Error Diagnosis and Recovery." TOPLAS.
 
-Brand, P. de, Rytter, W. Tree-sitter design notes. #link("https://tree-sitter.github.io").
+Brunsfeld, M. Tree-sitter design notes. #link("https://tree-sitter.github.io").
 
 Lippert, E. "Persistence, Facades, and Roslyn's Red-Green Trees." Microsoft Dev Blog.
 

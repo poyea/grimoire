@@ -45,8 +45,10 @@ O3 adds: aggressive inlining, loop vectoriser, polly (if built), argument promot
 ; strength reduction: div by constant → multiply by magic number
 %r = sdiv i32 %x, 7          ; expensive
 ; ⇒
-%m = mul i32 %x, 1227133513  ; magic multiply
-%s = lshr i32 %m, 32         ; extract high word
+%w = sext i32 %x to i64      ; widen so the high word survives
+%m = mul i64 %w, 1227133513  ; magic multiply (64-bit product)
+%h = lshr i64 %m, 32         ; extract high word
+%s = trunc i64 %h to i32
 ```
 
 The compiler computes the magic constant at compile time (Hacker's Delight, Warren 2012). Loop induction variable strength reduction replaces a multiply inside a loop with an add-by-stride.

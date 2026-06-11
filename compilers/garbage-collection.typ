@@ -413,4 +413,4 @@ Yuasa, T. (1990). "Real-time Garbage Collection on General-purpose Machines." _S
 
 Detlefs, D. et al. (2004). "Garbage-First Garbage Collection." _ISMM._
 
-Liden, P., Flood, C. (2018). "ZGC: A Scalable Low-latency Garbage Collector." OpenJDK project report.
+Lidén, P., Karlsson, S. (2018). "ZGC: A Scalable Low-latency Garbage Collector." OpenJDK / FOSDEM 2018.
