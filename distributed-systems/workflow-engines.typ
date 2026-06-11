@@ -18,7 +18,7 @@ Three invariants of the durable execution model:
 
 == Temporal
 
-*Temporal* (Maxim Fain, Samar Abbas — forked from Cadence, 2019) is a durable execution platform. A Temporal cluster stores workflow state; application code runs in *workers* that the cluster orchestrates.
+*Temporal* (Maxim Fateev, Samar Abbas — forked from Cadence, 2019) is a durable execution platform. A Temporal cluster stores workflow state; application code runs in *workers* that the cluster orchestrates.
 
 === Core Concepts
 
@@ -273,7 +273,7 @@ This 40-line function encodes retry, compensation, a durable timer-backed human-
 
 == Further Reading
 
-Fain, M., Abbas, S. (2020). "Temporal: Open Source Durable Execution." Temporal Technologies whitepaper.
+Fateev, M., Abbas, S. (2020). "Temporal: Open Source Durable Execution." Temporal Technologies whitepaper.
 
 Garcia-Molina, H., Salem, K. (1987). "Sagas." ACM SIGMOD.
 

@@ -66,7 +66,7 @@ Fischer, Lynch, and Paterson (1985): in a purely asynchronous system where even 
 
 Brewer (2000) conjectured, and Gilbert and Lynch (2002) formalized: a replicated register cannot simultaneously provide *Consistency* (linearizability), *Availability* (every request to a non-failed node returns), and *Partition tolerance* (the system continues despite arbitrary message loss). Under partition, choose CP or AP.
 
-PACELC (Abadi 2010) extends: even when there is no Partition, there is a Latency-Consistency tradeoff. A CP system that synchronously replicates pays cross-region RTT on every write; an AP system trades freshness for sub-millisecond local writes.
+PACELC (Abadi 2012) extends: even when there is no Partition, there is a Latency-Consistency tradeoff. A CP system that synchronously replicates pays cross-region RTT on every write; an AP system trades freshness for sub-millisecond local writes.
 
 #table(
   columns: (auto, 1fr, 1fr),
@@ -116,7 +116,7 @@ The choice depends on availability requirements, write rate, and the application
 Empirical data from Google (Barroso 2009), Facebook (Maneas 2020), and Backblaze drive reports informs realistic models:
 
 - Hard disk AFR: 0.5--5% depending on model and age.
-- DRAM uncorrectable error rate: $approx 25,000$ FIT per Mbit (Schroeder et al. 2009).
+- DRAM correctable error rate: $approx 25,000$ FIT per Mbit (Schroeder et al. 2009).
 - Rack-level power events: monthly at hyperscale.
 - DC-level outages: 1--2 per year per site (cooling, fiber cut, BGP misconfiguration).
 - Correlated failures dominate independent ones; Markov-chain availability calculations that assume independence wildly overestimate reliability.

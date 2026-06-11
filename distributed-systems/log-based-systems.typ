@@ -127,7 +127,7 @@ Pulsar also offers *tiered storage*: offloading cold ledgers to object storage (
 #table(
   columns: (auto, 1fr, 1fr, 1fr, 1fr),
   table.header[*Feature*][*Kafka*][*Pulsar*][*Kinesis*][*NATS JetStream*],
-  [Storage model], [Log segments on disk], [BookKeeper ledgers], [Shard shards on SSD], [File-based streams],
+  [Storage model], [Log segments on disk], [BookKeeper ledgers], [Shards on SSD], [File-based streams],
   [Scaling storage], [Add brokers], [Add bookies independently], [Increase shards], [Add server nodes],
   [Multi-tenancy], [Via cluster/topic naming], [Native namespaces], [Via stream ARNs], [JetStream accounts],
   [Replay], [Configurable retention], [Tiered storage], [7 days default], [Configurable],
