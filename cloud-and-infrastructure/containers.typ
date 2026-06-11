@@ -113,7 +113,7 @@ The OCI runtime-spec's `config.json` is the input to this process: it lists ever
 
 ```json
 {
-  "ociVersion": "1.0.2",
+  "ociVersion": "1.1.0",
   "process": {
     "terminal": false,
     "user": {"uid": 1000, "gid": 1000},

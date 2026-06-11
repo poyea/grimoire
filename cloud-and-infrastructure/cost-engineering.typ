@@ -139,10 +139,10 @@ A Spot instance is reclaimed when the hyperscaler needs the capacity back. AWS g
 import urllib.request, time
 
 def check_spot_interruption():
-    url = "http://169.254.169.254/latest/meta-data/spot/interruption-action"
+    url = "http://169.254.169.254/latest/meta-data/spot/instance-action"
     try:
         with urllib.request.urlopen(url, timeout=1) as r:
-            return r.read().decode()   # "terminate" if notice is active
+            return r.read().decode()   # '{"action":"terminate","time":"..."}' if notice is active
     except Exception:
         return None                    # No notice
 
@@ -205,7 +205,7 @@ Egress is the most dangerous hidden cost in cloud architecture. The general rule
 - *Inter-region:* \$0.02–0.08/GB.
 - *Internet egress:* \$0.05–0.09/GB for the first 10 TB/month, less with volume tiers.
 
-A service doing 100 TB/month of Internet egress pays $100 "TB" times \$0.05 approx \$5 000 slash"month"$ on egress alone, not counting compute. Common mitigations:
+A service doing 100 TB/month of Internet egress pays approximately \$5 000/month on egress alone ($100 times 0.05 approx 5000$), not counting compute. Common mitigations:
 
 + *CloudFront / Cloud CDN / Azure CDN:* CDN egress is roughly half the origin egress rate, and popular objects are served from cache at zero origin cost.
 + *S3 Transfer Acceleration* / *Direct Connect* / *Cloud Interconnect:* dedicated paths with lower per-GB pricing for high-volume or latency-sensitive transfers.
