@@ -86,7 +86,7 @@ A typical row:
 257 common  openat  sys_openat
 ```
 
-The numbers are stable ABI: once allocated, a syscall number is never reused. This is why `open` (5) and `openat` (257) coexist; `open` cannot be removed without breaking every binary that ever called it.
+The numbers are stable ABI: once allocated, a syscall number is never reused. This is why `open` (2) and `openat` (257) coexist; `open` cannot be removed without breaking every binary that ever called it.
 
 *Adding a new syscall* (rare, requires LKML acceptance):
 
