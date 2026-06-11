@@ -72,7 +72,7 @@ Ed25519 is the default for SSH keys, Signal, and most modern protocols. One cave
 
 Shor's algorithm breaks RSA, DSA, and all elliptic-curve schemes. NIST standardised (2024):
 - *ML-DSA (Dilithium)*: lattice-based (module-LWE), the general-purpose default; signatures $approx 2.4$–$4.6$ KB depending on security level.
-- *SLH-DSA (SPHINCS+)*: stateless hash-based; conservative security, large signatures ($approx 8$–$50$ KB).
+- *SLH-DSA (SPHINCS+)*: stateless hash-based; conservative security, large signatures ($approx 7.7$–$50$ KB).
 - *FN-DSA (Falcon)*: lattice (NTRU); compact but requires floating-point Gaussian sampling that is hard to make constant-time.
 
 See _Post-Quantum Cryptography_ for the underlying problems and migration strategy.

@@ -2,7 +2,7 @@
 
 Symmetric cryptography is built from a small set of well-studied primitives: block ciphers (AES), stream ciphers (ChaCha20), polynomial MACs (Poly1305, GMAC), and the AEAD modes that combine them. Choosing the right mode, using nonces correctly, and writing constant-time code matter far more than the underlying algorithm.
 
-*See also:* _Hashing and MACs_, _Protocols_, _Key Management_, _TLS (Transport Layer Security)_ (networking), _Database Security and Privacy_ (database).
+*See also:* _Hashing and MACs_, _Protocols_, _Key Exchange and PKI_, _TLS (Transport Layer Security)_ (networking), _Database Security and Privacy_ (database).
 
 == Block Ciphers
 
@@ -83,7 +83,7 @@ ct = aesgcm.encrypt(nonce, plaintext, aad)
 pt = aesgcm.decrypt(nonce, ct, aad)   # raises InvalidTag if AAD/ct modified
 ```
 
-*Critical pitfall:* $"GCM"$ catastrophically fails on nonce reuse — two messages with the same $(K, N)$ reveal $"GHASH"$ key and allow arbitrary forgeries (Joux's forbidden attack). Counter-based nonces or 192-bit extended $"GCM"$-$"SIV"$ nonces are the practical defenses.
+*Critical pitfall:* $"GCM"$ catastrophically fails on nonce reuse — two messages with the same $(K, N)$ reveal $"GHASH"$ key and allow arbitrary forgeries (Joux's forbidden attack). Counter-based nonces or $"AES"$-$"GCM"$-$"SIV"$ (which is nonce-misuse-resistant) are the practical defenses.
 
 === $"ChaCha20"$-$"Poly1305"$
 

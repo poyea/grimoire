@@ -44,7 +44,7 @@ A *SNARK* — succinct non-interactive argument of knowledge — proves arbitrar
 
 === Groth16
 
-Groth (2016) remains the smallest: 3 group elements ($approx 128$ bytes), one pairing equation to verify. Cost: a *trusted setup per circuit* — the "toxic waste" from the setup ceremony would allow forging proofs, so multi-party ceremonies (Zcash's Sapling MPC, built on a circuit-independent powers-of-tau phase) ensure security if any one participant is honest.
+Groth (2016) remains the smallest: 2 $G_1$ + 1 $G_2$ elements ($approx 192$ bytes on BLS12-381), one pairing equation to verify. Cost: a *trusted setup per circuit* — the "toxic waste" from the setup ceremony would allow forging proofs, so multi-party ceremonies (Zcash's Sapling MPC, built on a circuit-independent powers-of-tau phase) ensure security if any one participant is honest.
 
 === PLONK and Universal Setups
 
