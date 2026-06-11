@@ -107,7 +107,7 @@ A small 2D $"LUT"$ stores the geometry/Fresnel scale-bias terms; mip levels of t
 
 Even with Smith $G_2$, multiple-scattering between microfacets makes rough surfaces appear too dark. Kulla & Conty (2017) propose a furnace-test-derived compensation term:
 
-$ f_("ms") = (E_o (omega_o) E_o (omega_i)) / (pi (1 - E_a)) (1 - E_o (omega_i))(1 - E_o (omega_o)), $
+$ f_("ms") = ((1 - E_o (omega_i))(1 - E_o (omega_o))) / (pi (1 - E_a)), $
 
 where $E_o$ is the directional albedo (precomputed 2D $"LUT"$). Used in Unreal 5, Blender Cycles, Houdini Karma.
 
