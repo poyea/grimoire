@@ -97,52 +97,49 @@ def apply_rope(x: torch.Tensor, cos: torch.Tensor,
 
 
 class CausalSelfAttention(nn.Module):
-    def __init__(self, d_model: int, n_heads: int, n_kv: int):
+    """Plain multi-head attention: every head has its own K and V.
+    Grouped-query attention (GQA) — fewer KV heads than Q heads —
+    is developed in the Transformer Architecture chapter."""
+    def __init__(self, d_model: int, n_heads: int):
         super().__init__()
         assert d_model % n_heads == 0
-        self.n_heads, self.n_kv = n_heads, n_kv
+        self.n_heads = n_heads
         self.d_head = d_model // n_heads
-        self.q_proj = nn.Linear(d_model, n_heads * self.d_head, bias=False)
-        self.k_proj = nn.Linear(d_model, n_kv   * self.d_head, bias=False)
-        self.v_proj = nn.Linear(d_model, n_kv   * self.d_head, bias=False)
-        self.o_proj = nn.Linear(d_model, d_model,              bias=False)
+        self.qkv_proj = nn.Linear(d_model, 3 * d_model, bias=False)
+        self.o_proj   = nn.Linear(d_model, d_model,     bias=False)
 
     def forward(self, x: torch.Tensor, cos: torch.Tensor,
                 sin: torch.Tensor) -> torch.Tensor:
         B, L, _ = x.shape
-        q = self.q_proj(x).view(B, L, self.n_heads, self.d_head).transpose(1, 2)
-        k = self.k_proj(x).view(B, L, self.n_kv,   self.d_head).transpose(1, 2)
-        v = self.v_proj(x).view(B, L, self.n_kv,   self.d_head).transpose(1, 2)
+        q, k, v = self.qkv_proj(x).chunk(3, dim=-1)
+        shape = (B, L, self.n_heads, self.d_head)
+        q, k, v = (t.view(shape).transpose(1, 2) for t in (q, k, v))
 
         q, k = apply_rope(q, cos, sin), apply_rope(k, cos, sin)
 
-        # expand KV heads to match Q heads (GQA)
-        reps = self.n_heads // self.n_kv
-        k = k.repeat_interleave(reps, dim=1)
-        v = v.repeat_interleave(reps, dim=1)
-
         # scaled dot-product attention with causal mask (PyTorch 2.0 fused)
         out = F.scaled_dot_product_attention(q, k, v, is_causal=True)
-        out = out.transpose(1, 2).reshape(B, L, -1)
-        return self.o_proj(out)
+        return self.o_proj(out.transpose(1, 2).reshape(B, L, -1))
 
 
 class FeedForward(nn.Module):
+    """Two-layer GELU MLP (GPT-2 style). The gated SwiGLU variant used
+    by LLaMA-family models is covered in the Transformer Architecture
+    chapter."""
     def __init__(self, d_model: int, d_ff: int):
         super().__init__()
-        self.gate = nn.Linear(d_model, d_ff, bias=False)
-        self.up   = nn.Linear(d_model, d_ff, bias=False)
+        self.up   = nn.Linear(d_model, d_ff,   bias=False)
         self.down = nn.Linear(d_ff,   d_model, bias=False)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.down(F.silu(self.gate(x)) * self.up(x))  # SwiGLU
+        return self.down(F.gelu(self.up(x)))
 
 
 class TransformerBlock(nn.Module):
-    def __init__(self, d_model: int, n_heads: int, n_kv: int, d_ff: int):
+    def __init__(self, d_model: int, n_heads: int, d_ff: int):
         super().__init__()
         self.attn_norm = RMSNorm(d_model)
-        self.attn      = CausalSelfAttention(d_model, n_heads, n_kv)
+        self.attn      = CausalSelfAttention(d_model, n_heads)
         self.ffn_norm  = RMSNorm(d_model)
         self.ffn       = FeedForward(d_model, d_ff)
 
@@ -154,11 +151,11 @@ class TransformerBlock(nn.Module):
 
 class MiniLLM(nn.Module):
     def __init__(self, vocab: int, d_model: int, n_layers: int,
-                 n_heads: int, n_kv: int, d_ff: int, max_len: int = 2048):
+                 n_heads: int, d_ff: int, max_len: int = 2048):
         super().__init__()
         self.embed    = nn.Embedding(vocab, d_model)
         self.blocks   = nn.ModuleList(
-            [TransformerBlock(d_model, n_heads, n_kv, d_ff)
+            [TransformerBlock(d_model, n_heads, d_ff)
              for _ in range(n_layers)])
         self.norm     = RMSNorm(d_model)
         self.lm_head  = nn.Linear(d_model, vocab, bias=False)
@@ -182,10 +179,11 @@ class MiniLLM(nn.Module):
         return self.lm_head(self.norm(x))   # [B, L, V] logits
 
 
-# LLaMA 3 8B configuration
+# LLaMA-3-8B-scale configuration (the real model additionally uses
+# GQA with 8 KV heads and a SwiGLU FFN — see Transformer Architecture)
 model = MiniLLM(
     vocab=128_256, d_model=4096, n_layers=32,
-    n_heads=32, n_kv=8, d_ff=14336,
+    n_heads=32, d_ff=14336,
 ).cuda().to(torch.bfloat16)
 
 ids = torch.randint(0, 128_256, (1, 64)).cuda()
