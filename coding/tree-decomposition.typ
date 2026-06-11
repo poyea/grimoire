@@ -6,7 +6,7 @@
 
 == Euler Tour and DFS Ordering
 
-*Core idea:* A DFS over $n$ nodes visits exactly $2n - 1$ edges. Recording entry time `tin` and exit time `tout` for each node maps every subtree to a contiguous range in DFS order.
+*Core idea:* A DFS visits each of the $n$ nodes once, assigning entry times in visit order — a DFS-order array of $n$ entries. Recording entry time `tin` and exit time `tout` (the largest entry time in $v$'s subtree) for each node maps every subtree to a contiguous range in that array. (This subtree flattening is distinct from the $2n - 1$-entry Euler walk used for LCA below, which records a node on every entry *and* exit.)
 
 *DFS-order array:* Node $v$'s subtree occupies indices `[tin[v], tout[v]]` in the Euler-tour array. Any subtree aggregate becomes a range query.
 
