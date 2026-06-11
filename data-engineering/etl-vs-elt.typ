@@ -65,7 +65,7 @@ with sessionized as (
   )
 )
 select
-  md5(user_id || '|' || session_idx) as session_id,
+  md5(cast(user_id as varchar) || '|' || cast(session_idx as varchar)) as session_id,
   user_id,
   min(event_ts) as session_start,
   max(event_ts) as session_end,
@@ -133,7 +133,7 @@ A 1 TB clickstream ingest, transformed daily for 30 days:
   [Engineer time], [Higher (PySpark, $"YAML"$, $"DAG"$)], [Lower (pure $"SQL"$ + dbt)],
 )
 
-The engineer-time delta usually dominates the cloud bill in the first two years; the compute delta dominates after. _Cost Models_ formalizes this.
+The engineer-time delta usually dominates the cloud bill in the first two years; the compute delta dominates after. _Cloud Cost Engineering_ (Cloud & Infrastructure volume) formalizes this.
 
 == Streaming ELT
 

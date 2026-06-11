@@ -46,7 +46,7 @@ Beam adds custom `WindowFn`s (calendar windows, keyed session gaps); Flink addit
 The watermark answers "when is the window complete?"; the *trigger* answers "when do we materialise output?" — and the two are deliberately decoupled, because for a 24-hour window nobody wants to wait 24 hours for the first number. The Beam trigger algebra composes:
 
 - `AfterWatermark.pastEndOfWindow()` — the completeness trigger; fires once when the watermark passes the window end (the *on-time* pane).
-- `.withEarlyFirings(AfterProcessingTime.pastFirstElementInPane().plusDelayOf(60s))` — speculative panes every minute before completion.
+- `.withEarlyFirings(AfterProcessingTime.pastFirstElementInPane().plusDelayOf(Duration.standardSeconds(60)))` — speculative panes every minute before completion.
 - `.withLateFirings(AfterPane.elementCountAtLeast(1))` — a corrective pane per late element after completion.
 
 Each emitted result is a *pane* tagged with its timing (`EARLY`, `ON_TIME`, `LATE`) and index, so downstream consumers can distinguish a speculative number from a final one. Flink's DataStream API has a simpler built-in set (`EventTimeTrigger` is the default; `ContinuousEventTimeTrigger`, `CountTrigger`, custom `Trigger` subclasses), and Flink SQL exposes early/late firing only via configuration options — the full algebra is a Beam-model concept.

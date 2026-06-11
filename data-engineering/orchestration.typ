@@ -107,6 +107,7 @@ A change to `stg_orders` automatically marks `fct_revenue` as *stale*. Lineage i
 Prefect treats flows as ordinary Python functions decorated with `@flow` / `@task`. Dynamism (loops, conditionals creating tasks at runtime) is natural.
 
 ```python
+import pandas as pd
 from prefect import flow, task
 
 @task(retries=3, retry_delay_seconds=60)

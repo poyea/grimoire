@@ -2,7 +2,7 @@
 
 Streaming systems process unbounded data with bounded latency. Three concerns dominate: ordering (event time vs processing time), correctness under failure (exactly-once semantics), and state management (how billions of keyed aggregates fit in memory). This chapter covers Kafka as the durable log, Flink as the canonical processing engine, and the streaming-$"SQL"$ wave (RisingWave, Materialize, ksqlDB).
 
-*See also:* _CDC and Replication_ (the most common stream source), _Lakehouse Engineering_ (streaming writes to Iceberg / Delta / Hudi), _Streaming and Incremental Computation_ (database framing), _Log-Based Systems_ (distributed-systems framing).
+*See also:* _Change Data Capture_ (the most common stream source), _Lakehouse Engineering_ (streaming writes to Iceberg / Delta / Hudi), _Streaming and Incremental Computation_ (database framing), _Log-Based Systems_ (distributed-systems framing).
 
 == The Log as Substrate
 
@@ -56,7 +56,11 @@ DataStream<Revenue> hourly = orders
     .allowedLateness(Time.minutes(10))
     .aggregate(new SumAmount());
 
-hourly.sinkTo(IcebergSink.forTable("warehouse.gold.revenue_hourly").build());
+// catalog is a loaded FlinkCatalog; table must be resolved before sink construction
+Table dest = catalog.loadTable(TableIdentifier.of("gold", "revenue_hourly"));
+FlinkSink.forRow(hourly, RevenueSchema.INSTANCE)
+    .table(dest)
+    .build();
 ```
 
 The `BoundedOutOfOrderness(30s)` watermark says "events may be up to 30s late." `allowedLateness(10m)` keeps window state for 10 more minutes so very-late events can still update.
@@ -80,7 +84,7 @@ For external sinks, exactly-once requires a *transactional* sink:
   [*System*], [*Model*], [*State*], [*Niche*],
   [Kafka Streams], [Library, partition $=$ task], [$"RocksDB"$ in-process], [Microservices on $"JVM"$],
   [Flink], [Dataflow, distributed], [$"RocksDB"$ + checkpoints], [Heavy stateful jobs],
-  [Spark Structured Streaming], [Micro-batch, event-time], [$"RocksDB"$ / $"HDFS"$], [Unified with batch],
+  [Spark Structured Streaming], [Micro-batch, event-time], [$"RocksDB"$ / memory], [Unified with batch],
   [ksqlDB], [$"SQL"$ over Kafka Streams], [$"RocksDB"$], [Kafka-native $"SQL"$],
   [Materialize], [Differential dataflow], [In-memory arrangements], [Incremental views, low latency],
   [RisingWave], [Distributed $"SQL"$], [Tiered (S3-backed)], [Cloud-native streaming $"SQL"$],

@@ -2,7 +2,7 @@
 
 Data quality is the discipline of detecting, preventing, and communicating defects in data before they corrupt downstream decisions. Unlike software bugs, data bugs are silent: a pipeline can run green for months while loading nulls into a revenue column, and the failure surfaces only when a finance report disagrees with the bank statement. This chapter covers the dimensions used to define quality, declarative expectations frameworks (Great Expectations, dbt tests, Soda), statistical anomaly detection on metrics, data contracts, the write-audit-publish pattern, circuit breakers, and data SLAs.
 
-*See also:* _Schema Evolution_ (contracts at the schema layer), _Orchestration_ (where checks run in the DAG), _CDC and Replication_ (quality of replicated data), _Batch Processing_.
+*See also:* _Schema Evolution_ (contracts at the schema layer), _Orchestration_ (where checks run in the DAG), _Change Data Capture_ (quality of replicated data), _Batch Processing_.
 
 == Dimensions of Quality
 
