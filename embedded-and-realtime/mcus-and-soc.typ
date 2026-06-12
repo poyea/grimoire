@@ -85,7 +85,8 @@ SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk
               | SysTick_CTRL_TICKINT_Msk
               | SysTick_CTRL_ENABLE_Msk;
 
-NVIC_SetPriorityGrouping(3U);              // 4 bits preempt, 4 bits sub
+NVIC_SetPriorityGrouping(3U);              // split 8-bit field 4/4 preempt/sub
+                                           // (STM32 implements 4 bits, so 4 preempt / 0 sub)
 NVIC_SetPriority(USART1_IRQn, 5U);
 NVIC_EnableIRQ(USART1_IRQn);
 
