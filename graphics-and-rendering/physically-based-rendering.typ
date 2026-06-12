@@ -44,7 +44,7 @@ For dielectrics $F_0 approx 0.04$; for metals $F_0$ is RGB (gold $approx (1.00, 
 
 $ G_2 (omega_i, omega_o) = G_1 (omega_i) thin G_1 (omega_o), quad G_1 (omega) = (2 (n dot omega)) / ((n dot omega) + sqrt(alpha^2 + (1 - alpha^2)(n dot omega)^2)). $
 
-The height-correlated variant (Heitz 2014) is more accurate at low roughness; both are cheap enough for real-time.
+The height-correlated variant (Heitz 2014) is more accurate at high roughness; both are cheap enough for real-time.
 
 == Diffuse: Lambert vs Disney
 
