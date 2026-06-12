@@ -261,7 +261,7 @@ chapters:
   - subject: compilers
     slug: optimisation-passes
     path: compilers/optimisation-passes.typ
-    lines: 234
+    lines: 236
     status: reviewed
   - subject: compilers
     slug: register-allocation
@@ -431,7 +431,7 @@ chapters:
   - subject: data-engineering
     slug: orchestration
     path: data-engineering/orchestration.typ
-    lines: 198
+    lines: 199
     status: reviewed
   - subject: data-engineering
     slug: schema-evolution
@@ -441,7 +441,7 @@ chapters:
   - subject: data-engineering
     slug: streaming
     path: data-engineering/streaming.typ
-    lines: 139
+    lines: 143
     status: reviewed
   - subject: data-engineering
     slug: watermarks-and-windows
@@ -636,7 +636,7 @@ chapters:
   - subject: distributed-systems
     slug: gossip
     path: distributed-systems/gossip.typ
-    lines: 182
+    lines: 183
     status: reviewed
   - subject: distributed-systems
     slug: introduction
@@ -956,7 +956,7 @@ chapters:
   - subject: llm
     slug: introduction
     path: llm/introduction.typ
-    lines: 284
+    lines: 282
     status: reviewed
   - subject: llm
     slug: long-context
