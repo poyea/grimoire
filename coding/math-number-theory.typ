@@ -354,6 +354,63 @@ int64_t fibonacci(int n, int64_t mod) {
 
 *Cache blocking for large matrices (n > 32):* Block into tiles to fit in cache.
 
+== Vieta Jumping
+
+*Technique:* Infinite descent on quadratic Diophantine equations using Vieta's formulas. Given one solution, "jump" to a smaller one; since positive integers cannot descend forever, the minimal solution must be degenerate, which forces the desired conclusion.
+
+*Canonical example (IMO 1988, Problem 6):* If $a, b$ are positive integers with $(a b + 1) | (a^2 + b^2)$, then $k = (a^2 + b^2) \/ (a b + 1)$ is a perfect square.
+
+*The jump:* Fix $k$ and $b$, and view the relation as a quadratic in $x$:
+
+$ x^2 - k b x + (b^2 - k) = 0. $
+
+If $a$ is one root, Vieta's formulas give the other root
+
+$ a' = k b - a = (b^2 - k) / a. $
+
+The first form shows $a'$ is an integer; the second bounds it: if $a > b$ then $a' = (b^2 - k)\/a < b < a$, so $(a', b)$ is a strictly smaller solution with the same $k$. Take the solution minimizing $a + b$ with $a >= b$. If $a' > 0$, the pair $(b, a')$ contradicts minimality; $a' < 0$ is impossible: with $a' <= -1$, $a'^2 - k b a' + b^2 - k >= a'^2 + k b + b^2 - k >= a'^2 + b^2 > 0$, but a root makes it zero. Hence $a' = 0$, so $k = b^2$.
+
+*Algorithmic view:* the jump map generates all solutions for a fixed $k$ from the base pair $(b, 0)$ — the solution tree of the Markov-style equation. Running it forward enumerates solutions; running it backward (descent) proves structure.
+
+```cpp
+// Enumerate (a, b) with (a^2 + b^2) = k * (a*b + 1), k = t^2,
+// by jumping up from the root (t, 0): (a, b) -> (k*a - b, a).
+#include <cstdint>
+#include <utility>
+#include <vector>
+
+std::vector<std::pair<int64_t, int64_t>> vieta_solutions(int64_t t, int64_t limit) {
+    int64_t k = t * t;
+    std::vector<std::pair<int64_t, int64_t>> out;
+    int64_t b = 0, a = t;          // degenerate base solution
+    while (a <= limit) {
+        out.push_back({a, b});
+        int64_t next = k * a - b;  // Vieta: the other root of x^2 - k*a*x + (a^2 - k)
+        if (next <= a) break;      // t = 1 degenerates: (1,0) and (1,1) only
+        b = a;
+        a = next;
+    }
+    return out;
+}
+
+// Descent direction: verify a non-degenerate pair reduces to (t, 0).
+bool vieta_descend(int64_t a, int64_t b) {  // requires (a*b+1) | (a^2+b^2)
+    if (a < b) std::swap(a, b);
+    int64_t k = (a * a + b * b) / (a * b + 1);
+    while (b > 0) {
+        int64_t a2 = k * b - a;    // jump to the smaller root
+        a = b;
+        b = a2;
+        if (a < b) return false;   // descent must be monotone
+    }
+    return k == a * a;             // minimal solution is (sqrt(k), 0)
+}
+```
+
+For $t = 2$ ($k = 4$): $(2,0), (8,2), (30,8), (112,30), dots$ — each pair satisfies $(a^2+b^2)\/(a b+1) = 4$. Values grow geometrically (ratio $approx k$), so use `__int128` or stop early when `k * a - b` would overflow. For $t = 1$ the equation $a^2 - a b + b^2 = 1$ has only $(1,0)$ and $(1,1)$.
+
+*When to reach for it:* divisibility conditions symmetric in two variables, where the expression is quadratic in each variable separately. Related to descent arguments on Markov triples ($x^2+y^2+z^2 = 3 x y z$) and Apollonian-style recursions.
+
 == References
 
 *Algorithms:*
