@@ -30,6 +30,8 @@ jobs:
           python-version: '3.12'
       - name: Check Further Reading citations
         run: python3 scripts/check_citations.py
+      - name: Check cross-references
+        run: python3 scripts/check_crossrefs.py
       - name: Report near-duplicate paragraphs (advisory)
         run: python3 scripts/check_duplicates.py
 
