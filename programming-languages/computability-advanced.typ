@@ -100,7 +100,7 @@ halts on every input. The *Turing degree* of $A$ is $deg(A) = { B | B equiv_T A
 
 The set $cal(D) = NN^NN \/ equiv_T$ of degrees with order $lt.eq_T$ is an
 upper semilattice with least element $bold(0) = deg(emptyset) = $ recursive
-degrees and join $deg(A) join deg(B) = deg(A xor B)$ where $A xor B = { 2 n | n
+degrees and join $deg(A) bowtie.big deg(B) = deg(A xor B)$ where $A xor B = { 2 n | n
 in A } union { 2 n + 1 | n in B }$.
 
 *Properties of $cal(D)$.*

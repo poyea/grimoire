@@ -291,8 +291,8 @@ Register-automaton learning, integrating with LearnLib.
 The *learning-based verification* loop (Peled--Vardi--Yannakakis 2002; Cobleigh--Giannakopoulou--Păsăreanu 2003):
 
 1. Learn a model $M$ of an unknown component.
-2. Verify $M tack.r.double phi$ via model checking.
-3. If $M tack.r.double phi$, attempt to certify the real system; if a counterexample is found, refine via further queries.
+2. Verify $M tack.rr phi$ via model checking.
+3. If $M tack.rr phi$, attempt to certify the real system; if a counterexample is found, refine via further queries.
 
 This *assume-guarantee* style reduces compositional verification to a sequence of learning problems and is realized in tools like JPF-LTL.
 

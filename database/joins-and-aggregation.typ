@@ -143,7 +143,7 @@ def merge_join(R_sorted, S_sorted, key):
 
 For *cyclic joins* (e.g., triangle query $R(A,B) ⋈ S(B,C) ⋈ T(A,C)$), pairwise binary joins are provably suboptimal. The AGM bound (Atserias, Grohe, Marx 2008) gives the worst-case output size:
 
-$ |R join S join T| <= sqrt(|R| dot |S| dot |T|) $
+$ |R bowtie.big S bowtie.big T| <= sqrt(|R| dot |S| dot |T|) $
 
 For a triangle on 3 relations each of size $N$: output $<= N^(3\/2)$, but binary joins produce intermediate results of size up to $N^2$.
 

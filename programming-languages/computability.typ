@@ -392,8 +392,8 @@ $0''$ /  $0'''$-priority machinery are extensions of this idea.
 
 == The Structure of Turing Degrees
 
-Let $cal(D) = (cal(D), lt.eq, join)$ denote the upper semilattice of Turing
-degrees, with $deg(A) join deg(B) = deg(A xor B)$. Let $cal(R) subset.eq cal(D)$
+Let $cal(D) = (cal(D), lt.eq, bowtie.big)$ denote the upper semilattice of Turing
+degrees, with $deg(A) bowtie.big deg(B) = deg(A xor B)$. Let $cal(R) subset.eq cal(D)$
 be the r.e. degrees.
 
 *Theorem (Kleene--Post 1954).* There are degrees $bold(a), bold(b) lt.eq bold(0')$
@@ -401,7 +401,7 @@ with $bold(a) |_T bold(b)$. The priority method is *not* required for this
 non-r.e. result; finite-extension forcing suffices.
 
 *Theorem (Sacks splitting, 1963).* Every nonrecursive r.e. degree $bold(a)$ splits:
-there exist r.e. degrees $bold(b), bold(c) < bold(a)$ with $bold(b) join bold(c) =
+there exist r.e. degrees $bold(b), bold(c) < bold(a)$ with $bold(b) bowtie.big bold(c) =
 bold(a)$ and $bold(b) |_T bold(c)$.
 
 *Theorem (Sacks density, 1964).* For any r.e. degrees $bold(a) < bold(b)$ there is

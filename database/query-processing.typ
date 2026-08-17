@@ -366,7 +366,7 @@ Predicate: salary BETWEEN 60k AND 80k
 
 *Join cardinality* estimation assumes independence between join columns:
 
-$ |R join S| approx |R| dot |S| dot sigma_"join" $
+$ |R bowtie.big S| approx |R| dot |S| dot sigma_"join" $
 
 This independence assumption breaks down for correlated predicates, leading to severe underestimates. Modern systems augment histograms with:
 

@@ -17,7 +17,7 @@ A *relation* $R$ is a set of tuples over a fixed schema $R(A_1: D_1, ..., A_n: D
   [*Operator*], [*Symbol*], [*SQL equivalent*],
   [Selection],       [$sigma_(p)(R)$],              [`WHERE p`],
   [Projection],      [$pi_(A)(R)$],                 [`SELECT A`],
-  [Join],            [$R join S$],                   [`R JOIN S ON ...`],
+  [Join],            [$R bowtie.big S$],                   [`R JOIN S ON ...`],
   [Union],           [$R union S$],                  [`UNION ALL`],
   [Difference],      [$R \\ S$],                     [`EXCEPT`],
   [Rename],          [$rho_(B\/A)(R)$],              [`AS`],

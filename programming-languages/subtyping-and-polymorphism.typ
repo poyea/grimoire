@@ -14,18 +14,18 @@ The defining feature of a subtyping system is a single inference rule:
    Gamma |- e : tau_2
 ```
 
-If $tau_1$ is a subtype of $tau_2$, then any term of type $tau_1$ may be promoted to type $tau_2$. The *subtype relation* $lt.tri$ is required to be a preorder (reflexive and transitive) on types; it may or may not be antisymmetric depending on whether types are considered up to alpha-equivalence and unfolding.
+If $tau_1$ is a subtype of $tau_2$, then any term of type $tau_1$ may be promoted to type $tau_2$. The *subtype relation* $lt.closed$ is required to be a preorder (reflexive and transitive) on types; it may or may not be antisymmetric depending on whether types are considered up to alpha-equivalence and unfolding.
 
 The slogan attributed to Liskov (1987): *whenever an instance of $tau_1$ is expected, an instance of $tau_2$ may be supplied*. The reverse reading (*subtyping is implicit coercion*) leads to the *coercive* interpretation: subsumption is a logically silent insertion of a function $tau_1 arrow.r tau_2$. The *subset* interpretation, in contrast, treats subtypes as honest set inclusions on the semantic interpretation of types.
 
 #table(
   columns: (auto, auto),
-  [*Interpretation*], [*$tau_1 lt.tri tau_2$ means*],
+  [*Interpretation*], [*$tau_1 lt.closed tau_2$ means*],
   [Subset semantics], [$[| tau_1 |] subset.eq [| tau_2 |]$],
   [Coercive semantics], [there is a canonical coercion $c : tau_1 arrow.r tau_2$ inserted by elaboration],
 )
 
-The interpretations agree on simple data but diverge on function types: in the coercive view, $tau_1 arrow.r tau_2 lt.tri tau_1' arrow.r tau_2'$ is mediated by composition with explicit coercions.
+The interpretations agree on simple data but diverge on function types: in the coercive view, $tau_1 arrow.r tau_2 lt.closed tau_1' arrow.r tau_2'$ is mediated by composition with explicit coercions.
 
 == Record Subtyping: Width and Depth
 
@@ -33,13 +33,13 @@ The two foundational rules for structural records.
 
 *Width subtyping:* a record with more fields is a subtype of a record with fewer (assuming the shared fields agree).
 
-$ {ell_1 : tau_1, dots, ell_n : tau_n, ell_(n+1) : tau_(n+1)} lt.tri {ell_1 : tau_1, dots, ell_n : tau_n} $
+$ {ell_1 : tau_1, dots, ell_n : tau_n, ell_(n+1) : tau_(n+1)} lt.closed {ell_1 : tau_1, dots, ell_n : tau_n} $
 
 The reading: anyone expecting only the first $n$ fields can be safely given a record that has those *and more*. Semantically, in the subset interpretation, the set of records of the wider type is a subset of the set satisfying the narrower constraint.
 
 *Depth subtyping:* covariant subtyping inside each field.
 
-$ "for each" i, tau_i lt.tri tau_i' => {ell_1 : tau_1, dots, ell_n : tau_n} lt.tri {ell_1 : tau_1', dots, ell_n : tau_n'} $
+$ "for each" i, tau_i lt.closed tau_i' => {ell_1 : tau_1, dots, ell_n : tau_n} lt.closed {ell_1 : tau_1', dots, ell_n : tau_n'} $
 
 Reading: if each field's type narrows to a subtype, the whole record narrows.
 
@@ -63,7 +63,7 @@ These three rules together (width, depth, permutation) characterise *structural*
 
 The function arrow does not behave covariantly in both positions.
 
-*Theorem (function subtyping).* $tau_1 arrow.r tau_2 lt.tri tau_1' arrow.r tau_2'$ <==> $tau_1' lt.tri tau_1$ and $tau_2 lt.tri tau_2'$.
+*Theorem (function subtyping).* $tau_1 arrow.r tau_2 lt.closed tau_1' arrow.r tau_2'$ <==> $tau_1' lt.closed tau_1$ and $tau_2 lt.closed tau_2'$.
 
 The argument position is *contravariant*: to substitute for a function expecting $tau_1$, you need a function that accepts *at least* $tau_1$, i.e., one accepting any $tau_1' supset.eq tau_1$. The return position is *covariant*: your replacement may return *at most* what's expected.
 
@@ -82,7 +82,7 @@ For a mutable cell `Ref tau`, both read and write operations exist:
 - read: $"Ref" tau arrow.r tau$ (covariant in $tau$);
 - write: $"Ref" tau arrow.r tau arrow.r 1$ (contravariant in $tau$).
 
-To be sound for both, `Ref` must be *invariant*: $"Ref" tau lt.tri "Ref" tau'$ <==> $tau = tau'$.
+To be sound for both, `Ref` must be *invariant*: $"Ref" tau lt.closed "Ref" tau'$ <==> $tau = tau'$.
 
 *Java arrays* (1996) infamously got this wrong: arrays are declared covariant. The compiler accepts:
 
@@ -112,13 +112,13 @@ Languages with parameterised types and subtyping must declare variance somehow.
 
 Emir, Kennedy, Russo, Yu (*Variance and generalized constraints for C\# generics*, 2006) gave the canonical treatment of declaration-site variance in a setting with subtyping; their work directly informed C\# 4.0's `in`/`out` annotations.
 
-== Bounded Quantification: System F$(lt.tri)$
+== Bounded Quantification: System F$(lt.closed)$
 
-The marriage of subtyping with parametric polymorphism is *System F$(lt.tri)$* (Cardelli–Wegner 1985, refined by Curien–Ghelli 1992). Type abstraction may be *bounded* by an upper subtype constraint:
+The marriage of subtyping with parametric polymorphism is *System F$(lt.closed)$* (Cardelli–Wegner 1985, refined by Curien–Ghelli 1992). Type abstraction may be *bounded* by an upper subtype constraint:
 
-$ tau ::= dots | forall alpha lt.tri tau_1 . tau_2 | exists alpha lt.tri tau_1 . tau_2 $
+$ tau ::= dots | forall alpha lt.closed tau_1 . tau_2 | exists alpha lt.closed tau_1 . tau_2 $
 
-A bounded universal $forall alpha lt.tri tau_1 . tau_2$ is the type of a function polymorphic over all subtypes $alpha$ of $tau_1$. Reading: *"for any type $alpha$ that is at most $tau_1$, the term has type $tau_2$ with $alpha$ in scope"*.
+A bounded universal $forall alpha lt.closed tau_1 . tau_2$ is the type of a function polymorphic over all subtypes $alpha$ of $tau_1$. Reading: *"for any type $alpha$ that is at most $tau_1$, the term has type $tau_2$ with $alpha$ in scope"*.
 
 ```text
    Gamma, alpha <: tau_1 |- e : tau_2
@@ -134,17 +134,17 @@ A bounded universal $forall alpha lt.tri tau_1 . tau_2$ is the type of a functio
    Gamma |- forall alpha <: tau_1. tau_2 <: forall alpha <: tau_1'. tau_2'
 ```
 
-The subtyping rule for bounded universals is *itself* contravariant in the bound: a tighter bound is a *less* general type, hence a *subtype* of the looser-bound type. The intricate interplay of bound-variable shadowing, contravariance of bounds, and transitivity is what makes F$(lt.tri)$'s metatheory subtle.
+The subtyping rule for bounded universals is *itself* contravariant in the bound: a tighter bound is a *less* general type, hence a *subtype* of the looser-bound type. The intricate interplay of bound-variable shadowing, contravariance of bounds, and transitivity is what makes F$(lt.closed)$'s metatheory subtle.
 
-=== Undecidability of Full F$(lt.tri)$
+=== Undecidability of Full F$(lt.closed)$
 
-*Theorem (Pierce 1992, 1994).* Subtyping for full System F$(lt.tri)$ is undecidable.
+*Theorem (Pierce 1992, 1994).* Subtyping for full System F$(lt.closed)$ is undecidable.
 
 Pierce reduces from the halting problem for two-counter machines, encoding counter states as deeply-nested bounded universals and counter operations as subtyping derivations. The non-termination of subtyping checks tracks the non-termination of the encoded machine.
 
-The diagnosis: the *bound* of a quantifier $forall alpha lt.tri tau_1 . dots$ may itself be a universal $forall beta lt.tri tau . dots$; nesting these triggers the unbounded recursion. The *kernel* F$(lt.tri)$ (Cardelli–Martini–Mitchell–Scedrov) requires the bound to remain the *same* in the rule S-All, which sacrifices some expressiveness but restores decidability.
+The diagnosis: the *bound* of a quantifier $forall alpha lt.closed tau_1 . dots$ may itself be a universal $forall beta lt.closed tau . dots$; nesting these triggers the unbounded recursion. The *kernel* F$(lt.closed)$ (Cardelli–Martini–Mitchell–Scedrov) requires the bound to remain the *same* in the rule S-All, which sacrifices some expressiveness but restores decidability.
 
-*Kernel F$(lt.tri)$* (Cardelli–Martini–Mitchell–Scedrov; algorithmic study by Curien–Ghelli 1992) modifies the S-All rule:
+*Kernel F$(lt.closed)$* (Cardelli–Martini–Mitchell–Scedrov; algorithmic study by Curien–Ghelli 1992) modifies the S-All rule:
 
 ```text
    Gamma, alpha <: tau_1 |- tau_2 <: tau_2'
@@ -152,15 +152,15 @@ The diagnosis: the *bound* of a quantifier $forall alpha lt.tri tau_1 . dots$ ma
    Gamma |- forall alpha <: tau_1. tau_2 <: forall alpha <: tau_1. tau_2'
 ```
 
-The bound $tau_1$ must be identical on both sides. Subtyping in kernel F$(lt.tri)$ is decidable (exponential in the worst case; polynomial in practice).
+The bound $tau_1$ must be identical on both sides. Subtyping in kernel F$(lt.closed)$ is decidable (exponential in the worst case; polynomial in practice).
 
 === Bounded Existentials
 
-Dual to bounded universals: $exists alpha lt.tri tau_1 . tau_2$. The reading is *"there exists a type $alpha$, hidden but known to be at most $tau_1$, satisfying $tau_2$"*. This is the type-theoretic basis for *abstract data types*: a `Stack` exposed as $exists alpha lt.tri "Object" . {"push" : alpha arrow.r 1, "pop" : alpha arrow.r alpha}$ hides its representation while making its supertype publicly known.
+Dual to bounded universals: $exists alpha lt.closed tau_1 . tau_2$. The reading is *"there exists a type $alpha$, hidden but known to be at most $tau_1$, satisfying $tau_2$"*. This is the type-theoretic basis for *abstract data types*: a `Stack` exposed as $exists alpha lt.closed "Object" . {"push" : alpha arrow.r 1, "pop" : alpha arrow.r alpha}$ hides its representation while making its supertype publicly known.
 
-=== System $F_(lt.tri omega)$
+=== System $F_(lt.closed omega)$
 
-Adding *type operators* (functions on types, kind $* arrow.r *$) gives System $F_(omega)$; adding bounded quantification on top gives $F_(lt.tri omega)$. This is the type-theoretic core of Scala's compiler and of theoretical work on object encodings.
+Adding *type operators* (functions on types, kind $* arrow.r *$) gives System $F_(omega)$; adding bounded quantification on top gives $F_(lt.closed omega)$. This is the type-theoretic core of Scala's compiler and of theoretical work on object encodings.
 
 == Subtyping for Recursive Types
 
@@ -198,8 +198,8 @@ The assumption set $A$ is the *coinductive certificate* that recursive subtyping
 
 *Intersection types* (Coppo–Dezani 1980; Pottinger 1980) add a connective $tau_1 inter tau_2$ for types *"both"* of $tau_1$ and $tau_2$. The subtyping rules:
 
-$ tau_1 inter tau_2 lt.tri tau_1 quad tau_1 inter tau_2 lt.tri tau_2 \
-"if" tau lt.tri tau_1 "and" tau lt.tri tau_2, "then" tau lt.tri tau_1 inter tau_2 $
+$ tau_1 inter tau_2 lt.closed tau_1 quad tau_1 inter tau_2 lt.closed tau_2 \
+"if" tau lt.closed tau_1 "and" tau lt.closed tau_2, "then" tau lt.closed tau_1 inter tau_2 $
 
 Here intersection is the *greatest lower bound* in the subtype lattice.
 
@@ -217,8 +217,8 @@ A useful restricted form: intersection of *refinements* of a single base type. E
 
 Union types $tau_1 union tau_2$ (values of *either* type) appear in TypeScript, Flow, Ceylon, and Scala 3. The subtyping rules:
 
-$ tau_1 lt.tri tau_1 union tau_2 quad tau_2 lt.tri tau_1 union tau_2 \
-"if" tau_1 lt.tri tau "and" tau_2 lt.tri tau, "then" tau_1 union tau_2 lt.tri tau $
+$ tau_1 lt.closed tau_1 union tau_2 quad tau_2 lt.closed tau_1 union tau_2 \
+"if" tau_1 lt.closed tau "and" tau_2 lt.closed tau, "then" tau_1 union tau_2 lt.closed tau $
 
 Here union is the *least upper bound*.
 
@@ -239,7 +239,7 @@ A *refinement type* refines an existing type by a logical predicate:
 
 $ {x : "Int" | x > 0} quad {"xs" : "List" alpha | "length" "xs" > 0} $
 
-Subtyping reduces to *implication* between refinements: ${x : "Int" | P(x)} lt.tri {x : "Int" | Q(x)}$ <==> $forall x . P(x) => Q(x)$.
+Subtyping reduces to *implication* between refinements: ${x : "Int" | P(x)} lt.closed {x : "Int" | Q(x)}$ <==> $forall x . P(x) => Q(x)$.
 
 The predicate language is typically chosen to admit a decision procedure (SMT-solvable theories: linear arithmetic, bit-vectors, uninterpreted functions, arrays). The resulting type system delivers strong guarantees with no proof-writing burden on the programmer, as the SMT solver handles all the routine reasoning.
 
@@ -280,7 +280,7 @@ Rémy's *scoped labels* (1989; Leijen 2005 for effects) order the labels in a ro
 
 Categorical semantics of subtyping (Reynolds 1980, Mitchell 1988, Breazu-Tannen–Coquand–Gunter–Scedrov 1991): the subtype relation is interpreted by *faithful functors* between categories of types-as-objects. The subsumption rule becomes the action of a *coherence* requirement: two derivations of the same typing judgement, possibly using different chains of subsumptions, must yield *equal* terms after coercion insertion.
 
-*Theorem (coherence, Breazu-Tannen et al. 1991).* For F$(lt.tri)$ with kernel rule, the coercion semantics is coherent: the meaning of a term is independent of the derivation chosen.
+*Theorem (coherence, Breazu-Tannen et al. 1991).* For F$(lt.closed)$ with kernel rule, the coercion semantics is coherent: the meaning of a term is independent of the derivation chosen.
 
 Without coherence, the *meaning* of a program would depend on which derivation the type-checker happened to find, a disaster for predictability. Languages with non-coherent subtype systems (Scala 2's implicit conversions, early TypeScript) have suffered the resulting confusion.
 
@@ -362,8 +362,8 @@ The subsumption step is *silent*: it changes no values, performs no runtime work
   [*Discipline*], [*Quantification*], [*Subtype reasoning*], [*Inference*], [*Examples*],
   [System F], [explicit type abstraction], [none], [undecidable in general], [Haskell rank-2, Coq Core],
   [Hindley–Milner], [implicit at `let`], [none], [decidable, $O(n alpha(n))$], [OCaml, SML, Haskell],
-  [F$(lt.tri)$ (full)], [bounded universal], [yes, full], [undecidable], [theoretical],
-  [F$(lt.tri)$ (kernel)], [bounded universal], [yes, restricted], [decidable, exponential worst-case], [Scala foundation],
+  [F$(lt.closed)$ (full)], [bounded universal], [yes, full], [undecidable], [theoretical],
+  [F$(lt.closed)$ (kernel)], [bounded universal], [yes, restricted], [decidable, exponential worst-case], [Scala foundation],
   [Row polymorphism], [implicit at `let` over rows], [via row extension only], [decidable], [OCaml objects, Koka, PureScript],
   [Refinement types], [implicit, with predicates], [via SMT implication], [decidable iff theory is], [Liquid Haskell, F$"*"$],
   [Dependent types], [explicit $Pi$, $Sigma$], [definitional + propositional], [usually undecidable], [Agda, Idris, Coq, Lean],
