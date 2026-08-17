@@ -1,0 +1,34 @@
+name: Setup Typst
+description: >-
+  Install a pinned Typst release by downloading its asset directly.
+
+  typst-community/setup-typst resolves an exact version by fetching the
+  full release list for typst/typst, and that endpoint intermittently
+  returns 504, which surfaces as "Typst <version> could not be resolved"
+  and fails the job. Only `latest` avoids it, by using a different
+  endpoint — but `latest` floats, and a Typst release that deprecates a
+  symbol then breaks the build on an unrelated commit. Downloading the
+  tagged asset by URL keeps the pin and touches no release-listing API.
+
+inputs:
+  version:
+    description: Typst version to install, without the leading "v".
+    required: false
+    default: '0.15.1'
+
+runs:
+  using: composite
+  steps:
+    - name: Install Typst ${{ inputs.version }}
+      shell: bash
+      run: |
+        set -euo pipefail
+        target=x86_64-unknown-linux-musl
+        url="https://github.com/typst/typst/releases/download/v${{ inputs.version }}/typst-${target}.tar.xz"
+        dest="${RUNNER_TEMP}/typst"
+        mkdir -p "$dest"
+        curl --fail --silent --show-error --location --retry 3 \
+             --retry-delay 2 "$url" -o "${RUNNER_TEMP}/typst.tar.xz"
+        tar -xJf "${RUNNER_TEMP}/typst.tar.xz" -C "$dest" --strip-components=1
+        echo "$dest" >> "$GITHUB_PATH"
+        "$dest/typst" --version

@@ -22,9 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Typst
-        uses: typst-community/setup-typst@v5
-        with:
-          typst-version: '0.15.1'
+        uses: ./.github/actions/setup-typst
 
       - name: Find and compile all Typst documents
         run: |

@@ -66,9 +66,7 @@ jobs:
           - search-and-ir
     steps:
       - uses: actions/checkout@v4
-      - uses: typst-community/setup-typst@v5
-        with:
-          typst-version: '0.15.1'
+      - uses: ./.github/actions/setup-typst
       - name: Compile ${{ matrix.subject }}.typ
         run: |
           SNAKE=$(echo "${{ matrix.subject }}" | tr '-' '_')
