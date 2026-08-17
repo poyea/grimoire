@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Multi-GPU Communication and Scaling
 
 Modern ML training (LLMs with 100B+ parameters) and HPC simulations no longer fit on a single GPU. Scaling requires high-bandwidth GPU-to-GPU interconnects, efficient collective communication libraries, and parallelism strategies that map workload structure onto hardware topology.
 
-*See also:* _GPU Memory Hierarchy_ (HBM, global memory), _Compute Units and Specialized Cores_ (Hopper/Blackwell interconnect), _Performance Optimization_ (kernel tuning).
+*See also:* #xref("gpu-architecture", "memory-hierarchy", label: "GPU Memory Hierarchy") (HBM, global memory), #xref("gpu-architecture", "compute-architecture", label: "Compute Units and Specialized Cores") (Hopper/Blackwell interconnect), #xref("gpu-architecture", "performance-optimization", label: "Performance Optimization") (kernel tuning).
 
 == Interconnect Hierarchy
 

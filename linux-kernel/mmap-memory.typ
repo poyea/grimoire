@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = mmap and Memory Management
 
 `mmap` is the most important memory primitive in Linux. Almost everything in the kernel's memory subsystem (file I/O, shared libraries, `fork()`'s copy-on-write, anonymous heaps, hugepages) is either implemented as `mmap` or trivially layered on top of it. This chapter is a deep dive into what `mmap` actually does, and the family of features built around it.
@@ -258,7 +260,7 @@ cat /proc/buddyinfo              # free-page fragmentation per order
 
 `pmap -X <pid>` is a friendlier `smaps`. `/proc/<pid>/pagemap` lets you decode physical addresses if you have root.
 
-*See also:* _Virtual Memory (CPU Architecture volume)_ (TLB, page tables, address translation hardware), _Zero-Copy Networking (Networking volume)_ (mmap-based zero-copy I/O patterns), _Advanced Algorithms in Modern Systems (Coding volume)_ (custom allocators on top of mmap).
+*See also:* _Virtual Memory (CPU Architecture volume)_ (TLB, page tables, address translation hardware), #xref("networking", "zero-copy", label: "Zero-Copy Networking (Networking volume)") (mmap-based zero-copy I/O patterns), #xref("coding", "advanced-systems", label: "Advanced Algorithms in Modern Systems (Coding volume)") (custom allocators on top of mmap).
 
 == Further Reading
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Kubernetes Internals
 
 Kubernetes is best understood as a *control loop platform built around a strongly-consistent key-value store*. The apiserver is the only client of etcd; everything else — controllers, schedulers, kubelets — watches the apiserver and writes back desired state through it. This level-triggered, declarative model is the deep structural decision that makes the system extensible (CRDs and custom controllers are first-class) and self-healing (every reconciliation step recomputes from current state, never from deltas).
 
-*See also:* _Containers: OCI, runc, containerd, Image Layers_, _Service Mesh_ (networking), _Infrastructure as Code_, _Multi-Tenancy_, _Container Networking_ (networking), _cgroups and Namespaces_ (linux-kernel).
+*See also:* #xref("cloud-and-infrastructure", "containers", label: "Containers: OCI, runc, containerd, Image Layers"), #xref("networking", "service-mesh", label: "Service Mesh") (networking), #xref("cloud-and-infrastructure", "iac", label: "Infrastructure as Code"), #xref("cloud-and-infrastructure", "multi-tenancy", label: "Multi-Tenancy"), #xref("networking", "container-networking", label: "Container Networking") (networking), #xref("linux-kernel", "cgroups-namespaces", label: "cgroups and Namespaces") (linux-kernel).
 
 == Architectural Overview
 

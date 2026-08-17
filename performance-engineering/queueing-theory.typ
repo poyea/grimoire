@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Queueing Theory
 
 Every shared resource with variable demand is a queue: a CPU run queue, a disk, a connection pool, a load balancer, a barista. Queueing theory supplies the small set of formulas that explain why latency explodes near saturation, why variability is as expensive as load, and why "the server is only at 80%" is not reassurance. This chapter covers Little's law, the M/M/1 family, the utilization-latency curve, the effects of variability and multiple servers, and the practical translation to systems work.
 
-*See also:* _Performance Methodology_ (USE saturation metrics are queue lengths), _Capacity Planning_ (these models, applied forward), _Concurrency Performance_ (thread pools as queueing systems), and _I/O Performance_ (`iostat` is a queueing report).
+*See also:* #xref("performance-engineering", "methodology", label: "Performance Methodology") (USE saturation metrics are queue lengths), #xref("performance-engineering", "capacity-planning", label: "Capacity Planning") (these models, applied forward), #xref("performance-engineering", "concurrency-performance", label: "Concurrency Performance") (thread pools as queueing systems), and #xref("performance-engineering", "io-performance", label: "I/O Performance") (`iostat` is a queueing report).
 
 == Notation and Little's Law
 

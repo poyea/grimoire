@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Real-Time Scheduling
 
 A real-time system is not a fast system; it is a *predictable* one. The defining question is not "how quickly does this usually finish?" but "can I prove it always finishes by its deadline?" That shift — from expectation to guarantee — produces a body of theory with actual theorems (utilization bounds, optimality proofs, blocking-time bounds) and a body of engineering (priority protocols, preemptible kernels, bandwidth servers) for making commodity OSes honor them. _Scheduling Theory_ surveys the general landscape; this chapter goes deep on the real-time half.
 
-*See also:* _Scheduling Theory_, _Processes and Threads_, _Inter-Process Communication_, _The Scheduler_ (linux-kernel), _Interrupts and Bottom Halves_ (linux-kernel).
+*See also:* #xref("operating-systems", "scheduling-theory", label: "Scheduling Theory"), #xref("operating-systems", "processes-and-threads", label: "Processes and Threads"), #xref("operating-systems", "ipc-mechanisms", label: "Inter-Process Communication"), #xref("linux-kernel", "scheduler", label: "The Scheduler") (linux-kernel), #xref("linux-kernel", "interrupts", label: "Interrupts and Bottom Halves") (linux-kernel).
 
 == Hard, Firm, and Soft
 

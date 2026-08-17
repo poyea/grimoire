@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Non-NVIDIA Accelerators
 
 NVIDIA dominates the discrete-GPU market but is no longer the only credible target for serious compute. AMD's MI300-series competes head-to-head on training, Apple's Metal stack runs production inference on tens of millions of laptops, Intel ships Xe and Gaudi accelerators, and a wave of startups (Tenstorrent, Cerebras, Groq, Graphcore) offers genuinely different architectures. This chapter surveys the alternatives and the portability stories that target them.
 
-*See also:* _Compute Units and Specialized Cores_ (NVIDIA SMs for contrast), _ML Workload Optimization on GPUs_ (the workloads everyone is chasing).
+*See also:* #xref("gpu-architecture", "compute-architecture", label: "Compute Units and Specialized Cores") (NVIDIA SMs for contrast), #xref("gpu-architecture", "ml-workloads", label: "ML Workload Optimization on GPUs") (the workloads everyone is chasing).
 
 == AMD — CDNA and RDNA
 

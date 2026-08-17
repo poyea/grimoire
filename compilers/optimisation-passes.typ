@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Optimisation Passes
 
 A compiler's middle-end applies a sequence of analysis and transformation passes over the IR. Each pass either analyses — computing properties and annotating the IR — or transforms, rewriting instructions to be faster, smaller, or more parallel. This chapter surveys the canonical scalar optimisations, loop transformations, and vectorisation, and explains how LLVM's pass manager orchestrates them.
 
-*See also:* _IR Design and SSA Form_, _Dataflow Analysis_, _Register Allocation_
+*See also:* #xref("compilers", "ir-design", label: "IR Design and SSA Form"), #xref("compilers", "dataflow-analysis", label: "Dataflow Analysis"), #xref("compilers", "register-allocation", label: "Register Allocation")
 
 == Pass Manager Architecture
 

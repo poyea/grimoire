@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Evolutionary Architecture
 
 Architecture is traditionally framed as "the decisions that are hard to change", which quietly assumes the goal is to get them right up front. Evolutionary architecture inverts the assumption: since requirements, technology, and the organisation *will* change in ways no one can predict, the architecture's primary job is to support *guided, incremental change across multiple dimensions* (Ford, Parsons & Kua, _Building Evolutionary Architectures_, 2017). The guidance comes from *fitness functions*, executable checks that the qualities you care about still hold, and the increments come from techniques like strangler fig, branch by abstraction, and expand–contract. This chapter covers the mechanics.
 
-*See also:* _Architecture Evaluation_ (assessing qualities at a point in time; fitness functions make that assessment continuous), _Monoliths and Microservices_ (decomposition as a common evolution), _Domain-Driven Design_ (bounded contexts as the natural quantum of change).
+*See also:* #xref("software-architecture", "architecture-evaluation", label: "Architecture Evaluation") (assessing qualities at a point in time; fitness functions make that assessment continuous), #xref("software-architecture", "monoliths-and-microservices", label: "Monoliths and Microservices") (decomposition as a common evolution), #xref("software-architecture", "domain-driven-design", label: "Domain-Driven Design") (bounded contexts as the natural quantum of change).
 
 == Fitness Functions
 

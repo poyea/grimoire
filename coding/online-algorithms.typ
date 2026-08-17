@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Online Algorithms
 
 *Online* algorithms make irrevocable decisions on a sequence of inputs without seeing the future. They are evaluated by the *competitive ratio* — the worst-case ratio of the online cost to that of the optimal *offline* algorithm that sees the whole sequence in advance. This chapter develops the standard playbook: ski rental, paging (LRU, FIFO, Marking), the $k$-server problem, and how randomization beats deterministic lower bounds.
 
-*See also:* _Greedy_, _Dynamic Programming_, _Streaming Algorithms_, _Randomized Algorithms_.
+*See also:* #xref("coding", "greedy", label: "Greedy"), #xref("coding", "dynamic-programming", label: "Dynamic Programming"), #xref("coding", "streaming-algorithms", label: "Streaming Algorithms"), #xref("coding", "randomized-algorithms", label: "Randomized Algorithms").
 
 == Competitive Ratio
 

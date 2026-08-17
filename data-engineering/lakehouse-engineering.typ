@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Lakehouse Engineering
 
 The lakehouse pattern unifies the data lake's cheap object-storage substrate with the warehouse's $"ACID"$ semantics, by layering an *open table format* — Iceberg, Delta Lake, or Hudi — on top of Parquet files in $"S3"$ / $"GCS"$ / $"ADLS"$. This chapter is the engineering companion to `database/lakehouses-and-open-formats.typ`: that one focuses on the format internals; this one focuses on writing, maintaining, and operating lakehouse tables in production.
 
-*See also:* _Lakehouses and Open Table Formats_ (database framing), _Batch Processing_, _Streaming_, _Change Data Capture_, _Cloud Cost Engineering_ (Cloud & Infrastructure volume).
+*See also:* #xref("database", "lakehouses-and-open-formats", label: "Lakehouses and Open Table Formats") (database framing), #xref("data-engineering", "batch-processing", label: "Batch Processing"), #xref("data-engineering", "streaming", label: "Streaming"), #xref("data-engineering", "change-data-capture", label: "Change Data Capture"), #xref("cloud-and-infrastructure", "cost-engineering", label: "Cloud Cost Engineering") (Cloud & Infrastructure volume).
 
 == The Three Layers
 

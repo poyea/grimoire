@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Vision Transformers
 
 The Vision Transformer (ViT) transplanted the transformer architecture to images, showing that a pure attention-based model pre-trained at sufficient scale outperforms CNNs without inductive biases for translation equivariance. This chapter covers ViT, its training recipe, hierarchical variants, and multimodal vision-language models.
 
-*See also:* _Transformer Architecture_ (attention mechanism, positional encoding), _CNN Architectures_ (pre-ViT baselines), _Object Detection_ and _Image Segmentation_ (ViT as backbone).
+*See also:* #xref("llm", "transformer-architecture", label: "Transformer Architecture") (attention mechanism, positional encoding), #xref("computer-vision", "cnn-architectures", label: "CNN Architectures") (pre-ViT baselines), #xref("computer-vision", "object-detection", label: "Object Detection") and #xref("computer-vision", "image-segmentation", label: "Image Segmentation") (ViT as backbone).
 
 == Vision Transformer (ViT)
 

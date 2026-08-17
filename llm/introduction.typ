@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Introduction
 
 Large Language Models (LLMs) are the defining systems of modern AI. A single model like LLaMA 3 70B encodes over 70 billion learned parameters, requires terabytes of training data, and demands hundreds of GPU-hours to serve efficiently at scale. Understanding how they work, from the mathematics of attention to the engineering of distributed training and low-latency inference, is essential for anyone building or operating AI systems today.
@@ -19,7 +21,7 @@ Large Language Models (LLMs) are the defining systems of modern AI. A single mod
 
 *Code conventions:* Examples use PyTorch as the primary framework (industry standard for research and production). JAX/Flax is shown where it meaningfully differs. All examples assume CUDA availability.
 
-*See also:* _ML Workload Optimization on GPUs (GPU Architecture volume)_ (Flash Attention, GEMM kernels, KV cache hardware), _Multi-GPU Communication and Scaling (GPU Architecture volume)_ (distributed training topology).
+*See also:* #xref("gpu-architecture", "ml-workloads", label: "ML Workload Optimization on GPUs (GPU Architecture volume)") (Flash Attention, GEMM kernels, KV cache hardware), #xref("gpu-architecture", "multi-gpu", label: "Multi-GPU Communication and Scaling (GPU Architecture volume)") (distributed training topology).
 
 == Notation and Conventions
 

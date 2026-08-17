@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Log-Based Systems
 
 The *append-only log* is one of the most consequential data structures in distributed systems: every write is a new record at the tail, nothing is ever overwritten, and the entire history of a system can be reconstructed by replaying the sequence from the beginning. Lamport observed that any deterministic state machine fed the same ordered log of inputs reaches the same state — a principle that connects consensus, replication, stream processing, and storage under one roof. This chapter traces that principle from its theoretical roots through Apache Kafka's production architecture to unified batch-and-stream frameworks.
 
-*See also:* _Time and Order_, _Distributed Transactions_, _Storage Engines_ (database-side framing), _Consensus Deep Dive_
+*See also:* #xref("distributed-systems", "time-and-order", label: "Time and Order"), _Distributed Transactions_, #xref("database", "storage-engines", label: "Storage Engines") (database-side framing), #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive")
 
 == The Log as Central Abstraction
 

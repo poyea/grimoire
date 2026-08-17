@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = QUIC and HTTP/3
 
 QUIC is a UDP-based, encrypted, stream-multiplexed transport: effectively a redesign of TCP+TLS+HTTP/2 into a single user-space protocol. Standardised as RFC 9000 (2021), QUIC underpins HTTP/3 (RFC 9114) and now carries the majority of traffic for Google, Cloudflare, and Meta. This chapter covers stream multiplexing, 0-RTT, connection migration, pluggable congestion control, the HTTP/3 mapping, and real-world deployment lessons.
 
-*See also:* _Transport Layer_ (for TCP background), _Congestion Control_ (for $"BBR"$ and $"CUBIC"$), _TLS_ (QUIC integrates TLS 1.3), _Kernel Bypass_ (most QUIC stacks live in user space).
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP background), #xref("networking", "congestion-control", label: "Congestion Control") (for $"BBR"$ and $"CUBIC"$), _TLS_ (QUIC integrates TLS 1.3), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (most QUIC stacks live in user space).
 
 == Why QUIC?
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Reasoning Models
 
 A "reasoning model" allocates substantial *inference-time compute* to a chain of intermediate steps before emitting a final answer. The transformation from a one-shot generator to a deliberate reasoner (through prompting, training, or both) defines the o1 / R1 generation of models. This chapter covers chain-of-thought prompting and its variants, the algorithms (self-consistency, ToT, GoT, MCTS-style search), the RL training that produces "native" reasoners (DeepSeek-R1, GRPO, DAPO), reward design over verifiable tasks, and the engineering implications (long reasoning traces, KV cache for thinking tokens, hidden vs. visible thoughts).
 
-*See also:* _RLHF_ (PPO-family algorithms reasoning RL extends), _Inference Optimization_ (long reasoning traces are decode-bound), _Evaluation_ (verifiable rewards for math/code benchmarks).
+*See also:* #xref("llm", "rlhf", label: "RLHF") (PPO-family algorithms reasoning RL extends), #xref("llm", "inference-optimization", label: "Inference Optimization") (long reasoning traces are decode-bound), _Evaluation_ (verifiable rewards for math/code benchmarks).
 
 == Chain of Thought
 

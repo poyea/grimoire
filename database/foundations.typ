@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Database Foundations
 
 Databases manage persistent, shared, and reliable data. The field rests on three pillars: the relational model (Codd 1970), transaction theory (ACID), and the architecture of a DBMS. Every modern system — from SQLite to Spanner — can be analyzed through these lenses.
 
-*See also:* _Concurrency Control_, _Storage Engines_, _Isolation and Consistency Models_, _Hardware-Aware Database Design_
+*See also:* #xref("database", "concurrency-control", label: "Concurrency Control"), #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "isolation-and-consistency-models", label: "Isolation and Consistency Models"), #xref("database", "hardware-aware-design", label: "Hardware-Aware Database Design")
 
 == The Relational Model
 

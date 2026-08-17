@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Memory Reclaim
 
 Linux ships memory aggressively: free RAM is "wasted RAM", so the kernel fills it with page cache and anonymous allocations until pressure forces eviction. The machinery that decides *what* to evict, *when*, and *how aggressively* is the memory reclaim subsystem in `mm/vmscan.c`, `mm/page_alloc.c`, and (for the modern path) `mm/vmscan.c`'s MGLRU code. Misconfigured reclaim is the single most common cause of "the box has 256 GB and is somehow OOM-killing my workload".
@@ -234,4 +236,4 @@ Brown, N. (2024). _zswap and friends_ — LWN.
 
 `mm/vmscan.c`, `mm/page_alloc.c`, `mm/oom_kill.c`, `mm/memcontrol.c`, `mm/damon/core.c`, `kernel/sched/psi.c`.
 
-*See also:* _mmap and Memory Management_ (where the page cache and anonymous pages originate), _Cgroups and Namespaces_ (memcg controllers), _Scheduler_ (PSI integrates with CFS load tracking), _VFS and Filesystems_ (dentry/inode shrinkers, writeback path).
+*See also:* #xref("linux-kernel", "mmap-memory", label: "mmap and Memory Management") (where the page cache and anonymous pages originate), #xref("linux-kernel", "cgroups-namespaces", label: "Cgroups and Namespaces") (memcg controllers), #xref("linux-kernel", "scheduler", label: "Scheduler") (PSI integrates with CFS load tracking), #xref("linux-kernel", "vfs-and-fs", label: "VFS and Filesystems") (dentry/inode shrinkers, writeback path).

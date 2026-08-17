@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Regular Languages
 
 Regular languages are the smallest interesting class in the Chomsky hierarchy and the most thoroughly characterised: at least seven independently motivated formalisms (regular expressions, finite automata in deterministic, nondeterministic, two-way, and alternating variants, monadic second-order logic over words, finite monoids, recognisable subsets of free monoids, Brzozowski derivatives, and Kleene algebras) all denote *exactly the same class of subsets of* $Sigma^*$. The coincidence is not accidental; it is the content of a small handful of theorems (Kleene 1956, Myhill 1957, Nerode 1958, Büchi 1960, Elgot 1961, Trakhtenbrot 1962, Schützenberger 1965, McNaughton–Papert 1971, Eilenberg 1976) which together make the regular languages the most algebraically and logically transparent class of formal languages we know.
 
-*See also:* _Lexing_, _Context-Free Languages_, _Pushdown Automata and Beyond_, _Turing Machines and Computability_.
+*See also:* #xref("programming-languages", "lexing", label: "Lexing"), #xref("programming-languages", "context-free-languages", label: "Context-Free Languages"), #xref("programming-languages", "pushdown-and-beyond", label: "Pushdown Automata and Beyond"), #xref("programming-languages", "turing-computability", label: "Turing Machines and Computability").
 
 == Words, Languages, and the Free Monoid
 

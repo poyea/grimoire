@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = API Design
 
 An API is a published promise. Unlike internal code, it cannot be refactored at will: every consumer compounds the cost of every design mistake. This chapter covers REST maturity and resource modelling, versioning and pagination, error design under RFC 9457, the gRPC and GraphQL trade space, idempotency, backwards compatibility, and contract tooling with OpenAPI.
 
-*See also:* _Event-Driven Architecture_ (asynchronous contracts and event schema evolution), _Distributed Data Patterns_ (API composition over service-owned data), _Evolutionary Architecture_ (deprecation policy as a governance practice).
+*See also:* #xref("software-architecture", "event-driven-architecture", label: "Event-Driven Architecture") (asynchronous contracts and event schema evolution), #xref("software-architecture", "distributed-data-patterns", label: "Distributed Data Patterns") (API composition over service-owned data), #xref("software-architecture", "evolutionary-architecture", label: "Evolutionary Architecture") (deprecation policy as a governance practice).
 
 == REST and the Richardson Maturity Model
 

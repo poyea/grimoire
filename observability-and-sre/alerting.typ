@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Alerting
 
 An alert is a claim that something deserves human attention; a page is a claim that it deserves attention _now_. Alerting design is therefore an exercise in classifier engineering: the alert pipeline labels system states as page-worthy or not, and it can be wrong in both directions. Too many false positives and responders stop trusting the pager; too many false negatives and customers become your monitoring. This chapter covers the symptom-versus-cause principle, alert quality as precision and recall, the multi-window multi-burn-rate method from the SRE Workbook with its arithmetic, the routing machinery (Alertmanager), and the human side — on-call health.
 
-*See also:* _SLO Engineering_, _Incident Management_, _Metrics Systems_, _The Three Pillars and Beyond_
+*See also:* #xref("observability-and-sre", "slo-engineering", label: "SLO Engineering"), #xref("observability-and-sre", "incident-management", label: "Incident Management"), #xref("observability-and-sre", "metrics-systems", label: "Metrics Systems"), #xref("observability-and-sre", "the-three-pillars-and-beyond", label: "The Three Pillars and Beyond")
 
 == Symptoms versus Causes
 

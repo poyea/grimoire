@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Hashing and MACs
 
 A cryptographic hash function $H : {0,1}^* -> {0,1}^n$ is the workhorse of modern cryptography: it underpins digital signatures, password storage, blockchain identifiers, key derivation, and Merkle proofs. MACs add a key, turning the unkeyed hash into an authenticated integrity tag.
 
-*See also:* _Symmetric Primitives_, _Asymmetric Cryptography_, _Key Exchange and PKI_.
+*See also:* #xref("cryptography-and-security", "symmetric-primitives", label: "Symmetric Primitives"), #xref("cryptography-and-security", "asymmetric", label: "Asymmetric Cryptography"), #xref("cryptography-and-security", "key-exchange-and-pki", label: "Key Exchange and PKI").
 
 == Security Properties
 

@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = eBPF Deep Dive
 
 eBPF (extended Berkeley Packet Filter) is a sandboxed in-kernel virtual machine that runs verified, JITed userspace-supplied programs at attach points throughout the kernel. It turned the kernel from a recompile-and-reboot artefact into a programmable platform: tracing, networking, security, observability, and even schedulers (`sched_ext`) are now things you load at runtime. The cost model (single-digit nanoseconds per instruction after JIT, with verifier-proven safety) is what makes it production-grade where kprobes alone were too dangerous and userspace tracing too slow.
@@ -236,4 +238,4 @@ LWN: Corbet's BPF series (verifier evolution, BTF, CO-RE, sleepable, kfuncs).
 
 ebpf.io — the community portal, with curated tool index.
 
-*See also:* _Kernel Tracing_ (tracepoints, kprobes, perf — the trace-side attach points), _Networking Stack_ (XDP, TC, sockmap — the network-side attach points), _Security Modules_ (BPF LSM in context), _Scheduler_ (`sched_ext` BPF schedulers).
+*See also:* #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing") (tracepoints, kprobes, perf — the trace-side attach points), #xref("linux-kernel", "networking-stack", label: "Networking Stack") (XDP, TC, sockmap — the network-side attach points), #xref("linux-kernel", "security-modules", label: "Security Modules") (BPF LSM in context), #xref("linux-kernel", "scheduler", label: "Scheduler") (`sched_ext` BPF schedulers).

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Parallel Algorithms
 
 *Parallel algorithms* exploit multiple processors or cores to reduce wall-clock time below the sequential lower bound. This chapter introduces the *PRAM* model and its work-span analysis, then walks through the parallel patterns that recur in every modern data-parallel library (Cilk, TBB, OpenMP, CUDA, JAX `pmap`): parallel scan / prefix sum, sample sort, parallel BFS, segmented operations, and parallel reductions.
 
-*See also:* _GPU Architecture_, _CPU Architecture_, _Dynamic Programming_, _Graphs_, _Network Flows and Matching_.
+*See also:* _GPU Architecture_, _CPU Architecture_, #xref("coding", "dynamic-programming", label: "Dynamic Programming"), #xref("coding", "graphs", label: "Graphs"), #xref("coding", "flows-and-matching", label: "Network Flows and Matching").
 
 == The PRAM Model
 

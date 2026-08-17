@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = NISQ Devices and Benchmarking
 
 John Preskill coined *NISQ* (Noisy Intermediate-Scale Quantum) in 2018 to describe the 50--1000 qubit devices available today: large enough that classical simulation is hard, small enough that error correction is impractical. Understanding what NISQ devices can and cannot do requires precise benchmarking and honest assessment of noise.
 
-*See also:* _Hardware Architectures_, _Quantum Algorithms_, _Error Correction_
+*See also:* #xref("quantum-computing", "hardware-architectures", label: "Hardware Architectures"), #xref("quantum-computing", "quantum-algorithms", label: "Quantum Algorithms"), #xref("quantum-computing", "error-correction", label: "Error Correction")
 
 == The NISQ Regime
 

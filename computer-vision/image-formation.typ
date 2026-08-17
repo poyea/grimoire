@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Image Formation and Representation
 
 Before an algorithm can understand an image, we must understand how images form. This chapter covers the physics of image formation: projection geometry, radiometry, and optics, along with the digital representations and preprocessing pipelines that transform raw sensor data into arrays amenable to learning.
 
-*See also:* _CNN Architectures_ (learned feature extraction), _3D Vision and Neural Fields_ (multi-view geometry in depth).
+*See also:* #xref("computer-vision", "cnn-architectures", label: "CNN Architectures") (learned feature extraction), #xref("computer-vision", "3d-vision", label: "3D Vision and Neural Fields") (multi-view geometry in depth).
 
 == Geometric Camera Models
 

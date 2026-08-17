@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = IaaS Fundamentals
 
 Infrastructure-as-a-Service abstracts compute, storage, and networking behind APIs so that capacity becomes an operational expense rather than a procurement cycle. The three hyperscalers (AWS, GCP, Azure) expose conceptually parallel primitives — virtual machines, virtual networks, object stores, managed identities — but the API shapes, isolation boundaries, and pricing models differ enough that portable design requires understanding each abstraction in detail. This chapter maps the primitives side-by-side and digs into the substrate (Nitro, Titan, hypervisors) that makes them possible.
 
-*See also:* _Containers: OCI, runc, containerd, Image Layers_, _Infrastructure as Code_, _Data Center Networking_ (networking), _Load Balancing_ (networking), _cgroups and Namespaces_ (linux-kernel).
+*See also:* #xref("cloud-and-infrastructure", "containers", label: "Containers: OCI, runc, containerd, Image Layers"), #xref("cloud-and-infrastructure", "iac", label: "Infrastructure as Code"), #xref("networking", "data-center-networking", label: "Data Center Networking") (networking), #xref("networking", "load-balancing", label: "Load Balancing") (networking), #xref("linux-kernel", "cgroups-namespaces", label: "cgroups and Namespaces") (linux-kernel).
 
 == The IaaS Stack
 

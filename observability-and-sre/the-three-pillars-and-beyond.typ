@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = The Three Pillars and Beyond
 
 Observability begins with three classical signal types — metrics, logs, traces — but production systems require two more first-class citizens: continuous profiles and discrete events. This chapter frames each pillar by its information density, query model, retention economics, and the questions it answers, then sketches how OpenTelemetry semantic conventions stitch them into a single graph keyed by resource and span context.
 
-*See also:* _Metrics Systems_, _Distributed Tracing_, _Continuous Profiling_, _OpenTelemetry_, _Observability and Self-Driving Databases_ (database), _Network Observability_ (networking), _Kernel Tracing_ (linux-kernel)
+*See also:* #xref("observability-and-sre", "metrics-systems", label: "Metrics Systems"), #xref("observability-and-sre", "distributed-tracing", label: "Distributed Tracing"), #xref("observability-and-sre", "continuous-profiling", label: "Continuous Profiling"), #xref("observability-and-sre", "opentelemetry", label: "OpenTelemetry"), #xref("database", "observability-and-self-driving", label: "Observability and Self-Driving Databases") (database), #xref("networking", "observability", label: "Network Observability") (networking), #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing") (linux-kernel)
 
 == Why "Three Pillars" Underspecifies the Problem
 

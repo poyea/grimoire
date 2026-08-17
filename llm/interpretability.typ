@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Interpretability
 
 Interpretability tries to answer: what is *inside* a trained LLM, and how does it compute? The field has matured rapidly from "attention is interpretation" (largely wrong) to *mechanistic interpretability*, a research program that aims to reverse-engineer specific circuits implementing specific behaviors. This chapter covers the toolbox: probing classifiers, the residual stream view, activation patching and causal tracing, sparse autoencoders, dictionary learning, monosemantic features, attention head analysis, and the open problems that limit interpretability as a safety tool.
 
-*See also:* _Transformer Architecture_ (mechanistic concepts assume familiarity with QKV, residual stream), _Safety and Alignment_ (interpretability as a possible lever).
+*See also:* #xref("llm", "transformer-architecture", label: "Transformer Architecture") (mechanistic concepts assume familiarity with QKV, residual stream), #xref("llm", "safety-and-alignment", label: "Safety and Alignment") (interpretability as a possible lever).
 
 == Why It Is Hard
 

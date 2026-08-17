@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = JIT Compilation and Runtime Systems
 
 Just-in-time compilation defers code generation to runtime, enabling optimisations based on observed execution profiles. JITs underpin JavaScript engines (V8, SpiderMonkey), the JVM (HotSpot, GraalVM), Python (PyPy), and increasingly ML frameworks (XLA, Triton, torch.compile). This chapter covers tiered compilation, deoptimisation, garbage collection interactions, and the LLVM ORC JIT API.
 
-*See also:* _Optimisation Passes_, _Register Allocation_, _IR Design and SSA Form_
+*See also:* #xref("compilers", "optimisation-passes", label: "Optimisation Passes"), #xref("compilers", "register-allocation", label: "Register Allocation"), #xref("compilers", "ir-design", label: "IR Design and SSA Form")
 
 == Why JIT?
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Data Quality
 
 Data quality is the discipline of detecting, preventing, and communicating defects in data before they corrupt downstream decisions. Unlike software bugs, data bugs are silent: a pipeline can run green for months while loading nulls into a revenue column, and the failure surfaces only when a finance report disagrees with the bank statement. This chapter covers the dimensions used to define quality, declarative expectations frameworks (Great Expectations, dbt tests, Soda), statistical anomaly detection on metrics, data contracts, the write-audit-publish pattern, circuit breakers, and data SLAs.
 
-*See also:* _Schema Evolution_ (contracts at the schema layer), _Orchestration_ (where checks run in the DAG), _Change Data Capture_ (quality of replicated data), _Batch Processing_.
+*See also:* #xref("data-engineering", "schema-evolution", label: "Schema Evolution") (contracts at the schema layer), #xref("data-engineering", "orchestration", label: "Orchestration") (where checks run in the DAG), #xref("data-engineering", "change-data-capture", label: "Change Data Capture") (quality of replicated data), #xref("data-engineering", "batch-processing", label: "Batch Processing").
 
 == Dimensions of Quality
 

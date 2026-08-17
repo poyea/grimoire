@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Isolation and Consistency Models
 
 The ANSI SQL standard defines four isolation levels by the anomalies they permit. Adya (1999) formalized this with a graph-based framework that precisely characterizes each level and exposes gaps in the ANSI specification. Understanding this framework is essential for reasoning about correctness in real systems.
 
-*See also:* _Concurrency Control_, _Distributed Transactions_, _Weakly Consistent Systems_
+*See also:* #xref("database", "concurrency-control", label: "Concurrency Control"), _Distributed Transactions_, #xref("database", "weakly-consistent-systems", label: "Weakly Consistent Systems")
 
 == ANSI SQL Isolation Levels
 

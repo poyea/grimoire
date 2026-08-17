@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Out-of-Order Execution Deep Dive
 
 Out-of-order (OoO) execution extracts instruction-level parallelism by dynamically scheduling instructions around long-latency operations. This chapter dissects the structures that make OoO possible: the reorder buffer (ROB), reservation stations (RS), register renaming, and the memory disambiguation machinery.
 
-*See also:* _Superscalar and Out-of-Order Execution_, _Pipelining_, _Branch Prediction_, _Memory System_
+*See also:* #xref("cpu-architecture", "superscalar", label: "Superscalar and Out-of-Order Execution"), #xref("cpu-architecture", "pipelining", label: "Pipelining"), #xref("cpu-architecture", "branch-prediction", label: "Branch Prediction"), #xref("cpu-architecture", "memory-system", label: "Memory System")
 
 == Why Out-of-Order
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Performance Methodology
 
 Performance work without methodology degenerates into guessing: tweaking flags, restarting services, and blaming the network. This chapter covers the structured methods that turn performance analysis into engineering: the USE and RED checklists, workload characterization, the scaling laws (Amdahl, Gustafson, and the Universal Scalability Law), and the statistical discipline needed to talk about latency honestly.
 
-*See also:* _Benchmarking_ (measuring correctly), _Queueing Theory_ (the mathematics behind utilization-latency curves), _Capacity Planning_ (applying these models forward in time), and the CPU Architecture volume's _Pipelining_ chapter (where hardware-level bottlenecks originate).
+*See also:* #xref("performance-engineering", "benchmarking", label: "Benchmarking") (measuring correctly), #xref("performance-engineering", "queueing-theory", label: "Queueing Theory") (the mathematics behind utilization-latency curves), #xref("performance-engineering", "capacity-planning", label: "Capacity Planning") (applying these models forward in time), and the CPU Architecture volume's #xref("cpu-architecture", "pipelining", label: "Pipelining") chapter (where hardware-level bottlenecks originate).
 
 == The USE Method
 

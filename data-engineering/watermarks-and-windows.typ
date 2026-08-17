@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Watermarks and Windows
 
 Unbounded streams force a question batch never faces: when is a result *complete enough* to emit? The Dataflow model (Akidau et al., 2015) decomposed the answer into four orthogonal choices — *what* is computed (the transformation), *where* in event time it is grouped (windowing), *when* results are emitted (watermarks and triggers), and *how* refinements relate (accumulation modes). This chapter works through that machinery: event vs processing time, watermark generation and propagation in Flink and the Beam model, window types, triggers, allowed lateness, and accumulation modes.
 
-*See also:* _Streaming_ (engines and exactly-once mechanics), _Change Data Capture_ (a major source of timestamped streams), _Batch Processing_ (the bounded special case where the watermark jumps from $-infinity$ to $+infinity$).
+*See also:* #xref("data-engineering", "streaming", label: "Streaming") (engines and exactly-once mechanics), #xref("data-engineering", "change-data-capture", label: "Change Data Capture") (a major source of timestamped streams), #xref("data-engineering", "batch-processing", label: "Batch Processing") (the bounded special case where the watermark jumps from $-infinity$ to $+infinity$).
 
 == Two Clocks
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Cloud Cost Engineering
 
 Cloud bills are engineering artifacts: every line item maps to an architectural decision made by a developer. Treating cost as a first-class engineering metric — with the same observability discipline applied to latency or error rates — routinely yields 40–60 % reductions without sacrificing reliability. This chapter covers the full stack from raw bill visibility through unit economics, purchase commitment strategy, storage tiering, egress optimisation, and the FinOps culture that sustains the practice.
 
-*See also:* _IaaS Fundamentals_, _Kubernetes Internals_, _Serverless Computing_, _Load Balancing_ (networking).
+*See also:* #xref("cloud-and-infrastructure", "iaas-fundamentals", label: "IaaS Fundamentals"), #xref("cloud-and-infrastructure", "kubernetes-internals", label: "Kubernetes Internals"), #xref("cloud-and-infrastructure", "serverless", label: "Serverless Computing"), #xref("networking", "load-balancing", label: "Load Balancing") (networking).
 
 == Cost Visibility
 

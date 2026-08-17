@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = CPU Affinity, Isolation, and NUMA
 
 A modern server has dozens of cores, multiple NUMA nodes, hardware-interrupt sources, and a kernel that's free to migrate any task to any core at any time. For latency-sensitive or throughput-critical workloads, leaving the kernel's defaults in place is usually wrong. This chapter covers the primitives for *pinning* threads to cores, *isolating* cores from the rest of the system, and *binding* memory to NUMA nodes.
@@ -252,7 +254,7 @@ perf stat -e migrations,context-switches ./prog              # how much the kern
 
 If `migrations` is non-zero on a pinned task, your affinity is broken. If `context-switches` is high on an isolated core, something else is running there.
 
-*See also:* _Multicore and Cache Coherence (CPU Architecture volume)_ (NUMA architecture and cache coherence at the hardware level), _The Scheduler_ (RT scheduling classes that complement isolation), _Interrupts and Bottom Halves_ (IRQ infrastructure beneath `smp_affinity`).
+*See also:* #xref("cpu-architecture", "multicore", label: "Multicore and Cache Coherence (CPU Architecture volume)") (NUMA architecture and cache coherence at the hardware level), #xref("linux-kernel", "scheduler", label: "The Scheduler") (RT scheduling classes that complement isolation), #xref("linux-kernel", "interrupts", label: "Interrupts and Bottom Halves") (IRQ infrastructure beneath `smp_affinity`).
 
 == Further Reading
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Vector Search
 
 Dense retrieval reduces matching to nearest-neighbor search in $RR^d$: given a query vector, find the $k$ closest of $N$ document vectors. Exact search is a linear scan — fine to a few hundred thousand vectors, hopeless at billions — so production systems use *approximate* nearest neighbor (ANN) indexes that trade a little recall for orders of magnitude in speed. This chapter covers the distance metrics, the two dominant index families (graph-based HNSW and cluster-based IVF), quantization for memory, and the operational concerns — filtering, updates, and the recall/latency/memory triangle — that decide real deployments.
 
-*See also:* _Neural Retrieval_ (where the vectors come from), _Inverted Indexes_ (the lexical analogue; IVF is the closest structural cousin), _RAG and Search Systems_ (vector search as RAG's backbone), _Evaluation_ (recall\@k against exact search as the index metric).
+*See also:* #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (where the vectors come from), #xref("search-and-ir", "inverted-indexes", label: "Inverted Indexes") (the lexical analogue; IVF is the closest structural cousin), #xref("search-and-ir", "rag-and-search-systems", label: "RAG and Search Systems") (vector search as RAG's backbone), _Evaluation_ (recall\@k against exact search as the index metric).
 
 == Distances and the Curse of Dimensionality
 

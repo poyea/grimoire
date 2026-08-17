@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = CNN Architectures
 
 Convolutional neural networks are the backbone of classical deep vision. Although vision transformers now dominate large-scale benchmarks, CNNs remain indispensable in resource-constrained deployment, medical imaging, and as encoders in hybrid architectures. This chapter covers the convolution operation, pooling, normalization, and the evolution of architectures from LeNet to ConvNeXt.
 
-*See also:* _Image Formation_ (input representations), _Object Detection_ (CNN as backbone), _Image Segmentation_ (fully convolutional networks), _Transformer Architecture_ (ViT alternative).
+*See also:* #xref("computer-vision", "image-formation", label: "Image Formation") (input representations), #xref("computer-vision", "object-detection", label: "Object Detection") (CNN as backbone), #xref("computer-vision", "image-segmentation", label: "Image Segmentation") (fully convolutional networks), #xref("llm", "transformer-architecture", label: "Transformer Architecture") (ViT alternative).
 
 == The Convolution Operation
 

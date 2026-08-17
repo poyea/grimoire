@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Query Languages
 
 A query language is the surface through which users describe what they want; the optimizer and engine decide how. SQL has dominated for fifty years because relational algebra composes cleanly, but it now sits beside SQL/JSON for semistructured data, GQL (ISO/IEC 39075:2024) for property graphs, and Datalog descendants for recursive analytics. This chapter surveys the modern standards landscape and the algebraic kernels behind each.
 
-*See also:* _Foundations_, _Query Optimization_, _Time-Series and Graph_, _Streaming and Incremental Computation_
+*See also:* _Foundations_, #xref("database", "query-optimization", label: "Query Optimization"), #xref("database", "time-series-and-graph", label: "Time-Series and Graph"), #xref("database", "streaming-and-incremental-computation", label: "Streaming and Incremental Computation")
 
 == The SQL Standard
 

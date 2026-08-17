@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = VFS and Filesystems
 
 The Virtual File System (VFS) is the kernel's polymorphism layer for filesystems. Every `open`, `read`, `write`, `stat`, `unlink` enters a small set of generic functions in `fs/` that dispatch through function-pointer tables (`*_operations` structs) implemented by the concrete filesystem (ext4, XFS, btrfs, F2FS, tmpfs, FUSE, procfs, overlayfs). Without the VFS, every syscall would need a `switch` on filesystem type; with it, a `cat` of `/proc/meminfo` and a `cat` of `/data/foo.txt` on XFS share exactly the same syscall fast path.
@@ -245,4 +247,4 @@ F2FS: Lee, C. et al. (2015). _F2FS: A New File System for Flash Storage_, FAST.
 
 LWN: Corbet's "folio" series (2021-2023); McKenney's coverage of RCU-walk path lookup.
 
-*See also:* _mmap and Memory Management_ (page cache shares the same folios as file-backed mappings), _IO uring_ (modern async path through the same read/write iterator entry points), _Cgroups and Namespaces_ (mount namespaces, the container-rootfs primitive), _Block Layer_ (what sits beneath the page cache writeback path).
+*See also:* #xref("linux-kernel", "mmap-memory", label: "mmap and Memory Management") (page cache shares the same folios as file-backed mappings), #xref("linux-kernel", "io-uring", label: "IO uring") (modern async path through the same read/write iterator entry points), #xref("linux-kernel", "cgroups-namespaces", label: "Cgroups and Namespaces") (mount namespaces, the container-rootfs primitive), #xref("linux-kernel", "block-layer", label: "Block Layer") (what sits beneath the page cache writeback path).

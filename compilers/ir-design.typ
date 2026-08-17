@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = IR Design and SSA Form
 
 The choice of intermediate representation determines what optimizations are tractable. $"SSA"$ made dataflow sparse; $"CPS"$ made control explicit; sea-of-nodes erased the program order; $"MLIR"$ made the IR itself extensible. This chapter compares the practical tradeoffs of each.
 
-*See also:* _Dataflow Analysis_, _Optimisation Passes_, and the _Operational Semantics_ chapter in the Languages & Compilers volume
+*See also:* #xref("compilers", "dataflow-analysis", label: "Dataflow Analysis"), #xref("compilers", "optimisation-passes", label: "Optimisation Passes"), and the #xref("programming-languages", "operational-semantics", label: "Operational Semantics") chapter in the Languages & Compilers volume
 
 == Why an IR?
 

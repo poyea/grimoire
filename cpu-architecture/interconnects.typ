@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Interconnects: UPI, Infinity Fabric, CXL, NVLink, PCIe
 
 Once compute scales beyond a single die, the bottleneck moves to the wires between dies, sockets, and accelerators. Modern interconnects span four tiers: on-package (chiplet links), socket-to-socket ($"UPI"$, $"Infinity"$ $"Fabric"$), host-to-device ($"PCIe"$, $"CXL"$), and accelerator-to-accelerator ($"NVLink"$, $"UALink"$, optical).
 
-*See also:* _Multicore_, _Memory System_, _Accelerators_, _Cache Hierarchy_
+*See also:* #xref("cpu-architecture", "multicore", label: "Multicore"), #xref("cpu-architecture", "memory-system", label: "Memory System"), #xref("cpu-architecture", "accelerators", label: "Accelerators"), #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy")
 
 == Why Interconnects Matter
 

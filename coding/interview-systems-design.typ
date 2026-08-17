@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Interview Systems Design Playbook
 
 The systems-design round tests your ability to take a vague product brief ("design Twitter") and, in 45 minutes, produce a workable architecture: API surface, data model, scale estimate, storage choice, hot-path optimisations, and failure modes. This chapter is the playbook for the canonical question set: rate limiter, news feed, chat / messaging, search typeahead, URL shortener, and distributed counter. It is the *interview* counterpart to _Advanced Systems_: the same primitives (caches, log-structured storage, sharding, replication) but oriented toward 45-minute communication rather than internals.
 
-*See also:* _Advanced Algorithms in Modern Systems_, _Database_, _Networking_, _Hashing_, _Probabilistic Data Structures_.
+*See also:* #xref("coding", "advanced-systems", label: "Advanced Algorithms in Modern Systems"), _Database_, _Networking_, #xref("coding", "hashing", label: "Hashing"), #xref("coding", "probabilistic-data-structures", label: "Probabilistic Data Structures").
 
 == The Framework
 

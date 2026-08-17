@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = 3D Vision and Neural Fields
 
 3D vision reconstructs, represents, and reasons about the three-dimensional world from 2D images. This chapter covers structure-from-motion, depth estimation, point clouds, and the revolutionary neural field representations (NeRF, Gaussian splatting) that have transformed novel view synthesis and 3D generation.
 
-*See also:* _Image Formation_ (camera models, epipolar geometry), _Object Detection_ (3D detection), _Diffusion Models_ (3D generation).
+*See also:* #xref("computer-vision", "image-formation", label: "Image Formation") (camera models, epipolar geometry), #xref("computer-vision", "object-detection", label: "Object Detection") (3D detection), #xref("machine-learning-foundations", "diffusion-models", label: "Diffusion Models") (3D generation).
 
 == Structure from Motion
 

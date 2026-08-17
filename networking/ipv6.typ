@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = IPv6
 
 IPv6 [RFC 8200] replaces IPv4's 32-bit address space with 128 bits, eliminates header checksums and in-network fragmentation, and bakes autoconfiguration into the protocol itself via Neighbor Discovery [RFC 4861] and SLAAC [RFC 4862]. Deployment is now majority traffic at major eyeball networks (Google measures roughly 45-50% IPv6 client traffic as of 2026), but coexistence with the IPv4 internet still drives most operational complexity: dual stack, NAT64/DNS64, 6rd, and 464XLAT remain everyday concerns.
 
-*See also:* _NAT_ (for NAT64 stateful translation), _DNS_ (for AAAA, DNS64 synthesis), _Network Security_ (for RA guard, SeND).
+*See also:* #xref("networking", "nat", label: "NAT") (for NAT64 stateful translation), #xref("networking", "dns", label: "DNS") (for AAAA, DNS64 synthesis), #xref("networking", "network-security", label: "Network Security") (for RA guard, SeND).
 
 == Addressing Architecture
 

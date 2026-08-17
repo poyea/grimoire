@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Metrics Systems
 
 A metrics system is a time-series database with a query language tuned for monitoring. The dominant lineage — Prometheus, VictoriaMetrics, Mimir, Thanos, Cortex, M3DB — descends from Borgmon, with shared assumptions: labeled multidimensional series, pull-based scraping, a functional query language, and chunked columnar storage on object storage. This chapter compares architectures, drills into PromQL, and covers the statistics (TDigest, HdrHistogram, DDSketch) without which percentile alerts are meaningless.
 
-*See also:* _The Three Pillars and Beyond_, _SLO Engineering_, _Continuous Profiling_, _Time-Series and Graph Databases_ (database), _Network Observability_ (networking)
+*See also:* #xref("observability-and-sre", "the-three-pillars-and-beyond", label: "The Three Pillars and Beyond"), #xref("observability-and-sre", "slo-engineering", label: "SLO Engineering"), #xref("observability-and-sre", "continuous-profiling", label: "Continuous Profiling"), #xref("database", "time-series-and-graph", label: "Time-Series and Graph Databases") (database), #xref("networking", "observability", label: "Network Observability") (networking)
 
 == Data Model
 

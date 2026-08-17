@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Security Models
 
 Every protection system answers one question: *which subject may perform which operation on which object?* The answers differ wildly (Unix mode bits, SELinux type enforcement, an seL4 capability table) but all are concrete projections of the same abstract structure, and all aspire to the same ideal of a small, trustworthy decision point that nothing can bypass. This chapter treats the models conceptually; the Linux mechanisms that implement them live in `linux-kernel/security-modules.typ` and `linux-kernel/cgroups-namespaces.typ`.
 
-*See also:* _Processes and Threads_, _Memory Management_, _Security Modules_ (implementation), _cgroups and Namespaces_ (implementation), _Asymmetric Cryptography_ (cryptography).
+*See also:* #xref("operating-systems", "processes-and-threads", label: "Processes and Threads"), #xref("operating-systems", "memory-management", label: "Memory Management"), #xref("linux-kernel", "security-modules", label: "Security Modules") (implementation), #xref("linux-kernel", "cgroups-namespaces", label: "cgroups and Namespaces") (implementation), #xref("cryptography-and-security", "asymmetric", label: "Asymmetric Cryptography") (cryptography).
 
 == The Reference Monitor
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Scheduling Theory
 
 CPU scheduling is the problem of dividing a scarce resource (execution time on $n$ cores) among $m$ contending threads under conflicting goals: throughput, latency, fairness, deadline satisfaction, energy. No single policy optimizes all of them, and the algorithmic literature is correspondingly rich. This chapter treats the theoretical landscape; Linux's CFS/EEVDF implementation is in `linux-kernel/scheduler.typ`.
 
-*See also:* _Processes and Threads_, _The Scheduler_ (implementation), _CPU Affinity, Isolation, and NUMA_ (implementation).
+*See also:* #xref("operating-systems", "processes-and-threads", label: "Processes and Threads"), #xref("linux-kernel", "scheduler", label: "The Scheduler") (implementation), #xref("linux-kernel", "cpu-affinity", label: "CPU Affinity, Isolation, and NUMA") (implementation).
 
 == Workload Models and Metrics
 

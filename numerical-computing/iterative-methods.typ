@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Iterative Methods
 
 When $A$ is large and sparse — a 3-D PDE discretization with $10^8$ unknowns, a graph Laplacian, a kernel matrix touched only through matrix-vector products — direct factorization drowns in fill-in or simply does not fit in memory. Iterative methods trade the certainty of $O(n^3)$ for a sequence of cheap steps, each dominated by a matrix-vector product, that converge at a rate governed by the spectrum. This chapter covers the classical splittings, Krylov subspace methods (CG, MINRES, GMRES, BiCGSTAB), convergence theory, preconditioning, and multigrid.
 
-*See also:* _Linear Systems_ (direct methods, and when to prefer them), _Eigenvalue Problems_ (Krylov subspaces reappear as Lanczos and Arnoldi), _Error Analysis_ (rounding delays but rarely destroys convergence), _Optimization Algorithms_ (CG is also a quadratic minimizer).
+*See also:* #xref("numerical-computing", "linear-systems", label: "Linear Systems") (direct methods, and when to prefer them), #xref("numerical-computing", "eigenvalue-problems", label: "Eigenvalue Problems") (Krylov subspaces reappear as Lanczos and Arnoldi), #xref("numerical-computing", "error-analysis", label: "Error Analysis") (rounding delays but rarely destroys convergence), #xref("numerical-computing", "optimization-algorithms", label: "Optimization Algorithms") (CG is also a quadratic minimizer).
 
 == Classical Splittings
 

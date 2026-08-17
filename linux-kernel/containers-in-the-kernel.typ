@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Containers in the Kernel
 
 A "container" is a userspace fiction. The kernel knows only namespaces, cgroups, capabilities, seccomp filters, LSM labels, and bind mounts; Docker, podman, containerd, runc, and the Kubernetes kubelet are orchestrators that assemble these primitives into a coherent isolation unit. Understanding what the kernel actually does (especially the user-namespace pitfalls and root/unprivileged trade-offs) is essential to running containers safely.
@@ -244,4 +246,4 @@ OCI Runtime Spec — #link("https://github.com/opencontainers/runtime-spec")[git
 
 `kernel/nsproxy.c`, `kernel/user_namespace.c`, `kernel/pid_namespace.c`, `fs/namespace.c`, `fs/mount.h`, `net/core/net_namespace.c`.
 
-*See also:* _Cgroups and Namespaces_ (the API-level introduction), _Security Modules_ (seccomp, capabilities, per-container LSM profiles), _VFS and Filesystems_ (overlayfs, bind mounts, id-mapped mounts), _Networking Stack_ (veth, netfilter, eBPF service mesh).
+*See also:* #xref("linux-kernel", "cgroups-namespaces", label: "Cgroups and Namespaces") (the API-level introduction), #xref("linux-kernel", "security-modules", label: "Security Modules") (seccomp, capabilities, per-container LSM profiles), #xref("linux-kernel", "vfs-and-fs", label: "VFS and Filesystems") (overlayfs, bind mounts, id-mapped mounts), #xref("linux-kernel", "networking-stack", label: "Networking Stack") (veth, netfilter, eBPF service mesh).

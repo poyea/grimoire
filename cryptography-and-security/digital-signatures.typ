@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Digital Signatures
 
 A digital signature binds a message to a public key such that anyone can verify the binding but only the holder of the private key can produce it. Signatures provide authenticity, integrity, and non-repudiation, and they underpin TLS certificates, software updates, blockchains, and secure boot. This chapter covers security definitions, the RSA and discrete-log signature families, modern deterministic schemes, and aggregate and threshold constructions.
 
-*See also:* _Asymmetric Cryptography_ (RSA, elliptic curves), _Hashing and MACs_ (hash-then-sign, collision resistance), _Key Exchange and PKI_ (certificates), _Post-Quantum Cryptography_ (Dilithium, SPHINCS+).
+*See also:* #xref("cryptography-and-security", "asymmetric", label: "Asymmetric Cryptography") (RSA, elliptic curves), #xref("cryptography-and-security", "hashing-and-macs", label: "Hashing and MACs") (hash-then-sign, collision resistance), #xref("cryptography-and-security", "key-exchange-and-pki", label: "Key Exchange and PKI") (certificates), #xref("cryptography-and-security", "post-quantum", label: "Post-Quantum Cryptography") (Dilithium, SPHINCS+).
 
 == Security Definitions
 

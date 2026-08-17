@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Eigenvalue Problems
 
 Eigenvalues are the frequencies of a vibrating structure, the stability exponents of a dynamical system, the principal components of a dataset, and the page ranks of the web. Unlike linear systems, eigenvalue problems cannot be solved in finitely many arithmetic operations — Abel's theorem forbids closed forms for the characteristic polynomial beyond degree four — so every eigenvalue algorithm is intrinsically iterative. This chapter covers conditioning, power iteration and its inverse, the QR algorithm, Lanczos and Arnoldi for large sparse problems, and the SVD.
 
-*See also:* _Linear Systems_ (QR factorization is the engine here), _Iterative Methods_ (Krylov subspaces again), _Error Analysis_ (backward stability of orthogonal transformations), _FFT_ (the eigendecomposition of circulant matrices).
+*See also:* #xref("numerical-computing", "linear-systems", label: "Linear Systems") (QR factorization is the engine here), #xref("numerical-computing", "iterative-methods", label: "Iterative Methods") (Krylov subspaces again), #xref("numerical-computing", "error-analysis", label: "Error Analysis") (backward stability of orthogonal transformations), #xref("numerical-computing", "fft", label: "FFT") (the eigendecomposition of circulant matrices).
 
 == Conditioning of Eigenvalues
 

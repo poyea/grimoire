@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Coordination Services
 
 Distributed systems need a small, highly-available store for configuration, group membership, and locks — something that tolerates node failures yet delivers the strong consistency required for leader election and distributed locking. This chapter examines the three canonical coordination services: ZooKeeper, etcd, and Google's Chubby.
 
-*See also:* _Consensus Deep Dive_, _Leader Election and Leases_, _Distributed Transactions_, _Failure Detection_
+*See also:* #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive"), #xref("distributed-systems", "leader-election-and-leases", label: "Leader Election and Leases"), _Distributed Transactions_, #xref("distributed-systems", "failure-detection", label: "Failure Detection")
 
 == ZooKeeper
 

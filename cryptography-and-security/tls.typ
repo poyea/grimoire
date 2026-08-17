@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = TLS: Transport Layer Security
 
 TLS (formerly SSL) is the cryptographic protocol securing nearly all internet traffic. Every HTTPS connection, gRPC call, and database connection uses TLS. Understanding TLS means understanding how the cryptographic primitives from earlier chapters compose into a real protocol: asymmetric cryptography for authentication and key exchange, symmetric ciphers for bulk encryption, and MACs for integrity.
 
-*See also:* _Asymmetric Cryptography_, _Symmetric Primitives_, _Hashing and MACs_, _Post-Quantum Cryptography_, _Application Protocols_ (networking), _TLS_ (networking, full protocol detail).
+*See also:* #xref("cryptography-and-security", "asymmetric", label: "Asymmetric Cryptography"), #xref("cryptography-and-security", "symmetric-primitives", label: "Symmetric Primitives"), #xref("cryptography-and-security", "hashing-and-macs", label: "Hashing and MACs"), #xref("cryptography-and-security", "post-quantum", label: "Post-Quantum Cryptography"), #xref("networking", "application-protocols", label: "Application Protocols") (networking), _TLS_ (networking, full protocol detail).
 
 == Protocol Versions
 

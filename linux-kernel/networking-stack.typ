@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = The Networking Stack
 
 The Linux networking stack handles ~30 M pps per core on commodity hardware in 2025, runs on every device with an IP address from a Raspberry Pi to a 400 GbE switch ASIC, and is the substrate beneath every container runtime's networking model. Its architecture is layered but porous: drivers, the NAPI poll loop, the IP/TCP/UDP code in `net/ipv4` and `net/ipv6`, traffic-control queueing disciplines, netfilter hooks, and the eBPF programmable data plane (XDP, TC, sk_lookup) all interlock through a single data structure: the `struct sk_buff`.
@@ -250,4 +252,4 @@ LWN: Corbet's GRO, GSO, BBR, and XDP series; "A look at sockmap" (2018).
 
 Hsieh, J. et al. (2024). _Cilium: Cloud-Native Networking and Security with eBPF_, O'Reilly.
 
-*See also:* _Interrupts and Bottom Halves_ (rx softirq path, IRQ affinity), _eBPF Deep Dive_ (the VM these XDP/TC programs target), _Cgroups and Namespaces_ (network namespaces and per-cgroup socket hooks), _IO uring_ (modern sendmsg/recvmsg path).
+*See also:* #xref("linux-kernel", "interrupts", label: "Interrupts and Bottom Halves") (rx softirq path, IRQ affinity), #xref("linux-kernel", "ebpf-deep-dive", label: "eBPF Deep Dive") (the VM these XDP/TC programs target), #xref("linux-kernel", "cgroups-namespaces", label: "Cgroups and Namespaces") (network namespaces and per-cgroup socket hooks), #xref("linux-kernel", "io-uring", label: "IO uring") (modern sendmsg/recvmsg path).

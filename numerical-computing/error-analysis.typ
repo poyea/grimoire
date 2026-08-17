@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Error Analysis
 
 An algorithm that returns the wrong answer is useless; an algorithm whose error you cannot bound is dangerous. Error analysis is the discipline of separating what is the *problem's* fault (conditioning) from what is the *algorithm's* fault (stability), and of proving bounds that hold for every input rather than the ones you happened to test. This chapter develops forward and backward error, condition numbers, Wilkinson's backward error analysis, concrete bounds for inner products and matrix multiplication, interval arithmetic, and stochastic rounding.
 
-*See also:* _Floating-Point Arithmetic_ (the rounding model these analyses build on), _Linear Systems_ (backward stability of LU and QR), _Iterative Methods_ (where rounding interacts with convergence).
+*See also:* #xref("numerical-computing", "floating-point", label: "Floating-Point Arithmetic") (the rounding model these analyses build on), #xref("numerical-computing", "linear-systems", label: "Linear Systems") (backward stability of LU and QR), #xref("numerical-computing", "iterative-methods", label: "Iterative Methods") (where rounding interacts with convergence).
 
 == Forward and Backward Error
 

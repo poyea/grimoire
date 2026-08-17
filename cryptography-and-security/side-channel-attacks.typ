@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Side-Channel Attacks
 
 A side-channel attack extracts secrets not from mathematical weaknesses but from the physical or behavioural traces of computation: timing, cache state, power draw, electromagnetic emission, or induced faults. The algorithm can be provably secure while its implementation leaks the key. This chapter covers timing and cache attacks, power analysis, fault injection, and the engineering discipline of constant-time code.
 
-*See also:* _Symmetric Primitives_ (AES T-tables), _Asymmetric Cryptography_ (RSA/ECC implementations), _Digital Signatures_ (nonce leakage), and the CPU Architecture volume's _Speculative Execution Security_ chapter (Spectre/Meltdown).
+*See also:* #xref("cryptography-and-security", "symmetric-primitives", label: "Symmetric Primitives") (AES T-tables), #xref("cryptography-and-security", "asymmetric", label: "Asymmetric Cryptography") (RSA/ECC implementations), #xref("cryptography-and-security", "digital-signatures", label: "Digital Signatures") (nonce leakage), and the CPU Architecture volume's #xref("cpu-architecture", "speculative-execution-security", label: "Speculative Execution Security") chapter (Spectre/Meltdown).
 
 == Timing Attacks
 

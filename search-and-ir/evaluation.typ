@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Evaluation
 
 Search quality cannot be eyeballed: rankings differ subtly, queries vary wildly, and intuition about "better" is unreliable. IR built one of the most disciplined evaluation traditions in computer science — the Cranfield paradigm of fixed collections, pooled judgments, and rank-based metrics, institutionalized by TREC since 1992 — and complemented it with online experimentation on live traffic. This chapter covers the offline metrics (precision/recall through nDCG), test-collection construction and its biases, statistical significance, the modern benchmarks (MS MARCO, BEIR), and online evaluation via interleaving and A/B tests.
 
-*See also:* _Learning to Rank_ (these metrics as training objectives and click bias), _Neural Retrieval_ (the benchmark results cited there), _Ranking: Classical Models_ (the baselines every evaluation needs), _RAG and Search Systems_ (evaluating retrieval inside a generation pipeline).
+*See also:* #xref("search-and-ir", "learning-to-rank", label: "Learning to Rank") (these metrics as training objectives and click bias), #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (the benchmark results cited there), #xref("search-and-ir", "ranking-classical", label: "Ranking: Classical Models") (the baselines every evaluation needs), #xref("search-and-ir", "rag-and-search-systems", label: "RAG and Search Systems") (evaluating retrieval inside a generation pipeline).
 
 == The Cranfield Paradigm
 

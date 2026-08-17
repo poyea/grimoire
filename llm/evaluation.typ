@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Evaluation
 
 Evaluating a large language model is harder than evaluating most software systems. A model with billions of parameters can excel at summarization while failing at arithmetic, ace multiple-choice science while hallucinating biographical facts, and refuse harmful requests while also refusing benign ones. No single number captures capability. This chapter covers the principal evaluation methodologies — from perplexity to human preference rankings — and the practical setup needed to reproduce published results.
 
-*See also:* _Pretraining_ (training loss, data quality), _RLHF and Alignment_ (reward model evaluation).
+*See also:* #xref("llm", "pretraining", label: "Pretraining") (training loss, data quality), #xref("llm", "rlhf", label: "RLHF and Alignment") (reward model evaluation).
 
 == Perplexity
 

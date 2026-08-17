@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Transformer Architecture
 
 The transformer is a sequence-to-sequence architecture built entirely from attention and feed-forward layers. Every modern LLM (GPT, LLaMA, Mistral, Gemma, Qwen) is a decoder-only transformer. Understanding its internals precisely is prerequisite to everything that follows.
 
-*See also:* _ML Workload Optimization on GPUs (GPU Architecture volume)_ (Flash Attention, GEMM kernels), _Pretraining_ (how these weights are learned).
+*See also:* #xref("gpu-architecture", "ml-workloads", label: "ML Workload Optimization on GPUs (GPU Architecture volume)") (Flash Attention, GEMM kernels), #xref("llm", "pretraining", label: "Pretraining") (how these weights are learned).
 
 *Code note:* PyTorch is used for all runnable examples. C++ (libtorch / llama.cpp) is shown for performance-critical kernels where the implementation detail matters. JAX is shown where its functional style clarifies the math.
 

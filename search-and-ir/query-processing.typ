@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Query Processing
 
 Query processing turns a user query and an inverted index into a ranked list of documents, ideally in a few milliseconds over billions of documents. The art is in not scoring most of the collection: dynamic pruning algorithms such as WAND and Block-Max WAND skip the vast majority of postings while returning exactly the same top-$k$ results as exhaustive evaluation. This chapter covers boolean retrieval, traversal strategies, top-$k$ pruning, phrase and proximity evaluation, and the analysis chain that produces query terms in the first place.
 
-*See also:* _Inverted Indexes_ (the structures being traversed), _Ranking: Classical Models_ (the scores being maximized), _Neural Retrieval_ (where pruning meets learned sparse models), _RAG and Search Systems_ (query processing inside multi-stage pipelines).
+*See also:* #xref("search-and-ir", "inverted-indexes", label: "Inverted Indexes") (the structures being traversed), #xref("search-and-ir", "ranking-classical", label: "Ranking: Classical Models") (the scores being maximized), #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (where pruning meets learned sparse models), #xref("search-and-ir", "rag-and-search-systems", label: "RAG and Search Systems") (query processing inside multi-stage pipelines).
 
 == Boolean Retrieval
 

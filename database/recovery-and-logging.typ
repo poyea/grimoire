@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Recovery and Logging
 
 A database must survive crashes: power loss, kernel panics, storage errors. Recovery ensures that committed transactions are durable (Durability) and uncommitted transactions are rolled back (Atomicity). ARIES (1992) is the definitive algorithm; every major RDBMS implements a variant.
 
-*See also:* _Buffer Pool and I/O_, _Storage Engines_, _Concurrency Control_
+*See also:* #xref("database", "buffer-pool-and-io", label: "Buffer Pool and I/O"), #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "concurrency-control", label: "Concurrency Control")
 
 == Write-Ahead Logging (WAL)
 

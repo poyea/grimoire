@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Learning to Rank
 
 Learning to rank (LTR) replaces hand-tuned scoring formulas with models trained on relevance judgments or click data. Rather than guessing how to combine BM25, PageRank, freshness, and a hundred other signals, a learned ranker fits the combination to optimize a ranking metric. LTR powered the second generation of web search (Bing's RankNet lineage, Yandex's MatrixNet) and remains the standard final-stage ranker in production: gradient-boosted trees over rich features, with LambdaMART the perennial benchmark winner. This chapter covers the pointwise/pairwise/listwise taxonomy, RankNet through LambdaMART, features and training data, click models, and the cascade architecture LTR lives in.
 
-*See also:* _Ranking: Classical Models_ (the features), _Evaluation_ (the metrics LTR optimizes), _Neural Retrieval_ (learned first stages and cross-encoder rerankers), _Query Processing_ (why LTR runs only on a candidate set).
+*See also:* #xref("search-and-ir", "ranking-classical", label: "Ranking: Classical Models") (the features), _Evaluation_ (the metrics LTR optimizes), #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (learned first stages and cross-encoder rerankers), _Query Processing_ (why LTR runs only on a candidate set).
 
 == The Problem Setup
 

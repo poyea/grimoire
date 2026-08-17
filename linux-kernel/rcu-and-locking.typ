@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = RCU and Locking
 
 A modern kernel running on 256 cores cannot scale with traditional locking; a single `rwlock` becomes the slowest part of the system long before the workload itself does. The Linux kernel's answer is a layered locking discipline: spinlocks and mutexes where contention is tolerable; per-CPU data wherever possible; *read-copy-update* (RCU) wherever readers vastly outnumber writers. Combined with strict lock-ordering rules and the lockdep validator, this is what lets the kernel scale linearly to hundreds of cores while remaining correct.
@@ -230,4 +232,4 @@ Tools: `tools/memory-model/` (herd7-based formal kernel memory model).
 
 `kernel/rcu/tree.c`, `kernel/locking/qspinlock.c`, `kernel/locking/lockdep.c`, `kernel/locking/rwsem.c`, `kernel/futex/core.c`.
 
-*See also:* _Scheduler_ (PREEMPT-RT and priority inheritance), _Kernel Tracing_ (lock event tracepoints), _eBPF Deep Dive_ (sleepable BPF uses Tasks Trace RCU), _Interrupts and Bottom Halves_ (IRQ-context locking constraints).
+*See also:* #xref("linux-kernel", "scheduler", label: "Scheduler") (PREEMPT-RT and priority inheritance), #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing") (lock event tracepoints), #xref("linux-kernel", "ebpf-deep-dive", label: "eBPF Deep Dive") (sleepable BPF uses Tasks Trace RCU), #xref("linux-kernel", "interrupts", label: "Interrupts and Bottom Halves") (IRQ-context locking constraints).

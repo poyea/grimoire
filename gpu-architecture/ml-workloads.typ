@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = ML Workload Optimization on GPUs
 
 Modern machine learning (particularly LLM training and inference) dominates GPU design decisions. Understanding how core primitives (GEMM, attention) map onto GPU hardware is essential for achieving near-peak throughput on Hopper/Blackwell-class devices.
 
-*See also:* _Compute Units and Specialized Cores_ (Tensor Cores, TMA), _GPU Memory Hierarchy_ (HBM, coalescing), _Multi-GPU Communication and Scaling_ (scaling).
+*See also:* #xref("gpu-architecture", "compute-architecture", label: "Compute Units and Specialized Cores") (Tensor Cores, TMA), #xref("gpu-architecture", "memory-hierarchy", label: "GPU Memory Hierarchy") (HBM, coalescing), #xref("gpu-architecture", "multi-gpu", label: "Multi-GPU Communication and Scaling") (scaling).
 
 == GEMM: the Core Primitive
 

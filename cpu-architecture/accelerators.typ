@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Domain-Specific Accelerators
 
 When Dennard scaling stopped, perf/W gains shifted from general-purpose cores to domain-specific architectures ($"DSA"$s): chips that trade generality for orders-of-magnitude efficiency on a narrow workload class. This chapter surveys the dominant accelerator families.
 
-*See also:* _SIMD_, _Multicore_, _Memory System_, _Interconnects_
+*See also:* #xref("cpu-architecture", "simd", label: "SIMD"), #xref("cpu-architecture", "multicore", label: "Multicore"), #xref("cpu-architecture", "memory-system", label: "Memory System"), #xref("cpu-architecture", "interconnects", label: "Interconnects")
 
 == Why Specialize
 

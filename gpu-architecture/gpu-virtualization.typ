@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = GPU Virtualization and Partitioning
 
 A single H100 or B200 is overkill for most inference workloads, yet you cannot share it the way you share a CPU: GPU state is large, kernel preemption is coarse, and memory bandwidth is contested. NVIDIA ships three different sharing mechanisms — MIG, MPS, and vGPU — each making different tradeoffs between isolation, flexibility, and overhead.
 
-*See also:* _Execution Model_ (SM scheduling), _Multi-GPU_ (cross-GPU fabrics).
+*See also:* #xref("gpu-architecture", "execution-model", label: "Execution Model") (SM scheduling), #xref("gpu-architecture", "multi-gpu", label: "Multi-GPU") (cross-GPU fabrics).
 
 == The Sharing Spectrum
 

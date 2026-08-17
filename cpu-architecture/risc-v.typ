@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = RISC-V
 
 RISC-V (pronounced "risk-five") is an open, modular instruction set architecture born at UC Berkeley in 2010 and now governed by RISC-V International. Unlike $"x86"$ or $"ARM"$, the $"ISA"$ itself is royalty-free; vendors compose extensions to fit their target.
 
-*See also:* _CPU Fundamentals_, _SIMD_, _ARM Deep Dive_, _Pipelining_
+*See also:* #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals"), #xref("cpu-architecture", "simd", label: "SIMD"), #xref("cpu-architecture", "arm-deep-dive", label: "ARM Deep Dive"), #xref("cpu-architecture", "pipelining", label: "Pipelining")
 
 == Design Philosophy
 

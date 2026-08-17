@@ -1,10 +1,12 @@
+#import "../template.typ": xref
+
 = Algorithms and Data Structures: An Orientation
 
 This subject is a practitioner's reference for algorithms and data structures. Each chapter covers one core data structure or algorithm family, presenting the essential invariants, worked problems that illustrate canonical patterns, complexity analysis, and implementation sketches. The goal is not to replace a textbook. CLRS gives you proofs; Skiena gives you design intuition. This reference gives you density: the material most likely to surface in an interview loop, a competitive programming contest, or a production engineering decision, distilled into a navigable form.
 
 The chapters are ordered from foundational to advanced, but each is self-contained. A reader preparing for interviews can work linearly through Part I and Part II, then dip into whatever the job description demands. A competitive programmer will find the later parts — segment trees, flows, geometry, randomized algorithms — more immediately relevant. A software engineer looking for the right tool for a specific problem should start with the complexity landscape table below, then jump to the corresponding chapter.
 
-*See also:* _Problem-Solving Framework_ (pattern recognition and optimization strategies), _Reference_ (complexity cheat sheet, common recurrences, master theorem summary).
+*See also:* #xref("coding", "problem-solving", label: "Problem-Solving Framework") (pattern recognition and optimization strategies), #xref("coding", "reference", label: "Reference") (complexity cheat sheet, common recurrences, master theorem summary).
 
 == How to Use This Subject
 

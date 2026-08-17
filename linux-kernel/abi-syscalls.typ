@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = ABI and Syscalls
 
 Every meaningful interaction between a user-space program and the kernel goes through a syscall. The mechanics (how arguments are passed, how the CPU transitions to ring 0, how the kernel validates pointers, how it returns) are surprisingly subtle, and the cost is non-negligible: a syscall round trip on modern x86-64 is ~100-300 cycles for the privilege transition itself, plus whatever work the handler does. Understanding the path lets you predict performance and exploit shortcuts like the vDSO.
@@ -197,7 +199,7 @@ seccomp_load(ctx);
 - *Minimizing syscalls:* `io_uring` (5.1+) batches submission and completion across many operations. `sendmmsg`/`recvmmsg` batch network IO; `readv`/`writev` batch buffer-list IO. `MAP_POPULATE` avoids later page-fault syscalls.
 - *vDSO troubleshooting:* If `clock_gettime` is suddenly slow, check the clocksource (`/sys/devices/system/clocksource/clocksource0/current_clocksource`) and `dmesg | grep -i tsc`. A fallback to `hpet` or `acpi_pm` will tank vDSO performance.
 
-*See also:* _Kernel Bypass (Networking volume)_: DPDK and AF-XDP avoid the syscall path entirely for packet IO. _Kernel Tracing_: eBPF tracepoints on raw syscall enter/exit give per-syscall observability.
+*See also:* #xref("networking", "kernel-bypass", label: "Kernel Bypass (Networking volume)"): DPDK and AF-XDP avoid the syscall path entirely for packet IO. #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing"): eBPF tracepoints on raw syscall enter/exit give per-syscall observability.
 
 == Further Reading
 
@@ -238,7 +240,7 @@ The Linux kernel is the most-deployed software artifact on Earth: it runs on the
 
 *Code conventions:* C is the kernel's native language. User-space examples are C unless a particular tool is more idiomatic in another form (`bpftrace` scripts, shell). All examples target x86-64 Linux 6.x; ARM64 differences are flagged where relevant.
 
-*See also:* _Multicore and Cache Coherence (CPU Architecture volume)_ (NUMA, cache coherence), _Virtual Memory (CPU Architecture volume)_ (TLB, page tables), _Kernel Bypass (Networking volume)_ (DPDK, AF-XDP), _Advanced Algorithms in Modern Systems (Coding volume)_ (scheduler algorithms, lock-free data structures).
+*See also:* #xref("cpu-architecture", "multicore", label: "Multicore and Cache Coherence (CPU Architecture volume)") (NUMA, cache coherence), _Virtual Memory (CPU Architecture volume)_ (TLB, page tables), #xref("networking", "kernel-bypass", label: "Kernel Bypass (Networking volume)") (DPDK, AF-XDP), #xref("coding", "advanced-systems", label: "Advanced Algorithms in Modern Systems (Coding volume)") (scheduler algorithms, lock-free data structures).
 
 ==== Why Kernel Internals Matter
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Safety and Alignment
 
 Alignment is the engineering discipline of getting models to *behave as intended*: follow instructions, refuse harmful requests, respect user values, remain honest about uncertainty. This chapter covers the techniques that go beyond PPO-style RLHF (introduced in the _RLHF_ chapter): Constitutional AI and RLAIF, DPO/IPO/KTO and their successors, red-teaming, jailbreak taxonomies, refusal calibration, weak-to-strong supervision, and the safety stack used in modern production systems. It is concrete about what current methods can and cannot do.
 
-*See also:* _RLHF_ (PPO, reward modeling), _Reasoning Models_ (RL with verifiable rewards), _Agents and Tool Use_ (agents amplify alignment failures).
+*See also:* #xref("llm", "rlhf", label: "RLHF") (PPO, reward modeling), #xref("llm", "reasoning-models", label: "Reasoning Models") (RL with verifiable rewards), #xref("llm", "agents-and-tool-use", label: "Agents and Tool Use") (agents amplify alignment failures).
 
 == The Alignment Problem in Production
 

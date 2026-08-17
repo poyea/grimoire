@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Diffusion Models
 
 Diffusion models are generative models that learn to reverse a noise-addition process. They have become the dominant approach for high-fidelity image, audio, and video synthesis, surpassing GANs on perceptual quality benchmarks while being more stable to train. This chapter develops the score-based and DDPM formulations, derives the evidence lower bound, covers accelerated samplers, and connects diffusion to flow matching and consistency models.
 
-*See also:* _Probability and Information_ (ELBO, KL divergence), _Loss Functions_ (denoising score matching), _Optimization_ (variance reduction, EMA), _Transformer Architecture_ (DiT, UNet attention).
+*See also:* #xref("machine-learning-foundations", "probability-and-information", label: "Probability and Information") (ELBO, KL divergence), #xref("machine-learning-foundations", "loss-functions", label: "Loss Functions") (denoising score matching), #xref("machine-learning-foundations", "optimization", label: "Optimization") (variance reduction, EMA), #xref("llm", "transformer-architecture", label: "Transformer Architecture") (DiT, UNet attention).
 
 == The Forward Process
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = SQL Engine Internals
 
 Optimizer textbooks describe System R dynamic programming as if every modern system implemented it directly. Real engines diverge sharply: PostgreSQL falls back to a genetic algorithm above a threshold; MySQL only embraced a cost-based optimizer in 5.6 and rewrote join planning in 8.0; DuckDB pushes vectors through a pipeline; ClickHouse pulls them in blocks. This chapter compares four open-source engines whose internals are well-documented.
 
-*See also:* _Query Optimization_, _Query Compilation_, _Column Stores and Vectorized Execution_, _Joins and Aggregation_
+*See also:* #xref("database", "query-optimization", label: "Query Optimization"), #xref("database", "query-compilation", label: "Query Compilation"), #xref("database", "column-stores-and-vectorized-execution", label: "Column Stores and Vectorized Execution"), #xref("database", "joins-and-aggregation", label: "Joins and Aggregation")
 
 == PostgreSQL Planner
 

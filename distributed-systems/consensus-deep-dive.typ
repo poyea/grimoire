@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Consensus Deep Dive
 
 Consensus is the abstraction every fault-tolerant distributed system reduces to: $N$ processes propose values, a single value is decided, and all correct processes eventually learn it. Beneath Paxos, Raft, EPaxos, and the Byzantine family lies a shared structure — *quorum intersection* plus *value carry-forward* across configuration epochs — that this chapter unfolds.
 
-*See also:* _Introduction_ (FLP), _Log-Based Systems_, _Leader Election and Leases_, and _Consensus and Replication_ (Databases volume — database-side framing).
+*See also:* _Introduction_ (FLP), #xref("distributed-systems", "log-based-systems", label: "Log-Based Systems"), #xref("distributed-systems", "leader-election-and-leases", label: "Leader Election and Leases"), and #xref("database", "consensus-and-replication", label: "Consensus and Replication") (Databases volume — database-side framing).
 
 == The Consensus Problem
 

@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Live Patching
 
 Live patching applies critical kernel fixes (typically security CVEs) to a *running* kernel without reboot. The unit is a kernel module that redirects calls to a buggy function to a replacement implementation. Done right, the patched kernel is indistinguishable in behaviour from one booted with the fix; done wrong, you have racy in-flight callers running half-old half-new code. The Linux *livepatch* infrastructure (`kernel/livepatch/`, mainlined 4.0) and the userspace toolchains around it (kpatch from Red Hat, kGraft from SUSE now merged into livepatch, and Ksplice from Oracle out-of-tree) provide the engineering rigour.
@@ -269,4 +271,4 @@ kpatch source: #link("https://github.com/dynup/kpatch")[github.com/dynup/kpatch]
 
 `kernel/livepatch/`, `arch/x86/kernel/ftrace.c`, `arch/x86/kernel/alternative.c`.
 
-*See also:* _Kernel Modules_ (livepatches are a special module flavour), _Kernel Tracing_ (ftrace, the trampoline substrate), _RCU and Locking_ (consistency-model invariants resemble RCU grace periods), _Security Modules_ (livepatching is how production fleets respond to LSM/syscall CVEs without reboots).
+*See also:* #xref("linux-kernel", "kernel-modules", label: "Kernel Modules") (livepatches are a special module flavour), #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing") (ftrace, the trampoline substrate), #xref("linux-kernel", "rcu-and-locking", label: "RCU and Locking") (consistency-model invariants resemble RCU grace periods), #xref("linux-kernel", "security-modules", label: "Security Modules") (livepatching is how production fleets respond to LSM/syscall CVEs without reboots).

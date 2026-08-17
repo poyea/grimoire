@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Concurrency Performance
 
 Adding threads is the easiest way to make a program slower. Concurrency buys throughput only when the work parallelizes without contending, and the failure modes (lock convoys, cache-line ping-pong, oversubscription, tail amplification) are subtle precisely because the code remains correct while the performance collapses. This chapter covers lock contention and its diagnosis, lock-free and sharded alternatives, thread-pool sizing, work stealing, and the statistics of fan-out latency.
 
-*See also:* _Memory Performance_ (false sharing and coherence costs), _Performance Methodology_ (Amdahl and the USL, which bound everything here), _Queueing Theory_ (thread pools are queues), and the CPU Architecture volume's _Cache Coherence_ chapter.
+*See also:* #xref("performance-engineering", "memory-performance", label: "Memory Performance") (false sharing and coherence costs), #xref("performance-engineering", "methodology", label: "Performance Methodology") (Amdahl and the USL, which bound everything here), #xref("performance-engineering", "queueing-theory", label: "Queueing Theory") (thread pools are queues), and the CPU Architecture volume's #xref("cpu-architecture", "multicore", label: "Cache Coherence") chapter.
 
 == Where Concurrency Costs Come From
 

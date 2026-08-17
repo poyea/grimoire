@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Time and Order
 
 Distributed systems have no global "now". What they have are *clocks* (each imperfect) and *messages* (which establish happens-before relationships). The art of this chapter is converting one into the other: using clocks to approximate causality and using causality to compensate for clock skew.
 
-*See also:* _Introduction_, _Consensus Deep Dive_, _Causal Consistency_, and _Consensus and Replication_ (Databases volume — TrueTime in Spanner).
+*See also:* _Introduction_, #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive"), #xref("distributed-systems", "causal-consistency", label: "Causal Consistency"), and #xref("database", "consensus-and-replication", label: "Consensus and Replication") (Databases volume — TrueTime in Spanner).
 
 == Physical Clocks
 

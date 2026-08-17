@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Serverless Computing
 
 *Serverless* is a misnomer — servers exist, but the operator no longer provisions, patches, or capacity-plans them. The defining contract is *pay-per-invocation*: the provider bills for compute time consumed, not for idle capacity. This shifts the economic model from always-on reserved capacity toward a step function where cost scales exactly with load, making serverless ideal for spiky, event-driven, or rarely-triggered workloads. This chapter covers the execution model, cold start physics, Lambda internals, event sources, serverless containers, and the stateless constraints that govern system design.
 
-*See also:* _IaaS Fundamentals_, _Containers: OCI, runc, containerd, Image Layers_, _Kubernetes Internals_, _Infrastructure as Code_, _The Three Pillars and Beyond_ (observability-and-sre).
+*See also:* #xref("cloud-and-infrastructure", "iaas-fundamentals", label: "IaaS Fundamentals"), #xref("cloud-and-infrastructure", "containers", label: "Containers: OCI, runc, containerd, Image Layers"), #xref("cloud-and-infrastructure", "kubernetes-internals", label: "Kubernetes Internals"), #xref("cloud-and-infrastructure", "iac", label: "Infrastructure as Code"), #xref("observability-and-sre", "the-three-pillars-and-beyond", label: "The Three Pillars and Beyond") (observability-and-sre).
 
 == The FaaS Execution Model
 

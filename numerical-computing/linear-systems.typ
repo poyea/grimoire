@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Linear Systems
 
 Solving $A x = b$ is the workhorse of scientific computing — discretized PDEs, circuit simulation, regression, Kalman filters, and the inner loop of interior-point optimizers all reduce to it. The direct-method toolkit is mature: factor once, solve cheaply, with stability guarantees inherited from a half-century of error analysis. This chapter covers LU with pivoting, Cholesky, QR via Householder and Givens, the interplay of condition number and residual, sparse direct methods, and the three roads to least squares.
 
-*See also:* _Error Analysis_ (backward stability of the factorizations), _Iterative Methods_ (when direct factorization is too expensive), _Eigenvalue Problems_ (QR reappears as an iteration), _Optimization Algorithms_ (Newton systems are linear systems).
+*See also:* #xref("numerical-computing", "error-analysis", label: "Error Analysis") (backward stability of the factorizations), #xref("numerical-computing", "iterative-methods", label: "Iterative Methods") (when direct factorization is too expensive), #xref("numerical-computing", "eigenvalue-problems", label: "Eigenvalue Problems") (QR reappears as an iteration), #xref("numerical-computing", "optimization-algorithms", label: "Optimization Algorithms") (Newton systems are linear systems).
 
 == LU Factorization with Pivoting
 

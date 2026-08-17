@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Object Detection
 
 Object detection requires simultaneously localising and classifying every object instance in an image. It is one of the core computer vision tasks, underpinning autonomous driving, robotics, medical imaging, and video understanding. This chapter covers the two-stage and one-stage detector families, anchor-free methods, and the transformer-based DETR family.
 
-*See also:* _CNN Architectures_ (backbones and FPN), _Image Segmentation_ (Mask R-CNN), _3D Vision_ (3D object detection).
+*See also:* #xref("computer-vision", "cnn-architectures", label: "CNN Architectures") (backbones and FPN), #xref("computer-vision", "image-segmentation", label: "Image Segmentation") (Mask R-CNN), #xref("computer-vision", "3d-vision", label: "3D Vision") (3D object detection).
 
 == Problem Formulation
 

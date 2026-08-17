@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Distributed and ML Algorithms
 
 Distributed coordination, large-model training, and inference algorithms share a common thread: they push single-machine abstractions to their limits and require explicit reasoning about concurrency, failure, and communication cost. This chapter covers consensus-adjacent coordination primitives, data-parallel and pipeline-parallel training patterns, and LLM inference scheduling — the algorithms a systems engineer encounters when a workload outgrows a single node.
 
-*See also:* _Advanced Algorithms in Modern Systems_ (coding), _Distributed Transactions_ (database), _Inference Optimization_ (llm), _GPU Memory Hierarchy_ (gpu-architecture).
+*See also:* #xref("coding", "advanced-systems", label: "Advanced Algorithms in Modern Systems") (coding), _Distributed Transactions_ (database), #xref("llm", "inference-optimization", label: "Inference Optimization") (llm), #xref("gpu-architecture", "memory-hierarchy", label: "GPU Memory Hierarchy") (gpu-architecture).
 
 == Distributed Coordination
 

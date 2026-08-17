@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Chaos Engineering
 
 Chaos engineering is the discipline of experimenting on a distributed system in order to build confidence in its ability to withstand turbulent conditions in production. The phrase comes from Netflix, whose Chaos Monkey (2011) randomly terminated production instances to force engineers to build termination-tolerant services. The practice has since matured from "break things randomly" into controlled, hypothesis-driven experimentation with explicit blast-radius limits — closer to clinical trials than to vandalism. This chapter covers the principles, the fault-injection toolbox, the major platforms, and game-day practice, then situates chaos experiments relative to testing and formal methods.
 
-*See also:* _Incident Management_, _SLO Engineering_, _Alerting_, _The Three Pillars and Beyond_
+*See also:* #xref("observability-and-sre", "incident-management", label: "Incident Management"), #xref("observability-and-sre", "slo-engineering", label: "SLO Engineering"), #xref("observability-and-sre", "alerting", label: "Alerting"), #xref("observability-and-sre", "the-three-pillars-and-beyond", label: "The Three Pillars and Beyond")
 
 == Principles
 

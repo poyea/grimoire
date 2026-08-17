@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Streaming and Incremental Computation
 
 Stream processing maintains continuously updated query results as new data arrives, without re-running the full query. *Differential dataflow* and *DBSP* provide formal foundations; Kafka Streams, Flink, and Spark Structured Streaming are industrial implementations.
 
-*See also:* _Lakehouses and Open Table Formats_, _Weakly Consistent Systems_, _Time-Series and Graph Databases_
+*See also:* #xref("database", "lakehouses-and-open-formats", label: "Lakehouses and Open Table Formats"), #xref("database", "weakly-consistent-systems", label: "Weakly Consistent Systems"), #xref("database", "time-series-and-graph", label: "Time-Series and Graph Databases")
 
 == The Streaming Model
 

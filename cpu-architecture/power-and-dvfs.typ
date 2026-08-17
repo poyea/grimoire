@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Power Management and DVFS
 
 Power is the limiting resource of modern processors. Every architectural choice — from frequency to core count to instruction mix — is constrained by a thermal design power ($"TDP"$) budget. This chapter covers the mechanisms that trade voltage, frequency, and idle states for energy efficiency.
 
-*See also:* _CPU Fundamentals_, _Multicore_, _Performance Analysis_
+*See also:* #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals"), #xref("cpu-architecture", "multicore", label: "Multicore"), #xref("cpu-architecture", "performance-analysis", label: "Performance Analysis")
 
 == The Power Equation
 

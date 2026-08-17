@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Agents and Tool Use
 
 An *agent* is an LLM that takes actions in an environment over multiple turns (calling tools, browsing the web, writing and executing code, manipulating files) and observes the consequences. The architectural primitives are *tool use* (the model emits a structured call; an external system executes it; the result is fed back), *planning* (decomposing a goal into steps), and *memory* (state that persists across actions). This chapter covers function calling, ReAct and its successors, code interpreters, web agents, MCP, and the engineering of robust agentic systems.
 
-*See also:* _Reasoning Models_ (planning is a CoT variant), _RAG_ (retrieval is a tool), _Safety and Alignment_ (agent actions amplify safety concerns).
+*See also:* #xref("llm", "reasoning-models", label: "Reasoning Models") (planning is a CoT variant), #xref("llm", "rag", label: "RAG") (retrieval is a tool), #xref("llm", "safety-and-alignment", label: "Safety and Alignment") (agent actions amplify safety concerns).
 
 == Function Calling
 

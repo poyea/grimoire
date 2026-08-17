@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Change Data Capture
 
 Change data capture (CDC) turns a database's internal replication log into an event stream, so every insert, update, and delete in the OLTP system appears, in commit order, as a record consumers can react to. It replaces the two bad alternatives: periodic full dumps (expensive, stale, miss intermediate states) and dual writes from application code (race-prone, drift-prone). This chapter covers log-based CDC mechanics, the Debezium architecture, Postgres logical decoding and the MySQL binlog, the snapshot-to-streaming handoff, exactly-once concerns, the transactional outbox pattern, and landing CDC in a lakehouse.
 
-*See also:* _Streaming_ (the processing layer downstream of CDC), _Lakehouse Engineering_ (merge-on-read for CDC sinks), _Schema Evolution_ (DDL flowing through CDC), _Data Quality_ (reconciling replicas against sources).
+*See also:* #xref("data-engineering", "streaming", label: "Streaming") (the processing layer downstream of CDC), #xref("data-engineering", "lakehouse-engineering", label: "Lakehouse Engineering") (merge-on-read for CDC sinks), #xref("data-engineering", "schema-evolution", label: "Schema Evolution") (DDL flowing through CDC), #xref("data-engineering", "data-quality", label: "Data Quality") (reconciling replicas against sources).
 
 == Why Log-Based
 

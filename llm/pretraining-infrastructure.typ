@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Pretraining Infrastructure
 
 *Training at scale:* This chapter covers the optimizer, distributed training, and training stability — the infrastructure side of pretraining. It continues from _Pretraining_ (data pipelines, objectives, scaling laws, mixed precision, gradient checkpointing).
 
-*See also:* _Pretraining_ (objectives and memory techniques), _Multi-GPU Communication and Scaling (GPU Architecture volume)_, _ML Workload Optimization on GPUs (GPU Architecture volume)_.
+*See also:* #xref("llm", "pretraining", label: "Pretraining") (objectives and memory techniques), #xref("gpu-architecture", "multi-gpu", label: "Multi-GPU Communication and Scaling (GPU Architecture volume)"), #xref("gpu-architecture", "ml-workloads", label: "ML Workload Optimization on GPUs (GPU Architecture volume)").
 
 == Optimizer
 

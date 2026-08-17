@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Network Address Translation (NAT)
 
 Network Address Translation rewrites IP and port headers as packets cross an administrative boundary. Originally introduced to mitigate IPv4 address exhaustion, NAT has become a de-facto security and topology hiding mechanism, and a perennial source of pain for peer-to-peer protocols.
 
-*See also:* _Transport Layer_ (for TCP/UDP), _Stateful Firewalls_ (for conntrack internals), _IPv6_ (for the long-term NAT-free alternative).
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP/UDP), #xref("networking", "stateful-firewalls", label: "Stateful Firewalls") (for conntrack internals), #xref("networking", "ipv6", label: "IPv6") (for the long-term NAT-free alternative).
 
 == NAT Overview
 

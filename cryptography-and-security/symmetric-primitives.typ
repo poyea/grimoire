@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Symmetric Primitives
 
 Symmetric cryptography is built from a small set of well-studied primitives: block ciphers (AES), stream ciphers (ChaCha20), polynomial MACs (Poly1305, GMAC), and the AEAD modes that combine them. Choosing the right mode, using nonces correctly, and writing constant-time code matter far more than the underlying algorithm.
 
-*See also:* _Hashing and MACs_, _Protocols_, _Key Exchange and PKI_, _TLS (Transport Layer Security)_ (networking), _Database Security and Privacy_ (database).
+*See also:* #xref("cryptography-and-security", "hashing-and-macs", label: "Hashing and MACs"), _Protocols_, #xref("cryptography-and-security", "key-exchange-and-pki", label: "Key Exchange and PKI"), _TLS (Transport Layer Security)_ (networking), #xref("database", "security-and-privacy", label: "Database Security and Privacy") (database).
 
 == Block Ciphers
 

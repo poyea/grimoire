@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Omega-Automata
 
 Finite automata read finite words and accept by halting in a designated state. Real systems -- operating system kernels, reactive controllers, communication protocols, hardware pipelines -- do not halt. Their executions are *infinite* sequences of states, and the questions we ask about them (does every request eventually receive a response?, is the bus never granted to two masters simultaneously?) are properties of those infinite sequences. To check such properties algorithmically we need automata that read infinite inputs and accept by the *limiting behaviour* of the run. That is the subject of $omega$-automata.
 
-*See also:* _Infinite Trees and Games_, _Tree Automata_, _Turing Machines and Computability_
+*See also:* #xref("programming-languages", "infinite-trees-and-games", label: "Infinite Trees and Games"), #xref("programming-languages", "tree-automata", label: "Tree Automata"), #xref("programming-languages", "turing-computability", label: "Turing Machines and Computability")
 
 == Infinite Words and Omega-Regular Languages
 

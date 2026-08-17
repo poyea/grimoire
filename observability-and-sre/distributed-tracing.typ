@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Distributed Tracing
 
 A trace is a causally ordered tree (or DAG) of spans across processes that together represent one logical request. Tracing answers _where_ time went and _which_ downstream calls amplify latency or errors. This chapter starts from the Dapper paper, follows the evolution through Zipkin and Jaeger to OpenTelemetry, and covers the hard parts: context propagation, sampling, and tail-based decisions at scale.
 
-*See also:* _The Three Pillars and Beyond_, _Metrics Systems_, _SLO Engineering_, _Network Observability_ (networking), _gRPC (Remote Procedure Calls)_ (networking), _Observability and Self-Driving Databases_ (database)
+*See also:* #xref("observability-and-sre", "the-three-pillars-and-beyond", label: "The Three Pillars and Beyond"), #xref("observability-and-sre", "metrics-systems", label: "Metrics Systems"), #xref("observability-and-sre", "slo-engineering", label: "SLO Engineering"), #xref("networking", "observability", label: "Network Observability") (networking), #xref("networking", "grpc", label: "gRPC (Remote Procedure Calls)") (networking), #xref("database", "observability-and-self-driving", label: "Observability and Self-Driving Databases") (database)
 
 == The Span Model
 

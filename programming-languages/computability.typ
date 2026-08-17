@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Computability and Recursion Theory
 
 Recursion theory is the mathematical study of what can be computed, and -- more
@@ -7,7 +9,7 @@ extensional definition of computability; the recursion-theoretic vocabulary
 arithmetical hierarchy) is the intensional language in which actual proofs about
 undecidability are written.
 
-*See also:* _Turing Machines and Computability_, _Advanced Recursion Theory_, _Type Systems_, _Complexity Theory_
+*See also:* #xref("programming-languages", "turing-computability", label: "Turing Machines and Computability"), #xref("programming-languages", "computability-advanced", label: "Advanced Recursion Theory"), #xref("programming-languages", "type-systems", label: "Type Systems"), #xref("programming-languages", "complexity", label: "Complexity Theory")
 
 == Primitive Recursive and $mu$-Recursive Functions
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = OLTP / HTAP / OLAP Convergence
 
 For three decades the database world split cleanly: OLTP systems (Oracle, DB2, MySQL, Postgres) optimized short, point-access transactions on row stores; OLAP systems (Teradata, Vertica, Redshift, BigQuery) optimized long, scan-heavy aggregations on column stores. The split was so entrenched that the standard architecture was a *nightly ETL pipeline* shuffling rows from the OLTP master into a separate warehouse. The 2010s eroded the boundary. Memory got cheap enough to keep working sets resident, compilers got good enough to fuse transactional and analytical code paths, and customers grew impatient with the staleness of a warehouse that lagged production by hours. The result is *HTAP* — Hybrid Transactional / Analytical Processing — and a family of systems that, by varying internal design choices, sit anywhere on the spectrum from "OLTP with bolt-on columns" to "OLAP with bolt-on rows."
 
-*See also:* _Column Stores and Vectorized Execution_, _Query Compilation_, _Cloud-Native Databases_, _Storage Engines_, _Distributed Transactions_
+*See also:* #xref("database", "column-stores-and-vectorized-execution", label: "Column Stores and Vectorized Execution"), #xref("database", "query-compilation", label: "Query Compilation"), #xref("database", "cloud-native-databases", label: "Cloud-Native Databases"), #xref("database", "storage-engines", label: "Storage Engines"), _Distributed Transactions_
 
 == Why Converge?
 

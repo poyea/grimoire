@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Asymmetric Cryptography
 
 Public-key cryptography rests on number-theoretic problems believed hard for classical computers: integer factorization (RSA), discrete log in $(ZZ slash p)^*$ and elliptic curve groups (DH, ECDSA, EdDSA), and bilinear pairings (BLS signatures, identity-based encryption). Modern deployments are dominated by elliptic curves with classical hardness arguments, in transition to post-quantum.
 
-*See also:* _Symmetric Primitives_, _Hashing and MACs_, _Post-Quantum Cryptography_, _Protocols_, _TLS (Transport Layer Security)_ (networking).
+*See also:* #xref("cryptography-and-security", "symmetric-primitives", label: "Symmetric Primitives"), #xref("cryptography-and-security", "hashing-and-macs", label: "Hashing and MACs"), #xref("cryptography-and-security", "post-quantum", label: "Post-Quantum Cryptography"), _Protocols_, _TLS (Transport Layer Security)_ (networking).
 
 == RSA
 

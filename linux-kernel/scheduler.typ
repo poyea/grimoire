@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = The Scheduler
 
 The Linux scheduler decides which runnable task gets the CPU next. For most workloads its default class (CFS, the Completely Fair Scheduler) is good enough that you don't think about it. For latency-sensitive, real-time, or contended systems, understanding what it is doing is the difference between a smooth system and a system with mysterious tail latency.
@@ -225,7 +227,7 @@ The Linux scheduler is one of the most actively developed subsystems in the kern
 
 The scheduler is best understood as a policy *layer*, not a guarantee: the same policy can produce very different behaviour depending on hardware topology, interrupt routing, and memory pressure. Observability tools (`perf sched`, `runqlat`, `sched_debug`) and controlled isolation are the practical path to predictable behaviour.
 
-*See also:* _CPU Affinity, Isolation, and NUMA_ (isolation, the necessary complement to RT scheduling), _Interrupts and Bottom Halves_ (IRQ jitter, threaded IRQs), _Advanced Algorithms in Modern Systems (Coding volume)_ (scheduler theory: EDF, rate-monotonic), _cgroups and Namespaces_ (cpu controller, cpuset partitions).
+*See also:* #xref("linux-kernel", "cpu-affinity", label: "CPU Affinity, Isolation, and NUMA") (isolation, the necessary complement to RT scheduling), #xref("linux-kernel", "interrupts", label: "Interrupts and Bottom Halves") (IRQ jitter, threaded IRQs), #xref("coding", "advanced-systems", label: "Advanced Algorithms in Modern Systems (Coding volume)") (scheduler theory: EDF, rate-monotonic), #xref("linux-kernel", "cgroups-namespaces", label: "cgroups and Namespaces") (cpu controller, cpuset partitions).
 
 == Further Reading
 

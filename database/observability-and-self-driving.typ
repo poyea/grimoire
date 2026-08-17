@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Observability and Self-Driving Databases
 
 A database that cannot be observed cannot be tuned. Observability (metrics, logs, traces) is the prerequisite for self-driving capabilities — automated index selection, knob tuning, query plan selection, and anomaly detection.
 
-*See also:* _Query Optimization_, _Database Security and Privacy_, _Benchmarking and Research Methods_
+*See also:* #xref("database", "query-optimization", label: "Query Optimization"), #xref("database", "security-and-privacy", label: "Database Security and Privacy"), #xref("database", "benchmarking-and-research-methods", label: "Benchmarking and Research Methods")
 
 == Three Pillars of Database Observability
 

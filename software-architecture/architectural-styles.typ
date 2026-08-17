@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Architectural Styles
 
 An architectural style is a named collection of design decisions: how a system is partitioned into components, how those components communicate, and which constraints govern their evolution. Styles are not mutually exclusive; real systems mix them. This chapter surveys the major styles, layered, hexagonal, clean, pipes-and-filters, event-driven, microkernel, and space-based, and develops the trade-off vocabulary needed to choose between them.
 
-*See also:* _Monoliths and Microservices_ (deployment-level decomposition), _Event-Driven Architecture_ (event-driven style in depth), _Architecture Evaluation_ (how to assess a chosen style against quality attributes).
+*See also:* #xref("software-architecture", "monoliths-and-microservices", label: "Monoliths and Microservices") (deployment-level decomposition), #xref("software-architecture", "event-driven-architecture", label: "Event-Driven Architecture") (event-driven style in depth), #xref("software-architecture", "architecture-evaluation", label: "Architecture Evaluation") (how to assess a chosen style against quality attributes).
 
 == Layered Architecture
 

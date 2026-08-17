@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = I/O Performance
 
 Storage and network I/O are where nanosecond-scale CPUs meet microsecond- and millisecond-scale devices, and where the operating system inserts its thickest layer of indirection: page caches, schedulers, socket buffers, protocol stacks. This chapter covers the storage stack from syscall to flash, the asynchronous I/O models and `io_uring`, network performance from socket tuning to kernel bypass, and the measurement tools that distinguish device limits from software overhead.
 
-*See also:* _Queueing Theory_ (disks and NICs are queueing systems; `iostat`'s columns are its vocabulary), _Concurrency Performance_ (thread-pool sizing for blocking I/O), _Benchmarking_ (`fio` discipline), and _Capacity Planning_ (provisioning for I/O headroom).
+*See also:* #xref("performance-engineering", "queueing-theory", label: "Queueing Theory") (disks and NICs are queueing systems; `iostat`'s columns are its vocabulary), #xref("performance-engineering", "concurrency-performance", label: "Concurrency Performance") (thread-pool sizing for blocking I/O), #xref("performance-engineering", "benchmarking", label: "Benchmarking") (`fio` discipline), and #xref("performance-engineering", "capacity-planning", label: "Capacity Planning") (provisioning for I/O headroom).
 
 == The Numbers
 

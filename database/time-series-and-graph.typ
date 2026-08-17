@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Time-Series and Graph Databases
 
 Time-series and graph data have access patterns that don't fit relational models well. Specialized engines exploit domain structure for 10–100× better performance on their target workloads.
 
-*See also:* _Storage Engines_, _Column Stores and Vectorized Execution_, _Streaming and Incremental Computation_
+*See also:* #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "column-stores-and-vectorized-execution", label: "Column Stores and Vectorized Execution"), #xref("database", "streaming-and-incremental-computation", label: "Streaming and Incremental Computation")
 
 == Time-Series Data
 

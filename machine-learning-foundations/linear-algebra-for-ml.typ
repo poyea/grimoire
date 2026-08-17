@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Linear Algebra for ML
 
 Almost every ML algorithm reduces, at the inner loop, to a sequence of matrix multiplications, decompositions, or solves. Understanding when a decomposition exists, what it costs, and how it conditions a downstream problem is the difference between a stable training run and a NaN at step 17. This chapter focuses on the parts of linear algebra that show up in actual ML pipelines: structured matrices, decompositions (SVD, QR, eigen, Cholesky), matrix calculus, numerical stability, and the dimensionality-aware tricks (Johnson–Lindenstrom, random projections, Kronecker structure) that make large models tractable.
 
-*See also:* _Optimization_ (Hessian structure, Newton's method), _Transformer Architecture_ in the Large Language Models volume (initialization, backprop), _ML Workload Optimization on GPUs_ (matmul throughput), _Transformer Architecture_ (attention as low-rank composition).
+*See also:* #xref("machine-learning-foundations", "optimization", label: "Optimization") (Hessian structure, Newton's method), #xref("llm", "transformer-architecture", label: "Transformer Architecture") in the Large Language Models volume (initialization, backprop), #xref("gpu-architecture", "ml-workloads", label: "ML Workload Optimization on GPUs") (matmul throughput), #xref("llm", "transformer-architecture", label: "Transformer Architecture") (attention as low-rank composition).
 
 == Vector Spaces and Norms
 

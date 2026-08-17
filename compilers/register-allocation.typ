@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Register Allocation
 
 Register allocation maps an unbounded set of virtual registers (or $"SSA"$ values) to a finite set of machine registers. It is one of the hardest problems in compiler backends --- optimal allocation is NP-complete in general --- and the quality of allocation directly determines instruction count, spill code, and ultimately runtime performance.
 
-*See also:* _IR Design and SSA Form_, _Dataflow Analysis_, _Instruction Selection and Code Generation_
+*See also:* #xref("compilers", "ir-design", label: "IR Design and SSA Form"), #xref("compilers", "dataflow-analysis", label: "Dataflow Analysis"), #xref("compilers", "backend-and-codegen", label: "Instruction Selection and Code Generation")
 
 == The Problem
 

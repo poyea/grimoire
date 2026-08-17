@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Query Optimization
 
 The query optimizer transforms a declarative SQL query into an efficient physical execution plan. This is the hardest engineering problem in databases: the search space of plans grows super-exponentially with the number of joins, cardinality estimation is error-prone, and cost models are approximations. Modern optimizers combine dynamic programming, heuristics, and increasingly, learned components.
 
-*See also:* _Query Compilation_, _Joins and Aggregation_, _Storage Engines_
+*See also:* #xref("database", "query-compilation", label: "Query Compilation"), #xref("database", "joins-and-aggregation", label: "Joins and Aggregation"), #xref("database", "storage-engines", label: "Storage Engines")
 
 == Optimization Pipeline
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Dependent Types
 
 A *dependent type* is a type that may depend on a *term*. The function type $A arrow.r B$ becomes the *dependent function type* $Pi x : A . B(x)$ where the codomain $B$ may mention $x$; the product $A times B$ becomes $Sigma x : A . B(x)$ where the second component's type depends on the first. With this single move, types acquire the full expressive power of a logic: $Pi$ encodes universal quantification, $Sigma$ encodes existence with a witness, and the *Curry–Howard correspondence* extends to predicate logic. This is the foundation of Martin-Löf Type Theory (Martin-Löf 1972, 1975, 1984), the Calculus of Constructions (Coquand–Huet 1988), and modern proof assistants Coq/Rocq, Agda, Lean, Idris, and F\*.
 
-*See also:* _Simply-Typed Lambda Calculus_, _System F and Parametricity_, _Type Systems_, _Homotopy Type Theory_
+*See also:* _Simply-Typed Lambda Calculus_, #xref("programming-languages", "system-f-and-parametricity", label: "System F and Parametricity"), #xref("programming-languages", "type-systems", label: "Type Systems"), #xref("programming-languages", "homotopy-type-theory", label: "Homotopy Type Theory")
 
 This chapter develops dependent type theory from the ground up. We give the syntax and rules of $lambda P$ / LF; the predicative universe hierarchy and Girard's paradox at $cal(U) : cal(U)$; W-types and inductive families; intensional vs extensional MLTT; the $J$-eliminator and the (in)derivability of function extensionality; the Calculus of Inductive Constructions (CIC) underpinning Coq; sized types and well-founded recursion; universe polymorphism; worked examples in Coq, Agda, and Lean; the Curry–Howard reading for first-order predicate logic; and program extraction.
 

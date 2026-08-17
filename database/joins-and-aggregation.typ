@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Joins and Aggregation
 
 Join algorithms are the performance-critical core of relational query processing. The right algorithm depends on input sizes, available memory, sort order, and key distribution. Aggregation is deeply intertwined with join order and physical layout.
 
-*See also:* _Query Optimization_, _Query Compilation_, _Column Stores and Vectorized Execution_
+*See also:* #xref("database", "query-optimization", label: "Query Optimization"), #xref("database", "query-compilation", label: "Query Compilation"), #xref("database", "column-stores-and-vectorized-execution", label: "Column Stores and Vectorized Execution")
 
 == Nested Loop Join (NLJ)
 

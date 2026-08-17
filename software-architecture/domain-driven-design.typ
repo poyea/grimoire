@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Domain-Driven Design
 
 Domain-driven design (DDD), introduced by Eric Evans in his 2003 book, is a school of design that puts the business domain, not the database schema, not the framework, at the centre of the architecture. Its core claim: the hardest part of most software is not technical but conceptual, and software that does not embody a rigorous model of its domain rots into a *big ball of mud*. DDD splits into *strategic* design (where are the boundaries?) and *tactical* design (how is the model expressed in code?).
 
-*See also:* _Monoliths and Microservices_ (bounded contexts as service boundaries), _Event-Driven Architecture_ (domain events as integration mechanism), _Distributed Data Patterns_ (aggregates and consistency boundaries across services).
+*See also:* #xref("software-architecture", "monoliths-and-microservices", label: "Monoliths and Microservices") (bounded contexts as service boundaries), #xref("software-architecture", "event-driven-architecture", label: "Event-Driven Architecture") (domain events as integration mechanism), #xref("software-architecture", "distributed-data-patterns", label: "Distributed Data Patterns") (aggregates and consistency boundaries across services).
 
 == Ubiquitous Language
 

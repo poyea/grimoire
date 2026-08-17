@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Congestion Control
 
 Congestion control governs how fast a sender may inject data into the network. The choice of algorithm directly determines tail latency, link utilisation, and fairness, and is one of the few transport-layer knobs that has measurable end-user impact. This chapter covers the loss-based classics ($"Reno"$, $"NewReno"$, $"CUBIC"$), the rate-model family ($"BBR"$ v1/v2/v3), and modern marking-based approaches (ECN, L4S with DualPI2 and $"Prague"$).
 
-*See also:* _Transport Layer_ (TCP basics), _QUIC and HTTP/3_ (pluggable CC), _Multipath_ (coupled CC), _Data Center Networking_ (DCTCP and ECN at high speed).
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (TCP basics), #xref("networking", "quic-and-http3", label: "QUIC and HTTP/3") (pluggable CC), #xref("networking", "multipath", label: "Multipath") (coupled CC), #xref("networking", "data-center-networking", label: "Data Center Networking") (DCTCP and ECN at high speed).
 
 == The Problem
 

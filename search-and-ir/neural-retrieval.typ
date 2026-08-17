@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Neural Retrieval
 
 Neural retrieval applies pretrained language models to the matching problem itself, not just to reranking features. The field reorganized around BERT (2019–2021) into a small set of architectures distinguished by _where_ the query–document interaction happens: cross-encoders (full interaction, expensive, rerank-only), dense bi-encoders (no interaction until a single dot product, indexable), late interaction (per-token dot products, in between), and learned sparse models (neural term weighting on a classical inverted index). This chapter covers each, the training recipes that make or break them, and the hybrid systems production actually ships.
 
-*See also:* _Ranking: Classical Models_ (BM25, the baseline and hybrid partner), _Vector Search_ (the ANN indexes dense retrieval needs), _Learning to Rank_ (where rerankers slot into the cascade), _RAG and Search Systems_ (retrieval as an LLM component), _Evaluation_ (BEIR and MS MARCO).
+*See also:* #xref("search-and-ir", "ranking-classical", label: "Ranking: Classical Models") (BM25, the baseline and hybrid partner), #xref("search-and-ir", "vector-search", label: "Vector Search") (the ANN indexes dense retrieval needs), #xref("search-and-ir", "learning-to-rank", label: "Learning to Rank") (where rerankers slot into the cascade), #xref("search-and-ir", "rag-and-search-systems", label: "RAG and Search Systems") (retrieval as an LLM component), _Evaluation_ (BEIR and MS MARCO).
 
 == Vocabulary Mismatch and the Case for Learning
 

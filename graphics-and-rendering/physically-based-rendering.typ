@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Physically Based Rendering
 
 Physically based rendering ($"PBR"$) replaces ad-hoc shading models (Phong, Blinn–Phong) with formulations grounded in the rendering equation and microfacet theory. The result is materials that respond plausibly under arbitrary lighting — a prerequisite for $"HDR"$ pipelines, image-based lighting, and any system mixing rasterization with path tracing.
 
-*See also:* _Shaders and Shading Languages_ (BRDF implementation), _Ray Tracing_ (Monte Carlo evaluation), _Global Illumination Techniques_ (importance sampling reuse), _Real-Time Engine Architecture_ (Disney/Unreal material model).
+*See also:* #xref("graphics-and-rendering", "shaders", label: "Shaders and Shading Languages") (BRDF implementation), #xref("graphics-and-rendering", "ray-tracing", label: "Ray Tracing") (Monte Carlo evaluation), #xref("graphics-and-rendering", "gi-techniques", label: "Global Illumination Techniques") (importance sampling reuse), #xref("graphics-and-rendering", "realtime-engines", label: "Real-Time Engine Architecture") (Disney/Unreal material model).
 
 == The Rendering Equation
 

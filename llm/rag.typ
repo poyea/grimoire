@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Retrieval-Augmented Generation
 
 RAG injects information retrieved from an external corpus into the LLM's prompt at query time. The model gains access to up-to-date, domain-specific, or proprietary knowledge without retraining, and citations become attributable. This chapter covers the full pipeline — chunking, embedding, indexing, hybrid retrieval, reranking, fusion strategies — plus the evaluation methodology and the design tradeoffs versus long context and fine-tuning.
 
-*See also:* _Long Context_ (a complementary approach), _Vector and Similarity Search (Database volume)_ (HNSW, IVF, product quantization), _Agents and Tool Use_ (retrieval is a tool the agent can call).
+*See also:* #xref("llm", "long-context", label: "Long Context") (a complementary approach), #xref("database", "vector-and-similarity-search", label: "Vector and Similarity Search (Database volume)") (HNSW, IVF, product quantization), #xref("llm", "agents-and-tool-use", label: "Agents and Tool Use") (retrieval is a tool the agent can call).
 
 == When RAG, When Long Context, When Fine-Tuning
 

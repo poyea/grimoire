@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Capacity Planning
 
 Capacity planning answers a forward-looking question: how much resource will the workload need, when, and at what cost. Done well, it is measurement plus a model plus a margin; done badly, it is last year's spend times a guess. This chapter covers demand forecasting, headroom policy, load testing for capacity (not just performance), scalability modeling with the USL, autoscaling, overload protection, and cost-aware sizing.
 
-*See also:* _Queueing Theory_ (why headroom is non-negotiable), _Performance Methodology_ (the USL, workload characterization), _Benchmarking_ (trustworthy load tests), and _Concurrency Performance_ (the scaling limits the plan must respect).
+*See also:* #xref("performance-engineering", "queueing-theory", label: "Queueing Theory") (why headroom is non-negotiable), #xref("performance-engineering", "methodology", label: "Performance Methodology") (the USL, workload characterization), #xref("performance-engineering", "benchmarking", label: "Benchmarking") (trustworthy load tests), and #xref("performance-engineering", "concurrency-performance", label: "Concurrency Performance") (the scaling limits the plan must respect).
 
 == The Core Loop
 

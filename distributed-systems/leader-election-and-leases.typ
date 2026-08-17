@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Leader Election and Leases
 
 Many distributed protocols are simpler with a distinguished coordinator: a sequencer for ordering, an exclusive writer to a shard, a master scheduling tasks. The challenge is electing a leader despite failures, and *bounding* leadership so a partitioned former leader cannot corrupt state. Leases and fencing tokens are how this bound is enforced.
 
-*See also:* _Failure Detection_, _Consensus Deep Dive_ (Raft leader election, reconfiguration), _Coordination Services_ (Chubby, etcd leases).
+*See also:* #xref("distributed-systems", "failure-detection", label: "Failure Detection"), #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive") (Raft leader election, reconfiguration), #xref("distributed-systems", "coordination-services", label: "Coordination Services") (Chubby, etcd leases).
 
 == Why Elect a Leader?
 

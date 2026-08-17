@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Programmable Data Planes and P4
 
 Programmable data planes extend SDN beyond OpenFlow's fixed match-action pipeline: the parser, match-action tables, and packet layout itself become software, compiled to a target ASIC, FPGA, NIC, or software switch. P4 [Bosshart et al. 2014] is the lingua franca; PISA (Protocol-Independent Switch Architecture) is the dominant abstract machine; P4Runtime [P4.org 2018] is the gRPC control API. The space is in flux after Intel exited the Tofino merchant ASIC business in early 2023, leaving Cisco Silicon One P200, Marvell Teralynx 10, AMD Pensando Elba, and Nvidia BlueField as the heirs.
 
-*See also:* _SDN and Programmable Networks_ (for OpenFlow, controllers), _Kernel Bypass_ (for XDP / AF-XDP software targets), _Data Center Networking_ (for in-network compute placement).
+*See also:* #xref("networking", "sdn-programmable-networks", label: "SDN and Programmable Networks") (for OpenFlow, controllers), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for XDP / AF-XDP software targets), #xref("networking", "data-center-networking", label: "Data Center Networking") (for in-network compute placement).
 
 == Why Programmable Data Planes
 

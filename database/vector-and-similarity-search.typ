@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Vector and Similarity Search
 
 Embedding models (BERT, CLIP, text-embedding-3) map text, images, and other data into dense vectors in $RR^d$ (typically $d$ = 768–3072). *Nearest-neighbor search* — finding the $k$ vectors closest to a query vector — is the performance-critical operation in retrieval-augmented generation, semantic search, and recommendation systems.
 
-*See also:* _Query Optimization_, _Hardware-Aware Database Design_, _LLM volume_ (retrieval-augmented generation — ANN is the inner loop of RAG)
+*See also:* #xref("database", "query-optimization", label: "Query Optimization"), #xref("database", "hardware-aware-design", label: "Hardware-Aware Database Design"), _LLM volume_ (retrieval-augmented generation — ANN is the inner loop of RAG)
 
 == Distance Metrics
 

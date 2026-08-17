@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Benchmarking
 
 A benchmark is an experiment, and most benchmarks are bad experiments: they measure the wrong thing, on the wrong workload, with no error bars, and then generalize. This chapter covers the failure modes of microbenchmarks, the tools that mitigate them, the statistics needed to claim "A is faster than B", and how to run experiments safely in production.
 
-*See also:* _Performance Methodology_ (what to measure and why), _CPU Profiling_ (finding where time goes once a benchmark shows a regression), and the CPU Architecture volume's _Branch Prediction_ and _Cache Hierarchy_ chapters (the microarchitectural state that makes small benchmarks lie).
+*See also:* #xref("performance-engineering", "methodology", label: "Performance Methodology") (what to measure and why), #xref("performance-engineering", "cpu-profiling", label: "CPU Profiling") (finding where time goes once a benchmark shows a regression), and the CPU Architecture volume's #xref("cpu-architecture", "branch-prediction", label: "Branch Prediction") and #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy") chapters (the microarchitectural state that makes small benchmarks lie).
 
 == Why Microbenchmarks Lie
 

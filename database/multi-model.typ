@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Multi-Model Databases
 
 The "NoSQL" era convinced many that the relational model was inadequate for documents, key-value, graphs, and time series. A decade of operational experience reversed the conclusion partially: most NoSQL systems re-invented joins (poorly), transactions (eventually), and SQL (under another name). At the same time, relational systems absorbed JSON, vector, and graph types natively. The term *multi-model* now describes both directions — relational engines that handle documents, and document/graph/KV systems that grew SQL-like querying.
 
-*See also:* _Query Languages_, _Storage Engines_, _Time-Series and Graph_, _Vector and Similarity Search_
+*See also:* #xref("database", "query-languages", label: "Query Languages"), #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "time-series-and-graph", label: "Time-Series and Graph"), #xref("database", "vector-and-similarity-search", label: "Vector and Similarity Search")
 
 == JSON in Relational Systems
 

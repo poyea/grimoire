@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Streaming
 
 Streaming systems process unbounded data with bounded latency. Three concerns dominate: ordering (event time vs processing time), correctness under failure (exactly-once semantics), and state management (how billions of keyed aggregates fit in memory). This chapter covers Kafka as the durable log, Flink as the canonical processing engine, and the streaming-$"SQL"$ wave (RisingWave, Materialize, ksqlDB).
 
-*See also:* _Change Data Capture_ (the most common stream source), _Lakehouse Engineering_ (streaming writes to Iceberg / Delta / Hudi), _Streaming and Incremental Computation_ (database framing), _Log-Based Systems_ (distributed-systems framing).
+*See also:* #xref("data-engineering", "change-data-capture", label: "Change Data Capture") (the most common stream source), #xref("data-engineering", "lakehouse-engineering", label: "Lakehouse Engineering") (streaming writes to Iceberg / Delta / Hudi), #xref("database", "streaming-and-incremental-computation", label: "Streaming and Incremental Computation") (database framing), #xref("distributed-systems", "log-based-systems", label: "Log-Based Systems") (distributed-systems framing).
 
 == The Log as Substrate
 

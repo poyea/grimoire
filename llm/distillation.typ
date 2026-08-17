@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Distillation
 
 Distillation transfers capability from a large *teacher* model to a smaller *student*. The student trains not (only) on the original labels but on the teacher's outputs, distributions, or reasoning traces. Done well, a 7B student can recover 80–95% of a 70B teacher's performance at 10× lower inference cost. This chapter covers the original Hinton formulation, modern LLM-specific variants — sequence-level, white-box, on-policy, reasoning-trace distillation — and the failure modes that limit how far distillation can go.
 
-*See also:* _Pretraining_ (distillation is increasingly used as part of pretraining), _Quantization_ (a complementary axis: same architecture, smaller bits), _Reasoning Models_ (CoT trace distillation).
+*See also:* #xref("llm", "pretraining", label: "Pretraining") (distillation is increasingly used as part of pretraining), #xref("llm", "quantization", label: "Quantization") (a complementary axis: same architecture, smaller bits), #xref("llm", "reasoning-models", label: "Reasoning Models") (CoT trace distillation).
 
 == Classical Knowledge Distillation
 

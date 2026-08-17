@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = The Rasterization Pipeline
 
 Rasterization remains the dominant real-time rendering paradigm because GPUs are organized — at every level from the SM down to the ROP — to scan-convert triangles in massively parallel batches. Understanding the fixed-function stages and their programmable hooks is the prerequisite for everything that follows: shaders, $"PBR"$, deferred lighting, and even hybrid ray-traced effects.
 
-*See also:* _Shaders and Shading Languages_ (programmable stages), _Real-Time Engine Architecture_ (Nanite virtualized geometry), _Compute Units and Specialized Cores_ (gpu-architecture framing; SM, ROPs), _GPU Memory Hierarchy_ (gpu-architecture framing; tile caches).
+*See also:* #xref("graphics-and-rendering", "shaders", label: "Shaders and Shading Languages") (programmable stages), #xref("graphics-and-rendering", "realtime-engines", label: "Real-Time Engine Architecture") (Nanite virtualized geometry), #xref("gpu-architecture", "compute-architecture", label: "Compute Units and Specialized Cores") (gpu-architecture framing; SM, ROPs), #xref("gpu-architecture", "memory-hierarchy", label: "GPU Memory Hierarchy") (gpu-architecture framing; tile caches).
 
 == Pipeline Overview
 

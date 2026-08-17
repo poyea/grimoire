@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Information Theory
 
 Information theory, founded by Claude Shannon in 1948, provides the mathematical language for quantifying uncertainty, compression, and the fundamental limits of communication. Its core quantities — entropy, mutual information, and channel capacity — appear throughout machine learning, statistics, compression, and communications. This chapter develops the classical theory rigorously and connects it to the tools used daily in learning systems.
 
-*See also:* _Probability and Information_ (probability foundations), _Loss Functions_ (cross-entropy as a training objective), _Generalization Theory_ (MDL principle, information-theoretic bounds), _Network Information Theory_ (multi-user channels, capacity regions).
+*See also:* #xref("machine-learning-foundations", "probability-and-information", label: "Probability and Information") (probability foundations), #xref("machine-learning-foundations", "loss-functions", label: "Loss Functions") (cross-entropy as a training objective), #xref("machine-learning-foundations", "generalization-theory", label: "Generalization Theory") (MDL principle, information-theoretic bounds), #xref("machine-learning-foundations", "network-information-theory", label: "Network Information Theory") (multi-user channels, capacity regions).
 
 == Entropy
 

@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Advanced Recursion Theory
 
 This chapter continues from _Computability and Recursion Theory_, covering the
@@ -6,7 +8,7 @@ analysis, the fine structure of the r.e. degrees, forcing, and algorithmic
 randomness. Together the two chapters give a complete account of the classical
 theory through the 1970s and its connections to practice.
 
-*See also:* _Computability and Recursion Theory_
+*See also:* #xref("programming-languages", "computability", label: "Computability and Recursion Theory")
 
 == The Hyperarithmetical and Analytical Hierarchies
 

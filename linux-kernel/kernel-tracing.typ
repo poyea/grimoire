@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Kernel Tracing
 
 Modern Linux is the most observable kernel ever shipped. You can attach a probe to almost any kernel function, sample on hardware events, trace every syscall, watch every block-IO completion, all in production, with overhead measured in single-digit percentage points or less. This chapter covers the four major tracing mechanisms: kprobes, ftrace, perf, and eBPF, and the tools built on them.
@@ -276,7 +278,7 @@ cat /sys/kernel/debug/tracing/available_filter_functions | wc -l   # kprobeable 
 
 If `bpftrace` complains about kheaders or BTF, install `linux-headers-$(uname -r)` and `linux-image-$(uname -r)-dbg` (or distro equivalent). Most modern kernels (5.4+) embed BTF and don't require headers.
 
-*See also:* _Performance Analysis and Measurement (CPU Architecture volume)_ (PMU counters, TMAM), _Stateful Firewalls_ and _Network Address Translation_ (Networking volume) (eBPF/XDP packet filtering, the original BPF use case), _The Scheduler_ (sched_ext lets eBPF *implement* the scheduler, not just observe it).
+*See also:* #xref("cpu-architecture", "performance-analysis", label: "Performance Analysis and Measurement (CPU Architecture volume)") (PMU counters, TMAM), #xref("networking", "stateful-firewalls", label: "Stateful Firewalls") and #xref("networking", "nat", label: "Network Address Translation") (Networking volume) (eBPF/XDP packet filtering, the original BPF use case), #xref("linux-kernel", "scheduler", label: "The Scheduler") (sched_ext lets eBPF *implement* the scheduler, not just observe it).
 
 == Further Reading
 

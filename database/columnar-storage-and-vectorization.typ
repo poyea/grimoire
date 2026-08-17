@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Columnar Storage and Vectorization
 
 Analytical workloads read a small subset of columns across millions of rows, making the traditional row-oriented layout wasteful — every cache line pulled from disk or DRAM carries irrelevant field bytes. *Columnar storage* reorders the physical layout so that all values of a single column are contiguous, enabling aggressive compression and SIMD-friendly batch processing. Combined with *vectorised execution*, columnar engines routinely outperform row-store engines by 10–100× on OLAP queries.
 
-*See also:* _Storage Engines_, _Query Compilation_, _OLTP vs OLAP_, _Lakehouses and Open Table Formats_
+*See also:* #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "query-compilation", label: "Query Compilation"), #xref("database", "oltp-vs-olap", label: "OLTP vs OLAP"), #xref("database", "lakehouses-and-open-formats", label: "Lakehouses and Open Table Formats")
 
 == Row vs Columnar Layout
 

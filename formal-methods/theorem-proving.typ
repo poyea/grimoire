@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Theorem Proving
 
 Interactive theorem provers let humans and machines collaborate to construct machine-checked proofs of mathematical and software correctness claims that lie beyond the reach of fully automatic tools. Three systems dominate practice: Coq, Lean 4, and Isabelle/HOL, each grounded in a rich type-theoretic or set-theoretic foundation that doubles as both specification language and proof language. The Curry-Howard correspondence is the conceptual bridge: proofs are programs, propositions are types.
 
-*See also:* _Propositional and First-Order Logic_, _SAT and SMT_, _Separation Logic_
+*See also:* #xref("formal-methods", "propositional-and-fol", label: "Propositional and First-Order Logic"), #xref("formal-methods", "sat-and-smt", label: "SAT and SMT"), #xref("formal-methods", "separation-logic", label: "Separation Logic")
 
 == The Curry-Howard Correspondence
 

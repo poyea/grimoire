@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = ODE Integration
 
 Initial value problems $y' = f(t, y)$, $y(t_0) = y_0$ are the dynamics of everything: orbital mechanics, chemical kinetics, neuron models, the training dynamics of neural ODEs. Numerical integration replaces the continuum by discrete steps, and the central tensions are accuracy versus cost, stability versus step size, and the special demands of stiff problems and long-time simulation. This chapter covers Runge-Kutta methods, error control, stiffness and implicit methods, multistep methods, and symplectic integration.
 
-*See also:* _Error Analysis_ (local truncation error and its propagation), _Linear Systems_ and _Iterative Methods_ (implicit steps are nonlinear solves), _Optimization Algorithms_ (Newton's method inside every implicit integrator), _Floating-Point Arithmetic_ (roundoff floors for tiny steps).
+*See also:* #xref("numerical-computing", "error-analysis", label: "Error Analysis") (local truncation error and its propagation), #xref("numerical-computing", "linear-systems", label: "Linear Systems") and #xref("numerical-computing", "iterative-methods", label: "Iterative Methods") (implicit steps are nonlinear solves), #xref("numerical-computing", "optimization-algorithms", label: "Optimization Algorithms") (Newton's method inside every implicit integrator), #xref("numerical-computing", "floating-point", label: "Floating-Point Arithmetic") (roundoff floors for tiny steps).
 
 == Euler and the Anatomy of a Step
 

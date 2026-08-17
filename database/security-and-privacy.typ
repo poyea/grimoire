@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Database Security and Privacy
 
 Database security must be designed in — SQL injection, privilege escalation, and data leakage are the most common causes of data breaches. Privacy-preserving computation (differential privacy, encryption in use) adds a layer beyond access control.
 
-*See also:* _Database Foundations_, _Observability and Self-Driving Databases_
+*See also:* #xref("database", "foundations", label: "Database Foundations"), #xref("database", "observability-and-self-driving", label: "Observability and Self-Driving Databases")
 
 == SQL Injection
 

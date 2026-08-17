@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Schema Evolution
 
 Schemas change: products add fields, teams rename columns, types widen. The engineering problem is letting producers and consumers evolve *independently* without coordinated deploys or broken pipelines. This chapter covers compatibility modes (backward, forward, full), the evolution semantics of Avro, Protobuf, and JSON Schema, schema registries, table-format evolution in Iceberg and Delta (column mapping, field IDs), migration mechanics, and versioning strategy.
 
-*See also:* _Data Quality_ (contracts enforce evolution policy), _Change Data Capture_ (schema changes flowing through CDC), _Lakehouse Engineering_ (table-level evolution in practice), _Streaming_.
+*See also:* #xref("data-engineering", "data-quality", label: "Data Quality") (contracts enforce evolution policy), #xref("data-engineering", "change-data-capture", label: "Change Data Capture") (schema changes flowing through CDC), #xref("data-engineering", "lakehouse-engineering", label: "Lakehouse Engineering") (table-level evolution in practice), #xref("data-engineering", "streaming", label: "Streaming").
 
 == Readers, Writers, and Compatibility
 

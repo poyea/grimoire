@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Speculative Execution Security
 
 Speculative execution, the engine of modern $"IPC"$, leaks data through microarchitectural side channels. Since 2018 a steady stream of disclosures has forced a complete rethink of the boundary between architectural and microarchitectural state.
 
-*See also:* _Branch Prediction_, _Out-of-Order Execution Deep Dive_, _Cache Hierarchy_, _Virtual Memory_
+*See also:* #xref("cpu-architecture", "branch-prediction", label: "Branch Prediction"), #xref("cpu-architecture", "out-of-order-deep-dive", label: "Out-of-Order Execution Deep Dive"), #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy"), _Virtual Memory_
 
 == Threat Model
 

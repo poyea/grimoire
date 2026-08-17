@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Distributed Data Patterns
 
 Splitting a system into services is, in the end, a decision about data: who owns it, where the truth lives, and what happens to transactions and joins that used to be a single SQL statement. This chapter covers the theory that bounds the design space, CAP, PACELC, consistency models, and the patterns that fill it: database-per-service, sagas, the transactional outbox, change data capture, replication and partitioning, and the reporting problem that database-per-service creates.
 
-*See also:* _Event-Driven Architecture_ (the messaging substrate most of these patterns ride on), _Monoliths and Microservices_ (when to split at all), _Resilience Patterns_ (what failure does to data flows in flight).
+*See also:* #xref("software-architecture", "event-driven-architecture", label: "Event-Driven Architecture") (the messaging substrate most of these patterns ride on), #xref("software-architecture", "monoliths-and-microservices", label: "Monoliths and Microservices") (when to split at all), _Resilience Patterns_ (what failure does to data flows in flight).
 
 == The Theoretical Bounds
 

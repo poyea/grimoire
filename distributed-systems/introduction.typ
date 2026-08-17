@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Introduction: Models and Impossibilities
 
 A distributed system is a collection of independent computers that appears to its users as a single coherent system. The discipline studies what is *possible* under partial failure, asynchrony, and adversarial scheduling — and what is *impossible*. Every engineering decision in a real system (timeout values, quorum sizes, lease durations) is a concrete answer to one of these theoretical questions.
 
-*See also:* _Time and Order_, _Failure Detection_, _Consensus Deep Dive_, _Formal Methods_, and _Consensus and Replication_ (database-specific framing).
+*See also:* #xref("distributed-systems", "time-and-order", label: "Time and Order"), #xref("distributed-systems", "failure-detection", label: "Failure Detection"), #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive"), _Formal Methods_, and #xref("database", "consensus-and-replication", label: "Consensus and Replication") (database-specific framing).
 
 == The Eight Fallacies
 

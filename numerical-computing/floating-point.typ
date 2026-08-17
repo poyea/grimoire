@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Floating-Point Arithmetic
 
 Every numerical computation rests on a finite approximation of the reals, and most numerical disasters trace back to forgetting that. IEEE 754 floating point is a remarkably well-designed system — deterministic, portable, with carefully specified rounding — yet it still allows $0.1 + 0.2 != 0.3$, sums that depend on summation order, and silent loss of fifteen digits in a single subtraction. This chapter covers the IEEE 754 formats and their semantics, machine epsilon and ulp, catastrophic cancellation, compensated summation, fused multiply-add, the reduced-precision formats driving modern ML hardware, and reproducibility.
 
-*See also:* _Error Analysis_ (how rounding errors propagate through algorithms), _Linear Systems_ (where conditioning amplifies rounding), _Optimization Algorithms_ (mixed-precision training pitfalls).
+*See also:* #xref("numerical-computing", "error-analysis", label: "Error Analysis") (how rounding errors propagate through algorithms), #xref("numerical-computing", "linear-systems", label: "Linear Systems") (where conditioning amplifies rounding), #xref("numerical-computing", "optimization-algorithms", label: "Optimization Algorithms") (mixed-precision training pitfalls).
 
 == IEEE 754 Formats
 

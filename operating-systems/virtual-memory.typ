@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Virtual Memory
 
 Virtual memory is the abstraction that lets every process believe it owns a private, contiguous, enormous address space while the kernel quietly multiplexes a finite set of physical frames behind it. The machinery is a collaboration: the MMU translates on every reference, the TLB caches translations, and the kernel fills in the gaps via page faults. This chapter covers the architectural mechanics: translation structures, TLB behavior, fault handling, copy-on-write, huge pages, and NUMA placement. Linux's `mmap` interface and VMA bookkeeping live in `linux-kernel/mmap-memory.typ`; allocator and reclaim policy are in _Memory Management_ and _Page Reclaim and OOM_.
 
-*See also:* _Memory Management_, _Page Reclaim and OOM_, _Processes and Threads_, _mmap and Memory Management_ (linux-kernel), _Memory Reclaim_ (linux-kernel).
+*See also:* #xref("operating-systems", "memory-management", label: "Memory Management"), #xref("operating-systems", "page-reclaim-and-oom", label: "Page Reclaim and OOM"), #xref("operating-systems", "processes-and-threads", label: "Processes and Threads"), #xref("linux-kernel", "mmap-memory", label: "mmap and Memory Management") (linux-kernel), #xref("linux-kernel", "memory-reclaim", label: "Memory Reclaim") (linux-kernel).
 
 == Address Translation
 

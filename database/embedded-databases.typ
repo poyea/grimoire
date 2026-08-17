@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Embedded Databases
 
 An embedded database runs in the same process as the application; there is no server, no IPC, no protocol layer. The tradeoffs invert the usual ones: schema flexibility yields to startup latency and binary footprint; concurrency control degenerates to file locking or single-writer MVCC; durability relies on the host application not crashing in the middle of fsync. SQLite, DuckDB, RocksDB, and LMDB cover the design space — row OLTP, column OLAP, LSM key-value, and mmap-COW key-value respectively.
 
-*See also:* _Storage Engines_, _Buffer Pool and I/O_, _Recovery and Logging_, _Concurrency Control_
+*See also:* #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "buffer-pool-and-io", label: "Buffer Pool and I/O"), #xref("database", "recovery-and-logging", label: "Recovery and Logging"), #xref("database", "concurrency-control", label: "Concurrency Control")
 
 == SQLite
 

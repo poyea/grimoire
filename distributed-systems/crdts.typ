@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Conflict-Free Replicated Data Types
 
 CRDTs let replicas accept writes locally, without coordination, and still converge to the same state once they have exchanged updates. The trick is to restrict the data type so that concurrent updates *commute by construction*: there is nothing to "resolve" at merge time because the type's semantics already define a deterministic outcome for every interleaving. This chapter develops the lattice theory behind that guarantee, walks through the canonical counter, register, set, and sequence CRDTs, and ends where CRDTs end: at global invariants that genuinely require consensus.
 
-*See also:* _Gossip Protocols_ (dissemination and a first look at G-Counters), _Causal Consistency_ (the delivery order op-based CRDTs require), _Time and Order_ (version vectors, HLC timestamps for LWW), _Consensus Deep Dive_ (what to use when CRDTs cannot).
+*See also:* #xref("distributed-systems", "gossip", label: "Gossip Protocols") (dissemination and a first look at G-Counters), #xref("distributed-systems", "causal-consistency", label: "Causal Consistency") (the delivery order op-based CRDTs require), #xref("distributed-systems", "time-and-order", label: "Time and Order") (version vectors, HLC timestamps for LWW), #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive") (what to use when CRDTs cannot).
 
 == Strong Eventual Consistency
 

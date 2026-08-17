@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Instruction Selection and Code Generation
 
 The backend translates the optimised IR into target machine code. The three classical phases are instruction selection (matching IR patterns to machine instructions), instruction scheduling (reordering instructions to fill pipeline slots), and register allocation (covered in the previous chapter). This chapter focuses on selection and scheduling, plus the LLVM SelectionDAG and GlobalISel pipelines, and closes with object file emission and link-time optimisation.
 
-*See also:* _IR Design and SSA Form_, _Register Allocation_, _Dataflow Analysis_
+*See also:* #xref("compilers", "ir-design", label: "IR Design and SSA Form"), #xref("compilers", "register-allocation", label: "Register Allocation"), #xref("compilers", "dataflow-analysis", label: "Dataflow Analysis")
 
 == Instruction Selection
 

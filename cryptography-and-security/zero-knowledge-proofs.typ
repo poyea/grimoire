@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Zero-Knowledge Proofs
 
 A zero-knowledge proof lets a prover convince a verifier that a statement is true while revealing nothing beyond its truth. Once a theoretical curiosity, ZK proofs now run in production at scale: blockchain rollups prove the correct execution of millions of transactions, and privacy systems prove properties of hidden data. This chapter builds from interactive proofs and sigma protocols to the modern SNARK and STARK families.
 
-*See also:* _Asymmetric Cryptography_ (discrete log, pairings), _Digital Signatures_ (Fiat-Shamir, Schnorr), _Hashing and MACs_ (Merkle trees, random oracles).
+*See also:* #xref("cryptography-and-security", "asymmetric", label: "Asymmetric Cryptography") (discrete log, pairings), #xref("cryptography-and-security", "digital-signatures", label: "Digital Signatures") (Fiat-Shamir, Schnorr), #xref("cryptography-and-security", "hashing-and-macs", label: "Hashing and MACs") (Merkle trees, random oracles).
 
 == Interactive Proofs and the Three Properties
 

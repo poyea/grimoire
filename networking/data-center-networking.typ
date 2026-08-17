@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Data Center Networking
 
 Data-centre fabrics are engineered for very different goals than the public internet: tight latency variance, full bisection bandwidth, and RDMA-grade losslessness. This chapter covers the dominant topologies (Clos / fat-tree), ECMP flow hashing, RDMA over Converged Ethernet (RoCEv2) with PFC/ECN, InfiniBand, and modern NIC offloads.
 
-*See also:* _Congestion Control_ (DCTCP, L4S), _Kernel Bypass_ (RDMA verbs), _BGP Routing_ (BGP-in-the-data-centre), _Programmable Data Planes_ (P4 / Tofino).
+*See also:* #xref("networking", "congestion-control", label: "Congestion Control") (DCTCP, L4S), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (RDMA verbs), #xref("networking", "bgp-routing", label: "BGP Routing") (BGP-in-the-data-centre), #xref("networking", "programmable-data-planes", label: "Programmable Data Planes") (P4 / Tofino).
 
 == Clos and Fat-Tree Topologies
 

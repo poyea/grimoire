@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Game Theory
 
 *Combinatorial game theory* studies two-player, perfect-information, zero-sum games played under deterministic rules. The central question is always the same: given a position, does the player about to move win or lose under optimal play?
@@ -13,7 +15,7 @@
 - A position is an N-position if at least one move leads to a P-position.
 - A position is a P-position if every move leads to an N-position.
 
-*See also:* _Dynamic Programming_ (memoised game-state search), _Math & Number Theory_ (XOR nim-sum), _Bit Manipulation_ (fast XOR computation)
+*See also:* #xref("coding", "dynamic-programming", label: "Dynamic Programming") (memoised game-state search), #xref("coding", "math-number-theory", label: "Math & Number Theory") (XOR nim-sum), #xref("coding", "bit-manipulation", label: "Bit Manipulation") (fast XOR computation)
 
 == Nim
 

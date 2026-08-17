@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Reinforcement Learning
 
 Reinforcement learning (RL) formalises the problem of an agent learning to act in an environment by trial and error. Unlike supervised learning, there is no labelled target: the agent receives a scalar reward signal and must discover, through interaction, a policy that maximises cumulative reward. This chapter develops the mathematical foundations — Markov decision processes, dynamic programming, temporal-difference learning, policy gradients, through to the modern deep RL methods that underpin current large-scale systems.
 
-*See also:* _Optimization_ (gradient methods used in policy gradient and actor-critic), _Probability and Information_ (Bellman expectation, importance sampling), _Loss Functions_ (value regression objectives), _Reasoning Models_ (RLHF and GRPO).
+*See also:* #xref("machine-learning-foundations", "optimization", label: "Optimization") (gradient methods used in policy gradient and actor-critic), #xref("machine-learning-foundations", "probability-and-information", label: "Probability and Information") (Bellman expectation, importance sampling), #xref("machine-learning-foundations", "loss-functions", label: "Loss Functions") (value regression objectives), #xref("llm", "reasoning-models", label: "Reasoning Models") (RLHF and GRPO).
 
 == Markov Decision Processes
 

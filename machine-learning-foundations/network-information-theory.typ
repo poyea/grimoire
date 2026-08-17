@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Network Information Theory
 
 Classical information theory analyses a single sender communicating with a single receiver. Network information theory generalises this to systems with multiple senders, receivers, and shared resources: broadcast channels, multiple-access channels, interference channels, relay networks, and distributed source coding. The field reveals that separation of source and channel coding is no longer optimal in multi-user settings, and that cooperation between terminals can dramatically increase capacity.
 
-*See also:* _Information Theory_ (entropy, channel capacity, rate-distortion), _Cryptography_ (secrecy capacity, wiretap channels).
+*See also:* #xref("machine-learning-foundations", "information-theory", label: "Information Theory") (entropy, channel capacity, rate-distortion), _Cryptography_ (secrecy capacity, wiretap channels).
 
 == Multi-User Channel Models
 

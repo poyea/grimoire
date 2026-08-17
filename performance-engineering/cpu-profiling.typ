@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = CPU Profiling
 
 Profiling answers the question a benchmark cannot: _where_ does the time go. This chapter covers sampling and instrumentation profilers, the Linux `perf` and eBPF toolchains, flame graphs, off-CPU analysis, hardware performance counters and Intel's top-down methodology, and how profiles feed back into the compiler.
 
-*See also:* _Benchmarking_ (establishing that there is a regression worth profiling), _Memory Performance_ (when the profile says "stalled on memory"), and the CPU Architecture volume's _Performance Analysis and Measurement_ and _Out-of-Order Execution_ chapters (what the PMU events actually count).
+*See also:* #xref("performance-engineering", "benchmarking", label: "Benchmarking") (establishing that there is a regression worth profiling), #xref("performance-engineering", "memory-performance", label: "Memory Performance") (when the profile says "stalled on memory"), and the CPU Architecture volume's #xref("cpu-architecture", "performance-analysis", label: "Performance Analysis and Measurement") and _Out-of-Order Execution_ chapters (what the PMU events actually count).
 
 == Sampling vs. Instrumentation
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Image Segmentation
 
 Segmentation assigns a label to every pixel in an image. The three main tasks are *semantic segmentation* (per-pixel class label), *instance segmentation* (per-pixel class + instance identity), and *panoptic segmentation* (unified semantic + instance). This chapter traces the evolution from fully convolutional networks through Mask R-CNN to the Segment Anything Model.
 
-*See also:* _Object Detection_ (proposal-based instance segmentation), _CNN Architectures_ (encoder backbones), _3D Vision_ (volumetric segmentation).
+*See also:* #xref("computer-vision", "object-detection", label: "Object Detection") (proposal-based instance segmentation), #xref("computer-vision", "cnn-architectures", label: "CNN Architectures") (encoder backbones), #xref("computer-vision", "3d-vision", label: "3D Vision") (volumetric segmentation).
 
 == Semantic Segmentation
 

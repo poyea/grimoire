@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Kernel Modules
 
 A kernel module is code loaded into the running kernel at runtime, sharing its address space and privilege level. Modules are how Linux ships drivers, filesystems, network protocols, and crypto algorithms without baking them into a monolithic image. Writing one is straightforward; writing one *correctly* requires care, because everything the module does runs in ring 0 and a bug typically panics the box.
@@ -401,7 +403,7 @@ Most things you'd reach for a kernel module for in 2026 are better solved in use
 
 A kernel module is the right answer when you genuinely need ring 0 — a new bus driver, a new filesystem implementation, a new hardware accelerator integration, a feature with strict latency requirements that BPF can't meet. For everything else, the user-space tooling is now mature enough that staying out of the kernel is the right default.
 
-*See also:* _Interrupts and Bottom Halves_ (IRQ registration, NAPI, threaded IRQs), _Kernel Tracing_ (eBPF as the alternative to writing a probe-style module), _ABI and Syscalls_ (adding a new syscall is a special case of kernel modification).
+*See also:* #xref("linux-kernel", "interrupts", label: "Interrupts and Bottom Halves") (IRQ registration, NAPI, threaded IRQs), #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing") (eBPF as the alternative to writing a probe-style module), #xref("linux-kernel", "abi-syscalls", label: "ABI and Syscalls") (adding a new syscall is a special case of kernel modification).
 
 == Further Reading
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Buffer Pool and I/O
 
 The buffer pool is the database's in-process page cache. It decouples the query engine (which works on in-memory page pointers) from the storage device (which is orders of magnitude slower). Understanding the buffer pool is prerequisite to reasoning about I/O costs, dirty page management, and performance tuning.
 
-*See also:* _Storage Engines_, _Recovery and Logging_, _Hardware-Aware Database Design_
+*See also:* #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "recovery-and-logging", label: "Recovery and Logging"), #xref("database", "hardware-aware-design", label: "Hardware-Aware Database Design")
 
 == Buffer Pool Structure
 

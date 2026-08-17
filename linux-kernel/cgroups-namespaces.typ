@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = cgroups and Namespaces
 
 A "container" is not a kernel object. There is no `struct container` anywhere in the kernel source. What runtimes like Docker, containerd, and Kubernetes ship is a userspace orchestration layer that calls two largely-independent kernel features: *namespaces* (which give a process its own view of system resources) and *cgroups* (which limit and account those resources). Together they are sufficient to build OS-level virtualization that is much cheaper than full VMs.
@@ -283,7 +285,7 @@ lsns                                             # list namespaces and their mem
 
 If a containerized workload has tail-latency outliers, `cpu.stat`'s `nr_throttled` is the first thing to check. If memory ballooning is suspect, `memory.events` shows whether `memory.high` reclaim is firing.
 
-*See also:* _CPU Affinity, Isolation, and NUMA_ (cpuset partitions overlap with `isolcpus`), _The Scheduler_ (cpu controller integrates with CFS bandwidth), _ABI and Syscalls_ (seccomp, the syscall-filter complement to cgroup limits).
+*See also:* #xref("linux-kernel", "cpu-affinity", label: "CPU Affinity, Isolation, and NUMA") (cpuset partitions overlap with `isolcpus`), #xref("linux-kernel", "scheduler", label: "The Scheduler") (cpu controller integrates with CFS bandwidth), #xref("linux-kernel", "abi-syscalls", label: "ABI and Syscalls") (seccomp, the syscall-filter complement to cgroup limits).
 
 == Further Reading
 

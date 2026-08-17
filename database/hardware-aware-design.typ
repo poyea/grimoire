@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Hardware-Aware Database Design
 
 Database performance is ultimately constrained by hardware: DRAM bandwidth, NVMe latency, cache hierarchy, RDMA, and GPU compute. Modern systems are redesigned for each generation of hardware — NVMe SSDs, CXL memory pooling, and GPU OLAP represent the current frontier.
 
-*See also:* _Buffer Pool and I/O_, _Column Stores and Vectorized Execution_, _Storage Engines_, _Query Compilation_ (codegen + SIMD), _CPU Architecture volume_ (pipelines, NUMA, cache hierarchy), _GPU Architecture volume_ (SIMT, memory hierarchy for GPU OLAP)
+*See also:* #xref("database", "buffer-pool-and-io", label: "Buffer Pool and I/O"), #xref("database", "column-stores-and-vectorized-execution", label: "Column Stores and Vectorized Execution"), #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "query-compilation", label: "Query Compilation") (codegen + SIMD), _CPU Architecture volume_ (pipelines, NUMA, cache hierarchy), _GPU Architecture volume_ (SIMT, memory hierarchy for GPU OLAP)
 
 == CPU and Cache Hierarchy
 

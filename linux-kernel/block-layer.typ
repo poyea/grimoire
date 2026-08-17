@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = The Block Layer
 
 Beneath every filesystem read and every `O_DIRECT` write sits the block layer: the kernel subsystem that batches, reorders, and dispatches I/O to storage devices. It is the home of `struct bio`, request queues, the multi-queue scheduling framework (blk-mq), and the I/O schedulers (`none`, `mq-deadline`, `bfq`, `kyber`). Its job is to bridge the gap between filesystem-level "write this folio" intent and device-level "issue this NVMe command on submission queue 7" mechanics.
@@ -226,4 +228,4 @@ LWN: "An introduction to blk-mq" (Corbet 2014); "ublk" series (2022-2023); "Zone
 
 `drivers/nvme/host/pci.c`, `block/blk-mq.c`, `block/blk-flush.c`, `block/mq-deadline.c`, `block/kyber-iosched.c`, `block/bfq-iosched.c`.
 
-*See also:* _VFS and Filesystems_ (filesystems submit the bios this layer dispatches), _IO uring_ (the IOPOLL mode rides the polling path), _Cgroups and Namespaces_ (io controller), _Interrupts and Bottom Halves_ (MSI-X delivery and IRQ affinity for completion path).
+*See also:* #xref("linux-kernel", "vfs-and-fs", label: "VFS and Filesystems") (filesystems submit the bios this layer dispatches), #xref("linux-kernel", "io-uring", label: "IO uring") (the IOPOLL mode rides the polling path), #xref("linux-kernel", "cgroups-namespaces", label: "Cgroups and Namespaces") (io controller), #xref("linux-kernel", "interrupts", label: "Interrupts and Bottom Halves") (MSI-X delivery and IRQ affinity for completion path).

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Ray Tracing
 
 Hardware-accelerated ray tracing, standardized through $"DXR"$ (DirectX Raytracing) and Vulkan Ray Tracing, adds a programmable ray-intersection pipeline alongside the rasterization pipeline. This enables effects — soft shadows, reflections, ambient occlusion, and global illumination — that either require expensive screen-space hacks or prohibitive offline cost when done in a rasterizer alone.
 
-*See also:* _The Rasterization Pipeline_ (hybrid integration), _Physically Based Rendering_ (rendering equation, BRDF), _Global Illumination Techniques_ (Monte Carlo path tracing, ReSTIR), _Compute Units and Specialized Cores_ (gpu-architecture framing; RT cores, warp divergence).
+*See also:* #xref("graphics-and-rendering", "rasterization-pipeline", label: "The Rasterization Pipeline") (hybrid integration), #xref("graphics-and-rendering", "physically-based-rendering", label: "Physically Based Rendering") (rendering equation, BRDF), #xref("graphics-and-rendering", "gi-techniques", label: "Global Illumination Techniques") (Monte Carlo path tracing, ReSTIR), #xref("gpu-architecture", "compute-architecture", label: "Compute Units and Specialized Cores") (gpu-architecture framing; RT cores, warp divergence).
 
 == Acceleration Structures
 

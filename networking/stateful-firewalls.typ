@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Stateful Firewalls
 
 A stateful firewall tracks full connection state rather than evaluating each packet independently. Every accepted new flow is recorded in a state table; return packets match the existing entry and bypass rule evaluation. This chapter covers Linux netfilter / nftables, connection tracking (conntrack), eBPF/XDP firewalling, and next-generation deep-packet-inspection (NGFW) systems.
 
-*See also:* _NAT_ (which depends on conntrack), _Network Security_ (for higher-level policy), _Kernel Bypass_ (for XDP context), _Container Networking_ (for Cilium / per-pod policy).
+*See also:* #xref("networking", "nat", label: "NAT") (which depends on conntrack), #xref("networking", "network-security", label: "Network Security") (for higher-level policy), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for XDP context), #xref("networking", "container-networking", label: "Container Networking") (for Cilium / per-pod policy).
 
 == Connection Tracking (conntrack)
 

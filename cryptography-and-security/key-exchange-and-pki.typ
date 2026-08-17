@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Key Exchange and PKI
 
 Key exchange lets two parties who share no secret establish one over a public channel; public-key infrastructure (PKI) solves the remaining problem of knowing _whose_ key you are exchanging with. Together they form the trust backbone of TLS, SSH, VPNs, and messaging. This chapter covers Diffie-Hellman and its modern instantiations, authenticated key exchange, the Signal protocol stack, and the X.509 certificate ecosystem.
 
-*See also:* _Asymmetric Cryptography_ (discrete log, elliptic curves), _TLS: Transport Layer Security_ (the deployed handshake), _Digital Signatures_ (certificate signing), _Post-Quantum Cryptography_ (ML-KEM, hybrid key exchange).
+*See also:* #xref("cryptography-and-security", "asymmetric", label: "Asymmetric Cryptography") (discrete log, elliptic curves), #xref("cryptography-and-security", "tls", label: "TLS: Transport Layer Security") (the deployed handshake), #xref("cryptography-and-security", "digital-signatures", label: "Digital Signatures") (certificate signing), #xref("cryptography-and-security", "post-quantum", label: "Post-Quantum Cryptography") (ML-KEM, hybrid key exchange).
 
 == Diffie-Hellman Key Exchange
 

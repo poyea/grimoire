@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Causal Consistency
 
 Causal consistency is the strongest consistency model that remains available under partition: replicas must apply writes in an order consistent with happens-before, but concurrent writes may be observed in different orders at different replicas. _Time and Order_ introduced the clock machinery (Lamport, vector clocks, HLC); this chapter uses that machinery to build *systems*: causally consistent stores, the metadata they carry, the session guarantees they decompose into, and the stability protocols that let them prune state.
 
-*See also:* _Time and Order_ (clock algorithms and causal broadcast), _CRDTs_ (op-based CRDTs require causal delivery), _Transactions_ (stronger isolation levels), _Consensus Deep Dive_ (linearizability, which causal consistency deliberately forgoes).
+*See also:* #xref("distributed-systems", "time-and-order", label: "Time and Order") (clock algorithms and causal broadcast), #xref("distributed-systems", "crdts", label: "CRDTs") (op-based CRDTs require causal delivery), #xref("distributed-systems", "transactions", label: "Transactions") (stronger isolation levels), #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive") (linearizability, which causal consistency deliberately forgoes).
 
 == Why Causal, Exactly
 

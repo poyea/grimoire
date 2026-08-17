@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Network Flows and Matching
 
 *Network flow* is the universal solvent of combinatorial optimization: shortest paths, bipartite matching, project selection, image segmentation, and many scheduling problems all reduce to max-flow or min-cost flow. This chapter presents the modern toolkit: Dinic's algorithm, ISAP, Push-Relabel, the Successive Shortest Paths (SSP) min-cost flow, and the two pillars of bipartite assignment (Hopcroft-Karp and Kuhn-Munkres / Hungarian).
 
-*See also:* _Graphs_, _Advanced Graph Algorithms_, _Linear Programming and the Simplex Method_ (LP duality is the source of max-flow min-cut), _Approximation Algorithms_ (LP-rounding uses flows).
+*See also:* #xref("coding", "graphs", label: "Graphs"), #xref("coding", "advanced-graphs", label: "Advanced Graph Algorithms"), #xref("coding", "linear-programming-and-simplex", label: "Linear Programming and the Simplex Method") (LP duality is the source of max-flow min-cut), #xref("coding", "approximation-algorithms", label: "Approximation Algorithms") (LP-rounding uses flows).
 
 == Maximum Flow: Problem Statement
 

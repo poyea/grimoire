@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Application Protocols
 
 Application-layer protocols define message formats and communication patterns for specific services.
 
-*See also:* _Transport Layer_ (for TCP/UDP foundations), _Sockets API_ (for implementation), _TLS_ (for encryption layer)
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP/UDP foundations), #xref("networking", "sockets-api", label: "Sockets API") (for implementation), _TLS_ (for encryption layer)
 
 == HTTP (Hypertext Transfer Protocol)
 

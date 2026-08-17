@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Long Context
 
 Frontier models advertise context windows of 128k, 1M, even 10M tokens. Achieving these requires solving two distinct problems: (1) the *positional encoding* must extrapolate or interpolate beyond training length without losing locality; (2) the *attention compute and memory* must stay tractable as $L$ grows, since vanilla attention is $O(L^2)$ and the KV cache is $O(L)$ per layer. This chapter covers RoPE and its scaling variants (Position Interpolation, NTK-aware, YaRN, LongRoPE), block-sparse attention (sliding window, sink tokens, hybrid layers), parallelism for long sequences (Ring Attention, Tree Attention), and the practical tradeoff between long context and retrieval-augmented generation.
 
-*See also:* _Transformer Architecture_ (attention internals, RoPE), _Inference Optimization_ (KV cache memory), _RAG_ (alternative to long context for some tasks).
+*See also:* #xref("llm", "transformer-architecture", label: "Transformer Architecture") (attention internals, RoPE), #xref("llm", "inference-optimization", label: "Inference Optimization") (KV cache memory), #xref("llm", "rag", label: "RAG") (alternative to long context for some tasks).
 
 == The Two Bottlenecks
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Optimization Algorithms
 
 Minimize $f(x)$ over $x in RR^n$ — the problem behind regression, maximum likelihood, neural network training, optimal control, and design. The continuous optimization toolkit divides along two axes: how much derivative information is available (values only, gradients, Hessians), and how the global step is controlled (line search versus trust region). This chapter covers optimality conditions, line search, gradient descent and its conditioning, Newton and quasi-Newton methods, nonlinear least squares, constrained optimization via KKT, and the stochastic methods that dominate machine learning.
 
-*See also:* _Linear Systems_ (every Newton step is one), _Iterative Methods_ (CG as a quadratic minimizer, and as the inner solver in Newton-CG), _Eigenvalue Problems_ (Hessian spectra decide conditioning), _Error Analysis_ (finite-difference gradients and their precision floor).
+*See also:* #xref("numerical-computing", "linear-systems", label: "Linear Systems") (every Newton step is one), #xref("numerical-computing", "iterative-methods", label: "Iterative Methods") (CG as a quadratic minimizer, and as the inner solver in Newton-CG), #xref("numerical-computing", "eigenvalue-problems", label: "Eigenvalue Problems") (Hessian spectra decide conditioning), #xref("numerical-computing", "error-analysis", label: "Error Analysis") (finite-difference gradients and their precision floor).
 
 == Optimality Conditions and the Lay of the Land
 

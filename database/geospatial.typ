@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Geospatial Data Management
 
 Spatial queries — "what is within 5 km of this point?", "do these polygons intersect?", "rank these candidates by distance" — break the standard B-Tree because the natural keys (latitude, longitude, polygon vertices) have no useful one-dimensional order. Three families of techniques dominate: *space-partitioning trees* (R-tree and friends), *space-filling curves* that linearize 2D coordinates (GeoHash, S2, H3), and *hybrid grid + cell IDs* that bridge the two.
 
-*See also:* _Storage Engines_, _Joins and Aggregation_, _Multi-Model Databases_
+*See also:* #xref("database", "storage-engines", label: "Storage Engines"), #xref("database", "joins-and-aggregation", label: "Joins and Aggregation"), #xref("database", "multi-model", label: "Multi-Model Databases")
 
 == The Spatial Index Problem
 

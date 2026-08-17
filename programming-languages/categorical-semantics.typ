@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Categorical Semantics
 
 Categorical semantics gives programming languages their meaning in a category whose structure mirrors the language's syntactic constructions. The dictionary -- types are objects, terms are morphisms, type constructors are functors, equational reasoning is composition and naturality -- is so close to the syntax that one speaks of the *internal language* of a category. Lambek and Scott's *Introduction to Higher-Order Categorical Logic* (1986) made the equivalence between simply-typed lambda calculus and cartesian closed categories precise; Moggi's *Notions of computation and monads* (1991) made effects categorical; Plotkin and Power's *Notions of computation determine monads* (2002) explained why monads come from algebra. The categorical view is now the lingua franca of programming-language theory.
 
-*See also:* _Type Systems_, _Operational Semantics_, _Denotational Semantics_, _Axiomatic Semantics_
+*See also:* #xref("programming-languages", "type-systems", label: "Type Systems"), #xref("programming-languages", "operational-semantics", label: "Operational Semantics"), #xref("programming-languages", "denotational-semantics", label: "Denotational Semantics"), #xref("programming-languages", "axiomatic-semantics", label: "Axiomatic Semantics")
 
 == Categories, Functors, Natural Transformations
 

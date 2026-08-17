@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Mixture of Experts
 
 A dense transformer scales every parameter with every token: doubling the parameter count doubles the FLOPs per forward pass. *Mixture of Experts (MoE)* breaks this coupling — total parameters grow but *active* parameters per token stay fixed by sparsely activating a small subset of "expert" feed-forward sublayers. The result is models with 100B–1T total parameters running at the FLOP cost of a 10–50B dense model. This chapter covers routing, load balancing, capacity factors, the training and inference systems implications, and the design choices of Switch, GShard, GLaM, Mixtral, and DeepSeek-V3.
 
-*See also:* _Transformer Architecture_ (the FFN sublayer becomes an expert), _Pretraining_ (token-routing affects parallelism), _Inference Optimization_ (expert dispatch is a serving bottleneck).
+*See also:* #xref("llm", "transformer-architecture", label: "Transformer Architecture") (the FFN sublayer becomes an expert), #xref("llm", "pretraining", label: "Pretraining") (token-routing affects parallelism), #xref("llm", "inference-optimization", label: "Inference Optimization") (expert dispatch is a serving bottleneck).
 
 == The Core Idea
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Multipath Transport
 
 Multipath transports (MPTCP, MPQUIC, and SCTP-CMT) use several network paths simultaneously between a single pair of endpoints, improving throughput, resilience, and seamless handover between heterogeneous links (Wi-Fi + LTE, dual-uplink data centres). This chapter focuses on MPTCP, the most widely deployed multipath transport, with a survey of MPQUIC.
 
-*See also:* _Transport Layer_ (single-path TCP), _Congestion Control_ (coupled CC algorithms), _QUIC and HTTP/3_ (MPQUIC builds on QUIC), _Wireless Protocols_ (heterogeneous radio handover).
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (single-path TCP), #xref("networking", "congestion-control", label: "Congestion Control") (coupled CC algorithms), #xref("networking", "quic-and-http3", label: "QUIC and HTTP/3") (MPQUIC builds on QUIC), #xref("networking", "wireless-protocols", label: "Wireless Protocols") (heterogeneous radio handover).
 
 == Motivation
 

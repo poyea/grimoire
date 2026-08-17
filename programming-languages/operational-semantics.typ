@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Operational Semantics
 
 Operational semantics defines the meaning of a program by describing the rules under which it executes on an abstract machine. The machine is not silicon; it is a mathematical artefact -- a transition system whose states are syntactic configurations and whose steps are determined by inference rules over the syntax. This stance, due to Plotkin (1981) in the Aarhus lecture notes _A Structural Approach to Operational Semantics_, gave the field its modern shape: meaning is *what the program does*, presented as a rewriting calculus on the program text itself.
 
-*See also:* _Denotational Semantics_, _Axiomatic Semantics_, _Type Systems_, _Categorical Semantics_
+*See also:* #xref("programming-languages", "denotational-semantics", label: "Denotational Semantics"), #xref("programming-languages", "axiomatic-semantics", label: "Axiomatic Semantics"), #xref("programming-languages", "type-systems", label: "Type Systems"), #xref("programming-languages", "categorical-semantics", label: "Categorical Semantics")
 
 == Small-Step (Structural) Semantics
 
