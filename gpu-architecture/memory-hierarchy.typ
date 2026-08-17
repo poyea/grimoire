@@ -437,3 +437,13 @@ float* ptr = d_data + 1;  // Offset by 4 bytes
 __align__(128) float smem[256];  // Force alignment in shared memory
 ```
 
+
+== Further Reading
+
+NVIDIA. _CUDA C++ Programming Guide_. (Authoritative reference for the memory model, coalescing rules, and cache behaviour.)
+
+Jia, Z., Maggioni, M., Staiger, B., & Scarpazza, D. P. (2018). "Dissecting the NVIDIA Volta GPU Architecture via Microbenchmarking." arXiv:1804.06826. (Measured cache and memory latencies at each level.)
+
+Volkov, V., & Demmel, J. W. (2008). "Benchmarking GPUs to Tune Dense Linear Algebra." SC. (Classic study of occupancy and register/shared-memory tradeoffs.)
+
+Hennessy, J. L., & Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. (Chapter 4 on data-parallel memory systems.)

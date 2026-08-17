@@ -75,3 +75,11 @@ An MDP is the tuple $(cal(S), cal(A), P, R, gamma)$: states, actions, transition
 == Asymptotics and Misc
 
 $O(dot)$, $Omega(dot)$, $Theta(dot)$ have their usual meanings; $tilde(O)(dot)$ hides polylogarithmic factors. $[n] = {1, ..., n}$. $bb(1)[dot]$ is the indicator function. "i.i.d." means independent and identically distributed. One MAC counts as 2 FLOPs.
+
+== Further Reading
+
+Goodfellow, I., Bengio, Y., & Courville, A. (2016). _Deep Learning_. MIT Press. (Chapter 2 establishes much of the notation used across the field.)
+
+Bishop, C. M. (2006). _Pattern Recognition and Machine Learning_. Springer. (Probabilistic notation conventions.)
+
+Murphy, K. P. (2022). _Probabilistic Machine Learning: An Introduction_. MIT Press. (Consistent modern notation with an explicit symbol table.)

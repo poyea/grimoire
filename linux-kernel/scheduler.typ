@@ -226,3 +226,15 @@ The Linux scheduler is one of the most actively developed subsystems in the kern
 The scheduler is best understood as a policy *layer*, not a guarantee: the same policy can produce very different behaviour depending on hardware topology, interrupt routing, and memory pressure. Observability tools (`perf sched`, `runqlat`, `sched_debug`) and controlled isolation are the practical path to predictable behaviour.
 
 *See also:* _CPU Affinity, Isolation, and NUMA_ (isolation, the necessary complement to RT scheduling), _Interrupts and Bottom Halves_ (IRQ jitter, threaded IRQs), _Advanced Algorithms in Modern Systems (Coding volume)_ (scheduler theory: EDF, rate-monotonic), _cgroups and Namespaces_ (cpu controller, cpuset partitions).
+
+== Further Reading
+
+Love, R. (2010). _Linux Kernel Development_, 3rd ed. Addison-Wesley. (Chapter 4 on process scheduling.)
+
+Bovet, D. P., & Cesati, M. (2005). _Understanding the Linux Kernel_, 3rd ed. O'Reilly. (Chapter 7 on the scheduler's data structures.)
+
+Stoica, I., & Abdel-Wahab, H. (1995). "Earliest Eligible Virtual Deadline First: A Flexible and Accurate Mechanism for Proportional Share Resource Allocation." Technical Report, Old Dominion University. (The algorithm Linux adopted as EEVDF in 6.6.)
+
+Corbet, J. (2023). "An EEVDF CPU scheduler for Linux." LWN.net. (Why CFS was replaced and what changed.)
+
+Corbet, J. (2007). "Schedulers: the plot thickens." LWN.net. (Contemporary account of the CFS transition.)

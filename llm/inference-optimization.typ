@@ -425,3 +425,15 @@ New requests undergo prefill (which is compute-bound) interleaved with decode st
   [Scheduling unit],    [request], [iteration],
 )
 
+
+== Further Reading
+
+Kwon, W., et al. (2023). "Efficient Memory Management for Large Language Model Serving with PagedAttention." SOSP. (vLLM; paged KV cache management.)
+
+Dao, T., et al. (2022). "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness." NeurIPS. (IO-aware attention kernels.)
+
+Leviathan, Y., Kalman, M., & Matias, Y. (2023). "Fast Inference from Transformers via Speculative Decoding." ICML. (Draft-and-verify decoding.)
+
+Shazeer, N. (2019). "Fast Transformer Decoding: One Write-Head is All You Need." arXiv:1911.02150. (Multi-query attention; the basis for later GQA work.)
+
+Pope, R., et al. (2023). "Efficiently Scaling Transformer Inference." MLSys. (Partitioning strategies and the latency/throughput frontier.)

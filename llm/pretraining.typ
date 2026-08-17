@@ -428,3 +428,15 @@ for layer in model.model.layers:
     layer.forward = partial(checkpoint, layer.forward, use_reentrant=False)
 ```
 
+
+== Further Reading
+
+Kaplan, J., et al. (2020). "Scaling Laws for Neural Language Models." arXiv:2001.08361. (The original power-law relationships between compute, data, and loss.)
+
+Hoffmann, J., et al. (2022). "Training Compute-Optimal Large Language Models." NeurIPS. (Chinchilla; corrected the compute-optimal token-to-parameter ratio.)
+
+Brown, T., et al. (2020). "Language Models are Few-Shot Learners." NeurIPS. (GPT-3 pretraining setup and data mixture.)
+
+Touvron, H., et al. (2023). "LLaMA: Open and Efficient Foundation Language Models." arXiv:2302.13971. (Open recipe with detailed data and hyperparameter reporting.)
+
+Shoeybi, M., et al. (2019). "Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism." arXiv:1909.08053. (Tensor parallelism for large-scale pretraining.)

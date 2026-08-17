@@ -89,10 +89,9 @@ def main() -> int:
             rel = chap.relative_to(ROOT)
             entries = extract_section(chap.read_text(encoding="utf-8"))
             if entries is None:
-                # A handful of existing chapters predate the Further
-                # Reading convention; warn rather than fail so they can
-                # be backfilled without blocking CI.
-                warnings.append(
+                # Every chapter now carries a citation section; the
+                # backfill is complete, so a missing one is a regression.
+                errors.append(
                     f"{rel}: missing '== Further Reading' section")
                 continue
             entries = [e for e in entries if e]

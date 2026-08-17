@@ -259,3 +259,13 @@ cat /proc/buddyinfo              # free-page fragmentation per order
 `pmap -X <pid>` is a friendlier `smaps`. `/proc/<pid>/pagemap` lets you decode physical addresses if you have root.
 
 *See also:* _Virtual Memory (CPU Architecture volume)_ (TLB, page tables, address translation hardware), _Zero-Copy Networking (Networking volume)_ (mmap-based zero-copy I/O patterns), _Advanced Algorithms in Modern Systems (Coding volume)_ (custom allocators on top of mmap).
+
+== Further Reading
+
+Gorman, M. (2004). _Understanding the Linux Virtual Memory Manager_. Prentice Hall. (Book-length treatment of the VM subsystem.)
+
+Bovet, D. P., & Cesati, M. (2005). _Understanding the Linux Kernel_, 3rd ed. O'Reilly. (Chapters 9 and 16 on memory regions and page-cache mapping.)
+
+Kerrisk, M. (2010). _The Linux Programming Interface_. No Starch Press. (Chapters 49--50 on `mmap` from userspace.)
+
+Corbet, J. (2004). "The object-based reverse-mapping VM." LWN.net. (How the kernel finds every mapping of a page.)

@@ -284,3 +284,13 @@ lsns                                             # list namespaces and their mem
 If a containerized workload has tail-latency outliers, `cpu.stat`'s `nr_throttled` is the first thing to check. If memory ballooning is suspect, `memory.events` shows whether `memory.high` reclaim is firing.
 
 *See also:* _CPU Affinity, Isolation, and NUMA_ (cpuset partitions overlap with `isolcpus`), _The Scheduler_ (cpu controller integrates with CFS bandwidth), _ABI and Syscalls_ (seccomp, the syscall-filter complement to cgroup limits).
+
+== Further Reading
+
+Kerrisk, M. (2013). "Namespaces in operation." LWN.net. (Seven-part series covering each namespace type in turn.)
+
+Corbet, J. (2015). "The control group hierarchy." LWN.net. (Background on the v1 to v2 redesign.)
+
+Linux kernel documentation: `admin-guide/cgroup-v2.rst`. (The authoritative reference for the unified hierarchy.)
+
+Rosen, R. (2014). _Linux Kernel Networking: Implementation and Theory_. Apress. (Chapter 14 covers network namespaces.)

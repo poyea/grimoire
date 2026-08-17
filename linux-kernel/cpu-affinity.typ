@@ -253,3 +253,13 @@ perf stat -e migrations,context-switches ./prog              # how much the kern
 If `migrations` is non-zero on a pinned task, your affinity is broken. If `context-switches` is high on an isolated core, something else is running there.
 
 *See also:* _Multicore and Cache Coherence (CPU Architecture volume)_ (NUMA architecture and cache coherence at the hardware level), _The Scheduler_ (RT scheduling classes that complement isolation), _Interrupts and Bottom Halves_ (IRQ infrastructure beneath `smp_affinity`).
+
+== Further Reading
+
+Kerrisk, M. (2010). _The Linux Programming Interface_. No Starch Press. (Chapter 35 on process priority and affinity.)
+
+Love, R. (2010). _Linux Kernel Development_, 3rd ed. Addison-Wesley. (Scheduler domains and load balancing.)
+
+Gregg, B. (2020). _Systems Performance: Enterprise and the Cloud_, 2nd ed. Addison-Wesley. (Chapter 6 on CPUs, including NUMA binding.)
+
+Linux kernel documentation: `admin-guide/cpusets.rst` and `scheduler/sched-domains.rst`. (Topology-aware placement.)

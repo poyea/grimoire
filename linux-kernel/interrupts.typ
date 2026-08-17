@@ -237,3 +237,13 @@ ethtool -S eth0 | grep -E 'rx_dropped|tx_dropped|rx_no_buffer'
 A high `%soft` on a CPU that wasn't expected to be doing network work means RFS/RPS is steering work there; check `/sys/class/net/eth0/queues/rx-N/rps_cpus`.
 
 *See also:* _CPU Affinity, Isolation, and NUMA_ (steering IRQs away from isolated cores), _The Scheduler_ (threaded IRQ priority, RT throttling), _Kernel Bypass (Networking volume)_ (DPDK and AF_XDP bypass the IRQ path entirely).
+
+== Further Reading
+
+Corbet, J., Rubini, A., & Kroah-Hartman, G. (2005). _Linux Device Drivers_, 3rd ed. O'Reilly. (Chapter 10 on interrupt handling.)
+
+Love, R. (2010). _Linux Kernel Development_, 3rd ed. Addison-Wesley. (Chapters 7--8 on interrupts and bottom halves.)
+
+Bovet, D. P., & Cesati, M. (2005). _Understanding the Linux Kernel_, 3rd ed. O'Reilly. (Chapter 4 on interrupts and exceptions.)
+
+Corbet, J. (2007). "Threaded interrupt handlers." LWN.net. (The motivation for moving handler work into kernel threads.)

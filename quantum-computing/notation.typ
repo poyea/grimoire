@@ -57,3 +57,11 @@ Measurement in the computational basis yields outcome $x$ with probability $|che
 == Complexity and Units
 
 $O(dot)$ is standard asymptotic notation; $N = 2^n$ converts between qubit count and search-space size. Oracle algorithms are measured in *queries*. Gate fidelities are quoted as error rates (e.g. $10^(-3)$ per two-qubit gate); times in $mu$s or ns. Hardware-relevant classes: BQP (quantum polynomial time) vs P, NP — see _Complexity Theory_ (programming-languages).
+
+== Further Reading
+
+Nielsen, M. A., & Chuang, I. L. (2010). _Quantum Computation and Quantum Information_, 10th Anniversary ed. Cambridge University Press. (The standard notational reference for the field.)
+
+Dirac, P. A. M. (1939). "A New Notation for Quantum Mechanics." _Mathematical Proceedings of the Cambridge Philosophical Society_ 35(3): 416--418. (The original bra-ket paper.)
+
+Preskill, J. _Lecture Notes for Physics 219: Quantum Computation_. Caltech. (Freely available, notationally careful.)

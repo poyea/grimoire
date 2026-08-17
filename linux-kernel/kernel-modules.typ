@@ -402,3 +402,13 @@ Most things you'd reach for a kernel module for in 2026 are better solved in use
 A kernel module is the right answer when you genuinely need ring 0 — a new bus driver, a new filesystem implementation, a new hardware accelerator integration, a feature with strict latency requirements that BPF can't meet. For everything else, the user-space tooling is now mature enough that staying out of the kernel is the right default.
 
 *See also:* _Interrupts and Bottom Halves_ (IRQ registration, NAPI, threaded IRQs), _Kernel Tracing_ (eBPF as the alternative to writing a probe-style module), _ABI and Syscalls_ (adding a new syscall is a special case of kernel modification).
+
+== Further Reading
+
+Corbet, J., Rubini, A., & Kroah-Hartman, G. (2005). _Linux Device Drivers_, 3rd ed. O'Reilly. (Chapters 1--2 on module construction and loading.)
+
+Salzman, P. J., Burian, M., & Pomerantz, O. (2007). _The Linux Kernel Module Programming Guide_. (Concise, example-driven introduction.)
+
+Linux kernel documentation: `kbuild/modules.rst`. (Out-of-tree build mechanics.)
+
+Love, R. (2010). _Linux Kernel Development_, 3rd ed. Addison-Wesley. (Chapter 17 on the device model and kobjects.)

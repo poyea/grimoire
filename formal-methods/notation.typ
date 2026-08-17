@@ -72,3 +72,11 @@ $"SAT"$, $"SMT"$, and theory names ($"EUF"$, $"LIA"$, $"LRA"$, bit-vectors $"BV"
 == Naming Conventions
 
 Calligraphic letters denote structures and operators: $cal(K)$ (Kripke structure), $cal(M)$ (model), $cal(A)$ (automaton), $cal(T)$ (theories, transition operators). Sans-serif or quoted names denote keywords and tool syntax (`Init`, `Next`, $"UNCHANGED"$).
+
+== Further Reading
+
+Enderton, H. B. (2001). _A Mathematical Introduction to Logic_, 2nd ed. Academic Press. (Standard reference for first-order syntax and semantics.)
+
+Huth, M., & Ryan, M. (2004). _Logic in Computer Science: Modelling and Reasoning about Systems_, 2nd ed. Cambridge University Press. (Notation as used in verification.)
+
+ISO/IEC 13568:2002. _Information Technology --- Z Formal Specification Notation_. (The standardised Z notation reference.)

@@ -280,3 +280,15 @@ IO-aware attention tiling: avoids $O(L^2)$ HBM traffic. 2× faster than FA1. Now
 6. *Quantization:* GPTQ, AWQ, FP8, INT4, GGUF
 7. *Serving Systems:* vLLM, TensorRT-LLM, latency/throughput
 8. *Evaluation:* benchmarks, perplexity, safety
+
+== Further Reading
+
+Vaswani, A., et al. (2017). "Attention Is All You Need." NeurIPS. (The transformer architecture underlying everything in this volume.)
+
+Brown, T., et al. (2020). "Language Models are Few-Shot Learners." NeurIPS. (GPT-3; established in-context learning as the dominant interface.)
+
+Bommasani, R., et al. (2021). "On the Opportunities and Risks of Foundation Models." arXiv:2108.07258. (Broad survey framing the paradigm shift.)
+
+Zhao, W. X., et al. (2023). "A Survey of Large Language Models." arXiv:2303.18223. (Comprehensive map of the field's subareas.)
+
+Jurafsky, D., & Martin, J. H. _Speech and Language Processing_, 3rd ed. draft. (Standard textbook treatment, continuously updated.)
