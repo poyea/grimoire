@@ -164,15 +164,15 @@ So $=>$ contracts an arbitrary set of redexes simultaneously, possibly none.
 
 *Lemma 2 (Substitution).* If $e_1 => e_1'$ and $e_2 => e_2'$, then $[x |-> e_2] e_1 => [x |-> e_2'] e_1'$.
 
-*Proof.* Induction on $e_1 => e_1'$. Case $x$: $[x |-> e_2] x = e_2 => e_2' = [x |-> e_2'] x$. Case $y eq."not" x$: both sides are $y$. Case $lambda y . e => lambda y . e'$ with $e => e'$: $alpha$-rename $y$ fresh, apply IH. Case $f space a => f' space a'$: by IH and congruence. Case $(lambda y . e) space a => [y |-> a'] e'$: apply IH then use the well-known substitution lemma $[x |-> e_2'] [y |-> a'] e' = [y |-> [x |-> e_2'] a'] [x |-> e_2'] e'$. $square$
+#proof[Induction on $e_1 => e_1'$. Case $x$: $[x |-> e_2] x = e_2 => e_2' = [x |-> e_2'] x$. Case $y eq."not" x$: both sides are $y$. Case $lambda y . e => lambda y . e'$ with $e => e'$: $alpha$-rename $y$ fresh, apply IH. Case $f space a => f' space a'$: by IH and congruence. Case $(lambda y . e) space a => [y |-> a'] e'$: apply IH then use the well-known substitution lemma $[x |-> e_2'] [y |-> a'] e' = [y |-> [x |-> e_2'] a'] [x |-> e_2'] e'$.]
 
 *Lemma 3 (Diamond for $=>$).* If $e => e_1$ and $e => e_2$, there exists $e'$ with $e_1 => e'$ and $e_2 => e'$.
 
-*Proof.* Define the *complete development* $e^*$ of all redexes present in $e$ simultaneously:
+#proof[Define the *complete development* $e^*$ of all redexes present in $e$ simultaneously:
 $ x^* &= x \
 (lambda x . e)^* &= lambda x . e^* \
 (e_1 space e_2)^* &= e_1^* space e_2^* space space ("if " e_1 " not an abstraction") \
-((lambda x . e_1) space e_2)^* &= [x |-> e_2^*] e_1^* $
+((lambda x . e_1) space e_2)^* &= [x |-> e_2^*] e_1^* $]
 
 By induction on $e$, if $e => e'$ then $e' => e^*$ — every parallel reduct can be completed to $e^*$. So $e_1, e_2 => e^*$ closes the diamond. $square$
 
@@ -182,7 +182,7 @@ By induction on $e$, if $e => e'$ then $e' => e^*$ — every parallel reduct can
 
 == Subject Reduction (Preservation)
 
-*Lemma (Substitution).* If $Gamma, x : sigma tack.r e : tau$ and $Gamma tack.r s : sigma$, then $Gamma tack.r [x |-> s] e : tau$.
+#lemma(name: "Substitution")[If $Gamma, x : sigma tack.r e : tau$ and $Gamma tack.r s : sigma$, then $Gamma tack.r [x |-> s] e : tau$.]
 
 #proof[Induction on the derivation of $Gamma, x : sigma tack.r e : tau$.]
 
@@ -254,20 +254,20 @@ So all reducts are in $cal(R)_(tau_2)$; by CR3 at $tau_2$, $e space a in cal(R)_
 
 === The Abstraction Lemma
 
-*Lemma.* If for every $a in cal(R)_(tau_1)$ we have $[x |-> a] e in cal(R)_(tau_2)$, then $lambda x : tau_1 . e in cal(R)_(tau_1 arrow.r tau_2)$.
+#lemma[If for every $a in cal(R)_(tau_1)$ we have $[x |-> a] e in cal(R)_(tau_2)$, then $lambda x : tau_1 . e in cal(R)_(tau_1 arrow.r tau_2)$.]
 
-*Proof.* We must show that for every $a in cal(R)_(tau_1)$, $(lambda x : tau_1 . e) space a in cal(R)_(tau_2)$. By CR1, both $e$ (take $a = x$, a variable in $cal(R)_(tau_1)$ by CR3) and $a$ are SN. Induction on $"sn"(e) + "sn"(a)$ (sum of longest reduction lengths). The term $(lambda x : tau_1 . e) space a$ is neutral; by CR3 at $tau_2$, check reducts:
+#proof[We must show that for every $a in cal(R)_(tau_1)$, $(lambda x : tau_1 . e) space a in cal(R)_(tau_2)$. By CR1, both $e$ (take $a = x$, a variable in $cal(R)_(tau_1)$ by CR3) and $a$ are SN. Induction on $"sn"(e) + "sn"(a)$ (sum of longest reduction lengths). The term $(lambda x : tau_1 . e) space a$ is neutral; by CR3 at $tau_2$, check reducts:
 - B-AppAbs: $(lambda x . e) space a arrow.r [x |-> a] e in cal(R)_(tau_2)$ by hypothesis.
 - $e arrow.r e'$: then $(lambda x . e') space a$; the hypothesis $[x |-> a] e' in cal(R)_(tau_2)$ follows from $[x |-> a] e arrow.r [x |-> a] e'$ and CR2. Inner IH applies (sum decreased).
-- $a arrow.r a'$: $a' in cal(R)_(tau_1)$ by CR2. Show $[x |-> a'] e in cal(R)_(tau_2)$: we have $[x |-> a] e in cal(R)_(tau_2)$ and $[x |-> a] e arrow.r^* [x |-> a'] e$ (substituting reducts), so by CR2 (multistep) $[x |-> a'] e in cal(R)_(tau_2)$. Apply inner IH.
+- $a arrow.r a'$: $a' in cal(R)_(tau_1)$ by CR2. Show $[x |-> a'] e in cal(R)_(tau_2)$: we have $[x |-> a] e in cal(R)_(tau_2)$ and $[x |-> a] e arrow.r^* [x |-> a'] e$ (substituting reducts), so by CR2 (multistep) $[x |-> a'] e in cal(R)_(tau_2)$. Apply inner IH.]
 
 All reducts in $cal(R)_(tau_2)$, so by CR3 the application is in $cal(R)_(tau_2)$. $square$
 
 === The Main Theorem
 
-*Theorem (Tait).* If $x_1 : tau_1, ..., x_n : tau_n tack.r e : tau$ and $a_i in cal(R)_(tau_i)$ for each $i$, then $[x_1 |-> a_1, ..., x_n |-> a_n] e in cal(R)_tau$.
+#theorem(name: "Tait")[If $x_1 : tau_1, ..., x_n : tau_n tack.r e : tau$ and $a_i in cal(R)_(tau_i)$ for each $i$, then $[x_1 |-> a_1, ..., x_n |-> a_n] e in cal(R)_tau$.]
 
-*Proof.* Write $sigma = [overline(x |-> a)]$. Induction on the typing derivation.
+#proof[Write $sigma = [overline(x |-> a)]$. Induction on the typing derivation.]
 
 T-VAR: $e = x_i$. $sigma(x_i) = a_i in cal(R)_(tau_i)$ by assumption.
 

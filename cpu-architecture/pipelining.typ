@@ -1,3 +1,5 @@
+#import "../template.typ": definition
+
 = Pipelining
 
 Pipelining overlaps instruction execution: while one instruction executes, the next instruction decodes, and the one after that fetches. Analogous to assembly line in manufacturing.
@@ -100,7 +102,7 @@ Three types of hazards prevent the pipeline from achieving ideal CPI of 1: struc
 
 === Structural Hazards
 
-*Definition:* Two instructions need the same hardware resource in the same cycle.
+#definition[Two instructions need the same hardware resource in the same cycle.]
 
 ```
 add r1, r2, r3    ; Uses ALU in EX stage

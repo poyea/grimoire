@@ -1,4 +1,4 @@
-#import "../template.typ": definition, theorem, xref
+#import "../template.typ": definition, example, theorem, xref
 
 = Categorical Semantics
 
@@ -131,9 +131,9 @@ The correspondence presents a monad by *generators and relations*: $T$ is determ
 
 Plotkin and Power (2001, 2002, 2003) reread Moggi's monads through the Lawvere-theory correspondence: *computational effects* should be presented by algebraic *operations* and equations, not as opaque monads.
 
-*Example: state.* Signature: $"lookup" : V^L arrow.r V$ (read a location, branch on the value) and $"update" : V arrow.r 1$ (write, no value). Equations: $"lookup"(ell, lambda v. "lookup"(ell, lambda v'. f(v, v'))) = "lookup"(ell, lambda v. f(v, v))$ (idempotence of read), $"lookup"(ell, lambda v. "update"(ell, v, k)) = k$ (write-after-read is no-op), etc. The free monad on this theory is exactly the state monad.
+#example(name: "state")[Signature: $"lookup" : V^L arrow.r V$ (read a location, branch on the value) and $"update" : V arrow.r 1$ (write, no value). Equations: $"lookup"(ell, lambda v. "lookup"(ell, lambda v'. f(v, v'))) = "lookup"(ell, lambda v. f(v, v))$ (idempotence of read), $"lookup"(ell, lambda v. "update"(ell, v, k)) = k$ (write-after-read is no-op), etc. The free monad on this theory is exactly the state monad.]
 
-*Example: nondeterminism.* Signature: binary $"or" : T A times T A arrow.r T A$ and $bot : 1 arrow.r T A$. Equations: associativity, commutativity, idempotence, $bot$ as unit. The free monad is the powerset monad (with finite suprema).
+#example(name: "nondeterminism")[Signature: binary $"or" : T A times T A arrow.r T A$ and $bot : 1 arrow.r T A$. Equations: associativity, commutativity, idempotence, $bot$ as unit. The free monad is the powerset monad (with finite suprema).]
 
 This perspective has consequences:
 

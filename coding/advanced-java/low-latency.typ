@@ -1,3 +1,5 @@
+#import "../../template.typ": definition
+
 = Part VI: Low-Latency Patterns
 
 == Memory Management for Low Latency
@@ -645,7 +647,7 @@ Input → Disruptor (Ring Buffer) → Business Logic → Output Disruptor → Ne
 
 === Mechanical Sympathy
 
-*Definition:* Design software with hardware in mind (Martin Thompson)
+#definition[Design software with hardware in mind (Martin Thompson)]
 
 *Key concepts:*
 

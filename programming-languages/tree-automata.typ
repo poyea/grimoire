@@ -1,4 +1,4 @@
-#import "../template.typ": proof, theorem, xref
+#import "../template.typ": lemma, proof, theorem, xref
 
 = Tree Automata
 
@@ -104,9 +104,9 @@ The class of *regular* (synonymously: *recognisable*) tree languages is the clas
 
 === Pumping Lemma for Trees
 
-*Lemma (Pumping for Tree Languages).* For every regular tree language $L$ there is a constant $k$ such that every $t in L$ with $|t| >= k$ admits a decomposition $t = C[C'[s]]$ (where $C, C'$ are *contexts* -- terms with a single hole) such that $C'$ is non-trivial and for every $i >= 0$, $C[C'^i[s]] in L$.
+#lemma(name: "Pumping for Tree Languages")[For every regular tree language $L$ there is a constant $k$ such that every $t in L$ with $|t| >= k$ admits a decomposition $t = C[C'[s]]$ (where $C, C'$ are *contexts* -- terms with a single hole) such that $C'$ is non-trivial and for every $i >= 0$, $C[C'^i[s]] in L$.]
 
-*Proof.* Let $cal(A)$ be a DFTA for $L$ with $n$ states. If $t in L$ has height $> n$, the run on $t$ visits some state twice along the path from a leaf to the root: at positions $u_0 subset.sq u_1$ with $r(u_0) = r(u_1) = q$. Let $s = t|_(u_1)$, $C' = t|_(u_0)[u_0 / u_1 <- "hole"]$, $C = t[u_0 <- "hole"]$. Pumping $C'^i$ preserves the state $q$ at the splice point, hence acceptance. $square$
+#proof[Let $cal(A)$ be a DFTA for $L$ with $n$ states. If $t in L$ has height $> n$, the run on $t$ visits some state twice along the path from a leaf to the root: at positions $u_0 subset.sq u_1$ with $r(u_0) = r(u_1) = q$. Let $s = t|_(u_1)$, $C' = t|_(u_0)[u_0 / u_1 <- "hole"]$, $C = t[u_0 <- "hole"]$. Pumping $C'^i$ preserves the state $q$ at the splice point, hence acceptance.]
 
 The pumping lemma is the standard tool for proving a tree language *non-regular*: e.g. ${g(t, t) | t in T_Sigma}$ fails pumping because pumping along one side of the $g$-tree breaks the duplication.
 
@@ -119,7 +119,7 @@ $ s tilde_L t <==> forall "context" C. space (C[s] in L <==> C[t] in L). $
 
 #theorem(name: "Myhill--Nerode for Trees")[$L$ is regular <==> $tilde_L$ has finitely many equivalence classes. The minimal DFTA for $L$ has exactly $|T_Sigma slash tilde_L|$ states.]
 
-*Proof.* (Necessity) For a DFTA, $s tilde_L t$ holds whenever $s, t$ run to the same state, so the index is at most $|Q|$. (Sufficiency) Take $Q = T_Sigma slash tilde_L$; transitions $f([t_1], dots, [t_n]) arrow.r [f(t_1, dots, t_n)]$ are well-defined; accepting set $= { [t] | t in L }$. $square$
+#proof[(Necessity) For a DFTA, $s tilde_L t$ holds whenever $s, t$ run to the same state, so the index is at most $|Q|$. (Sufficiency) Take $Q = T_Sigma slash tilde_L$; transitions $f([t_1], dots, [t_n]) arrow.r [f(t_1, dots, t_n)]$ are well-defined; accepting set $= { [t] | t in L }$.]
 
 This is the structural backbone of *tree-automaton minimisation*, decidable in $O(n log n)$ time by an adaptation of Hopcroft's partition refinement algorithm.
 

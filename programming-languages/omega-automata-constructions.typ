@@ -348,7 +348,7 @@ A *weak Büchi automaton* (WBA) is an NBA whose SCCs are either entirely in $F$ 
 
 WBAs correspond to LTL formulas without any nesting of $G$ and $F$ -- the "flat" temporal logic fragment.
 
-*Theorem (Rohde 1997).* The class of WBA-recognisable languages equals the class of *LTL[$G, F$]* languages (LTL with only $G$ and $F$, not their nesting), and is decidably closed under all Boolean operations with polynomial-size WBAs.
+#theorem(name: "Rohde 1997")[The class of WBA-recognisable languages equals the class of *LTL[$G, F$]* languages (LTL with only $G$ and $F$, not their nesting), and is decidably closed under all Boolean operations with polynomial-size WBAs.]
 
 === Latching Automata
 

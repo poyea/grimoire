@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": proof, theorem, xref
 
 = Online Algorithms
 
@@ -68,15 +68,15 @@ Memory holds $k$ pages out of universe of $N$. A request to a page not in cache 
   [LFU], [Least frequently used], [Not competitive],
 )
 
-*Theorem (Sleator-Tarjan 1985).* No deterministic online paging algorithm is better than $k$-competitive.
+#theorem(name: "Sleator-Tarjan 1985")[No deterministic online paging algorithm is better than $k$-competitive.]
 
-*Proof.* Adversary uses $k + 1$ pages. Whatever ALG holds, request the missing page each round; ALG faults every step. Over $k$ phases of $k$ requests each, OPT (Belady) faults at most once per phase. Ratio $-> k$.
+#proof[Adversary uses $k + 1$ pages. Whatever ALG holds, request the missing page each round; ALG faults every step. Over $k$ phases of $k$ requests each, OPT (Belady) faults at most once per phase. Ratio $-> k$.]
 
 === Marking Algorithm (Randomized)
 
 *Marking (Fiat-Karp-Luby-Naor-Rabani 1991):* divide requests into phases; mark a page when used; on a fault, evict a uniformly random *unmarked* page; clear all marks when all $k$ pages are marked.
 
-*Theorem.* Marking is $2 H_k$-competitive against the oblivious adversary; this is tight up to constants (lower bound $H_k = ln k + O(1)$).
+#theorem[Marking is $2 H_k$-competitive against the oblivious adversary; this is tight up to constants (lower bound $H_k = ln k + O(1)$).]
 
 ```python
 import random
@@ -134,7 +134,7 @@ Maintain a singly linked list; accesses cost the index of the item; you may move
 
 *Move-To-Front (MTF):* on every access, move the item to the head.
 
-*Theorem.* MTF is $2$-competitive against the optimal offline algorithm — analyzed via the *potential* $Phi$ = number of inversions with the offline list. This was historically the first amortized analysis of an online algorithm.
+#theorem[MTF is $2$-competitive against the optimal offline algorithm — analyzed via the *potential* $Phi$ = number of inversions with the offline list. This was historically the first amortized analysis of an online algorithm.]
 
 == Online Convex Optimization (Sketch)
 

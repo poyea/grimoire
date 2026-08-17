@@ -269,7 +269,7 @@ Define a unary logical predicate $"SN"_tau$ on closed terms of type $tau$:
 
 #theorem(name: "Tait 1967")[For every $tau$, every closed $e : tau$ is in $"SN"_tau$.]
 
-*Proof sketch.* By induction on the typing derivation, generalized to open terms via a *closing substitution* lemma: if every substitution $gamma$ that maps each $x : sigma in Gamma$ to a closed $e_x in "SN"_sigma$ produces $gamma(e) in "SN"_tau$, then we say $e in "SN"_tau$ (under $Gamma$). The induction passes through application by definition, through abstraction via a *Kleene closure* lemma ("if $e[x := e'] in "SN"_(tau_2)$ for all $e' in "SN"_(tau_1)$, then $lambda x. e in "SN"_(tau_1 arrow.r tau_2)$"), which in turn relies on the head expansion property of $beta$-reduction. $square$
+#proof(name: "sketch")[By induction on the typing derivation, generalized to open terms via a *closing substitution* lemma: if every substitution $gamma$ that maps each $x : sigma in Gamma$ to a closed $e_x in "SN"_sigma$ produces $gamma(e) in "SN"_tau$, then we say $e in "SN"_tau$ (under $Gamma$). The induction passes through application by definition, through abstraction via a *Kleene closure* lemma ("if $e[x := e'] in "SN"_(tau_2)$ for all $e' in "SN"_(tau_1)$, then $lambda x. e in "SN"_(tau_1 arrow.r tau_2)$"), which in turn relies on the head expansion property of $beta$-reduction.]
 
 The crucial idea is that the predicate at higher type is *stronger* than mere normalization -- it imposes a uniformity condition that survives application. This pattern -- defining the predicate so the function-type clause "carries its own ammunition" -- is the engine of every logical relation.
 

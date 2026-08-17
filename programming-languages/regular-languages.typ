@@ -198,7 +198,7 @@ This is a paradigm of the *algebra–logic–automata* triad: a *logical* class 
 
 Extend FO over words to *monadic second-order* logic ($"MSO"$), permitting quantification over sets of positions.
 
-*Theorem (Büchi 1960, Elgot 1961, Trakhtenbrot 1962).* A language $L subset.eq Sigma^*$ is regular <==> $L$ is definable by an $"MSO"[<]$ sentence.
+#theorem(name: "Büchi 1960, Elgot 1961, Trakhtenbrot 1962")[A language $L subset.eq Sigma^*$ is regular <==> $L$ is definable by an $"MSO"[<]$ sentence.]
 
 #proof(name: "sketch")[$("MSO" => "regular")$. By induction on formulas. The atomic predicates $Q_a$ and $<$ are obviously regular. Boolean connectives are regular by closure. Existential quantification over a position $x$ corresponds to projecting away a tape track labelled with $x$'s position, using closure under homomorphic image. Existential quantification over a *set* $X$ adds a track of bits indicating membership, likewise a projection. The constructions stay within finite automata at every step.]
 

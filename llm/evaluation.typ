@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": definition, xref
 
 = Evaluation
 
@@ -215,7 +215,7 @@ The harness handles prompt construction, batching, and aggregation. Always pin t
 
 Running a single generation and checking correctness (Pass\@1) underestimates a model's true capability. Pass\@k measures whether _any_ of $k$ independent samples solves the problem.
 
-*Definition.* Let $n gt.eq k$ total samples be drawn for a problem, of which $c$ are correct. The unbiased estimator of Pass\@k is:
+#definition[Let $n gt.eq k$ total samples be drawn for a problem, of which $c$ are correct. The unbiased estimator of Pass\@k is:]
 
 $
 "Pass@"k = 1 - binom(n-c, k) / binom(n, k)

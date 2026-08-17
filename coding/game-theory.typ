@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": definition, theorem, xref
 
 = Game Theory
 
@@ -62,7 +62,7 @@ pair<int,int> nim_winning_move(const vector<int>& piles) {
 
 == Grundy Values (Nimbers)
 
-*Definition:* The *Grundy value* (nimber) $G(p)$ of a game position $p$ is defined recursively:
+#definition[The *Grundy value* (nimber) $G(p)$ of a game position $p$ is defined recursively:]
 
 $ G(p) = "mex" { G(q) : q in "moves"(p) } $
 
@@ -138,7 +138,7 @@ int grundy_bounded_nim(int n, int k,
 
 == The Sprague-Grundy Theorem
 
-*Theorem:* Every finite, impartial game under normal play is equivalent to a single Nim pile whose size equals the game's Grundy value.
+#theorem[Every finite, impartial game under normal play is equivalent to a single Nim pile whose size equals the game's Grundy value.]
 
 *Composite game (sum of games):* Two players alternate; on each turn a player moves in exactly one component game. The combined game ends when no moves exist in any component.
 

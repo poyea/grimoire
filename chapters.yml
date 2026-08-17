@@ -46,7 +46,7 @@ chapters:
   - subject: coding
     slug: advanced-string-algorithms
     path: coding/advanced-string-algorithms.typ
-    lines: 738
+    lines: 740
     status: reviewed
   - subject: coding
     slug: advanced-systems
@@ -201,7 +201,7 @@ chapters:
   - subject: coding
     slug: string-algorithms
     path: coding/string-algorithms.typ
-    lines: 652
+    lines: 654
     status: reviewed
   - subject: coding
     slug: tree-decomposition
@@ -321,7 +321,7 @@ chapters:
   - subject: cpu-architecture
     slug: pipelining
     path: cpu-architecture/pipelining.typ
-    lines: 456
+    lines: 458
     status: reviewed
   - subject: cpu-architecture
     slug: power-and-dvfs
@@ -1546,7 +1546,7 @@ chapters:
   - subject: programming-languages
     slug: turing-computability
     path: programming-languages/turing-computability.typ
-    lines: 224
+    lines: 226
     status: reviewed
   - subject: programming-languages
     slug: type-systems

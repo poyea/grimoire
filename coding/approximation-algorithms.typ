@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": theorem, xref
 
 = Approximation Algorithms
 
@@ -69,7 +69,7 @@ def set_cover_greedy(U, sets, weights):
     return chosen
 ```
 
-*Theorem.* Greedy is an $H_n = 1 + 1/2 + ... + 1/n approx ln n$ approximation.
+#theorem[Greedy is an $H_n = 1 + 1/2 + ... + 1/n approx ln n$ approximation.]
 
 *Sketch.* Charge each element $e$ a price $p_e = w_(i^*) / |S_(i^*) \\ "covered"_(("when " e "is covered"))|$. Order elements as they get covered; the $k$-th element of an optimal set $S^*$ pays at most $w(S^*) / (|S^*| - k + 1)$. Sum: $w("greedy") = sum p_e <= sum_(S^* in "OPT") w(S^*) H_(|S^*|) <= H_n dot "OPT"$.
 

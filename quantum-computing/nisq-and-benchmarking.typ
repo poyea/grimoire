@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": definition, xref
 
 = NISQ Devices and Benchmarking
 
@@ -78,7 +78,7 @@ Setting $t = T_1 = T_2/2$ (a common superconducting-qubit approximation) and $ga
 
 IBM's Quantum Volume (Cross et al. 2019) is a single-number metric that captures gate fidelity, qubit connectivity, circuit compilation quality, and coherence time together.
 
-*Definition.* For a device with $n$ qubits, run random $n$-qubit, $n$-layer square circuits (each layer is a random permutation followed by random $"SU"(4)$ gates on paired qubits). A circuit is *heavy* if its output bitstring has probability above the median of the ideal output distribution. The device achieves $"QV" = 2^n$ if the fraction of heavy outputs exceeds $2/3$ with at least $2 sigma$ confidence over many random circuits.
+#definition[For a device with $n$ qubits, run random $n$-qubit, $n$-layer square circuits (each layer is a random permutation followed by random $"SU"(4)$ gates on paired qubits). A circuit is *heavy* if its output bitstring has probability above the median of the ideal output distribution. The device achieves $"QV" = 2^n$ if the fraction of heavy outputs exceeds $2/3$ with at least $2 sigma$ confidence over many random circuits.]
 
 *Why "heavy output probability" and why $2/3$.* For an ideal device, the output distribution of a Haar-random circuit is approximately a Porter-Thomas distribution: probabilities $p_x$ follow $Pr(p_x > t) = e^{-2^n t}$. The median of this distribution is $m = (ln 2)/2^n$. A bitstring $x$ is *heavy* when $p_x > m$. Under the Porter-Thomas model, the probability that a randomly drawn sample is heavy is
 

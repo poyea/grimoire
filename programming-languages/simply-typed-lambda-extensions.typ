@@ -74,10 +74,10 @@ S space x space y space z &arrow.r (x space z) (y space z) $
 
 In fact $I = S space K space K$ (verify: $S space K space K space x = K space x space (K space x) = x$), so $S$ and $K$ suffice.
 
-*Theorem (Bracket Abstraction).* For every $lambda$-term $M$ with free variable $x$, there is an SK-term $T$ with no $lambda$ such that $T space x = M$. Notation: $T = [x] M$, defined by
+#theorem(name: "Bracket Abstraction")[For every $lambda$-term $M$ with free variable $x$, there is an SK-term $T$ with no $lambda$ such that $T space x = M$. Notation: $T = [x] M$, defined by
 $ [x] x &= I \
 [x] M &= K space M space space space (x in.not "FV"(M)) \
-[x] (M space N) &= S space ([x] M) space ([x] N) $
+[x] (M space N) &= S space ([x] M) space ([x] N) $]
 
 In the typed setting, $S$ and $K$ get the principal types
 $ K &: forall alpha beta . alpha arrow.r beta arrow.r alpha \

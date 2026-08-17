@@ -1,3 +1,5 @@
+#import "../template.typ": definition
+
 = Advanced String Algorithms
 
 *Beyond basic pattern matching:* Suffix arrays, suffix automata, and multiple pattern matching enable sophisticated string processing with optimal complexity. Critical for bioinformatics, text indexing, and data compression [Gusfield 1997].
@@ -88,7 +90,7 @@ vector<int> horspool_search(const string& text, const string& pattern) {
 
 == Suffix Array Construction
 
-*Definition:* Array of starting indices of all suffixes, sorted lexicographically.
+#definition[Array of starting indices of all suffixes, sorted lexicographically.]
 
 *Example:* "banana" has suffixes:
 - 0: "banana"

@@ -1,3 +1,5 @@
+#import "../template.typ": corollary
+
 = Turing Machines and Computability
 
 The Turing machine is not a model of modern hardware -- it is a model of *what can be
@@ -130,8 +132,8 @@ Now run $D$ on $chevron.l D chevron.r$:
 Both cases are impossible, so $H$ cannot exist. The diagonal argument works because we
 construct $D$ to *disagree* with $H$'s prediction on the self-referential input.
 
-*Corollary:* $A_"TM"$ is recognizable (the universal TM recognizes it) but not decidable.
-Its complement $overline(A_"TM")$ is not even recognizable.
+#corollary[$A_"TM"$ is recognizable (the universal TM recognizes it) but not decidable.
+Its complement $overline(A_"TM")$ is not even recognizable.]
 
 == Rice's Theorem
 
