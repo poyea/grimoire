@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = CSS and Layout
 
 Style and layout turn a DOM tree and a pile of stylesheets into a geometry tree: every box's position and size. This is the most algorithmically dense stage of the rendering pipeline, and the one with the sharpest performance cliffs. This chapter covers the CSSOM, selector matching, the cascade, invalidation, the architecture of layout engines, and the cost model authors must internalize.
 
-*See also:* _HTML Parsing and the DOM_ (the input tree, shadow DOM flat tree), _Rendering Pipeline_ (paint and compositing downstream of layout), _Web Performance_ (CLS and layout-driven metrics).
+*See also:* #xref("web-and-browsers", "html-parsing-and-dom", label: "HTML Parsing and the DOM") (the input tree, shadow DOM flat tree), #xref("web-and-browsers", "rendering-pipeline", label: "Rendering Pipeline") (paint and compositing downstream of layout), #xref("web-and-browsers", "web-performance", label: "Web Performance") (CLS and layout-driven metrics).
 
 == The CSSOM
 

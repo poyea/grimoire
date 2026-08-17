@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Web Performance
 
 Web performance is the discipline of making pages load fast, respond instantly, and stay visually stable — and of *proving* it with measurement, because intuition about latency is reliably wrong. This chapter covers the modern metrics (Core Web Vitals), the measurement stack (field vs. lab), the loading waterfall and how to shorten it, runtime responsiveness, and the optimization techniques with the best evidence behind them. It is the applied capstone of everything earlier in this volume: every metric maps to a pipeline stage from the preceding chapters.
 
-*See also:* _Rendering Pipeline_ (what LCP and jank measure), _Event Loop and Scheduling_ (the machinery behind INP), _CSS and Layout_ (CLS and layout thrashing), _Browser Architecture_ (the navigation steps being timed), and the Networking volume (TCP/QUIC, HTTP/2 and /3, CDNs).
+*See also:* #xref("web-and-browsers", "rendering-pipeline", label: "Rendering Pipeline") (what LCP and jank measure), #xref("web-and-browsers", "event-loop-and-scheduling", label: "Event Loop and Scheduling") (the machinery behind INP), #xref("web-and-browsers", "css-and-layout", label: "CSS and Layout") (CLS and layout thrashing), #xref("web-and-browsers", "browser-architecture", label: "Browser Architecture") (the navigation steps being timed), and the Networking volume (TCP/QUIC, HTTP/2 and /3, CDNs).
 
 == Core Web Vitals
 

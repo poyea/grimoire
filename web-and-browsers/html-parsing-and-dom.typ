@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = HTML Parsing and the DOM
 
 HTML is the only mainstream language whose parser is fully specified *including error recovery*: every byte sequence produces a well-defined tree in every conforming browser. This chapter covers the HTML5 parsing algorithm, the speculative optimizations engines layer on top of it, and the internals of the DOM — including shadow DOM, custom elements, and mutation observers.
 
-*See also:* _Browser Architecture_ (where parsing sits in a navigation), _CSS and Layout_ (how the DOM and CSSOM combine), _Event Loop and Scheduling_ (when parser-yielded tasks run).
+*See also:* #xref("web-and-browsers", "browser-architecture", label: "Browser Architecture") (where parsing sits in a navigation), #xref("web-and-browsers", "css-and-layout", label: "CSS and Layout") (how the DOM and CSSOM combine), #xref("web-and-browsers", "event-loop-and-scheduling", label: "Event Loop and Scheduling") (when parser-yielded tasks run).
 
 == Why HTML Parsing Is Special
 

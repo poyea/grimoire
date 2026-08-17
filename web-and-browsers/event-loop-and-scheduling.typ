@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Event Loop and Scheduling
 
 JavaScript's concurrency model is famously "single-threaded with an event loop", but the real machinery is richer: multiple task queues with different priorities, a microtask queue with run-to-completion semantics that surprises almost everyone, rendering interleaved at vsync boundaries, and — in modern browsers — a cooperative scheduler with explicit priorities. This chapter covers the HTML event loop as specified, how Chromium actually schedules it, and the APIs for yielding, prioritizing, and offloading work.
 
-*See also:* _JavaScript Engines_ (what runs inside each task), _Rendering Pipeline_ (the rendering steps the loop interleaves), _Web Performance_ (INP, long tasks, and TBT).
+*See also:* #xref("web-and-browsers", "javascript-engines", label: "JavaScript Engines") (what runs inside each task), #xref("web-and-browsers", "rendering-pipeline", label: "Rendering Pipeline") (the rendering steps the loop interleaves), #xref("web-and-browsers", "web-performance", label: "Web Performance") (INP, long tasks, and TBT).
 
 == Tasks and Task Sources
 

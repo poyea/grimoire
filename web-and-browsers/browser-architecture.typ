@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Browser Architecture
 
 A modern browser is one of the largest pieces of software most people run: Chromium contains roughly 35 million lines of code, comparable to an operating system kernel plus much of its userland. This chapter covers the multi-process architecture that browsers converged on, the security boundaries between processes, inter-process communication, and an end-to-end overview of how a URL typed in the address bar becomes pixels on screen.
 
-*See also:* _Rendering Pipeline_ (compositing and rasterization in depth), _JavaScript Engines_ (V8 inside the renderer), _Event Loop and Scheduling_ (task scheduling within a renderer), and the Networking volume (HTTP, TLS, DNS for the network service).
+*See also:* #xref("web-and-browsers", "rendering-pipeline", label: "Rendering Pipeline") (compositing and rasterization in depth), #xref("web-and-browsers", "javascript-engines", label: "JavaScript Engines") (V8 inside the renderer), #xref("web-and-browsers", "event-loop-and-scheduling", label: "Event Loop and Scheduling") (task scheduling within a renderer), and the Networking volume (HTTP, TLS, DNS for the network service).
 
 == The Multi-Process Model
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = JavaScript Engines
 
 A JavaScript engine must run a dynamically typed, garbage-collected, eval-capable language at near-native speed, starting from source text it has never seen, often with a budget of milliseconds before the user notices. The result is some of the most sophisticated systems software in existence: multi-tier JIT compilers, speculative optimization with deoptimization, hidden classes, inline caches, and concurrent garbage collectors. This chapter uses V8 (Chrome, Node.js) as the spine, with JavaScriptCore (Safari) and SpiderMonkey (Firefox) for contrast.
 
-*See also:* _Browser Architecture_ (where V8 lives in the renderer), _Event Loop and Scheduling_ (how script execution is driven), _WebAssembly_ (the engines' second language), _Web Performance_ (script cost in the field).
+*See also:* #xref("web-and-browsers", "browser-architecture", label: "Browser Architecture") (where V8 lives in the renderer), #xref("web-and-browsers", "event-loop-and-scheduling", label: "Event Loop and Scheduling") (how script execution is driven), #xref("web-and-browsers", "webassembly", label: "WebAssembly") (the engines' second language), #xref("web-and-browsers", "web-performance", label: "Web Performance") (script cost in the field).
 
 == Parsing and Startup
 

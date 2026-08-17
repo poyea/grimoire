@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Rendering Pipeline
 
 After style and layout produce a geometry tree, the browser must turn it into pixels — repeatedly, sixty or more times per second, while the page scrolls, animates, and mutates underneath. This chapter covers the stages downstream of layout: paint, layerization, rasterization, and compositing, with Chromium's pipeline (Blink + cc + Viz) as the running example, plus Firefox's WebRender as the contrasting design.
 
-*See also:* _CSS and Layout_ (the geometry that paint consumes), _Browser Architecture_ (the GPU process and Viz), _Event Loop and Scheduling_ (frame timing and `requestAnimationFrame`), _Web Performance_ (LCP, INP, and jank).
+*See also:* #xref("web-and-browsers", "css-and-layout", label: "CSS and Layout") (the geometry that paint consumes), #xref("web-and-browsers", "browser-architecture", label: "Browser Architecture") (the GPU process and Viz), #xref("web-and-browsers", "event-loop-and-scheduling", label: "Event Loop and Scheduling") (frame timing and `requestAnimationFrame`), #xref("web-and-browsers", "web-performance", label: "Web Performance") (LCP, INP, and jank).
 
 == The Stages of a Frame
 

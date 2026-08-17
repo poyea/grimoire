@@ -87,9 +87,19 @@
 // #xref("database", "partitioning-and-elasticity") renders as a styled
 // in-text reference to another chapter. Resolves to a GitHub link so the
 // PDF stays clickable.
+//
+// Pass `label` to keep the prose reading naturally while still linking:
+//
+//   #xref("web-and-browsers", "css-and-layout", label: "CSS and Layout")
+//
+// renders as _CSS and Layout_ rather than the raw path.
 // -----------------------------------------------------------------------------
 
-#let xref(subject, slug) = {
+#let xref(subject, slug, label: none) = {
   let url = "https://github.com/poyea/grimoire/blob/main/" + subject + "/" + slug + ".typ"
-  emph(link(url)[#subject\/#slug])
+  if label == none {
+    emph(link(url)[#subject\/#slug])
+  } else {
+    emph(link(url)[#label])
+  }
 }

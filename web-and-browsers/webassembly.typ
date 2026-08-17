@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = WebAssembly
 
 WebAssembly (Wasm) is the web's second language: a compact, statically typed binary instruction format designed to be a portable compilation target with near-native performance, validated and sandboxed by construction. Announced in 2015 by a four-browser coalition, an MVP shipped in all engines in 2017, and Wasm 2.0/3.0-era features (GC, threads, SIMD, tail calls, exceptions) have steadily landed since. This chapter covers the design, how engines execute it, the memory and security model, and the ecosystem beyond the browser.
 
-*See also:* _JavaScript Engines_ (shared compiler infrastructure and tiering), _Browser Architecture_ (the sandbox Wasm lives inside), _Web Performance_ (when Wasm actually wins).
+*See also:* #xref("web-and-browsers", "javascript-engines", label: "JavaScript Engines") (shared compiler infrastructure and tiering), #xref("web-and-browsers", "browser-architecture", label: "Browser Architecture") (the sandbox Wasm lives inside), #xref("web-and-browsers", "web-performance", label: "Web Performance") (when Wasm actually wins).
 
 == Design: A Sandboxed Stack Machine
 

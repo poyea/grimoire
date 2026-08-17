@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Validate `*See also:*` cross-references in Grimoire chapters.
 
-For every chapter file, the `*See also:*` line is parsed and each
-_italicised_ name is resolved against:
+Structured `#xref("subject", "slug")` calls are resolved exactly:
+the target file must exist on disk. Remaining prose references on a
+`*See also:*` line are parsed and each _italicised_ name is resolved
+fuzzily against:
   (a) chapter `= Title` headings in the same volume,
   (b) chapter titles in every other volume,
   (c) volume display names (from `#project("...")` in <slug>.typ),
@@ -25,6 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 ITALIC_RE = re.compile(r"_([^_]+)_")
+XREF_RE = re.compile(r'#xref\("([^"]+)",\s*"([^"]+)"')
 TITLE_RE = re.compile(r"^=\s+(.+?)\s*$", re.M)
 PROJECT_RE = re.compile(r'#project\("([^"]+)"\)')
 PAREN_RE = re.compile(r"\s*\([^()]*\)\s*$")
@@ -139,12 +142,20 @@ def main() -> int:
     warnings = 0
     for slug in sorted(vols):
         for chap in sorted((ROOT / slug).glob("*.typ")):
-            for line in chap.read_text(encoding="utf-8").splitlines():
+            text = chap.read_text(encoding="utf-8")
+            rel = chap.relative_to(ROOT)
+            # Structured #xref("subject", "slug") calls resolve exactly:
+            # the target file must exist on disk.
+            for subj, stem in XREF_RE.findall(text):
+                if not (ROOT / subj / f"{stem}.typ").is_file():
+                    print(f"WARNING: {rel}: #xref target does not exist "
+                          f"'{subj}/{stem}'")
+                    warnings += 1
+            for line in text.splitlines():
                 if "*See also:*" not in line:
                     continue
                 for name in ITALIC_RE.findall(line):
                     if not resolve(name, slug, vols):
-                        rel = chap.relative_to(ROOT)
                         print(f"WARNING: {rel}: unresolved reference "
                               f"'{name.strip()}'")
                         warnings += 1
