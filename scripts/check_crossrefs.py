@@ -14,7 +14,7 @@ ignored; a name also resolves if it appears as a whole-word phrase
 inside a title (e.g. "Scheduler" -> "The Scheduler") or equals the
 title's acronym (e.g. "RAG").
 
-Unresolved references are reported as warnings. Always exits 0.
+Unresolved references are reported and exit nonzero.
 """
 from __future__ import annotations
 
@@ -150,8 +150,8 @@ def main() -> int:
                         warnings += 1
     if warnings:
         print(f"\n{warnings} unresolved cross-reference(s).")
-    else:
-        print("All cross-references resolved.")
+        return 1
+    print("All cross-references resolved.")
     return 0
 
 
