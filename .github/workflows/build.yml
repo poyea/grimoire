@@ -66,7 +66,7 @@ jobs:
           - search-and-ir
     steps:
       - uses: actions/checkout@v4
-      - uses: typst-community/setup-typst@v3
+      - uses: typst-community/setup-typst@v5
         with:
           typst-version: '0.15.1'
       - name: Compile ${{ matrix.subject }}.typ

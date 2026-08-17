@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Typst
-        uses: typst-community/setup-typst@v3
+        uses: typst-community/setup-typst@v5
         with:
           typst-version: '0.15.1'
 
