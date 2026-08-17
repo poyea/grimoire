@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: typst-community/setup-typst@v3
         with:
-          typst-version: 'latest'
+          typst-version: '0.15.1'
       - name: Compile all volumes and fail on warnings/deprecations
         run: |
           fail=0

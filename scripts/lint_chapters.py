@@ -6,8 +6,8 @@ Checks performed:
      `<subject>.typ` resolves to a file that exists.
   2. Every chapter file on disk is referenced by its parent subject file
      (no orphans).
-  3. Chapter line counts: warns on files >800 (suggest splitting) or
-     <120 (suggest merging). Configurable via env vars.
+  3. Chapter word counts: warns on files >5000 (suggest splitting) or
+     <900 (suggest merging). Configurable via env vars.
   4. chapters.yml (if present) is in sync with the filesystem: every
      chapter entry exists; every chapter file has an entry.
 
@@ -58,13 +58,16 @@ SUBJECTS = [
 
 INCLUDE_RE = re.compile(r'#include\s+"([^"]+\.typ)"')
 
-MAX_LINES = int(os.environ.get("GRIMOIRE_MAX_LINES", "800"))
-MIN_LINES = int(os.environ.get("GRIMOIRE_MIN_LINES", "120"))
+# Chapter size is measured in words, not lines. Chapters wrap each
+# paragraph onto a single long line, so a line count reflects paragraph
+# style rather than substance: search-and-ir/vector-search.typ is 71
+# lines but 1350 words, more prose than a 244-line chapter in coding/.
+MAX_WORDS = int(os.environ.get("GRIMOIRE_MAX_WORDS", "5000"))
+MIN_WORDS = int(os.environ.get("GRIMOIRE_MIN_WORDS", "900"))
 
 
-def count_lines(p: Path) -> int:
-    with p.open("rb") as f:
-        return sum(1 for _ in f)
+def count_words(p: Path) -> int:
+    return len(p.read_text(encoding="utf-8").split())
 
 
 def parse_includes(subject_typ: Path) -> list[str]:
@@ -131,11 +134,11 @@ def main() -> int:
     for subject in SUBJECTS:
         for rel in sorted(collect_chapter_files(root, subject)):
             p = root / rel
-            n = count_lines(p)
-            if n > MAX_LINES:
-                warnings.append(f"{rel}: {n} lines (>{MAX_LINES}, consider splitting)")
-            elif n < MIN_LINES:
-                warnings.append(f"{rel}: {n} lines (<{MIN_LINES}, consider merging)")
+            n = count_words(p)
+            if n > MAX_WORDS:
+                warnings.append(f"{rel}: {n} words (>{MAX_WORDS}, consider splitting)")
+            elif n < MIN_WORDS:
+                warnings.append(f"{rel}: {n} words (<{MIN_WORDS}, consider merging)")
 
     # 4. manifest sync.
     manifest = load_manifest(root)
