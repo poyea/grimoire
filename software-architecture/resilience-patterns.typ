@@ -4,7 +4,7 @@
 
 Distribution makes partial failure the normal operating condition: dependencies time out, return errors, slow down, or, worst of all, slow down *intermittently*. Resilience is the system's ability to keep delivering acceptable service while parts of it fail, and to recover without human heroics. This chapter covers the core patterns, timeouts, retries, circuit breakers, bulkheads, load shedding, graceful degradation, the arithmetic that motivates them, and chaos engineering as the discipline that verifies they actually work.
 
-*See also:* #xref("software-architecture", "monoliths-and-microservices", label: "Monoliths and Microservices") (why call chains multiply failure), #xref("software-architecture", "event-driven-architecture", label: "Event-Driven Architecture") (asynchronous decoupling as a resilience tool), #xref("software-architecture", "architecture-evaluation", label: "Architecture Evaluation") (availability as a quality attribute with testable scenarios).
+*See also:* #xref("software-architecture", "monoliths-and-microservices", label: "Monoliths and Microservices") (why call chains multiply failure), #xref("software-architecture", "event-driven-architecture", label: "Event-Driven Architecture") (asynchronous decoupling as a resilience tool), #xref("software-architecture", "architecture-evaluation", label: "Architecture Evaluation") (availability as a quality attribute with testable scenarios); #xref("networking", "resilience-patterns", label: "Resilience Patterns") (the same patterns at the network-call level).
 
 == The Arithmetic of Partial Failure
 

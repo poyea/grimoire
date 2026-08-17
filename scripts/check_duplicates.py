@@ -37,7 +37,9 @@ def paragraphs(path: Path):
     text = path.read_text(encoding="utf-8")
     for raw in re.split(r"\n\s*\n", text):
         raw = raw.strip()
-        if not raw or raw.startswith(("=", "#import", "#let")):
+        # `*See also:*` lines are navigation, not prose: they are meant to
+        # look alike across chapters, so comparing them only produces noise.
+        if not raw or raw.startswith(("=", "#import", "#let", "*See also:*")):
             continue
         norm = normalize(raw)
         if len(norm) >= MIN_PARA_LEN:

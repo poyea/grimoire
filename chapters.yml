@@ -356,7 +356,7 @@ chapters:
   - subject: cpu-architecture
     slug: virtual-memory
     path: cpu-architecture/virtual-memory.typ
-    lines: 539
+    lines: 541
     status: reviewed
   - subject: cryptography-and-security
     slug: asymmetric
@@ -1086,7 +1086,7 @@ chapters:
   - subject: networking
     slug: concurrency-models
     path: networking/concurrency-models.typ
-    lines: 178
+    lines: 180
     status: reviewed
   - subject: networking
     slug: congestion-control
@@ -1201,7 +1201,7 @@ chapters:
   - subject: networking
     slug: resilience-patterns
     path: networking/resilience-patterns.typ
-    lines: 425
+    lines: 427
     status: reviewed
   - subject: networking
     slug: sdn-programmable-networks
@@ -1231,7 +1231,7 @@ chapters:
   - subject: networking
     slug: tls
     path: networking/tls.typ
-    lines: 425
+    lines: 427
     status: reviewed
   - subject: networking
     slug: transport-layer

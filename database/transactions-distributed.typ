@@ -4,7 +4,7 @@
 
 A distributed transaction spans multiple nodes (shards, replicas, or data centers). Achieving ACID properties in this setting requires *atomic commit protocols* (2PC, 3PC) and *distributed concurrency control*. The fundamental tension: coordination overhead vs consistency guarantees.
 
-*See also:* #xref("database", "concurrency-control", label: "Concurrency Control"), #xref("database", "consensus-and-replication", label: "Consensus and Replication"), #xref("database", "isolation-and-consistency-models", label: "Isolation and Consistency Models")
+*See also:* #xref("database", "concurrency-control", label: "Concurrency Control"), #xref("database", "consensus-and-replication", label: "Consensus and Replication"), #xref("database", "isolation-and-consistency-models", label: "Isolation and Consistency Models"), #xref("distributed-systems", "transactions", label: "Distributed Transactions") (the distributed-systems framing of the same protocols).
 
 == Two-Phase Commit (2PC)
 

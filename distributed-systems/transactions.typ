@@ -4,7 +4,7 @@
 
 A transaction is the unit of *all-or-nothing* change: either every operation in a group commits durably, or none does. Distributing that guarantee across multiple nodes, disks, and data centres requires careful coordination of atomicity, concurrency control, and failure handling — the subject of this chapter.
 
-*See also:* #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive"), #xref("distributed-systems", "gossip", label: "Gossip Protocols"), #xref("distributed-systems", "coordination-services", label: "Coordination Services"), #xref("database", "consensus-and-replication", label: "Consensus and Replication") (database-side framing), #xref("database", "storage-engines", label: "Storage Engines") (database-side framing)
+*See also:* #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive"), #xref("distributed-systems", "gossip", label: "Gossip Protocols"), #xref("distributed-systems", "coordination-services", label: "Coordination Services"), #xref("database", "consensus-and-replication", label: "Consensus and Replication") (database-side framing), #xref("database", "storage-engines", label: "Storage Engines") (database-side framing), #xref("database", "transactions-distributed", label: "Distributed Transactions") (the database framing of the same protocols).
 
 == ACID
 

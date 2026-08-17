@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Concurrency Models
 
 Network servers must handle multiple simultaneous connections. Choice of concurrency model affects performance, scalability, and code complexity.
 
-*See also:* I/O Multiplexing (for event-driven I/O), Lock-Free (for inter-thread communication), Sockets API (for blocking vs non-blocking)
+*See also:* I/O Multiplexing (for event-driven I/O), Lock-Free (for inter-thread communication), Sockets API (for blocking vs non-blocking), #xref("programming-languages", "concurrency-models", label: "Concurrency Models") (the language-level treatment of the same models).
 
 == Thread-Per-Connection
 
