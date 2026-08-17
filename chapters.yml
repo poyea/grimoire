@@ -1371,7 +1371,7 @@ chapters:
   - subject: programming-languages
     slug: complexity
     path: programming-languages/complexity.typ
-    lines: 800
+    lines: 801
     status: reviewed
   - subject: programming-languages
     slug: computability-advanced
@@ -1411,12 +1411,12 @@ chapters:
   - subject: programming-languages
     slug: effects-and-handlers
     path: programming-languages/effects-and-handlers.typ
-    lines: 464
+    lines: 466
     status: reviewed
   - subject: programming-languages
     slug: effects-handlers-implementation
     path: programming-languages/effects-handlers-implementation.typ
-    lines: 469
+    lines: 471
     status: reviewed
   - subject: programming-languages
     slug: foundations
@@ -1446,7 +1446,7 @@ chapters:
   - subject: programming-languages
     slug: linear-and-substructural
     path: programming-languages/linear-and-substructural.typ
-    lines: 431
+    lines: 433
     status: reviewed
   - subject: programming-languages
     slug: macros-and-metaprogramming
@@ -1456,12 +1456,12 @@ chapters:
   - subject: programming-languages
     slug: macros-metaprogramming-formalism
     path: programming-languages/macros-metaprogramming-formalism.typ
-    lines: 554
+    lines: 556
     status: reviewed
   - subject: programming-languages
     slug: omega-automata-constructions
     path: programming-languages/omega-automata-constructions.typ
-    lines: 524
+    lines: 526
     status: reviewed
   - subject: programming-languages
     slug: omega-automata
@@ -1496,7 +1496,7 @@ chapters:
   - subject: programming-languages
     slug: regular-languages-proofs
     path: programming-languages/regular-languages-proofs.typ
-    lines: 641
+    lines: 643
     status: reviewed
   - subject: programming-languages
     slug: regular-languages
@@ -1511,17 +1511,17 @@ chapters:
   - subject: programming-languages
     slug: simply-typed-lambda-extensions
     path: programming-languages/simply-typed-lambda-extensions.typ
-    lines: 477
+    lines: 479
     status: reviewed
   - subject: programming-languages
     slug: simply-typed-lambda
     path: programming-languages/simply-typed-lambda.typ
-    lines: 354
+    lines: 356
     status: reviewed
   - subject: programming-languages
     slug: subtyping-and-polymorphism
     path: programming-languages/subtyping-and-polymorphism.typ
-    lines: 390
+    lines: 392
     status: reviewed
   - subject: programming-languages
     slug: system-f-and-parametricity
@@ -1531,7 +1531,7 @@ chapters:
   - subject: programming-languages
     slug: system-f-categorical-models
     path: programming-languages/system-f-categorical-models.typ
-    lines: 412
+    lines: 414
     status: reviewed
   - subject: programming-languages
     slug: timed-and-hybrid-automata
@@ -1551,7 +1551,7 @@ chapters:
   - subject: programming-languages
     slug: type-systems
     path: programming-languages/type-systems.typ
-    lines: 285
+    lines: 287
     status: reviewed
   - subject: programming-languages
     slug: weighted-and-probabilistic-automata

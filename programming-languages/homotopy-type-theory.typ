@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": proof, theorem, xref
 
 = Homotopy Type Theory
 
@@ -48,9 +48,9 @@ $ A, quad "Id"_A(a, b), quad "Id"_("Id"_A(a,b))(p, q), quad "Id"_("Id"_("Id"_A(a
 
 is not arbitrary structure: it organises into an *$oo$-groupoid*, a higher-dimensional algebraic gadget whose objects are points, whose 1-morphisms are paths, whose 2-morphisms are homotopies, and so on, with composition associative and unital *up to higher morphisms*.
 
-*Theorem (Lumsdaine 2009; van den Berg–Garner 2011).* Every type $A$ in Martin-Löf type theory carries the structure of a *weak $oo$-groupoid* whose 0-cells are the elements of $A$, whose 1-cells are inhabitants of $"Id"_A$, and so on.
+#theorem(name: "Lumsdaine 2009; van den Berg–Garner 2011")[Every type $A$ in Martin-Löf type theory carries the structure of a *weak $oo$-groupoid* whose 0-cells are the elements of $A$, whose 1-cells are inhabitants of $"Id"_A$, and so on.]
 
-*Proof sketch.* One defines, by simultaneous induction over the dimension, the *composition* operations and the *coherence laws*. Composition $p tack.r q$ for paths $p : "Id"_A(a, b)$ and $q : "Id"_A(b, c)$ is defined by path induction on $q$, sending $"refl"_b$ to $p$. The inverse $p^(-1) : "Id"_A(b, a)$ is defined by path induction on $p$, sending $"refl"_a$ to $"refl"_a$. The associator and unitors live one dimension up and are themselves obtained by path induction. The pattern continues: each coherence law is a higher path whose existence is proved by induction on the lower ones. $square$
+#proof(name: "sketch")[One defines, by simultaneous induction over the dimension, the *composition* operations and the *coherence laws*. Composition $p tack.r q$ for paths $p : "Id"_A(a, b)$ and $q : "Id"_A(b, c)$ is defined by path induction on $q$, sending $"refl"_b$ to $p$. The inverse $p^(-1) : "Id"_A(b, a)$ is defined by path induction on $p$, sending $"refl"_a$ to $"refl"_a$. The associator and unitors live one dimension up and are themselves obtained by path induction. The pattern continues: each coherence law is a higher path whose existence is proved by induction on the lower ones.]
 
 The composition $p tack.r q$ is associative *not strictly* but only up to a 2-path $alpha_(p,q,r) : "Id"((p tack.r q) tack.r r, p tack.r (q tack.r r))$, and these associators satisfy *Mac Lane's pentagon* up to a 3-path, and so on. The full coherence is captured by saying the structure is a *Kan complex* in the sense of simplicial homotopy theory.
 
@@ -102,9 +102,9 @@ $ "isEquiv"(f) :equiv Pi y : B . "isContr"("fib"_f(y)) $
 
 where $"fib"_f(y) :equiv (x : A) times "Id"_B(f(x), y)$ is the fibre over $y$, and $"isContr"(C) :equiv (c : C) times Pi x : C . "Id"_C(c, x)$ is contractibility (existence of a center to which everything is uniquely path-connected).
 
-*Theorem.* $"isEquiv"(f)$ is a proposition (any two inhabitants are equal), and is logically equivalent to $"QInv"(f)$.
+#theorem[$"isEquiv"(f)$ is a proposition (any two inhabitants are equal), and is logically equivalent to $"QInv"(f)$.]
 
-*Proof.* That $"isContr"$ is a proposition is direct from the definitions. A product of propositions is a proposition. The logical equivalence with $"QInv"$ uses the standard back-and-forth construction. $square$
+#proof[That $"isContr"$ is a proposition is direct from the definitions. A product of propositions is a proposition. The logical equivalence with $"QInv"$ uses the standard back-and-forth construction.]
 
 Two further equivalent formulations are useful in practice:
 
@@ -151,9 +151,9 @@ The classical homotopy types are stratified by *truncation level*:
 
 In HoTT, the types are *not* automatically sets — a generic type $A : cal(U)$ might have a rich path space. The choice to add UIP as an axiom amounts to *postulating* that all types are sets, collapsing the hierarchy to its zeroth level. In *cubical* HoTT, by contrast, types can be of arbitrary truncation level, and many naturally arise from constructions like *higher inductive types*.
 
-*Theorem (Hedberg 1998).* If $A$ has *decidable equality* ($Pi x, y . ("Id"(x, y)) + not "Id"(x, y)$), then $A$ is a set.
+#theorem(name: "Hedberg 1998")[If $A$ has *decidable equality* ($Pi x, y . ("Id"(x, y)) + not "Id"(x, y)$), then $A$ is a set.]
 
-*Proof.* Decidability gives a function $"dec" : Pi x, y . ("Id"(x, y)) + not "Id"(x, y)$. From this one constructs a *retraction* of any identity type onto a proposition, hence the identity type is itself a proposition. $square$
+#proof[Decidability gives a function $"dec" : Pi x, y . ("Id"(x, y)) + not "Id"(x, y)$. From this one constructs a *retraction* of any identity type onto a proposition, hence the identity type is itself a proposition.]
 
 The theorem explains why types like $NN$ and $"Bool"$ are sets: decidability of their equality is computable.
 
@@ -182,7 +182,7 @@ Computation: $f("base") equiv a$ definitionally, and $"ap"_f ("loop")$ equals $e
 
 The circle, defined this way, has the homotopy type of the geometric circle:
 
-*Theorem (Licata–Shulman 2013).* $pi_1(S^1) = ZZ$, where $pi_1(S^1) :equiv ||"Id"_(S^1)("base", "base")||_0$.
+#theorem(name: "Licata–Shulman 2013")[$pi_1(S^1) = ZZ$, where $pi_1(S^1) :equiv ||"Id"_(S^1)("base", "base")||_0$.]
 
 *Proof outline.* One constructs the *universal cover* of $S^1$ as a HIT, with fibre $ZZ$. The fibre over $"base"$ is $ZZ$. The loop induces a map $ZZ arrow.r ZZ$ which one shows is the successor. By a covering-space argument, made fully formal in HoTT, $pi_1(S^1) = ZZ$. The proof is fully mechanised in Agda and Coq. $square$
 
@@ -228,9 +228,9 @@ The *Kan composition* operations are the heart of the system. A *Kan composition
 
 The operations are written $"hcomp"$ (homogeneous composition) and $"transp"$ (transport along a path of types). Together they give a *constructive* interpretation of univalence: the *Glue* type former allows constructing, for any equivalence $e : A tilde B$, a path $"ua"(e) : "Id"_(cal(U))(A, B)$ such that $"transp"("ua"(e), -) equiv e$.
 
-*Theorem (Canonicity for Cubical Type Theory, Huber 2018).* In CCHM cubical type theory, every closed term of base type (natural numbers, booleans) reduces to a canonical form. In particular, $"transp"("ua"(e), n) equiv e(n)$ for $n : NN$: univalence computes.
+#theorem(name: "Canonicity for Cubical Type Theory, Huber 2018")[In CCHM cubical type theory, every closed term of base type (natural numbers, booleans) reduces to a canonical form. In particular, $"transp"("ua"(e), n) equiv e(n)$ for $n : NN$: univalence computes.]
 
-*Proof.* A direct semantic argument using the *cubical sets* model and a *normalisation-by-evaluation* construction. The key is that the Kan composition operations are *deterministic*: there is no axiom whose computation is left undefined. $square$
+#proof[A direct semantic argument using the *cubical sets* model and a *normalisation-by-evaluation* construction. The key is that the Kan composition operations are *deterministic*: there is no axiom whose computation is left undefined.]
 
 A variant, the *ABCFHL* (Angiuli–Brunerie–Coquand–Favonia–Harper–Licata) cartesian cubical theory (2017), uses a different interval (cartesian rather than de Morgan) and supports a slightly different proof structure. The two are equivalent in expressive power but differ in technical convenience.
 

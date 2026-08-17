@@ -1,3 +1,5 @@
+#import "../template.typ": corollary, theorem
+
 = Effects and Handlers: Implementation and Theory
 
 == Free Monads in Detail
@@ -101,9 +103,9 @@ interpret(Put(s', k), s)  = interpret(k(()), s')
 
 This gives a morphism of $Sigma$-algebras. Uniqueness follows because any other morphism must satisfy the same equations — there is no choice.
 
-*Theorem (Plotkin–Power 2002).* Every finitary monad on $"Set"$ is the free monad of some algebraic theory. The theory is given by: operations = $Sigma$-algebra generators, equations = the monad's equations.
+#theorem(name: "Plotkin–Power 2002")[Every finitary monad on $"Set"$ is the free monad of some algebraic theory. The theory is given by: operations = $Sigma$-algebra generators, equations = the monad's equations.]
 
-*Corollary.* Exception, state, reader, writer, nondeterminism, and finite distribution monads are all algebraic. The continuation monad $"Cont" r$ is *not* algebraic for non-trivial $r$ (it cannot be presented by a finitary theory).
+#corollary[Exception, state, reader, writer, nondeterminism, and finite distribution monads are all algebraic. The continuation monad $"Cont" r$ is *not* algebraic for non-trivial $r$ (it cannot be presented by a finitary theory).]
 
 == Plotkin–Pretnar Handler Semantics: Deep vs Shallow
 
@@ -169,7 +171,7 @@ loop n = if n = 0 then return 0
 
 Under the *deep* handler `counter_deep`, `loop 5` yields `(0, 5)`. Under a *shallow* handler, the continuation of the first `tick` is `loop 4` without a handler, so subsequent ticks escape — the shallow handler would need to be re-applied manually to get the same effect.
 
-*Theorem (Hillerström–Lindley 2016).* Deep and shallow handlers are mutually encodable. The encoding of deep in terms of shallow uses a fixed-point combinator to re-apply the handler; the encoding of shallow in terms of deep extracts only the "first layer" of the deep handler via a one-shot continuation.
+#theorem(name: "Hillerström–Lindley 2016")[Deep and shallow handlers are mutually encodable. The encoding of deep in terms of shallow uses a fixed-point combinator to re-apply the handler; the encoding of shallow in terms of deep extracts only the "first layer" of the deep handler via a one-shot continuation.]
 
 == Row Polymorphism and Effect Inference
 
@@ -249,7 +251,7 @@ ev_exn.raise(msg, current_stack_pointer)
 
 The evidence pointer contains the stack pointer of the handler frame. Resuming the continuation is a *stack switch* to that frame.
 
-*Theorem (Xie et al. 2020, Efficiency).* The evidence translation is $O(1)$ per operation perform: the evidence pointer is known at compile time, and the call is a single indirect function call through the evidence vector.
+#theorem(name: "Xie et al. 2020, Efficiency")[The evidence translation is $O(1)$ per operation perform: the evidence pointer is known at compile time, and the call is a single indirect function call through the evidence vector.]
 
 Compare with the alternative approaches:
 - *Free monad*: each `Bind` allocates a heap node; $O(n)$ allocations for $n$ operations.
@@ -330,7 +332,7 @@ shift { k -> e } = perform DelimShift (fun () ->
 
 The encoding is *macro-expressible*: each source construct translates to a fixed-size target term (no whole-program transformation). Both directions of the encoding preserve typing.
 
-*Corollary.* Any language with multi-prompt delimited control can simulate algebraic effects, and vice versa. The two mechanisms are *equipotent*.
+#corollary[Any language with multi-prompt delimited control can simulate algebraic effects, and vice versa. The two mechanisms are *equipotent*.]
 
 == Concrete Effect Examples
 

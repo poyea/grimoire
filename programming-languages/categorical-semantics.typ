@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": definition, theorem, xref
 
 = Categorical Semantics
 
@@ -44,7 +44,7 @@ natural in $A$, $B$, $C$. This is the categorical content of "a function of two 
 
 == The Lambek-Scott Correspondence
 
-*Theorem (Lambek-Scott 1986).* The category of simply-typed lambda theories (objects: theories; morphisms: theory translations) is *equivalent* to the category of cartesian closed categories with chosen structure (objects: CCCs; morphisms: structure-preserving functors).
+#theorem(name: "Lambek-Scott 1986")[The category of simply-typed lambda theories (objects: theories; morphisms: theory translations) is *equivalent* to the category of cartesian closed categories with chosen structure (objects: CCCs; morphisms: structure-preserving functors).]
 
 In one direction: from a CCC $cal(C)$, build a $lambda^arrow.r$ theory whose types are objects of $cal(C)$ and whose terms-in-context are morphisms. The product structure interprets pairing and projection; the exponential interprets abstraction and application.
 
@@ -68,7 +68,7 @@ The *distributive law* $A times (B + C) tilde.eq (A times B) + (A times C)$ hold
 
 Moggi's insight (1989 LICS, 1991 I&C) was that *every* notion of computation -- exceptions, state, nondeterminism, continuations, I/O -- factors through a monad on the category of values.
 
-*Definition.* A *monad* on $cal(C)$ is a triple $(T, eta, mu)$ with:
+#definition[A *monad* on $cal(C)$ is a triple $(T, eta, mu)$ with:]
 
 - An endofunctor $T : cal(C) arrow.r cal(C)$.
 - A natural transformation $eta : "Id" arrow.r.long T$ (the *unit* or *return*).
@@ -123,7 +123,7 @@ Monads as black boxes obscure their *operations*. A state monad has $"get"$ and 
 
 *Lawvere theory* (Lawvere 1963). A Lawvere theory is a small category $cal(L)$ with finite products whose objects are the finite ordinals $0, 1, 2, dots$ and where $n = 1 times dots times 1$. Morphisms $n arrow.r m$ correspond to $m$-tuples of $n$-ary operations modulo equations.
 
-*Theorem (Lawvere; Linton).* For $cal(C) = "Set"$, *Lawvere theories* correspond exactly to *finitary monads* on $"Set"$: every Lawvere theory $cal(L)$ gives a monad $T_cal(L)$ whose algebras are the models of $cal(L)$, and every finitary monad arises this way.
+#theorem(name: "Lawvere; Linton")[For $cal(C) = "Set"$, *Lawvere theories* correspond exactly to *finitary monads* on $"Set"$: every Lawvere theory $cal(L)$ gives a monad $T_cal(L)$ whose algebras are the models of $cal(L)$, and every finitary monad arises this way.]
 
 The correspondence presents a monad by *generators and relations*: $T$ is determined by a signature $Sigma$ of operations and a set $E$ of equations.
 
@@ -147,7 +147,7 @@ Algebraic effect handlers have become a primary tool for structuring effectful p
 
 Dependent types -- types that depend on values -- demand a richer categorical structure. The *base* category $cal(B)$ has *contexts*; the *total* category $cal(E)$ has *types-in-context*. A *display map* $p : E arrow.r B$ is the projection forgetting the dependent type.
 
-*Definition (Grothendieck fibration).* A functor $p : cal(E) arrow.r cal(B)$ is a *fibration* if for every $f : I arrow.r J$ in $cal(B)$ and every $Y$ over $J$, there is a *cartesian* lifting $hat(f) : f^* Y arrow.r Y$ over $f$ enjoying a universal property.
+#definition(name: "Grothendieck fibration")[A functor $p : cal(E) arrow.r cal(B)$ is a *fibration* if for every $f : I arrow.r J$ in $cal(B)$ and every $Y$ over $J$, there is a *cartesian* lifting $hat(f) : f^* Y arrow.r Y$ over $f$ enjoying a universal property.]
 
 The fibre $cal(E)_I$ over context $I$ is the category of types-in-context $I$. *Reindexing* along $f : I arrow.r J$ gives $f^* : cal(E)_J arrow.r cal(E)_I$ -- the *substitution functor*.
 
@@ -163,7 +163,7 @@ For *intensional* MLTT with the identity type $"Id"$, models include *groupoids*
 
 For a small category $cal(C)$, the *presheaf category* $hat(cal(C)) = "Set"^(cal(C)^"op")$ has functors $cal(C)^"op" arrow.r "Set"$ as objects and natural transformations as morphisms.
 
-*Theorem (Yoneda).* For every $A in cal(C)$ and presheaf $F$, $hat(cal(C))(cal(C)(-, A), F) tilde.eq F(A)$, naturally in $A$ and $F$. In particular, the *Yoneda embedding* $cal(C) arrow.r.hook hat(cal(C))$ is fully faithful: it embeds $cal(C)$ in its presheaf category preserving and reflecting all structure.
+#theorem(name: "Yoneda")[For every $A in cal(C)$ and presheaf $F$, $hat(cal(C))(cal(C)(-, A), F) tilde.eq F(A)$, naturally in $A$ and $F$. In particular, the *Yoneda embedding* $cal(C) arrow.r.hook hat(cal(C))$ is fully faithful: it embeds $cal(C)$ in its presheaf category preserving and reflecting all structure.]
 
 Presheaf categories are *cocomplete*, *complete*, and *cartesian closed* -- the natural setting for many semantic models.
 

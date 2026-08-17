@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": corollary, definition, example, proof, theorem, xref
 
 = Advanced Recursion Theory
 
@@ -21,8 +21,8 @@ emptyset^((|b|)) }$ where $<_O$ is Kleene's $cal(O)$ ordering of notations. The
 union $bold(H) = union.big_(alpha < omega_1^"CK") emptyset^((alpha))$ is the
 *hyperarithmetical* class.
 
-*Theorem (Suslin--Kleene).* $A$ is hyperarithmetical <==> $A in Delta^1_1$ (both
-$Sigma^1_1$ and $Pi^1_1$).
+#theorem(name: "Suslin--Kleene")[$A$ is hyperarithmetical <==> $A in Delta^1_1$ (both
+$Sigma^1_1$ and $Pi^1_1$).]
 
 The *analytical hierarchy* extends the arithmetical hierarchy with quantification
 over *functions* $f : NN -> NN$.
@@ -33,10 +33,10 @@ over *functions* $f : NN -> NN$.
   no infinite path" (well-foundedness).
 - $Sigma^1_2$: $exists f$ of a $Pi^1_1$ matrix; and so on.
 
-*Example.* "$e$ codes a recursive tree with an infinite path" is
+#example["$e$ codes a recursive tree with an infinite path" is
 $Sigma^1_1$; "$e$ codes a well-founded recursive tree" is $Pi^1_1$-complete. The
 set of indices of total recursive functions is $Pi^0_2$-complete; the set of
-*hyperarithmetical* indices is $Pi^1_1$.
+*hyperarithmetical* indices is $Pi^1_1$.]
 
 == Effective Topology and Effective Descriptive Set Theory
 
@@ -51,14 +51,14 @@ analogues. A set $A subset.eq NN^NN$ (Baire space) is:
 - $bold(Sigma)^1_1$: analytic (projection of closed in product space). $Sigma^1_1$:
   effectively analytic -- the projection of a $Pi^0_1$ set.
 
-*Theorem (Kleene).* $A subset.eq NN$ is $Sigma^1_1$ <==> $A$ is the set of indices
+#theorem(name: "Kleene")[$A subset.eq NN$ is $Sigma^1_1$ <==> $A$ is the set of indices
 of recursive trees that are *not* well-founded (i.e., that have an infinite path).
 $A subset.eq NN$ is $Pi^1_1$ <==> $A$ is the set of indices of *well-founded*
-recursive trees -- equivalently, $A$ is the complement of a $Sigma^1_1$ set.
+recursive trees -- equivalently, $A$ is the complement of a $Sigma^1_1$ set.]
 
-*Theorem ($Pi^1_1$-uniformisation, Kondo--Addison).* Every $Pi^1_1$ relation $R
+#theorem(name: "$Pi^1_1$-uniformisation, Kondo--Addison")[Every $Pi^1_1$ relation $R
 subset.eq NN times NN^NN$ has a $Pi^1_1$ uniformisation: a $Pi^1_1$ function $f$
-with $(n, f(n)) in R$ whenever $exists g . (n, g) in R$.
+with $(n, f(n)) in R$ whenever $exists g . (n, g) in R$.]
 
 Effective DST is the bridge between recursion theory and infinitary combinatorics;
 in particular, $Pi^1_1$ sets behave very much like the complement of c.e. sets
@@ -94,9 +94,9 @@ entering $q_?$ causes the machine to transition (in one step) to $q_+$ if $y in
 A$ and $q_-$ otherwise. The oracle is consulted as a black box; its complexity
 is irrelevant to the simulation cost.
 
-*Definition.* $A lt.eq_T B$ <==> $A$ is decided by some oracle machine $M^B$ that
+#definition[$A lt.eq_T B$ <==> $A$ is decided by some oracle machine $M^B$ that
 halts on every input. The *Turing degree* of $A$ is $deg(A) = { B | B equiv_T A
-}$.
+}$.]
 
 The set $cal(D) = NN^NN \/ equiv_T$ of degrees with order $lt.eq_T$ is an
 upper semilattice with least element $bold(0) = deg(emptyset) = $ recursive
@@ -129,7 +129,7 @@ Beyond Rice's bare undecidability we want to *locate* index sets in the
 arithmetical hierarchy. Soare's textbook contains a long catalogue; the proofs
 follow a small set of templates.
 
-*Theorem.* The following are $Pi^0_2$-complete:
+#theorem[The following are $Pi^0_2$-complete:]
 
 - $"Tot" = { e | phi_e "total"} = { e | forall x exists s . T(e, x, s) }$.
 - $"Inf" = { e | W_e "infinite"} = { e | forall n exists x > n . x in W_e }$.
@@ -143,9 +143,9 @@ $"Inf" lt.eq_m "Tot"$.* Symmetric: $phi_(g(e))(n)$ searches for an $x > n$ in $W
 $"Cof"(emptyset') = { e | forall n exists s > n . n in emptyset'_s }$ via direct
 encoding.
 
-*Theorem.* $"Fin" = { e | W_e "finite"} in Sigma^0_2$-complete; $"Cof" = { e |
+#theorem[$"Fin" = { e | W_e "finite"} in Sigma^0_2$-complete; $"Cof" = { e |
 overline(W_e) "finite"}$ and $"Rec" = { e | W_e "recursive"}$ are $Sigma^0_3$-
-complete; $"Ext" = { e | exists "total" psi "extending" phi_e }$ is $Sigma^0_3$.
+complete; $"Ext" = { e | exists "total" psi "extending" phi_e }$ is $Sigma^0_3$.]
 
 These are exact: a complete classification places every natural property at its
 precise level. The arithmetical hierarchy is the unit of measurement for
@@ -153,19 +153,19 @@ precise level. The arithmetical hierarchy is the unit of measurement for
 
 == Limit Lemma and the $0'$-Recursive Sets
 
-*Theorem (Shoenfield's limit lemma, 1959).* A set $A$ is computable in $emptyset'$
+#theorem(name: "Shoenfield's limit lemma, 1959")[A set $A$ is computable in $emptyset'$
 ($A lt.eq_T emptyset'$, equivalently $A in Delta^0_2$) if and only if there is a
-*total computable* function $f(x, s)$ such that
+*total computable* function $f(x, s)$ such that]
 
 $ chi_A (x) = lim_(s -> oo) f(x, s) $
 
 with $f(x, s) in {0, 1}$ and the limit existing for every $x$.
 
-*Proof sketch.* ($=>$) Use $emptyset'$ as oracle to decide $chi_A (x)$;
+#proof(name: "sketch")[($=>$) Use $emptyset'$ as oracle to decide $chi_A (x)$;
 since the answer is computable in $emptyset'$, finite-injury can be replaced by a
 $emptyset'$-recursive enumeration whose stage-$s$ approximations converge.
 ($arrow.l.double$) Decide "$lim_s f(x, s) = 1$" using $emptyset'$ via $exists t
-forall s gt.eq t . f(x, s) = 1$, a $Sigma^0_2$ predicate. $square$
+forall s gt.eq t . f(x, s) = 1$, a $Sigma^0_2$ predicate.]
 
 The limit lemma is the working definition of $Delta^0_2$: sets you can "guess
 and revise finitely often". The construction of Friedberg--Muchnik produces
@@ -185,8 +185,8 @@ emptyset'$ and $A' lt.eq_T emptyset''$ if $A lt.eq_T emptyset'$.
 - $A$ is *low*#sub[$n$] if $A^((n)) equiv_T emptyset^((n))$.
 - $A$ is *high* if $A' equiv_T emptyset''$.
 
-*Theorem (Sacks 1963).* Every nonzero r.e. degree is the supremum of two low r.e.
-degrees. *Theorem (Robinson 1971).* Low r.e. degrees are dense within $cal(R)$.
+#theorem(name: "Sacks 1963")[Every nonzero r.e. degree is the supremum of two low r.e.
+degrees. *Theorem (Robinson 1971).* Low r.e. degrees are dense within $cal(R)$.]
 
 Low sets are r.e. but jump-equivalent to $emptyset$: they are "almost computable"
 in a precise jump-theoretic sense, and the Friedberg--Muchnik incomparable pair
@@ -195,21 +195,21 @@ contains a *maximal* set (Martin 1966).
 
 == Strong Reducibilities, $1$-Completeness, Myhill's Theorem
 
-*Definition.* $A lt.eq_1 B$ ("one-one reducible") <==> there is an *injective*
+#definition[$A lt.eq_1 B$ ("one-one reducible") <==> there is an *injective*
 total computable $f$ with $x in A arrow.l.r.double f(x) in B$. $A equiv_1 B$
-means mutual $1$-reductions.
+means mutual $1$-reductions.]
 
-*Theorem (Myhill 1955).* $A equiv_1 B$ <==> $A$ and $B$ are *recursively isomorphic*:
-there is a total computable bijection $h : NN -> NN$ with $A = h^(-1)(B)$.
+#theorem(name: "Myhill 1955")[$A equiv_1 B$ <==> $A$ and $B$ are *recursively isomorphic*:
+there is a total computable bijection $h : NN -> NN$ with $A = h^(-1)(B)$.]
 
-*Proof.* The Schröder--Bernstein construction is made effective by interleaving
+#proof[The Schröder--Bernstein construction is made effective by interleaving
 the two reductions $A lt.eq_1 B$ via $f$ and $B lt.eq_1 A$ via $g$, building $h$
-in stages by back-and-forth. $square$
+in stages by back-and-forth.]
 
-*Corollary.* All creative sets are recursively isomorphic. Up to recursive
+#corollary[All creative sets are recursively isomorphic. Up to recursive
 isomorphism there is exactly *one* $m$-complete (equivalently $1$-complete) r.e.
 set: $K$. Halting problems across machine models -- TM, RAM, lambda, Markov --
-are not just bi-reducible but *the same set* under a computable relabelling.
+are not just bi-reducible but *the same set* under a computable relabelling.]
 
 *The truth-table reducibilities.* $A lt.eq_(t t) B$ <==> there is a computable $f$
 that on $x$ produces a *list* of queries $arrow(y)$ and a truth-table $tau$ such
@@ -226,17 +226,17 @@ function of a generic set $G$. A set $D$ of conditions is *dense* if every
 $sigma$ has an extension in $D$. $G$ is *$n$-generic* if for every $Sigma^0_n$
 dense set of conditions, some initial segment of $G$ lies in it.
 
-*Theorem.* For each $n$, there is a $n$-generic set $G lt.eq_T emptyset^((n))$.
+#theorem[For each $n$, there is a $n$-generic set $G lt.eq_T emptyset^((n))$.
 *Theorem (Jockusch 1980).* Every $1$-generic set is of hyperimmune degree, hence
-not r.e. and not co-r.e.
+not r.e. and not co-r.e.]
 
 Genericity arguments are the *non-priority* alternative for many incomparability
 constructions: the Kleene--Post result above is one line of forcing.
 
 == The Recursion Theorem with Parameters
 
-*Theorem (effective fixed-point theorem with parameters).* For every total
-computable $f(e, arrow(x))$ there is a total computable $h(arrow(x))$ such that
+#theorem(name: "effective fixed-point theorem with parameters")[For every total
+computable $f(e, arrow(x))$ there is a total computable $h(arrow(x))$ such that]
 
 $ phi_(h(arrow(x))) = phi_(f(h(arrow(x)), arrow(x))) quad "for all" arrow(x). $
 
@@ -245,9 +245,9 @@ parameters. This is what licences self-referential constructions to carry side
 parameters -- you can build a quine that prints its source *and* a fixed input
 chosen at construction time.
 
-*Theorem (double recursion).* For every pair of total computable $f, g$ there are
+#theorem(name: "double recursion")[For every pair of total computable $f, g$ there are
 $a, b$ with $phi_a = phi_(f(a, b))$ and $phi_b = phi_(g(a, b))$. Two mutually
-recursive programs can simultaneously fix-point themselves.
+recursive programs can simultaneously fix-point themselves.]
 
 *Application: Smullyan's double diagonal.* In provability logic, the Gödel--
 Carnap fixed-point lemma (every $phi(x)$ has a sentence $sigma$ with $"PA" tack.r
@@ -291,11 +291,11 @@ A binary sequence $X in 2^omega$ is *Martin-Löf random* (1966) if it passes eve
 *effective statistical test*: for every uniformly c.e. sequence $(U_n)$ of open
 sets in $2^omega$ with $mu(U_n) lt.eq 2^(-n)$, $X in."not" inter_n U_n$.
 
-*Theorem (universal test).* There is a universal Martin-Löf test, so the class of
-ML-random sequences has measure $1$ and is $Pi^0_2$.
+#theorem(name: "universal test")[There is a universal Martin-Löf test, so the class of
+ML-random sequences has measure $1$ and is $Pi^0_2$.]
 
-*Theorem (Levin--Schnorr).* $X$ is ML-random <==> its *prefix-free Kolmogorov complexity*
-satisfies $K(X harpoon.rt n) gt.eq n - O(1)$ for all but finitely many $n$.
+#theorem(name: "Levin--Schnorr")[$X$ is ML-random <==> its *prefix-free Kolmogorov complexity*
+satisfies $K(X harpoon.rt n) gt.eq n - O(1)$ for all but finitely many $n$.]
 
 *Chaitin's $Omega = sum_(p "halts") 2^(-|p|)$* (the halting probability) is the
 canonical Martin-Löf random real. $Omega$ is left-c.e. (its rationals approaching
@@ -303,11 +303,11 @@ from below are c.e.) and ML-random, hence not computable. Knowing $n$ bits of
 $Omega$ allows one to decide the halting problem for all programs of length
 $lt.eq n$.
 
-*Theorem (Kucera--Gács).* Every set $A$ is Turing-reducible to some ML-random
+#theorem(name: "Kucera--Gács")[Every set $A$ is Turing-reducible to some ML-random
 set. Consequently ML-random sets are not all in a single degree: they spread
 across uncountably many degrees. *Theorem (Kucera 1985).* Every Turing degree
 $gt.eq bold(0')$ contains an ML-random set; moreover every non-computable r.e.
-degree contains an ML-random.
+degree contains an ML-random.]
 
 The theory connects measure (almost every sequence), category (comeager many
 sequences), and computability (which random sequences a given oracle can

@@ -1,3 +1,5 @@
+#import "../template.typ": theorem
+
 = Linear and Substructural Type Systems
 
 Substructural type systems control *how often* a variable may be used. Classical logic and the simply-typed lambda calculus treat the typing context $Gamma$ as a "set": any hypothesis may be duplicated, discarded, or reordered at will. Substructural systems drop one or more of those liberties, and in doing so gain the ability to talk about resources, capabilities, file handles, channel endpoints, and memory ownership inside the type system itself.
@@ -122,7 +124,7 @@ Promotion has the side condition that *all* hypotheses are exponential; otherwis
 
 === Cut Elimination
 
-*Theorem (Girard 1987, cut elimination).* Every derivation in linear logic can be transformed into a cut-free derivation of the same sequent.
+#theorem(name: "Girard 1987, cut elimination")[Every derivation in linear logic can be transformed into a cut-free derivation of the same sequent.]
 
 The proof is the usual triple induction (on the cut formula, on the height of the right derivation, on the height of the left derivation), but linear logic gives sharper data: a cut between $A times.o B$ on one side and its left-rule on the other reduces *without duplication*; the reduction strictly decreases a resource measure rather than merely a proof height. Cut elimination on the exponentials, in contrast, may duplicate sub-derivations precisely when contraction is invoked, locating the irreducible source of complexity in the modality $!$, not the linear core.
 
@@ -134,7 +136,7 @@ Sequent derivations have spurious bureaucracy: the order in which independent ru
 
 A proof net for a multiplicative formula is a graph whose nodes are the formula's connectives and whose edges encode the axiom links between dual atoms. Not every such graph corresponds to a sequent derivation; one needs a *correctness criterion* to identify the "proof-like" graphs.
 
-*Theorem (Danos–Regnier 1989, switching criterion).* A multiplicative proof structure is a proof net iff for every choice of one premise at each par node, the resulting graph is acyclic and connected.
+#theorem(name: "Danos–Regnier 1989, switching criterion")[A multiplicative proof structure is a proof net iff for every choice of one premise at each par node, the resulting graph is acyclic and connected.]
 
 Girard's original *long-trip* criterion was equivalent but combinatorially heavier. Danos–Regnier reduced correctness checking to a check over $2^k$ switchings ($k$ par nodes); subsequent work (Murawski–Ong, Guerrini) gave polynomial-time algorithms. Proof nets are the basis for *game semantics* and the *geometry of interaction* (Girard 1989).
 
@@ -180,7 +182,7 @@ Typing uses *two* contexts, $Gamma; Delta$: an *unrestricted* context $Gamma$ (v
 
 The application rule splits the linear context $Delta_1, Delta_2$ between function and argument: no linear resource is used twice. The introduction rule for $!$ requires an empty linear context; you cannot package a one-shot resource into something that can be used many times.
 
-*Theorem (linearity invariant).* If $Gamma; Delta tack.r e : tau$, then each variable bound in $Delta$ appears free in $e$ exactly once; each variable bound in $Gamma$ may appear zero or more times.
+#theorem(name: "linearity invariant")[If $Gamma; Delta tack.r e : tau$, then each variable bound in $Delta$ appears free in $e$ exactly once; each variable bound in $Gamma$ may appear zero or more times.]
 
 The proof is a straightforward induction on derivations. The economic consequence: a function $f : tau_1 multimap tau_2$ cannot duplicate or discard its argument. Equivalently, $f$ must *transform* its argument into the result without losing information about whether the argument has been consumed.
 
@@ -346,7 +348,7 @@ A global type is *projected* onto each participant to obtain a *local* session t
 
 == The Caires–Pfenning Correspondence
 
-*Theorem (Caires–Pfenning 2010, Wadler 2012 "Propositions as Sessions").* Intuitionistic linear logic proofs and $pi$-calculus processes are in bijection, under the dictionary:
+#theorem[Intuitionistic linear logic proofs and $pi$-calculus processes are in bijection, under the dictionary:]
 
 #table(
   columns: (auto, auto),
@@ -412,7 +414,7 @@ The cost is a steeper learning curve and a more verbose surface syntax. Forty ye
 
 Pierce remarks in *Types and Programming Languages* (2002) that "linear types are a powerful tool, but in practice their pervasive use can make programs hard to write". The pragmatic resolution adopted by Linear Haskell, Idris 2, and Granule is *graded modal types*: a single language allows variables to carry any multiplicity from a chosen semiring (e.g., $0$, $1$, $omega$ for irrelevance / linear / unrestricted, or the natural numbers for exact usage counts). Programmers pay the syntactic cost only at the boundaries where it matters.
 
-*Theorem (Atkey 2018, quantitative type theory).* Multiplicities form a semiring; the typing rules instantiate uniformly to recover linear, affine, relevant, dependent-irrelevant, and ordinary type systems as special cases.
+#theorem(name: "Atkey 2018, quantitative type theory")[Multiplicities form a semiring; the typing rules instantiate uniformly to recover linear, affine, relevant, dependent-irrelevant, and ordinary type systems as special cases.]
 
 This is the modern face of substructural type theory: not five competing logics, but one *graded* framework parameterised by a semiring of resource accounting.
 

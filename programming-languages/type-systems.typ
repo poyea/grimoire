@@ -1,3 +1,5 @@
+#import "../template.typ": theorem
+
 = Type Systems
 
 A type system is a syntactic method for proving the absence of certain program behaviors. That definition from Pierce is deliberately narrow: types are a *proof*, not a test. They are checked statically, before any execution, and their guarantees hold for all possible inputs.
@@ -72,7 +74,7 @@ _See also: Turing Machines and Computability for Rice's theorem and undecidabili
 
 === Progress: T-APP Case
 
-*Theorem (Progress).* If $dot tack.r t : T$ then either $t$ is a value or $exists t'. t arrow.r t'$.
+#theorem(name: "Progress")[If $dot tack.r t : T$ then either $t$ is a value or $exists t'. t arrow.r t'$.]
 
 *Proof* by induction on the typing derivation. The central case:
 
@@ -90,7 +92,7 @@ by rule E-AppAbs. In every sub-case the term either is a value or steps, complet
 
 === Preservation: T-APP / E-AppAbs Case
 
-*Theorem (Preservation).* If $dot tack.r t : T$ and $t arrow.r t'$, then $dot tack.r t' : T$.
+#theorem(name: "Preservation")[If $dot tack.r t : T$ and $t arrow.r t'$, then $dot tack.r t' : T$.]
 
 *Proof* by induction on the typing derivation and case analysis on the reduction step. The case that requires the Substitution Lemma:
 

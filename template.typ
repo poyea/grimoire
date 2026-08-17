@@ -61,11 +61,13 @@
 #let definition(body, name: none) = _boxed("Definition", _def-counter, body, name: name, italic: false)
 #let example(body, name: none) = _boxed("Example", _ex-counter, body, name: name, italic: false)
 
-#let proof(body) = block(
+// `name` qualifies the lead-in, e.g. #proof(name: "sketch")[...] renders
+// "Proof (sketch)." — chapters distinguish full proofs from sketches.
+#let proof(body, name: none) = block(
   breakable: true,
   above: 0.6em,
   below: 0.8em,
-  [#emph[Proof.] #h(0.4em) #body #h(1fr) $square.stroked$],
+  [#emph[Proof#if name != none [ (#name)].] #h(0.4em) #body #h(1fr) $square.stroked$],
 )
 
 // -----------------------------------------------------------------------------

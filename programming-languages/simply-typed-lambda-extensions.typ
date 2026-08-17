@@ -1,3 +1,5 @@
+#import "../template.typ": proof, theorem
+
 = Simply-Typed Lambda Calculus: Extensions and Advanced Topics
 
 == Extensions
@@ -102,9 +104,9 @@ Formally, by induction on type:
 
 Long normal forms are unique up to $alpha$-equivalence and have the pleasant property that they can be read off directly from a typing derivation in a *bidirectional* fashion.
 
-*Theorem.* Every well-typed $lambda^arrow.r$ term has a unique $beta$-normal $eta$-long form.
+#theorem[Every well-typed $lambda^arrow.r$ term has a unique $beta$-normal $eta$-long form.]
 
-*Proof.* By SN, the $beta$-nf exists and is unique. $eta$-expand recursively at neutral arrow-typed positions; this terminates because each expansion strictly decreases the "$eta$-defect" measure. $square$
+#proof[By SN, the $beta$-nf exists and is unique. $eta$-expand recursively at neutral arrow-typed positions; this terminates because each expansion strictly decreases the "$eta$-defect" measure.]
 
 == Bidirectional Type Checking
 
@@ -198,9 +200,9 @@ $eta$-equality $lambda x : tau . (e space x) =_eta e$ (for $x in."not" "FV"(e)$)
 + *$eta$-conversion as a rewrite rule* ($arrow.r_eta$): breaks confluence with $beta$ in some extended calculi (e.g., when $e$ has a free variable later substituted). The combined $beta eta$-reduction is confluent for pure $lambda^arrow.r$ but not always for extensions.
 + *$eta$-expansion + restriction to $eta$-long normal forms*: every term is expanded so neutral subterms at arrow types acquire visible abstractions; $beta$ alone then suffices. Standard in NbE.
 
-*Theorem ($beta eta$-Confluence).* The combined relation $arrow.r_(beta eta)$ is confluent on pure $lambda^arrow.r$.
+#theorem(name: "$beta eta$-Confluence")[The combined relation $arrow.r_(beta eta)$ is confluent on pure $lambda^arrow.r$.]
 
-*Proof.* Hindley's *Strip Lemma* combined with the parallel-reduction argument. See Barendregt 1984, §15.1. $square$
+#proof[Hindley's *Strip Lemma* combined with the parallel-reduction argument. See Barendregt 1984, §15.1.]
 
 == Eta and Categorical Naturality
 
@@ -328,9 +330,9 @@ The $beta eta$-equational theory of $lambda^arrow.r$ is the smallest congruence 
 + Reflexivity, symmetry, transitivity.
 + Congruence under $lambda$, application.
 
-*Theorem.* $e_1 =_(beta eta) e_2$ is decidable for $lambda^arrow.r$.
+#theorem[$e_1 =_(beta eta) e_2$ is decidable for $lambda^arrow.r$.]
 
-*Proof.* By SN + confluence, every term has a unique $beta$-normal form; further $eta$-normalize (or $eta$-expand) to obtain a canonical form. Equality of canonical forms is structural and decidable. $square$
+#proof[By SN + confluence, every term has a unique $beta$-normal form; further $eta$-normalize (or $eta$-expand) to obtain a canonical form. Equality of canonical forms is structural and decidable.]
 
 This contrasts sharply with untyped $lambda$: $beta$-equality of arbitrary $lambda$-terms is undecidable (Scott 1963).
 

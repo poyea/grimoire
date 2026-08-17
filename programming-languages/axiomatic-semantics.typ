@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": proof, theorem, xref
 
 = Axiomatic Semantics
 
@@ -97,15 +97,15 @@ The boundary between partial and total correctness is the boundary between *live
 
 Hoare logic is *sound* with respect to the operational semantics:
 
-*Theorem (Soundness).* If $tack.r {P} c {Q}$ then for every $sigma$ with $sigma tack.r P$ and every $sigma'$ with $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$, $sigma' tack.r Q$.
+#theorem(name: "Soundness")[If $tack.r {P} c {Q}$ then for every $sigma$ with $sigma tack.r P$ and every $sigma'$ with $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$, $sigma' tack.r Q$.]
 
-*Proof sketch.* Induction on the derivation of the triple, using the standard operational rules of IMP. The `H-While` case requires induction on the number of loop iterations, using the invariant. $square$
+#proof(name: "sketch")[Induction on the derivation of the triple, using the standard operational rules of IMP. The `H-While` case requires induction on the number of loop iterations, using the invariant.]
 
 Completeness is more delicate. The natural statement -- "every true triple is provable" -- fails because the assertion language might be too weak to express the necessary invariants. Cook (1978) gave the right formulation.
 
-*Theorem (Cook 1978, Relative Completeness).* Let $cal(L)$ be an *expressive* assertion language (one in which the strongest postcondition of every command can be expressed). Then for every triple ${P} c {Q}$ that is *true* under the operational semantics, $tack.r {P} c {Q}$ in Hoare logic, *relative* to an oracle for the validity of formulae in $cal(L)$.
+#theorem(name: "Cook 1978, Relative Completeness")[Let $cal(L)$ be an *expressive* assertion language (one in which the strongest postcondition of every command can be expressed). Then for every triple ${P} c {Q}$ that is *true* under the operational semantics, $tack.r {P} c {Q}$ in Hoare logic, *relative* to an oracle for the validity of formulae in $cal(L)$.]
 
-*Proof sketch.* By induction on $c$, building a derivation whose loop invariants are *strongest* (or *weakest*) postconditions expressible in $cal(L)$. For `while b do c` with given $P$, set $I = "sp"(P, "while" b "do" c) or "the disjunction of all states reachable after some number of iterations"$; expressivity ensures $I$ is in $cal(L)$, and the loop rule discharges with weakening. The reliance on the assertion-language oracle is *unavoidable*: by Tarski's undefinability and Gödel's incompleteness, no recursive proof system for arithmetic is complete. $square$
+#proof(name: "sketch")[By induction on $c$, building a derivation whose loop invariants are *strongest* (or *weakest*) postconditions expressible in $cal(L)$. For `while b do c` with given $P$, set $I = "sp"(P, "while" b "do" c) or "the disjunction of all states reachable after some number of iterations"$; expressivity ensures $I$ is in $cal(L)$, and the loop rule discharges with weakening. The reliance on the assertion-language oracle is *unavoidable*: by Tarski's undefinability and Gödel's incompleteness, no recursive proof system for arithmetic is complete.]
 
 The slogan: Hoare logic is *as complete as logic itself*. Any incompleteness lies in the underlying theory, not the program logic.
 

@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": definition, proof, theorem, xref
 
 = Weighted and Probabilistic Automata
 
@@ -43,9 +43,9 @@ Repeated multiplication yields the Floyd--Warshall and Bellman--Ford algorithms;
 
 == Weighted Automata
 
-*Definition (Schützenberger 1961).* A *$K$-weighted automaton* over alphabet $Sigma$ is a tuple
+#definition(name: "Schützenberger 1961")[A *$K$-weighted automaton* over alphabet $Sigma$ is a tuple
 $ cal(A) = (Q, lambda, mu, gamma) $
-with
+with]
 
 - finite state set $Q$ of size $n$,
 - *initial vector* $lambda in K^Q$ (row),
@@ -79,13 +79,13 @@ Equipped with pointwise sum and the *Cauchy product* $(s dot t, w) = sum_(u v = 
 $ s^* = sum_(n gt.eq 0) s^n = 1 + s + s dot s + dots, $
 which is a well-defined element of $K chevron.l chevron.l Sigma^* chevron.r chevron.r$ since each coefficient $(s^*, w)$ is a finite sum.
 
-*Definition.* The set of *$K$-rational* series is the smallest subset of $K chevron.l chevron.l Sigma^* chevron.r chevron.r$ containing $0$, $1$, every $k dot a$ ($k in K$, $a in Sigma$), and closed under sum, Cauchy product, scalar product, and (proper) star.
+#definition[The set of *$K$-rational* series is the smallest subset of $K chevron.l chevron.l Sigma^* chevron.r chevron.r$ containing $0$, $1$, every $k dot a$ ($k in K$, $a in Sigma$), and closed under sum, Cauchy product, scalar product, and (proper) star.]
 
 === Kleene--Schützenberger Theorem
 
-*Theorem (Schützenberger 1961).* For any semiring $K$, a power series $s in K chevron.l chevron.l Sigma^* chevron.r chevron.r$ is *$K$-recognizable* iff it is *$K$-rational*.
+#theorem(name: "Schützenberger 1961")[For any semiring $K$, a power series $s in K chevron.l chevron.l Sigma^* chevron.r chevron.r$ is *$K$-recognizable* iff it is *$K$-rational*.]
 
-*Proof sketch.* $(arrow.l.double)$ By induction on the rational expression, constructing automata for each constructor (sum, product, star) by direct analogues of Thompson's NFA constructions, with weights propagated through. $(=>)$ Given a weighted automaton, eliminate states one at a time, accumulating expressions of the form $k_1 (k_2)^* k_3$ on remaining transitions; the surviving single-state automaton yields a rational expression. (This is the *state-elimination* / *Brzozowski--McCluskey* construction.) $square$
+#proof(name: "sketch")[$(arrow.l.double)$ By induction on the rational expression, constructing automata for each constructor (sum, product, star) by direct analogues of Thompson's NFA constructions, with weights propagated through. $(=>)$ Given a weighted automaton, eliminate states one at a time, accumulating expressions of the form $k_1 (k_2)^* k_3$ on remaining transitions; the surviving single-state automaton yields a rational expression. (This is the *state-elimination* / *Brzozowski--McCluskey* construction.)]
 
 The theorem encompasses Kleene's theorem ($K = BB$), the Chomsky--Schützenberger generating functions ($K = NN$ counting parses), and tropical Kleene algebras for path problems.
 
@@ -93,21 +93,21 @@ The theorem encompasses Kleene's theorem ($K = BB$), the Chomsky--Schützenberge
 
 The *equivalence problem* for weighted automata: given $cal(A), cal(B)$ over $K$, decide whether $cal(A)(w) = cal(B)(w)$ for all $w$.
 
-*Theorem (Schützenberger 1961; Tzeng 1992).* Equivalence is decidable in *polynomial time* for weighted automata over a *field*.
+#theorem(name: "Schützenberger 1961; Tzeng 1992")[Equivalence is decidable in *polynomial time* for weighted automata over a *field*.]
 
-*Proof.* The behaviour vector $beta(w) = mu(w) gamma$ lives in $K^Q$. The set ${beta(w) | w in Sigma^*}$ spans a sub-vector-space $V subset.eq K^Q$. Compute $V$ by BFS: start from $gamma$, and for each newly discovered vector $v in V$ and each $a in Sigma$, add $mu(a) v$ if linearly independent of the current basis. The procedure terminates in $|Q|$ rounds (the dimension of $V$ is bounded by $|Q|$). $cal(A) equiv cal(B)$ <==> $lambda_(cal(A)) v = lambda_(cal(B)) v$ for every $v$ in the basis of the analogous combined automaton. Total cost: $O((n_(cal(A)) + n_(cal(B)))^3 |Sigma|)$. $square$
+#proof[The behaviour vector $beta(w) = mu(w) gamma$ lives in $K^Q$. The set ${beta(w) | w in Sigma^*}$ spans a sub-vector-space $V subset.eq K^Q$. Compute $V$ by BFS: start from $gamma$, and for each newly discovered vector $v in V$ and each $a in Sigma$, add $mu(a) v$ if linearly independent of the current basis. The procedure terminates in $|Q|$ rounds (the dimension of $V$ is bounded by $|Q|$). $cal(A) equiv cal(B)$ <==> $lambda_(cal(A)) v = lambda_(cal(B)) v$ for every $v$ in the basis of the analogous combined automaton. Total cost: $O((n_(cal(A)) + n_(cal(B)))^3 |Sigma|)$.]
 
-*Theorem (Krob 1994).* Equivalence is *undecidable* for weighted automata over the *tropical semiring* $(NN union {oo}, min, +)$.
+#theorem(name: "Krob 1994")[Equivalence is *undecidable* for weighted automata over the *tropical semiring* $(NN union {oo}, min, +)$.]
 
 The Krob construction reduces from Hilbert's tenth problem: integer-coefficient polynomial equations are encoded via tropical computations of products and sums of word weights.
 
-*Theorem (Almagor--Boker--Kupferman 2011).* Quantitative *containment* $forall w. cal(A)(w) lt.eq cal(B)(w)$ is undecidable for the tropical semiring even when both are deterministic.
+#theorem(name: "Almagor--Boker--Kupferman 2011")[Quantitative *containment* $forall w. cal(A)(w) lt.eq cal(B)(w)$ is undecidable for the tropical semiring even when both are deterministic.]
 
 == Determinization and Minimization
 
 A weighted automaton is *deterministic* if the underlying graph (states with nonzero outgoing transitions on each letter) is deterministic. Not every weighted automaton is determinizable.
 
-*Theorem (Mohri 1997).* Weighted automata over the tropical semiring are determinizable <==> they have the *twins property*: any two states reachable from the initial states on the same word and lying on cycles labelled by the same word have the same cycle weight difference.
+#theorem(name: "Mohri 1997")[Weighted automata over the tropical semiring are determinizable <==> they have the *twins property*: any two states reachable from the initial states on the same word and lying on cycles labelled by the same word have the same cycle weight difference.]
 
 The *minimization* problem over a field reduces to the classical Hopcroft algorithm via the canonical *quotient* by behavioural equivalence; the quotient is computed by the same linear-algebra basis construction used for equivalence.
 
@@ -147,9 +147,9 @@ The OpenFST library (Allauzen--Riley--Schalkwyk--Skut--Mohri 2007) provides comp
 
 == Probabilistic Automata
 
-*Definition (Rabin 1963).* A *probabilistic automaton* is a tuple
+#definition(name: "Rabin 1963")[A *probabilistic automaton* is a tuple
 $ cal(A) = (Q, Sigma, M, q_0, F) $
-where
+where]
 
 - $Q$ is a finite state set, $q_0 in Q$, $F subset.eq Q$,
 - $M : Sigma arrow.r [0,1]^(Q times Q)$ assigns a *row-stochastic* matrix $M(a)$ to each letter (each row sums to 1).
@@ -164,19 +164,19 @@ A PA is a $[0,1]$-weighted automaton with row-stochasticity.
 
 For $lambda in [0,1]$, the *cut-point language* is $L_(>lambda)(cal(A)) = { w | P_(cal(A))(w) > lambda }$. A cut-point is *isolated* if $exists epsilon > 0. forall w. |P_(cal(A))(w) - lambda| gt.eq epsilon$.
 
-*Theorem (Rabin 1963).* Languages with *isolated* cut-points are regular.
+#theorem(name: "Rabin 1963")[Languages with *isolated* cut-points are regular.]
 
-*Theorem (Rabin 1963).* Languages with *non-isolated* cut-points need not be regular; in particular, $L_(>1/2)$ can be non-context-free.
+#theorem(name: "Rabin 1963")[Languages with *non-isolated* cut-points need not be regular; in particular, $L_(>1/2)$ can be non-context-free.]
 
 === Undecidability Results
 
-*Theorem (Paz 1971).* The *emptiness* problem $L_(>lambda)(cal(A)) = emptyset.rev$ for probabilistic automata is *undecidable*.
+#theorem(name: "Paz 1971")[The *emptiness* problem $L_(>lambda)(cal(A)) = emptyset.rev$ for probabilistic automata is *undecidable*.]
 
 The proof reduces from Post's correspondence problem, building a PA whose acceptance probability exceeds $lambda$ <==> a PCP instance has a solution.
 
-*Theorem (Gimbert--Oualhadj 2010).* The *value-1 problem* -- given a PA $cal(A)$, decide whether $sup_w P_(cal(A))(w) = 1$ -- is *undecidable*. (Note: this is the supremum of probabilities, asking if it can be made arbitrarily close to $1$.)
+#theorem(name: "Gimbert--Oualhadj 2010")[The *value-1 problem* -- given a PA $cal(A)$, decide whether $sup_w P_(cal(A))(w) = 1$ -- is *undecidable*. (Note: this is the supremum of probabilities, asking if it can be made arbitrarily close to $1$.)]
 
-*Theorem (Fijalkow--Gimbert--Oualhadj 2012).* The value-1 problem is decidable for *leaktight* PAs, a syntactic subclass closed under operations of interest.
+#theorem(name: "Fijalkow--Gimbert--Oualhadj 2012")[The value-1 problem is decidable for *leaktight* PAs, a syntactic subclass closed under operations of interest.]
 
 === Equivalence
 
@@ -199,9 +199,9 @@ $ psi ::= X Phi | Phi U Phi | Phi U^(lt.eq k) Phi $
 
 where $p in [0,1]$, $k in NN$, $prec in {<, lt.eq, gt.eq, >}$. Semantics: $s models P_(prec.eq p)[psi]$ <==> $"Pr"_s({pi | pi models psi}) prec.eq p$.
 
-*Theorem (Hansson--Jonsson 1994; Bianco--de Alfaro 1995).* PCTL model checking over finite Markov chains is in *P*. The until operator reduces to a system of linear equations:
+#theorem(name: "Hansson--Jonsson 1994; Bianco--de Alfaro 1995")[PCTL model checking over finite Markov chains is in *P*. The until operator reduces to a system of linear equations:
 $ x_s = cases(1 "if" s in "Sat"(Phi_2), 0 "if" s in.not ("Sat"(Phi_1) union "Sat"(Phi_2)), sum_(s') P(s, s') x_(s') "otherwise"). $
-Solve in $O(|S|^3)$ via Gaussian elimination, or iteratively for sparse systems.
+Solve in $O(|S|^3)$ via Gaussian elimination, or iteratively for sparse systems.]
 
 For MDPs, the model-checking question becomes "does *every* / *some* scheduler satisfy the formula?" and reduces to *linear programming* over reachability probabilities; complexity is *P-complete*.
 
@@ -220,11 +220,11 @@ The Baier--Katoen textbook gives a comprehensive treatment. PRISM and Storm impl
 
 === Stochastic Games
 
-*Definition (Shapley 1953).* A *stochastic game* (a.k.a. *2.5-player game*) has states partitioned $S = S_("Max") union S_("Min") union S_("Prob")$ with transition matrices for the probabilistic vertices and choices at the others; both players choose strategies aiming to maximize/minimize a payoff.
+#definition(name: "Shapley 1953")[A *stochastic game* (a.k.a. *2.5-player game*) has states partitioned $S = S_("Max") union S_("Min") union S_("Prob")$ with transition matrices for the probabilistic vertices and choices at the others; both players choose strategies aiming to maximize/minimize a payoff.]
 
-*Theorem (Shapley 1953).* Finite discounted stochastic games have *value* and *optimal stationary deterministic strategies* for both players.
+#theorem(name: "Shapley 1953")[Finite discounted stochastic games have *value* and *optimal stationary deterministic strategies* for both players.]
 
-*Theorem (Gimbert--Zielonka 2005).* *Two-player zero-sum stochastic games* with *$omega$-regular* objectives are *positionally determined*: optimal strategies depend only on the current state (and the Rabin/Streett index for the corresponding deterministic automaton).
+#theorem(name: "Gimbert--Zielonka 2005")[*Two-player zero-sum stochastic games* with *$omega$-regular* objectives are *positionally determined*: optimal strategies depend only on the current state (and the Rabin/Streett index for the corresponding deterministic automaton).]
 
 *Complexity.* Solving simple stochastic games (Condon 1992) is in NP $inter$ coNP and not known to be in P; this is one of the most famous "intermediate" problems in complexity.
 
@@ -246,9 +246,9 @@ Both tools accept the same input formats (PRISM language, JANI); benchmark compa
 
 Weighted automata interact with classical computability in unexpected ways.
 
-*Theorem (Halava--Harju 1996; Hirvensalo 2007).* The *zero-isolation* problem ("does there exist $epsilon > 0$ with $|cal(A)(w)| > epsilon$ for all $w$ with $cal(A)(w) eq."not" 0$?") for $ZZ$-weighted automata is *undecidable*.
+#theorem(name: "Halava--Harju 1996; Hirvensalo 2007")[The *zero-isolation* problem ("does there exist $epsilon > 0$ with $|cal(A)(w)| > epsilon$ for all $w$ with $cal(A)(w) eq."not" 0$?") for $ZZ$-weighted automata is *undecidable*.]
 
-*Theorem (Daviaud--Jecker--Reynier--Villevalois 2017).* *Quantitative simulation* of weighted automata (a relaxation of equivalence) is decidable for tropical automata over bounded ambit, undecidable in general.
+#theorem(name: "Daviaud--Jecker--Reynier--Villevalois 2017")[*Quantitative simulation* of weighted automata (a relaxation of equivalence) is decidable for tropical automata over bounded ambit, undecidable in general.]
 
 The *probabilistic value-1 problem*'s undecidability (Gimbert--Oualhadj 2010) implies undecidability of various synthesis problems over MDPs with infinite-horizon objectives.
 
@@ -268,7 +268,7 @@ For non-deterministic-probabilistic systems (PA in the Segala sense, distinct fr
 $ phi ::= "true" | "not" phi | and.big_i phi_i | chevron.l a chevron.r_p phi $
 where $chevron.l a chevron.r_p phi$ means "with probability $> p$ a transition by $a$ leads to a state satisfying $phi$" characterizes bisimulation in the Hennessy--Milner sense.
 
-*Theorem (Baier--Hermanns 1999).* Probabilistic bisimulation is decidable in polynomial time on finite PAs (partition-refinement à la Paige--Tarjan).
+#theorem(name: "Baier--Hermanns 1999")[Probabilistic bisimulation is decidable in polynomial time on finite PAs (partition-refinement à la Paige--Tarjan).]
 
 == Algorithmics: Shortest-Distance in Semirings
 
@@ -311,15 +311,15 @@ They are *not* closed under "complement" (which is meaningless outside the Boole
 
 *Probabilistic Büchi automata* (PBA) extend the Rabin model to infinite words with Büchi acceptance condition $"Pr"({pi | "Inf"(pi) inter F eq."not" emptyset.rev}) > lambda$.
 
-*Theorem (Baier--Bertrand--Grösser 2008).* *Almost-sure* emptiness ($lambda = 1$) is decidable for PBA, but *positive* emptiness ($lambda > 0$) is undecidable. Determinization fails: PBA are *strictly more expressive* than deterministic PBA, breaking the McNaughton-style symmetry of the classical theory.
+#theorem(name: "Baier--Bertrand--Grösser 2008")[*Almost-sure* emptiness ($lambda = 1$) is decidable for PBA, but *positive* emptiness ($lambda > 0$) is undecidable. Determinization fails: PBA are *strictly more expressive* than deterministic PBA, breaking the McNaughton-style symmetry of the classical theory.]
 
 == Quantitative Languages and Mean-Payoff Automata
 
 *Mean-payoff automata* (Chatterjee--Doyen--Henzinger 2008) assign to each infinite run the long-run average $liminf_(n arrow.r oo) (1 slash n) sum_(i=1)^n w_i$ of its edge weights. The behaviour of a non-deterministic mean-payoff automaton on $w$ is $sup$ (or $inf$) over runs.
 
-*Theorem (Chatterjee--Doyen--Henzinger 2010).* *Inclusion* and *equivalence* of non-deterministic mean-payoff automata are *undecidable*.
+#theorem(name: "Chatterjee--Doyen--Henzinger 2010")[*Inclusion* and *equivalence* of non-deterministic mean-payoff automata are *undecidable*.]
 
-*Theorem (Chatterjee--Doyen--Henzinger 2010).* Inclusion is *PSPACE-complete* for *deterministic* mean-payoff automata.
+#theorem(name: "Chatterjee--Doyen--Henzinger 2010")[Inclusion is *PSPACE-complete* for *deterministic* mean-payoff automata.]
 
 This mirrors the (un)decidability of inclusion for tropical weighted automata: in the algebraic limit, $liminf$ is the tropical sum over infinite runs.
 
@@ -365,7 +365,7 @@ The boundary at which decidability fails -- emptiness over $[0,1]$, equivalence 
 
 Eilenberg's classical theorem establishes a bijective correspondence between *varieties of regular languages* and *varieties of finite monoids*. Reutenauer (1980) and Reutenauer--Schützenberger extend the framework:
 
-*Theorem (Reutenauer 1980).* For a commutative ring $K$, $K$-recognizable series correspond to representations of the free monoid $Sigma^*$ as a finitely generated $K$-submodule of matrices over $K$. The *syntactic algebra* of a series $s$ is the smallest $K$-algebra recognizing $s$; minimal automata correspond to its irreducible representations.
+#theorem(name: "Reutenauer 1980")[For a commutative ring $K$, $K$-recognizable series correspond to representations of the free monoid $Sigma^*$ as a finitely generated $K$-submodule of matrices over $K$. The *syntactic algebra* of a series $s$ is the smallest $K$-algebra recognizing $s$; minimal automata correspond to its irreducible representations.]
 
 This perspective views weighted automata as *linear representations* of $Sigma^*$ and explains why polynomial-time equivalence over fields succeeds: rank in linear algebra plays the role of state count.
 
@@ -373,7 +373,7 @@ This perspective views weighted automata as *linear representations* of $Sigma^*
 
 For $s in K chevron.l chevron.l Sigma^* chevron.r chevron.r$, the *Hankel matrix* $H_s$ is the $Sigma^* times Sigma^*$ matrix with $H_s[u, v] = (s, u v)$.
 
-*Theorem (Carlyle--Paz 1971; Fliess 1974).* For a field $K$, $s$ is $K$-recognizable iff $H_s$ has finite rank, and the minimum number of states recognizing $s$ equals $"rank"(H_s)$.
+#theorem(name: "Carlyle--Paz 1971; Fliess 1974")[For a field $K$, $s$ is $K$-recognizable iff $H_s$ has finite rank, and the minimum number of states recognizing $s$ equals $"rank"(H_s)$.]
 
 *Algorithmic content.* Truncating $H_s$ to finite blocks and computing rank gives an algorithm for minimization; the *SVD* of a sub-Hankel block underlies the *spectral learning* of WAs (Bailly--Denis--Ralaivola 2009; Balle--Mohri 2015).
 
@@ -386,7 +386,7 @@ For $omega$-words, several *value functions* over infinite runs:
 - *Limsup / liminf* of edge weights;
 - *Sup / inf* over prefixes.
 
-*Theorem (Chatterjee--Doyen--Henzinger 2010).* For *deterministic* quantitative automata, inclusion is decidable for limsup, liminf, sup, inf in PTIME; for *discounted-sum* it is *not known* whether inclusion is decidable (related to the *positivity problem* for linear recurrences).
+#theorem(name: "Chatterjee--Doyen--Henzinger 2010")[For *deterministic* quantitative automata, inclusion is decidable for limsup, liminf, sup, inf in PTIME; for *discounted-sum* it is *not known* whether inclusion is decidable (related to the *positivity problem* for linear recurrences).]
 
 == Extended Topic: Decision Problems for Linear Recurrence Sequences
 
@@ -402,7 +402,7 @@ These problems sit at the boundary of effective number theory and automata theor
 
 *Cost register automata* (Alur--D'Antoni--Deshmukh--Raghothaman--Yuan 2013) are deterministic finite automata augmented with a finite set of registers over a semiring $K$, updated by linear combinations on each transition. The output is a register value at the end.
 
-*Theorem (Alur--D'Antoni et al. 2013).* CRAs are exactly as expressive as a natural subclass of weighted automata; over the $(NN, +, dot)$ semiring with copyless updates (each register used at most once per update), they coincide with unambiguous WAs.
+#theorem(name: "Alur--D'Antoni et al. 2013")[CRAs are exactly as expressive as a natural subclass of weighted automata; over the $(NN, +, dot)$ semiring with copyless updates (each register used at most once per update), they coincide with unambiguous WAs.]
 
 CRAs serve as a *structured operational semantics* for streaming computation; tools like *streamable string transducers* (Alur--Cerný 2010) extend the framework with strings.
 
@@ -420,9 +420,9 @@ The undecidability of WA equivalence over the tropical semiring (Krob 1994) => t
 
 For tropical WAs, *determinization* succeeds <==> the *twins property* holds: any two states $p, q$ reachable on the same word $u$ from initial, and lying on cycles labelled by the same word $v$, must have cycle weights satisfying $w(p, v, p) = w(q, v, q)$.
 
-*Theorem (Mohri 1997).* The twins property is decidable for *trim* tropical WAs in polynomial time.
+#theorem(name: "Mohri 1997")[The twins property is decidable for *trim* tropical WAs in polynomial time.]
 
-*Theorem (Allauzen--Mohri 2003).* Mohri's classical determinization algorithm constructs a (possibly exponential) deterministic equivalent when the twins property holds, by tracking *residual weights* in a subset construction.
+#theorem(name: "Allauzen--Mohri 2003")[Mohri's classical determinization algorithm constructs a (possibly exponential) deterministic equivalent when the twins property holds, by tracking *residual weights* in a subset construction.]
 
 For the probability semiring, *no analogue of the twins property* yields determinizability; in fact, probabilistic automata are *strictly more expressive* than deterministic Markov chains over the same state count.
 
@@ -443,7 +443,7 @@ For *average-reward* MDPs, the Howard--Veinott decomposition yields a system of 
 
 POMDPs (Smallwood--Sondik 1973) replace state observation with *observation distributions* $O(o | s, a)$. The agent maintains a *belief state* $b in Delta(S)$.
 
-*Theorem (Madani--Hanks--Condon 1999).* Almost-sure reachability in finite POMDPs is *EXPTIME-complete*; positive (non-zero probability) reachability is *undecidable*.
+#theorem(name: "Madani--Hanks--Condon 1999")[Almost-sure reachability in finite POMDPs is *EXPTIME-complete*; positive (non-zero probability) reachability is *undecidable*.]
 
 POMDPs intersect automata learning: *probabilistic-language equivalence* of POMDPs is decidable by reduction to weighted-automaton equivalence over $QQ$ (since belief updates are linear).
 
@@ -457,7 +457,7 @@ CTMC model checking with *continuous stochastic logic* (CSL, Aziz--Sanwal--Singh
 
 For weighted/probabilistic systems, *equality of bisimulation* is too rigid: small perturbations break it. *Behavioural pseudometrics* (Desharnais--Gupta--Jagadeesan--Panangaden 2004) define a $1$-Lipschitz distance via a Banach fixed-point of the *Kantorovich--Wasserstein* metric on probability distributions.
 
-*Theorem (van Breugel--Worrell 2001).* Bisimilarity-pseudometric on probabilistic labelled transition systems is computable in polynomial time using LP at each iteration.
+#theorem(name: "van Breugel--Worrell 2001")[Bisimilarity-pseudometric on probabilistic labelled transition systems is computable in polynomial time using LP at each iteration.]
 
 Applications: *quantitative reasoning about implementations*, certifying that a probabilistic abstraction is "$epsilon$-close" to the concrete system.
 

@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": definition, proof, theorem, xref
 
 = Process Calculi
 
@@ -99,18 +99,18 @@ $ "Buf2" eq.delta (nu c)("Cell"[c slash "out"] bar "Cell"[c slash "in"]) $
 
 Two processes are *strongly bisimilar* when each can match every transition of the other, step for step. Formally:
 
-*Definition (Strong bisimulation).* A relation $cal(R) subset.eq cal(P) times cal(P)$ is a *strong bisimulation* <==> whenever $P cal(R) Q$:
+#definition(name: "Strong bisimulation")[A relation $cal(R) subset.eq cal(P) times cal(P)$ is a *strong bisimulation* <==> whenever $P cal(R) Q$:]
 
 - For every $P arrow.r^alpha P'$ there exists $Q'$ with $Q arrow.r^alpha Q'$ and $P' cal(R) Q'$.
 - For every $Q arrow.r^alpha Q'$ there exists $P'$ with $P arrow.r^alpha P'$ and $P' cal(R) Q'$.
 
 *Strong bisimilarity* $tilde$ is the union of all strong bisimulations; equivalently, the largest such relation. It is itself a bisimulation (the property is closed under unions).
 
-*Theorem (Park 1981).* $tilde$ is an equivalence relation, and it is the greatest fixed point of the monotone operator $cal(F)$ on $cal(P^2)$ defined by
+#theorem(name: "Park 1981")[$tilde$ is an equivalence relation, and it is the greatest fixed point of the monotone operator $cal(F)$ on $cal(P^2)$ defined by]
 
 $ cal(F)(cal(R)) = { (P, Q) : "the bisimulation clauses hold for" cal(R) } $
 
-*Proof.* Symmetry of bisimulation is built in. Reflexivity: the identity is a bisimulation. Transitivity: $cal(R)_1 circle.small cal(R)_2$ is a bisimulation if both are. The fixed-point characterisation follows from the Knaster–Tarski theorem, since $cal(F)$ is monotone on the complete lattice $cal(P^2)$. $square$
+#proof[Symmetry of bisimulation is built in. Reflexivity: the identity is a bisimulation. Transitivity: $cal(R)_1 circle.small cal(R)_2$ is a bisimulation if both are. The fixed-point characterisation follows from the Knaster–Tarski theorem, since $cal(F)$ is monotone on the complete lattice $cal(P^2)$.]
 
 The fixed-point view yields the *bisimulation game*: to show $P tilde Q$, supply a bisimulation containing $(P, Q)$. To show $P tilde."not" Q$, exhibit a strategy by which Attacker (choosing a move from one side) defeats every Defender response (matching from the other).
 
@@ -138,7 +138,7 @@ $ P =>^alpha P' <==> P arrow.r^tau^* arrow.r^alpha arrow.r^tau^* P' $
 
 and $=>^hat(alpha) = =>^alpha$ for $alpha eq."not" tau$, while $=>^hat(tau) = arrow.r^tau^*$ (zero or more $tau$-steps).
 
-*Definition (Weak bisimulation).* $cal(R)$ is a *weak bisimulation* <==> whenever $P cal(R) Q$:
+#definition(name: "Weak bisimulation")[$cal(R)$ is a *weak bisimulation* <==> whenever $P cal(R) Q$:]
 
 - $P arrow.r^alpha P'$ => $exists Q'. Q =>^hat(alpha) Q' and P' cal(R) Q'$.
 - Symmetrically.
@@ -149,7 +149,7 @@ and $=>^hat(alpha) = =>^alpha$ for $alpha eq."not" tau$, while $=>^hat(tau) = ar
 
 Weak bisimulation can identify processes whose silent steps occur at semantically different *branching points*. Van Glabbeek and Weijland (1996) introduced *branching bisimulation* to preserve the branching structure across $tau$-steps.
 
-*Definition.* $cal(R)$ is a *branching bisimulation* <==> whenever $P cal(R) Q$ and $P arrow.r^alpha P'$:
+#definition[$cal(R)$ is a *branching bisimulation* <==> whenever $P cal(R) Q$ and $P arrow.r^alpha P'$:]
 
 - Either $alpha = tau$ and $P' cal(R) Q$; or
 - There exist $Q_0, Q'$ with $Q arrow.r^tau^* Q_0 arrow.r^alpha Q'$, $P cal(R) Q_0$, and $P' cal(R) Q'$.
@@ -187,9 +187,9 @@ The semantics:
 - $P models chevron.l alpha chevron.r phi$ <==> $exists P'. P arrow.r^alpha P' and P' models phi$.
 - $P models [alpha] phi$ <==> $forall P'. P arrow.r^alpha P' => P' models phi$.
 
-*Theorem (Hennessy–Milner 1985).* On image-finite processes ($forall alpha$, ${ P' : P arrow.r^alpha P' }$ is finite), $P tilde Q$ <==> $P$ and $Q$ satisfy the same HML formulae.
+#theorem(name: "Hennessy–Milner 1985")[On image-finite processes ($forall alpha$, ${ P' : P arrow.r^alpha P' }$ is finite), $P tilde Q$ <==> $P$ and $Q$ satisfy the same HML formulae.]
 
-*Proof sketch.* Soundness ($tilde subset.eq$ HML-equiv) is by induction on formulae. Completeness uses the diamond and box modalities together with negation to build a *characteristic formula* at each finite depth; image-finiteness ensures the construction stabilises. $square$
+#proof(name: "sketch")[Soundness ($tilde subset.eq$ HML-equiv) is by induction on formulae. Completeness uses the diamond and box modalities together with negation to build a *characteristic formula* at each finite depth; image-finiteness ensures the construction stabilises.]
 
 The image-finiteness hypothesis is essential: without it, infinitary conjunction is required for the completeness direction. HML extended with fixed-point operators yields the *modal $mu$-calculus* (Kozen 1983), which is strictly more expressive and is the standard logic for model-checking concurrent systems.
 
@@ -229,7 +229,7 @@ read as "$Q$ refines $P$": $Q$ has fewer behaviours (less nondeterminism, less d
 
 Refinement is the central proof obligation in CSP-based verification: a specification $S$ is refined by an implementation $I$ when $S subset.sq.eq_(F D) I$. The *FDR* model checker (Roscoe et al.) decides refinement by normalising both sides and comparing finite state machines. FDR has been used to verify cryptographic protocols (Lowe's attack on Needham–Schroeder), bus protocols, and distributed algorithms.
 
-*Theorem (Roscoe).* $cal(F D)$ is fully abstract for CSP with respect to a "may-test / must-test" observation regime: $P =_(F D) Q$ <==> no CSP context can distinguish them by may/must testing.
+#theorem(name: "Roscoe")[$cal(F D)$ is fully abstract for CSP with respect to a "may-test / must-test" observation regime: $P =_(F D) Q$ <==> no CSP context can distinguish them by may/must testing.]
 
 === Trace, Failures, Failures–Divergences
 

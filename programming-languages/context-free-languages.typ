@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": corollary, proof, theorem, xref
 
 = Context-Free Languages
 
@@ -39,7 +39,7 @@ G_5 (Dyck_2):            S -> ε | ( S ) S | [ S ] S
 
 The *Dyck language* $D_n$ (balanced strings over $n$ kinds of parentheses) is the prototypical CFL; *every* CFL is, up to inverse homomorphism and intersection with a regular set, a Dyck language (Chomsky–Schützenberger 1963):
 
-*Theorem (Chomsky–Schützenberger).* A language $L$ is context-free <==> there exist $n >= 1$, a regular language $R subset.eq { 1, dots, n, overline(1), dots, overline(n) }^*$, and a homomorphism $h$ such that $L = h(D_n inter R)$.
+#theorem(name: "Chomsky–Schützenberger")[A language $L$ is context-free <==> there exist $n >= 1$, a regular language $R subset.eq { 1, dots, n, overline(1), dots, overline(n) }^*$, and a homomorphism $h$ such that $L = h(D_n inter R)$.]
 
 This says CFLs are precisely the homomorphic images of intersections of Dyck languages with regular languages, a statement of the same flavour as Kleene's representation of regular languages but two levels deeper.
 
@@ -51,9 +51,9 @@ $ A arrow.r B C quad (B, C in V), quad A arrow.r a quad (a in Sigma), quad S arr
 
 with the last allowed only if $epsilon in L(G)$ and $S$ does not appear on any right-hand side.
 
-*Theorem (Chomsky 1959).* Every CFG $G$ can be effectively transformed into a CNF grammar $G'$ with $L(G') = L(G)$.
+#theorem(name: "Chomsky 1959")[Every CFG $G$ can be effectively transformed into a CNF grammar $G'$ with $L(G') = L(G)$.]
 
-*Proof sketch.* Four passes.
+#proof(name: "sketch")[Four passes.]
 
 (1) *START.* Introduce a fresh $S_0 arrow.r S$ to ensure $S$ does not appear on a right-hand side.
 
@@ -73,15 +73,15 @@ $ A arrow.r a alpha quad (a in Sigma, alpha in V^*) $
 
 GNF is the CFG analogue of right-regular grammars: every derivation step *consumes one terminal*, so a leftmost derivation of $w$ has exactly $|w|$ steps. This makes GNF the natural target for top-down recursive-descent and PDA constructions.
 
-*Theorem (Greibach 1965).* Every $epsilon$-free CFG can be effectively transformed into GNF.
+#theorem(name: "Greibach 1965")[Every $epsilon$-free CFG can be effectively transformed into GNF.]
 
-*Proof sketch.* Start in CNF without $epsilon$. Order the nonterminals $A_1, dots, A_n$. Iteratively eliminate left recursion: for $i$ from 1 to $n$, for each production $A_i arrow.r A_j alpha$ with $j < i$, substitute $A_j$'s right-hand sides; eliminate direct left recursion $A_i arrow.r A_i alpha | beta$ by introducing $A_i'$ and rewriting as $A_i arrow.r beta A_i'$, $A_i' arrow.r alpha A_i' | epsilon$ (Paull's algorithm). After processing all $A_i$, productions $A_i arrow.r A_j alpha$ have $j > i$; back-substitute in decreasing order of $j$ to ensure every right-hand side starts with a terminal. Size blow-up is *exponential* in the worst case but polynomial when the input grammar has bounded recursion depth. $square$
+#proof(name: "sketch")[Start in CNF without $epsilon$. Order the nonterminals $A_1, dots, A_n$. Iteratively eliminate left recursion: for $i$ from 1 to $n$, for each production $A_i arrow.r A_j alpha$ with $j < i$, substitute $A_j$'s right-hand sides; eliminate direct left recursion $A_i arrow.r A_i alpha | beta$ by introducing $A_i'$ and rewriting as $A_i arrow.r beta A_i'$, $A_i' arrow.r alpha A_i' | epsilon$ (Paull's algorithm). After processing all $A_i$, productions $A_i arrow.r A_j alpha$ have $j > i$; back-substitute in decreasing order of $j$ to ensure every right-hand side starts with a terminal. Size blow-up is *exponential* in the worst case but polynomial when the input grammar has bounded recursion depth.]
 
 == Pushdown Automata
 
 A *pushdown automaton* (PDA) is the canonical recogniser for CFLs; full treatment is in the next chapter (_Pushdown Automata and Beyond_). For the present chapter the key fact is:
 
-*Theorem (CFG–PDA equivalence; Chomsky, Evey, Schützenberger).* A language $L$ is context-free <==> $L = L(M)$ for some nondeterministic pushdown automaton $M$.
+#theorem(name: "CFG–PDA equivalence; Chomsky, Evey, Schützenberger")[A language $L$ is context-free <==> $L = L(M)$ for some nondeterministic pushdown automaton $M$.]
 
 The construction *CFG $arrow.r$ PDA*: from a CFG in GNF, build a one-state PDA whose stack holds a *sentential form's tail*. The PDA pops the top nonterminal $A$, reads the next input $a$, and pushes the tail of some production $A arrow.r a alpha$, guessing $alpha$ nondeterministically. The construction *PDA $arrow.r$ CFG* introduces nonterminals $chevron.l p, X, q chevron.r$ standing for "the PDA goes from state $p$ to state $q$ while net popping $X$" and grammar productions encode push/pop sequences; the construction is quadratic in PDA size and produces $|Q|^2 |Gamma|$ nonterminals.
 
@@ -119,9 +119,9 @@ def cyk(grammar, w):
 
 === Valiant's Reduction to Boolean Matrix Multiplication
 
-*Theorem (Valiant 1975).* CFG recognition is reducible in $O(M(n))$ time to *Boolean matrix multiplication*, where $M(n)$ is the time to multiply two $n times n$ Boolean matrices. Combined with $omega < 2.371$ (Williams–Xu–Xu–Zhou 2024), CFG recognition is in $O(n^omega)$ time.
+#theorem(name: "Valiant 1975")[CFG recognition is reducible in $O(M(n))$ time to *Boolean matrix multiplication*, where $M(n)$ is the time to multiply two $n times n$ Boolean matrices. Combined with $omega < 2.371$ (Williams–Xu–Xu–Zhou 2024), CFG recognition is in $O(n^omega)$ time.]
 
-*Proof sketch.* Define the *CYK matrix* $X$ over the semiring of subsets of $V$ with union and "production-composition" as $+$ and $dot$. The CYK recurrence corresponds to a *transitive closure* on a triangular matrix; Valiant showed this can be reduced to a sequence of $O(log n)$ Boolean matrix multiplications via divide-and-conquer over diagonal blocks. The reduction is one-way: faster CFG recognition does not (yet) imply faster matmul, but several authors (Lee 2002, Abboud–Backurs–V. Williams 2018) have shown that a "combinatorial" sub-cubic CFG parser would imply a sub-cubic combinatorial matmul algorithm — a 50-year open problem. So $O(n^3)$ is in this sense the barrier for combinatorial CFG parsing. $square$
+#proof(name: "sketch")[Define the *CYK matrix* $X$ over the semiring of subsets of $V$ with union and "production-composition" as $+$ and $dot$. The CYK recurrence corresponds to a *transitive closure* on a triangular matrix; Valiant showed this can be reduced to a sequence of $O(log n)$ Boolean matrix multiplications via divide-and-conquer over diagonal blocks. The reduction is one-way: faster CFG recognition does not (yet) imply faster matmul, but several authors (Lee 2002, Abboud–Backurs–V. Williams 2018) have shown that a "combinatorial" sub-cubic CFG parser would imply a sub-cubic combinatorial matmul algorithm — a 50-year open problem. So $O(n^3)$ is in this sense the barrier for combinatorial CFG parsing.]
 
 == Earley's Algorithm
 
@@ -135,17 +135,17 @@ Three operations populate the sets:
 
 Acceptance: $[S arrow.r gamma ., 0] in E_n$.
 
-*Theorem (Earley complexity).* Earley's algorithm runs in time $O(n^3 |G|^2)$ on general CFGs, $O(n^2 |G|^2)$ on unambiguous CFGs, and $O(n |G|^2)$ on bounded-state grammars.
+#theorem(name: "Earley complexity")[Earley's algorithm runs in time $O(n^3 |G|^2)$ on general CFGs, $O(n^2 |G|^2)$ on unambiguous CFGs, and $O(n |G|^2)$ on bounded-state grammars.]
 
 Earley is the parser of choice when the grammar is given dynamically (e.g., user-defined operators in interactive proof assistants) and when full GLR generality is needed without an offline grammar-compilation phase.
 
 == Pumping Lemma for CFLs (Bar-Hillel–Perles–Shamir 1961)
 
-*Theorem (Bar-Hillel et al.).* If $L$ is context-free, there exists $p >= 1$ such that every $w in L$ with $|w| >= p$ decomposes as $w = u v x y z$ with
+#theorem(name: "Bar-Hillel et al.")[If $L$ is context-free, there exists $p >= 1$ such that every $w in L$ with $|w| >= p$ decomposes as $w = u v x y z$ with]
 
 (i) $|v y| >= 1$, (ii) $|v x y| <= p$, (iii) $u v^i x y^i z in L$ for all $i >= 0$.
 
-*Proof.* Let $G$ be a CFG in CNF generating $L$ with $|V| = k$ nonterminals. Set $p = 2^(k+1)$. For any $w in L$ with $|w| >= p$, any parse tree has *height* $> k$ (since CNF parse trees are binary and a binary tree of height $h$ has $<= 2^h$ leaves). Along any root-to-leaf path of length $> k$ some nonterminal $A$ repeats. Let the outer occurrence subtree yield $v x y$ and the inner yield $x$. Then $A =>^* v A y$ and $A =>^* x$; the outer derivation can be iterated to give $u v^i x y^i z in L$ for all $i$. Taking $A$ to be the *lowest* repeated nonterminal (in a path of length exactly $k + 1$) bounds $|v x y| <= 2^(k+1) = p$. $square$
+#proof[Let $G$ be a CFG in CNF generating $L$ with $|V| = k$ nonterminals. Set $p = 2^(k+1)$. For any $w in L$ with $|w| >= p$, any parse tree has *height* $> k$ (since CNF parse trees are binary and a binary tree of height $h$ has $<= 2^h$ leaves). Along any root-to-leaf path of length $> k$ some nonterminal $A$ repeats. Let the outer occurrence subtree yield $v x y$ and the inner yield $x$. Then $A =>^* v A y$ and $A =>^* x$; the outer derivation can be iterated to give $u v^i x y^i z in L$ for all $i$. Taking $A$ to be the *lowest* repeated nonterminal (in a path of length exactly $k + 1$) bounds $|v x y| <= 2^(k+1) = p$.]
 
 === Ogden's Lemma (1968)
 
@@ -159,11 +159,11 @@ For $w in Sigma^*$ with $Sigma = { a_1, dots, a_k }$, the *Parikh vector* is $Ps
 
 A subset $S subset.eq NN^k$ is *linear* if $S = { v_0 + n_1 v_1 + dots + n_m v_m | n_i in NN }$ for fixed vectors $v_0, dots, v_m in NN^k$. *Semilinear* means finite union of linear sets, equivalently definable in *Presburger arithmetic* $"FO"(NN, +, <)$.
 
-*Theorem (Parikh 1961).* For every context-free language $L$, $Psi(L)$ is semilinear. Hence $Psi(L_"CFL") = Psi(L_"regular")$: every CFL has the *same commutative image* as some regular language.
+#theorem(name: "Parikh 1961")[For every context-free language $L$, $Psi(L)$ is semilinear. Hence $Psi(L_"CFL") = Psi(L_"regular")$: every CFL has the *same commutative image* as some regular language.]
 
-*Proof sketch.* Take a CFG in CNF generating $L$. The *parse-tree pumping* argument decomposes parse trees into a *seed* (bounded height) plus iterable *pump fragments* (loops $A =>^* alpha A beta$). Each seed contributes a base vector $v_0$ and each pump contributes a period vector $v_i$. The Parikh image is the union over finite choices of seed and pumps, a finite union of linear sets. $square$
+#proof(name: "sketch")[Take a CFG in CNF generating $L$. The *parse-tree pumping* argument decomposes parse trees into a *seed* (bounded height) plus iterable *pump fragments* (loops $A =>^* alpha A beta$). Each seed contributes a base vector $v_0$ and each pump contributes a period vector $v_i$. The Parikh image is the union over finite choices of seed and pumps, a finite union of linear sets.]
 
-*Corollary.* Every CFL over a *unary* alphabet $Sigma = { a }$ is regular: a semilinear subset of $NN$ is just a finite union of arithmetic progressions, definable by a DFA counting modulo the period.
+#corollary[Every CFL over a *unary* alphabet $Sigma = { a }$ is regular: a semilinear subset of $NN$ is just a finite union of arithmetic progressions, definable by a DFA counting modulo the period.]
 
 == Closure Properties
 
@@ -175,7 +175,7 @@ Context-free languages are closed under: union, concatenation, Kleene star, reve
 
 *Counterexample (complement).* If CFLs were closed under complement they would, with union-closure, be closed under intersection, a contradiction.
 
-*Theorem (intersection with regular).* If $L$ is context-free and $R$ is regular then $L inter R$ is context-free. *Proof:* product-construct the PDA for $L$ with the DFA for $R$; the new states are $Q_L times Q_R$, stack and transitions unchanged on the PDA side.
+#theorem(name: "intersection with regular")[If $L$ is context-free and $R$ is regular then $L inter R$ is context-free. *Proof:* product-construct the PDA for $L$ with the DFA for $R$; the new states are $Q_L times Q_R$, stack and transitions unchanged on the PDA side.]
 
 This asymmetric closure underpins the *Chomsky–Schützenberger* representation theorem: every CFL is recoverable as a homomorphic image of a regular-intersected Dyck language.
 
@@ -183,15 +183,15 @@ This asymmetric closure underpins the *Chomsky–Schützenberger* representation
 
 A CFL $L$ is *inherently ambiguous* if every CFG generating $L$ is ambiguous (i.e., produces $>= 2$ parse trees for some string). Inherent ambiguity is a property of the *language*, not of any particular grammar.
 
-*Theorem (Ginsburg 1966).* The language $L = { a^i b^j c^k | i = j or j = k }$ is inherently ambiguous.
+#theorem(name: "Ginsburg 1966")[The language $L = { a^i b^j c^k | i = j or j = k }$ is inherently ambiguous.]
 
-*Proof sketch.* The language is the union $L_1 union L_2$ with $L_1 = { a^n b^n c^m }$ and $L_2 = { a^m b^n c^n }$. Strings of the form $a^n b^n c^n$ lie in both. Any CFG for $L$ must, by an Ogden-lemma-style pumping argument applied to the parse trees, contain two distinct derivation strategies (one preserving $i = j$ and one preserving $j = k$), and at $a^n b^n c^n$ both apply, giving two parse trees. $square$
+#proof(name: "sketch")[The language is the union $L_1 union L_2$ with $L_1 = { a^n b^n c^m }$ and $L_2 = { a^m b^n c^n }$. Strings of the form $a^n b^n c^n$ lie in both. Any CFG for $L$ must, by an Ogden-lemma-style pumping argument applied to the parse trees, contain two distinct derivation strategies (one preserving $i = j$ and one preserving $j = k$), and at $a^n b^n c^n$ both apply, giving two parse trees.]
 
 Inherent ambiguity is *undecidable* in general (Cantor 1962; Floyd 1962) but is rare in practical languages; most syntactic ambiguities (dangling-else, expression-precedence) are *grammatical* and can be resolved by rewriting.
 
 == Undecidability for CFGs
 
-*Theorem (Bar-Hillel–Perles–Shamir 1961; Cantor 1962; Floyd 1962).* The following problems for CFGs are *undecidable*:
+#theorem(name: "Bar-Hillel–Perles–Shamir 1961; Cantor 1962; Floyd 1962")[The following problems for CFGs are *undecidable*:]
 
 (a) *Equivalence:* given $G_1, G_2$, is $L(G_1) = L(G_2)$?
 
@@ -207,7 +207,7 @@ Inherent ambiguity is *undecidable* in general (Cantor 1962; Floyd 1962) but is 
 
 (g) *Intersection emptiness:* given $G_1, G_2$, is $L(G_1) inter L(G_2) = emptyset$?
 
-*Proof sketch.* Reduction from the *Post Correspondence Problem* (PCP). Given a PCP instance with dominoes $(u_i, v_i)$, build CFGs $G_U$ generating ${ u_(i_1) dots u_(i_k) \# i_k dots i_1 }$ and $G_V$ similarly for the $v_i$. Then $L(G_U) inter L(G_V) eq."not" emptyset$ <==> the PCP has a solution. This gives (g) directly; the others follow by simple language manipulations (e.g., universality: complement $L(G_U inter G_V)$ relative to the appropriate regular envelope; equivalence: compare with a known universal language).
+#proof(name: "sketch")[Reduction from the *Post Correspondence Problem* (PCP). Given a PCP instance with dominoes $(u_i, v_i)$, build CFGs $G_U$ generating ${ u_(i_1) dots u_(i_k) \# i_k dots i_1 }$ and $G_V$ similarly for the $v_i$. Then $L(G_U) inter L(G_V) eq."not" emptyset$ <==> the PCP has a solution. This gives (g) directly; the others follow by simple language manipulations (e.g., universality: complement $L(G_U inter G_V)$ relative to the appropriate regular envelope; equivalence: compare with a known universal language).]
 
 Floyd (1962) gave the original ambiguity-undecidability proof: from a PCP instance build a grammar $G$ generating ${ w_U \# w_V | u"-sequence" = v"-sequence" }$ in two derivational ways, ambiguous when the PCP has a solution. $square$
 
@@ -217,7 +217,7 @@ Floyd (1962) gave the original ambiguity-undecidability proof: from a PCP instan
 
 A *deterministic pushdown automaton* (DPDA) has a partial transition function $delta : Q times (Sigma union { epsilon }) times Gamma arrow.r Q times Gamma^*$ with the determinism condition: if $delta(q, epsilon, Z)$ is defined then $delta(q, a, Z)$ is undefined for all $a in Sigma$. A language is a *deterministic CFL* (DCFL) if it is recognised by a DPDA accepting by *final state*.
 
-*Theorem.* DCFL is *strictly* between regular and CFL: $"Reg" subset.eq."not" "DCFL" subset.eq."not" "CFL"$.
+#theorem[DCFL is *strictly* between regular and CFL: $"Reg" subset.eq."not" "DCFL" subset.eq."not" "CFL"$.]
 
 Separation from CFL: even-length palindromes $L = { w w^R | w in { a, b }^* }$ are context-free but not DCFL (no PDA can deterministically guess the midpoint).
 
@@ -227,7 +227,7 @@ Separation from CFL: even-length palindromes $L = { w w^R | w in { a, b }^* }$ a
 
 A grammar is *LR($k$)* if a deterministic bottom-up parser can decide each reduction by looking at the top of the stack and $k$ symbols of lookahead. Knuth (1965) proved:
 
-*Theorem (Knuth 1965).* A language is LR($k$) for some $k$ iff it is LR(1) iff it is a deterministic context-free language.
+#theorem(name: "Knuth 1965")[A language is LR($k$) for some $k$ iff it is LR(1) iff it is a deterministic context-free language.]
 
 So LR(1) captures *exactly* the DCFLs. Practically, *LALR(1)* (a coarser equivalence relation on LR(1) states yielding smaller parse tables; Korenjak 1969, DeRemer 1969) is the basis of yacc/bison; *LR(1)* tables can be hundreds of times larger.
 
@@ -235,17 +235,17 @@ The dual class *LL($k$)* (top-down deterministic parsers with $k$-symbol lookahe
 
 === Sénizergues's Theorem
 
-*Theorem (Sénizergues 1997; Stirling 2001).* Equivalence of *deterministic* pushdown automata is *decidable*.
+#theorem(name: "Sénizergues 1997; Stirling 2001")[Equivalence of *deterministic* pushdown automata is *decidable*.]
 
 This astonishing result (a Gödel Prize in 2002) stands in sharp contrast to the undecidability of CFG equivalence. The proof employs *bisimulation up to* on infinite-state systems and is one of the most technically demanding decidability proofs in formal-language theory. *Stirling* gave a simplified proof via game-theoretic bisimulation arguments.
 
-*Theorem (Jančar 2012).* DPDA equivalence is *primitive-recursive*: the running time is bounded by a tower of exponentials of height polynomial in the input size. The exact complexity remains open; no known elementary upper bound.
+#theorem(name: "Jančar 2012")[DPDA equivalence is *primitive-recursive*: the running time is bounded by a tower of exponentials of height polynomial in the input size. The exact complexity remains open; no known elementary upper bound.]
 
 For *DCFLs* this gives a (very impractical) equivalence-checking algorithm; in practice equivalence is decided by parser-generator constructions that build canonical LR(1) automata and check isomorphism.
 
 == Greibach's Hardest Context-Free Language
 
-*Theorem (Greibach 1973).* There exists a CFL $L_0$ (the *hardest CFL*) such that every CFL $L$ is reducible to $L_0$ by a *length-preserving homomorphism*. Hence any algorithm deciding membership in $L_0$ in time $T(n)$ yields an $O(T(n))$ algorithm for every CFL.
+#theorem(name: "Greibach 1973")[There exists a CFL $L_0$ (the *hardest CFL*) such that every CFL $L$ is reducible to $L_0$ by a *length-preserving homomorphism*. Hence any algorithm deciding membership in $L_0$ in time $T(n)$ yields an $O(T(n))$ algorithm for every CFL.]
 
 *Construction sketch.* $L_0$ is a Dyck-like language over a specific 12-letter alphabet, encoding nondeterministic PDA computations: each letter represents a transition tag, and well-bracketed words correspond exactly to accepting PDA runs. Reduction: every CFL is recognised by a PDA whose transitions are encoded as homomorphic images of $L_0$'s letters. $square$
 

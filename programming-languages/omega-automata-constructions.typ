@@ -1,3 +1,5 @@
+#import "../template.typ": proof, theorem
+
 = Omega-Automata: Detailed Constructions and Algorithms
 
 == Detailed Constructions Revisited
@@ -74,7 +76,7 @@ Initial tree: single node, name $1$, label ${q_0}$, mark $0$. The transition on 
 
 The Rabin pairs $(E_i, F_i)$ for $i in {1, dots, 2n}$ then capture: name $i$ survives forever (i.e. eventually appears in every reached tree) *and* is marked infinitely often, witnessing an accepting infinite branch in the original NBA. The proof of correctness rests on a delicate argument that the youngest surviving accepting branch of an accepting NBA run corresponds to exactly one Safra-tree node that is eventually never deleted.
 
-*Theorem (Optimality).* For every $n$, there exists an NBA with $n$ states whose minimal deterministic Rabin equivalent has at least $2^(Omega(n log n))$ states (Michel 1988, refined by Yan 2008). Hence Safra is asymptotically optimal.
+#theorem(name: "Optimality")[For every $n$, there exists an NBA with $n$ states whose minimal deterministic Rabin equivalent has at least $2^(Omega(n log n))$ states (Michel 1988, refined by Yan 2008). Hence Safra is asymptotically optimal.]
 
 === Piterman's Compact Variant
 
@@ -90,7 +92,7 @@ The state space remains $2^(O(n log n))$ but the resulting automaton plugs direc
 
 An alternative to Safra-based complementation: *rank-based complementation* (Kupferman--Vardi 2001). The complement of an NBA is recognised by an NBA whose states are *level rankings* $f : Q arrow.r {0, dots, 2n}$ with $f(q)$ odd for $q in F$; the run tracks how *close* each state of the NBA is to its last accepting visit. This yields a *direct* $2^(O(n log n))$ construction, avoiding deterministic intermediate.
 
-*Theorem (Kupferman--Vardi 2001).* For every NBA $cal(A)$ with $n$ states there is an NBA $cal(B)$ with $2^(O(n log n))$ states such that $L(cal(B)) = Sigma^omega \\ L(cal(A))$.
+#theorem(name: "Kupferman--Vardi 2001")[For every NBA $cal(A)$ with $n$ states there is an NBA $cal(B)$ with $2^(O(n log n))$ states such that $L(cal(B)) = Sigma^omega \\ L(cal(A))$.]
 
 The ranking framework also gives clean complementation constructions for *generalized Büchi*, *co-Büchi*, and *Streett* automata, and supports symbolic implementations (Friedgut--Kupferman--Vardi 2006).
 
@@ -281,7 +283,7 @@ Transitions (on alphabet $2^({p, q})$):
 
 == McNaughton's Theorem: Determinisability of Nondeterministic Büchi
 
-*Theorem (McNaughton 1966).* Every NBA is equivalent to a deterministic Muller automaton (DMA).
+#theorem(name: "McNaughton 1966")[Every NBA is equivalent to a deterministic Muller automaton (DMA).]
 
 The proof is a classical tour de force and has been subsumed by Safra, but its structure illuminates the subject.
 
@@ -328,7 +330,7 @@ Wagner's theorem: the index is computable from any DMA in polynomial time. The W
 
 *Wadge reducibility.* For $L, L' subset.eq Sigma^omega$, say $L lt.eq_W L'$ (*$L$ Wadge-reduces to $L'$*) iff there is a continuous $f : Sigma^omega arrow.r Sigma^omega$ with $f^(-1)(L') = L$. Wadge (1983) proved:
 
-*Theorem (Wadge).* Under the Axiom of Determinacy (AD), $lt.eq_W$ is a well-order of all subsets of $Sigma^omega$. Under ZFC, $lt.eq_W$ is well-founded on the Borel sets and defines the *Wadge hierarchy*.
+#theorem(name: "Wadge")[Under the Axiom of Determinacy (AD), $lt.eq_W$ is a well-order of all subsets of $Sigma^omega$. Under ZFC, $lt.eq_W$ is well-founded on the Borel sets and defines the *Wadge hierarchy*.]
 
 For $omega$-regular languages, the Wadge hierarchy coincides with the Wagner hierarchy -- every Wagner-index class is a Wadge degree. This gives a complete quasi-order of the $omega$-regular languages by continuous reducibility, with the consequence that for any two $omega$-regular $L, L'$, exactly one of $L lt.eq_W L'$, $L' lt.eq_W L$, or $L tilde.equiv_W L'$ holds (the last <==> $L$ and $L'$ differ only by complementation in their Wagner class).
 
@@ -342,7 +344,7 @@ For $omega$-regular languages, the Wadge hierarchy coincides with the Wagner hie
 
 A *weak Büchi automaton* (WBA) is an NBA whose SCCs are either entirely in $F$ (accepting SCCs) or entirely disjoint from $F$ (rejecting SCCs). The partition into accepting/rejecting SCCs induces a *topological ordering* compatible with the language.
 
-*Theorem (Staiger 1983; Loding 2001).* A language $L$ is recognisable by a WBA <==> $L$ is a Boolean combination of *open* sets <==> $L$ is in $bold(Delta)^0_2$ (the Boolean closure of $G_delta$) <==> $L$ is recognisable by a *safety* automaton or a *co-safety* automaton or a Boolean combination thereof.
+#theorem(name: "Staiger 1983; Loding 2001")[A language $L$ is recognisable by a WBA <==> $L$ is a Boolean combination of *open* sets <==> $L$ is in $bold(Delta)^0_2$ (the Boolean closure of $G_delta$) <==> $L$ is recognisable by a *safety* automaton or a *co-safety* automaton or a Boolean combination thereof.]
 
 WBAs correspond to LTL formulas without any nesting of $G$ and $F$ -- the "flat" temporal logic fragment.
 
@@ -352,7 +354,7 @@ WBAs correspond to LTL formulas without any nesting of $G$ and $F$ -- the "flat"
 
 A *latch* in an automaton is a strongly connected component from which all exits lead back into the same component or to accepting states. Automata with special latching structure arise in *hardware model checking* (latches are flip-flops) and in bounded model checking.
 
-*Theorem.* An $omega$-regular language $L$ is recognisable by a DBA <==> $L$ is a Boolean combination of $G_delta$ sets <==> $L$ is *$Sigma^0_2 inter Pi^0_2$*-measurable <==> the minimal DMA for $L$ has only *self-accepting* SCCs (every SCC has the property that either all its infinitely-visited subsets are accepting or none are).
+#theorem[An $omega$-regular language $L$ is recognisable by a DBA <==> $L$ is a Boolean combination of $G_delta$ sets <==> $L$ is *$Sigma^0_2 inter Pi^0_2$*-measurable <==> the minimal DMA for $L$ has only *self-accepting* SCCs (every SCC has the property that either all its infinitely-visited subsets are accepting or none are).]
 
 This coincides with the characterisation of *$omega$-regular languages reachable by deterministic latching automata* in the hardware sense. AIGER circuits and model-checking tools translate directly to this formalism.
 
@@ -378,9 +380,9 @@ This formula is not equivalent to any $Pi^mu_2 union Sigma^mu_2$ formula; the pr
 
 *Stutter equivalence.* Two $omega$-words $alpha, beta in Sigma^omega$ are *stutter-equivalent* if one can be obtained from the other by finite repetitions of single letters: formally, $alpha equiv_"st" beta$ <==> there is a sequence of words agreeing at every position when runs of the same letter are contracted.
 
-*Theorem (Peled--Wilke 1997; earlier implicit in Lamport 1983).* An $omega$-regular language $L$ is *stutter-invariant* (closed under stutter equivalence) <==> $L$ is expressible in *LTL-X* (LTL without the next-time operator $X$).
+#theorem(name: "Peled--Wilke 1997; earlier implicit in Lamport 1983")[An $omega$-regular language $L$ is *stutter-invariant* (closed under stutter equivalence) <==> $L$ is expressible in *LTL-X* (LTL without the next-time operator $X$).]
 
-*Proof sketch.* ($(=>)$) The LTL-X direction: by structural induction, $G$, $F$, and $U$ applied to stutter-invariant sub-formulae yield stutter-invariant formulae; $X phi$ is not stutter-invariant unless $phi$ does not depend on positions.
+#proof(name: "sketch")[($(=>)$) The LTL-X direction: by structural induction, $G$, $F$, and $U$ applied to stutter-invariant sub-formulae yield stutter-invariant formulae; $X phi$ is not stutter-invariant unless $phi$ does not depend on positions.]
 
 ($(arrow.l)$) An $omega$-regular stutter-invariant language has a minimal DPA whose states correspond to *stutter-equivalence classes*; the DPA transition function depends only on the *new* letter, not on how many times it was repeated. One reconstructs an LTL-X formula from the DPA's SCC structure using the Wagner hierarchy: safety $= G psi$, liveness $= G F psi$, nested liveness $= G F G psi$, etc. $square$
 

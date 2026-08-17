@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": example, proof, theorem, xref
 
 = System F and Parametricity
 
@@ -69,9 +69,9 @@ $ (lambda x : tau . e_1) space e_2 &arrow.r_beta [x |-> e_2] e_1 space space spa
 
 The second is *type-level $beta$*: instantiating a polymorphic value at a type. Both rules are subject to congruence (compatible closure).
 
-*Theorem (Subject Reduction).* If $Delta; Gamma tack.r e : tau$ and $e arrow.r e'$, then $Delta; Gamma tack.r e' : tau$.
+#theorem(name: "Subject Reduction")[If $Delta; Gamma tack.r e : tau$ and $e arrow.r e'$, then $Delta; Gamma tack.r e' : tau$.]
 
-*Proof.* Induction on the reduction. The $beta_2$ case uses the Type Substitution Lemma. $square$
+#proof[Induction on the reduction. The $beta_2$ case uses the Type Substitution Lemma.]
 
 == Examples and Church Encodings
 
@@ -101,7 +101,7 @@ overline(n+1) &:= Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alp
 
 Iteration is *built in*: $n [tau] space s space z$ applies $s$ to $z$ exactly $n$ times.
 
-*Theorem.* The functions $"Nat" arrow.r "Nat"$ representable in System F are exactly the *provably total recursive functions* of second-order Peano arithmetic, a strictly larger class than those provable in $"PA"$ (Girard 1972). This includes Ackermann's function and many beyond.
+#theorem[The functions $"Nat" arrow.r "Nat"$ representable in System F are exactly the *provably total recursive functions* of second-order Peano arithmetic, a strictly larger class than those provable in $"PA"$ (Girard 1972). This includes Ackermann's function and many beyond.]
 
 === Pairs
 
@@ -127,7 +127,7 @@ Church-encoded $exists alpha . tau$ as $forall beta . (forall alpha . tau arrow.
 
 == Strong Normalization (Girard 1972)
 
-*Theorem (Girard 1972).* Every well-typed term of System F is strongly normalising.
+#theorem(name: "Girard 1972")[Every well-typed term of System F is strongly normalising.]
 
 This is *substantially* harder than the STLC case. The naïve attempt (defining $cal(R)_tau$ by induction on $tau$, with $cal(R)_(forall alpha . tau) = inter.big_(sigma) [alpha |-> ?] cal(R)_(tau)$) fails because the type $sigma$ may be larger than $forall alpha . tau$ itself (impredicativity!), so no structural induction on types is available. Tait's plain reducibility works for STLC but breaks here.
 
@@ -151,7 +151,7 @@ The big intersection is the crux. Because we range over the *abstract* class of 
 
 *Lemma.* For every type $tau$ and environment $eta$, $[| tau |]_eta in "CR"$.
 
-*Proof.* Induction on $tau$. Variables: by assumption $eta(alpha) in "CR"$. Arrow: verify CR1, CR2, CR3 directly; CR3 uses that $e space e'$ is neutral when $e$ is, plus IH. Universal: an intersection of candidates is a candidate (intersect the closure conditions pointwise). $square$
+#proof[Induction on $tau$. Variables: by assumption $eta(alpha) in "CR"$. Arrow: verify CR1, CR2, CR3 directly; CR3 uses that $e space e'$ is neutral when $e$ is, plus IH. Universal: an intersection of candidates is a candidate (intersect the closure conditions pointwise).]
 
 *Substitution Lemma.* $[| [alpha |-> sigma] tau |]_eta = [| tau |]_(eta, alpha |-> [| sigma |]_eta)$.
 
@@ -192,7 +192,7 @@ The first projection $rho_1(alpha) = A_alpha$, second $rho_2(alpha) = B_alpha$; 
 
 *Theorem (Reynolds 1983, Abstraction).* For every closed term $emptyset tack.r e : tau$ and every relation environment $rho$, the pair $([| e |]_(rho_1), [| e |]_(rho_2)) in [| tau |]_rho$. In particular if $e$ is closed and $rho$ has all $rho(alpha) = $ identity, the theorem says $e$ is related to itself: *every term respects every parametric relation*.
 
-*Proof.* Induction on the typing derivation, exactly mirroring the SN proof but with binary relations in place of candidates. $square$
+#proof[Induction on the typing derivation, exactly mirroring the SN proof but with binary relations in place of candidates.]
 
 == Theorems for Free (Wadler 1989)
 
@@ -238,9 +238,9 @@ $ exists alpha . tau &:= forall beta . (forall alpha . tau arrow.r beta) arrow.r
 
 The introduction $"pack"$ packages a *concrete* witness $tau$ together with a value $e : [alpha |-> tau] tau'$, hiding the witness behind the existential. The elimination $"unpack"$ binds a *fresh* type variable $alpha$ (the abstract type) and a term variable $x$ of representation type $tau'$. Crucially, the eliminator's body $e'$ may not mention $alpha$ in its result type; this is *information hiding*.
 
-*Example.* A counter ADT:
+#example[A counter ADT:
 $ "Counter" &:= exists alpha . alpha times (alpha arrow.r alpha) times (alpha arrow.r "Int") \
-"intCounter" &:= "pack" "Int" "with" (0, lambda x . x + 1, lambda x . x) "as" "Counter" $
+"intCounter" &:= "pack" "Int" "with" (0, lambda x . x + 1, lambda x . x) "as" "Counter" $]
 
 Clients see only $alpha$, never `Int`. They can $"init"$, $"incr"$, and $"read"$, but cannot (by parametricity) exploit the representation.
 
@@ -282,7 +282,7 @@ Types of kind $*$ are *proper* types (inhabited by terms). Types of higher kinds
 
 The type equality used in T-APP, T-TAPP is now equality *modulo type-level $beta eta$*; this is decidable (type-level reduction is SN by the same candidate argument lifted one level), but the type checker must perform conversion.
 
-*Theorem (Girard 1972).* $F_omega$ is strongly normalising at both the term and type levels.
+#theorem(name: "Girard 1972")[$F_omega$ is strongly normalising at both the term and type levels.]
 
 == The Barendregt Cube
 
@@ -315,13 +315,13 @@ The *let-polymorphic* restriction of System F (no first-class $forall$ in argume
 
 *Theorem (Wells 1994).* Type inference for full (Curry-style) System F is undecidable. Type *checking* with annotations on all $Lambda$ and $[tau]$ is decidable (just walk the tree); but inferring a type for an unannotated term is undecidable.
 
-*Proof sketch.* Wells gave a reduction from *semi-unification*: given a system of equations $tau_i = tau'_i$ and inequations $tau_j lt.eq.eq tau'_j$ (where $lt.eq.eq$ is "is a substitution instance of"), decide solvability. Semi-unification is undecidable (Kfoury–Tiuryn–Urzyczyn 1990). Wells encoded an arbitrary semi-unification problem as a System F typability problem: each inequation becomes a quantifier instantiation. $square$
+#proof(name: "sketch")[Wells gave a reduction from *semi-unification*: given a system of equations $tau_i = tau'_i$ and inequations $tau_j lt.eq.eq tau'_j$ (where $lt.eq.eq$ is "is a substitution instance of"), decide solvability. Semi-unification is undecidable (Kfoury–Tiuryn–Urzyczyn 1990). Wells encoded an arbitrary semi-unification problem as a System F typability problem: each inequation becomes a quantifier instantiation.]
 
 === System $F_omega$ Type Checking is Decidable but Expensive
 
 Type checking $F_omega$ is *decidable*: type equality requires deciding $beta eta$-equality of type expressions, which is decidable because type-level reduction is SN (Girard 1972). But the checking *cost* can be huge:
 
-*Theorem (Henglein–Mairson 1991, Statman 1979).* Deciding $beta$-equality in $F_omega$ is *not* elementary recursive: the worst-case time is a tower of exponentials whose height depends on the term.
+#theorem(name: "Henglein–Mairson 1991, Statman 1979")[Deciding $beta$-equality in $F_omega$ is *not* elementary recursive: the worst-case time is a tower of exponentials whose height depends on the term.]
 
 Practical type checkers (Haskell's GHC, OCaml) restrict to fragments where this blow-up does not arise; full $F_omega$ as a *type system* is rarely directly exposed.
 
@@ -336,9 +336,9 @@ Two variants:
 - *Kernel $F_(<:)$* (Curien–Ghelli 1992): subtyping of $forall alpha <: sigma . tau$ requires *equal* bounds. Decidable.
 - *Full $F_(<:)$*: subtyping of $forall alpha <: sigma_1 . tau_1 <: forall alpha <: sigma_2 . tau_2$ requires $sigma_2 <: sigma_1$ (contravariance in the bound). This is the natural reading; this is what programmers want.
 
-*Theorem (Pierce 1994).* Subtype-checking in full $F_(<:)$ is *undecidable*.
+#theorem(name: "Pierce 1994")[Subtype-checking in full $F_(<:)$ is *undecidable*.]
 
-*Proof sketch.* Pierce reduced the halting problem for *two-counter Minsky machines* to $F_(<:)$ subtype-checking. The trick: encode the configuration $(q, c_1, c_2)$ of a counter machine as a type; the subtyping query $tau_q <: tau_(q')$ holds <==> the machine, starting from $q$, eventually reaches a state included in $q'$. Counter increment is encoded by wrapping in a $forall$; counter decrement uses the contravariance of bounds. Each subtyping step in the recursion mimics one machine step. Termination of subtype-checking would decide halting, which is impossible.
+#proof(name: "sketch")[Pierce reduced the halting problem for *two-counter Minsky machines* to $F_(<:)$ subtype-checking. The trick: encode the configuration $(q, c_1, c_2)$ of a counter machine as a type; the subtyping query $tau_q <: tau_(q')$ holds <==> the machine, starting from $q$, eventually reaches a state included in $q'$. Counter increment is encoded by wrapping in a $forall$; counter decrement uses the contravariance of bounds. Each subtyping step in the recursion mimics one machine step. Termination of subtype-checking would decide halting, which is impossible.]
 
 Hence Pierce's recommendation: stick to *kernel* $F_(<:)$ or impose a syntactic restriction. The languages Java and C\# face similar issues with bounded generics: Java's wildcard subtyping is, technically, undecidable as well (Grigore 2017 showed Java generic subtype-checking is Turing-complete).
 

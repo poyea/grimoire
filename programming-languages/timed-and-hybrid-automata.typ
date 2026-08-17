@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": corollary, definition, proof, theorem, xref
 
 = Timed and Hybrid Automata
 
@@ -20,9 +20,9 @@ $ phi ::= x "≺"c | x - y "≺"c | phi_1 and phi_2 | "true" $
 
 where $x, y in X$, $c in NN$, and $"≺" in {<, lt.eq, =, gt.eq, >}$. The diagonal constraints $x - y "≺"c$ extend the original definition of Alur--Dill, who allowed only the conjunctive (rectangular) fragment $x "≺"c$; diagonal constraints add no expressive power for closed automata but matter for the size of the region partition.
 
-*Definition (Timed Automaton, Alur--Dill 1994).* A timed automaton is a tuple
+#definition(name: "Timed Automaton, Alur--Dill 1994")[A timed automaton is a tuple
 $ cal(A) = (L, L_0, Sigma, X, E, "Inv") $
-where
+where]
 
 - $L$ is a finite set of *locations*,
 - $L_0 subset.eq L$ is the set of *initial locations*,
@@ -67,7 +67,7 @@ The clock $x$ measures time since switching on. The invariant $x lt.eq 30$ in lo
 
 The state space $L times RR^X_(>=0)$ is uncountable, but only finitely many *qualitative* configurations are distinguishable by clock constraints with constants bounded by a maximum $c_x$ per clock.
 
-*Definition (Region Equivalence, Alur--Dill 1994).* Let $c_x$ be the largest constant compared with clock $x$ in any guard or invariant of $cal(A)$. Two valuations $v, v'$ are *region-equivalent*, written $v tilde v'$, iff for every $x, y in X$:
+#definition(name: "Region Equivalence, Alur--Dill 1994")[Let $c_x$ be the largest constant compared with clock $x$ in any guard or invariant of $cal(A)$. Two valuations $v, v'$ are *region-equivalent*, written $v tilde v'$, iff for every $x, y in X$:]
 
 1. $floor(v(x)) = floor(v'(x))$ whenever $v(x) lt.eq c_x$, and $v(x) > c_x <==> v'(x) > c_x$;
 2. ${v(x)} = 0 <==> {v'(x)} = 0$ (where ${dot.op}$ denotes fractional part), whenever $v(x) lt.eq c_x$;
@@ -75,30 +75,30 @@ The state space $L times RR^X_(>=0)$ is uncountable, but only finitely many *qua
 
 Equivalence classes are called *regions*. A region is determined by (i) an integer part for each clock, capped at $c_x + 1$ (above maximum); (ii) a total preorder on the fractional parts of unsaturated clocks; (iii) which clocks have integer value.
 
-*Theorem (Alur--Dill 1994).* Region equivalence is a *time-abstract bisimulation*: if $v tilde v'$ and $(l, v) arrow.r (l', v'')$ via an action $a$, there exists $v'''$ with $(l, v') arrow.r (l', v''')$ via $a$ and $v'' tilde v'''$; and similarly for the existence of a time-successor in a given region.
+#theorem(name: "Alur--Dill 1994")[Region equivalence is a *time-abstract bisimulation*: if $v tilde v'$ and $(l, v) arrow.r (l', v'')$ via an action $a$, there exists $v'''$ with $(l, v') arrow.r (l', v''')$ via $a$ and $v'' tilde v'''$; and similarly for the existence of a time-successor in a given region.]
 
-*Corollary (Region Automaton).* The quotient
+#corollary(name: "Region Automaton")[The quotient
 $ cal(R)(cal(A)) = (L times "Regions"(X) slash tilde, dots.h) $
 is a *finite* automaton that accepts the *untimed* projection of $L(cal(A))$. Its size is bounded by
-$ |L| dot |X|! dot 2^(|X|) dot product_(x in X) (2 c_x + 2). $
+$ |L| dot |X|! dot 2^(|X|) dot product_(x in X) (2 c_x + 2). $]
 
 The factor $|X|!$ counts the orderings of fractional parts; the $2^|X|$ counts which clocks are at integer values; the product counts the integer parts (with the saturation cap doubled to account for at integer vs. in open interval).
 
 === Reachability is Decidable, and Tight
 
-*Theorem (Alur--Dill 1994).* The reachability problem for timed automata -- given $cal(A)$, location $l$, decide whether some run reaches a configuration with control at $l$ -- is *PSPACE-complete*.
+#theorem(name: "Alur--Dill 1994")[The reachability problem for timed automata -- given $cal(A)$, location $l$, decide whether some run reaches a configuration with control at $l$ -- is *PSPACE-complete*.]
 
-*Proof sketch.* Membership: guess a path in $cal(R)(cal(A))$ on the fly; each region is representable in $O(|X| log c_max)$ bits, so the procedure runs in NPSPACE = PSPACE by Savitch. Hardness: reduce from acceptance of a linearly-bounded Turing machine; the encoding uses $O(n)$ clocks for tape contents (Alur--Dill).
+#proof(name: "sketch")[Membership: guess a path in $cal(R)(cal(A))$ on the fly; each region is representable in $O(|X| log c_max)$ bits, so the procedure runs in NPSPACE = PSPACE by Savitch. Hardness: reduce from acceptance of a linearly-bounded Turing machine; the encoding uses $O(n)$ clocks for tape contents (Alur--Dill).]
 
-*Theorem (Courcoubetis--Yannakakis 1992).* Reachability is PSPACE-hard already with *three* clocks. With one clock, it drops to NLOGSPACE; with two, it is NP-hard (PSPACE-membership holds in general, as for any fixed number of clocks) — the precise complexity below PSPACE for two clocks remains open.
+#theorem(name: "Courcoubetis--Yannakakis 1992")[Reachability is PSPACE-hard already with *three* clocks. With one clock, it drops to NLOGSPACE; with two, it is NP-hard (PSPACE-membership holds in general, as for any fixed number of clocks) — the precise complexity below PSPACE for two clocks remains open.]
 
 == Zones and Difference Bound Matrices
 
 The region construction is intellectually clean but practically catastrophic: even modest automata produce trillions of regions. Tools instead use *zones* -- convex unions of regions described by conjunctions of difference constraints.
 
-*Definition (Zone).* A *zone* over $X$ is a set $Z subset.eq RR^X_(>=0)$ of the form
+#definition(name: "Zone")[A *zone* over $X$ is a set $Z subset.eq RR^X_(>=0)$ of the form
 $ Z = { v | and.big_(i,j) v(x_i) - v(x_j) prec_(i j) c_(i j) } $
-where $x_0$ denotes a *fictitious zero clock*, $prec_(i j) in {<, lt.eq}$, and $c_(i j) in ZZ union {oo}$.
+where $x_0$ denotes a *fictitious zero clock*, $prec_(i j) in {<, lt.eq}$, and $c_(i j) in ZZ union {oo}$.]
 
 === Difference Bound Matrices
 
@@ -121,21 +121,21 @@ Let $Z$ be a canonical zone over $X$.
 
 Naive forward exploration with zones may not terminate: clocks can grow unboundedly. *$cal(C)$-closure* (Daws--Tripakis 1998) abstracts a zone by truncating any entry referring to a constant larger than $c_max$. Formally, replace $D_(i j) = (c, "≺")$ by $(oo, <)$ if $c > c_max$, by $(-c_max, <)$ if $c < -c_max$, and re-canonicalize.
 
-*Theorem (Daws--Tripakis 1998).* The $cal(C)$-closure abstraction is sound for reachability: a state is reachable iff some normalized zone containing it is reachable in the abstract semantics. The abstract state space is finite.
+#theorem(name: "Daws--Tripakis 1998")[The $cal(C)$-closure abstraction is sound for reachability: a state is reachable iff some normalized zone containing it is reachable in the abstract semantics. The abstract state space is finite.]
 
 *Warning.* Naive $k$-normalization is *unsound* in the presence of *diagonal* constraints (Bouyer 2003). Sound abstractions for diagonal-free automata include the $"LU"$-abstraction (Behrmann--Bouyer--Larsen--Pelánek 2006), which uses per-clock lower and upper bounds rather than a single maximum.
 
 == Determinization and Closure Properties
 
-*Theorem (Alur--Dill 1994).* Timed automata are *not closed under complementation*: there exist timed languages $L(cal(A))$ whose complements are not timed-regular. They are closed under union and intersection (product construction with clock disjoint copies).
+#theorem(name: "Alur--Dill 1994")[Timed automata are *not closed under complementation*: there exist timed languages $L(cal(A))$ whose complements are not timed-regular. They are closed under union and intersection (product construction with clock disjoint copies).]
 
-*Theorem (Alur--Dill 1994).* *Language inclusion* $L(cal(A)_1) subset.eq L(cal(A)_2)$ is *undecidable* for timed automata. The proof reduces from the halting problem for two-counter machines, encoding counter values as clock differences.
+#theorem(name: "Alur--Dill 1994")[*Language inclusion* $L(cal(A)_1) subset.eq L(cal(A)_2)$ is *undecidable* for timed automata. The proof reduces from the halting problem for two-counter machines, encoding counter values as clock differences.]
 
 This is a sharp contrast with finite automata. Determinism, here, is genuinely restrictive: deterministic timed automata are strictly less expressive than nondeterministic ones, and no algorithm decides whether a given nondeterministic timed automaton has a deterministic equivalent.
 
 === One-Clock Timed Automata
 
-*Theorem (Ouaknine--Worrell 2004).* Language inclusion is *decidable* (and *NSPACE*$(n^2)$-complete) for *one-clock* timed automata over infinite alphabets, and for finite-word semantics. With two clocks, undecidability returns.
+#theorem(name: "Ouaknine--Worrell 2004")[Language inclusion is *decidable* (and *NSPACE*$(n^2)$-complete) for *one-clock* timed automata over infinite alphabets, and for finite-word semantics. With two clocks, undecidability returns.]
 
 The proof relies on a well-quasi-order on configurations of a region automaton augmented with a counter tracking unmatched obligation tokens; decidability follows from Higman's lemma applied to encoded configurations.
 
@@ -146,7 +146,7 @@ The undecidability of inclusion makes timed automata a problematic specification
 - *Recorder clocks* $x_a$ for each $a in Sigma$: $x_a$ measures time since the last occurrence of $a$.
 - *Predictor clocks* $y_a$: $y_a$ measures time *until* the next occurrence of $a$ (a non-causal feature requiring symbolic resolution).
 
-*Theorem (Alur--Fix--Henzinger 1999).* Event-clock automata are *determinizable* and *closed under all Boolean operations*. Inclusion is PSPACE-complete.
+#theorem(name: "Alur--Fix--Henzinger 1999")[Event-clock automata are *determinizable* and *closed under all Boolean operations*. Inclusion is PSPACE-complete.]
 
 The trade-off: event-clock automata are strictly less expressive than general timed automata. They form the timed analogue of the variety of regular languages closed under complementation, with cleaner algebraic structure but reduced modelling power.
 
@@ -156,7 +156,7 @@ A *timed game* (Asarin--Maler--Pnueli--Sifakis 1998; Maler--Pnueli--Sifakis 1995
 
 *Reachability game.* Decide if the controller has a strategy to force the system into a target set $T subset.eq L$.
 
-*Theorem (Asarin--Maler--Pnueli--Sifakis 1998).* The reachability and safety control problems for timed games are *EXPTIME-complete*.
+#theorem(name: "Asarin--Maler--Pnueli--Sifakis 1998")[The reachability and safety control problems for timed games are *EXPTIME-complete*.]
 
 *Algorithmic content.* The fixed-point computation is performed on zones with a *controllable-predecessor* operator $"Pred"_t^c(W) = { (l, v) | exists d gt.eq 0. exists a in Sigma_c. dots }$ defined symbolically over DBMs (Cassez--David--Fleury--Larsen--Lime 2005). The tool UPPAAL-TIGA implements this for safety, reachability, and Büchi objectives.
 
@@ -174,9 +174,9 @@ A *timed game* (Asarin--Maler--Pnueli--Sifakis 1998; Maler--Pnueli--Sifakis 1995
 
 A *hybrid automaton* (Alur--Courcoubetis--Henzinger--Ho 1992; Henzinger 1996) generalizes timed automata by replacing the rigid "clocks tick at rate 1" semantics with arbitrary continuous dynamics in each location.
 
-*Definition (Hybrid Automaton).* A hybrid automaton is a tuple
+#definition(name: "Hybrid Automaton")[A hybrid automaton is a tuple
 $ cal(H) = (L, L_0, X, "Init", "Inv", "Flow", E, "Jump", Sigma, "Lab") $
-where
+where]
 
 - $L, L_0$ are locations and initial locations (as for TA),
 - $X = {x_1, dots, x_n}$ is a finite set of *continuous variables*,
@@ -196,7 +196,7 @@ A *linear hybrid automaton* (LHA) restricts:
 
 LHA include *timed automata* (each clock is a variable with $dot(x) = 1$), *multi-rate automata* ($dot(x) = k_l$ varies per location), and *rectangular automata* (intervals on rates).
 
-*Theorem (Henzinger--Kopke--Puri--Varaiya 1998).* Reachability for LHA is *undecidable* in general. The undecidability holds already for *2-rate timed automata* with rates $1$ and $2$.
+#theorem(name: "Henzinger--Kopke--Puri--Varaiya 1998")[Reachability for LHA is *undecidable* in general. The undecidability holds already for *2-rate timed automata* with rates $1$ and $2$.]
 
 The technique encodes a two-counter machine using two variables with different rates; the difference of variables stores a counter. Decrement, increment, and zero-test become reachability questions in a constructed LHA.
 
@@ -204,17 +204,17 @@ The technique encodes a two-counter machine using two variables with different r
 
 A *rectangular hybrid automaton* (RHA) restricts further: each variable evolves in an interval $dot(x) in [a_l^x, b_l^x]$ depending only on $l$ (no coupling), and guards/invariants are rectangular (each constraint involves a single variable).
 
-*Definition (Initialized RHA).* An RHA is *initialized* if every jump that changes the flow interval of a variable $x$ also resets $x$ to a fresh value (i.e. $x$'s history is forgotten).
+#definition(name: "Initialized RHA")[An RHA is *initialized* if every jump that changes the flow interval of a variable $x$ also resets $x$ to a fresh value (i.e. $x$'s history is forgotten).]
 
-*Theorem (Henzinger--Kopke--Puri--Varaiya 1998).* Reachability for *initialized* rectangular hybrid automata is *decidable* (PSPACE-complete) by reduction to a multi-rate region automaton.
+#theorem(name: "Henzinger--Kopke--Puri--Varaiya 1998")[Reachability for *initialized* rectangular hybrid automata is *decidable* (PSPACE-complete) by reduction to a multi-rate region automaton.]
 
-*Theorem (HKPV 1998).* Reachability for *uninitialized* RHA -- equivalently, for *stopwatch automata* (clocks with rates in ${0, 1}$ that can be paused without reset) -- is *undecidable*.
+#theorem(name: "HKPV 1998")[Reachability for *uninitialized* RHA -- equivalently, for *stopwatch automata* (clocks with rates in ${0, 1}$ that can be paused without reset) -- is *undecidable*.]
 
 === O-Minimal Hybrid Systems
 
 A theory $T$ is *o-minimal* (van den Dries) if every definable subset of the real line is a finite union of points and intervals. The theory of real closed fields ($"Th"(RR, +, dot, 0, 1, <)$) and the theory $RR_(exp)$ (with exponentiation, Wilkie 1996) are o-minimal.
 
-*Theorem (Lafferriere--Pappas--Sastry 2000).* For *o-minimal* hybrid systems -- systems where the flow in each location is a definable family of trajectories in an o-minimal expansion of the reals -- reachability is *decidable*, provided every discrete transition *resets* the continuous state (so locations are independent).
+#theorem(name: "Lafferriere--Pappas--Sastry 2000")[For *o-minimal* hybrid systems -- systems where the flow in each location is a definable family of trajectories in an o-minimal expansion of the reals -- reachability is *decidable*, provided every discrete transition *resets* the continuous state (so locations are independent).]
 
 The decidability proof leverages the *cell decomposition theorem* for o-minimal structures: definable sets admit a finite partition into cells with uniformly bounded combinatorial complexity, yielding a finite bisimulation quotient.
 
@@ -291,7 +291,7 @@ The `LU_normalize` step is what guarantees termination. Without it, repeated inc
 
 A *Timed Büchi Automaton* (TBA) has a designated set $F subset.eq L$; a run is accepting if it visits $F$ infinitely often *and* is *non-Zeno*, i.e. the sequence of timestamps diverges. The non-Zeno requirement excludes pathological behaviours like infinitely many actions in a bounded interval.
 
-*Theorem (Alur--Dill 1994).* Emptiness of TBAs is *PSPACE-complete*, decided by searching for a *fair cycle* in the region automaton -- a cycle that visits $F$ and along which some clock is reset, ensuring time can elapse.
+#theorem(name: "Alur--Dill 1994")[Emptiness of TBAs is *PSPACE-complete*, decided by searching for a *fair cycle* in the region automaton -- a cycle that visits $F$ and along which some clock is reset, ensuring time can elapse.]
 
 *Strong non-Zenoness* is a stricter syntactic condition: every cycle in the region automaton must contain a state where some clock $x$ has $v(x) gt.eq 1$ and an edge resetting $x$. UPPAAL relies on user-supplied leads-to properties combined with structural fairness to check liveness.
 
@@ -303,7 +303,7 @@ $ phi ::= p | not phi | phi and phi | exists phi_1 U_("≺" c) phi_2 | forall ph
 
 Read $exists phi_1 U_(lt.eq 5) phi_2$ as there is a run along which $phi_1$ holds until $phi_2$ holds, within $5$ time units.
 
-*Theorem (Alur--Courcoubetis--Dill 1993).* TCTL model checking for timed automata is *PSPACE-complete*. The algorithm augments the automaton with a fresh observer clock for each subformula and reduces to repeated reachability on a region/zone graph.
+#theorem(name: "Alur--Courcoubetis--Dill 1993")[TCTL model checking for timed automata is *PSPACE-complete*. The algorithm augments the automaton with a fresh observer clock for each subformula and reduces to repeated reachability on a region/zone graph.]
 
 == Beyond Reachability: Parametric and Weighted Extensions
 
@@ -360,13 +360,13 @@ A *time-abstract bisimulation* on a timed transition system $(S, arrow.r)$ is an
 
 Note the *abstraction* over the delay duration: $d$ and $d'$ need not coincide; only their qualitative effect on regions must match. The region equivalence is the *coarsest* time-abstract bisimulation that respects the location and the per-clock $c_x$ bounds.
 
-*Theorem (Tripakis--Yovine 2001).* Every finite time-abstract bisimulation quotient of a timed automaton's transition system refines the region quotient. Coarser symbolic representations (zones, $"LU"$-abstractions) do *not* in general yield bisimulation-respecting quotients, only simulation-respecting ones; this suffices for reachability and safety but not for branching-time logics like TCTL with $exists$ over arbitrary futures.
+#theorem(name: "Tripakis--Yovine 2001")[Every finite time-abstract bisimulation quotient of a timed automaton's transition system refines the region quotient. Coarser symbolic representations (zones, $"LU"$-abstractions) do *not* in general yield bisimulation-respecting quotients, only simulation-respecting ones; this suffices for reachability and safety but not for branching-time logics like TCTL with $exists$ over arbitrary futures.]
 
 == Extended Topic: Updatable Timed Automata
 
 *Updatable timed automata* (Bouyer--Dufourd--Fleury--Petit 2004) generalize Alur--Dill resets to *updates* of the form $x := y + c$, $x := c$, $x in [a, b]$, or $x := c y$.
 
-*Theorem (BDFP 2004).* Reachability for updatable timed automata is
+#theorem(name: "BDFP 2004")[Reachability for updatable timed automata is]
 
 - *decidable* (PSPACE-complete) for updates $x := c$ (constant), $x := y$, $x := x + 1$ under syntactic restrictions;
 - *undecidable* for arbitrary $x := y + c$ with $c < 0$, by reduction from two-counter machines.
@@ -377,7 +377,7 @@ The classification of decidable update fragments forms a non-trivial lattice; se
 
 *Timed pushdown automata* (Bouajjani--Echahed--Robbana 1994; Abdulla--Atig--Stenman 2012) combine clocks and a pushdown stack.
 
-*Theorem (Abdulla--Atig--Stenman 2012).* Reachability for *dense-timed* pushdown automata, where stack symbols carry ages, is *EXPTIME-complete*. The construction uses a generalization of the region construction combined with a snapshot-based abstraction of the stack.
+#theorem(name: "Abdulla--Atig--Stenman 2012")[Reachability for *dense-timed* pushdown automata, where stack symbols carry ages, is *EXPTIME-complete*. The construction uses a generalization of the region construction combined with a snapshot-based abstraction of the stack.]
 
 This enables verification of recursive timed programs and time-bounded asynchronous protocols.
 
@@ -391,9 +391,9 @@ This compositional framework underpins formal models for cyber-physical systems 
 
 For nonlinear hybrid systems, exact bisimulation is rarely computable. *Approximate bisimulation* (Girard--Pappas 2007) replaces equality of trajectories with proximity:
 
-*Definition.* A symmetric relation $cal(R)$ is an *$epsilon$-approximate bisimulation* if $(x, y) in cal(R)$ => $|x - y| lt.eq epsilon$ and every transition from one side is matched within $cal(R)$ from the other.
+#definition[A symmetric relation $cal(R)$ is an *$epsilon$-approximate bisimulation* if $(x, y) in cal(R)$ => $|x - y| lt.eq epsilon$ and every transition from one side is matched within $cal(R)$ from the other.]
 
-*Theorem (Girard--Pappas 2007).* For *incrementally stable* linear systems $dot(x) = A x + B u$ with $A$ Hurwitz, finite $epsilon$-approximate bisimulations are computable, yielding controllers with quantifiable robustness margins.
+#theorem(name: "Girard--Pappas 2007")[For *incrementally stable* linear systems $dot(x) = A x + B u$ with $A$ Hurwitz, finite $epsilon$-approximate bisimulations are computable, yielding controllers with quantifiable robustness margins.]
 
 Tools: *Pessoa* (Mazo--Davitian--Tabuada 2010) and *SCOTS* (Rungger--Zamani 2016) synthesize symbolic controllers from approximate bisimulations.
 
@@ -409,7 +409,7 @@ Tools: *dReal* (Gao--Kong--Clarke 2013), *iSAT-ODE* (Eggers--Fränzle--Herde 200
 
 *Energy automata* (Bouyer--Fahrenberg--Larsen--Markey 2008) annotate edges with energy deltas $w in ZZ$; the energy level must stay non-negative.
 
-*Theorem (BFLM 2008).* The *lower-bound* energy problem -- can the energy level be kept $gt.eq 0$ forever? -- is *PSPACE-complete* for $1$-clock energy timed automata, *undecidable* with $gt.eq 2$ clocks (without restrictions) but recovers *EXPTIME-completeness* under structural assumptions.
+#theorem(name: "BFLM 2008")[The *lower-bound* energy problem -- can the energy level be kept $gt.eq 0$ forever? -- is *PSPACE-complete* for $1$-clock energy timed automata, *undecidable* with $gt.eq 2$ clocks (without restrictions) but recovers *EXPTIME-completeness* under structural assumptions.]
 
 This models battery-powered systems, scheduling with budget, and the *energy parity games* studied in controller synthesis.
 

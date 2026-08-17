@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": definition, theorem, xref
 
 = Concurrency Models
 
@@ -25,7 +25,7 @@ This *interleaving model* is the implicit semantics of all introductory concurre
 
 === Sequential Consistency
 
-*Definition (Lamport 1979).* A multiprocessor is *sequentially consistent* if the result of any execution is the same as if the operations of all processors were executed in some sequential order, and the operations of each processor appear in that sequence in the order specified by its program.
+#definition(name: "Lamport 1979")[A multiprocessor is *sequentially consistent* if the result of any execution is the same as if the operations of all processors were executed in some sequential order, and the operations of each processor appear in that sequence in the order specified by its program.]
 
 Equivalently: there exists a total order on memory operations such that (i) each processor's operations appear in program order, and (ii) every read returns the value written by the most recent write in the total order.
 
@@ -73,15 +73,15 @@ A transition $t$ is *enabled* at marking $M$ if every input place $p$ (with $(p,
 
 === Decidability and Complexity
 
-*Theorem (Mayr 1981, Kosaraju 1982, Lambert 1992).* Reachability for Petri nets is decidable.
+#theorem(name: "Mayr 1981, Kosaraju 1982, Lambert 1992")[Reachability for Petri nets is decidable.]
 
 The proof (a multi-decade effort) uses the *Karp–Miller tree* generalised to a coverability graph, but reachability itself requires a more sophisticated argument. The latest complexity bounds are striking.
 
-*Theorem (Czerwiński–Orlikowski 2021, Leroux 2021).* Reachability for Petri nets is Ackermann-complete.
+#theorem(name: "Czerwiński–Orlikowski 2021, Leroux 2021")[Reachability for Petri nets is Ackermann-complete.]
 
-*Theorem (Lipton 1976).* Reachability requires at least $2^(Omega(sqrt(n)))$ space (i.e., is EXPSPACE-hard).
+#theorem(name: "Lipton 1976")[Reachability requires at least $2^(Omega(sqrt(n)))$ space (i.e., is EXPSPACE-hard).]
 
-*Theorem (Rackoff 1978).* *Coverability* (given $M$, is some $M' gt.eq M$ reachable?) is EXPSPACE-complete.
+#theorem(name: "Rackoff 1978")[*Coverability* (given $M$, is some $M' gt.eq M$ reachable?) is EXPSPACE-complete.]
 
 The gap between coverability (EXPSPACE) and reachability (Ackermann) is one of the most dramatic in computational complexity. Coverability suffices for *safety* properties phrased as "a bad marking is never reached", which is why most Petri-net model checkers analyse coverability rather than full reachability.
 
@@ -273,7 +273,7 @@ The `STM` monad type prevents arbitrary IO from leaking into a transaction (an a
 
 A correctness condition for STM, finer than serialisability:
 
-*Definition (Guerraoui–Kapalka 2008).* A history of an STM is *opaque* <==> there is an equivalent serial history $S$ such that (i) committed transactions appear in $S$ in real-time order, and (ii) every aborted transaction in the original history reads values consistent with some prefix of $S$.
+#definition(name: "Guerraoui–Kapalka 2008")[A history of an STM is *opaque* <==> there is an equivalent serial history $S$ such that (i) committed transactions appear in $S$ in real-time order, and (ii) every aborted transaction in the original history reads values consistent with some prefix of $S$.]
 
 The second clause is the strengthening over serialisability: aborted transactions must not observe inconsistent states. Without opacity, an aborted transaction may, e.g., divide by zero or enter an infinite loop because it observed an impossible combination of values. Most production STM implementations are opaque.
 
@@ -363,9 +363,9 @@ The cost of a fence is hardware-dependent: an x86 `mfence` typically costs tens 
 
 === The Data-Race-Freedom Theorem
 
-*Definition.* Two memory operations *conflict* if they access the same location and at least one is a write. A *data race* is a pair of conflicting operations from different threads that are not ordered by happens-before.
+#definition[Two memory operations *conflict* if they access the same location and at least one is a write. A *data race* is a pair of conflicting operations from different threads that are not ordered by happens-before.]
 
-*Theorem (DRF–SC, Adve–Hill 1990; refined Boehm–Adve 2008).* In a programming language whose memory model guarantees SC for data-race-free programs, any execution of a DRF program is equivalent to some sequentially consistent execution.
+#theorem(name: "DRF–SC, Adve–Hill 1990; refined Boehm–Adve 2008")[In a programming language whose memory model guarantees SC for data-race-free programs, any execution of a DRF program is equivalent to some sequentially consistent execution.]
 
 This theorem is the foundational compromise of modern memory models: *programmers who avoid data races see SC; programmers who race see only the weak model's guarantees*. The contract makes a strong language guarantee compatible with weak hardware: the compiler may freely reorder *as long as* the reorderings are invisible to DRF programs.
 
@@ -384,7 +384,7 @@ The standard establishes a *happens-before* relation built from program order, r
 
 === Subtleties and Bugs
 
-*Theorem (Batty–Memarian–Owens–Sarkar–Sewell 2011).* The C11/C++11 memory model as standardised contains several inconsistencies (most notably around "out-of-thin-air" reads) that no compiler or hardware implements correctly and that no straightforward patch resolves.
+#theorem(name: "Batty–Memarian–Owens–Sarkar–Sewell 2011")[The C11/C++11 memory model as standardised contains several inconsistencies (most notably around "out-of-thin-air" reads) that no compiler or hardware implements correctly and that no straightforward patch resolves.]
 
 The OOTA problem: the relaxed memory model permits *self-justifying* executions in which a read returns a value only because a later write produces it. This is theoretically permitted but operationally absurd and outlaws important compiler optimisations. The Java memory model (Manson–Pugh–Adve 2005) attempted a global fix via the *causality* requirement; it was subsequently shown to have its own subtle flaws.
 

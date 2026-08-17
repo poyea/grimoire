@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": proof, theorem, xref
 
 = Gradual and Hybrid Type Systems
 
@@ -90,9 +90,9 @@ $ (chevron.l tau_1' arrow.r tau_2' arrow.l^ell tau_1 arrow.r tau_2 chevron.r v) 
 
 where $macron(ell)$ denotes the *negation* (complementary blame) of $ell$. Negative blame falls on the *caller* when an argument fails its precondition; positive blame falls on the *callee* when the result fails its postcondition.
 
-*Theorem (Blame, Wadler–Findler 2009).* In a cast calculus annotated with *positive* and *negative* labels, the "more typed" side of a failing cast is never blamed. Formally, if a closed program $e$ in $lambda_C$ reduces to $"blame" space ell^+$ (positive blame at $ell$), then the type that originated the cast labelled $ell$ is *not* a refinement of the actually-flowing value's type; the dynamically typed side is the one that violated the contract.
+#theorem(name: "Blame, Wadler–Findler 2009")[In a cast calculus annotated with *positive* and *negative* labels, the "more typed" side of a failing cast is never blamed. Formally, if a closed program $e$ in $lambda_C$ reduces to $"blame" space ell^+$ (positive blame at $ell$), then the type that originated the cast labelled $ell$ is *not* a refinement of the actually-flowing value's type; the dynamically typed side is the one that violated the contract.]
 
-*Proof sketch.* The proof proceeds by a logical relation indexed by *subtyping* (more precisely, by the *naive subtyping* $lt.eq$ that treats "?" as bottom on the positive side and as top on the negative side). One shows: if $tau_1 lt.eq tau_2$ then a cast $chevron.l tau_2 arrow.l^ell tau_1 chevron.r$ never blames $ell^+$, and dually for $ell^-$. The arrow case is the interesting one: contravariance of the function space requires flipping the polarity of the blame label, which is exactly what the operational rule above does. Closure under reduction gives the theorem. $square$
+#proof(name: "sketch")[The proof proceeds by a logical relation indexed by *subtyping* (more precisely, by the *naive subtyping* $lt.eq$ that treats "?" as bottom on the positive side and as top on the negative side). One shows: if $tau_1 lt.eq tau_2$ then a cast $chevron.l tau_2 arrow.l^ell tau_1 chevron.r$ never blames $ell^+$, and dually for $ell^-$. The arrow case is the interesting one: contravariance of the function space requires flipping the polarity of the blame label, which is exactly what the operational rule above does. Closure under reduction gives the theorem.]
 
 The blame theorem makes "well-typed programs cannot be blamed" a precise statement: the *static* fragment of a partially-typed program is in the position of a server that can trust its inputs, modulo the assumptions it has stated. The dynamic fragment is in the position of a client that must obey those assumptions or be blamed for breaking them. This is the precise sense in which gradual typing has *teeth*.
 
@@ -100,7 +100,7 @@ The blame theorem makes "well-typed programs cannot be blamed" a precise stateme
 
 A second metatheorem, often called the *gradual guarantee* (Siek–Vitousek–Cimini–Boyland 2015), formalises the programmer's expectation that adding or removing type annotations is a *behaviour-preserving* refactoring. Define the *precision* relation $e_1 ⊑ e_2$ on terms: $e_2$ is at least as precise as $e_1$, in the sense that every "?" in $e_1$ may be replaced by a more specific type in $e_2$, but never the reverse. Precision is congruent on terms and consistent with the typing.
 
-*Theorem (Gradual Guarantee).* Let $e_1 ⊑ e_2$ be closed and well-typed.
+#theorem(name: "Gradual Guarantee")[Let $e_1 ⊑ e_2$ be closed and well-typed.]
 
 1. *(Static.)* If $e_1$ type-checks, then $e_2$ type-checks.
 2. *(Dynamic.)* If $e_1 arrow.r^* v_1$ then either $e_2 arrow.r^* v_2$ with $v_1 ⊑ v_2$, or $e_2 arrow.r^* "blame" space ell$.
@@ -171,9 +171,9 @@ Note that the last form is the *wrapped function value*, i.e., a value that has 
 
 A *ground* type is one of `Bool`, `Int`, or the *prime* arrow `? -> ?`. Higher-order casts to "?" decompose through the prime arrow: $chevron.l "?" arrow.l tau_1 arrow.r tau_2 chevron.r v$ reduces to $chevron.l "?" arrow.l "?" arrow.r "?" chevron.r (chevron.l "?" arrow.r "?" arrow.l tau_1 arrow.r tau_2 chevron.r v)$. The factoring through ground types is what makes blame coherent: the run-time check is always between a known ground type and another known ground type.
 
-*Theorem (Type Safety for $lambda_C$).* If $dot tack.r e : tau$ then either $e$ is a value of type $tau$, $e arrow.r e'$ with $dot tack.r e' : tau$, or $e arrow.r "blame" space ell$ for some label $ell$.
+#theorem(name: "Type Safety for $lambda_C$")[If $dot tack.r e : tau$ then either $e$ is a value of type $tau$, $e arrow.r e'$ with $dot tack.r e' : tau$, or $e arrow.r "blame" space ell$ for some label $ell$.]
 
-*Proof.* Standard progress and preservation, treating blame as an additional terminal configuration not classified as "stuck". The casts on values are themselves typed and reduce cleanly; the only stuck-looking configurations are those that produce blame, which the theorem explicitly allows. $square$
+#proof[Standard progress and preservation, treating blame as an additional terminal configuration not classified as "stuck". The casts on values are themselves typed and reduce cleanly; the only stuck-looking configurations are those that produce blame, which the theorem explicitly allows.]
 
 The contrast with the Milner-style theorem is informative: *gradual type safety admits blame as a legitimate outcome*. Soundness does not promise the absence of type errors; it promises that those errors are *located* (a blame label) and *attributed* (to a definite side of a cast).
 
@@ -297,9 +297,9 @@ $ (tau_1, m_1, tau_2) ; (tau_2, m_2, tau_3) = (tau_1, m_1 inter.sq m_2, tau_3) $
 
 The composition fails (and the program raises blame) if and only if $m_1 inter.sq m_2$ fails. This is exactly when an inconsistency would have been discovered in the naïve sequence.
 
-*Theorem (Space Efficiency, Herman–Tomb–Flanagan 2010, Siek–Wadler 2010).* In a cast calculus with threesomes, the size of any value is bounded by a constant times the size of its type. Hence the heap usage of a gradually typed program is asymptotically the same as the corresponding statically typed program.
+#theorem(name: "Space Efficiency, Herman–Tomb–Flanagan 2010, Siek–Wadler 2010")[In a cast calculus with threesomes, the size of any value is bounded by a constant times the size of its type. Hence the heap usage of a gradually typed program is asymptotically the same as the corresponding statically typed program.]
 
-*Proof.* By induction on values. A wrapped function value $chevron.l (tau_1, m, tau_2) chevron.r v$ stores one threesome, of constant size; the inner $v$ is recursively bounded. Composition of two wrappers produces another wrapper with a single threesome. $square$
+#proof[By induction on values. A wrapped function value $chevron.l (tau_1, m, tau_2) chevron.r v$ stores one threesome, of constant size; the inner $v$ is recursively bounded. Composition of two wrappers produces another wrapper with a single threesome.]
 
 == Gradual Session Types
 
