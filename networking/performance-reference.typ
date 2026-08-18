@@ -128,7 +128,7 @@ _PPS column is the *line rate* the NIC can deliver at the given coalesce setting
 *Rule of thumb:* Ring size = bandwidth × latency / packet size
 
 Example: 10Gbps, 100μs burst, 1518B packets
-= 10 Gbps × 100 μs / (1518 × 8 bits) = 823 packets
+\= 10 Gbps × 100 μs / (1518 × 8 bits) = 823 packets
 
 == References
 
