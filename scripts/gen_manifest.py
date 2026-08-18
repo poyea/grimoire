@@ -41,9 +41,14 @@ SUBJECTS = [
 ]
 
 
-def count_lines(p: Path) -> int:
-    with p.open("rb") as f:
-        return sum(1 for _ in f)
+def count_words(p: Path) -> int:
+    """Chapter size in words.
+
+    Must stay consistent with scripts/lint_chapters.py: chapters wrap each
+    paragraph onto one long line, so a line count measures paragraph style
+    rather than substance, and churns on every reflow.
+    """
+    return len(p.read_text(encoding="utf-8", errors="replace").split())
 
 
 def load_existing(path: Path) -> dict[tuple[str, str], dict]:
@@ -93,7 +98,7 @@ def main() -> int:
                        if p.is_file() and p.suffix == ".typ")
         for p in files:
             slug = p.stem
-            n = count_lines(p)
+            n = count_words(p)
             prev = existing.get((subject, slug), {})
             status = prev.get("status", "draft")
             reviewer = prev.get("reviewer", None)
@@ -101,7 +106,7 @@ def main() -> int:
             lines.append(f"  - subject: {subject}")
             lines.append(f"    slug: {slug}")
             lines.append(f"    path: {subject}/{p.name}")
-            lines.append(f"    lines: {n}")
+            lines.append(f"    words: {n}")
             lines.append(f"    status: {yaml_escape(status)}")
             if reviewer is not None:
                 lines.append(f"    reviewer: {yaml_escape(str(reviewer))}")

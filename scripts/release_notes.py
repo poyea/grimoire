@@ -28,6 +28,16 @@ def load_chapters(ref: str | None) -> dict[str, dict]:
     return {f"{c['subject']}/{c['slug']}": c for c in data.get("chapters", [])}
 
 
+def size(entry: dict) -> int | None:
+    """Chapter size, tolerating manifests from before the words rename.
+
+    Tags cut before the `lines:` -> `words:` change carry only `lines:`.
+    Returning None for those makes the comparison below skip them rather
+    than reporting every chapter in the repo as changed.
+    """
+    return entry.get("words")
+
+
 def main() -> None:
     if len(sys.argv) > 1:
         prev_tag = sys.argv[1]
@@ -41,7 +51,8 @@ def main() -> None:
     removed = sorted(set(old) - set(new))
     changed = sorted(
         k for k in set(old) & set(new)
-        if old[k].get("lines") != new[k].get("lines")
+        if size(old[k]) is not None and size(new[k]) is not None
+        and size(old[k]) != size(new[k])
     )
 
     print(f"## Chapter changes since {prev_tag}")
@@ -68,13 +79,13 @@ def main() -> None:
                 print(f"  - {fmt(subject, slug)}")
         print()
 
-    section("Added", added, lambda s, g: f"{g} ({new[f'{s}/{g}']['lines']} lines)")
+    section("Added", added, lambda s, g: f"{g} ({size(new[f'{s}/{g}'])} words)")
     section("Removed", removed, lambda s, g: g)
     section(
         "Changed",
         changed,
         lambda s, g: (
-            f"{g} ({old[f'{s}/{g}']['lines']} → {new[f'{s}/{g}']['lines']} lines)"
+            f"{g} ({size(old[f'{s}/{g}'])} → {size(new[f'{s}/{g}'])} words)"
         ),
     )
 

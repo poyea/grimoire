@@ -6,1820 +6,1820 @@ chapters:
   - subject: cloud-and-infrastructure
     slug: containers
     path: cloud-and-infrastructure/containers.typ
-    lines: 283
+    words: 1485
     status: reviewed
   - subject: cloud-and-infrastructure
     slug: cost-engineering
     path: cloud-and-infrastructure/cost-engineering.typ
-    lines: 258
+    words: 1700
     status: reviewed
   - subject: cloud-and-infrastructure
     slug: iaas-fundamentals
     path: cloud-and-infrastructure/iaas-fundamentals.typ
-    lines: 203
+    words: 2032
     status: reviewed
   - subject: cloud-and-infrastructure
     slug: iac
     path: cloud-and-infrastructure/iac.typ
-    lines: 301
+    words: 1652
     status: reviewed
   - subject: cloud-and-infrastructure
     slug: kubernetes-internals
     path: cloud-and-infrastructure/kubernetes-internals.typ
-    lines: 292
+    words: 1621
     status: reviewed
   - subject: cloud-and-infrastructure
     slug: multi-tenancy
     path: cloud-and-infrastructure/multi-tenancy.typ
-    lines: 367
+    words: 1780
     status: reviewed
   - subject: cloud-and-infrastructure
     slug: serverless
     path: cloud-and-infrastructure/serverless.typ
-    lines: 291
+    words: 2219
     status: reviewed
   - subject: coding
     slug: advanced-graphs
     path: coding/advanced-graphs.typ
-    lines: 584
+    words: 2258
     status: reviewed
   - subject: coding
     slug: advanced-string-algorithms
     path: coding/advanced-string-algorithms.typ
-    lines: 738
+    words: 2884
     status: reviewed
   - subject: coding
     slug: advanced-systems
     path: coding/advanced-systems.typ
-    lines: 515
+    words: 1954
     status: reviewed
   - subject: coding
     slug: approximation-algorithms
     path: coding/approximation-algorithms.typ
-    lines: 204
+    words: 1605
     status: reviewed
   - subject: coding
     slug: arrays
     path: coding/arrays.typ
-    lines: 293
+    words: 1419
     status: reviewed
   - subject: coding
     slug: backtracking
     path: coding/backtracking.typ
-    lines: 169
+    words: 743
     status: reviewed
   - subject: coding
     slug: binary-search
     path: coding/binary-search.typ
-    lines: 368
+    words: 2000
     status: reviewed
   - subject: coding
     slug: bit-manipulation
     path: coding/bit-manipulation.typ
-    lines: 700
+    words: 2995
     status: reviewed
   - subject: coding
     slug: computational-geometry
     path: coding/computational-geometry.typ
-    lines: 701
+    words: 2928
     status: reviewed
   - subject: coding
     slug: distributed-algorithms
     path: coding/distributed-algorithms.typ
-    lines: 419
+    words: 1763
     status: reviewed
   - subject: coding
     slug: dynamic-programming
     path: coding/dynamic-programming.typ
-    lines: 602
+    words: 2809
     status: reviewed
   - subject: coding
     slug: flows-and-matching
     path: coding/flows-and-matching.typ
-    lines: 369
+    words: 2460
     status: reviewed
   - subject: coding
     slug: game-theory
     path: coding/game-theory.typ
-    lines: 239
+    words: 1660
     status: draft
   - subject: coding
     slug: graphs
     path: coding/graphs.typ
-    lines: 244
+    words: 1099
     status: reviewed
   - subject: coding
     slug: greedy
     path: coding/greedy.typ
-    lines: 351
+    words: 1855
     status: reviewed
   - subject: coding
     slug: hashing
     path: coding/hashing.typ
-    lines: 687
+    words: 3608
     status: reviewed
   - subject: coding
     slug: heap-priority-queue
     path: coding/heap-priority-queue.typ
-    lines: 410
+    words: 2275
     status: reviewed
   - subject: coding
     slug: interview-systems-design
     path: coding/interview-systems-design.typ
-    lines: 244
+    words: 1968
     status: reviewed
   - subject: coding
     slug: introduction
     path: coding/introduction.typ
-    lines: 187
+    words: 1513
     status: reviewed
   - subject: coding
     slug: linear-programming-and-simplex
     path: coding/linear-programming-and-simplex.typ
-    lines: 224
+    words: 1812
     status: reviewed
   - subject: coding
     slug: linked-list
     path: coding/linked-list.typ
-    lines: 438
+    words: 1999
     status: reviewed
   - subject: coding
     slug: math-number-theory
     path: coding/math-number-theory.typ
-    lines: 442
+    words: 2289
     status: reviewed
   - subject: coding
     slug: online-algorithms
     path: coding/online-algorithms.typ
-    lines: 192
+    words: 1468
     status: reviewed
   - subject: coding
     slug: parallel-algorithms
     path: coding/parallel-algorithms.typ
-    lines: 256
+    words: 1557
     status: reviewed
   - subject: coding
     slug: probabilistic-data-structures
     path: coding/probabilistic-data-structures.typ
-    lines: 677
+    words: 2830
     status: reviewed
   - subject: coding
     slug: problem-solving
     path: coding/problem-solving.typ
-    lines: 139
+    words: 716
     status: reviewed
   - subject: coding
     slug: randomized-algorithms
     path: coding/randomized-algorithms.typ
-    lines: 212
+    words: 1622
     status: reviewed
   - subject: coding
     slug: reference
     path: coding/reference.typ
-    lines: 751
+    words: 4691
     status: reviewed
   - subject: coding
     slug: segment-trees
     path: coding/segment-trees.typ
-    lines: 721
+    words: 3040
     status: reviewed
   - subject: coding
     slug: sliding-window
     path: coding/sliding-window.typ
-    lines: 472
+    words: 2211
     status: reviewed
   - subject: coding
     slug: stack
     path: coding/stack.typ
-    lines: 385
+    words: 1854
     status: reviewed
   - subject: coding
     slug: streaming-algorithms
     path: coding/streaming-algorithms.typ
-    lines: 737
+    words: 2433
     status: reviewed
   - subject: coding
     slug: string-algorithms
     path: coding/string-algorithms.typ
-    lines: 652
+    words: 2802
     status: reviewed
   - subject: coding
     slug: tree-decomposition
     path: coding/tree-decomposition.typ
-    lines: 573
+    words: 2922
     status: draft
   - subject: coding
     slug: trees
     path: coding/trees.typ
-    lines: 494
+    words: 2139
     status: reviewed
   - subject: coding
     slug: tries
     path: coding/tries.typ
-    lines: 357
+    words: 1567
     status: reviewed
   - subject: coding
     slug: two-pointers
     path: coding/two-pointers.typ
-    lines: 461
+    words: 2087
     status: reviewed
   - subject: coding
     slug: union-find
     path: coding/union-find.typ
-    lines: 480
+    words: 1847
     status: reviewed
   - subject: compilers
     slug: backend-and-codegen
     path: compilers/backend-and-codegen.typ
-    lines: 232
+    words: 1889
     status: reviewed
   - subject: compilers
     slug: dataflow-analysis
     path: compilers/dataflow-analysis.typ
-    lines: 260
+    words: 1524
     status: reviewed
   - subject: compilers
     slug: frontends
     path: compilers/frontends.typ
-    lines: 289
+    words: 1466
     status: reviewed
   - subject: compilers
     slug: garbage-collection
     path: compilers/garbage-collection.typ
-    lines: 418
+    words: 3406
     status: draft
   - subject: compilers
     slug: ir-design
     path: compilers/ir-design.typ
-    lines: 267
+    words: 1622
     status: reviewed
   - subject: compilers
     slug: jit-and-runtimes
     path: compilers/jit-and-runtimes.typ
-    lines: 189
+    words: 1703
     status: reviewed
   - subject: compilers
     slug: optimisation-passes
     path: compilers/optimisation-passes.typ
-    lines: 238
+    words: 2120
     status: reviewed
   - subject: compilers
     slug: register-allocation
     path: compilers/register-allocation.typ
-    lines: 182
+    words: 1642
     status: reviewed
   - subject: cpu-architecture
     slug: accelerators
     path: cpu-architecture/accelerators.typ
-    lines: 181
+    words: 1250
     status: reviewed
   - subject: cpu-architecture
     slug: arm-deep-dive
     path: cpu-architecture/arm-deep-dive.typ
-    lines: 205
+    words: 1240
     status: reviewed
   - subject: cpu-architecture
     slug: branch-prediction
     path: cpu-architecture/branch-prediction.typ
-    lines: 371
+    words: 2526
     status: reviewed
   - subject: cpu-architecture
     slug: cache-hierarchy
     path: cpu-architecture/cache-hierarchy.typ
-    lines: 609
+    words: 3679
     status: reviewed
   - subject: cpu-architecture
     slug: cpu-fundamentals
     path: cpu-architecture/cpu-fundamentals.typ
-    lines: 555
+    words: 3037
     status: reviewed
   - subject: cpu-architecture
     slug: interconnects
     path: cpu-architecture/interconnects.typ
-    lines: 181
+    words: 1240
     status: reviewed
   - subject: cpu-architecture
     slug: memory-system
     path: cpu-architecture/memory-system.typ
-    lines: 330
+    words: 1817
     status: reviewed
   - subject: cpu-architecture
     slug: multicore
     path: cpu-architecture/multicore.typ
-    lines: 546
+    words: 2939
     status: reviewed
   - subject: cpu-architecture
     slug: out-of-order-deep-dive
     path: cpu-architecture/out-of-order-deep-dive.typ
-    lines: 218
+    words: 1633
     status: reviewed
   - subject: cpu-architecture
     slug: performance-analysis
     path: cpu-architecture/performance-analysis.typ
-    lines: 496
+    words: 2016
     status: reviewed
   - subject: cpu-architecture
     slug: pipelining
     path: cpu-architecture/pipelining.typ
-    lines: 456
+    words: 2712
     status: reviewed
   - subject: cpu-architecture
     slug: power-and-dvfs
     path: cpu-architecture/power-and-dvfs.typ
-    lines: 192
+    words: 1267
     status: reviewed
   - subject: cpu-architecture
     slug: risc-v
     path: cpu-architecture/risc-v.typ
-    lines: 212
+    words: 1196
     status: reviewed
   - subject: cpu-architecture
     slug: simd
     path: cpu-architecture/simd.typ
-    lines: 443
+    words: 2764
     status: reviewed
   - subject: cpu-architecture
     slug: speculative-execution-security
     path: cpu-architecture/speculative-execution-security.typ
-    lines: 179
+    words: 1273
     status: reviewed
   - subject: cpu-architecture
     slug: superscalar
     path: cpu-architecture/superscalar.typ
-    lines: 398
+    words: 2268
     status: reviewed
   - subject: cpu-architecture
     slug: synchronization
     path: cpu-architecture/synchronization.typ
-    lines: 397
+    words: 3485
     status: reviewed
   - subject: cpu-architecture
     slug: virtual-memory
     path: cpu-architecture/virtual-memory.typ
-    lines: 541
+    words: 3020
     status: reviewed
   - subject: cryptography-and-security
     slug: asymmetric
     path: cryptography-and-security/asymmetric.typ
-    lines: 193
+    words: 1226
     status: reviewed
   - subject: cryptography-and-security
     slug: digital-signatures
     path: cryptography-and-security/digital-signatures.typ
-    lines: 97
+    words: 1261
     status: reviewed
   - subject: cryptography-and-security
     slug: hashing-and-macs
     path: cryptography-and-security/hashing-and-macs.typ
-    lines: 219
+    words: 1329
     status: reviewed
   - subject: cryptography-and-security
     slug: key-exchange-and-pki
     path: cryptography-and-security/key-exchange-and-pki.typ
-    lines: 95
+    words: 1269
     status: reviewed
   - subject: cryptography-and-security
     slug: post-quantum
     path: cryptography-and-security/post-quantum.typ
-    lines: 182
+    words: 1229
     status: reviewed
   - subject: cryptography-and-security
     slug: side-channel-attacks
     path: cryptography-and-security/side-channel-attacks.typ
-    lines: 82
+    words: 1168
     status: reviewed
   - subject: cryptography-and-security
     slug: symmetric-primitives
     path: cryptography-and-security/symmetric-primitives.typ
-    lines: 216
+    words: 1280
     status: reviewed
   - subject: cryptography-and-security
     slug: tls
     path: cryptography-and-security/tls.typ
-    lines: 216
+    words: 1734
     status: reviewed
   - subject: cryptography-and-security
     slug: zero-knowledge-proofs
     path: cryptography-and-security/zero-knowledge-proofs.typ
-    lines: 89
+    words: 1144
     status: reviewed
   - subject: data-engineering
     slug: batch-processing
     path: data-engineering/batch-processing.typ
-    lines: 150
+    words: 1024
     status: reviewed
   - subject: data-engineering
     slug: change-data-capture
     path: data-engineering/change-data-capture.typ
-    lines: 129
+    words: 1715
     status: reviewed
   - subject: data-engineering
     slug: data-quality
     path: data-engineering/data-quality.typ
-    lines: 156
+    words: 1649
     status: reviewed
   - subject: data-engineering
     slug: etl-vs-elt
     path: data-engineering/etl-vs-elt.typ
-    lines: 161
+    words: 945
     status: reviewed
   - subject: data-engineering
     slug: lakehouse-engineering
     path: data-engineering/lakehouse-engineering.typ
-    lines: 179
+    words: 1005
     status: reviewed
   - subject: data-engineering
     slug: orchestration
     path: data-engineering/orchestration.typ
-    lines: 201
+    words: 957
     status: reviewed
   - subject: data-engineering
     slug: schema-evolution
     path: data-engineering/schema-evolution.typ
-    lines: 124
+    words: 1607
     status: reviewed
   - subject: data-engineering
     slug: streaming
     path: data-engineering/streaming.typ
-    lines: 145
+    words: 1181
     status: reviewed
   - subject: data-engineering
     slug: watermarks-and-windows
     path: data-engineering/watermarks-and-windows.typ
-    lines: 108
+    words: 1807
     status: reviewed
   - subject: database
     slug: benchmarking-and-research-methods
     path: database/benchmarking-and-research-methods.typ
-    lines: 291
+    words: 1395
     status: reviewed
   - subject: database
     slug: buffer-pool-and-io
     path: database/buffer-pool-and-io.typ
-    lines: 274
+    words: 1341
     status: reviewed
   - subject: database
     slug: cloud-native-databases
     path: database/cloud-native-databases.typ
-    lines: 236
+    words: 1814
     status: reviewed
   - subject: database
     slug: column-stores-and-vectorized-execution
     path: database/column-stores-and-vectorized-execution.typ
-    lines: 256
+    words: 1300
     status: reviewed
   - subject: database
     slug: columnar-storage-and-vectorization
     path: database/columnar-storage-and-vectorization.typ
-    lines: 312
+    words: 1975
     status: reviewed
   - subject: database
     slug: concurrency-control
     path: database/concurrency-control.typ
-    lines: 326
+    words: 1941
     status: reviewed
   - subject: database
     slug: consensus-and-replication
     path: database/consensus-and-replication.typ
-    lines: 300
+    words: 1797
     status: reviewed
   - subject: database
     slug: embedded-databases
     path: database/embedded-databases.typ
-    lines: 217
+    words: 1743
     status: reviewed
   - subject: database
     slug: foundations
     path: database/foundations.typ
-    lines: 235
+    words: 1127
     status: reviewed
   - subject: database
     slug: geospatial
     path: database/geospatial.typ
-    lines: 234
+    words: 1557
     status: reviewed
   - subject: database
     slug: hardware-aware-design
     path: database/hardware-aware-design.typ
-    lines: 255
+    words: 1309
     status: reviewed
   - subject: database
     slug: isolation-and-consistency-models
     path: database/isolation-and-consistency-models.typ
-    lines: 216
+    words: 1327
     status: reviewed
   - subject: database
     slug: joins-and-aggregation
     path: database/joins-and-aggregation.typ
-    lines: 263
+    words: 1425
     status: reviewed
   - subject: database
     slug: lakehouses-and-open-formats
     path: database/lakehouses-and-open-formats.typ
-    lines: 252
+    words: 1088
     status: reviewed
   - subject: database
     slug: multi-model
     path: database/multi-model.typ
-    lines: 264
+    words: 1732
     status: reviewed
   - subject: database
     slug: observability-and-self-driving
     path: database/observability-and-self-driving.typ
-    lines: 293
+    words: 1255
     status: reviewed
   - subject: database
     slug: oltp-htap-olap-convergence
     path: database/oltp-htap-olap-convergence.typ
-    lines: 258
+    words: 2466
     status: reviewed
   - subject: database
     slug: oltp-vs-olap
     path: database/oltp-vs-olap.typ
-    lines: 249
+    words: 1773
     status: reviewed
   - subject: database
     slug: partitioning-and-elasticity
     path: database/partitioning-and-elasticity.typ
-    lines: 271
+    words: 1571
     status: reviewed
   - subject: database
     slug: query-compilation
     path: database/query-compilation.typ
-    lines: 239
+    words: 1231
     status: reviewed
   - subject: database
     slug: query-languages
     path: database/query-languages.typ
-    lines: 289
+    words: 1867
     status: reviewed
   - subject: database
     slug: query-optimization
     path: database/query-optimization.typ
-    lines: 249
+    words: 1292
     status: reviewed
   - subject: database
     slug: query-processing
     path: database/query-processing.typ
-    lines: 428
+    words: 2669
     status: reviewed
   - subject: database
     slug: recovery-and-logging
     path: database/recovery-and-logging.typ
-    lines: 232
+    words: 1339
     status: reviewed
   - subject: database
     slug: security-and-privacy
     path: database/security-and-privacy.typ
-    lines: 296
+    words: 1349
     status: reviewed
   - subject: database
     slug: sql-engines-internals
     path: database/sql-engines-internals.typ
-    lines: 253
+    words: 1665
     status: reviewed
   - subject: database
     slug: storage-engines
     path: database/storage-engines.typ
-    lines: 326
+    words: 2004
     status: reviewed
   - subject: database
     slug: streaming-and-incremental-computation
     path: database/streaming-and-incremental-computation.typ
-    lines: 294
+    words: 1334
     status: reviewed
   - subject: database
     slug: time-series-and-graph
     path: database/time-series-and-graph.typ
-    lines: 331
+    words: 1454
     status: reviewed
   - subject: database
     slug: transactions-distributed
     path: database/transactions-distributed.typ
-    lines: 232
+    words: 1274
     status: reviewed
   - subject: database
     slug: vector-and-similarity-search
     path: database/vector-and-similarity-search.typ
-    lines: 244
+    words: 1232
     status: reviewed
   - subject: database
     slug: weakly-consistent-systems
     path: database/weakly-consistent-systems.typ
-    lines: 262
+    words: 1348
     status: reviewed
   - subject: distributed-systems
     slug: causal-consistency
     path: distributed-systems/causal-consistency.typ
-    lines: 151
+    words: 2333
     status: reviewed
   - subject: distributed-systems
     slug: consensus-deep-dive
     path: distributed-systems/consensus-deep-dive.typ
-    lines: 209
+    words: 1734
     status: reviewed
   - subject: distributed-systems
     slug: coordination-services
     path: distributed-systems/coordination-services.typ
-    lines: 218
+    words: 1553
     status: reviewed
   - subject: distributed-systems
     slug: crdts
     path: distributed-systems/crdts.typ
-    lines: 138
+    words: 2325
     status: reviewed
   - subject: distributed-systems
     slug: failure-detection
     path: distributed-systems/failure-detection.typ
-    lines: 192
+    words: 1403
     status: reviewed
   - subject: distributed-systems
     slug: gossip
     path: distributed-systems/gossip.typ
-    lines: 185
+    words: 1441
     status: reviewed
   - subject: distributed-systems
     slug: introduction
     path: distributed-systems/introduction.typ
-    lines: 182
+    words: 1484
     status: reviewed
   - subject: distributed-systems
     slug: leader-election-and-leases
     path: distributed-systems/leader-election-and-leases.typ
-    lines: 195
+    words: 1447
     status: reviewed
   - subject: distributed-systems
     slug: log-based-systems
     path: distributed-systems/log-based-systems.typ
-    lines: 220
+    words: 1904
     status: reviewed
   - subject: distributed-systems
     slug: time-and-order
     path: distributed-systems/time-and-order.typ
-    lines: 226
+    words: 1565
     status: reviewed
   - subject: distributed-systems
     slug: transactions
     path: distributed-systems/transactions.typ
-    lines: 192
+    words: 1577
     status: reviewed
   - subject: distributed-systems
     slug: workflow-engines
     path: distributed-systems/workflow-engines.typ
-    lines: 290
+    words: 1915
     status: reviewed
   - subject: embedded-and-realtime
     slug: mcus-and-soc
     path: embedded-and-realtime/mcus-and-soc.typ
-    lines: 200
+    words: 1499
     status: reviewed
   - subject: embedded-and-realtime
     slug: peripherals-and-drivers
     path: embedded-and-realtime/peripherals-and-drivers.typ
-    lines: 322
+    words: 1945
     status: reviewed
   - subject: embedded-and-realtime
     slug: rtos
     path: embedded-and-realtime/rtos.typ
-    lines: 228
+    words: 1454
     status: reviewed
   - subject: formal-methods
     slug: model-checking
     path: formal-methods/model-checking.typ
-    lines: 278
+    words: 1857
     status: reviewed
   - subject: formal-methods
     slug: notation
     path: formal-methods/notation.typ
-    lines: 82
+    words: 583
     status: reviewed
   - subject: formal-methods
     slug: propositional-and-fol
     path: formal-methods/propositional-and-fol.typ
-    lines: 262
+    words: 2054
     status: reviewed
   - subject: formal-methods
     slug: sat-and-smt
     path: formal-methods/sat-and-smt.typ
-    lines: 245
+    words: 1891
     status: reviewed
   - subject: formal-methods
     slug: separation-logic
     path: formal-methods/separation-logic.typ
-    lines: 202
+    words: 2299
     status: reviewed
   - subject: formal-methods
     slug: theorem-proving
     path: formal-methods/theorem-proving.typ
-    lines: 187
+    words: 1692
     status: reviewed
   - subject: formal-methods
     slug: tla-plus
     path: formal-methods/tla-plus.typ
-    lines: 263
+    words: 1722
     status: reviewed
   - subject: gpu-architecture
     slug: compute-architecture
     path: gpu-architecture/compute-architecture.typ
-    lines: 783
+    words: 4223
     status: reviewed
   - subject: gpu-architecture
     slug: cuda-programming-model
     path: gpu-architecture/cuda-programming-model.typ
-    lines: 272
+    words: 1317
     status: reviewed
   - subject: gpu-architecture
     slug: execution-model
     path: gpu-architecture/execution-model.typ
-    lines: 553
+    words: 2323
     status: reviewed
   - subject: gpu-architecture
     slug: gpu-fundamentals
     path: gpu-architecture/gpu-fundamentals.typ
-    lines: 436
+    words: 1982
     status: reviewed
   - subject: gpu-architecture
     slug: gpu-virtualization
     path: gpu-architecture/gpu-virtualization.typ
-    lines: 189
+    words: 1087
     status: reviewed
   - subject: gpu-architecture
     slug: memory-advanced
     path: gpu-architecture/memory-advanced.typ
-    lines: 421
+    words: 1706
     status: reviewed
   - subject: gpu-architecture
     slug: memory-hierarchy
     path: gpu-architecture/memory-hierarchy.typ
-    lines: 449
+    words: 2261
     status: reviewed
   - subject: gpu-architecture
     slug: ml-workloads
     path: gpu-architecture/ml-workloads.typ
-    lines: 312
+    words: 2342
     status: reviewed
   - subject: gpu-architecture
     slug: multi-gpu
     path: gpu-architecture/multi-gpu.typ
-    lines: 270
+    words: 1916
     status: reviewed
   - subject: gpu-architecture
     slug: nccl-and-collectives
     path: gpu-architecture/nccl-and-collectives.typ
-    lines: 185
+    words: 1217
     status: reviewed
   - subject: gpu-architecture
     slug: non-nvidia
     path: gpu-architecture/non-nvidia.typ
-    lines: 210
+    words: 1339
     status: reviewed
   - subject: gpu-architecture
     slug: performance-optimization
     path: gpu-architecture/performance-optimization.typ
-    lines: 687
+    words: 2511
     status: reviewed
   - subject: gpu-architecture
     slug: profiling
     path: gpu-architecture/profiling.typ
-    lines: 620
+    words: 1834
     status: reviewed
   - subject: gpu-architecture
     slug: tensor-cores-and-mma
     path: gpu-architecture/tensor-cores-and-mma.typ
-    lines: 229
+    words: 1272
     status: reviewed
   - subject: gpu-architecture
     slug: triton-and-dsls
     path: gpu-architecture/triton-and-dsls.typ
-    lines: 225
+    words: 1373
     status: reviewed
   - subject: graphics-and-rendering
     slug: gi-techniques
     path: graphics-and-rendering/gi-techniques.typ
-    lines: 152
+    words: 1492
     status: reviewed
   - subject: graphics-and-rendering
     slug: physically-based-rendering
     path: graphics-and-rendering/physically-based-rendering.typ
-    lines: 164
+    words: 1223
     status: reviewed
   - subject: graphics-and-rendering
     slug: rasterization-pipeline
     path: graphics-and-rendering/rasterization-pipeline.typ
-    lines: 195
+    words: 1351
     status: reviewed
   - subject: graphics-and-rendering
     slug: ray-tracing
     path: graphics-and-rendering/ray-tracing.typ
-    lines: 179
+    words: 1389
     status: reviewed
   - subject: graphics-and-rendering
     slug: realtime-engines
     path: graphics-and-rendering/realtime-engines.typ
-    lines: 189
+    words: 1788
     status: reviewed
   - subject: graphics-and-rendering
     slug: shaders
     path: graphics-and-rendering/shaders.typ
-    lines: 205
+    words: 1205
     status: reviewed
   - subject: linux-kernel
     slug: abi-syscalls
     path: linux-kernel/abi-syscalls.typ
-    lines: 340
+    words: 2817
     status: reviewed
   - subject: linux-kernel
     slug: block-layer
     path: linux-kernel/block-layer.typ
-    lines: 231
+    words: 1889
     status: reviewed
   - subject: linux-kernel
     slug: cgroups-namespaces
     path: linux-kernel/cgroups-namespaces.typ
-    lines: 298
+    words: 1765
     status: reviewed
   - subject: linux-kernel
     slug: containers-in-the-kernel
     path: linux-kernel/containers-in-the-kernel.typ
-    lines: 249
+    words: 1927
     status: reviewed
   - subject: linux-kernel
     slug: cpu-affinity
     path: linux-kernel/cpu-affinity.typ
-    lines: 267
+    words: 1649
     status: reviewed
   - subject: linux-kernel
     slug: ebpf-deep-dive
     path: linux-kernel/ebpf-deep-dive.typ
-    lines: 241
+    words: 1857
     status: reviewed
   - subject: linux-kernel
     slug: interrupts
     path: linux-kernel/interrupts.typ
-    lines: 251
+    words: 1841
     status: reviewed
   - subject: linux-kernel
     slug: io-uring
     path: linux-kernel/io-uring.typ
-    lines: 316
+    words: 2450
     status: reviewed
   - subject: linux-kernel
     slug: kernel-modules
     path: linux-kernel/kernel-modules.typ
-    lines: 416
+    words: 1875
     status: reviewed
   - subject: linux-kernel
     slug: kernel-tracing
     path: linux-kernel/kernel-tracing.typ
-    lines: 291
+    words: 1695
     status: reviewed
   - subject: linux-kernel
     slug: live-patching
     path: linux-kernel/live-patching.typ
-    lines: 274
+    words: 1882
     status: reviewed
   - subject: linux-kernel
     slug: memory-reclaim
     path: linux-kernel/memory-reclaim.typ
-    lines: 239
+    words: 1962
     status: reviewed
   - subject: linux-kernel
     slug: mmap-memory
     path: linux-kernel/mmap-memory.typ
-    lines: 273
+    words: 1905
     status: reviewed
   - subject: linux-kernel
     slug: networking-stack
     path: linux-kernel/networking-stack.typ
-    lines: 255
+    words: 2103
     status: reviewed
   - subject: linux-kernel
     slug: rcu-and-locking
     path: linux-kernel/rcu-and-locking.typ
-    lines: 235
+    words: 1979
     status: reviewed
   - subject: linux-kernel
     slug: scheduler
     path: linux-kernel/scheduler.typ
-    lines: 242
+    words: 2057
     status: reviewed
   - subject: linux-kernel
     slug: security-modules
     path: linux-kernel/security-modules.typ
-    lines: 235
+    words: 1680
     status: reviewed
   - subject: linux-kernel
     slug: vfs-and-fs
     path: linux-kernel/vfs-and-fs.typ
-    lines: 250
+    words: 2098
     status: reviewed
   - subject: llm
     slug: agents-and-tool-use
     path: llm/agents-and-tool-use.typ
-    lines: 300
+    words: 2170
     status: reviewed
   - subject: llm
     slug: data-curation
     path: llm/data-curation.typ
-    lines: 265
+    words: 1914
     status: reviewed
   - subject: llm
     slug: distillation
     path: llm/distillation.typ
-    lines: 168
+    words: 1512
     status: reviewed
   - subject: llm
     slug: evaluation
     path: llm/evaluation.typ
-    lines: 775
+    words: 4284
     status: reviewed
   - subject: llm
     slug: finetuning
     path: llm/finetuning.typ
-    lines: 780
+    words: 4507
     status: reviewed
   - subject: llm
     slug: inference-optimization
     path: llm/inference-optimization.typ
-    lines: 441
+    words: 2356
     status: reviewed
   - subject: llm
     slug: inference-serving
     path: llm/inference-serving.typ
-    lines: 440
+    words: 2211
     status: reviewed
   - subject: llm
     slug: interpretability
     path: llm/interpretability.typ
-    lines: 202
+    words: 1745
     status: reviewed
   - subject: llm
     slug: introduction
     path: llm/introduction.typ
-    lines: 296
+    words: 1609
     status: reviewed
   - subject: llm
     slug: long-context
     path: llm/long-context.typ
-    lines: 210
+    words: 1787
     status: reviewed
   - subject: llm
     slug: mixture-of-experts
     path: llm/mixture-of-experts.typ
-    lines: 206
+    words: 1644
     status: reviewed
   - subject: llm
     slug: multimodal
     path: llm/multimodal.typ
-    lines: 179
+    words: 1450
     status: reviewed
   - subject: llm
     slug: pretraining-infrastructure
     path: llm/pretraining-infrastructure.typ
-    lines: 419
+    words: 2454
     status: reviewed
   - subject: llm
     slug: pretraining
     path: llm/pretraining.typ
-    lines: 444
+    words: 2881
     status: reviewed
   - subject: llm
     slug: quantization
     path: llm/quantization.typ
-    lines: 621
+    words: 3936
     status: reviewed
   - subject: llm
     slug: rag
     path: llm/rag.typ
-    lines: 225
+    words: 1628
     status: reviewed
   - subject: llm
     slug: reasoning-models
     path: llm/reasoning-models.typ
-    lines: 202
+    words: 1725
     status: reviewed
   - subject: llm
     slug: rlhf
     path: llm/rlhf.typ
-    lines: 714
+    words: 4409
     status: reviewed
   - subject: llm
     slug: safety-and-alignment
     path: llm/safety-and-alignment.typ
-    lines: 211
+    words: 2224
     status: reviewed
   - subject: llm
     slug: serving-systems
     path: llm/serving-systems.typ
-    lines: 744
+    words: 4008
     status: reviewed
   - subject: llm
     slug: tokenization
     path: llm/tokenization.typ
-    lines: 249
+    words: 1830
     status: reviewed
   - subject: llm
     slug: transformer-architecture
     path: llm/transformer-architecture.typ
-    lines: 494
+    words: 2594
     status: reviewed
   - subject: machine-learning-foundations
     slug: diffusion-models
     path: machine-learning-foundations/diffusion-models.typ
-    lines: 156
+    words: 1378
     status: reviewed
   - subject: machine-learning-foundations
     slug: generalization-theory
     path: machine-learning-foundations/generalization-theory.typ
-    lines: 238
+    words: 2498
     status: reviewed
   - subject: machine-learning-foundations
     slug: information-theory
     path: machine-learning-foundations/information-theory.typ
-    lines: 207
+    words: 1562
     status: reviewed
   - subject: machine-learning-foundations
     slug: linear-algebra-for-ml
     path: machine-learning-foundations/linear-algebra-for-ml.typ
-    lines: 269
+    words: 2275
     status: reviewed
   - subject: machine-learning-foundations
     slug: loss-functions
     path: machine-learning-foundations/loss-functions.typ
-    lines: 272
+    words: 2588
     status: reviewed
   - subject: machine-learning-foundations
     slug: network-information-theory
     path: machine-learning-foundations/network-information-theory.typ
-    lines: 168
+    words: 1359
     status: reviewed
   - subject: machine-learning-foundations
     slug: notation
     path: machine-learning-foundations/notation.typ
-    lines: 85
+    words: 540
     status: reviewed
   - subject: machine-learning-foundations
     slug: optimization
     path: machine-learning-foundations/optimization.typ
-    lines: 314
+    words: 2805
     status: reviewed
   - subject: machine-learning-foundations
     slug: probability-and-information
     path: machine-learning-foundations/probability-and-information.typ
-    lines: 219
+    words: 1781
     status: reviewed
   - subject: machine-learning-foundations
     slug: reinforcement-learning
     path: machine-learning-foundations/reinforcement-learning.typ
-    lines: 195
+    words: 1474
     status: reviewed
   - subject: networking
     slug: application-protocols
     path: networking/application-protocols.typ
-    lines: 215
+    words: 1276
     status: reviewed
   - subject: networking
     slug: bgp-routing
     path: networking/bgp-routing.typ
-    lines: 417
+    words: 1681
     status: reviewed
   - subject: networking
     slug: concurrency-models
     path: networking/concurrency-models.typ
-    lines: 180
+    words: 623
     status: reviewed
   - subject: networking
     slug: congestion-control
     path: networking/congestion-control.typ
-    lines: 250
+    words: 2095
     status: reviewed
   - subject: networking
     slug: connection-pooling
     path: networking/connection-pooling.typ
-    lines: 524
+    words: 1769
     status: reviewed
   - subject: networking
     slug: container-networking
     path: networking/container-networking.typ
-    lines: 481
+    words: 1694
     status: reviewed
   - subject: networking
     slug: data-center-networking
     path: networking/data-center-networking.typ
-    lines: 213
+    words: 1667
     status: reviewed
   - subject: networking
     slug: debugging
     path: networking/debugging.typ
-    lines: 519
+    words: 1816
     status: reviewed
   - subject: networking
     slug: dns
     path: networking/dns.typ
-    lines: 309
+    words: 1430
     status: reviewed
   - subject: networking
     slug: grpc
     path: networking/grpc.typ
-    lines: 443
+    words: 1536
     status: reviewed
   - subject: networking
     slug: io-multiplexing
     path: networking/io-multiplexing.typ
-    lines: 187
+    words: 694
     status: reviewed
   - subject: networking
     slug: ipv6
     path: networking/ipv6.typ
-    lines: 305
+    words: 2320
     status: reviewed
   - subject: networking
     slug: kernel-bypass
     path: networking/kernel-bypass.typ
-    lines: 267
+    words: 1077
     status: reviewed
   - subject: networking
     slug: link-layer
     path: networking/link-layer.typ
-    lines: 532
+    words: 2414
     status: reviewed
   - subject: networking
     slug: load-balancing
     path: networking/load-balancing.typ
-    lines: 538
+    words: 1865
     status: reviewed
   - subject: networking
     slug: lock-free
     path: networking/lock-free.typ
-    lines: 464
+    words: 2118
     status: reviewed
   - subject: networking
     slug: message-queues
     path: networking/message-queues.typ
-    lines: 220
+    words: 749
     status: reviewed
   - subject: networking
     slug: multipath
     path: networking/multipath.typ
-    lines: 220
+    words: 1495
     status: reviewed
   - subject: networking
     slug: nat
     path: networking/nat.typ
-    lines: 309
+    words: 1763
     status: reviewed
   - subject: networking
     slug: network-security
     path: networking/network-security.typ
-    lines: 676
+    words: 2923
     status: reviewed
   - subject: networking
     slug: observability
     path: networking/observability.typ
-    lines: 641
+    words: 1999
     status: reviewed
   - subject: networking
     slug: performance-reference
     path: networking/performance-reference.typ
-    lines: 139
+    words: 651
     status: reviewed
   - subject: networking
     slug: programmable-data-planes
     path: networking/programmable-data-planes.typ
-    lines: 313
+    words: 2193
     status: reviewed
   - subject: networking
     slug: quic-and-http3
     path: networking/quic-and-http3.typ
-    lines: 215
+    words: 1578
     status: reviewed
   - subject: networking
     slug: realtime-protocols
     path: networking/realtime-protocols.typ
-    lines: 697
+    words: 2377
     status: reviewed
   - subject: networking
     slug: resilience-patterns
     path: networking/resilience-patterns.typ
-    lines: 427
+    words: 1539
     status: reviewed
   - subject: networking
     slug: sdn-programmable-networks
     path: networking/sdn-programmable-networks.typ
-    lines: 484
+    words: 1738
     status: reviewed
   - subject: networking
     slug: service-discovery
     path: networking/service-discovery.typ
-    lines: 425
+    words: 1659
     status: reviewed
   - subject: networking
     slug: service-mesh
     path: networking/service-mesh.typ
-    lines: 441
+    words: 1622
     status: reviewed
   - subject: networking
     slug: sockets-api
     path: networking/sockets-api.typ
-    lines: 474
+    words: 1884
     status: reviewed
   - subject: networking
     slug: stateful-firewalls
     path: networking/stateful-firewalls.typ
-    lines: 480
+    words: 1981
     status: reviewed
   - subject: networking
     slug: tls
     path: networking/tls.typ
-    lines: 427
+    words: 1725
     status: reviewed
   - subject: networking
     slug: transport-layer
     path: networking/transport-layer.typ
-    lines: 459
+    words: 2204
     status: reviewed
   - subject: networking
     slug: websockets
     path: networking/websockets.typ
-    lines: 414
+    words: 1665
     status: reviewed
   - subject: networking
     slug: wireless-protocols
     path: networking/wireless-protocols.typ
-    lines: 616
+    words: 2855
     status: reviewed
   - subject: networking
     slug: zero-copy
     path: networking/zero-copy.typ
-    lines: 278
+    words: 1166
     status: reviewed
   - subject: observability-and-sre
     slug: alerting
     path: observability-and-sre/alerting.typ
-    lines: 110
+    words: 1623
     status: reviewed
   - subject: observability-and-sre
     slug: chaos-engineering
     path: observability-and-sre/chaos-engineering.typ
-    lines: 99
+    words: 1670
     status: reviewed
   - subject: observability-and-sre
     slug: continuous-profiling
     path: observability-and-sre/continuous-profiling.typ
-    lines: 277
+    words: 1775
     status: reviewed
   - subject: observability-and-sre
     slug: distributed-tracing
     path: observability-and-sre/distributed-tracing.typ
-    lines: 275
+    words: 1783
     status: reviewed
   - subject: observability-and-sre
     slug: incident-management
     path: observability-and-sre/incident-management.typ
-    lines: 124
+    words: 1685
     status: reviewed
   - subject: observability-and-sre
     slug: metrics-systems
     path: observability-and-sre/metrics-systems.typ
-    lines: 283
+    words: 1535
     status: reviewed
   - subject: observability-and-sre
     slug: opentelemetry
     path: observability-and-sre/opentelemetry.typ
-    lines: 96
+    words: 1641
     status: reviewed
   - subject: observability-and-sre
     slug: slo-engineering
     path: observability-and-sre/slo-engineering.typ
-    lines: 216
+    words: 1550
     status: reviewed
   - subject: observability-and-sre
     slug: the-three-pillars-and-beyond
     path: observability-and-sre/the-three-pillars-and-beyond.typ
-    lines: 203
+    words: 1388
     status: reviewed
   - subject: operating-systems
     slug: boot-and-init
     path: operating-systems/boot-and-init.typ
-    lines: 202
+    words: 2375
     status: reviewed
   - subject: operating-systems
     slug: ipc-mechanisms
     path: operating-systems/ipc-mechanisms.typ
-    lines: 180
+    words: 2242
     status: reviewed
   - subject: operating-systems
     slug: memory-management
     path: operating-systems/memory-management.typ
-    lines: 196
+    words: 2410
     status: reviewed
   - subject: operating-systems
     slug: page-reclaim-and-oom
     path: operating-systems/page-reclaim-and-oom.typ
-    lines: 130
+    words: 2054
     status: reviewed
   - subject: operating-systems
     slug: processes-and-threads
     path: operating-systems/processes-and-threads.typ
-    lines: 173
+    words: 2319
     status: reviewed
   - subject: operating-systems
     slug: real-time-scheduling
     path: operating-systems/real-time-scheduling.typ
-    lines: 116
+    words: 1925
     status: reviewed
   - subject: operating-systems
     slug: scheduling-theory
     path: operating-systems/scheduling-theory.typ
-    lines: 134
+    words: 1952
     status: reviewed
   - subject: operating-systems
     slug: security-models
     path: operating-systems/security-models.typ
-    lines: 221
+    words: 2824
     status: reviewed
   - subject: operating-systems
     slug: storage-stack
     path: operating-systems/storage-stack.typ
-    lines: 252
+    words: 2374
     status: reviewed
   - subject: operating-systems
     slug: virtual-memory
     path: operating-systems/virtual-memory.typ
-    lines: 128
+    words: 2038
     status: reviewed
   - subject: programming-languages
     slug: automata-learning
     path: programming-languages/automata-learning.typ
-    lines: 582
+    words: 5782
     status: reviewed
   - subject: programming-languages
     slug: axiomatic-semantics
     path: programming-languages/axiomatic-semantics.typ
-    lines: 311
+    words: 3268
     status: reviewed
   - subject: programming-languages
     slug: build-a-compiler
     path: programming-languages/build-a-compiler.typ
-    lines: 719
+    words: 3823
     status: reviewed
   - subject: programming-languages
     slug: categorical-semantics
     path: programming-languages/categorical-semantics.typ
-    lines: 242
+    words: 3499
     status: reviewed
   - subject: programming-languages
     slug: complexity
     path: programming-languages/complexity.typ
-    lines: 800
+    words: 5612
     status: reviewed
   - subject: programming-languages
     slug: computability-advanced
     path: programming-languages/computability-advanced.typ
-    lines: 370
+    words: 2837
     status: reviewed
   - subject: programming-languages
     slug: computability
     path: programming-languages/computability.typ
-    lines: 475
+    words: 3525
     status: reviewed
   - subject: programming-languages
     slug: concurrency-models
     path: programming-languages/concurrency-models.typ
-    lines: 428
+    words: 4836
     status: reviewed
   - subject: programming-languages
     slug: context-free-languages
     path: programming-languages/context-free-languages.typ
-    lines: 357
+    words: 4351
     status: reviewed
   - subject: programming-languages
     slug: denotational-semantics
     path: programming-languages/denotational-semantics.typ
-    lines: 250
+    words: 3543
     status: reviewed
   - subject: programming-languages
     slug: dependent-types-proof-engineering
     path: programming-languages/dependent-types-proof-engineering.typ
-    lines: 302
+    words: 2725
     status: reviewed
   - subject: programming-languages
     slug: dependent-types
     path: programming-languages/dependent-types.typ
-    lines: 594
+    words: 5507
     status: reviewed
   - subject: programming-languages
     slug: effects-and-handlers
     path: programming-languages/effects-and-handlers.typ
-    lines: 464
+    words: 3762
     status: reviewed
   - subject: programming-languages
     slug: effects-handlers-implementation
     path: programming-languages/effects-handlers-implementation.typ
-    lines: 469
+    words: 3638
     status: reviewed
   - subject: programming-languages
     slug: foundations
     path: programming-languages/foundations.typ
-    lines: 228
+    words: 1697
     status: reviewed
   - subject: programming-languages
     slug: gradual-and-hybrid
     path: programming-languages/gradual-and-hybrid.typ
-    lines: 359
+    words: 4651
     status: reviewed
   - subject: programming-languages
     slug: homotopy-type-theory
     path: programming-languages/homotopy-type-theory.typ
-    lines: 325
+    words: 4171
     status: reviewed
   - subject: programming-languages
     slug: infinite-trees-and-games
     path: programming-languages/infinite-trees-and-games.typ
-    lines: 377
+    words: 5001
     status: reviewed
   - subject: programming-languages
     slug: lexing
     path: programming-languages/lexing.typ
-    lines: 257
+    words: 2251
     status: reviewed
   - subject: programming-languages
     slug: linear-and-substructural
     path: programming-languages/linear-and-substructural.typ
-    lines: 431
+    words: 3859
     status: reviewed
   - subject: programming-languages
     slug: macros-and-metaprogramming
     path: programming-languages/macros-and-metaprogramming.typ
-    lines: 375
+    words: 4523
     status: reviewed
   - subject: programming-languages
     slug: macros-metaprogramming-formalism
     path: programming-languages/macros-metaprogramming-formalism.typ
-    lines: 554
+    words: 3692
     status: reviewed
   - subject: programming-languages
     slug: omega-automata-constructions
     path: programming-languages/omega-automata-constructions.typ
-    lines: 524
+    words: 5656
     status: reviewed
   - subject: programming-languages
     slug: omega-automata
     path: programming-languages/omega-automata.typ
-    lines: 309
+    words: 4056
     status: reviewed
   - subject: programming-languages
     slug: operational-semantics
     path: programming-languages/operational-semantics.typ
-    lines: 331
+    words: 3919
     status: reviewed
   - subject: programming-languages
     slug: parsing
     path: programming-languages/parsing.typ
-    lines: 301
+    words: 2274
     status: reviewed
   - subject: programming-languages
     slug: process-calculi
     path: programming-languages/process-calculi.typ
-    lines: 505
+    words: 5391
     status: reviewed
   - subject: programming-languages
     slug: pushdown-and-beyond
     path: programming-languages/pushdown-and-beyond.typ
-    lines: 350
+    words: 4277
     status: reviewed
   - subject: programming-languages
     slug: pushdown-cfg
     path: programming-languages/pushdown-cfg.typ
-    lines: 230
+    words: 1795
     status: reviewed
   - subject: programming-languages
     slug: regular-languages-proofs
     path: programming-languages/regular-languages-proofs.typ
-    lines: 641
+    words: 5012
     status: reviewed
   - subject: programming-languages
     slug: regular-languages
     path: programming-languages/regular-languages.typ
-    lines: 315
+    words: 4523
     status: reviewed
   - subject: programming-languages
     slug: semantics
     path: programming-languages/semantics.typ
-    lines: 300
+    words: 1965
     status: reviewed
   - subject: programming-languages
     slug: simply-typed-lambda-extensions
     path: programming-languages/simply-typed-lambda-extensions.typ
-    lines: 477
+    words: 4949
     status: reviewed
   - subject: programming-languages
     slug: simply-typed-lambda
     path: programming-languages/simply-typed-lambda.typ
-    lines: 354
+    words: 4149
     status: reviewed
   - subject: programming-languages
     slug: subtyping-and-polymorphism
     path: programming-languages/subtyping-and-polymorphism.typ
-    lines: 390
+    words: 3575
     status: reviewed
   - subject: programming-languages
     slug: system-f-and-parametricity
     path: programming-languages/system-f-and-parametricity.typ
-    lines: 433
+    words: 5342
     status: reviewed
   - subject: programming-languages
     slug: system-f-categorical-models
     path: programming-languages/system-f-categorical-models.typ
-    lines: 412
+    words: 3947
     status: reviewed
   - subject: programming-languages
     slug: timed-and-hybrid-automata
     path: programming-languages/timed-and-hybrid-automata.typ
-    lines: 493
+    words: 5428
     status: reviewed
   - subject: programming-languages
     slug: tree-automata
     path: programming-languages/tree-automata.typ
-    lines: 474
+    words: 5540
     status: reviewed
   - subject: programming-languages
     slug: turing-computability
     path: programming-languages/turing-computability.typ
-    lines: 224
+    words: 1840
     status: reviewed
   - subject: programming-languages
     slug: type-systems
     path: programming-languages/type-systems.typ
-    lines: 285
+    words: 3208
     status: reviewed
   - subject: programming-languages
     slug: weighted-and-probabilistic-automata
     path: programming-languages/weighted-and-probabilistic-automata.typ
-    lines: 528
+    words: 5173
     status: reviewed
   - subject: quantum-computing
     slug: error-correction
     path: quantum-computing/error-correction.typ
-    lines: 164
+    words: 1333
     status: reviewed
   - subject: quantum-computing
     slug: hardware-architectures
     path: quantum-computing/hardware-architectures.typ
-    lines: 179
+    words: 1286
     status: reviewed
   - subject: quantum-computing
     slug: nisq-and-benchmarking
     path: quantum-computing/nisq-and-benchmarking.typ
-    lines: 185
+    words: 3307
     status: reviewed
   - subject: quantum-computing
     slug: notation
     path: quantum-computing/notation.typ
-    lines: 67
+    words: 542
     status: reviewed
   - subject: quantum-computing
     slug: quantum-algorithms
     path: quantum-computing/quantum-algorithms.typ
-    lines: 157
+    words: 1308
     status: reviewed
   - subject: quantum-computing
     slug: qubits-and-gates
     path: quantum-computing/qubits-and-gates.typ
-    lines: 175
+    words: 1186
     status: reviewed
   - subject: computer-vision
     slug: 3d-vision
     path: computer-vision/3d-vision.typ
-    lines: 123
+    words: 1168
     status: reviewed
   - subject: computer-vision
     slug: cnn-architectures
     path: computer-vision/cnn-architectures.typ
-    lines: 140
+    words: 1251
     status: reviewed
   - subject: computer-vision
     slug: image-formation
     path: computer-vision/image-formation.typ
-    lines: 147
+    words: 1059
     status: reviewed
   - subject: computer-vision
     slug: image-segmentation
     path: computer-vision/image-segmentation.typ
-    lines: 119
+    words: 1082
     status: reviewed
   - subject: computer-vision
     slug: object-detection
     path: computer-vision/object-detection.typ
-    lines: 136
+    words: 1190
     status: reviewed
   - subject: computer-vision
     slug: vision-transformers
     path: computer-vision/vision-transformers.typ
-    lines: 130
+    words: 1171
     status: reviewed
   - subject: software-architecture
     slug: api-design
     path: software-architecture/api-design.typ
-    lines: 110
+    words: 1658
     status: reviewed
   - subject: software-architecture
     slug: architectural-styles
     path: software-architecture/architectural-styles.typ
-    lines: 109
+    words: 1367
     status: reviewed
   - subject: software-architecture
     slug: architecture-evaluation
     path: software-architecture/architecture-evaluation.typ
-    lines: 87
+    words: 1612
     status: reviewed
   - subject: software-architecture
     slug: distributed-data-patterns
     path: software-architecture/distributed-data-patterns.typ
-    lines: 105
+    words: 1792
     status: reviewed
   - subject: software-architecture
     slug: domain-driven-design
     path: software-architecture/domain-driven-design.typ
-    lines: 111
+    words: 1309
     status: reviewed
   - subject: software-architecture
     slug: event-driven-architecture
     path: software-architecture/event-driven-architecture.typ
-    lines: 106
+    words: 1714
     status: reviewed
   - subject: software-architecture
     slug: evolutionary-architecture
     path: software-architecture/evolutionary-architecture.typ
-    lines: 90
+    words: 1523
     status: reviewed
   - subject: software-architecture
     slug: monoliths-and-microservices
     path: software-architecture/monoliths-and-microservices.typ
-    lines: 118
+    words: 1672
     status: reviewed
   - subject: software-architecture
     slug: resilience-patterns
     path: software-architecture/resilience-patterns.typ
-    lines: 107
+    words: 1774
     status: reviewed
   - subject: performance-engineering
     slug: benchmarking
     path: performance-engineering/benchmarking.typ
-    lines: 97
+    words: 1252
     status: reviewed
   - subject: performance-engineering
     slug: capacity-planning
     path: performance-engineering/capacity-planning.typ
-    lines: 130
+    words: 2049
     status: reviewed
   - subject: performance-engineering
     slug: concurrency-performance
     path: performance-engineering/concurrency-performance.typ
-    lines: 92
+    words: 1512
     status: reviewed
   - subject: performance-engineering
     slug: cpu-profiling
     path: performance-engineering/cpu-profiling.typ
-    lines: 87
+    words: 1244
     status: reviewed
   - subject: performance-engineering
     slug: io-performance
     path: performance-engineering/io-performance.typ
-    lines: 92
+    words: 1508
     status: reviewed
   - subject: performance-engineering
     slug: memory-performance
     path: performance-engineering/memory-performance.typ
-    lines: 93
+    words: 1324
     status: reviewed
   - subject: performance-engineering
     slug: methodology
     path: performance-engineering/methodology.typ
-    lines: 114
+    words: 1257
     status: reviewed
   - subject: performance-engineering
     slug: queueing-theory
     path: performance-engineering/queueing-theory.typ
-    lines: 120
+    words: 1954
     status: reviewed
   - subject: numerical-computing
     slug: eigenvalue-problems
     path: numerical-computing/eigenvalue-problems.typ
-    lines: 76
+    words: 1428
     status: reviewed
   - subject: numerical-computing
     slug: error-analysis
     path: numerical-computing/error-analysis.typ
-    lines: 157
+    words: 1915
     status: reviewed
   - subject: numerical-computing
     slug: fft
     path: numerical-computing/fft.typ
-    lines: 79
+    words: 1312
     status: reviewed
   - subject: numerical-computing
     slug: floating-point
     path: numerical-computing/floating-point.typ
-    lines: 176
+    words: 2002
     status: reviewed
   - subject: numerical-computing
     slug: iterative-methods
     path: numerical-computing/iterative-methods.typ
-    lines: 116
+    words: 1531
     status: reviewed
   - subject: numerical-computing
     slug: linear-systems
     path: numerical-computing/linear-systems.typ
-    lines: 119
+    words: 1486
     status: reviewed
   - subject: numerical-computing
     slug: ode-integration
     path: numerical-computing/ode-integration.typ
-    lines: 103
+    words: 1897
     status: reviewed
   - subject: numerical-computing
     slug: optimization-algorithms
     path: numerical-computing/optimization-algorithms.typ
-    lines: 89
+    words: 1617
     status: reviewed
   - subject: web-and-browsers
     slug: browser-architecture
     path: web-and-browsers/browser-architecture.typ
-    lines: 99
+    words: 1282
     status: reviewed
   - subject: web-and-browsers
     slug: css-and-layout
     path: web-and-browsers/css-and-layout.typ
-    lines: 93
+    words: 1366
     status: reviewed
   - subject: web-and-browsers
     slug: event-loop-and-scheduling
     path: web-and-browsers/event-loop-and-scheduling.typ
-    lines: 91
+    words: 1157
     status: reviewed
   - subject: web-and-browsers
     slug: html-parsing-and-dom
     path: web-and-browsers/html-parsing-and-dom.typ
-    lines: 110
+    words: 1312
     status: reviewed
   - subject: web-and-browsers
     slug: javascript-engines
     path: web-and-browsers/javascript-engines.typ
-    lines: 74
+    words: 1248
     status: reviewed
   - subject: web-and-browsers
     slug: rendering-pipeline
     path: web-and-browsers/rendering-pipeline.typ
-    lines: 82
+    words: 1333
     status: reviewed
   - subject: web-and-browsers
     slug: web-performance
     path: web-and-browsers/web-performance.typ
-    lines: 78
+    words: 1353
     status: reviewed
   - subject: web-and-browsers
     slug: webassembly
     path: web-and-browsers/webassembly.typ
-    lines: 72
+    words: 1303
     status: reviewed
   - subject: search-and-ir
     slug: evaluation
     path: search-and-ir/evaluation.typ
-    lines: 85
+    words: 1406
     status: reviewed
   - subject: search-and-ir
     slug: inverted-indexes
     path: search-and-ir/inverted-indexes.typ
-    lines: 120
+    words: 1497
     status: reviewed
   - subject: search-and-ir
     slug: learning-to-rank
     path: search-and-ir/learning-to-rank.typ
-    lines: 105
+    words: 1375
     status: reviewed
   - subject: search-and-ir
     slug: neural-retrieval
     path: search-and-ir/neural-retrieval.typ
-    lines: 78
+    words: 1293
     status: reviewed
   - subject: search-and-ir
     slug: query-processing
     path: search-and-ir/query-processing.typ
-    lines: 99
+    words: 1369
     status: reviewed
   - subject: search-and-ir
     slug: rag-and-search-systems
     path: search-and-ir/rag-and-search-systems.typ
-    lines: 96
+    words: 1447
     status: reviewed
   - subject: search-and-ir
     slug: ranking-classical
     path: search-and-ir/ranking-classical.typ
-    lines: 106
+    words: 1442
     status: reviewed
   - subject: search-and-ir
     slug: vector-search
     path: search-and-ir/vector-search.typ
-    lines: 71
+    words: 1350
     status: reviewed

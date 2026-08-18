@@ -9,9 +9,8 @@ on:
 permissions:
   contents: read
 
-# Supersede in-flight runs for the same ref instead of letting them pile
-# up: every queued run re-fetches the Typst distribution, and concurrent
-# fetches are what intermittently trips setup-typst.
+# Supersede in-flight runs for the same ref rather than letting queued
+# runs pile up behind each other on a busy push sequence.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -33,9 +32,6 @@ jobs:
     needs: lint
     strategy:
       fail-fast: false
-      # Throttle the fan-out: 26 jobs starting at once means 26 concurrent
-      # Typst downloads. Eight keeps the wall-clock short without the storm.
-      max-parallel: 8
       matrix:
         subject:
           - cloud-and-infrastructure

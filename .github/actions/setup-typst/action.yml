@@ -19,16 +19,85 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Install Typst ${{ inputs.version }}
+    - name: Resolve platform
+      id: plat
       shell: bash
       run: |
         set -euo pipefail
-        target=x86_64-unknown-linux-musl
-        url="https://github.com/typst/typst/releases/download/v${{ inputs.version }}/typst-${target}.tar.xz"
-        dest="${RUNNER_TEMP}/typst"
-        mkdir -p "$dest"
-        curl --fail --silent --show-error --location --retry 3 \
-             --retry-delay 2 "$url" -o "${RUNNER_TEMP}/typst.tar.xz"
-        tar -xJf "${RUNNER_TEMP}/typst.tar.xz" -C "$dest" --strip-components=1
-        echo "$dest" >> "$GITHUB_PATH"
-        "$dest/typst" --version
+        case "${{ runner.os }}:${{ runner.arch }}" in
+          Linux:X64)     target=x86_64-unknown-linux-musl;    ext=tar.xz ;;
+          Linux:ARM64)   target=aarch64-unknown-linux-musl;   ext=tar.xz ;;
+          Linux:ARM)     target=armv7-unknown-linux-musleabi; ext=tar.xz ;;
+          macOS:X64)     target=x86_64-apple-darwin;          ext=tar.xz ;;
+          macOS:ARM64)   target=aarch64-apple-darwin;         ext=tar.xz ;;
+          Windows:X64)   target=x86_64-pc-windows-msvc;       ext=zip    ;;
+          Windows:ARM64) target=aarch64-pc-windows-msvc;      ext=zip    ;;
+          *)
+            echo "::error::No Typst build for ${{ runner.os }}/${{ runner.arch }}." \
+                 "Supported: Linux X64/ARM64/ARM, macOS X64/ARM64, Windows X64/ARM64."
+            exit 1 ;;
+        esac
+        echo "target=$target" >> "$GITHUB_OUTPUT"
+        echo "ext=$ext" >> "$GITHUB_OUTPUT"
+        echo "dest=$HOME/.typst-bin" >> "$GITHUB_OUTPUT"
+
+    - name: Restore cached Typst
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.typst-bin
+        key: typst-${{ inputs.version }}-${{ steps.plat.outputs.target }}
+
+    - name: Download Typst ${{ inputs.version }}
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        TARGET: ${{ steps.plat.outputs.target }}
+        EXT: ${{ steps.plat.outputs.ext }}
+        DEST: ${{ steps.plat.outputs.dest }}
+      run: |
+        set -euo pipefail
+        archive="typst-${TARGET}.${EXT}"
+        url="https://github.com/typst/typst/releases/download/v${VERSION}/${archive}"
+        tmp="${RUNNER_TEMP}/${archive}"
+
+        curl --fail --silent --show-error --location \
+             --retry 3 --retry-delay 2 "$url" -o "$tmp"
+
+        # SHA-256 digests published by GitHub for the pinned release. A
+        # version bump must add a block here; until it does, the download
+        # is unverified and says so loudly rather than failing the build.
+        expected=""
+        if [ "$VERSION" = "0.15.1" ]; then
+          case "$TARGET" in
+            x86_64-unknown-linux-musl)    expected=a6d077d0a95eed5a2eba715b2dae06be954f624ccbf85758a03f389ded33118c ;;
+            aarch64-unknown-linux-musl)   expected=5aa8d74a3d906e60ea12a66ac2f37f8eef1b14cbad7182a745e393a10c23dcee ;;
+            armv7-unknown-linux-musleabi) expected=44986312e557b9ac0f2c71d5d5156c0ad93b2da374d54c859d6c0c7c0b73709f ;;
+            x86_64-apple-darwin)          expected=7f9fdd9584866245de9a79e0add8f9236fae6f40a8a45e2c4771ccc14db4e0fa ;;
+            aarch64-apple-darwin)         expected=48f62ed034aa3a7978309579ac6ca00045e2ef0da73114e8af27cfd8e74dc05a ;;
+            x86_64-pc-windows-msvc)       expected=19ce3551153c2fe7ee9fa2f95208310c8f4d3209fedb699e0333faf8913f6736 ;;
+            aarch64-pc-windows-msvc)      expected=4ab28e1b71ec3184d38d580ab797f499b6770d952b6b19167be5cea5c2662e14 ;;
+          esac
+        fi
+        if [ -n "$expected" ]; then
+          echo "${expected}  ${tmp}" | sha256sum -c -
+        else
+          echo "::warning::No pinned SHA-256 for Typst ${VERSION}/${TARGET}; skipping checksum verification."
+        fi
+
+        mkdir -p "$DEST"
+        if [ "$EXT" = "zip" ]; then
+          unzip -q -j "$tmp" -d "$DEST"
+        else
+          tar -xJf "$tmp" -C "$DEST" --strip-components=1
+        fi
+
+    - name: Add Typst to PATH
+      shell: bash
+      env:
+        DEST: ${{ steps.plat.outputs.dest }}
+      run: |
+        set -euo pipefail
+        echo "$DEST" >> "$GITHUB_PATH"
+        "$DEST/typst" --version
