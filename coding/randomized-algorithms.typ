@@ -1,4 +1,4 @@
-#import "../template.typ": proof, xref
+#import "../template.typ": xref
 
 = Randomized Algorithms
 
@@ -23,7 +23,7 @@
 
 The simplest non-trivial Las Vegas algorithm. Picking the pivot uniformly at random gives expected runtime $O(n log n)$ on *every* input, defeating the adversarial $O(n^2)$ worst case of deterministic median-of-three on sorted-and-then-rotated inputs.
 
-#proof(name: "sketch")[Let $X_(i j)$ indicate that the $i$-th and $j$-th smallest elements are ever compared. They are compared iff the first pivot chosen from ${z_i, ..., z_j}$ is $z_i$ or $z_j$ — probability $2/(j - i + 1)$. Total expected comparisons $sum_(i < j) 2/(j-i+1) = O(n log n)$.]
+*Proof sketch.* Let $X_(i j)$ indicate that the $i$-th and $j$-th smallest elements are ever compared. They are compared iff the first pivot chosen from ${z_i, ..., z_j}$ is $z_i$ or $z_j$ — probability $2/(j - i + 1)$. Total expected comparisons $sum_(i < j) 2/(j-i+1) = O(n log n)$.
 
 ```python
 import random

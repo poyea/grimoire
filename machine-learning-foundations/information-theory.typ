@@ -1,4 +1,4 @@
-#import "../template.typ": theorem, xref
+#import "../template.typ": xref
 
 = Information Theory
 
@@ -92,7 +92,7 @@ The following diagram relates the four fundamental quantities for two variables:
 
 Shannon's first theorem establishes the fundamental limits of lossless compression.
 
-#theorem(name: "Shannon, 1948")[For an i.i.d. source with entropy $H(X)$, any lossless code requires at least $H(X)$ bits per symbol on average. A sequence of $n$ symbols can be compressed to $n(H(X) + epsilon)$ bits with probability of error going to zero as $n -> infinity$, for any $epsilon > 0$.]
+*Theorem (Shannon, 1948).* For an i.i.d. source with entropy $H(X)$, any lossless code requires at least $H(X)$ bits per symbol on average. A sequence of $n$ symbols can be compressed to $n(H(X) + epsilon)$ bits with probability of error going to zero as $n -> infinity$, for any $epsilon > 0$.
 
 The theorem relies on *typicality*: almost all long sequences drawn from $p$ have empirical entropy close to $H(X)$.
 
@@ -120,7 +120,7 @@ A discrete memoryless channel (DMC) is specified by a conditional distribution $
 
 $ C = max_(p(x)) I(X; Y) quad "bits per channel use." $
 
-#theorem(name: "Shannon, 1948")[For any rate $R < C$ and any $epsilon > 0$, there exists a code of rate $R$ with block error probability $< epsilon$ for sufficiently large block length $n$. Conversely, any sequence of codes with rate $R > C$ has error probability bounded away from zero.]
+*Theorem (Shannon, 1948).* For any rate $R < C$ and any $epsilon > 0$, there exists a code of rate $R$ with block error probability $< epsilon$ for sufficiently large block length $n$. Conversely, any sequence of codes with rate $R > C$ has error probability bounded away from zero.
 
 === Gaussian Channel
 

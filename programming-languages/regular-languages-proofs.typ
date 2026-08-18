@@ -1,4 +1,4 @@
-#import "../template.typ": corollary, example, lemma, proof, proposition, theorem
+#import "../template.typ": corollary, example, lemma, proof, theorem
 
 = Regular Languages: Proofs, Algorithms, and Advanced Theory
 
@@ -35,10 +35,10 @@ right-invariance). For any word $w$, induction on $|w|$ gives $hat(delta)([epsil
 Then $w in L(M) <==> [w]_tilde subset.eq L <==> w in L$ (by saturation).
 $square$
 
-#corollary(name: "uniqueness up to isomorphism")[If $M_1, M_2$ are both *minimal* DFAs for $L$
+*Corollary (uniqueness up to isomorphism).* If $M_1, M_2$ are both *minimal* DFAs for $L$
 (no dead states, all states reachable) then $M_1 tilde.equiv M_2$. In particular, the
 *Nerode DFA* $M_L = (Sigma^* / equiv_L, Sigma, delta_L, [epsilon], F_L)$ with
-$delta_L([x], a) = [x a]$ and $F_L = { [x] | x in L }$ is the *canonical* minimal DFA.]
+$delta_L([x], a) = [x a]$ and $F_L = { [x] | x in L }$ is the *canonical* minimal DFA.
 
 *Non-constructive remark.* Condition (ii) does not, by itself, yield an algorithm
 to compute $equiv_L$: the relation is defined by an infinite family of futures $z$.
@@ -70,7 +70,7 @@ the Brzozowski derivative. Right quotients: $L u^(-1) = { w | w u in L }$; these
 less frequently used but appear in the theory of two-way automata and in deciding
 whether $L$ is closed under right quotient (the condition for $L$ to be a *right ideal*).
 
-#proposition[The Nerode equivalence classes are exactly the left quotients: $[u]_(equiv_L) = u^(-1) L$ as a *language* (the class of $u$ is characterised by the set of valid continuations). The states of the minimal DFA are thus precisely the distinct left quotients of $L$.]
+*Proposition.* The Nerode equivalence classes are exactly the left quotients: $[u]_(equiv_L) = u^(-1) L$ as a *language* (the class of $u$ is characterised by the set of valid continuations). The states of the minimal DFA are thus precisely the distinct left quotients of $L$.
 
 #corollary[$L$ is regular <==> $L$ has finitely many distinct left quotients. This
 gives an algorithm: compute $epsilon^(-1) L = L$, then $a^(-1) L$ for $a in Sigma$,
@@ -329,11 +329,11 @@ ${ "id", "swap" } tilde.equiv ZZ slash 2 ZZ$ (the cyclic group of order 2). Sinc
 a *group* (every element has an inverse) and groups are *not* aperiodic
 (e.g., $"swap"^2 = "id"$ but $"swap"^1 eq.not "swap"^2$), $L$ is *not* star-free.]
 
-#example(name: "star-free: threshold counting")[The language $L = { w | |w|_a >= 1 }$,
+*Example (star-free: threshold counting).* The language $L = { w | |w|_a >= 1 }$,
 requiring at least one $a$, has a syntactic monoid with three elements: ${ [epsilon], [a], [b a^(-1) b] }$
 where $[a]$ represents "has seen at least one $a$", which is *idempotent* ($[a]^2 = [a]$).
 The monoid is aperiodic (no non-trivial groups), so $L$ is star-free. Indeed
-$L = Sigma^* a Sigma^*$, which is star-free by definition.]
+$L = Sigma^* a Sigma^*$, which is star-free by definition.
 
 === Table of Correspondences
 
@@ -428,18 +428,18 @@ formulas. $square$
 
 === First-Order Logic and Star-Free
 
-#theorem(name: "McNaughton–Papert 1971; Schützenberger 1965")[$L$ is FO$[<]$-definable
-<==> $L$ is star-free <==> $"Synt"(L)$ is aperiodic.]
+*Theorem (McNaughton–Papert 1971; Schützenberger 1965).* $L$ is FO$[<]$-definable
+<==> $L$ is star-free <==> $"Synt"(L)$ is aperiodic.
 
-#theorem(name: "Thomas 1982")[$L$ is FO$[<, "Suc"]$-definable (with both linear order and
+*Theorem (Thomas 1982).* $L$ is FO$[<, "Suc"]$-definable (with both linear order and
 successor) <==> $L$ is *locally threshold testable*: there exist $k, t$ such that
 membership of $w$ in $L$ depends only on the *factors* of $w$ of length $<= k$
-and the *prefix and suffix* of $w$ of length $<= k$, with multiplicities capped at $t$.]
+and the *prefix and suffix* of $w$ of length $<= k$, with multiplicities capped at $t$.
 
-#theorem(name: "Straubing 1988; Thérien–Wilke 1998")[$L$ is $"FO"^2[<]$-definable (two
+*Theorem (Straubing 1988; Thérien–Wilke 1998).* $L$ is $"FO"^2[<]$-definable (two
 first-order variables only) <==> $"Synt"(L)$ is in the pseudovariety $bold("DA")$
 (definite aperiodic, also called $cal(J)$-trivial above $bold(R)$-trivial intersect
-$bold(L)$-trivial). The corresponding language class is the *unambiguous languages*.]
+$bold(L)$-trivial). The corresponding language class is the *unambiguous languages*.
 
 These characterisations form a *fine classification* of regular languages by logical
 complexity, each level corresponding to a decidable algebraic condition on the

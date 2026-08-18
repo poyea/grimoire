@@ -1,5 +1,3 @@
-#import "../template.typ": definition
-
 = String Algorithms
 
 *Memory access patterns critical:* Strings are character arrays = sequential access optimal. Random access = cache-hostile. Modern SSE4.2/AVX2 instructions provide SIMD acceleration [Intel Opt. Manual 2023, §14.8].
@@ -307,7 +305,7 @@ Now query is $O(1)$, ~10-30 cycles.
 
 == Suffix Array
 
-#definition[Sorted array of all suffixes of string.]
+*Definition:* Sorted array of all suffixes of string.
 
 *Construction - Naive:* $O(n^2 log n)$
 

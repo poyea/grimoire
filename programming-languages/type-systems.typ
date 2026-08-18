@@ -1,4 +1,4 @@
-#import "../template.typ": lemma, theorem
+#import "../template.typ": theorem
 
 = Type Systems
 
@@ -59,7 +59,7 @@ _See also: Turing Machines and Computability for Rice's theorem and undecidabili
 
 === Substitution Lemma
 
-#lemma(name: "Substitution")[If $Gamma, x : S tack.r t : T$ and $tack.r s : S$, then $Gamma tack.r [x |-> s] t : T$.]
+*Lemma (Substitution).* If $Gamma, x : S tack.r t : T$ and $tack.r s : S$, then $Gamma tack.r [x |-> s] t : T$.
 
 *Proof* by induction on the derivation of $Gamma, x : S tack.r t : T$.
 

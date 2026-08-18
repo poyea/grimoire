@@ -1,4 +1,4 @@
-#import "../template.typ": theorem, xref
+#import "../template.typ": xref
 
 = Gossip Protocols
 
@@ -37,7 +37,7 @@ Combine both: the initiator pushes its digest *and* receives a push back. Each e
 
 == Convergence Guarantees
 
-#theorem(name: "Karp et al. 2000")[With fanout $k = c dot log N$ for any constant $c > 1$, push gossip infects all $N$ nodes within $(1 + epsilon) log N$ rounds with probability $1 - N^(-(c-1))$.]
+*Theorem (Karp et al. 2000).* With fanout $k = c dot log N$ for any constant $c > 1$, push gossip infects all $N$ nodes within $(1 + epsilon) log N$ rounds with probability $1 - N^(-(c-1))$.
 
 The *residue* — number of nodes that never received the message — is $O(1)$ for $k = log N$, and falls to zero with overwhelming probability for $k = 2 log N$. Network bandwidth consumed: $O(N log N)$ messages total, each of size $O(|"payload"|)$, versus $O(N)$ for a single broadcast that risks a single point of failure.
 

@@ -402,9 +402,9 @@ alternating $"or"$/$"and"$ layers collapse. Iterate: a depth-$d$ circuit collaps
 depth $d - 1$ after restriction. After $d - 1$ restrictions the circuit is a
 constant, but PARITY of any nonempty restriction is non-constant -- contradiction.]
 
-#theorem(name: "Razborov 1987, Smolensky 1987")[$"AC"^0 [p]$ ($"AC"^0$ augmented with
+*Theorem (Razborov 1987, Smolensky 1987).* $"AC"^0 [p]$ ($"AC"^0$ augmented with
 $"MOD"_p$ gates, $p$ prime) cannot compute $"MOD"_q$ for $q$ a different prime.
-In particular $"AC"^0 [2]$ cannot compute $"MOD"_3$.]
+In particular $"AC"^0 [2]$ cannot compute $"MOD"_3$.
 
 #proof[Approximate each gate by a *low-degree polynomial* over $bb(F)_p$.
 Over $O(log n)$ depth this gives a degree-$"polylog"$ approximator for the

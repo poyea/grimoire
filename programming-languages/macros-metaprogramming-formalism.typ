@@ -96,13 +96,13 @@ call reduces the size of the pattern. The expansion algorithm terminates because
 the template is a fixed finite tree; ellipsis expansion produces a finite sequence
 (bounded by the input's matched length). $square$]
 
-#example[Consider
+*Example.* Consider
 ```racket
 (define-syntax my-let
   (syntax-rules ()
     [(_ ((v e) ...) body ...)
      ((lambda (v ...) body ...) e ...)]))
-```]
+```
 
 For the call `(my-let ((x 1) (y 2)) (+ x y))`:
 
@@ -122,7 +122,7 @@ colour assignment.
 during the expansion of phase-0 code. The procedure receives a *syntax object* and
 returns a syntax object. Inside the body, arbitrary Scheme computation is permitted.
 
-#example(name: "a `while` loop")[]
+*Example: a `while` loop.*
 
 ```racket
 (define-syntax while

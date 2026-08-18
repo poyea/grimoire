@@ -193,9 +193,9 @@ A *strategy* (a.k.a. policy or scheduler) $sigma$ resolves nondeterminism. The c
 
 === PCTL: Probabilistic CTL
 
-#definition(name: "Hansson--Jonsson 1994")[PCTL formulae:
+*Definition (Hansson--Jonsson 1994).* PCTL formulae:
 $ Phi ::= "true" | p | "not" Phi | Phi and Phi | P_(prec.eq p)[psi] $
-$ psi ::= X Phi | Phi U Phi | Phi U^(lt.eq k) Phi $]
+$ psi ::= X Phi | Phi U Phi | Phi U^(lt.eq k) Phi $
 
 where $p in [0,1]$, $k in NN$, $prec in {<, lt.eq, gt.eq, >}$. Semantics: $s models P_(prec.eq p)[psi]$ <==> $"Pr"_s({pi | pi models psi}) prec.eq p$.
 
@@ -207,7 +207,7 @@ For MDPs, the model-checking question becomes "does *every* / *some* scheduler s
 
 === LTL Model Checking on MDPs
 
-#theorem(name: "Vardi 1985; Courcoubetis--Yannakakis 1995")[Given an MDP $cal(M)$ and an LTL formula $phi$, computing $max_sigma "Pr"_(cal(M)^sigma)[phi]$ is decidable in *2EXPTIME*, polynomial in $|cal(M)|$, doubly exponential in $|phi|$.]
+*Theorem (Vardi 1985; Courcoubetis--Yannakakis 1995).* Given an MDP $cal(M)$ and an LTL formula $phi$, computing $max_sigma "Pr"_(cal(M)^sigma)[phi]$ is decidable in *2EXPTIME*, polynomial in $|cal(M)|$, doubly exponential in $|phi|$.
 
 *Algorithm.*
 

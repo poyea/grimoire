@@ -1,4 +1,4 @@
-#import "../template.typ": proof, xref
+#import "../template.typ": xref
 
 = Introduction: Models and Impossibilities
 
@@ -56,7 +56,7 @@ Faults compose. A network partition can be modeled as simultaneous omission faul
 
 Fischer, Lynch, and Paterson (1985): in a purely asynchronous system where even *one* process may crash, there is no deterministic protocol that solves consensus and always terminates.
 
-#proof(name: "sketch")[Define a *bivalent* configuration as one whose outcome (the eventually decided value) is not yet determined — both 0 and 1 reachable. Show that (a) some initial configuration is bivalent, and (b) from any bivalent configuration the adversary can schedule messages to reach another bivalent configuration. By induction, an infinite execution exists that never decides.]
+*Proof sketch.* Define a *bivalent* configuration as one whose outcome (the eventually decided value) is not yet determined — both 0 and 1 reachable. Show that (a) some initial configuration is bivalent, and (b) from any bivalent configuration the adversary can schedule messages to reach another bivalent configuration. By induction, an infinite execution exists that never decides.
 
 *Why it matters.* The result rules out *deterministic, always-terminating, asynchronous* consensus. Real systems escape via:
 

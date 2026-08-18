@@ -116,7 +116,7 @@ The fixed-point view yields the *bisimulation game*: to show $P tilde Q$, supply
 
 === Congruence and Equational Axiomatisation
 
-#theorem(name: "Milner 1989")[$tilde$ is a congruence: $P tilde Q$ => $C[P] tilde C[Q]$ for every CCS context $C[dot]$.]
+*Theorem (Milner 1989).* $tilde$ is a congruence: $P tilde Q$ => $C[P] tilde C[Q]$ for every CCS context $C[dot]$.
 
 For *finite* CCS (no recursion), a complete axiomatisation of $tilde$ is given by the laws
 

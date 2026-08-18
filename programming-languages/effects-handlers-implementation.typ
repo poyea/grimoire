@@ -1,4 +1,4 @@
-#import "../template.typ": corollary, example, theorem
+#import "../template.typ": corollary, theorem
 
 = Effects and Handlers: Implementation and Theory
 
@@ -277,7 +277,7 @@ The fiber stack is a *linked list of segments*. Each segment is $8"KB"$ by defau
 
 *One-shot continuations* are the common case and are free to resume: the segment is simply resumed in place without copying.
 
-#example(name: "cooperative threading")[The `eio` library implements async I/O on top of OCaml effects:]
+*Example: cooperative threading.* The `eio` library implements async I/O on top of OCaml effects:
 
 ```ocaml
 effect Suspend : (unit -> unit) -> unit

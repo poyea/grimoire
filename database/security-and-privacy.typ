@@ -1,4 +1,4 @@
-#import "../template.typ": definition, xref
+#import "../template.typ": xref
 
 = Database Security and Privacy
 
@@ -204,7 +204,7 @@ conn = psycopg2.connect(
 
 Differential privacy (Dwork et al. 2006) provides a mathematical guarantee that the inclusion or exclusion of a single person's data changes the query result by at most a bounded amount.
 
-#definition[a randomized mechanism $M$ satisfies $(epsilon, delta)$-differential privacy if for all neighboring datasets $D$ and $D'$ (differing in one row) and all outputs $S$:]
+*Definition:* a randomized mechanism $M$ satisfies $(epsilon, delta)$-differential privacy if for all neighboring datasets $D$ and $D'$ (differing in one row) and all outputs $S$:
 
 $Pr[M(D) in S] <= e^epsilon dot Pr[M(D') in S] + delta$
 

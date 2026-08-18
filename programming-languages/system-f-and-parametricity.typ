@@ -1,4 +1,4 @@
-#import "../template.typ": corollary, example, lemma, proof, theorem, xref
+#import "../template.typ": example, proof, theorem, xref
 
 = System F and Parametricity
 
@@ -57,9 +57,9 @@ The typing judgment is $Delta; Gamma tack.r e : tau$, where $Delta$ tracks type 
 
 The side condition in T-TABS (that $alpha$ does not occur in $Gamma$) is the analogue of the universal-introduction *eigenvariable* condition in natural deduction. Without it, one could derive $x : alpha tack.r Lambda alpha . x : forall alpha . alpha$, a contradiction in the Curry–Howard reading.
 
-#lemma(name: "Type Substitution")[If $Delta, alpha; Gamma tack.r e : tau$ and $Delta tack.r sigma$, then $Delta; [alpha |-> sigma] Gamma tack.r [alpha |-> sigma] e : [alpha |-> sigma] tau$.]
+*Lemma (Type Substitution).* If $Delta, alpha; Gamma tack.r e : tau$ and $Delta tack.r sigma$, then $Delta; [alpha |-> sigma] Gamma tack.r [alpha |-> sigma] e : [alpha |-> sigma] tau$.
 
-#lemma(name: "Inversion")[If $Delta; Gamma tack.r Lambda alpha . e : rho$, then $rho = forall alpha. tau$ with $Delta, alpha; Gamma tack.r e : tau$. If $Delta; Gamma tack.r e [sigma] : rho$, then $Delta; Gamma tack.r e : forall alpha. tau$ with $rho = [alpha |-> sigma] tau$ for some $tau$.]
+*Lemma (Inversion).* If $Delta; Gamma tack.r Lambda alpha . e : rho$, then $rho = forall alpha. tau$ with $Delta, alpha; Gamma tack.r e : tau$. If $Delta; Gamma tack.r e [sigma] : rho$, then $Delta; Gamma tack.r e : forall alpha. tau$ with $rho = [alpha |-> sigma] tau$ for some $tau$.
 
 == Dynamic Semantics
 
@@ -149,7 +149,7 @@ $ [| alpha |]_eta &= eta(alpha) \
 
 The big intersection is the crux. Because we range over the *abstract* class of candidates rather than concrete types, the recursion is on $tau$ rather than on the (semantic) type of the interpretation.
 
-#lemma[For every type $tau$ and environment $eta$, $[| tau |]_eta in "CR"$.]
+*Lemma.* For every type $tau$ and environment $eta$, $[| tau |]_eta in "CR"$.
 
 #proof[Induction on $tau$. Variables: by assumption $eta(alpha) in "CR"$. Arrow: verify CR1, CR2, CR3 directly; CR3 uses that $e space e'$ is neutral when $e$ is, plus IH. Universal: an intersection of candidates is a candidate (intersect the closure conditions pointwise).]
 
@@ -157,14 +157,14 @@ The big intersection is the crux. Because we range over the *abstract* class of 
 
 *Main Theorem.* If $Delta; Gamma tack.r e : tau$, then for every type-environment $eta$ assigning candidates to $Delta$, and every closing substitution $gamma$ with $gamma(x) in [| Gamma(x) |]_eta$ for each $x$, we have $gamma(e) in [| tau |]_eta$.
 
-#proof[Induction on the typing derivation.
+*Proof.* Induction on the typing derivation.
 - T-VAR: by assumption.
 - T-APP: by definition of arrow candidate.
 - T-ABS: analogue of the STLC Abstraction Lemma, using CR3 to handle the redex case; $beta$-step reaches the IH.
 - T-TAPP: by Substitution Lemma, $gamma(e)[sigma] in [| forall alpha . tau' |]_eta subset.eq [| tau' |]_(eta, alpha |-> [| sigma |]_eta) = [| [alpha |-> sigma] tau' |]_eta$, modulo the fact that type application is itself neutral and reduces via $beta_2$, handled by CR3.
-- T-TABS: for every candidate $cal(C)$ and the extended environment, show $gamma(e) in [| tau |]_(eta, alpha |-> cal(C))$ by IH; conclude $Lambda alpha . gamma(e) in [| forall alpha . tau |]_eta$. The reduction $(Lambda alpha . gamma(e)) [sigma] arrow.r [alpha |-> sigma] gamma(e)$ is the $beta_2$-redex, handled by an analogue of the Abstraction Lemma.]
+- T-TABS: for every candidate $cal(C)$ and the extended environment, show $gamma(e) in [| tau |]_(eta, alpha |-> cal(C))$ by IH; conclude $Lambda alpha . gamma(e) in [| forall alpha . tau |]_eta$. The reduction $(Lambda alpha . gamma(e)) [sigma] arrow.r [alpha |-> sigma] gamma(e)$ is the $beta_2$-redex, handled by an analogue of the Abstraction Lemma. $square$
 
-#corollary[Take $eta(alpha) = "SN"_alpha$ and $gamma(x_i) = x_i$ (variables are in every candidate by CR3). Then $e in [| tau |]_eta$, hence $e$ is SN by CR1. $square$]
+*Corollary.* Take $eta(alpha) = "SN"_alpha$ and $gamma(x_i) = x_i$ (variables are in every candidate by CR3). Then $e in [| tau |]_eta$, hence $e$ is SN by CR1. $square$
 
 === Why Plain Reducibility Fails
 
@@ -190,7 +190,7 @@ $ [| alpha |]_rho &= rho(alpha) \
 
 The first projection $rho_1(alpha) = A_alpha$, second $rho_2(alpha) = B_alpha$; for $tau_1 arrow.r tau_2$, $[| tau_1 arrow.r tau_2 |]_(rho_1) = [| tau_1 |]_(rho_1) arrow.r [| tau_2 |]_(rho_1)$.
 
-#theorem(name: "Reynolds 1983, Abstraction")[For every closed term $emptyset tack.r e : tau$ and every relation environment $rho$, the pair $([| e |]_(rho_1), [| e |]_(rho_2)) in [| tau |]_rho$. In particular if $e$ is closed and $rho$ has all $rho(alpha) = $ identity, the theorem says $e$ is related to itself: *every term respects every parametric relation*.]
+*Theorem (Reynolds 1983, Abstraction).* For every closed term $emptyset tack.r e : tau$ and every relation environment $rho$, the pair $([| e |]_(rho_1), [| e |]_(rho_2)) in [| tau |]_rho$. In particular if $e$ is closed and $rho$ has all $rho(alpha) = $ identity, the theorem says $e$ is related to itself: *every term respects every parametric relation*.
 
 #proof[Induction on the typing derivation, exactly mirroring the SN proof but with binary relations in place of candidates.]
 
@@ -313,7 +313,7 @@ The *let-polymorphic* restriction of System F (no first-class $forall$ in argume
 
 === System F Type Inference is Undecidable
 
-#theorem(name: "Wells 1994")[Type inference for full (Curry-style) System F is undecidable. Type *checking* with annotations on all $Lambda$ and $[tau]$ is decidable (just walk the tree); but inferring a type for an unannotated term is undecidable.]
+*Theorem (Wells 1994).* Type inference for full (Curry-style) System F is undecidable. Type *checking* with annotations on all $Lambda$ and $[tau]$ is decidable (just walk the tree); but inferring a type for an unannotated term is undecidable.
 
 #proof(name: "sketch")[Wells gave a reduction from *semi-unification*: given a system of equations $tau_i = tau'_i$ and inequations $tau_j lt.eq.eq tau'_j$ (where $lt.eq.eq$ is "is a substitution instance of"), decide solvability. Semi-unification is undecidable (Kfoury–Tiuryn–Urzyczyn 1990). Wells encoded an arbitrary semi-unification problem as a System F typability problem: each inequation becomes a quantifier instantiation.]
 

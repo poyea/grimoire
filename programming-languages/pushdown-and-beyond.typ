@@ -41,7 +41,7 @@ The two modes are *not* equivalent for *deterministic* PDAs: empty-stack DPDAs a
 
 A leftmost derivation $S =>^* w_1 w_2 dots w_n$ corresponds to a PDA computation that reads $w_i$ on the $i$-th step, with the stack always holding the *tail* of the current sentential form. Acceptance by empty stack corresponds to completing the derivation.
 
-#proof(name: "PDA $arrow.r.long$ CFG")[The classical triple-construction (Hopcroft–Ullman). Given PDA $M = (Q, Sigma, Gamma, delta, q_0, Z_0, F)$ accepting by empty stack, build a CFG with nonterminals $[p X q]$ for $p, q in Q$, $X in Gamma$, intended to derive all $w$ such that $M$, starting in state $p$ with $X$ on top, ends in state $q$ with $X$ (and everything pushed on top of it) popped. Productions:]
+*Proof (PDA $arrow.r.long$ CFG).* The classical triple-construction (Hopcroft–Ullman). Given PDA $M = (Q, Sigma, Gamma, delta, q_0, Z_0, F)$ accepting by empty stack, build a CFG with nonterminals $[p X q]$ for $p, q in Q$, $X in Gamma$, intended to derive all $w$ such that $M$, starting in state $p$ with $X$ on top, ends in state $q$ with $X$ (and everything pushed on top of it) popped. Productions:
 
 - For each $(q', X_1 X_2 dots X_k) in delta(p, a, X)$ with $k >= 1$ and $a in Sigma union { epsilon }$, and for each tuple $(q_1, q_2, dots, q_k) in Q^k$, add the production $[p X q_k] arrow.r a [q' X_1 q_1] [q_1 X_2 q_2] dots [q_(k-1) X_k q_k]$.
 - For each $(q', epsilon) in delta(p, a, X)$, add $[p X q'] arrow.r a$.

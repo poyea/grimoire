@@ -106,7 +106,7 @@ A subtle point in *predicative* extensions: when type instantiation triggers fur
 
 === Erasure
 
-#theorem(name: "Mitchell, Girard, others")[A typed System F term $e$ and its *type-erasure* $|e|$ (delete all $Lambda$ and $[tau]$) have the same untyped reduction behaviour on the corresponding term-level redexes.]
+*Theorem (Mitchell, Girard, others).* A typed System F term $e$ and its *type-erasure* $|e|$ (delete all $Lambda$ and $[tau]$) have the same untyped reduction behaviour on the corresponding term-level redexes.
 
 So a System F program *runs* like an untyped $lambda$ program; types are computationally inert. This justifies *type erasure* in compilers: GHC erases types between Core and STG/Cmm; OCaml erases at the back end. The exception: features like Haskell's `Typeable` or polymorphic recursion with type-class dictionaries pass *runtime representations*, breaking pure erasure.
 
