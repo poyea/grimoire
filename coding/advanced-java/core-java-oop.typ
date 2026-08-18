@@ -1697,3 +1697,11 @@ map.reserve(1000);  // Pre-allocate buckets for 1000 elements
 - Higher load factor: less space, more collisions
 - Lower load factor: more space, fewer collisions
 - Default max_load_factor is 1.0
+
+== Further Reading
+
+Bloch, J. (2018). _Effective Java_, 3rd ed. Addison-Wesley. (The standard reference on idiomatic object design in Java.)
+
+Gosling, J., Joy, B., Steele, G., Bracha, G., & Buckley, A. _The Java Language Specification_. Oracle. (Normative semantics for the language constructs in this chapter.)
+
+Horstmann, C. S. (2022). _Core Java, Volume I: Fundamentals_, 12th ed. Pearson. (Thorough treatment of the type system and class model.)

@@ -67,7 +67,8 @@ MIN_WORDS = int(os.environ.get("GRIMOIRE_MIN_WORDS", "900"))
 
 
 def count_words(p: Path) -> int:
-    return len(p.read_text(encoding="utf-8").split())
+    return len(p.read_text(encoding="utf-8",
+                           errors="replace").split())
 
 
 def parse_includes(subject_typ: Path) -> list[str]:

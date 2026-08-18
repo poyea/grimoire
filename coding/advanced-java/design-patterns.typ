@@ -778,3 +778,11 @@ Holder             Yes          Yes   Yes             Low
 - Know multiple approaches (show depth)
 - Prefer simple, correct solutions (not clever)
 - Mention modern alternatives (BlockingQueue, atomic classes)
+
+== Further Reading
+
+Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). _Design Patterns: Elements of Reusable Object-Oriented Software_. Addison-Wesley. (The original catalogue.)
+
+Bloch, J. (2018). _Effective Java_, 3rd ed. Addison-Wesley. (How the classic patterns change given modern Java's language features.)
+
+Freeman, E., & Robson, E. (2020). _Head First Design Patterns_, 2nd ed. O'Reilly. (Worked, example-driven presentation of the same catalogue.)

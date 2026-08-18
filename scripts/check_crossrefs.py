@@ -79,7 +79,7 @@ def load() -> dict[str, Volume]:
             continue
         m = PROJECT_RE.search(vfile.read_text(encoding="utf-8"))
         vol = Volume(slug, m.group(1) if m else slug)
-        for chap in sorted((ROOT / slug).glob("*.typ")):
+        for chap in sorted((ROOT / slug).rglob("*.typ")):
             vol.stems.add(chap.stem)
             t = TITLE_RE.search(chap.read_text(encoding="utf-8"))
             if t:
@@ -139,28 +139,28 @@ def resolve(name: str, here: str, vols: dict[str, Volume]) -> bool:
 
 def main() -> int:
     vols = load()
-    warnings = 0
+    errors = 0
     for slug in sorted(vols):
-        for chap in sorted((ROOT / slug).glob("*.typ")):
+        for chap in sorted((ROOT / slug).rglob("*.typ")):
             text = chap.read_text(encoding="utf-8")
             rel = chap.relative_to(ROOT)
             # Structured #xref("subject", "slug") calls resolve exactly:
             # the target file must exist on disk.
             for subj, stem in XREF_RE.findall(text):
                 if not (ROOT / subj / f"{stem}.typ").is_file():
-                    print(f"WARNING: {rel}: #xref target does not exist "
+                    print(f"ERROR: {rel}: #xref target does not exist "
                           f"'{subj}/{stem}'")
-                    warnings += 1
+                    errors += 1
             for line in text.splitlines():
                 if "*See also:*" not in line:
                     continue
                 for name in ITALIC_RE.findall(line):
                     if not resolve(name, slug, vols):
-                        print(f"WARNING: {rel}: unresolved reference "
+                        print(f"ERROR: {rel}: unresolved reference "
                               f"'{name.strip()}'")
-                        warnings += 1
-    if warnings:
-        print(f"\n{warnings} unresolved cross-reference(s).")
+                        errors += 1
+    if errors:
+        print(f"\n{errors} broken cross-reference(s).")
         return 1
     print("All cross-references resolved.")
     return 0

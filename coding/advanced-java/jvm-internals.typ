@@ -870,3 +870,11 @@ Map<String, SoftReference<Image>> cache = new HashMap<>();
 *Decision:*
 - Cache (keep as long as possible) → SoftReference
 - Metadata (remove when key gone) → WeakReference
+
+== Further Reading
+
+Lindholm, T., Yellin, F., Bracha, G., Buckley, A., & Smith, D. _The Java Virtual Machine Specification_. Oracle. (Normative reference for the class file format, verification, and bytecode.)
+
+Oaks, S. (2020). _Java Performance: In-Depth Advice for Tuning and Programming_, 2nd ed. O'Reilly. (Chapters on the runtime, JIT, and memory management.)
+
+Bloch, J. (2018). _Effective Java_, 3rd ed. Addison-Wesley. (Items on finalization, references, and initialization order.)

@@ -952,3 +952,11 @@ phaser.arriveAndDeregister();  // Main done
 - Dynamic parties (register/deregister)
 - Phase number tracking
 - Termination handling
+
+== Further Reading
+
+Herlihy, M., & Shavit, N. (2020). _The Art of Multiprocessor Programming_, 2nd ed. Morgan Kaufmann. (Lock-free and wait-free algorithm design.)
+
+Goetz, B., et al. (2006). _Java Concurrency in Practice_. Addison-Wesley. (Atomic variables and non-blocking algorithms.)
+
+Michael, M. M., & Scott, M. L. (1996). "Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms." PODC. (The queue algorithm behind `ConcurrentLinkedQueue`.)

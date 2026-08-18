@@ -915,3 +915,11 @@ Thread.startVirtualThread(() -> {
 *3. No async complexity:*
 - Write blocking code (easier)
 - JVM handles async (under the hood)
+
+== Further Reading
+
+Urma, R.-G., Fusco, M., & Mycroft, A. (2018). _Modern Java in Action_. Manning. (Lambdas, streams, and the functional additions.)
+
+Bloch, J. (2018). _Effective Java_, 3rd ed. Addison-Wesley. (Items 42--48 on lambdas and streams.)
+
+OpenJDK. _JDK Enhancement Proposals_. (Normative design rationale for records, sealed types, pattern matching, and virtual threads.)

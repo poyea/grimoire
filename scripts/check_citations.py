@@ -84,13 +84,14 @@ def main() -> int:
     warnings: list[str] = []
     n_chapters = 0
     for d in subject_dirs():
-        for chap in sorted(d.glob("*.typ")):
+        for chap in sorted(d.rglob("*.typ")):
             n_chapters += 1
             rel = chap.relative_to(ROOT)
             entries = extract_section(chap.read_text(encoding="utf-8"))
             if entries is None:
-                # Every chapter now carries a citation section; the
-                # backfill is complete, so a missing one is a regression.
+                # Every chapter carries a citation section, including
+                # nested subtrees such as coding/advanced-java, so a
+                # missing one is a regression rather than a legacy gap.
                 errors.append(
                     f"{rel}: missing '== Further Reading' section")
                 continue

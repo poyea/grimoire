@@ -945,3 +945,11 @@ public void test() { ... }
 - Long measurement window (minutes, not seconds)
 - Avoid coordinated omission (fixed rate)
 - Separate warmup and measurement phases
+
+== Further Reading
+
+Thompson, M., Farley, D., Barker, M., Gee, P., & Stewart, A. (2011). "Disruptor: High Performance Alternative to Bounded Queues." LMAX. (Mechanical sympathy applied to the JVM.)
+
+Oaks, S. (2020). _Java Performance_, 2nd ed. O'Reilly. (Allocation behaviour and low-pause collectors.)
+
+Gregg, B. (2020). _Systems Performance_, 2nd ed. Addison-Wesley. (Latency measurement and outlier analysis.)

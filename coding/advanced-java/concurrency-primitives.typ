@@ -925,3 +925,11 @@ daemon.start();
 - Non-daemon: Application logic, user requests
 
 *Warning:* Daemons don't execute finally blocks on JVM exit!
+
+== Further Reading
+
+Goetz, B., Peierls, T., Bloch, J., Bowbeer, J., Holmes, D., & Lea, D. (2006). _Java Concurrency in Practice_. Addison-Wesley. (The definitive treatment of the Java memory model in practice.)
+
+Lea, D. (1999). _Concurrent Programming in Java: Design Principles and Patterns_, 2nd ed. Addison-Wesley. (Design-level foundations by the author of `java.util.concurrent`.)
+
+Manson, J., Pugh, W., & Adve, S. V. (2005). "The Java Memory Model." POPL. (The formal specification underlying happens-before.)

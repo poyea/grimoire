@@ -1301,3 +1301,11 @@ auto result = std::visit(evaluator, expr);  // Compiler-generated switch
 ```
 
 _See also: CPU Architecture book, Chapter on Branch Prediction for cache and branch effects of virtual dispatch._
+
+== Further Reading
+
+Oaks, S. (2020). _Java Performance_, 2nd ed. O'Reilly. (Systematic coverage of JIT, GC, and heap tuning.)
+
+Gregg, B. (2020). _Systems Performance_, 2nd ed. Addison-Wesley. (Methodology and OS-level observability that JVM tuning sits on top of.)
+
+Shipilev, A. _JMH: Java Microbenchmark Harness_. OpenJDK. (The sanctioned way to benchmark on a JIT runtime, and why naive timing loops mislead.)

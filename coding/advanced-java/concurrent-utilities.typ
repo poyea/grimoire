@@ -1119,3 +1119,11 @@ A:
 *Performance:*
 - Blocking: Better for bursty workloads (threads sleep during idle)
 - Lock-free: Better for sustained high throughput (no OS scheduler overhead)
+
+== Further Reading
+
+Goetz, B., et al. (2006). _Java Concurrency in Practice_. Addison-Wesley. (Chapters 5--8 cover the utilities in this chapter.)
+
+Lea, D. (2000). "A Java Fork/Join Framework." ACM Java Grande. (The design behind `ForkJoinPool`.)
+
+Herlihy, M., & Shavit, N. (2020). _The Art of Multiprocessor Programming_, 2nd ed. Morgan Kaufmann. (Algorithms underlying the concurrent collections.)
