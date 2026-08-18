@@ -165,7 +165,7 @@ Cox-Buday, K. (2016). "Concurrency in Go." O'Reilly. (covers goroutine scheduler
 
 Goetz, B. et al. (2006). "Java Concurrency in Practice." Addison-Wesley. (Project Loom landed in JDK 21, 2023 — JEP 444)
 
-Loewenstern, A. et al. (2022). "Linux kernel namespaces." LWN series (`https://lwn.net/Articles/531114/`).
+Kerrisk, M. (2013). "Namespaces in operation." LWN.net series (`https://lwn.net/Articles/531114/`).
 
 Tanenbaum, A., Bos, H. (2014). "Modern Operating Systems" (4th ed.), Chapters 2-3.
 

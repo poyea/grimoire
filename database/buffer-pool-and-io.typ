@@ -269,6 +269,6 @@ Graefe, G. (1993). "Query Evaluation Techniques for Large Databases." ACM CSUR 2
 
 PostgreSQL Documentation. "Resource Consumption." https://www.postgresql.org/docs/current/runtime-config-resource.html
 
-Axboe, J. (2019). "Efficient IO with io_uring." https://kernel.dk/io_uring.pdf
+Axboe, J. (2019). "Efficient IO with io_uring."
 
 Sadoghi, M., Canim, M., Bhattacharjee, B., Nagel, F., Ross, K. (2014). "Reducing Database Locking Contention Through Multi-version Concurrency." VLDB.

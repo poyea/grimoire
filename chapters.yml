@@ -501,7 +501,7 @@ chapters:
   - subject: database
     slug: buffer-pool-and-io
     path: database/buffer-pool-and-io.typ
-    words: 1341
+    words: 1340
     status: reviewed
   - subject: database
     slug: cloud-native-databases
@@ -1366,7 +1366,7 @@ chapters:
   - subject: operating-systems
     slug: processes-and-threads
     path: operating-systems/processes-and-threads.typ
-    words: 2319
+    words: 2317
     status: reviewed
   - subject: operating-systems
     slug: real-time-scheduling

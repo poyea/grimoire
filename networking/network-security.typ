@@ -318,7 +318,7 @@ restrict,command="rsync --server ..." ssh-ed25519 AAAA... deploy@ci
 ```
 Options: `no-pty`, `no-port-forwarding`, `from="IP"`, `command="..."`, `restrict`
 
-*OpenSSH source:* `auth_key_is_revoked()` + `user_key_allowed2()`: #link("https://github.com/openssh/openssh-portable/blob/master/auth-rsa.c")[`openssh-portable/auth-rsa.c`]
+*OpenSSH source:* `auth_key_is_revoked()` + `user_key_allowed2()`: #link("https://github.com/openssh/openssh-portable/blob/master/auth2-pubkey.c")[`openssh-portable/auth2-pubkey.c`]
 
 *2. password:* plaintext password sent inside encrypted channel. Vulnerable to server compromise; avoid in hardened deployments.
 

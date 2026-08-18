@@ -273,7 +273,7 @@ Hennessy, J.L. & Patterson, D.A. (2019). Computer Architecture: A Quantitative A
 
 *Architecture whitepapers:*
 
-NVIDIA Corporation (2024). NVIDIA Ada GPU Architecture. https://images.nvidia.com/aem-dam/Solutions/geforce/ada/
+NVIDIA Corporation (2024). NVIDIA Ada GPU Architecture. https://images.nvidia.com/aem-dam/Solutions/geforce/ada/nvidia-ada-gpu-architecture.pdf
 
 NVIDIA Corporation (2022). NVIDIA H100 Tensor Core GPU Architecture. https://resources.nvidia.com/en-us-tensor-core
 
