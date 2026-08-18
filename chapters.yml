@@ -44,51 +44,6 @@ chapters:
     words: 2258
     status: reviewed
   - subject: coding
-    slug: advanced-concurrency
-    path: coding/advanced-java/advanced-concurrency.typ
-    words: 3304
-    status: draft
-  - subject: coding
-    slug: concurrency-primitives
-    path: coding/advanced-java/concurrency-primitives.typ
-    words: 3094
-    status: draft
-  - subject: coding
-    slug: concurrent-utilities
-    path: coding/advanced-java/concurrent-utilities.typ
-    words: 3928
-    status: draft
-  - subject: coding
-    slug: core-java-oop
-    path: coding/advanced-java/core-java-oop.typ
-    words: 6881
-    status: draft
-  - subject: coding
-    slug: design-patterns
-    path: coding/advanced-java/design-patterns.typ
-    words: 2407
-    status: draft
-  - subject: coding
-    slug: jvm-internals
-    path: coding/advanced-java/jvm-internals.typ
-    words: 3184
-    status: draft
-  - subject: coding
-    slug: jvm-performance
-    path: coding/advanced-java/jvm-performance.typ
-    words: 5169
-    status: draft
-  - subject: coding
-    slug: low-latency
-    path: coding/advanced-java/low-latency.typ
-    words: 3303
-    status: draft
-  - subject: coding
-    slug: modern-java
-    path: coding/advanced-java/modern-java.typ
-    words: 2939
-    status: draft
-  - subject: coding
     slug: advanced-string-algorithms
     path: coding/advanced-string-algorithms.typ
     words: 2884
@@ -128,6 +83,51 @@ chapters:
     path: coding/computational-geometry.typ
     words: 2928
     status: reviewed
+  - subject: coding
+    slug: advanced-concurrency
+    path: coding/cpp-and-java/advanced-concurrency.typ
+    words: 3304
+    status: draft
+  - subject: coding
+    slug: concurrency-primitives
+    path: coding/cpp-and-java/concurrency-primitives.typ
+    words: 3094
+    status: draft
+  - subject: coding
+    slug: core-cpp-oop
+    path: coding/cpp-and-java/core-cpp-oop.typ
+    words: 6881
+    status: draft
+  - subject: coding
+    slug: cpp-concurrency
+    path: coding/cpp-and-java/cpp-concurrency.typ
+    words: 3928
+    status: draft
+  - subject: coding
+    slug: cpp-memory-model
+    path: coding/cpp-and-java/cpp-memory-model.typ
+    words: 5169
+    status: draft
+  - subject: coding
+    slug: design-patterns
+    path: coding/cpp-and-java/design-patterns.typ
+    words: 2407
+    status: draft
+  - subject: coding
+    slug: jvm-internals
+    path: coding/cpp-and-java/jvm-internals.typ
+    words: 3184
+    status: draft
+  - subject: coding
+    slug: low-latency
+    path: coding/cpp-and-java/low-latency.typ
+    words: 3303
+    status: draft
+  - subject: coding
+    slug: modern-java
+    path: coding/cpp-and-java/modern-java.typ
+    words: 2939
+    status: draft
   - subject: coding
     slug: distributed-algorithms
     path: coding/distributed-algorithms.typ

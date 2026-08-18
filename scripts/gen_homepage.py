@@ -119,7 +119,7 @@ def chapters(slug: str) -> list[tuple[str, list[str]]]:
 
         Includes resolve relative to the including file: coding.typ pulls
         in distributed-algorithms.typ, which itself includes
-        advanced-java/*.typ. Reading only the root file's includes drops
+        cpp-and-java/*.typ. Reading only the root file's includes drops
         those nine chapters from the site even though they ship in the PDF.
         """
         for raw in INCLUDE_RE.findall(typ.read_text(encoding="utf-8")):

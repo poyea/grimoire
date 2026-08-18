@@ -77,7 +77,7 @@ def parse_includes(subject_typ: Path, root: Path
 
     Includes nest and resolve relative to the *including* file, not the
     repo root: coding.typ includes coding/distributed-algorithms.typ,
-    which itself includes advanced-java/*.typ. A single-level scan misses
+    which itself includes cpp-and-java/*.typ. A single-level scan misses
     those nine chapters entirely even though they ship in the PDF.
 
     Returns (repo-relative paths that exist, [(source, raw include)] that
@@ -182,7 +182,7 @@ def main() -> int:
         for e in entries:
             try:
                 # Use `path`: nested chapters such as
-                # coding/advanced-java/core-java-oop.typ cannot be
+                # coding/cpp-and-java/core-cpp-oop.typ cannot be
                 # rebuilt from subject + slug alone.
                 manifest_paths.add(
                     e.get("path") or f"{e['subject']}/{e['slug']}.typ")

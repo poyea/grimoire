@@ -94,7 +94,7 @@ def main() -> int:
         d = root / subject
         if not d.is_dir():
             continue
-        # rglob, not iterdir: coding/advanced-java/*.typ ship in the
+        # rglob, not iterdir: coding/cpp-and-java/*.typ ship in the
         # coding PDF (included via distributed-algorithms.typ) but were
         # absent from the manifest and the generated site.
         files = sorted(p for p in d.rglob("*.typ") if p.is_file())

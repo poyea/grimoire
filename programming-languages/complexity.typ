@@ -607,7 +607,7 @@ clause coverage.
 *Theorem (Toda 1991).* $"PH" subset.eq "P"^(\#"P")$. So counting is at least as
 hard as the whole polynomial hierarchy. *Proof.* Two-stage: first show $"PH"
 subset.eq "BP" dot plus.o "P"$ (probabilistic parity), then $plus.o "P" subset.eq
-#"P"$. Beneath the technicalities: counting modulo 2 plus randomisation
+\#"P"$. Beneath the technicalities: counting modulo 2 plus randomisation
 simulates alternating quantifiers.
 
 == Cryptographic Complexity and Trapdoors

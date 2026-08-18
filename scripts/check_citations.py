@@ -90,7 +90,7 @@ def main() -> int:
             entries = extract_section(chap.read_text(encoding="utf-8"))
             if entries is None:
                 # Every chapter carries a citation section, including
-                # nested subtrees such as coding/advanced-java, so a
+                # nested subtrees such as coding/cpp-and-java, so a
                 # missing one is a regression rather than a legacy gap.
                 errors.append(
                     f"{rel}: missing '== Further Reading' section")
