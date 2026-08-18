@@ -1,4 +1,4 @@
-#import "../template.typ": corollary, proof, theorem, xref
+#import "../template.typ": xref
 
 = Computability and Recursion Theory
 
@@ -56,18 +56,18 @@ functions (Gödel--Herbrand--Kleene). A central, nontrivial fact: there is no
 recursive enumeration of indices of total recursive functions -- if there were, a
 diagonal argument would produce a recursive function not in the list.
 
-#theorem(name: "Kleene normal form, 1936")[There exists a primitive recursive predicate
+*Theorem (Kleene normal form, 1936).* There exists a primitive recursive predicate
 $T(e, x, y)$ ("$y$ encodes a halting computation of program $e$ on input $x$") and
 a primitive recursive *result extractor* $U$ such that every partial computable
-function $phi_e$ admits]
+function $phi_e$ admits
 
 $ phi_e (x) = U(mu y . T(e, x, y)). $
 
 *Significance.* Every partial computable function is built from primitive recursion
 plus *one* outer $mu$. Unbounded search is the *only* source of unbounded power.
 
-#theorem(name: "Church--Turing--Kleene equivalence")[The following classes of partial
-functions $NN^k harpoon.rt NN$ coincide:]
+*Theorem (Church--Turing--Kleene equivalence).* The following classes of partial
+functions $NN^k harpoon.rt NN$ coincide:
 
 + Turing-computable functions
 + Partial $mu$-recursive functions
@@ -104,15 +104,15 @@ machine computing it is the universal TM.
 
 == The $s$-$m$-$n$ Theorem (Parametrisation)
 
-#theorem(name: "$s$-$m$-$n$, Kleene")[For all $m, n gt.eq 1$ there is a *total*
-primitive recursive injection $s^m_n : NN^(m + 1) -> NN$ such that]
+*Theorem ($s$-$m$-$n$, Kleene).* For all $m, n gt.eq 1$ there is a *total*
+primitive recursive injection $s^m_n : NN^(m + 1) -> NN$ such that
 
 $ phi_(s^m_n (e, x_1, ..., x_m)) (y_1, ..., y_n) = phi_e (x_1, ..., x_m, y_1, ..., y_n). $
 
-#proof[Given $e$ and parameters $arrow(x)$, syntactically construct the source
+*Proof.* Given $e$ and parameters $arrow(x)$, syntactically construct the source
 of a program that hard-codes $arrow(x)$ and then dispatches to $e$ with the
 combined argument list. This rewrite is purely textual and so primitive recursive
-in $(e, arrow(x))$.]
+in $(e, arrow(x))$. $square$
 
 In programmer terms, $s^m_n$ is *partial application* at the level of source code,
 made into a constructive operation on indices. It is the bridge between the
@@ -122,13 +122,13 @@ turns that construction into a single index.
 
 == The Recursion Theorem
 
-#theorem(name: "Kleene's second recursion theorem, 1938")[For every total computable
-function $f : NN -> NN$ there exists an index $e$ such that $phi_e = phi_(f(e))$.]
+*Theorem (Kleene's second recursion theorem, 1938).* For every total computable
+function $f : NN -> NN$ there exists an index $e$ such that $phi_e = phi_(f(e))$.
 
-#proof[Define $g(x, y)$ by $g(x, y) = phi_(phi_x (x)) (y)$ if the inner call
+*Proof.* Define $g(x, y)$ by $g(x, y) = phi_(phi_x (x)) (y)$ if the inner call
 converges, undefined otherwise. By $s$-$m$-$n$, fix $d$ total computable with
 $phi_(d(x)) (y) = g(x, y)$. Let $h = f circle.small d$, which is total computable; let
-$v$ be an index for $h$, so $phi_v (x) = f(d(x))$. Set $e = d(v)$. Then]
+$v$ be an index for $h$, so $phi_v (x) = f(d(x))$. Set $e = d(v)$. Then
 
 $ phi_e (y) = phi_(d(v)) (y) = g(v, y) = phi_(phi_v (v)) (y) = phi_(f(d(v))) (y) = phi_(f(e)) (y). $
 
@@ -152,13 +152,13 @@ def quine(f):
 Two consequences make the recursion theorem one of the most useful tools in all of
 recursion theory.
 
-#corollary(name: "Fixed-point form")[The map $e arrow.bar phi_(f(e))$ on indices has a
+*Corollary (Fixed-point form).* The map $e arrow.bar phi_(f(e))$ on indices has a
 *fixed point modulo extensional equality*: some index codes a program whose
-behaviour is invariant under $f$.]
+behaviour is invariant under $f$.
 
-#corollary(name: "Programs printing their own source")[Apply the theorem with $f$ the
+*Corollary (Programs printing their own source).* Apply the theorem with $f$ the
 total function "ignore your input and print $e$". The resulting $e$ is a *quine*.
-Every Turing-complete language admits one, by a fully effective construction.]
+Every Turing-complete language admits one, by a fully effective construction.
 
 *Application (Kleene's inseparability theorem).* The sets
 
@@ -183,12 +183,12 @@ $ K = { e | phi_e (e) "halts"} = { e | e in W_e }, $
 the *self-halting set*, also called the *diagonal halting problem*. It is the
 canonical undecidable set.
 
-#theorem(name: "Turing 1936")[$K$ is r.e. but not recursive.]
+*Theorem (Turing 1936).* $K$ is r.e. but not recursive.
 
-#proof(name: "RE")[The universal machine on input $e$ simulates $phi_e (e)$ and accepts
-when it halts; this is a semi-decision procedure.]
+*Proof (RE).* The universal machine on input $e$ simulates $phi_e (e)$ and accepts
+when it halts; this is a semi-decision procedure.
 
-#proof(name: "not recursive")[Suppose $chi_K$ were computable. Define]
+*Proof (not recursive).* Suppose $chi_K$ were computable. Define
 
 ```text
 D(e):
@@ -224,12 +224,12 @@ A class $cal(A)$ of partial computable functions is *extensional* if membership 
 $phi_e$ in $cal(A)$ depends only on $phi_e$ as a function, not on the index $e$.
 The associated *index set* is $I_(cal(A)) = { e | phi_e in cal(A) }$.
 
-#theorem(name: "Rice 1953")[If $cal(A) eq."not" emptyset$ and $cal(A)$ is not the set of
-all partial computable functions, then $I_(cal(A))$ is undecidable.]
+*Theorem (Rice 1953).* If $cal(A) eq."not" emptyset$ and $cal(A)$ is not the set of
+all partial computable functions, then $I_(cal(A))$ is undecidable.
 
-#proof[WLOG the everywhere-undefined function $bot in."not" cal(A)$ (else work with
+*Proof.* WLOG the everywhere-undefined function $bot in."not" cal(A)$ (else work with
 $overline(cal(A))$). Pick any $psi in cal(A)$, with index $i$. We reduce $K
-lt.eq_m I_(cal(A))$. For each $e$, by $s$-$m$-$n$ build $g(e)$ such that]
+lt.eq_m I_(cal(A))$. For each $e$, by $s$-$m$-$n$ build $g(e)$ such that
 
 ```text
 phi_{g(e)}(x):
@@ -257,9 +257,9 @@ not extensional; two indices for the same function can disagree on them.
 
 Which extensional properties are r.e. (not just undecidable)?
 
-#theorem(name: "Rice--Shapiro, McNaughton--Myhill 1957")[An index set $I_(cal(A))$ is
+*Theorem (Rice--Shapiro, McNaughton--Myhill 1957).* An index set $I_(cal(A))$ is
 r.e. if and only if there is an r.e. family $cal(F)$ of *finite* partial functions
-such that]
+such that
 
 $ phi_e in cal(A) arrow.l.r.double exists theta in cal(F) . theta subset.eq phi_e. $
 
@@ -352,9 +352,9 @@ Until 1956 it was open. Post had shown that strong reducibility separations
 (simple, hypersimple, ...) do not suffice: every example was either recursive or
 $T$-equivalent to $K$. The breakthrough was a new proof technique.
 
-#theorem(name: "Friedberg 1957, Muchnik 1956 independently")[There exist r.e. sets $A,
+*Theorem (Friedberg 1957, Muchnik 1956 independently).* There exist r.e. sets $A,
 B$ with $A |_T B$ (incomparable under $lt.eq_T$), both strictly between $emptyset$
-and $K$.]
+and $K$.
 
 *The finite injury priority method.* We construct $A$ and $B$ in stages to satisfy
 the *requirements*
@@ -396,21 +396,21 @@ Let $cal(D) = (cal(D), lt.eq, bowtie.big)$ denote the upper semilattice of Turin
 degrees, with $deg(A) bowtie.big deg(B) = deg(A xor B)$. Let $cal(R) subset.eq cal(D)$
 be the r.e. degrees.
 
-#theorem(name: "Kleene--Post 1954")[There are degrees $bold(a), bold(b) lt.eq bold(0')$
+*Theorem (Kleene--Post 1954).* There are degrees $bold(a), bold(b) lt.eq bold(0')$
 with $bold(a) |_T bold(b)$. The priority method is *not* required for this
-non-r.e. result; finite-extension forcing suffices.]
+non-r.e. result; finite-extension forcing suffices.
 
-#theorem(name: "Sacks splitting, 1963")[Every nonrecursive r.e. degree $bold(a)$ splits:
+*Theorem (Sacks splitting, 1963).* Every nonrecursive r.e. degree $bold(a)$ splits:
 there exist r.e. degrees $bold(b), bold(c) < bold(a)$ with $bold(b) bowtie.big bold(c) =
-bold(a)$ and $bold(b) |_T bold(c)$.]
+bold(a)$ and $bold(b) |_T bold(c)$.
 
-#theorem(name: "Sacks density, 1964")[For any r.e. degrees $bold(a) < bold(b)$ there is
-an r.e. degree $bold(c)$ with $bold(a) < bold(c) < bold(b)$. So $cal(R)$ is dense.]
+*Theorem (Sacks density, 1964).* For any r.e. degrees $bold(a) < bold(b)$ there is
+an r.e. degree $bold(c)$ with $bold(a) < bold(c) < bold(b)$. So $cal(R)$ is dense.
 
-#theorem(name: "Lachlan, Soare")[$cal(R)$ is not a lattice (some pairs lack infima) but
+*Theorem (Lachlan, Soare).* $cal(R)$ is not a lattice (some pairs lack infima) but
 is still elementarily nontrivial. The first-order theory of $(cal(R), lt.eq)$ is
 undecidable (Harrington--Shelah 1982); $"Th"(cal(D), lt.eq)$ is equivalent to second-
-order arithmetic (Simpson 1977, Slaman--Woodin).]
+order arithmetic (Simpson 1977, Slaman--Woodin).
 
 *The jump operator.* $A' = { e | Phi_e^A (e) "halts"}$, the halting problem
 *relative* to $A$. The jump is *strictly* increasing: $A <_T A'$ for every $A$, by
@@ -441,20 +441,20 @@ So $Sigma^0_1$ = r.e., $Pi^0_1$ = co-r.e., $Delta^0_1$ = decidable.
   [Rec $= { e | W_e "recursive"}$], [], [$Sigma^0_3$-complete],
 )
 
-#theorem(name: "Post 1948")[$Sigma^0_(n + 1)$ is precisely the class of sets that are
-r.e. relative to $emptyset^((n))$. Equivalently,]
+*Theorem (Post 1948).* $Sigma^0_(n + 1)$ is precisely the class of sets that are
+r.e. relative to $emptyset^((n))$. Equivalently,
 
 $ A in Sigma^0_(n + 1) arrow.l.r.double A "is r.e. in" emptyset^((n)), $
 
 and consequently $Delta^0_(n + 1)$ is the class of sets *computable* in
 $emptyset^((n))$.
 
-#proof(name: "sketch")[By induction. Base $n = 0$ is the definition of r.e. Step: a
+*Proof sketch.* By induction. Base $n = 0$ is the definition of r.e. Step: a
 $Sigma^0_(n + 1)$ set is $exists y . R(x, y)$ with $R in Pi^0_n$. The set $R$ is
 co-r.e. in $emptyset^((n - 1))$, i.e. decidable in $emptyset^((n))$. So
 membership in $A$ is r.e. in $emptyset^((n))$. Conversely, every set r.e. in
 $emptyset^((n))$ is the projection of a $emptyset^((n))$-decidable predicate,
-which unfolds to $Sigma^0_(n + 1)$ form.]
+which unfolds to $Sigma^0_(n + 1)$ form. $square$
 
 *Hierarchy theorem.* All inclusions $Sigma^0_n subset.eq Sigma^0_(n + 1)$ are
 strict; $Sigma^0_n union Pi^0_n subset.eq."not" Delta^0_(n + 1)$. The jump operator

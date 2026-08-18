@@ -1,5 +1,3 @@
-#import "../template.typ": corollary, lemma, proof, theorem
-
 = Simply-Typed Lambda Calculus
 
 The simply-typed lambda calculus, $lambda^arrow.r$, is the minimal nontrivial typed language: variables, function abstraction, and application, with a type discipline that forbids self-application.
@@ -63,22 +61,22 @@ The typing judgment $Gamma tack.r e : tau$ is read "in context $Gamma$, term $e$
 
 These three rules are the entire static semantics of $lambda^arrow.r$. With base types we add typing axioms $Gamma tack.r "true" : "Bool"$, $Gamma tack.r "false" : "Bool"$, $Gamma tack.r n : "Int"$, etc.
 
-#lemma(name: "Weakening")[If $Gamma tack.r e : tau$ and $x in."not" "dom"(Gamma)$, then $Gamma, x : sigma tack.r e : tau$.]
+*Lemma (Weakening).* If $Gamma tack.r e : tau$ and $x in."not" "dom"(Gamma)$, then $Gamma, x : sigma tack.r e : tau$.
 
-#proof[Induction on the derivation of $Gamma tack.r e : tau$. T-VAR: $e = y$ with $y : tau in Gamma$; since $y eq."not" x$ (as $x in."not" "dom"(Gamma)$), still $y : tau in Gamma, x : sigma$. T-ABS, T-APP: trivial by IH on subderivations, with $alpha$-renaming for T-ABS to avoid clashing with $x$.]
+*Proof.* Induction on the derivation of $Gamma tack.r e : tau$. T-VAR: $e = y$ with $y : tau in Gamma$; since $y eq."not" x$ (as $x in."not" "dom"(Gamma)$), still $y : tau in Gamma, x : sigma$. T-ABS, T-APP: trivial by IH on subderivations, with $alpha$-renaming for T-ABS to avoid clashing with $x$. $square$
 
-#lemma(name: "Type Uniqueness, Church-style")[If $Gamma tack.r e : tau_1$ and $Gamma tack.r e : tau_2$, then $tau_1 = tau_2$.]
+*Lemma (Type Uniqueness, Church-style).* If $Gamma tack.r e : tau_1$ and $Gamma tack.r e : tau_2$, then $tau_1 = tau_2$.
 
-#proof[Induction on $e$.
+*Proof.* Induction on $e$.
 - $e = x$: both derivations end in T-VAR with $x : tau_1 in Gamma$ and $x : tau_2 in Gamma$; since $Gamma$ is a function, $tau_1 = tau_2$.
 - $e = lambda x : sigma . e'$: both derivations end in T-ABS; both yield $tau_i = sigma arrow.r tau_i'$ with $Gamma, x : sigma tack.r e' : tau_i'$; by IH $tau_1' = tau_2'$, so $tau_1 = tau_2$.
-- $e = e_1 space e_2$: both derivations end in T-APP, with $Gamma tack.r e_1 : sigma_i arrow.r tau_i$ and $Gamma tack.r e_2 : sigma_i$ for $i = 1, 2$. By IH on $e_2$, $sigma_1 = sigma_2$. By IH on $e_1$, $sigma_1 arrow.r tau_1 = sigma_2 arrow.r tau_2$, so $tau_1 = tau_2$.]
+- $e = e_1 space e_2$: both derivations end in T-APP, with $Gamma tack.r e_1 : sigma_i arrow.r tau_i$ and $Gamma tack.r e_2 : sigma_i$ for $i = 1, 2$. By IH on $e_2$, $sigma_1 = sigma_2$. By IH on $e_1$, $sigma_1 arrow.r tau_1 = sigma_2 arrow.r tau_2$, so $tau_1 = tau_2$. $square$
 
 In Curry-style $lambda^arrow.r$ type uniqueness fails: $lambda x . x$ has type $tau arrow.r tau$ for every $tau$. Instead one has *principal types*: every typable term has a most-general type-scheme of which all its types are instances (Hindley 1969).
 
-#lemma(name: "Inversion")[If $Gamma tack.r lambda x : sigma . e : tau$, then $tau = sigma arrow.r tau'$ for some $tau'$ with $Gamma, x : sigma tack.r e : tau'$. If $Gamma tack.r e_1 space e_2 : tau$, then there exists $sigma$ with $Gamma tack.r e_1 : sigma arrow.r tau$ and $Gamma tack.r e_2 : sigma$.]
+*Lemma (Inversion).* If $Gamma tack.r lambda x : sigma . e : tau$, then $tau = sigma arrow.r tau'$ for some $tau'$ with $Gamma, x : sigma tack.r e : tau'$. If $Gamma tack.r e_1 space e_2 : tau$, then there exists $sigma$ with $Gamma tack.r e_1 : sigma arrow.r tau$ and $Gamma tack.r e_2 : sigma$.
 
-#proof[The only typing rule that concludes with a lambda is T-ABS; the only one that concludes with an application is T-APP. Read the premises.]
+*Proof.* The only typing rule that concludes with a lambda is T-ABS; the only one that concludes with an application is T-APP. Read the premises. $square$
 
 == Dynamic Semantics
 
@@ -128,7 +126,7 @@ For pure $lambda^arrow.r$ (no side effects, no general recursion) CBN and CBV ar
 
 == Confluence (Church–Rosser)
 
-#theorem(name: "Church–Rosser 1936")[The reduction relation $arrow.r_beta^*$ is *confluent*: if $e arrow.r^* e_1$ and $e arrow.r^* e_2$, then there exists $e'$ with $e_1 arrow.r^* e'$ and $e_2 arrow.r^* e'$.]
+*Theorem (Church–Rosser 1936).* The reduction relation $arrow.r_beta^*$ is *confluent*: if $e arrow.r^* e_1$ and $e arrow.r^* e_2$, then there exists $e'$ with $e_1 arrow.r^* e'$ and $e_2 arrow.r^* e'$.
 
 The diagram-completion property is:
 ```text
@@ -160,7 +158,7 @@ So $=>$ contracts an arbitrary set of redexes simultaneously, possibly none.
 
 *Lemma 1.* $e arrow.r_beta e' => e => e'$, and $e => e' => e arrow.r_beta^* e'$. Hence $=>^* = arrow.r_beta^*$.
 
-#proof[Direct induction on the derivations.]
+*Proof.* Direct induction on the derivations. $square$
 
 *Lemma 2 (Substitution).* If $e_1 => e_1'$ and $e_2 => e_2'$, then $[x |-> e_2] e_1 => [x |-> e_2'] e_1'$.
 
@@ -178,13 +176,13 @@ By induction on $e$, if $e => e'$ then $e' => e^*$ — every parallel reduct can
 
 *Proof of confluence.* Take the reflexive-transitive closure of $=>$, which by Lemma 1 equals $arrow.r_beta^*$. The diamond property for $=>$ lifts to confluence of $=>^*$ by a standard tiling argument. $square$
 
-#corollary(name: "Uniqueness of normal forms")[A $lambda^arrow.r$ term has at most one $beta$-normal form.]
+*Corollary (Uniqueness of normal forms).* A $lambda^arrow.r$ term has at most one $beta$-normal form.
 
 == Subject Reduction (Preservation)
 
 *Lemma (Substitution).* If $Gamma, x : sigma tack.r e : tau$ and $Gamma tack.r s : sigma$, then $Gamma tack.r [x |-> s] e : tau$.
 
-#proof[Induction on the derivation of $Gamma, x : sigma tack.r e : tau$.]
+*Proof.* Induction on the derivation of $Gamma, x : sigma tack.r e : tau$.
 
 T-VAR: $e = y$. If $y = x$ then $tau = sigma$ and $[x |-> s] y = s$, with $Gamma tack.r s : sigma$ given. If $y eq."not" x$ then $y : tau in Gamma$ and $[x |-> s] y = y$ with $Gamma tack.r y : tau$ by T-VAR.
 
@@ -192,9 +190,9 @@ T-ABS: $e = lambda y : tau_1 . e'$, $tau = tau_1 arrow.r tau_2$. $alpha$-rename 
 
 T-APP: $e = e_1 space e_2$, $Gamma, x : sigma tack.r e_i$ at appropriate types. IH on each, then T-APP. $square$
 
-#theorem(name: "Subject Reduction / Preservation")[If $Gamma tack.r e : tau$ and $e arrow.r_beta e'$, then $Gamma tack.r e' : tau$.]
+*Theorem (Subject Reduction / Preservation).* If $Gamma tack.r e : tau$ and $e arrow.r_beta e'$, then $Gamma tack.r e' : tau$.
 
-#proof[Induction on the derivation $e arrow.r_beta e'$.]
+*Proof.* Induction on the derivation $e arrow.r_beta e'$.
 
 Case B-AppAbs: $e = (lambda x : sigma . e_1) space e_2$ and $e' = [x |-> e_2] e_1$. By Inversion on T-APP, $Gamma tack.r lambda x : sigma . e_1 : sigma' arrow.r tau$ and $Gamma tack.r e_2 : sigma'$. By Inversion on T-ABS, $sigma' = sigma$ and $Gamma, x : sigma tack.r e_1 : tau$. By the Substitution Lemma, $Gamma tack.r [x |-> e_2] e_1 : tau$.
 
@@ -202,19 +200,19 @@ Congruence cases (under $lambda$, in $e_1$ or $e_2$ of an application): direct b
 
 == Progress
 
-#lemma(name: "Canonical Forms")[If $emptyset tack.r v : tau_1 arrow.r tau_2$ and $v$ is a value, then $v = lambda x : tau_1 . e$ for some $e$.]
+*Lemma (Canonical Forms).* If $emptyset tack.r v : tau_1 arrow.r tau_2$ and $v$ is a value, then $v = lambda x : tau_1 . e$ for some $e$.
 
-#proof[The only value-forming typing rule that can conclude an arrow type is T-ABS (T-VAR cannot apply with empty context; T-APP does not produce a value).]
+*Proof.* The only value-forming typing rule that can conclude an arrow type is T-ABS (T-VAR cannot apply with empty context; T-APP does not produce a value). $square$
 
-#theorem(name: "Progress")[If $emptyset tack.r e : tau$, then either $e$ is a value or there exists $e'$ with $e arrow.r e'$.]
+*Theorem (Progress).* If $emptyset tack.r e : tau$, then either $e$ is a value or there exists $e'$ with $e arrow.r e'$.
 
-#proof[Induction on $emptyset tack.r e : tau$. T-VAR: vacuous (no variables in empty context). T-ABS: $e$ is a value. T-APP: $e = e_1 space e_2$. By IH $e_1$ is a value or steps; if it steps, congruence. If $e_1$ is a value, by Canonical Forms $e_1 = lambda x : sigma . e_1'$, and the redex fires (with CBV: first step $e_2$ if not a value, else B-AppAbs).]
+*Proof.* Induction on $emptyset tack.r e : tau$. T-VAR: vacuous (no variables in empty context). T-ABS: $e$ is a value. T-APP: $e = e_1 space e_2$. By IH $e_1$ is a value or steps; if it steps, congruence. If $e_1$ is a value, by Canonical Forms $e_1 = lambda x : sigma . e_1'$, and the redex fires (with CBV: first step $e_2$ if not a value, else B-AppAbs). $square$
 
-#theorem(name: "Type Soundness")[A well-typed closed term either evaluates to a value in finitely many steps or — for systems with general recursion — diverges; it never gets *stuck*. Slogan: *"Well-typed programs cannot go wrong"* (Milner 1978). For $lambda^arrow.r$ proper, divergence is impossible (see Strong Normalization below), so evaluation terminates in a value.]
+*Theorem (Type Soundness).* A well-typed closed term either evaluates to a value in finitely many steps or — for systems with general recursion — diverges; it never gets *stuck*. Slogan: *"Well-typed programs cannot go wrong"* (Milner 1978). For $lambda^arrow.r$ proper, divergence is impossible (see Strong Normalization below), so evaluation terminates in a value.
 
 == Strong Normalization (Tait 1967)
 
-#theorem(name: "Strong Normalization, Tait 1967")[Every well-typed term $Gamma tack.r e : tau$ in $lambda^arrow.r$ is *strongly normalising*: every reduction sequence from $e$ terminates.]
+*Theorem (Strong Normalization, Tait 1967).* Every well-typed term $Gamma tack.r e : tau$ in $lambda^arrow.r$ is *strongly normalising*: every reduction sequence from $e$ terminates.
 
 A direct induction on typing derivations fails: in the T-APP case, the IH gives SN for $e_1$ and $e_2$ separately, but says nothing about $e_1 space e_2$, because substitution can blow up. Tait's trick: strengthen the IH by defining a *type-indexed* family of predicates $cal(R)_tau$ stronger than SN, and prove every well-typed term inhabits its $cal(R)$.
 
@@ -228,14 +226,14 @@ We extend $cal(R)$ to open terms via *closing substitutions*: if $Gamma = x_1 : 
 
 === Properties of Reducibility
 
-#lemma(name: "CR1, CR2, CR3")[For every type $tau$:
+*Lemma (CR1, CR2, CR3).* For every type $tau$:
 + *(CR1)* If $e in cal(R)_tau$, then $"SN"(e)$.
 + *(CR2)* If $e in cal(R)_tau$ and $e arrow.r e'$, then $e' in cal(R)_tau$.
-+ *(CR3)* If $e$ is *neutral* (i.e., not an abstraction) and every $e'$ with $e arrow.r e'$ lies in $cal(R)_tau$, then $e in cal(R)_tau$.]
++ *(CR3)* If $e$ is *neutral* (i.e., not an abstraction) and every $e'$ with $e arrow.r e'$ lies in $cal(R)_tau$, then $e in cal(R)_tau$.
 
 (Variables are not closed but the right notion of neutral is "not an abstraction"; for the closed-term version, neutral means an application $x space ...$ or, after substitution, headed by a variable. We sketch the standard formulation; see Girard, Lafont, Taylor 1989 for details.)
 
-#proof[Simultaneous induction on $tau$.]
+*Proof.* Simultaneous induction on $tau$.
 
 *Base type $iota$.* CR1: by definition. CR2: SN is preserved under reduction (any infinite reduction from $e'$ extended by $e arrow.r e'$ would give one from $e$). CR3: if all one-step reducts of $e$ are SN, then $e$ is SN (only finitely many one-step reducts; well-founded by König).
 
@@ -275,9 +273,9 @@ T-APP: $e = e_1 space e_2$. By IH, $sigma(e_1) in cal(R)_(tau_2 arrow.r tau)$ an
 
 T-ABS: $e = lambda y : tau_1' . e'$ with $tau = tau_1' arrow.r tau_2'$. $alpha$-rename $y$ fresh. Pick arbitrary $a in cal(R)_(tau_1')$; by IH applied to the extended substitution $sigma, y |-> a$, we have $(sigma, y |-> a)(e') = [y |-> a] sigma(e') in cal(R)_(tau_2')$. The Abstraction Lemma gives $lambda y : tau_1' . sigma(e') = sigma(lambda y : tau_1' . e') in cal(R)_(tau_1' arrow.r tau_2')$. $square$
 
-#corollary(name: "Strong Normalization")[Every well-typed term is SN.]
+*Corollary (Strong Normalization).* Every well-typed term is SN.
 
-#proof[Take $a_i = x_i$ (variables in $cal(R)_(tau_i)$ by CR3, neutral with no reducts). Then $sigma$ is the identity and $e in cal(R)_tau$; CR1 gives SN$(e)$.]
+*Proof.* Take $a_i = x_i$ (variables in $cal(R)_(tau_i)$ by CR3, neutral with no reducts). Then $sigma$ is the identity and $e in cal(R)_tau$; CR1 gives SN$(e)$. $square$
 
 A *consequence:* $lambda^arrow.r$ is *not* Turing complete. There is no fixed-point combinator $Y$ with the property $Y space f arrow.r^* f space (Y space f)$ in $lambda^arrow.r$ — such a $Y$ would type at $forall tau . (tau arrow.r tau) arrow.r tau$, contradicting SN by producing non-terminating reductions. The price of strong normalization is loss of computational universality; the gain is decidable type checking, totality, and logical consistency under Curry–Howard.
 

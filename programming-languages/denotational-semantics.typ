@@ -1,4 +1,4 @@
-#import "../template.typ": definition, proof, theorem, xref
+#import "../template.typ": xref
 
 = Denotational Semantics
 
@@ -20,7 +20,7 @@ The hard cases are *binders* and *recursion*. Binders are handled by interpretin
 
 The mathematical setting for Scott-Strachey semantics is the category of *complete partial orders* and Scott-continuous functions.
 
-#definition[A *partial order* $(D, subset.eq)$ is *directed-complete* (a *dcpo*) if every directed subset $X subset.eq D$ has a supremum $sup X in D$. A *directed* set is non-empty and any two elements have an upper bound in the set. A *CPO* additionally has a least element $bot$ (called *bottom* or *undefined*); some authors call this a *pointed* CPO.]
+*Definition.* A *partial order* $(D, subset.eq)$ is *directed-complete* (a *dcpo*) if every directed subset $X subset.eq D$ has a supremum $sup X in D$. A *directed* set is non-empty and any two elements have an upper bound in the set. A *CPO* additionally has a least element $bot$ (called *bottom* or *undefined*); some authors call this a *pointed* CPO.
 
 A chain $d_0 subset.eq d_1 subset.eq d_2 subset.eq dots$ is directed, so every CPO has suprema of $omega$-chains; conversely, when $D$ has no infinite branching, $omega$-completeness suffices and we speak of *$omega$-CPOs*.
 
@@ -31,7 +31,7 @@ A chain $d_0 subset.eq d_1 subset.eq d_2 subset.eq dots$ is directed, so every C
 - $[D arrow.r E]$, the set of *Scott-continuous* functions, ordered pointwise: $f subset.eq g$ <==> $f(d) subset.eq g(d)$ for all $d$. With $bot(d) = bot_E$ this is itself a CPO.
 - $"State" arrow.r "State"_bot$: state transformers, the meaning of imperative commands.
 
-#definition[A function $f : D arrow.r E$ between CPOs is *monotone* if $d subset.eq d'$ => $f(d) subset.eq f(d')$, and *Scott-continuous* if additionally, for every directed $X subset.eq D$, $f(sup X) = sup f(X)$.]
+*Definition.* A function $f : D arrow.r E$ between CPOs is *monotone* if $d subset.eq d'$ => $f(d) subset.eq f(d')$, and *Scott-continuous* if additionally, for every directed $X subset.eq D$, $f(sup X) = sup f(X)$.
 
 Continuity is the *finitary* condition: $f$'s value at a limit is determined by its values on the approximations. It rules out functions that "magically" inspect whether their argument is total. Every continuous function is monotone; the converse fails (the existence of a hypothetical total-checker is the standard counterexample).
 
@@ -48,13 +48,13 @@ A function is Scott-continuous (in the order-theoretic sense above) iff it is co
 
 The technical heart of the framework: every continuous endofunction on a CPO has a least fixed point, computable as a directed supremum.
 
-#theorem(name: "Kleene fixed point; Knaster-Tarski for monotone case")[Let $D$ be a CPO with bottom $bot$ and $f : D arrow.r D$ Scott-continuous. Then]
+*Theorem (Kleene fixed point; Knaster-Tarski for monotone case).* Let $D$ be a CPO with bottom $bot$ and $f : D arrow.r D$ Scott-continuous. Then
 
 $ "fix"(f) = union.big_(n in NN) f^n (bot) $
 
 is the least fixed point of $f$. Equivalently, $"fix"(f)$ is the least $d$ with $f(d) = d$.
 
-#proof[The chain $bot subset.eq f(bot) subset.eq f^2(bot) subset.eq dots$ is increasing by monotonicity and induction. Its supremum $d^*$ exists by directed-completeness. By continuity, $f(d^*) = f(sup_n f^n(bot)) = sup_n f^(n+1)(bot) = d^*$, so $d^*$ is a fixed point. For any other fixed point $d$, $bot subset.eq d$ => $f^n(bot) subset.eq f^n(d) = d$ for all $n$ by monotonicity, hence $d^* subset.eq d$.]
+*Proof.* The chain $bot subset.eq f(bot) subset.eq f^2(bot) subset.eq dots$ is increasing by monotonicity and induction. Its supremum $d^*$ exists by directed-completeness. By continuity, $f(d^*) = f(sup_n f^n(bot)) = sup_n f^(n+1)(bot) = d^*$, so $d^*$ is a fixed point. For any other fixed point $d$, $bot subset.eq d$ => $f^n(bot) subset.eq f^n(d) = d$ for all $n$ by monotonicity, hence $d^* subset.eq d$. $square$
 
 The fixed point operator $"fix" : [D arrow.r D] arrow.r D$ is itself continuous in $f$, which is essential for compositionality of recursive definitions.
 
@@ -97,17 +97,17 @@ This is the punchline: recursion as fixed point. Operationally, the loop unrolls
 
 We have two semantics: operational ($arrow.r^*$) and denotational ($bracket.l.stroked dot bracket.r.stroked$). They must agree.
 
-#theorem(name: "Adequacy, IMP")[For every command $c$ and state $sigma$:]
+*Theorem (Adequacy, IMP).* For every command $c$ and state $sigma$:
 
 (a) If $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$, then $bracket.l.stroked c bracket.r.stroked sigma = sigma'$.
 
 (b) If $bracket.l.stroked c bracket.r.stroked sigma = sigma'$ (with $sigma' eq."not" bot$), then $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$.
 
-#proof(name: "sketch")[(a) by induction on the length of reduction (or on the big-step derivation, using the equivalence theorem). (b) is harder for the loop case: one shows by induction on $n$ that $Phi_(b,c)^n (bot)(sigma) = sigma'$ => the loop terminates with $sigma'$ in at most $n$ iterations, then takes the supremum.]
+*Proof sketch.* (a) by induction on the length of reduction (or on the big-step derivation, using the equivalence theorem). (b) is harder for the loop case: one shows by induction on $n$ that $Phi_(b,c)^n (bot)(sigma) = sigma'$ => the loop terminates with $sigma'$ in at most $n$ iterations, then takes the supremum. $square$
 
 Adequacy is a *soundness* result: the denotation does not invent answers the operational semantics disagrees with. But two operationally distinct programs may receive the same denotation only if they are contextually indistinguishable.
 
-#definition(name: "Full abstraction")[The denotational semantics is *fully abstract* if for all $c_1, c_2$: $bracket.l.stroked c_1 bracket.r.stroked = bracket.l.stroked c_2 bracket.r.stroked$ <==> $c_1 tilde.equiv_"ctx" c_2$. Equivalently, the model contains exactly the contextual equivalences -- no more, no less.]
+*Definition (Full abstraction).* The denotational semantics is *fully abstract* if for all $c_1, c_2$: $bracket.l.stroked c_1 bracket.r.stroked = bracket.l.stroked c_2 bracket.r.stroked$ <==> $c_1 tilde.equiv_"ctx" c_2$. Equivalently, the model contains exactly the contextual equivalences -- no more, no less.
 
 Sound and complete with respect to contextual equivalence: this is the holy grail of denotational semantics, and it is *harder* than it sounds.
 
@@ -133,7 +133,7 @@ PCF (Programming Computable Functions; Plotkin 1977) is a typed $lambda$-calculu
 
 The natural Scott model interprets types as Scott domains and terms as continuous functions; the operational semantics is leftmost-outermost reduction.
 
-#theorem(name: "Adequacy, Plotkin 1977")[For closed $e : "nat"$, $bracket.l.stroked e bracket.r.stroked = n$ <==> $e$ reduces to the numeral $n$.]
+*Theorem (Adequacy, Plotkin 1977).* For closed $e : "nat"$, $bracket.l.stroked e bracket.r.stroked = n$ <==> $e$ reduces to the numeral $n$.
 
 Adequacy holds; *full abstraction* fails.
 
@@ -141,7 +141,7 @@ Adequacy holds; *full abstraction* fails.
 
 Define the test $T = lambda f. "ifz" (f space "tt" space bot) space (f space bot space "tt") space ("ifz" (f space "ff" space "ff") space 0 space 1) space 1$ (informally; transcribed for `nat` via boolean encodings). Then $T("por")$ converges to $0$ in the model but two PCF-definable functions agreeing on all sequentially evaluable inputs may differ on `por`, so two PCF terms with the same observational behavior can have different Scott denotations. The Scott model is *too coarse* in the sense that it admits non-PCF-definable elements that distinguish PCF terms.
 
-#theorem(name: "Milner 1977")[PCF *plus a constant for parallel-"or"* is fully abstracted by the Scott model.]
+*Theorem (Milner 1977).* PCF *plus a constant for parallel-"or"* is fully abstracted by the Scott model.
 
 This was unsatisfying: a fully abstract model of pure PCF was an open problem for almost twenty years.
 
@@ -151,9 +151,9 @@ The resolution came from *game semantics*, developed independently by Abramsky-J
 
 The idea: interpret a type as a *game* between two players, *Proponent* (P, the program) and *Opponent* (O, the environment). A term is an *innocent strategy* for P -- a deterministic rule for how P responds to O's moves, depending only on the *view* of the play (P's own moves and the moves O has made in response). Sequentiality is built into the model by the structure of plays.
 
-#theorem(name: "Hyland--Ong 2000; Abramsky--Jagadeesan--Malacaria 2000")[The category of arenas and innocent strategies provides a fully abstract model of PCF.]
+*Theorem (Hyland--Ong 2000; Abramsky--Jagadeesan--Malacaria 2000).* The category of arenas and innocent strategies provides a fully abstract model of PCF.
 
-#proof(name: "sketch")[Soundness: composition of innocent strategies is innocent, and reduction in PCF corresponds to the *interaction* of strategies. Adequacy: an innocent strategy denoting a closed term of type $"nat"$ that converges to $n$ has a finite trace producing $n$ as a P-move, and finite strategies are definable. Completeness: any innocent strategy can be approximated by definable strategies, and a *definability* argument shows that an undefinable strategy would have to involve non-sequential behavior, which innocence rules out.]
+*Proof sketch.* Soundness: composition of innocent strategies is innocent, and reduction in PCF corresponds to the *interaction* of strategies. Adequacy: an innocent strategy denoting a closed term of type $"nat"$ that converges to $n$ has a finite trace producing $n$ as a P-move, and finite strategies are definable. Completeness: any innocent strategy can be approximated by definable strategies, and a *definability* argument shows that an undefinable strategy would have to involve non-sequential behavior, which innocence rules out. $square$
 
 Game semantics has since been adapted to model state (history-sensitive strategies, McCusker-Honda 1998), control (well-bracketed strategies dropped, Laird), nondeterminism, probability, and concurrency. It is the most flexible technology for fully-abstract models of effectful languages.
 

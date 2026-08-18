@@ -1,4 +1,4 @@
-#import "../template.typ": proof, theorem, xref
+#import "../template.typ": xref
 
 = Infinite Trees and Games
 
@@ -32,7 +32,7 @@ Streett, Muller, and parity tree automata are defined analogously, replacing the
 
 === Equivalence of Acceptance Conditions
 
-#theorem[Nondeterministic Rabin, Streett, Muller, and parity tree automata recognise the same class of tree languages -- the *regular tree languages*. Deterministic versions are *strictly weaker*: deterministic top-down tree automata cannot even recognise some regular *finite*-tree languages (see _Tree Automata_).]
+*Theorem.* Nondeterministic Rabin, Streett, Muller, and parity tree automata recognise the same class of tree languages -- the *regular tree languages*. Deterministic versions are *strictly weaker*: deterministic top-down tree automata cannot even recognise some regular *finite*-tree languages (see _Tree Automata_).
 
 The proofs go via determinisation of $omega$-automata applied path-wise, plus the simulation theorem for alternating automata below.
 
@@ -40,7 +40,7 @@ The proofs go via determinisation of $omega$-automata applied path-wise, plus th
 
 The crowning result of the theory is:
 
-#theorem(name: "Rabin 1969")[The class of regular tree languages is closed under *complementation*, and the *emptiness* problem is decidable. Consequently, the *monadic second-order theory of two successor functions* (S2S) is decidable.]
+*Theorem (Rabin 1969).* The class of regular tree languages is closed under *complementation*, and the *emptiness* problem is decidable. Consequently, the *monadic second-order theory of two successor functions* (S2S) is decidable.
 
 Closure under complementation is the technical heart. Closure under union and projection is easy (disjoint sum; existential quantification over a label component). Intersection is the product construction. Once complementation is available, all Boolean operations are at hand, and an MSO formula
 $ phi(X_1, dots, X_n) $
@@ -82,7 +82,7 @@ So alternating parity tree automata are *trivially closed under complementation*
 
 === Simulation Theorem
 
-#theorem(name: "Muller--Schupp 1995")[Every alternating parity tree automaton with $n$ states and priority index $d$ is equivalent to a nondeterministic parity tree automaton with $2^(O(n d log (n d)))$ states.]
+*Theorem (Muller--Schupp 1995).* Every alternating parity tree automaton with $n$ states and priority index $d$ is equivalent to a nondeterministic parity tree automaton with $2^(O(n d log (n d)))$ states.
 
 The proof is the *tree-automata analogue of Safra's construction*. Each macro-state of the nondeterministic simulant is a *Safra tree* of memory states for Eve's strategy across all branches, together with the current set of (state, direction) commitments that must be honoured. Acceptance translates the parity condition on each branch into a Rabin / parity condition on the macro-run.
 
@@ -108,15 +108,15 @@ A strategy is *positional* (memoryless) if it depends only on the current positi
 
 A game is *determined* if from every position one of the two players has a winning strategy. Not all infinite games are determined; the axiom of choice constructs non-determined Gale--Stewart games. But for "definable" winning conditions, determinacy holds:
 
-#theorem(name: "Borel Determinacy; Martin 1975")[Every game with a Borel winning condition $"Win" subset.eq V^omega$ (where $V^omega$ has the product topology) is determined.]
+*Theorem (Borel Determinacy; Martin 1975).* Every game with a Borel winning condition $"Win" subset.eq V^omega$ (where $V^omega$ has the product topology) is determined.
 
 Martin's proof is a transfinite induction up to the Borel hierarchy. It is *non-effective* and requires a substantial fragment of replacement (Friedman showed that ZFC$-$Replacement does not suffice). For $omega$-regular conditions, however, much more is true:
 
-#theorem(name: "Positional Determinacy of Parity Games; Emerson--Jutla 1991; Mostowski 1991 independently")[Every parity game (finite or infinite arena, finite priority index) is determined, and both players have *positional* winning strategies on their respective winning regions.]
+*Theorem (Positional Determinacy of Parity Games; Emerson--Jutla 1991; Mostowski 1991 independently).* Every parity game (finite or infinite arena, finite priority index) is determined, and both players have *positional* winning strategies on their respective winning regions.
 
 Two independent proofs. Emerson--Jutla argue by induction on the priority index using $mu$-calculus fixed points (the winning regions are definable in $L_mu$, and finitary fixed-point computations yield positional strategies). Mostowski argues directly by signature-assignment, anticipating Jurdziński's small progress measures.
 
-#proof(name: "sketch, Mostowski / signatures")[Induct on $d = "max" Omega(V)$. If $d$ is even, let $A subset.eq V$ be the *attractor* of $V_0$ to $Omega^(-1)(d)$ -- positions from which Eve can force visiting priority $d$. Outside $A$, the game has strictly smaller priority index; apply the IH. The strategy on $A$ is: move toward priority $d$ along attractor levels; outside $A$, follow the IH strategy. Both are positional. Dual argument when $d$ is odd.]
+*Proof sketch (Mostowski / signatures).* Induct on $d = "max" Omega(V)$. If $d$ is even, let $A subset.eq V$ be the *attractor* of $V_0$ to $Omega^(-1)(d)$ -- positions from which Eve can force visiting priority $d$. Outside $A$, the game has strictly smaller priority index; apply the IH. The strategy on $A$ is: move toward priority $d$ along attractor levels; outside $A$, follow the IH strategy. Both are positional. Dual argument when $d$ is odd. $square$
 
 Positional determinacy is *false* for Muller games in general (memory is required, with Zielonka trees giving the exact memory needed) and *false* for Rabin games for player 1 (Adam needs memory proportional to the number of Rabin pairs).
 
@@ -128,7 +128,7 @@ for $phi in L_mu$ reduces to a *parity game* of size $|cal(K)| dot |phi|$ and in
 
 *Construction.* Positions are pairs $(s, psi)$ with $psi$ a sub-formula of $phi$. Eve owns positions $(s, psi_1 or psi_2)$, $(s, diamond psi)$, $(s, mu X. psi)$; Adam owns the corresponding $"and"$, $square$, $nu$ cases. Edges follow the syntax. Priorities encode the alternation: each $mu$-bound variable receives an odd priority, each $nu$-bound variable an even priority, with deeper binders receiving higher priorities; alternation depth equals the priority index.
 
-#theorem[$cal(K), s tack.r phi$ <==> Eve wins the associated parity game from $(s, phi)$.]
+*Theorem.* $cal(K), s tack.r phi$ <==> Eve wins the associated parity game from $(s, phi)$.
 
 This is the foundation of every $mu$-calculus model checker: build the game, solve it. With Zielonka's algorithm one obtains $O((|cal(K)| dot |phi|)^d)$; with Jurdziński's progress measures, $O(d dot m dot (n/floor(d/2))^(floor(d/2)))$; with the 2017 quasi-polynomial algorithm, $n^(O(log d))$.
 
@@ -157,7 +157,7 @@ For the *GR(1)* fragment (generalised reactivity of rank 1) -- a syntactically r
 
 *Pushdown systems* model recursive programs: states $Q$, stack alphabet $Gamma$, transitions $(q, gamma) arrow.r (q', w)$ that pop $gamma$ and push $w in Gamma^*$. A *pushdown game* is a pushdown system with positions partitioned by owner, equipped with an $omega$-regular winning condition on the sequence of (state, top-of-stack) pairs.
 
-#theorem(name: "Walukiewicz 2001")[Parity games on pushdown graphs are decidable in EXPTIME. Winning strategies are computable as deterministic pushdown transducers.]
+*Theorem (Walukiewicz 2001).* Parity games on pushdown graphs are decidable in EXPTIME. Winning strategies are computable as deterministic pushdown transducers.
 
 *Walukiewicz's reduction.* Reduce a pushdown parity game $cal(G)$ to a *finite-state* parity game $cal(G)^"sum"$ whose positions track *return information* -- the set of possible (state, max priority since last push) pairs upon eventual return to the current stack height. The reduction blows up the state space by $2^(O(|Q| dot d))$ but eliminates the stack; the resulting finite parity game is solved by standard means.
 
@@ -167,7 +167,7 @@ This result is fundamental for the *model checking* of $L_mu$ over *configuratio
 
 A *finite-memory strategy* is one of the form $sigma : M times V_i arrow.r M times V$ for some finite memory set $M$; the strategy reads the current position, updates memory, and chooses a move. Positional strategies are the special case $|M| = 1$.
 
-#theorem(name: "Gurevich--Harrington 1982; Büchi--Landweber 1969 for $omega$-regular")[For every game on a finite arena with $omega$-regular winning condition, both players have *finite-memory winning strategies* on their respective winning regions.]
+*Theorem (Gurevich--Harrington 1982; Büchi--Landweber 1969 for $omega$-regular).* For every game on a finite arena with $omega$-regular winning condition, both players have *finite-memory winning strategies* on their respective winning regions.
 
 The required memory size depends on the winning condition:
 
@@ -213,7 +213,7 @@ The principal historical importance of Rabin's theorem is that it gave the first
 
 For controller synthesis with branching-time specifications, the input is an $L_mu$ formula $phi$ and an open finite-state system; the output is a controller making $phi$ true in the closed system. Reduction to a parity game proceeds exactly as for model checking, with the system's nondeterminism resolved by Eve (the controller) and the environment's by Adam.
 
-#theorem(name: "Janin--Walukiewicz 1996")[The *bisimulation-invariant* fragment of MSO over Kripke structures coincides exactly with the modal $mu$-calculus.]
+*Theorem (Janin--Walukiewicz 1996).* The *bisimulation-invariant* fragment of MSO over Kripke structures coincides exactly with the modal $mu$-calculus.
 
 This celebrated result -- the $mu$-calculus is *expressively complete* for bisimulation-invariant branching-time properties -- justifies $L_mu$ as the canonical fixed-point logic for transition systems and explains why parity games are universal: any specification one would want to synthesise from corresponds to an $L_mu$ formula, which corresponds to an alternating parity tree automaton, which corresponds to a parity game.
 
@@ -285,11 +285,11 @@ is recognised by a 2-state parity automaton alternating states by depth, with pr
 - $forall s_1' . (s_1 arrow.r s_1') arrow.r exists s_2'. (s_2 arrow.r s_2' and (s_1', s_2') in R)$;
 - symmetric.
 
-#theorem(name: "van Benthem 1976")[A first-order formula $phi(x)$ over Kripke structures is bisimulation-invariant <==> it is equivalent to a *modal logic* formula.]
+*Theorem (van Benthem 1976).* A first-order formula $phi(x)$ over Kripke structures is bisimulation-invariant <==> it is equivalent to a *modal logic* formula.
 
 The $mu$-calculus extension:
 
-#theorem(name: "Janin--Walukiewicz 1996")[An MSO formula $phi(x)$ over Kripke structures is bisimulation-invariant <==> it is equivalent to a $L_mu$ formula.]
+*Theorem (Janin--Walukiewicz 1996).* An MSO formula $phi(x)$ over Kripke structures is bisimulation-invariant <==> it is equivalent to a $L_mu$ formula.
 
 This *MSO $=$ $L_mu$ modulo bisimulation* correspondence is the precise statement of "the $mu$-calculus is the canonical fixed-point logic of transition systems".
 
@@ -306,7 +306,7 @@ A *pushdown game* is a tuple $G = (Q_0, Q_1, Gamma, Delta, Omega)$ with:
 
 Configurations are pairs $(q, w) in Q times Gamma^*$. Plays alternate according to owners; the winning condition applies to the sequence of priorities of visited control states.
 
-#theorem(name: "Walukiewicz 2001")[Parity games on pushdown graphs are EXPTIME-complete; winning regions and winning strategies are computable in EXPTIME, and the winning strategy can be realised as a deterministic pushdown transducer.]
+*Theorem (Walukiewicz 2001).* Parity games on pushdown graphs are EXPTIME-complete; winning regions and winning strategies are computable in EXPTIME, and the winning strategy can be realised as a deterministic pushdown transducer.
 
 *Reduction (Walukiewicz).* Define a *finite-state* parity game $G^"sum"$ on positions $Q times R$ where $R$ summarises *return information*: a function from $Q times Gamma$ to $2^(Omega "values")$ recording which control states are reachable upon eventual pop of the stacked symbol, together with the maximum priority observed along the way. The transitions of $G^"sum"$ simulate one pushdown step; pops resolve return information, pushes guess it.
 
@@ -322,7 +322,7 @@ with $M$ a finite memory set. The transducer reads the current position, updates
 
 For *pushdown games*, strategies require *unbounded memory* in general (the stack itself), but are realised by *deterministic pushdown transducers* (Walukiewicz). For *higher-order pushdown games*, by *higher-order pushdown transducers*.
 
-#theorem(name: "Bouquet--Serre--Walukiewicz")[For every parity pushdown game won by Eve, Eve has a winning strategy realisable as a *deterministic pushdown transducer* with $2^(O(|Q| dot |Gamma| dot d))$ control states. The memory needed is the *return-information abstraction*.]
+*Theorem (Bouquet--Serre--Walukiewicz).* For every parity pushdown game won by Eve, Eve has a winning strategy realisable as a *deterministic pushdown transducer* with $2^(O(|Q| dot |Gamma| dot d))$ control states. The memory needed is the *return-information abstraction*.
 
 These finite-effective representations are what makes synthesis from $omega$-regular pushdown specifications *implementable* -- otherwise the controllers would be uncomputable abstract functions.
 
@@ -334,7 +334,7 @@ A *Markov chain* is $cal(M) = (S, P)$ with $P : S times S arrow.r [0,1]$ a stoch
 
 For *$omega$-regular objectives* on MDPs (Courcoubetis--Yannakakis 1995):
 
-#theorem[Optimal strategies for $omega$-regular objectives on finite MDPs are *positional* and computable in polynomial time for parity, Rabin, Streett objectives.]
+*Theorem.* Optimal strategies for $omega$-regular objectives on finite MDPs are *positional* and computable in polynomial time for parity, Rabin, Streett objectives.
 
 The proof routes through *end components* (maximal SCCs in which all probabilistic edges are present) and reduces the long-run behaviour to a graph game on the end-component graph. The MDP analogue of positional determinacy of parity games is part of why probabilistic model checking is feasible.
 

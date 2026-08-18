@@ -1,4 +1,4 @@
-#import "../template.typ": proof, theorem, xref
+#import "../template.typ": xref
 
 = Pushdown Automata and Beyond
 
@@ -25,17 +25,17 @@ The PDA accepts $w$ in one of two equivalent modes:
 - *Acceptance by final state:* $L_F (M) = { w | (q_0, w, Z_0) tack.r_M^* (q, epsilon, gamma) "for some" q in F, gamma in Gamma^* }$.
 - *Acceptance by empty stack:* $L_E (M) = { w | (q_0, w, Z_0) tack.r_M^* (q, epsilon, epsilon) "for some" q in Q }$.
 
-#theorem(name: "Equivalence of acceptance modes")[For every PDA $M$ accepting by final state there is a PDA $M'$ accepting by empty stack with $L_E (M') = L_F (M)$, and vice versa.]
+*Theorem (Equivalence of acceptance modes).* For every PDA $M$ accepting by final state there is a PDA $M'$ accepting by empty stack with $L_E (M') = L_F (M)$, and vice versa.
 
-#proof[(*Final $arrow.r$ empty.*) Add a fresh bottom marker $X_0 in."not" Gamma$; $M'$ first pushes $X_0$ below $Z_0$. When $M$ reaches an accepting state, $M'$ enters a new "drain" state that pops everything; otherwise the marker prevents $M'$ from accidentally emptying via $M$'s normal moves. (*Empty $arrow.r$ final.*) Similarly add a marker $X_0$ and a fresh accept state $q_F$; the only transition into $q_F$ is on seeing $X_0$ alone on the stack.]
+*Proof.* (*Final $arrow.r$ empty.*) Add a fresh bottom marker $X_0 in."not" Gamma$; $M'$ first pushes $X_0$ below $Z_0$. When $M$ reaches an accepting state, $M'$ enters a new "drain" state that pops everything; otherwise the marker prevents $M'$ from accidentally emptying via $M$'s normal moves. (*Empty $arrow.r$ final.*) Similarly add a marker $X_0$ and a fresh accept state $q_F$; the only transition into $q_F$ is on seeing $X_0$ alone on the stack. $square$
 
 The two modes are *not* equivalent for *deterministic* PDAs: empty-stack DPDAs are *strictly less expressive* than final-state DPDAs because empty-stack acceptance forces the language to be *prefix-free*.
 
 == PDA–CFG Equivalence
 
-#theorem(name: "Chomsky 1962; Evey 1963")[A language $L$ is context-free <==> $L = L(M)$ for some PDA $M$.]
+*Theorem (Chomsky 1962; Evey 1963).* A language $L$ is context-free <==> $L = L(M)$ for some PDA $M$.
 
-#proof(name: "CFG $arrow.r.long$ PDA")[Given $G = (V, Sigma, P, S)$ in Greibach Normal Form, construct a one-state PDA $M = ({ q }, Sigma, V union Sigma, delta, q, S, emptyset)$ accepting by empty stack:]
+*Proof (CFG $arrow.r.long$ PDA).* Given $G = (V, Sigma, P, S)$ in Greibach Normal Form, construct a one-state PDA $M = ({ q }, Sigma, V union Sigma, delta, q, S, emptyset)$ accepting by empty stack:
 
 - For each $A arrow.r a alpha in P$ ($a in Sigma$, $alpha in V^*$): $delta(q, a, A) in.rev (q, alpha)$ (pop $A$, consume $a$, push $alpha$).
 
@@ -60,13 +60,13 @@ A PDA is *deterministic* (DPDA) if:
 
 The language $L(M)$ of a DPDA accepting by final state is a *deterministic context-free language* (DCFL).
 
-#theorem(name: "Strict inclusion")[$"DCFL" subset.eq."not" "CFL"$.]
+*Theorem (Strict inclusion).* $"DCFL" subset.eq."not" "CFL"$.
 
 The witness is the even-length palindromes $L = { w w^R | w in { a, b }^* }$. Any PDA recognising $L$ must guess the midpoint to begin popping; no deterministic strategy can do this without lookahead. Knuth (1965) characterised DCFLs as exactly the LR(1) languages.
 
-#theorem(name: "DCFL closed under complement; Ginsburg–Greibach 1966; Hopcroft–Ullman §10.6")[The complement of every DCFL is a DCFL.]
+*Theorem (DCFL closed under complement; Ginsburg–Greibach 1966; Hopcroft–Ullman §10.6).* The complement of every DCFL is a DCFL.
 
-#proof(name: "sketch")[The challenge is handling $epsilon$-loops and configurations that "die" by failing to consume input. Convert the DPDA into an equivalent *loop-free* DPDA whose every configuration is either accepting, rejecting, or has a defined next move on every input symbol — by careful introduction of a "dead" state. Then swap accepting and non-accepting states. The technical heart is showing that the loop-elimination preserves acceptance.]
+*Proof sketch.* The challenge is handling $epsilon$-loops and configurations that "die" by failing to consume input. Convert the DPDA into an equivalent *loop-free* DPDA whose every configuration is either accepting, rejecting, or has a defined next move on every input symbol — by careful introduction of a "dead" state. Then swap accepting and non-accepting states. The technical heart is showing that the loop-elimination preserves acceptance. $square$
 
 DCFLs are *not* closed under union, intersection, reversal, concatenation, Kleene star, or homomorphism; these failures motivate the search for richer deterministic classes such as the visibly pushdown languages.
 
@@ -80,7 +80,7 @@ Alur and Madhusudan (2004) introduced the *visibly pushdown automaton* (VPA), a 
 
 The class of languages accepted is the *visibly pushdown languages* (VPL).
 
-#theorem(name: "Alur–Madhusudan 2004")[VPLs are *closed under union, intersection, complement, concatenation, Kleene star, reversal*, prefix-closure, homomorphism, and inverse homomorphism. Universality, inclusion, and equivalence are *all decidable in EXPTIME*.]
+*Theorem (Alur–Madhusudan 2004).* VPLs are *closed under union, intersection, complement, concatenation, Kleene star, reversal*, prefix-closure, homomorphism, and inverse homomorphism. Universality, inclusion, and equivalence are *all decidable in EXPTIME*.
 
 *Proof sketch of closure under intersection.* For VPAs $M_1, M_2$ over the same partitioned alphabet, the product construction works *because* both push and pop simultaneously on the same letters: their stacks evolve in lockstep, and the product state $(q_1, q_2)$ together with paired stack symbols $(X_1, X_2)$ suffices to track both. This is precisely what fails for general PDAs (whose stack behaviours need not synchronise).
 
@@ -92,7 +92,7 @@ Equivalently, VPLs are exactly the *regular* languages of *nested words*: sequen
 
 A *nested word* over $Sigma$ partitioned as above is a word $w = a_1 dots a_n$ together with a matching relation $arrow.hook subset.eq { 1, dots, n }^2$ where $i arrow.hook j$ requires $a_i in Sigma_c$, $a_j in Sigma_r$, $i < j$, and the matching is non-crossing (well-bracketed). A *nested word automaton* (NWA) is a finite-state device whose transitions read $(a_i, "history")$; on calls it produces a "hierarchical state" stored at the matching return; on returns it consumes that hierarchical state.
 
-#theorem(name: "Alur–Madhusudan 2009")[NWAs and VPAs recognise the same class: VPL is the *regular languages of nested words*. Furthermore, MSO logic over nested words (with both successor and matching) defines exactly the VPLs, a *Büchi–Elgot–Trakhtenbrot for nested words*.]
+*Theorem (Alur–Madhusudan 2009).* NWAs and VPAs recognise the same class: VPL is the *regular languages of nested words*. Furthermore, MSO logic over nested words (with both successor and matching) defines exactly the VPLs, a *Büchi–Elgot–Trakhtenbrot for nested words*.
 
 VPLs are the formal foundation of *static analysis of programs with procedure calls*: each procedure call is a $Sigma_c$ event, each return a $Sigma_r$, and the matching tracks the call stack. Tools like *MOPS*, *SLAM*, and *XML Schema validation* (XML's open/close tags are syntactically call/return) are VPL-based.
 
@@ -107,7 +107,7 @@ A *level-$k$ stack* over $Gamma$ is defined recursively: a level-1 stack is an o
 
 A *level-$k$ PDA* has finite control with transitions reading input and applying level-$k$ stack operations.
 
-#theorem(name: "Maslov 1976; Damm 1982; Engelfriet 1991")[The language classes $L_k$ recognised by level-$k$ PDAs form a *strict* hierarchy:]
+*Theorem (Maslov 1976; Damm 1982; Engelfriet 1991).* The language classes $L_k$ recognised by level-$k$ PDAs form a *strict* hierarchy:
 
 $ "Reg" = L_0 subset.neq L_1 = "CFL" subset.neq L_2 = "indexed languages" subset.neq L_3 subset.neq dots subset.neq "EXPTIME" $
 
@@ -115,7 +115,7 @@ For each $k$ the membership problem for $L_k$ is decidable in $k$-fold exponenti
 
 The level-2 languages are exactly Aho's *indexed languages*; level-$k$ languages match *level-$k$ recursion schemes* (Knapik–Niwiński–Urzyczyn 2002), and the *Caucal hierarchy* of infinite graphs is generated by the level-$k$ PDAs via prefix-rewriting interpretations.
 
-#theorem(name: "Ong 2006")[The *modal $mu$-calculus* model-checking problem on the configuration graph of a level-$k$ PDA is *decidable*, in $k$-fold exponential time. This is the foundation of *higher-order model checking* and underlies the verification of programs in higher-order functional languages (OCaml, Haskell) with arbitrary recursion.]
+*Theorem (Ong 2006).* The *modal $mu$-calculus* model-checking problem on the configuration graph of a level-$k$ PDA is *decidable*, in $k$-fold exponential time. This is the foundation of *higher-order model checking* and underlies the verification of programs in higher-order functional languages (OCaml, Haskell) with arbitrary recursion.
 
 == Indexed Grammars
 
@@ -125,7 +125,7 @@ $ A_phi arrow.r alpha quad or quad A_phi arrow.r alpha [B_(f phi) "with" f in F]
 
 intuitively: each nonterminal carries a *stack* of indices $phi in F^*$; productions can pop the top index ($A_(f phi) arrow.r alpha$ checking $f$), push an index ($A_phi arrow.r alpha[B_(f phi)]$), or inherit ($A_phi arrow.r alpha[B_phi]$).
 
-#theorem(name: "Aho 1968")[The class of indexed languages strictly contains the CFLs and is strictly contained in the context-sensitive languages. Membership is *NP-complete* (Rounds 1973); since indexed languages lie within NP they are in particular context-sensitive (NSPACE-recognisable).]
+*Theorem (Aho 1968).* The class of indexed languages strictly contains the CFLs and is strictly contained in the context-sensitive languages. Membership is *NP-complete* (Rounds 1973); since indexed languages lie within NP they are in particular context-sensitive (NSPACE-recognisable).
 
 *Examples* (canonically non-CFL):
 - $L = { a^n b^n c^n | n >= 0 }$.
@@ -148,7 +148,7 @@ The two operations:
 - *Substitution.* Replace a substitution-marked leaf in some tree by an initial tree with matching root label.
 - *Adjunction.* Splice an auxiliary tree into an internal node $n$ of an existing tree: the auxiliary tree's root replaces $n$; the subtree previously rooted at $n$ is reattached at the auxiliary's foot.
 
-#theorem(name: "Joshi–Levy–Takahashi 1975; Vijay-Shanker 1987")[TAGs generate exactly the class *TAL* of *tree-adjoining languages*, which strictly contains CFLs, includes the copy language and $a^n b^n c^n d^n$, and is properly contained in the *indexed languages*. TAL is recognised in $O(n^6)$ time.]
+*Theorem (Joshi–Levy–Takahashi 1975; Vijay-Shanker 1987).* TAGs generate exactly the class *TAL* of *tree-adjoining languages*, which strictly contains CFLs, includes the copy language and $a^n b^n c^n d^n$, and is properly contained in the *indexed languages*. TAL is recognised in $O(n^6)$ time.
 
 TAGs are weakly equivalent to several formalisms (Vijay-Shanker, Weir, Joshi 1987):
 
@@ -172,7 +172,7 @@ Joshi's *mildly context-sensitive* desiderata for a language class $cal(C)$:
 
 *Multiple Context-Free Grammars* (MCFGs; Seki–Matsumura–Fujii–Kasami 1991) form an infinite hierarchy generalising TAGs: an $m$-MCFG manipulates tuples of $<= m$ strings per nonterminal, with productions combining tuples via concatenation and copy operations.
 
-#theorem(name: "Seki et al. 1991")[The classes $"MCFL"(m)$ form a *strict* hierarchy with $"MCFL"(1) = "CFL"$ and $"MCFL"(2) = "TAL"$. The union $union.big_m "MCFL"(m) = "PMCFL"$ (polynomial multiple CFL) is strictly contained in the context-sensitive languages. Recognition of an $m$-MCFL is in $O(n^(c m))$ for a constant $c$ depending on grammar structure.]
+*Theorem (Seki et al. 1991).* The classes $"MCFL"(m)$ form a *strict* hierarchy with $"MCFL"(1) = "CFL"$ and $"MCFL"(2) = "TAL"$. The union $union.big_m "MCFL"(m) = "PMCFL"$ (polynomial multiple CFL) is strictly contained in the context-sensitive languages. Recognition of an $m$-MCFL is in $O(n^(c m))$ for a constant $c$ depending on grammar structure.
 
 These hierarchies are the active area of research for *natural language syntax*: Dutch and Swiss German have been formally proven to lie outside CFL (Shieber 1985: Swiss German has true cross-serial dependencies inducing $a^n b^m c^n d^m$) but appear to be MCFL-recognisable.
 
@@ -182,17 +182,17 @@ A *linear bounded automaton* (LBA) is a nondeterministic Turing machine whose ta
 
 A language is *context-sensitive* (CSL) if it is generated by a *context-sensitive grammar* (productions of the form $alpha A beta arrow.r alpha gamma beta$ with $gamma eq."not" epsilon$; equivalently, type-1 grammars in the Chomsky hierarchy).
 
-#theorem(name: "Kuroda 1964")[A language is context-sensitive iff it is recognised by a *nondeterministic* LBA.]
+*Theorem (Kuroda 1964).* A language is context-sensitive iff it is recognised by a *nondeterministic* LBA.
 
-#proof(name: "sketch")[(CSL $arrow.r.long$ LBA.) The LBA nondeterministically guesses a derivation in reverse, replacing right-hand sides with left-hand sides until it reduces to the start symbol. Since every step is *non-shrinking* ($|alpha A beta| <= |alpha gamma beta|$), the entire derivation fits within $|w|$ tape cells.]
+*Proof sketch.* (CSL $arrow.r.long$ LBA.) The LBA nondeterministically guesses a derivation in reverse, replacing right-hand sides with left-hand sides until it reduces to the start symbol. Since every step is *non-shrinking* ($|alpha A beta| <= |alpha gamma beta|$), the entire derivation fits within $|w|$ tape cells.
 
 (LBA $arrow.r.long$ CSG.) Encode LBA configurations as sentential forms with a state-marker letter interleaved into the tape contents; each LBA transition becomes a context-sensitive production preserving length. $square$
 
 *The deterministic LBA question* (the *first LBA problem*), whether deterministic LBAs are equivalent to nondeterministic LBAs, was the longest-standing open problem in classical formal-language theory:
 
-#theorem(name: "Immerman–Szelepcsényi 1987")[$"NSPACE"(s(n))$ is closed under complement for every space-constructible $s(n) >= log n$. In particular $"NSPACE"(n) = "co-NSPACE"(n)$, hence the *context-sensitive languages are closed under complement*.]
+*Theorem (Immerman–Szelepcsényi 1987).* $"NSPACE"(s(n))$ is closed under complement for every space-constructible $s(n) >= log n$. In particular $"NSPACE"(n) = "co-NSPACE"(n)$, hence the *context-sensitive languages are closed under complement*.
 
-#proof(name: "sketch, inductive counting")[To complement a nondeterministic machine $M$ working in space $s(n)$: count the *exact* number of configurations reachable from the initial configuration in $k$ steps, for $k = 1, 2, dots$. The count can be maintained nondeterministically in space $s(n)$ via an inductive bootstrap: given the count $N_k$ for step $k$, the machine guesses for each potential configuration $C$ whether $C$ is reachable in $k+1$ steps, verifies the guess by guessing a predecessor in $k$ steps, and checks that exactly $N_k$ predecessors verify. Then non-acceptance means: the final reachable set contains *no* accepting configuration, which is verifiable in $"NSPACE"(s(n))$.]
+*Proof sketch (inductive counting).* To complement a nondeterministic machine $M$ working in space $s(n)$: count the *exact* number of configurations reachable from the initial configuration in $k$ steps, for $k = 1, 2, dots$. The count can be maintained nondeterministically in space $s(n)$ via an inductive bootstrap: given the count $N_k$ for step $k$, the machine guesses for each potential configuration $C$ whether $C$ is reachable in $k+1$ steps, verifies the guess by guessing a predecessor in $k$ steps, and checks that exactly $N_k$ predecessors verify. Then non-acceptance means: the final reachable set contains *no* accepting configuration, which is verifiable in $"NSPACE"(s(n))$. $square$
 
 The *second LBA problem*, whether $"NLBA" = "DLBA"$ (equivalently $"NSPACE"(n) = "DSPACE"(n)$), *remains open* and is the LBA-scale analogue of $"L"$ vs $"NL"$ (which Immerman–Szelepcsényi tells us is *not* the obvious obstruction).
 
@@ -202,9 +202,9 @@ The *second LBA problem*, whether $"NLBA" = "DLBA"$ (equivalently $"NSPACE"(n) =
 
 A *type-0* grammar (or *unrestricted* grammar) has productions $alpha arrow.r beta$ with $alpha in (V union Sigma)^* V (V union Sigma)^*$ and $beta in (V union Sigma)^*$, permitting *"any"* string-rewriting on contexts containing at least one nonterminal.
 
-#theorem(name: "Chomsky 1959")[A language is generated by a type-0 grammar <==> it is *recursively enumerable* (Turing-recognisable).]
+*Theorem (Chomsky 1959).* A language is generated by a type-0 grammar <==> it is *recursively enumerable* (Turing-recognisable).
 
-#proof(name: "sketch")[(Type-0 $arrow.r.long$ TM.) A TM systematically enumerates all derivations from $S$ (in lexicographic order of production-sequence) and halts <==> some derivation yields the input.]
+*Proof sketch.* (Type-0 $arrow.r.long$ TM.) A TM systematically enumerates all derivations from $S$ (in lexicographic order of production-sequence) and halts <==> some derivation yields the input.
 
 (TM $arrow.r.long$ type-0.) Encode TM configurations as strings; for each TM transition write a string-rewriting rule on configurations; arrange productions so that the grammar derivation starts from $S$, generates an arbitrary "input guess" $w$, simulates the TM on $w$, and accepts (rewrites to $w$) iff the simulation enters $q_"accept"$. $square$
 

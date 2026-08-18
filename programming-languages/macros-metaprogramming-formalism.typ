@@ -1,5 +1,3 @@
-#import "../template.typ": definition, example, proof, theorem
-
 = Macros and Metaprogramming: Formal Foundations
 
 == Hygiene Formalized: Macros That Work (Clinger--Rees)
@@ -14,16 +12,16 @@ $u = (m e_1 dots e_k)$ in the context produced by pattern $p_i$ matching against
 template $t_i$, where $sigma$ is the substitution mapping pattern variables to
 syntax objects (pieces of the input with their use-site hygiene metadata attached).
 
-#definition[An identifier $x$ occurring in the output $E$ is called *macro-introduced*
+*Definition.* An identifier $x$ occurring in the output $E$ is called *macro-introduced*
 if it originated in $t_i$ (the template), and *use-site* if it originated in some
 $e_j$ (an argument). A mixed identifier is one produced by a template escape
-`(datum->syntax ...)` and is treated as use-site for hygiene purposes.]
+`(datum->syntax ...)` and is treated as use-site for hygiene purposes.
 
-#theorem(name: "Clinger--Rees 1991; paraphrase")[For any `syntax-rules` expansion,
+*Theorem (Clinger--Rees 1991; paraphrase).* For any `syntax-rules` expansion,
 no macro-introduced identifier in the output $E$ free-captures a use-site binding,
-and no use-site identifier free-captures a macro-introduced binding.]
+and no use-site identifier free-captures a macro-introduced binding.
 
-#proof(name: "sketch")[By structural induction on the template $t_i$.]
+*Proof (sketch).* By structural induction on the template $t_i$.
 
 - *Atomic case.* A template atom $x$ is macro-introduced; by the painting algorithm,
   it is painted with the fresh colour of the current invocation. A use-site variable
@@ -91,10 +89,10 @@ expand((t ...), sigma)   =                  ; t contains ellipsis vars E
 expand((t1 t2), sigma)   = (expand(t1, sigma)  expand(t2, sigma))
 ```
 
-#theorem(name: "Termination")[The matching algorithm terminates because each recursive
+*Theorem (Termination).* The matching algorithm terminates because each recursive
 call reduces the size of the pattern. The expansion algorithm terminates because
 the template is a fixed finite tree; ellipsis expansion produces a finite sequence
-(bounded by the input's matched length). $square$]
+(bounded by the input's matched length). $square$
 
 *Example.* Consider
 ```racket
@@ -160,15 +158,15 @@ a `(for-syntax ...)` block). The macro looks up `key` at expand time and substit
 the result directly into the code. The *run-time* program sees a literal value; the
 lookup cost is paid once, at compile time.
 
-#theorem(name: "Phase Soundness, Flatt 2002")[In a module system with phase separation,
+*Theorem (Phase Soundness, Flatt 2002).* In a module system with phase separation,
 a module can be safely instantiated at different phases without interference: the
 bindings available at phase $n$ are independent of those at phase $m eq.not n$. In
 particular, a module's phase-1 instantiation does not share mutable state with its
-phase-0 instantiation.]
+phase-0 instantiation.
 
-#proof(name: "sketch")[Each phase instantiation is a separate environment; import resolution
+*Proof sketch.* Each phase instantiation is a separate environment; import resolution
 is indexed by both module identity and phase number. Mutation of a phase-1 binding
-cannot affect the phase-0 binding because they are distinct cells.]
+cannot affect the phase-0 binding because they are distinct cells. $square$
 
 == Zig `comptime`, Nim Macros, and the Spectrum of Compile-Time Evaluation
 
@@ -267,7 +265,7 @@ do { x <- e; stmts }  =  e >>= \x -> do { stmts }
 do { let x = e; stmts }  =  let x = e in do { stmts }
 ```
 
-#example[The program]
+*Example.* The program
 
 ```haskell
 do
@@ -341,9 +339,9 @@ point (here `a` between the two reads) must be stored in the state enum. The mac
 transformation is in fact a form of *continuation-passing style* (CPS) transformation
 followed by defunctionalisation of the continuation type.
 
-#theorem[The CPS transformation of a direct-style program $P$ with $n$ `await`
+*Theorem.* The CPS transformation of a direct-style program $P$ with $n$ `await`
 points produces a state machine with at most $n + 1$ states. Each state corresponds
-to the continuation of $P$ from a particular `await` point. $square$]
+to the continuation of $P$ from a particular `await` point. $square$
 
 This is directly analogous to the *Futamura first projection*: specialising the
 "async interpreter" (the executor) to a particular coroutine `read_two` yields the
@@ -490,14 +488,14 @@ $
 Not all types support CSP: closures that refer to mutable state cannot be lifted.
 The *liftable* types form a sub-kind.
 
-#theorem(name: "Taha 2000; Subject Reduction")[If $Gamma tack.r_n e : tau$ and
-$e arrow.r e'$ (by the staged reduction relation), then $Gamma tack.r_n e' : tau$.]
+*Theorem (Taha 2000; Subject Reduction).* If $Gamma tack.r_n e : tau$ and
+$e arrow.r e'$ (by the staged reduction relation), then $Gamma tack.r_n e' : tau$.
 
-#proof[By induction on the typing derivation and the reduction rule. The key case
+*Proof.* By induction on the typing derivation and the reduction rule. The key case
 is ESCAPE under BRACKET: reducing $chevron.l tilde e chevron.r arrow.r e$ when
 $e : chevron.l tau chevron.r$ at stage $n$ yields $e$ itself, which has type $chevron.l tau chevron.r$
 at stage $n$. All other cases follow from the standard preservation argument for
-$lambda$-calculus extended with fresh constants.]
+$lambda$-calculus extended with fresh constants. $square$
 
 The significance: MetaML's staging cannot produce an ill-typed code value. Code
 generation is type-safe end-to-end. This is qualitatively different from all

@@ -1,4 +1,4 @@
-#import "../template.typ": proof, theorem, xref
+#import "../template.typ": xref
 
 = Operational Semantics
 
@@ -107,9 +107,9 @@ Kahn's *natural semantics* (1987) relates a term directly to its final value, su
 
 Big-step is convenient because each rule corresponds to one clause of a recursive interpreter. The drawback is that non-termination is silent: a diverging program has no big-step derivation, which is indistinguishable from a stuck program. Small-step keeps the two apart.
 
-#theorem(name: "Equivalence of small-step and big-step, IMP")[For all $c$, $sigma$, $sigma'$: $chevron.l c, sigma chevron.r arrow.b sigma'$ <==> $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$.]
+*Theorem (Equivalence of small-step and big-step, IMP).* For all $c$, $sigma$, $sigma'$: $chevron.l c, sigma chevron.r arrow.b sigma'$ <==> $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$.
 
-#proof(name: "sketch")[Forward direction by induction on the big-step derivation, using a substitution-style splicing lemma for sequencing. Backward by induction on the length of the small-step reduction, with a lemma that says any prefix ending in a value can be lifted into a big-step subderivation.]
+*Proof sketch.* Forward direction by induction on the big-step derivation, using a substitution-style splicing lemma for sequencing. Backward by induction on the length of the small-step reduction, with a lemma that says any prefix ending in a value can be lifted into a big-step subderivation. $square$
 
 == The Lambda Calculus and Reduction Strategies
 
@@ -141,9 +141,9 @@ The single computation rule is $beta$-reduction $(lambda x. e) space e' arrow.r 
 
 The classical results connecting these strategies live in the *Church-Rosser* theorem and its descendants.
 
-#theorem(name: "Church-Rosser, untyped $lambda$")[If $e arrow.r^* e_1$ and $e arrow.r^* e_2$ then there exists $e'$ with $e_1 arrow.r^* e'$ and $e_2 arrow.r^* e'$.]
+*Theorem (Church-Rosser, untyped $lambda$).* If $e arrow.r^* e_1$ and $e arrow.r^* e_2$ then there exists $e'$ with $e_1 arrow.r^* e'$ and $e_2 arrow.r^* e'$.
 
-#theorem(name: "Standardization, Curry-Feys")[If $e$ has a normal form $v$, then the leftmost-outermost reduction strategy reaches $v$. That is, CBN is *normalizing*: it finds a normal form whenever one exists. CBV is not normalizing: $(lambda x. y)(Omega)$ has normal form $y$ under CBN but diverges under CBV (where $Omega = (lambda x. x x)(lambda x. x x)$).]
+*Theorem (Standardization, Curry-Feys).* If $e$ has a normal form $v$, then the leftmost-outermost reduction strategy reaches $v$. That is, CBN is *normalizing*: it finds a normal form whenever one exists. CBV is not normalizing: $(lambda x. y)(Omega)$ has normal form $y$ under CBN but diverges under CBV (where $Omega = (lambda x. x x)(lambda x. x x)$).
 
 == Evaluation Contexts
 
@@ -244,9 +244,9 @@ Two terms are strongly bisimilar, $e_1 ~ e_2$, if some strong bisimulation relat
 
 The central question is whether applicative bisimilarity *is a congruence* -- closed under term constructors. Without congruence we cannot substitute equivalents within larger programs.
 
-#theorem(name: "Howe 1989, 1996")[For PCF and many extensions (recursion, sum types, products), applicative bisimilarity is a congruence.]
+*Theorem (Howe 1989, 1996).* For PCF and many extensions (recursion, sum types, products), applicative bisimilarity is a congruence.
 
-#proof(name: "sketch, Howe's method")[Define the *Howe closure* $cal(R)^cal(H)$ inductively as the smallest relation containing $cal(R)$ and closed under each term constructor on the *right*. Show: (i) $cal(R)^cal(H)$ is contained in $cal(R)$'s congruence closure trivially; (ii) reduction respects $cal(R)^cal(H)$ on the left (the "key lemma," proved by case analysis on the operational rule); (iii) hence $cal(R)^cal(H)$ is itself a bisimulation, so $cal(R)^cal(H) subset.eq cal(R)$, which gives congruence.]
+*Proof sketch (Howe's method).* Define the *Howe closure* $cal(R)^cal(H)$ inductively as the smallest relation containing $cal(R)$ and closed under each term constructor on the *right*. Show: (i) $cal(R)^cal(H)$ is contained in $cal(R)$'s congruence closure trivially; (ii) reduction respects $cal(R)^cal(H)$ on the left (the "key lemma," proved by case analysis on the operational rule); (iii) hence $cal(R)^cal(H)$ is itself a bisimulation, so $cal(R)^cal(H) subset.eq cal(R)$, which gives congruence. $square$
 
 == Contextual Equivalence and Full Abstraction
 
@@ -267,7 +267,7 @@ Define a unary logical predicate $"SN"_tau$ on closed terms of type $tau$:
 - $"SN"_o (e)$ <==> $e$ is strongly normalizing.
 - $"SN"_(tau_1 arrow.r tau_2) (e)$ <==> $e$ is SN *"and"* for every $e' in "SN"_(tau_1)$, $e space e' in "SN"_(tau_2)$.
 
-#theorem(name: "Tait 1967")[For every $tau$, every closed $e : tau$ is in $"SN"_tau$.]
+*Theorem (Tait 1967).* For every $tau$, every closed $e : tau$ is in $"SN"_tau$.
 
 *Proof sketch.* By induction on the typing derivation, generalized to open terms via a *closing substitution* lemma: if every substitution $gamma$ that maps each $x : sigma in Gamma$ to a closed $e_x in "SN"_sigma$ produces $gamma(e) in "SN"_tau$, then we say $e in "SN"_tau$ (under $Gamma$). The induction passes through application by definition, through abstraction via a *Kleene closure* lemma ("if $e[x := e'] in "SN"_(tau_2)$ for all $e' in "SN"_(tau_1)$, then $lambda x. e in "SN"_(tau_1 arrow.r tau_2)$"), which in turn relies on the head expansion property of $beta$-reduction. $square$
 

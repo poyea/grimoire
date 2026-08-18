@@ -1,12 +1,10 @@
-#import "../template.typ": proof, theorem
-
 = System F: Categorical Models and Advanced Topics
 
 == Categorical Models of System F
 
 The naïve set-theoretic interpretation does *not* work for System F: if $alpha$ ranges over all sets and $forall alpha . tau$ is interpreted as the product over all sets, the resulting set is too large to be a set. Reynolds (1984) proved:
 
-#theorem(name: "Reynolds 1984")[There is no set-theoretic model of polymorphism: no model in which $forall alpha . tau$ is interpreted as the set-theoretic product over all sets and $Lambda$-abstraction by ordinary function-formation.]
+*Theorem (Reynolds 1984).* There is no set-theoretic model of polymorphism: no model in which $forall alpha . tau$ is interpreted as the set-theoretic product over all sets and $Lambda$-abstraction by ordinary function-formation.
 
 The standard models of System F therefore work in restricted categories:
 - *PER models* (Bruce–Longo 1990): partial equivalence relations on a fixed combinatory algebra.
@@ -64,7 +62,7 @@ System F enjoys $beta eta$-conversion at both term and type levels:
 + $(eta)$  $lambda x : tau . (e space x) = e$ if $x in."not" "FV"(e)$
 + $(eta_2)$ $Lambda alpha . (e [alpha]) = e$ if $alpha in."not" "FTV"(e)$
 
-#theorem[$beta eta$-equality is *decidable* in System F (because SN + confluence).]
+*Theorem.* $beta eta$-equality is *decidable* in System F (because SN + confluence).
 
 In contrast: *contextual* equivalence (Mason–Talcott 1991) is decidable for STLC but undecidable for System F. Even though *syntactic* $beta eta$ is decidable, the question "are $e_1$ and $e_2$ indistinguishable in *every* context" is harder, because contexts include type instantiations at types that may have rich inhabitants. Parametricity is a *partial* characterisation: contextual equivalence is at least as strong as parametric equivalence and conjecturally (but not provably in general) equal.
 
@@ -194,9 +192,9 @@ commutes for every $h : A arrow.r B$ and every parametric $f$.
 
 == Boxes, Stuckness, and Type Soundness for F
 
-#theorem[If $emptyset; emptyset tack.r e : tau$ in System F, then either $e$ is a value or $e arrow.r e'$ for some $e'$.]
+*Theorem.* If $emptyset; emptyset tack.r e : tau$ in System F, then either $e$ is a value or $e arrow.r e'$ for some $e'$.
 
-#proof[Standard progress/preservation. Canonical forms: values of arrow type are $lambda$; of universal type are $Lambda$.]
+*Proof.* Standard progress/preservation. Canonical forms: values of arrow type are $lambda$; of universal type are $Lambda$. $square$
 
 Combined with strong normalization: evaluation of every closed well-typed term terminates in a value. *No* infinite computation; no run-time errors; no stuckness. System F is a *total* language. The trade-off, as for STLC, is incompleteness: not every algorithmically computable function is implementable in System F (only the second-order PA-provably-total ones).
 
@@ -231,7 +229,7 @@ $ T = forall alpha . (A_1 arrow.r ... arrow.r alpha) arrow.r ... arrow.r (B_1 ar
 
 with recursive references to $T$ in argument types replaced by $alpha$. A value is its own *fold*.
 
-#theorem(name: "Geuvers 2001")[The *full induction principle* (yielding *dependent* eliminators) is *not* derivable in System F from Church encodings. Only the *non-dependent* recursor is.]
+*Theorem (Geuvers 2001).* The *full induction principle* (yielding *dependent* eliminators) is *not* derivable in System F from Church encodings. Only the *non-dependent* recursor is.
 
 This is one of the main motivations for moving to dependent type theory: there one can both define and *reason about* inductive data.
 
@@ -334,9 +332,9 @@ But adding *delimited control* or *call/cc* (equivalently, allowing classical re
 
 == Conservativity Results
 
-#theorem(name: "Reynolds 1984, Mitchell 1986")[System F is *conservative* over STLC: a term not mentioning $forall$ is typable in F <==> it is typable in STLC.]
+*Theorem (Reynolds 1984, Mitchell 1986).* System F is *conservative* over STLC: a term not mentioning $forall$ is typable in F <==> it is typable in STLC.
 
-#theorem[HM is *conservative* over its predicative System F fragment.]
+*Theorem.* HM is *conservative* over its predicative System F fragment.
 
 *Non-conservativity:* adding *type families* or *GADTs* to Haskell adds equations that are not derivable from system FC alone; they require the equation axioms.
 

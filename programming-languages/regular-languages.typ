@@ -1,4 +1,4 @@
-#import "../template.typ": corollary, proof, theorem, xref
+#import "../template.typ": xref
 
 = Regular Languages
 
@@ -55,21 +55,21 @@ An *$epsilon$-NFA* additionally permits transitions labelled $epsilon$; the *$ep
 
 === Subset Construction (Rabin–Scott 1959)
 
-#theorem(name: "Rabin–Scott")[For every NFA $N = (Q, Sigma, Delta, q_0, F)$ there exists a DFA $M$ with at most $2^(|Q|)$ states such that $L(M) = L(N)$.]
+*Theorem (Rabin–Scott).* For every NFA $N = (Q, Sigma, Delta, q_0, F)$ there exists a DFA $M$ with at most $2^(|Q|)$ states such that $L(M) = L(N)$.
 
-#proof[Define $M = (2^Q, Sigma, delta', { q_0 }, F')$ with $delta'(S, a) = { q' | exists q in S. (q, a, q') in Delta }$ and $F' = { S | S inter F eq."not" emptyset }$. A trivial induction on $|w|$ shows $hat(delta')({ q_0 }, w) = hat(Delta)({ q_0 }, w)$, whence the languages agree.]
+*Proof.* Define $M = (2^Q, Sigma, delta', { q_0 }, F')$ with $delta'(S, a) = { q' | exists q in S. (q, a, q') in Delta }$ and $F' = { S | S inter F eq."not" emptyset }$. A trivial induction on $|w|$ shows $hat(delta')({ q_0 }, w) = hat(Delta)({ q_0 }, w)$, whence the languages agree. $square$
 
 The exponential bound is tight: the language $L_n = Sigma^* a Sigma^(n-1)$ over $Sigma = { a, b }$ (strings whose $n$-th-to-last symbol is $a$) is recognised by an NFA with $n + 1$ states but requires $2^n$ DFA states (the DFA must remember the last $n$ symbols).
 
 == Kleene's Theorem
 
-#theorem(name: "Kleene 1956")[A language $L subset.eq Sigma^*$ is recognised by a finite automaton <==> $L$ is denoted by a regular expression.]
+*Theorem (Kleene 1956).* A language $L subset.eq Sigma^*$ is recognised by a finite automaton <==> $L$ is denoted by a regular expression.
 
 The proof has two directions, each a classical construction.
 
 === Regex to NFA: Thompson's Construction
 
-#proof(name: "regex $arrow.r.long$ NFA")[By structural induction on $r$. Each construct yields an $epsilon$-NFA with a single start and single accept state.]
+*Proof (regex $arrow.r.long$ NFA).* By structural induction on $r$. Each construct yields an $epsilon$-NFA with a single start and single accept state.
 
 - *Base.* For $emptyset$: two states, no transitions; accept is unreachable. For $epsilon$: one $epsilon$-transition from start to accept. For $a in Sigma$: an $a$-transition from start to accept.
 - *Union $r_1 + r_2$.* Fresh start $s$ with $epsilon$-transitions into the start states of the NFAs for $r_1, r_2$; their accept states $epsilon$-transition to a fresh accept $f$.
@@ -80,7 +80,7 @@ The size of the resulting NFA is linear in $|r|$, exactly $2 |r|$ states in the 
 
 === NFA to Regex: State Elimination
 
-#proof(name: "NFA $arrow.r.long$ regex")[Add a fresh start $s$ and accept $f$ to the NFA, with $epsilon$-transitions $s arrow.r q_0$ and $q arrow.r f$ for $q in F$. Now systematically *eliminate* internal states one at a time: when removing state $q$, for every pair $(p, r)$ with $p eq."not" q eq."not" r$ and transitions $p arrow.r^(alpha) q$, $q arrow.r^(beta) q$, $q arrow.r^(gamma) r$, $p arrow.r^(delta) r$, add a transition $p arrow.r^(delta + alpha dot beta^* dot gamma) r$. After all internal states are eliminated, a single transition $s arrow.r^r f$ remains, and $L(N) = L(r)$.]
+*Proof (NFA $arrow.r.long$ regex).* Add a fresh start $s$ and accept $f$ to the NFA, with $epsilon$-transitions $s arrow.r q_0$ and $q arrow.r f$ for $q in F$. Now systematically *eliminate* internal states one at a time: when removing state $q$, for every pair $(p, r)$ with $p eq."not" q eq."not" r$ and transitions $p arrow.r^(alpha) q$, $q arrow.r^(beta) q$, $q arrow.r^(gamma) r$, $p arrow.r^(delta) r$, add a transition $p arrow.r^(delta + alpha dot beta^* dot gamma) r$. After all internal states are eliminated, a single transition $s arrow.r^r f$ remains, and $L(N) = L(r)$. $square$
 
 An alternative, *Brzozowski–McCluskey* via linear systems, solves $X_q = sum_(a, q') a dot X_(q') + [q in F]$ over the regex semiring using Arden's lemma ($X = A X + B$ has least solution $X = A^* B$ when $epsilon in."not" L(A)$).
 
@@ -92,7 +92,7 @@ $ x equiv_L y <==> forall z in Sigma^*. (x z in L <==> y z in L) $
 
 This is an equivalence relation, right-invariant ($x equiv_L y => x w equiv_L y w$ for all $w$), and *saturates* $L$: $x equiv_L y$ and $x in L$ imply $y in L$.
 
-#theorem(name: "Myhill–Nerode 1957–1958")[The following are equivalent for $L subset.eq Sigma^*$:]
+*Theorem (Myhill–Nerode 1957–1958).* The following are equivalent for $L subset.eq Sigma^*$:
 
 (i) $L$ is regular.
 
@@ -100,13 +100,13 @@ This is an equivalence relation, right-invariant ($x equiv_L y => x w equiv_L y 
 
 (iii) $L$ is the union of equivalence classes of some right-invariant equivalence relation of finite index on $Sigma^*$.
 
-#proof[$("i") => ("ii")$. Let $M = (Q, Sigma, delta, q_0, F)$ recognise $L$. Define $x tilde y$ <==> $hat(delta)(q_0, x) = hat(delta)(q_0, y)$. Then $tilde$ refines $equiv_L$ and has index $<= |Q|$, so $equiv_L$ has index $<= |Q|$.]
+*Proof.* $("i") => ("ii")$. Let $M = (Q, Sigma, delta, q_0, F)$ recognise $L$. Define $x tilde y$ <==> $hat(delta)(q_0, x) = hat(delta)(q_0, y)$. Then $tilde$ refines $equiv_L$ and has index $<= |Q|$, so $equiv_L$ has index $<= |Q|$.
 
 $("ii") => ("iii")$. Take $equiv_L$ itself.
 
 $("iii") => ("i")$. Let $tilde$ be such a relation with classes $[x]_tilde$ and index $n$. Define a DFA whose states are the classes, start state $[epsilon]_tilde$, transition $delta([x]_tilde, a) = [x a]_tilde$ (well-defined by right-invariance), and accepting classes $F = { [x]_tilde | x in L }$ (well-defined by saturation). This DFA recognises $L$. $square$
 
-#corollary(name: "canonical minimal DFA")[The quotient $Sigma^* slash equiv_L$ is itself a DFA recognising $L$, and any DFA $M$ recognising $L$ admits a surjective homomorphism onto $Sigma^* slash equiv_L$. Hence among all DFAs recognising $L$ there is a unique-up-to-isomorphism *minimal* one, with exactly $|Sigma^* slash equiv_L|$ states.]
+*Corollary (canonical minimal DFA).* The quotient $Sigma^* slash equiv_L$ is itself a DFA recognising $L$, and any DFA $M$ recognising $L$ admits a surjective homomorphism onto $Sigma^* slash equiv_L$. Hence among all DFAs recognising $L$ there is a unique-up-to-isomorphism *minimal* one, with exactly $|Sigma^* slash equiv_L|$ states.
 
 *Application (non-regularity).* To prove $L = { a^n b^n | n >= 0 }$ non-regular: the strings $a^i$ for distinct $i$ are pairwise $equiv_L$-inequivalent (witness $z = b^i$), so $equiv_L$ has infinite index.
 
@@ -118,9 +118,9 @@ The minimal DFA can be computed from any DFA $M$ by collapsing *Nerode-equivalen
 
 - *Hopcroft (1971).* The asymptotically optimal $O(n log n |Sigma|)$ algorithm. The key idea is the *smaller-half trick*: maintain a worklist $W$ of (class, symbol) splitters; when splitting class $X$ into $X_1, X_2$, add only the *smaller* of the two to $W$ for further processing. Each state participates in at most $O(log n)$ splits because each time it is in a splitter, the class containing it at least halves.
 
-#theorem(name: "Hopcroft correctness and complexity")[Hopcroft's algorithm computes the coarsest stable partition refining the initial partition ${ F, Q without F }$, in time $O(n log n dot |Sigma|)$.]
+*Theorem (Hopcroft correctness and complexity).* Hopcroft's algorithm computes the coarsest stable partition refining the initial partition ${ F, Q without F }$, in time $O(n log n dot |Sigma|)$.
 
-#proof(name: "sketch")[*Correctness.* The invariant is that the current partition $P$ is *coarser than* $tilde$ and *refined by* every partition obtained from $P$ by a $W$-split. Termination yields a stable partition $P^*$ with $P^* subset.eq tilde$ (no further splits) and $P^* supset.eq tilde$ (preserved invariant), so $P^* = tilde$.]
+*Proof sketch.* *Correctness.* The invariant is that the current partition $P$ is *coarser than* $tilde$ and *refined by* every partition obtained from $P$ by a $W$-split. Termination yields a stable partition $P^*$ with $P^* subset.eq tilde$ (no further splits) and $P^* supset.eq tilde$ (preserved invariant), so $P^* = tilde$.
 
 *Complexity.* For each state $q$ and each symbol $a$, count the times $q$ is processed as a member of a splitter via $a$. Each such time, $q$'s splitter class halves (smaller-half choice). Hence $q$ is processed $O(log n)$ times per symbol, total work $O(n log n |Sigma|)$. $square$
 
@@ -141,9 +141,9 @@ $ partial_a (r + s) = partial_a r + partial_a s, quad partial_a (r dot s) = part
 
 where $nu(r) = epsilon$ if $epsilon in L(r)$, $emptyset$ otherwise.
 
-#theorem(name: "Brzozowski 1964")[For any regex $r$, the set ${ partial_w r | w in Sigma^* }$ modulo the ACI equations of $+$ (associativity, commutativity, idempotence) is *finite*. The states are the derivatives, transitions are $r arrow.r^a partial_a r$, accept <==> $epsilon in L(r)$. The resulting DFA recognises $L(r)$ and, after minimisation, *is* the minimal DFA.]
+*Theorem (Brzozowski 1964).* For any regex $r$, the set ${ partial_w r | w in Sigma^* }$ modulo the ACI equations of $+$ (associativity, commutativity, idempotence) is *finite*. The states are the derivatives, transitions are $r arrow.r^a partial_a r$, accept <==> $epsilon in L(r)$. The resulting DFA recognises $L(r)$ and, after minimisation, *is* the minimal DFA.
 
-#proof(name: "sketch")[By structural induction on $r$, every iterated derivative is a finite ACI-sum of terms drawn from a finite syntactic universe determined by $r$. Antimirov's *partial derivatives* give the sharp bound of at most $1 + ||r||$ states, where $||r||$ counts symbol occurrences. The naive Brzozowski construction *without* ACI-canonicalisation can produce up to $2^(1 + ||r||)$ syntactically distinct derivatives; quotienting by the ACI equations of $+$ is exactly what collapses this back to the finite (and, after minimisation, minimal) automaton.]
+*Proof sketch.* By structural induction on $r$, every iterated derivative is a finite ACI-sum of terms drawn from a finite syntactic universe determined by $r$. Antimirov's *partial derivatives* give the sharp bound of at most $1 + ||r||$ states, where $||r||$ counts symbol occurrences. The naive Brzozowski construction *without* ACI-canonicalisation can produce up to $2^(1 + ||r||)$ syntactically distinct derivatives; quotienting by the ACI equations of $+$ is exactly what collapses this back to the finite (and, after minimisation, minimal) automaton. $square$
 
 === Coalgebraic View
 
@@ -155,9 +155,9 @@ where $2 = { 0, 1 }$. A coalgebra is a pair $(X, chevron.l o, t chevron.r)$ with
 
 == Pumping Lemma and Its Limits
 
-#theorem(name: "Pumping Lemma")[If $L$ is regular, there exists $p >= 1$ (the *pumping length*) such that every $w in L$ with $|w| >= p$ decomposes as $w = x y z$ with $|x y| <= p$, $|y| >= 1$, and $x y^i z in L$ for all $i >= 0$.]
+*Theorem (Pumping Lemma).* If $L$ is regular, there exists $p >= 1$ (the *pumping length*) such that every $w in L$ with $|w| >= p$ decomposes as $w = x y z$ with $|x y| <= p$, $|y| >= 1$, and $x y^i z in L$ for all $i >= 0$.
 
-#proof[Let $M$ be a DFA recognising $L$ with $p = |Q|$ states. On $w = a_1 dots a_n$ with $n >= p$, the run visits $n + 1 >= p + 1$ states, so by pigeonhole two visits coincide within the first $p$ steps: $hat(delta)(q_0, a_1 dots a_i) = hat(delta)(q_0, a_1 dots a_j)$ for some $0 <= i < j <= p$. Set $x = a_1 dots a_i$, $y = a_(i+1) dots a_j$, $z = a_(j+1) dots a_n$; the loop $y$ can be traversed any number of times.]
+*Proof.* Let $M$ be a DFA recognising $L$ with $p = |Q|$ states. On $w = a_1 dots a_n$ with $n >= p$, the run visits $n + 1 >= p + 1$ states, so by pigeonhole two visits coincide within the first $p$ steps: $hat(delta)(q_0, a_1 dots a_i) = hat(delta)(q_0, a_1 dots a_j)$ for some $0 <= i < j <= p$. Set $x = a_1 dots a_i$, $y = a_(i+1) dots a_j$, $z = a_(j+1) dots a_n$; the loop $y$ can be traversed any number of times. $square$
 
 The pumping lemma is *necessary* but *not sufficient* for regularity. *Jaffe's example* (1978, later refined) gives a non-regular language satisfying the pumping condition: a careful diagonal construction yields $L subset.eq { a, b }^*$ such that every long string can be pumped but the syntactic monoid is infinite. The strongest pumping-style characterisation is the *block-pumping lemma* of Jaffe, which *is* a characterisation: $L$ is regular <==> it satisfies block-pumping for some $p$. Even Jaffe's characterisation is rarely the easiest non-regularity proof; Myhill–Nerode normally is.
 
@@ -171,7 +171,7 @@ The *state complexity* of $L$ is the size of its minimal DFA. Lower bounds via c
 
 A class $cal(V)$ of regular languages closed under Boolean operations, quotients $a^(-1) L = { w | a w in L }$ and $L a^(-1)$, and inverse homomorphisms is a *variety of languages*. Dually, a class of finite monoids closed under submonoids, quotients, and finite direct products is a *pseudovariety of monoids*. Eilenberg (1974, 1976) proved:
 
-#theorem(name: "Eilenberg's Variety Theorem")[The correspondence sending a pseudovariety $bold(V)$ to the class $cal(V)(bold(V))$ of languages whose syntactic monoid lies in $bold(V)$ is a bijection between pseudovarieties of monoids and varieties of languages.]
+*Theorem (Eilenberg's Variety Theorem).* The correspondence sending a pseudovariety $bold(V)$ to the class $cal(V)(bold(V))$ of languages whose syntactic monoid lies in $bold(V)$ is a bijection between pseudovarieties of monoids and varieties of languages.
 
 This is the algebraic backbone of *decidable classification* of regular languages: deciding whether a regular $L$ belongs to $cal(V)(bold(V))$ reduces to deciding whether its (computable) syntactic monoid lies in $bold(V)$, a *finite* algebraic question.
 
@@ -179,9 +179,9 @@ This is the algebraic backbone of *decidable classification* of regular language
 
 A regular language is *star-free* if it has a regex over $Sigma$, the operations $+$, $dot$, *and complement*, *without Kleene star*. Equivalently, the regex uses union, concatenation, and complement only.
 
-#theorem(name: "Schützenberger 1965")[A regular language $L$ is star-free <==> its syntactic monoid is *aperiodic*: there exists $n$ such that $x^n = x^(n+1)$ for all $x$ in the monoid.]
+*Theorem (Schützenberger 1965).* A regular language $L$ is star-free <==> its syntactic monoid is *aperiodic*: there exists $n$ such that $x^n = x^(n+1)$ for all $x$ in the monoid.
 
-#theorem(name: "McNaughton–Papert 1971")[A regular language is star-free <==> it is definable by a first-order sentence in the signature $(<, (Q_a)_(a in Sigma))$ where variables range over word positions and $Q_a (i)$ asserts the $i$-th symbol is $a$.]
+*Theorem (McNaughton–Papert 1971).* A regular language is star-free <==> it is definable by a first-order sentence in the signature $(<, (Q_a)_(a in Sigma))$ where variables range over word positions and $Q_a (i)$ asserts the $i$-th symbol is $a$.
 
 Together:
 
@@ -200,7 +200,7 @@ Extend FO over words to *monadic second-order* logic ($"MSO"$), permitting quant
 
 *Theorem (Büchi 1960, Elgot 1961, Trakhtenbrot 1962).* A language $L subset.eq Sigma^*$ is regular <==> $L$ is definable by an $"MSO"[<]$ sentence.
 
-#proof(name: "sketch")[$("MSO" => "regular")$. By induction on formulas. The atomic predicates $Q_a$ and $<$ are obviously regular. Boolean connectives are regular by closure. Existential quantification over a position $x$ corresponds to projecting away a tape track labelled with $x$'s position, using closure under homomorphic image. Existential quantification over a *set* $X$ adds a track of bits indicating membership, likewise a projection. The constructions stay within finite automata at every step.]
+*Proof sketch.* $("MSO" => "regular")$. By induction on formulas. The atomic predicates $Q_a$ and $<$ are obviously regular. Boolean connectives are regular by closure. Existential quantification over a position $x$ corresponds to projecting away a tape track labelled with $x$'s position, using closure under homomorphic image. Existential quantification over a *set* $X$ adds a track of bits indicating membership, likewise a projection. The constructions stay within finite automata at every step.
 
 $("regular" => "MSO")$. Given DFA $M$ with states $Q = { q_1, dots, q_k }$, write an $"MSO"$ sentence asserting there exist sets $X_1, dots, X_k$ partitioning positions $1 dots |w| + 1$ such that $X_1$ contains the leftmost position, transitions agree with $delta$, and the rightmost position is in $union.big_(q in F) X_q$. $square$
 
@@ -210,9 +210,9 @@ The theorem has profound generalisations: Büchi extended it to $omega$-words (B
 
 A *two-way DFA* (2DFA) has transition $delta : Q times Gamma arrow.r Q times { L, R, S }$ on a read-only input bounded by endmarkers $\#$ in $Gamma$. It can move its head left or right or stay; it accepts by entering a designated accept state.
 
-#theorem(name: "Shepherdson 1959; Rabin–Scott 1959")[Every 2DFA can be simulated by a one-way DFA. Hence 2DFA, 2NFA, NFA, and DFA all recognise exactly the regular languages.]
+*Theorem (Shepherdson 1959; Rabin–Scott 1959).* Every 2DFA can be simulated by a one-way DFA. Hence 2DFA, 2NFA, NFA, and DFA all recognise exactly the regular languages.
 
-#proof(name: "sketch")[Encode each state of the simulating DFA as a *crossing-sequence summary*: a function $f : Q arrow.r Q union { perp }$ where $f(q)$ records if the 2DFA enters this position moving right in state $q$, in what state (or never) does it next exit to the right. The summary at position $i + 1$ is computable from the summary at position $i$ and the symbol at $i$. The number of summaries is $(|Q| + 1)^(|Q|)$, which is finite and hence regular.]
+*Proof sketch.* Encode each state of the simulating DFA as a *crossing-sequence summary*: a function $f : Q arrow.r Q union { perp }$ where $f(q)$ records if the 2DFA enters this position moving right in state $q$, in what state (or never) does it next exit to the right. The summary at position $i + 1$ is computable from the summary at position $i$ and the symbol at $i$. The number of summaries is $(|Q| + 1)^(|Q|)$, which is finite and hence regular. $square$
 
 Two-way automata are exponentially more *concise* than one-way ones: there are languages requiring 2DFAs of size $n$ and one-way DFAs of size $2^n$. The exact gap between 2NFA and 2DFA size (the *Sakoda–Sipser problem*, 1978) remains open after 47 years and is the automata-theoretic analogue of $"L"$ vs $"NL"$.
 
@@ -239,7 +239,7 @@ The following problems are decidable for regular languages (presented as DFAs, N
 - *Inclusion* $L(M_1) subset.eq L(M_2)$: polynomial for DFAs, PSPACE-complete for NFAs.
 - *Finiteness*: DAG-check on the trimmed automaton, polynomial.
 
-#theorem(name: "Meyer–Stockmeyer 1972")[Equivalence of regular expressions is PSPACE-complete; if star is disallowed it remains PSPACE-complete; if both star and intersection are disallowed it drops to NP-complete (for unions of concatenations).]
+*Theorem (Meyer–Stockmeyer 1972).* Equivalence of regular expressions is PSPACE-complete; if star is disallowed it remains PSPACE-complete; if both star and intersection are disallowed it drops to NP-complete (for unions of concatenations).
 
 The discrepancy between DFA-equivalence (P) and regex-equivalence (PSPACE) is the practical justification for the regex $arrow.r.long$ DFA pipeline used in lexer generators.
 

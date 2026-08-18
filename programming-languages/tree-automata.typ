@@ -1,4 +1,4 @@
-#import "../template.typ": proof, theorem, xref
+#import "../template.typ": xref
 
 = Tree Automata
 
@@ -33,11 +33,11 @@ A bottom-up automaton is *deterministic* (DFTA) iff for every $f in Sigma_n$ and
 
 === Equivalence Bottom-Up Nondeterministic = Deterministic
 
-#theorem(name: "Subset Construction for Trees")[For every NFTA $cal(A)$ with $n$ states there is an equivalent DFTA $cal(A)^"det"$ with at most $2^n$ states.]
+*Theorem (Subset Construction for Trees).* For every NFTA $cal(A)$ with $n$ states there is an equivalent DFTA $cal(A)^"det"$ with at most $2^n$ states.
 
-#proof[Let $Q^"det" = 2^Q$. For each $f in Sigma_n$ and each tuple $(S_1, dots, S_n) in (2^Q)^n$, define
+*Proof.* Let $Q^"det" = 2^Q$. For each $f in Sigma_n$ and each tuple $(S_1, dots, S_n) in (2^Q)^n$, define
 $ delta^"det"(f, S_1, dots, S_n) = { q | exists q_i in S_i. space f(q_1, dots, q_n) arrow.r q in Delta }. $
-Accepting set: $Q_F^"det" = { S subset.eq Q | S inter Q_F != emptyset }$. By induction on $t$, the unique deterministic run satisfies $r^"det"(u) = { q | exists "NFTA" "run r with" r(u) = q }$. Acceptance is preserved.]
+Accepting set: $Q_F^"det" = { S subset.eq Q | S inter Q_F != emptyset }$. By induction on $t$, the unique deterministic run satisfies $r^"det"(u) = { q | exists "NFTA" "run r with" r(u) = q }$. Acceptance is preserved. $square$
 
 The blow-up $2^n$ is tight in the worst case (the family $L_k = "trees containing a leaf labelled" k$ over an alphabet of size $k$ requires $2^k$ deterministic states).
 
@@ -67,7 +67,7 @@ $ q arrow.r f(q_1, dots, q_n) quad (f in Sigma_n). $
 
 A run is a state-labelled copy of $t$ with $r(epsilon) in Q_0$ and $r(u) arrow.r t(u)(r(u 1), dots, r(u n)) in Delta$. A tree is accepted iff some run exists (no acceptance condition on leaves beyond the existence of a rule $q arrow.r c$).
 
-#theorem[The class of languages recognised by NTDA equals the class recognised by NFTA: simply reverse all transitions to convert between the two models. $square$]
+*Theorem.* The class of languages recognised by NTDA equals the class recognised by NFTA: simply reverse all transitions to convert between the two models. $square$
 
 The surprise is determinism.
 
@@ -75,11 +75,11 @@ The surprise is determinism.
 
 A *deterministic top-down tree automaton* (DTDA) has $|Q_0| = 1$ and at most one rule $q arrow.r f(q_1, dots, q_n)$ for each $(q, f)$.
 
-#theorem(name: "Magidor--Moran 1969")[The tree language
+*Theorem (Magidor--Moran 1969).* The tree language
 $ L = { f(a, b), space f(b, a) } $
-over $Sigma_0 = {a, b}$, $Sigma_2 = {f}$ is recognisable (it is finite) but *not* DTDA-recognisable.]
+over $Sigma_0 = {a, b}$, $Sigma_2 = {f}$ is recognisable (it is finite) but *not* DTDA-recognisable.
 
-#proof[Suppose $cal(A) = (Q, Sigma, q_0, Delta)$ is a DTDA accepting $L$. On input $f(a, b)$, the unique run starts with $q_0$ at the root; determinism forces a unique rule $q_0 arrow.r f(q_l, q_r)$. The left child receives state $q_l$ and must consume $a$ (since $f(a, b) in L$); the right child receives $q_r$ and must consume $b$. But on $f(b, a) in L$ the same rule fires (the rule for $(q_0, f)$ is unique), so $q_l$ must also accept $b$ at the left, and $q_r$ must accept $a$ at the right. Hence the run on $f(a, a)$ is also accepting (left $= q_l$ consumes $a$; right $= q_r$ consumes $a$), yet $f(a, a) in.not L$. Contradiction.]
+*Proof.* Suppose $cal(A) = (Q, Sigma, q_0, Delta)$ is a DTDA accepting $L$. On input $f(a, b)$, the unique run starts with $q_0$ at the root; determinism forces a unique rule $q_0 arrow.r f(q_l, q_r)$. The left child receives state $q_l$ and must consume $a$ (since $f(a, b) in L$); the right child receives $q_r$ and must consume $b$. But on $f(b, a) in L$ the same rule fires (the rule for $(q_0, f)$ is unique), so $q_l$ must also accept $b$ at the left, and $q_r$ must accept $a$ at the right. Hence the run on $f(a, a)$ is also accepting (left $= q_l$ consumes $a$; right $= q_r$ consumes $a$), yet $f(a, a) in.not L$. Contradiction. $square$
 
 The asymmetry has a clear cause: a top-down deterministic automaton must commit to the states of all children *before reading them*, so its choice for the left child cannot depend on the right child's content. Bottom-up determinism has no such restriction.
 
@@ -98,9 +98,9 @@ This is the *single* fundamental difference between the string-automata and tree
 
 The class of *regular* (synonymously: *recognisable*) tree languages is the class accepted by NFTA (equivalently DFTA, NTDA). It enjoys all the closure properties one would hope for:
 
-#theorem(name: "Closure")[Regular tree languages are closed under union, intersection, complement, difference, inverse linear homomorphism, and *linear* homomorphism. They are *not* closed under arbitrary tree homomorphism (which can duplicate subtrees and break regularity).]
+*Theorem (Closure).* Regular tree languages are closed under union, intersection, complement, difference, inverse linear homomorphism, and *linear* homomorphism. They are *not* closed under arbitrary tree homomorphism (which can duplicate subtrees and break regularity).
 
-#proof[Union and intersection are by product. Complement is by complementing the accepting set of a *complete* DFTA. Inverse homomorphism: relabel the rules. Linear homomorphism: substitution preserves regularity when no subtree is duplicated. Counterexample for general homomorphism: the homomorphism $h(f(x)) = g(x, x)$ sends a regular set to ${g(t, t) | t in T_Sigma}$, which is *not* regular (this is the canonical non-regular tree language).]
+*Proof.* Union and intersection are by product. Complement is by complementing the accepting set of a *complete* DFTA. Inverse homomorphism: relabel the rules. Linear homomorphism: substitution preserves regularity when no subtree is duplicated. Counterexample for general homomorphism: the homomorphism $h(f(x)) = g(x, x)$ sends a regular set to ${g(t, t) | t in T_Sigma}$, which is *not* regular (this is the canonical non-regular tree language). $square$
 
 === Pumping Lemma for Trees
 
@@ -117,7 +117,7 @@ A *context* over $Sigma$ is a term with exactly one occurrence of a special hole
 Define on $T_Sigma$ the *Myhill--Nerode equivalence* for $L subset.eq T_Sigma$:
 $ s tilde_L t <==> forall "context" C. space (C[s] in L <==> C[t] in L). $
 
-#theorem(name: "Myhill--Nerode for Trees")[$L$ is regular <==> $tilde_L$ has finitely many equivalence classes. The minimal DFTA for $L$ has exactly $|T_Sigma slash tilde_L|$ states.]
+*Theorem (Myhill--Nerode for Trees).* $L$ is regular <==> $tilde_L$ has finitely many equivalence classes. The minimal DFTA for $L$ has exactly $|T_Sigma slash tilde_L|$ states.
 
 *Proof.* (Necessity) For a DFTA, $s tilde_L t$ holds whenever $s, t$ run to the same state, so the index is at most $|Q|$. (Sufficiency) Take $Q = T_Sigma slash tilde_L$; transitions $f([t_1], dots, [t_n]) arrow.r [f(t_1, dots, t_n)]$ are well-defined; accepting set $= { [t] | t in L }$. $square$
 
@@ -127,11 +127,11 @@ This is the structural backbone of *tree-automaton minimisation*, decidable in $
 
 The most important characterisation of regular tree languages connects them to logic.
 
-#theorem(name: "Thatcher--Wright 1968; Doner 1970")[A tree language $L subset.eq T_Sigma$ is regular <==> it is definable by a sentence of monadic second-order logic over the structure $(T_Sigma; "child"_1, dots, "child"_k, ("label"_f)_(f in Sigma))$.]
+*Theorem (Thatcher--Wright 1968; Doner 1970).* A tree language $L subset.eq T_Sigma$ is regular <==> it is definable by a sentence of monadic second-order logic over the structure $(T_Sigma; "child"_1, dots, "child"_k, ("label"_f)_(f in Sigma))$.
 
 MSO over trees has first-order variables ranging over positions, second-order variables ranging over sets of positions, and predicates for $y$ is the $i$-th child of $x$ and the symbol at position $x$ is $f$. The theorem is the *tree-automaton analogue of Büchi's theorem* for words, established the same year.
 
-#proof(name: "sketch, regular $arrow.r$ MSO")[Existential quantification over runs: let $X_q$ for each state $q$ be the set of positions where the run is in state $q$. The formula asserts that the $X_q$ partition $"Pos"(t)$, the root lies in some $X_q$ with $q in Q_F$, and the local rules are obeyed at every position.]
+*Proof sketch (regular $arrow.r$ MSO).* Existential quantification over runs: let $X_q$ for each state $q$ be the set of positions where the run is in state $q$. The formula asserts that the $X_q$ partition $"Pos"(t)$, the root lies in some $X_q$ with $q in Q_F$, and the local rules are obeyed at every position.
 
 *(MSO $arrow.r$ regular).* By induction on $phi$. Atomic predicates and Boolean combinations are immediate. Existential quantification corresponds to projection on automata (sound because regular tree languages are closed under projection). $square$
 
@@ -151,7 +151,7 @@ where $u$ is a term over $Omega$ with subterms of the form $q'(x_i)$ for $q' in 
 
 A computation rewrites $q_0(t)$ to a tree over $Omega$ by repeatedly applying rules.
 
-#theorem[The class of *top-down tree transductions* is properly contained in the class of *bottom-up tree transductions* (BUTT, Engelfriet 1975). The two classes are *incomparable* on the deterministic level.]
+*Theorem.* The class of *top-down tree transductions* is properly contained in the class of *bottom-up tree transductions* (BUTT, Engelfriet 1975). The two classes are *incomparable* on the deterministic level.
 
 The key difference: a BUTT can *inspect* a subterm and *"then"* decide what to output (the input is processed before the output is committed), whereas a TDTT commits to output structure at each step and then recurses; this lets BUTT realise transductions like if the input is $f(a, a)$ output $g$, else output $h$ that TDTT cannot.
 
@@ -161,7 +161,7 @@ The key difference: a BUTT can *inspect* a subterm and *"then"* decide what to o
 $ q(f(x_1, dots, x_n), y_1, dots, y_m) arrow.r u $
 with $u$ a term over $Omega$ allowing nested calls $q'(x_i, dots)$. Parameters let a state carry context information *down* the tree as it descends, granting MTTs significantly more power than TDTT or BUTT alone.
 
-#theorem(name: "Engelfriet--Vogler 1985")[MTT-transductions strictly contain both TDTT and BUTT transductions, and are closed under composition. The MTT hierarchy by parameter arity is strict.]
+*Theorem (Engelfriet--Vogler 1985).* MTT-transductions strictly contain both TDTT and BUTT transductions, and are closed under composition. The MTT hierarchy by parameter arity is strict.
 
 MTTs are the *de facto* model for XSLT compilation, attribute grammar translation, and program transformation.
 
@@ -169,7 +169,7 @@ MTTs are the *de facto* model for XSLT compilation, attribute grammar translatio
 
 *Courcelle (1994).* A tree-to-tree function $f : T_Sigma arrow.r T_Omega$ is *MSO-definable* if both the domain and the output structure (its labels and child relations) are defined by MSO formulas interpreted in the input.
 
-#theorem(name: "Engelfriet--Maneth--Bloem; Courcelle")[MSO-definable tree transductions coincide with *deterministic* MTT-transductions of *linear size increase*. They form a robust class strictly between deterministic TDTT and deterministic MTT.]
+*Theorem (Engelfriet--Maneth--Bloem; Courcelle).* MSO-definable tree transductions coincide with *deterministic* MTT-transductions of *linear size increase*. They form a robust class strictly between deterministic TDTT and deterministic MTT.
 
 MSO-definable transductions are central to *structural query languages* and to the verification of program transformations.
 
@@ -179,7 +179,7 @@ A *tree-walking automaton* (TWA, Aho--Ullman 1971) traverses a tree by moving a 
 
 For decades it was open whether TWAs recognise all regular tree languages. The question was settled negatively:
 
-#theorem(name: "Bojańczyk--Colcombet 2008")[Deterministic TWAs are strictly weaker than nondeterministic TWAs, which are in turn strictly weaker than NFTAs.]
+*Theorem (Bojańczyk--Colcombet 2008).* Deterministic TWAs are strictly weaker than nondeterministic TWAs, which are in turn strictly weaker than NFTAs.
 
 The witness language for the first separation: trees whose root has a left subtree equal to its right subtree, restricted to a parity-marking sub-class. The proof uses a *pebble argument* and a careful analysis of the information a sequential head can carry across a tree of unbounded width.
 
@@ -192,7 +192,7 @@ XML documents are *unranked* trees: nodes may have arbitrary numbers of children
 $ cal(A) = (Q, Sigma, Q_F, (R_a)_(a in Sigma)) $
 with $R_a$ a *regular language over $Q^*$* (the *horizontal* language) specifying the allowed state sequences for the children of an $a$-labelled node. A run assigns states bottom-up: at a node labelled $a$ with children in states $q_1 dots q_n$, accept the assignment iff $q_1 dots q_n in R_a$.
 
-#theorem[Hedge automata recognise exactly the *MSO-definable* languages of unranked trees, which are equivalent (via *first-child / next-sibling* encoding) to the regular ranked-tree languages.]
+*Theorem.* Hedge automata recognise exactly the *MSO-definable* languages of unranked trees, which are equivalent (via *first-child / next-sibling* encoding) to the regular ranked-tree languages.
 
 XML schema languages (DTD, XML Schema, RelaxNG) are formalised as restricted forms of hedge automata; their expressiveness and decidability of inclusion follow from the tree-automata theory.
 
@@ -200,7 +200,7 @@ XML schema languages (DTD, XML Schema, RelaxNG) are formalised as restricted for
 
 *XPath* is a language for navigating XML trees. Core XPath has *axes* (`child`, `descendant`, `parent`, `ancestor`, `following`, `preceding`, ...) and *predicates*.
 
-#theorem(name: "Marx 2005; Benedikt--Fan--Geerts 2008")[The expressiveness of various XPath fragments corresponds exactly to fragments of first-order logic over unranked trees:]
+*Theorem (Marx 2005; Benedikt--Fan--Geerts 2008).* The expressiveness of various XPath fragments corresponds exactly to fragments of first-order logic over unranked trees:
 
 - Core XPath = first-order logic over $(<_"doc", <_"child"^*)$.
 - XPath with `count` = first-order with counting.
@@ -212,7 +212,7 @@ Static analysis of XPath queries (containment, equivalence, satisfiability) redu
 
 The deepest application of tree automata in algorithmics:
 
-#theorem(name: "Courcelle 1990")[Every property of finite graphs expressible in monadic second-order logic with edge-set quantification (MSO_2) is decidable in *linear time* on graphs of bounded *tree-width*.]
+*Theorem (Courcelle 1990).* Every property of finite graphs expressible in monadic second-order logic with edge-set quantification (MSO_2) is decidable in *linear time* on graphs of bounded *tree-width*.
 
 *Tree-width* measures how tree-like a graph is. A *tree decomposition* of a graph $G = (V, E)$ is a tree $T$ whose nodes are labelled by *bags* $X_t subset.eq V$ such that (i) every vertex of $G$ is in some bag; (ii) every edge has both endpoints in some bag; (iii) for every vertex $v$, the set of bags containing $v$ forms a connected subtree of $T$. The *width* is $max_t |X_t| - 1$, and $"tw"(G)$ is the minimum width over all tree decompositions.
 
@@ -224,7 +224,7 @@ The deepest application of tree automata in algorithmics:
 
 The constant factor (a tower of exponentials) is the price of generality but is rarely a practical obstacle for small $k$ and short formulae.
 
-#theorem(name: "Courcelle--Makowsky--Rotics 2000")[The same statement holds for *clique-width* instead of tree-width, for MSO with vertex-set quantification only (MSO_1). Clique-width is more permissive: every bounded-tree-width class has bounded clique-width, but cliques themselves have unbounded tree-width and clique-width 2.]
+*Theorem (Courcelle--Makowsky--Rotics 2000).* The same statement holds for *clique-width* instead of tree-width, for MSO with vertex-set quantification only (MSO_1). Clique-width is more permissive: every bounded-tree-width class has bounded clique-width, but cliques themselves have unbounded tree-width and clique-width 2.
 
 Courcelle's theorem is the unifying meta-theorem of *parameterised complexity*: a great many NP-hard problems (3-COLOURING, INDEPENDENT SET, HAMILTONIAN CYCLE, ...) are MSO-expressible and hence linear-time on bounded-tree-width inputs.
 
@@ -252,7 +252,7 @@ This is the algorithm behind GHC's `-Wincomplete-patterns` and OCaml's `Match_fa
 
 A *rewrite system* $R$ over $T_Sigma$ is a set of pairs $(l, r)$ inducing the relation $t arrow.r_R t'$ <==> some subterm of $t$ matches $l$ and is replaced by the corresponding $r$. Many decidability questions reduce to tree-automaton constructions:
 
-#theorem(name: "Brainerd 1969; Genet--Klay 2000")[If $R$ is *left-linear* and $L$ is regular, then the set of *$R$-descendants* $R^*(L) = { t' | exists t in L. space t arrow.r_R^* t' }$ may be over-approximated by an effectively computable tree automaton via *tree automata completion*. For ground rewriting (no variables), the over-approximation is exact and yields decidability of *ground reachability*.]
+*Theorem (Brainerd 1969; Genet--Klay 2000).* If $R$ is *left-linear* and $L$ is regular, then the set of *$R$-descendants* $R^*(L) = { t' | exists t in L. space t arrow.r_R^* t' }$ may be over-approximated by an effectively computable tree automaton via *tree automata completion*. For ground rewriting (no variables), the over-approximation is exact and yields decidability of *ground reachability*.
 
 Tree-automata completion is the basis of static analyses for term-rewriting systems, cryptographic protocol verification (Genet--Tang--Tong 2003), and Java bytecode analysis.
 
@@ -309,7 +309,7 @@ A more abstract view of regular tree languages goes via *$Sigma$-algebras*. A $S
 
 A subset $L subset.eq T_Sigma$ is *recognised by $A$* (with $A$ finite) <==> $L = "eval"_A^(-1)(F)$ for some $F subset.eq A$.
 
-#theorem[$L$ is recognised by some finite $Sigma$-algebra iff $L$ is regular. Moreover, the *syntactic algebra* $A_L$ -- the quotient of $T_Sigma$ by the largest congruence saturating $L$ -- is the minimal recognising algebra, and is isomorphic to the state algebra of the minimal DFTA.]
+*Theorem.* $L$ is recognised by some finite $Sigma$-algebra iff $L$ is regular. Moreover, the *syntactic algebra* $A_L$ -- the quotient of $T_Sigma$ by the largest congruence saturating $L$ -- is the minimal recognising algebra, and is isomorphic to the state algebra of the minimal DFTA.
 
 The algebraic perspective generalises smoothly to *tree algebras with extra structure* (Bojańczyk--Walukiewicz), which capture richer logical fragments (FO with successor, FO with $<$, etc.) via varieties of finite tree algebras -- the tree analogue of Eilenberg's variety theorem.
 
@@ -360,7 +360,7 @@ Generalising from $L subset.eq T_Sigma$ to functions $f : T_Sigma arrow.r K$ for
 
 For $K = "Bool"$ this is regular tree languages. For $K = (NN, +, dot)$ it counts the number of accepting runs. For $K = "min-plus"$ semirings it solves *optimisation* problems over trees (cheapest accepting derivation).
 
-#theorem[Weighted tree automata over a commutative semiring are closed under sum and Hadamard product, with decidable equivalence over fields (Schützenberger). Over the tropical semiring $(ZZ union {oo}, min, +)$, equivalence is *undecidable* (Krob 1994 -- in the word case; the tree extension follows).]
+*Theorem.* Weighted tree automata over a commutative semiring are closed under sum and Hadamard product, with decidable equivalence over fields (Schützenberger). Over the tropical semiring $(ZZ union {oo}, min, +)$, equivalence is *undecidable* (Krob 1994 -- in the word case; the tree extension follows).
 
 Applications: probabilistic parsing (PCFG), statistical machine translation, weighted XML schema satisfaction.
 
@@ -386,7 +386,7 @@ The technique underlies the *Timbuk* tool and has been used for verification of 
 
 Between regular tree languages and context-free languages lies the class of *visibly pushdown languages* (Alur--Madhusudan 2004): pushdown languages whose stack operations are determined by the input symbol (each symbol is a "call" -- push, "return" -- pop, or "internal" -- nothing).
 
-#theorem(name: "Alur--Madhusudan")[Visibly pushdown languages are closed under all Boolean operations, have polynomial inclusion checking, decidable equivalence in EXPTIME, and correspond exactly to regular tree languages of the *call-return nesting tree* of the input.]
+*Theorem (Alur--Madhusudan).* Visibly pushdown languages are closed under all Boolean operations, have polynomial inclusion checking, decidable equivalence in EXPTIME, and correspond exactly to regular tree languages of the *call-return nesting tree* of the input.
 
 This makes VPLs an attractive intermediate between flat regular languages and full context-free, and they have been used in *XML stream validation*, *interprocedural program analysis*, and *XML-to-relational shredding*.
 

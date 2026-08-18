@@ -1,4 +1,4 @@
-#import "../template.typ": proof, theorem, xref
+#import "../template.typ": xref
 
 = Macros and Metaprogramming
 
@@ -117,9 +117,9 @@ The result: an identifier introduced by the macro has $s_"macro"$ in its scope s
 
 The set-of-scopes model is *equational*: two identifiers are *the same* <==> they have the same name and the same scope set. There is no painting, no marking, no renaming; just set membership. The model handles macros, modules, separately compiled code, and recursive expansion uniformly, and it is the basis of the current Racket macro expander.
 
-#theorem(name: "Hygiene, Flatt 2016")[In the set-of-scopes model, a macro's expansion never causes an identifier from the macro template to capture an identifier from the macro's use site, and never causes an identifier from the use site to capture an identifier from the template.]
+*Theorem (Hygiene, Flatt 2016).* In the set-of-scopes model, a macro's expansion never causes an identifier from the macro template to capture an identifier from the macro's use site, and never causes an identifier from the use site to capture an identifier from the template.
 
-#proof(name: "sketch")[The macro template's identifiers acquire $s_"macro"$ on expansion; the use-site identifiers do not. A binding introduced by the template binds only identifiers with $s_"macro"$ in their scope set; a use-site reference (without $s_"macro"$) cannot resolve to it. Symmetrically, a use-site binding cannot capture a template reference, because the template reference has $s_"macro"$ extra.]
+*Proof sketch.* The macro template's identifiers acquire $s_"macro"$ on expansion; the use-site identifiers do not. A binding introduced by the template binds only identifiers with $s_"macro"$ in their scope set; a use-site reference (without $s_"macro"$) cannot resolve to it. Symmetrically, a use-site binding cannot capture a template reference, because the template reference has $s_"macro"$ extra. $square$
 
 == Phase Separation and Modules
 
@@ -343,9 +343,9 @@ The convergence point of macros and PE is *typed metaprogramming with reflection
 
 The type system of MetaML guarantees that staged code is *well-typed at every stage*. A staged expression that produces a value of type $chevron.l "int" chevron.r$ can be *run* to produce an `int`; the operational semantics of `.!` is to take a code value and run it in the next stage, and the type system's *staging invariants* ensure the code value is closed and type-correct.
 
-#theorem(name: "Type Safety for MetaML, Taha 2000")[Well-typed MetaML programs do not produce ill-typed code values or unbound-variable errors when run.]
+*Theorem (Type Safety for MetaML, Taha 2000).* Well-typed MetaML programs do not produce ill-typed code values or unbound-variable errors when run.
 
-#proof(name: "sketch")[By a strengthened progress-and-preservation argument that tracks the *level* of each subexpression (the stage at which it will run). At each stage, the standard arguments apply; the cross-stage operations preserve well-typedness because the type of brackets explicitly records the stage.]
+*Proof sketch.* By a strengthened progress-and-preservation argument that tracks the *level* of each subexpression (the stage at which it will run). At each stage, the standard arguments apply; the cross-stage operations preserve well-typedness because the type of brackets explicitly records the stage. $square$
 
 The result is *macro hygiene* in a typed setting: capture is impossible because the type system tracks free variables, and ill-typed expansions are caught at the meta-stage rather than at the object stage. This is, in a sense, the *promised land* of macros: a hygienic, typed, expressive metaprogramming facility, realised in MetaOCaml and Scala 3's quoted API.
 

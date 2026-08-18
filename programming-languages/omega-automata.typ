@@ -1,4 +1,4 @@
-#import "../template.typ": example, proof, theorem, xref
+#import "../template.typ": xref
 
 = Omega-Automata
 
@@ -28,21 +28,21 @@ The simplest acceptance condition is due to Büchi (1962). A *nondeterministic B
 $ "Inf"(rho) inter F != emptyset, $
 i.e. some state in $F$ is visited infinitely often. The language $L(cal(A))$ is the set of $alpha in Sigma^omega$ admitting some accepting run.
 
-#example[Over $Sigma = {a, b}$, the language $L = { alpha | a "occurs infinitely often in" alpha }$ is recognised by a two-state NBA with states $q_0$ (accepting) and $q_1$ (non-accepting), transitions $q_0 arrow.r^a q_0$, $q_0 arrow.r^b q_1$, $q_1 arrow.r^b q_1$, $q_1 arrow.r^a q_0$. The complement $overline(L) = { alpha | a "occurs only finitely often" }$ is also recognisable, but requires a different construction -- and famously, the construction is not symmetric.]
+*Example.* Over $Sigma = {a, b}$, the language $L = { alpha | a "occurs infinitely often in" alpha }$ is recognised by a two-state NBA with states $q_0$ (accepting) and $q_1$ (non-accepting), transitions $q_0 arrow.r^a q_0$, $q_0 arrow.r^b q_1$, $q_1 arrow.r^b q_1$, $q_1 arrow.r^a q_0$. The complement $overline(L) = { alpha | a "occurs only finitely often" }$ is also recognisable, but requires a different construction -- and famously, the construction is not symmetric.
 
 === Expressive Power
 
-#theorem(name: "Büchi 1962")[A language $L subset.eq Sigma^omega$ is $omega$-regular iff $L = L(cal(A))$ for some NBA $cal(A)$.]
+*Theorem (Büchi 1962).* A language $L subset.eq Sigma^omega$ is $omega$-regular iff $L = L(cal(A))$ for some NBA $cal(A)$.
 
-#proof(name: "sketch")[For the forward direction, the operators ${u v^omega}$, $union$, $inter$, and $V^omega$ are realised by direct automaton constructions (initial-segment plus loop; product; subset). For the converse, given an NBA, decompose its accepting runs by the last visit to each accepting state and rebuild the language as a finite union $U V^omega$ where $U$ and $V$ are NFA-recognisable on finite words.]
+*Proof sketch.* For the forward direction, the operators ${u v^omega}$, $union$, $inter$, and $V^omega$ are realised by direct automaton constructions (initial-segment plus loop; product; subset). For the converse, given an NBA, decompose its accepting runs by the last visit to each accepting state and rebuild the language as a finite union $U V^omega$ where $U$ and $V$ are NFA-recognisable on finite words. $square$
 
 === Deterministic Büchi is Strictly Weaker
 
 A *deterministic Büchi automaton* (DBA) requires $delta$ to be a (total) function $Q times Sigma arrow.r Q$. The class of DBA-recognisable languages is strictly contained in the $omega$-regular languages.
 
-#theorem(name: "Landweber 1969")[The language $L = { alpha in {a,b}^omega | a "occurs only finitely often" }$ is $omega$-regular but not DBA-recognisable.]
+*Theorem (Landweber 1969).* The language $L = { alpha in {a,b}^omega | a "occurs only finitely often" }$ is $omega$-regular but not DBA-recognisable.
 
-#proof[Suppose toward contradiction $L = L(cal(A))$ for a DBA $cal(A) = (Q, Sigma, q_0, delta, F)$. Consider $b^omega in L$. The run of $cal(A)$ on $b^omega$ must visit some $f_0 in F$ at some step $n_0$. Now feed $a$ then enough $b$'s to reach $F$ again at $f_1$ after $n_1 > n_0$ steps -- this is possible because $b^(n_0) a b^omega in L$. Iterating, we construct $b^(n_0) a b^(m_0) a b^(m_1) a dots$ which visits $F$ infinitely often (so $cal(A)$ accepts) yet contains infinitely many $a$'s (so the word is not in $L$). Contradiction.]
+*Proof.* Suppose toward contradiction $L = L(cal(A))$ for a DBA $cal(A) = (Q, Sigma, q_0, delta, F)$. Consider $b^omega in L$. The run of $cal(A)$ on $b^omega$ must visit some $f_0 in F$ at some step $n_0$. Now feed $a$ then enough $b$'s to reach $F$ again at $f_1$ after $n_1 > n_0$ steps -- this is possible because $b^(n_0) a b^omega in L$. Iterating, we construct $b^(n_0) a b^(m_0) a b^(m_1) a dots$ which visits $F$ infinitely often (so $cal(A)$ accepts) yet contains infinitely many $a$'s (so the word is not in $L$). Contradiction. $square$
 
 The DBA/NBA gap motivates the entire hierarchy of acceptance conditions that follows.
 
@@ -107,11 +107,11 @@ NBA's are closed under union (disjoint sum with a single initial choice) and pro
 
 == McNaughton's Theorem and Safra's Construction
 
-#theorem(name: "McNaughton 1966")[Every NBA can be converted to an equivalent deterministic Muller automaton.]
+*Theorem (McNaughton 1966).* Every NBA can be converted to an equivalent deterministic Muller automaton.
 
 McNaughton's original construction was triply exponential and not tight. Safra (1988) provided the modern construction, which is asymptotically optimal.
 
-#theorem(name: "Safra 1988")[Every NBA with $n$ states has an equivalent deterministic Rabin (hence Muller) automaton with $2^(O(n log n))$ states and $O(n)$ Rabin pairs.]
+*Theorem (Safra 1988).* Every NBA with $n$ states has an equivalent deterministic Rabin (hence Muller) automaton with $2^(O(n log n))$ states and $O(n)$ Rabin pairs.
 
 *Construction sketch.* A *Safra tree* over $Q$ is a finite ordered tree whose nodes carry distinct *names* from ${1, dots, 2n}$ and *labels* that are subsets of $Q$, subject to: the root's label is the current macrostate; the labels of siblings are disjoint; the label of a parent is the (disjoint) union of the labels of its children, possibly with extra elements (the newcomers that have not yet entered any child). Each node is *marked* ($!$) or unmarked.
 
@@ -140,7 +140,7 @@ The state count $2^(O(n log n))$ arises from the Cayley-like bound on labelled, 
 
 === Piterman's Improvement
 
-#theorem(name: "Piterman 2006")[Safra's construction can be refined to produce a deterministic *parity* (rather than Rabin) automaton, also with $2^(O(n log n))$ states and $O(n)$ priorities.]
+*Theorem (Piterman 2006).* Safra's construction can be refined to produce a deterministic *parity* (rather than Rabin) automaton, also with $2^(O(n log n))$ states and $O(n)$ priorities.
 
 Piterman's variant uses *compact* Safra trees with positional re-numbering of names, yielding a deterministic parity automaton directly usable for game-solving. Schewe (2009) gave an alternative construction with the same asymptotic bound but better constants and a cleaner correctness proof via *history trees*.
 
@@ -150,7 +150,7 @@ Piterman's variant uses *compact* Safra trees with positional re-numbering of na
 $ phi ::= p | not phi | phi and phi | X phi | phi U phi $
 with the usual derived operators $F phi = "true" U phi$, $G phi = "not F "not phi$, $phi R psi = "not (not phi U "not psi)$. Semantics: $alpha, i tack.r phi$ is defined on positions of $alpha in (2^"AP")^omega$.
 
-#theorem(name: "Vardi--Wolper 1986")[For every LTL formula $phi$ there is a GBA $cal(A)_phi$ with $2^(O(|phi|))$ states such that $L(cal(A)_phi) = { alpha | alpha tack.r phi }$.]
+*Theorem (Vardi--Wolper 1986).* For every LTL formula $phi$ there is a GBA $cal(A)_phi$ with $2^(O(|phi|))$ states such that $L(cal(A)_phi) = { alpha | alpha tack.r phi }$.
 
 *Construction.* States are *consistent maximal sets* of subformulae of $phi$ (Hintikka-like elements). The transition relation enforces local consistency (e.g. $X psi in s arrow.r psi in s'$). The fairness sets handle until-eventualities: for each $psi_1 U psi_2$ in $"cl"(phi)$,
 $ F_(U,psi_1,psi_2) = { s | psi_2 in s or (psi_1 U psi_2) in.not s }, $
@@ -192,7 +192,7 @@ The *model-checking problem* for the $mu$-calculus, the *synthesis* of strategie
 
 A *parity game* is a tuple $G = (V_0, V_1, E, Omega)$ where $V = V_0 union.dot V_1$ is a finite set of positions partitioned by *owner* (player 0 = Even, player 1 = Odd), $E subset.eq V times V$ is the move relation (assumed total), and $Omega : V arrow.r {0, dots, d}$ is the priority function. From position $v$, the owner chooses an edge to a successor; an infinite play $v_0 v_1 v_2 dots$ is *winning for Even* <==> $max { Omega(v) | v in "Inf"(v_0 v_1 dots) }$ is even.
 
-#theorem(name: "Positional Determinacy; Emerson--Jutla 1991; Mostowski independently")[In every parity game, exactly one player has a winning strategy from each position, and the winning strategy can be chosen to be *positional* (memoryless): $sigma : V_i arrow.r V$ depending only on the current position.]
+*Theorem (Positional Determinacy; Emerson--Jutla 1991; Mostowski independently).* In every parity game, exactly one player has a winning strategy from each position, and the winning strategy can be chosen to be *positional* (memoryless): $sigma : V_i arrow.r V$ depending only on the current position.
 
 Positional determinacy means the winner of a parity game is decidable -- enumerate the finitely many positional strategies. The complexity, however, is the central open problem of the field.
 
@@ -228,7 +228,7 @@ The *alternation depth* of a formula counts nesting of alternating $mu / nu$ bin
 $ Sigma_0^mu subset.eq Pi_0^mu subset.eq Sigma_1^mu subset.eq Pi_1^mu subset.eq Sigma_2^mu subset.eq dots $
 of $L_mu$-fragments of bounded alternation depth.
 
-#theorem(name: "Bradfield 1998")[The alternation hierarchy of the modal $mu$-calculus is strict: for every $n$, there is a formula in $Sigma_(n+1)^mu$ not equivalent to any formula in $Pi_n^mu union Sigma_n^mu$.]
+*Theorem (Bradfield 1998).* The alternation hierarchy of the modal $mu$-calculus is strict: for every $n$, there is a formula in $Sigma_(n+1)^mu$ not equivalent to any formula in $Pi_n^mu union Sigma_n^mu$.
 
 Bradfield's proof uses the *parity game characterisation* of $L_mu$ model checking: $[| phi |]^cal(K)$ is decided by a parity game whose index equals the alternation depth of $phi$. A strict hierarchy of $L_mu$ corresponds to a strict hierarchy in the index of parity games needed to express them, witnessed by graph-theoretic separations. Arnold (1999) gave a substantially simpler proof using tree automata.
 
@@ -269,7 +269,7 @@ For *deterministic* parity / Rabin / Streett automata, universality, inclusion, 
 
 $omega$-regular languages occupy low levels of the *Borel hierarchy* on $Sigma^omega$ (with the product topology induced by clopen cylinders).
 
-#theorem(name: "Landweber 1969")[An $omega$-regular language $L$ is:]
+*Theorem (Landweber 1969).* An $omega$-regular language $L$ is:
 
 - *open* <==> $L = W Sigma^omega$ for some regular $W subset.eq Sigma^*$;
 - $G_delta$ (= countable intersection of opens, i.e. *safety*) <==> $L = lim(W)$ for some regular prefix-closed $W$;

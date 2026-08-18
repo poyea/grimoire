@@ -1,5 +1,3 @@
-#import "../template.typ": theorem
-
 = Subtyping and Polymorphism
 
 Subtyping is the principle that lets you pass a `Cat` to a function expecting an `Animal`. Polymorphism is the principle that lets a function operate uniformly across types it does not name. Where pure parametric polymorphism (System F) erases all type information at runtime and forbids any inspection, subtyping adds a *partial order* on types; the resulting interaction with type constructors, references, generics, and recursion is the source of three decades of language-design subtlety.
@@ -65,7 +63,7 @@ These three rules together (width, depth, permutation) characterise *structural*
 
 The function arrow does not behave covariantly in both positions.
 
-#theorem(name: "function subtyping")[$tau_1 arrow.r tau_2 lt.closed tau_1' arrow.r tau_2'$ <==> $tau_1' lt.closed tau_1$ and $tau_2 lt.closed tau_2'$.]
+*Theorem (function subtyping).* $tau_1 arrow.r tau_2 lt.closed tau_1' arrow.r tau_2'$ <==> $tau_1' lt.closed tau_1$ and $tau_2 lt.closed tau_2'$.
 
 The argument position is *contravariant*: to substitute for a function expecting $tau_1$, you need a function that accepts *at least* $tau_1$, i.e., one accepting any $tau_1' supset.eq tau_1$. The return position is *covariant*: your replacement may return *at most* what's expected.
 
@@ -140,7 +138,7 @@ The subtyping rule for bounded universals is *itself* contravariant in the bound
 
 === Undecidability of Full F$(lt.closed)$
 
-#theorem(name: "Pierce 1992, 1994")[Subtyping for full System F$(lt.closed)$ is undecidable.]
+*Theorem (Pierce 1992, 1994).* Subtyping for full System F$(lt.closed)$ is undecidable.
 
 Pierce reduces from the halting problem for two-counter machines, encoding counter states as deeply-nested bounded universals and counter operations as subtyping derivations. The non-termination of subtyping checks tracks the non-termination of the encoded machine.
 
@@ -177,7 +175,7 @@ For subtyping, the *coinductive* characterisation is fundamental. Define a relat
 - if $sigma = {ell_i : sigma_i}_(i in I)$ and $tau = {ell_j : tau_j}_(j in J)$ with $J subset.eq I$, then $sigma_j cal(R) tau_j$ for each $j in J$;
 - $dots$ (clauses for each connective).
 
-#theorem(name: "Amadio–Cardelli 1993")[The greatest simulation is the subtype relation on the infinite-tree unfoldings of recursive types.]
+*Theorem (Amadio–Cardelli 1993).* The greatest simulation is the subtype relation on the infinite-tree unfoldings of recursive types.
 
 The algorithmic content: subtyping is checked by *coinduction*; the algorithm maintains an *assumption set* of pairs known to be in $cal(R)$ and adds new pairs as it descends, succeeding when it would infinite-loop. Brandt and Henglein (1997) refined this to an efficient algorithm running in $O(n^2)$ on the size of the input types.
 
@@ -205,7 +203,7 @@ $ tau_1 inter tau_2 lt.closed tau_1 quad tau_1 inter tau_2 lt.closed tau_2 \
 
 Here intersection is the *greatest lower bound* in the subtype lattice.
 
-#theorem(name: "Coppo–Dezani–Venneri 1981; Pottinger 1980")[A $lambda$-term has an intersection type in a non-trivial system iff it is strongly normalising.]
+*Theorem (Coppo–Dezani–Venneri 1981; Pottinger 1980).* A $lambda$-term has an intersection type in a non-trivial system iff it is strongly normalising.
 
 Intersection types thus *characterise* termination, but at the price of *undecidable* type inference. The full system has no principal types and no decision procedure.
 
@@ -282,7 +280,7 @@ Rémy's *scoped labels* (1989; Leijen 2005 for effects) order the labels in a ro
 
 Categorical semantics of subtyping (Reynolds 1980, Mitchell 1988, Breazu-Tannen–Coquand–Gunter–Scedrov 1991): the subtype relation is interpreted by *faithful functors* between categories of types-as-objects. The subsumption rule becomes the action of a *coherence* requirement: two derivations of the same typing judgement, possibly using different chains of subsumptions, must yield *equal* terms after coercion insertion.
 
-#theorem(name: "coherence, Breazu-Tannen et al. 1991")[For F$(lt.closed)$ with kernel rule, the coercion semantics is coherent: the meaning of a term is independent of the derivation chosen.]
+*Theorem (coherence, Breazu-Tannen et al. 1991).* For F$(lt.closed)$ with kernel rule, the coercion semantics is coherent: the meaning of a term is independent of the derivation chosen.
 
 Without coherence, the *meaning* of a program would depend on which derivation the type-checker happened to find, a disaster for predictability. Languages with non-coherent subtype systems (Scala 2's implicit conversions, early TypeScript) have suffered the resulting confusion.
 

@@ -1,5 +1,3 @@
-#import "../template.typ": corollary, example, lemma, proof, theorem
-
 = Regular Languages: Proofs, Algorithms, and Advanced Theory
 
 == Myhill–Nerode: Full Proof and Constructive Content
@@ -8,7 +6,7 @@ The sketch in the earlier section omits two points that matter in practice: the
 *constructive* direction (building the DFA from a finite right-congruence) and the
 *canonical* direction (uniqueness of the minimal DFA). We prove these now in full.
 
-#theorem(name: "Myhill–Nerode, full statement")[For $L subset.eq Sigma^*$ the following are equivalent:]
+*Theorem (Myhill–Nerode, full statement).* For $L subset.eq Sigma^*$ the following are equivalent:
 
 (i) $L$ is regular.
 
@@ -72,11 +70,11 @@ whether $L$ is closed under right quotient (the condition for $L$ to be a *right
 
 *Proposition.* The Nerode equivalence classes are exactly the left quotients: $[u]_(equiv_L) = u^(-1) L$ as a *language* (the class of $u$ is characterised by the set of valid continuations). The states of the minimal DFA are thus precisely the distinct left quotients of $L$.
 
-#corollary[$L$ is regular <==> $L$ has finitely many distinct left quotients. This
+*Corollary.* $L$ is regular <==> $L$ has finitely many distinct left quotients. This
 gives an algorithm: compute $epsilon^(-1) L = L$, then $a^(-1) L$ for $a in Sigma$,
 then $(a b)^(-1) L$, etc., stopping when no new quotient appears. Termination is
 guaranteed by finiteness of the Nerode index; the resulting automaton is exactly the
-Brzozowski automaton.]
+Brzozowski automaton.
 
 === Equivalence Checking via Hopcroft–Karp
 
@@ -126,8 +124,8 @@ for the problem.
 
 == Brzozowski's Double-Reversal Minimisation
 
-#theorem(name: "Brzozowski 1962")[Given a DFA $M$ (or NFA) recognising $L$, the following
-procedure yields the *minimal DFA* for $L$:]
+*Theorem (Brzozowski 1962).* Given a DFA $M$ (or NFA) recognising $L$, the following
+procedure yields the *minimal DFA* for $L$:
 
 (1) Reverse all transitions and swap initial and accepting states to obtain an NFA $M^R$
     recognising $L^R$.
@@ -138,12 +136,12 @@ procedure yields the *minimal DFA* for $L$:]
 
 (4) Apply subset construction again: obtain the minimal DFA $D$ for $L$.
 
-#proof[The key lemma is: after subset construction, *every reachable state of the
+*Proof.* The key lemma is: after subset construction, *every reachable state of the
 resulting DFA is distinct* (i.e., the DFA is already *reduced*). This holds because
 the subset construction from a *deterministic* NFA (where each state is a subset of
 the original states) produces distinguishable states: a subset $S_1$ and $S_2$ of
 original states correspond to different acceptance behaviours on the reversed language
-precisely because their original states were reachable by different histories.]
+precisely because their original states were reachable by different histories.
 
 More precisely, for any NFA $N$, the DFA $D$ produced by subset construction from
 $N^R$ is *already* accessible (all states reachable from start) by construction. After
@@ -188,12 +186,12 @@ $"sh"(L) = min { "sh"(r) | L(r) = L }$.
 *Star-height problem.* Is the star-height of every regular language computable? Is the
 hierarchy strict (does each level add new languages)?
 
-#theorem(name: "Eggan 1963")[For every $k >= 0$ there exists a regular language requiring
+*Theorem (Eggan 1963).* For every $k >= 0$ there exists a regular language requiring
 star-height exactly $k$. One such language: let $L_k$ be defined by the regular
 expression $r_k$ where $r_0 = a$, $r_(k+1) = (r_k b^* r_k)^*$. The star-height
-of $L_k$ is exactly $k + 1$.]
+of $L_k$ is exactly $k + 1$.
 
-#theorem(name: "Hashiguchi 1988")[The star-height of a regular language is computable.]
+*Theorem (Hashiguchi 1988).* The star-height of a regular language is computable.
 
 *Proof outline.* Hashiguchi's proof constructs a decision procedure by translating the
 star-height question into membership in a finitely-based *finite-variable equation system*
@@ -222,15 +220,15 @@ language has generalised star-height $<= 1$.
 
 === Shepherdson's Crossing-Sequence Proof
 
-#theorem(name: "Shepherdson 1959")[Every two-way DFA can be simulated by a one-way DFA
-with at most $(|Q| + 1)^(|Q|)$ states.]
+*Theorem (Shepherdson 1959).* Every two-way DFA can be simulated by a one-way DFA
+with at most $(|Q| + 1)^(|Q|)$ states.
 
-#proof[Let $M = (Q, Sigma, delta, q_0, F)$ be a 2DFA reading input $\#a_1 a_2 dots a_n \#$.
+*Proof.* Let $M = (Q, Sigma, delta, q_0, F)$ be a 2DFA reading input $\#a_1 a_2 dots a_n \#$.
 For each input position $i$ ($0 <= i <= n+1$), define the *crossing sequence at $i$*
 as the sequence of states in which $M$'s head crosses the boundary between position $i-1$
 and $i$: $(q_(i_1), q_(i_2), dots, q_(i_r))$ where $q_(i_j)$ is the state of $M$ when
 the head crosses position $i$ for the $j$-th time. Consecutive crossings alternate
-direction (right then left then right ...).]
+direction (right then left then right ...).
 
 *Key observation.* The final output of $M$ on $a_1 dots.c a_n$ depends only on the
 crossing sequence at position $n+1$, i.e., whether it ever enters an accepting state
@@ -274,18 +272,18 @@ is a *fooling set* for $L$ if:
 (i) $x_i y_i in L$ for all $i$.
 (ii) For $i eq.not j$, either $x_i y_j in.not L$ or $x_j y_i in.not L$.
 
-#lemma[If $S$ is a fooling set for $L$ then the minimal DFA for $L$ has at least $|S|$ states.]
+*Lemma.* If $S$ is a fooling set for $L$ then the minimal DFA for $L$ has at least $|S|$ states.
 
-#proof[For each $i$, let $q_i = hat(delta)(q_0, x_i)$. Suppose $q_i = q_j$ for
+*Proof.* For each $i$, let $q_i = hat(delta)(q_0, x_i)$. Suppose $q_i = q_j$ for
 $i eq.not j$. Then $hat(delta)(q_0, x_i y_j) = hat(delta)(q_j, y_j) = hat(delta)(q_i, y_j)$
 and $hat(delta)(q_0, x_j y_i) = hat(delta)(q_i, y_i)$. Since $x_i y_i in L$ and
 $x_j y_j in L$, we have $q_i in F <==> hat(delta)(q_i, y_i) in F$. This forces
 both $x_i y_j$ and $x_j y_i$ to be in $L$, contradicting (ii). Hence $q_i eq.not q_j$
-for all $i eq.not j$.]
+for all $i eq.not j$. $square$
 
-#example[For $L = { a^n b^n | n >= 0 }$ (non-regular; the technique also applies
+*Example.* For $L = { a^n b^n | n >= 0 }$ (non-regular; the technique also applies
 to lower-bounding witness quotients): the fooling set ${ (a^i, b^i) | i >= 0 }$ has
-infinite size, confirming non-regularity.]
+infinite size, confirming non-regularity.
 
 For the *intersection* $L(M_1) inter L(M_2)$, the state complexity of the product
 DFA is $|Q_1| times |Q_2|$, and Yu–Zhuang–Salomaa (1994) proved this is *tight*: for every
@@ -297,7 +295,7 @@ from crossing-pair sequences.
 
 === The Theorem
 
-#theorem(name: "Eilenberg 1974, 1976")[There is a bijective correspondence between:]
+*Theorem (Eilenberg 1974, 1976).* There is a bijective correspondence between:
 
 - *Pseudovarieties of finite monoids* (classes closed under submonoids, quotient
   monoids, and finite direct products), and
@@ -321,13 +319,13 @@ the syntactic monoid is the *transition monoid* $M(M) = { hat(delta)(-, w) : Q a
 (the set of all transition functions induced by words, under composition). It is a
 submonoid of the full transformation monoid $T_Q$.
 
-#example(name: "parity language")[Let $L = { w in { a, b }^* | |w|_a equiv 0 mod 2 }$
+*Example (parity language).* Let $L = { w in { a, b }^* | |w|_a equiv 0 mod 2 }$
 (even number of $a$'s). The minimal DFA has 2 states ${ q_0, q_1 }$ with $q_0$
 accepting. Transition functions: $a$ maps $(q_0, q_1) |-> (q_1, q_0)$ (swap); $b$
 maps $(q_0, q_1) |-> (q_0, q_1)$ (identity). The transition monoid is
 ${ "id", "swap" } tilde.equiv ZZ slash 2 ZZ$ (the cyclic group of order 2). Since this is
 a *group* (every element has an inverse) and groups are *not* aperiodic
-(e.g., $"swap"^2 = "id"$ but $"swap"^1 eq.not "swap"^2$), $L$ is *not* star-free.]
+(e.g., $"swap"^2 = "id"$ but $"swap"^1 eq.not "swap"^2$), $L$ is *not* star-free.
 
 *Example (star-free: threshold counting).* The language $L = { w | |w|_a >= 1 }$,
 requiring at least one $a$, has a syntactic monoid with three elements: ${ [epsilon], [a], [b a^(-1) b] }$
@@ -372,8 +370,8 @@ forming a coherent system of elements in every finite quotient. A *pseudoidentit
 is an equation $u = v$ between pseudowords, interpreted in every finite monoid in a
 pseudovariety $bold(V)$. The *Reiterman theorem* (1982) states:
 
-#theorem(name: "Reiterman 1982")[Every pseudovariety of finite monoids is defined by a
-(possibly infinite) set of pseudoidentities.]
+*Theorem (Reiterman 1982).* Every pseudovariety of finite monoids is defined by a
+(possibly infinite) set of pseudoidentities.
 
 This is the Birkhoff HSP theorem carried into the finite setting via profinite completion.
 The pseudoidentity for *aperiodic* monoids: $x^omega = x^(omega+1)$ where $x^omega$
@@ -388,7 +386,7 @@ showing the corresponding pseudoidentities are decidable.
 
 === The Proof in Both Directions
 
-#theorem(name: "Büchi 1960; Elgot 1961; Trakhtenbrot 1962")[For $L subset.eq Sigma^*$:]
+*Theorem (Büchi 1960; Elgot 1961; Trakhtenbrot 1962).* For $L subset.eq Sigma^*$:
 
 $ L "is regular" <==> L "is definable in" "MSO"[<] $
 
@@ -396,8 +394,8 @@ where $"MSO"[<]$ uses first-order variables ranging over *positions*, second-ord
 variables ranging over *sets of positions*, the ordering $<$, and the predicates
 $Q_a(i)$ asserting position $i$ carries symbol $a$.
 
-#proof[By structural induction on the MSO formula $phi$,
-we construct a DFA (or NFA) $M_phi$ recognising ${ w | w models phi }$.]
+*Proof ($"MSO" =>$ regular).* By structural induction on the MSO formula $phi$,
+we construct a DFA (or NFA) $M_phi$ recognising ${ w | w models phi }$.
 
 - *Atomic $Q_a(i)$.* Label each position with its symbol and whether variable $i$ points
   there. The automaton carries an FO-variable assignment as state; state-space is polynomial
@@ -414,9 +412,9 @@ we construct a DFA (or NFA) $M_phi$ recognising ${ w | w models phi }$.]
 Each step yields a regular language; the procedure terminates since MSO formulas are
 well-founded. $square$
 
-#proof[Let $M = (Q = { q_1, dots, q_k }, Sigma, delta, q_0, F)$.
+*Proof (regular $=>$ $"MSO"$).* Let $M = (Q = { q_1, dots, q_k }, Sigma, delta, q_0, F)$.
 For word $w = a_1 dots a_n$ of length $n$, assert the existence of $k$ sets
-$X_1, dots, X_k$ (one per state) such that:]
+$X_1, dots, X_k$ (one per state) such that:
 
 $ forall i. "exactly one of" X_1(i), dots, X_k(i) "holds" $
 $ X_j (0) <==> q_j = q_0 quad ("start state") $
@@ -456,11 +454,11 @@ with states $Q$, and maintains $k$ non-negative integer counters. Transitions re
 an input symbol, test whether each counter is zero, and increment or decrement
 counters.
 
-#theorem(name: "Kannan–Lipton 1986")[The *reachability problem* for a single-counter machine
+*Theorem (Kannan–Lipton 1986).* The *reachability problem* for a single-counter machine
 (does the machine starting with counter value 0 ever reach a target configuration
 on a given word?) is solvable in polynomial space, hence in $"PSPACE"$. The *emptiness
 problem* (is the accepted language non-empty?) for 2-counter machines is undecidable
-(Minsky 1961).]
+(Minsky 1961).
 
 *Relevance to regularity.* Single-counter machine languages are exactly the *semilinear
 sets* over $Sigma^*$, precisely the *Parikh images* of regular languages. This means:
@@ -469,10 +467,10 @@ sets* over $Sigma^*$, precisely the *Parikh images* of regular languages. This m
 - But the *positional* information in regular languages is richer than counter
   machine languages when the ordering of symbols matters.
 
-#corollary[Deciding whether a regular language is *semilinear in a strong sense*
+*Corollary.* Deciding whether a regular language is *semilinear in a strong sense*
 (depends only on letter counts) reduces to checking whether its syntactic monoid is
 *commutative*, a decidable algebraic property. If $"Synt"(L)$ is commutative then
-$L$ is definable by Presburger arithmetic, hence semilinear.]
+$L$ is definable by Presburger arithmetic, hence semilinear.
 
 == Practical Algorithms: OCaml and Python Implementations
 

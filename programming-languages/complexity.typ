@@ -1,5 +1,3 @@
-#import "../template.typ": corollary, definition, proof, theorem
-
 = Complexity Theory
 
 Complexity theory classifies *decidable* problems by the resources required to
@@ -37,11 +35,11 @@ forced by the hierarchy theorems below.
 
 == Hierarchy Theorems
 
-#theorem(name: "Time Hierarchy, Hartmanis--Stearns 1965; sharpened Hennie--Stearns 1966")[
+*Theorem (Time Hierarchy, Hartmanis--Stearns 1965; sharpened Hennie--Stearns 1966).*
 If $f$ is time-constructible and $f(n) log f(n) = o(g(n))$, then $"DTIME"(f(n))
-subset.neq "DTIME"(g(n))$.]
+subset.neq "DTIME"(g(n))$.
 
-#proof(name: "sketch")[Construct a *diagonal* language]
+*Proof sketch.* Construct a *diagonal* language
 
 $ D = { chevron.l M, w chevron.r | M "is a DTM and" M "rejects" chevron.l M, w chevron.r "within" g(n) "steps"}. $
 
@@ -56,22 +54,22 @@ gap is $f(n)^2 = o(g(n))$ (Hartmanis--Stearns original); for RAM machines it
 collapses to $f(n) = o(g(n))$ (Cobham). Random-access models that simulate any TM
 in linear time achieve the cleanest hierarchy.
 
-#corollary[$"P" subset.eq."not" "EXP"$; in particular $"DTIME"(n) subset.neq
-"DTIME"(n^2)$, $"DTIME"(2^n) subset.neq "DTIME"(2^(2 n))$.]
+*Corollary.* $"P" subset.eq."not" "EXP"$; in particular $"DTIME"(n) subset.neq
+"DTIME"(n^2)$, $"DTIME"(2^n) subset.neq "DTIME"(2^(2 n))$.
 
-#theorem(name: "Space Hierarchy, Stearns--Hartmanis--Lewis 1965")[If $f$ is
+*Theorem (Space Hierarchy, Stearns--Hartmanis--Lewis 1965).* If $f$ is
 space-constructible and $f(n) = o(g(n))$, then $"DSPACE"(f(n)) subset.neq
 "DSPACE"(g(n))$. (No log factor: a $g$-space machine can directly simulate any
 $f$-space machine within its own space budget once it has a clock to prevent
 infinite loops; configurations are bounded by $2^(O(f))$ so a counter of that size
-suffices.)]
+suffices.)
 
-#corollary[$"L" subset.eq."not" "PSPACE"$, $"PSPACE" subset.eq."not" "EXPSPACE"$. We do
+*Corollary.* $"L" subset.eq."not" "PSPACE"$, $"PSPACE" subset.eq."not" "EXPSPACE"$. We do
 *not* know $"L" subset.eq."not" "P"$, $"P" subset.eq."not" "PSPACE"$, or $"P" subset.neq
-"NP"$ -- all are open.]
+"NP"$ -- all are open.
 
-#theorem(name: "Gap Theorem, Borodin 1972; Trakhtenbrot 1964")[For every total
-computable $r(n) gt.eq n$, there exists a computable $f(n)$ such that]
+*Theorem (Gap Theorem, Borodin 1972; Trakhtenbrot 1964).* For every total
+computable $r(n) gt.eq n$, there exists a computable $f(n)$ such that
 
 $ "DTIME"(f(n)) = "DTIME"(r(f(n))). $
 
@@ -79,10 +77,10 @@ So the hierarchy can have *arbitrarily large gaps* if $f$ is allowed to be
 pathologically non-constructible. The constructibility hypothesis in the hierarchy
 theorems is therefore essential, not cosmetic.
 
-#theorem(name: "Blum Speed-up, 1967")[There exists a recursive language $L$ such that
+*Theorem (Blum Speed-up, 1967).* There exists a recursive language $L$ such that
 for *every* DTM $M$ deciding $L$ in time $t_M (n)$, there is another DTM $M'$
 deciding $L$ in time $t_(M') (n) = O(log t_M (n))$ almost everywhere. In short,
-$L$ has *no asymptotically optimal algorithm*.]
+$L$ has *no asymptotically optimal algorithm*.
 
 The proof uses a priority-style diagonalisation over (machine, time bound) pairs.
 Speed-up languages are highly contrived, but the theorem demolishes naive hopes
@@ -113,15 +111,15 @@ unlikely and used as heuristic non-collapse evidence.
 
 == NP-Completeness: Cook--Levin
 
-#theorem(name: "Cook 1971, Levin 1973")[$"SAT" = { phi | phi "is a satisfiable
+*Theorem (Cook 1971, Levin 1973).* $"SAT" = { phi | phi "is a satisfiable
 Boolean formula" }$ is NP-complete: $"SAT" in "NP"$ and every $L in "NP"$
-Karp-reduces to $"SAT"$.]
+Karp-reduces to $"SAT"$.
 
-#proof(name: "tableau encoding")[Fix $L in "NP"$ decided by an NTM $M$ in time $p(n)$.
+*Proof (tableau encoding).* Fix $L in "NP"$ decided by an NTM $M$ in time $p(n)$.
 For input $x$ of length $n$, an *accepting tableau* is a $(p(n) + 1) times (p(n) + 1)$
 grid whose row $i$ is the configuration of $M$ at step $i$, with row $0$ being
 the start configuration on $x$. The reduction builds a CNF formula $phi_x$ whose
-satisfying assignments correspond exactly to accepting tableaux.]
+satisfying assignments correspond exactly to accepting tableaux.
 
 Variables (polynomially many in $n$):
 
@@ -173,8 +171,8 @@ only if $"NP" = "coNP"$.
 
 == Ladner's Theorem
 
-#theorem(name: "Ladner 1975")[If $"P" eq."not" "NP"$, then there exists an *NP-intermediate*
-language: $L in "NP" backslash "P"$ with $L$ not NP-complete.]
+*Theorem (Ladner 1975).* If $"P" eq."not" "NP"$, then there exists an *NP-intermediate*
+language: $L in "NP" backslash "P"$ with $L$ not NP-complete.
 
 *Proof idea.* Define $L = "SAT" inter cal(F)$ where $cal(F)$ is a recursively
 constructed set of formula sizes designed by *delayed diagonalisation*: at even
@@ -191,12 +189,12 @@ or in $"P"$.
 
 == Space Hierarchy: Savitch and Immerman--Szelepcsényi
 
-#theorem(name: "Savitch 1970")[For space-constructible $f(n) gt.eq log n$,]
+*Theorem (Savitch 1970).* For space-constructible $f(n) gt.eq log n$,
 
 $ "NSPACE"(f(n)) subset.eq "DSPACE"(f(n)^2). $
 
-#proof[Configurations of an $f$-space NTM are $2^(O(f))$ in number. Reachability
-in the configuration graph: define]
+*Proof.* Configurations of an $f$-space NTM are $2^(O(f))$ in number. Reachability
+in the configuration graph: define
 
 $ "REACH"(c_1, c_2, k) = "true <==>" c_2 "reachable from" c_1 "in" lt.eq 2^k "steps"$
 
@@ -208,28 +206,28 @@ Base case $k = 0$: $c_1 = c_2$ or $c_1 |-_M c_2$ in one step, checkable in space
 $O(f)$. Recursive depth is $log 2^(O(f)) = O(f)$. Each level pushes one $c$ of
 size $O(f)$ onto the stack. Total space: $O(f) dot O(f) = O(f^2)$. $square$
 
-#corollary[$"PSPACE" = "NPSPACE"$; $"NL" subset.eq "DSPACE"(log^2 n)$.]
+*Corollary.* $"PSPACE" = "NPSPACE"$; $"NL" subset.eq "DSPACE"(log^2 n)$.
 
-#theorem(name: "Immerman 1988, Szelepcsényi 1987 -- independent")[$"NSPACE"(f(n)) =
-"coNSPACE"(f(n))$ for $f(n) gt.eq log n$.]
+*Theorem (Immerman 1988, Szelepcsényi 1987 -- independent).* $"NSPACE"(f(n)) =
+"coNSPACE"(f(n))$ for $f(n) gt.eq log n$.
 
-#proof(name: "inductive counting")[Given a graph $G$ on $2^(O(f))$ configurations and a
+*Proof (inductive counting).* Given a graph $G$ on $2^(O(f))$ configurations and a
 source $s$, we show that "$t$ not reachable" is in NSPACE$(f)$. Suppose the exact
 count $r_i$ of vertices reachable from $s$ in $lt.eq i$ steps is *given*. Then
 $t$ is unreachable <==> in the set of $r_i$ reachable vertices, $t$ does not
 appear. An NTM guesses $r_i$ vertices, verifies each (by guessing a path of length
 $lt.eq i$ in $O(f)$ space), checks they are distinct and that none equals $t$,
-and counts.]
+and counts.
 
 To compute $r_(i + 1)$ from $r_i$: for each potential new vertex $v$, decide
 "reachable in $lt.eq i + 1$" by guessing whether $v$ is reachable in $lt.eq i$
 or $v$ is a neighbour of one of the $r_i$ vertices. Iterate from $r_0 = 1$ to
 $r_n$ where $n = 2^(O(f))$, storing only one $r_i$ at a time. Total space $O(f)$. $square$
 
-#corollary[$"NL" = "coNL"$. This was a major surprise: the NP/coNP analogue at
+*Corollary.* $"NL" = "coNL"$. This was a major surprise: the NP/coNP analogue at
 log-space level *collapses*. The result hints that the asymmetry between
 nondeterminism and co-nondeterminism may be a function of *time* bounds, not
-space bounds.]
+space bounds.
 
 == Randomised Complexity
 
@@ -246,20 +244,20 @@ Error amplification: $k$ independent repetitions plus majority vote reduce error
 to $2^(-Omega(k))$ in BPP, by Chernoff. So the constant $2/3$ can be replaced by
 $1 - 2^(-"poly")$ without change of class.
 
-#theorem(name: "Adleman 1978")[$"BPP" subset.eq "P/poly"$.]
+*Theorem (Adleman 1978).* $"BPP" subset.eq "P/poly"$.
 
-#proof[Amplify error to $< 2^(-(n + 1))$. By the union bound, for fixed input
+*Proof.* Amplify error to $< 2^(-(n + 1))$. By the union bound, for fixed input
 length $n$, at most a $2^n dot 2^(-(n + 1)) = 1/2$ fraction of random strings $r$
 fails on any input; in particular there exists an $r$ correct on *"all"* $2^n$
-inputs of length $n$. Hard-wire this $r$ as the advice string.]
+inputs of length $n$. Hard-wire this $r$ as the advice string. $square$
 
-#theorem(name: "Sipser 1983, Gács; Lautemann 1983")[$"BPP" subset.eq Sigma^p_2 inter
-Pi^p_2$.]
+*Theorem (Sipser 1983, Gács; Lautemann 1983).* $"BPP" subset.eq Sigma^p_2 inter
+Pi^p_2$.
 
-#proof(name: "Lautemann's covering trick")[Let $M$ be a BPP machine with error $< 2^(-n)$
+*Proof (Lautemann's covering trick).* Let $M$ be a BPP machine with error $< 2^(-n)$
 on inputs of length $n$, using $m = "poly"(n)$ random bits. Let $S_x = { r in
 {0, 1}^m | M(x, r) "accepts"}$. For $x in L$, $|S_x| gt.eq (1 - 2^(-n)) 2^m$; for
-$x in."not" L$, $|S_x| lt.eq 2^(-n) 2^m$. Claim:]
+$x in."not" L$, $|S_x| lt.eq 2^(-n) 2^m$. Claim:
 
 $ x in L arrow.l.r.double exists t_1, ..., t_m in {0, 1}^m forall r in {0, 1}^m exists i . r xor t_i in S_x. $
 
@@ -268,9 +266,9 @@ bound gives existence. If $|S_x|$ is small, $m$ shifts cover at most $m 2^(-n) 2
 < 2^m$, so some $r$ is missed. Resulting formula is $exists forall$, i.e.
 $Sigma^p_2$. Symmetrically $Pi^p_2$. $square$
 
-#theorem(name: "Impagliazzo--Wigderson 1997")[If some language in $"E"$ requires
+*Theorem (Impagliazzo--Wigderson 1997).* If some language in $"E"$ requires
 exponential-size circuits then $"BPP" = "P"$ -- *derandomisation* under
-plausible circuit lower bounds.]
+plausible circuit lower bounds.
 
 == Interactive Proofs
 
@@ -307,10 +305,10 @@ with the true polynomial at the chosen $r_i$; degree-$3n$ polynomials over
 $bb(F)_p$ disagree everywhere outside a $3 n / p$ fraction, so soundness error per
 round is $3 n \/ p$. Over $n$ rounds: $3 n^2 \/ p$, negligible. $square$
 
-#corollary(name: "LFKN")[$\#"SAT" in "IP"$, hence $"coNP" subset.eq "IP"$ (since $"coNP"
-lt.eq^p_T \#"SAT"$).]
+*Corollary (LFKN).* $\#"SAT" in "IP"$, hence $"coNP" subset.eq "IP"$ (since $"coNP"
+lt.eq^p_T \#"SAT"$).
 
-#theorem(name: "Shamir 1990")[$"IP" = "PSPACE"$.]
+*Theorem (Shamir 1990).* $"IP" = "PSPACE"$.
 
 *Sketch.* $"IP" subset.eq "PSPACE"$: an unbounded prover and poly-round verifier
 can be simulated by computing the optimal verifier-against-best-prover game tree,
@@ -391,29 +389,30 @@ Inclusions: $"NC"^k subset.eq "AC"^k subset.eq "TC"^k subset.eq "NC"^(k + 1)$.
 $"NC" = union.big_k "NC"^k$ captures *efficient parallelism*; problems in $"NC"$
 have $"polylog"$-time PRAM algorithms.
 
-#theorem(name: "Furst--Saxe--Sipser 1984; Yao 1985; Håstad 1986")[$"PARITY" in.not
+*Theorem (Furst--Saxe--Sipser 1984; Yao 1985; Håstad 1986).* $"PARITY" in.not
 "AC"^0$. More precisely, every depth-$d$ $"AC"^0$ circuit computing $"PARITY"_n$
-has size $2^(Omega(n^(1/(d - 1))))$.]
+has size $2^(Omega(n^(1/(d - 1))))$.
 
-#proof(name: "Håstad's switching lemma")[A random restriction $rho$ fixing all but a
+*Proof (Håstad's switching lemma).* A random restriction $rho$ fixing all but a
 $p$-fraction of inputs simplifies a depth-$d$ $"AC"^0$ circuit: with high
 probability each subcircuit becomes computable by a small *decision tree*, and
 alternating $"or"$/$"and"$ layers collapse. Iterate: a depth-$d$ circuit collapses to
 depth $d - 1$ after restriction. After $d - 1$ restrictions the circuit is a
-constant, but PARITY of any nonempty restriction is non-constant -- contradiction.]
+constant, but PARITY of any nonempty restriction is non-constant -- contradiction.
+$square$
 
 *Theorem (Razborov 1987, Smolensky 1987).* $"AC"^0 [p]$ ($"AC"^0$ augmented with
 $"MOD"_p$ gates, $p$ prime) cannot compute $"MOD"_q$ for $q$ a different prime.
 In particular $"AC"^0 [2]$ cannot compute $"MOD"_3$.
 
-#proof[Approximate each gate by a *low-degree polynomial* over $bb(F)_p$.
+*Proof.* Approximate each gate by a *low-degree polynomial* over $bb(F)_p$.
 Over $O(log n)$ depth this gives a degree-$"polylog"$ approximator for the
 entire circuit, agreeing with it on most inputs. But $"MOD"_q$ for $q eq."not" p$
 has full degree as a function $bb(F)_p^n -> bb(F)_p$; no low-degree polynomial
-agrees with it on a $1/2 + epsilon$ fraction.]
+agrees with it on a $1/2 + epsilon$ fraction. $square$
 
-#theorem(name: "Razborov 1985")[CLIQUE has no polynomial-size *monotone* circuits.
-Specifically, $k$-CLIQUE requires monotone circuits of size $n^(Omega(sqrt(k)))$.]
+*Theorem (Razborov 1985).* CLIQUE has no polynomial-size *monotone* circuits.
+Specifically, $k$-CLIQUE requires monotone circuits of size $n^(Omega(sqrt(k)))$.
 
 The proof method is the *approximation method*: replace each AND/OR gate by an
 approximator (a CNF/DNF of bounded size), bound how many errors approximation
@@ -425,9 +424,9 @@ were not.
 
 == The Natural Proofs Barrier
 
-#definition(name: "Razborov--Rudich 1997")[A *combinatorial property* $cal(P)_n
+*Definition (Razborov--Rudich 1997).* A *combinatorial property* $cal(P)_n
 subset.eq { f : {0, 1}^n -> {0, 1} }$ is *natural* against a class $cal(C)$ if it
-satisfies:]
+satisfies:
 
 + *Largeness*: $|cal(P)_n| gt.eq 2^(-O(n)) dot 2^(2^n)$; a random function has
   property $cal(P)_n$ with non-negligible probability.
@@ -435,9 +434,9 @@ satisfies:]
   given the truth table of $f$ (i.e. polynomial in the truth-table size).
 + *Usefulness*: $f in cal(P)_n => f in."not" cal(C)$.
 
-#theorem(name: "Razborov--Rudich 1997")[If pseudorandom function generators secure
+*Theorem (Razborov--Rudich 1997).* If pseudorandom function generators secure
 against $2^(n^epsilon)$-size circuits exist, then there is no natural proof of
-$cal(C) eq."not" "P/poly"$ for any superpolynomial $cal(C)$.]
+$cal(C) eq."not" "P/poly"$ for any superpolynomial $cal(C)$.
 
 *Proof intuition.* A constructive, large property is itself a polynomial-time
 *statistical test* distinguishing "random" functions from functions in $cal(C)$.
@@ -451,9 +450,9 @@ method, communication complexity) yield natural properties. To prove $"P" eq.not
 "NP"$ (or even $"NEXP" eq.not "P/poly"$) one must invent *non-natural* techniques
 -- e.g. *non-constructive* or *non-large*.
 
-#theorem(name: "Williams 2014")[$"NEXP" subset.eq.not "ACC"^0$. The proof *bypasses natural
+*Theorem (Williams 2014).* $"NEXP" subset.eq.not "ACC"^0$. The proof *bypasses natural
 proofs* by using a non-constructive ingredient: a faster-than-trivial satisfiability
-algorithm for $"ACC"^0$ circuits, combined with a Karp--Lipton style diagonalisation.]
+algorithm for $"ACC"^0$ circuits, combined with a Karp--Lipton style diagonalisation.
 
 Williams's blueprint -- "improved SAT algorithm for $cal(C)$ $=>$
 $"NEXP" subset.eq.not cal(C)$" -- is one of the few known routes around the barrier.
@@ -466,17 +465,17 @@ oracles also fail to separate $"P"$ from $"NP"$.
 
 == Descriptive Complexity
 
-#theorem(name: "Fagin 1974")[$"NP" = "ESO"$, where ESO is existential second-order
+*Theorem (Fagin 1974).* $"NP" = "ESO"$, where ESO is existential second-order
 logic: properties expressible as $exists R_1 dots exists R_k . Phi$ with $Phi$
-first-order and $R_i$ relation symbols.]
+first-order and $R_i$ relation symbols.
 
-#proof[$"ESO" subset.eq "NP"$: guess the relations $R_i$, verify $Phi$ in
+*Proof.* $"ESO" subset.eq "NP"$: guess the relations $R_i$, verify $Phi$ in
 poly-time. $"NP" subset.eq "ESO"$: an $"NP"$ computation on input encoded as a
-finite structure is captured by quantifying over a tableau relation.]
+finite structure is captured by quantifying over a tableau relation. $square$
 
-#theorem(name: "Immerman 1982, Vardi 1982")[$"P" = "FO + LFP"$ over *ordered*
+*Theorem (Immerman 1982, Vardi 1982).* $"P" = "FO + LFP"$ over *ordered*
 structures: properties expressible in first-order logic augmented with the least
-fixed-point operator.]
+fixed-point operator.
 
 The order is essential: without it, FO+LFP cannot count or even detect parity. On
 ordered finite structures, fixed-point iteration corresponds to polynomial-time
@@ -509,7 +508,7 @@ summing to zero requires time $n^(2 - o(1))$.
 ${0, 1}^d$ with $d = omega(log n)$, deciding whether $exists a in A, b in B$ with
 $a dot b = 0$ requires time $n^(2 - o(1))$.
 
-#theorem(name: "Williams 2005")[SETH $=>$ OV hypothesis.]
+*Theorem (Williams 2005).* SETH $=>$ OV hypothesis.
 
 *Corollaries via fine-grained reductions.*
 
@@ -554,7 +553,7 @@ existential and universal. A configuration accepts if it is existential and some
 successor accepts, or universal and every successor accepts. Define $"ATIME"$ and
 $"ASPACE"$ analogously.
 
-#theorem(name: "CKS 1981")[]
+*Theorem (CKS 1981).*
 
 - $"ATIME"(f) subset.eq "DSPACE"(f) subset.eq "ATIME"(f^2)$ for $f gt.eq log n$.
 - $"ASPACE"(f) = "DTIME"(2^(O(f)))$.
@@ -591,25 +590,25 @@ branching programs).
 
 == Counting Classes and \#P
 
-#definition(name: "Valiant 1979")[$\#"P"$ is the class of functions $f : Sigma^* -> NN$
+*Definition (Valiant 1979).* $\#"P"$ is the class of functions $f : Sigma^* -> NN$
 such that $f(x) = |{ y | V(x, y) "accepts" }|$ for some poly-time verifier $V$
-and polynomial bound on $|y|$. So $\#"P"$ counts NP-witnesses.]
+and polynomial bound on $|y|$. So $\#"P"$ counts NP-witnesses.
 
 *$\#"P"$-complete problems.* $\#"SAT"$ (count satisfying assignments), $\#"3SAT"$,
 $\#"HAMCYCLES"$, $"PERMANENT"$ (Valiant), $\#$-MATCHINGS, computing the partition
 function of the Ising model.
 
-#theorem(name: "Valiant 1979")[$"PERMANENT" in \#"P"$-complete -- even though it differs
+*Theorem (Valiant 1979).* $"PERMANENT" in \#"P"$-complete -- even though it differs
 from the determinant only in lacking signs, and determinant is in NC. *Proof
 sketch.* Encode 3-SAT as a matrix whose permanent equals the number of satisfying
 assignments times a known correction; gadgets enforce variable consistency and
-clause coverage.]
+clause coverage.
 
-#theorem(name: "Toda 1991")[$"PH" subset.eq "P"^(\#"P")$. So counting is at least as
+*Theorem (Toda 1991).* $"PH" subset.eq "P"^(\#"P")$. So counting is at least as
 hard as the whole polynomial hierarchy. *Proof.* Two-stage: first show $"PH"
 subset.eq "BP" dot plus.o "P"$ (probabilistic parity), then $plus.o "P" subset.eq
 #"P"$. Beneath the technicalities: counting modulo 2 plus randomisation
-simulates alternating quantifiers.]
+simulates alternating quantifiers.
 
 == Cryptographic Complexity and Trapdoors
 
@@ -623,14 +622,14 @@ Cryptography rests on average-case hardness assumptions stronger than $"P" eq.no
 - *Pseudorandom generators*: stretch $n$ bits to $n^omega(1)$ bits indistinguishable
   from uniform by poly-size circuits.
 
-#theorem(name: "Håstad--Impagliazzo--Levin--Luby 1999")[OWFs exist iff PRGs exist iff
-PRFs exist.]
+*Theorem (Håstad--Impagliazzo--Levin--Luby 1999).* OWFs exist iff PRGs exist iff
+PRFs exist.
 
-#theorem[Depending on which assumptions hold,
+*Theorem (Impagliazzo 1995, "five worlds").* Depending on which assumptions hold,
 we live in one of *Algorithmica* ($"P" = "NP"$), *Heuristica* ($"P" eq."not" "NP"$
 but average-case easy), *Pessiland* (NP hard on average, no OWFs), *Minicrypt*
 (OWFs but no public-key), or *Cryptomania* (trapdoor permutations). All but
-Cryptomania are consistent with our current knowledge.]
+Cryptomania are consistent with our current knowledge.
 
 == Communication Complexity
 
@@ -638,8 +637,8 @@ Two parties Alice and Bob hold inputs $x, y$ and wish to compute $f(x, y)$ with
 minimum communication. Models: deterministic $D(f)$, nondeterministic $N(f)$,
 randomised $R(f)$, quantum $Q(f)$.
 
-#theorem(name: "Yao 1979")[$D("EQ")_n = n$: equality testing requires $n$ bits
-deterministically. $R("EQ")_n = O(log n)$ via hashing.]
+*Theorem (Yao 1979).* $D("EQ")_n = n$: equality testing requires $n$ bits
+deterministically. $R("EQ")_n = O(log n)$ via hashing.
 
 *Disjointness.* $f("DISJ")(x, y) = 1 arrow.l.r.double x inter y = emptyset$ for
 $x, y subset.eq [n]$. *Theorem (Kalyanasundaram--Schnitger 1992; Razborov 1992).*
@@ -695,8 +694,8 @@ $k$-local Hamiltonian to inverse-polynomial precision) is QMA-complete for $k gt
 - $"VP" subset.eq "VNP"$; *Valiant's hypothesis*: $"VP" eq."not" "VNP"$, the
   algebraic analogue of $"P" eq."not" "NP"$.
 
-#theorem(name: "Valiant 1979")[$"PERMANENT" in "VNP"$-complete (over any field of
-characteristic $eq."not" 2$); $"DETERMINANT" in "VP"$.]
+*Theorem (Valiant 1979).* $"PERMANENT" in "VNP"$-complete (over any field of
+characteristic $eq."not" 2$); $"DETERMINANT" in "VP"$.
 
 *Geometric complexity theory* (Mulmuley--Sohoni 2001) attempts to prove $"VP"
 eq.not "VNP"$ via representation theory of $"GL"_n$: separate orbit closures of

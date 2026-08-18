@@ -1,4 +1,4 @@
-#import "../template.typ": corollary, definition, example, lemma, proof, proposition, theorem, xref
+#import "../template.typ": xref
 
 = Automata Learning
 
@@ -14,9 +14,9 @@ Three classical learning frameworks structure the field.
 
 A *learner* receives an infinite sequence of examples (or examples and counterexamples) from an unknown language $L$ in a class $cal(C)$ and outputs a hypothesis after each example. The learner *identifies $cal(C)$ in the limit* if for every $L in cal(C)$ and every fair enumeration, after finitely many steps the hypothesis stabilizes at a correct representation of $L$.
 
-#theorem(name: "Gold 1967")[No *superfinite* class -- one containing every finite language and at least one infinite language -- is identifiable in the limit from *positive data only*.]
+*Theorem (Gold 1967).* No *superfinite* class -- one containing every finite language and at least one infinite language -- is identifiable in the limit from *positive data only*.
 
-#theorem(name: "Gold 1967")[Every class with a *characteristic sample* of polynomial size is *PAC-learnable* (with an appropriate uniformity).]
+*Theorem (Gold 1967).* Every class with a *characteristic sample* of polynomial size is *PAC-learnable* (with an appropriate uniformity).
 
 So regular languages are not learnable from text alone, but are learnable from text-and-counterexamples. This is the gateway result for active learning.
 
@@ -28,9 +28,9 @@ in time and sample size polynomial in $1/epsilon, 1/delta$, and the size of $c$.
 
 The PAC framework abstracts away from any particular distribution and replaces "identify exactly" with "approximate w.h.p."
 
-#theorem(name: "Pitt--Warmuth 1989")[Learning DFAs in the PAC model with a *proper* hypothesis (DFA) is NP-hard.]
+*Theorem (Pitt--Warmuth 1989).* Learning DFAs in the PAC model with a *proper* hypothesis (DFA) is NP-hard.
 
-#theorem(name: "Kearns--Valiant 1994")[PAC-learning DFAs (even with *improper* representations) is as hard as breaking certain cryptographic problems: specifically, *learning DFAs* PAC-reduces to *inverting RSA* and *factoring Blum integers*.]
+*Theorem (Kearns--Valiant 1994).* PAC-learning DFAs (even with *improper* representations) is as hard as breaking certain cryptographic problems: specifically, *learning DFAs* PAC-reduces to *inverting RSA* and *factoring Blum integers*.
 
 So passive PAC learning of DFAs is essentially as hard as cryptanalysis -- which is why active learning, where the learner can *query* the teacher, was pursued.
 
@@ -101,15 +101,15 @@ def L_star(MQ, EQ, Sigma):
 
 === Correctness and Complexity
 
-#theorem(name: "Angluin 1987")[$L^*$ terminates and returns the minimal DFA for $L$ in
+*Theorem (Angluin 1987).* $L^*$ terminates and returns the minimal DFA for $L$ in
 $ O(|Sigma| n^2 m + n |Sigma|) " membership queries", quad O(n) " equivalence queries", $
-where $n$ is the number of states of the minimal DFA and $m$ is the length of the longest counterexample.]
+where $n$ is the number of states of the minimal DFA and $m$ is the length of the longest counterexample.
 
-#proof(name: "sketch, termination")[The number of distinct rows $|{ "row"(s) | s in S }|$ never exceeds $n$. Each iteration either adds a row (bounded by $n$) or adds an experiment that distinguishes a previously merged pair (bounded by $n - 1$). Each equivalence query either succeeds or contributes a counterexample that produces a strict increase in the number of distinct rows.]
+*Proof sketch (termination).* The number of distinct rows $|{ "row"(s) | s in S }|$ never exceeds $n$. Each iteration either adds a row (bounded by $n$) or adds an experiment that distinguishes a previously merged pair (bounded by $n - 1$). Each equivalence query either succeeds or contributes a counterexample that produces a strict increase in the number of distinct rows. $square$
 
-#proof(name: "sketch, correctness")[When the table is closed and consistent, the hypothesis DFA respects all observed behaviours; an equivalence query returning "yes" certifies correctness.]
+*Proof sketch (correctness).* When the table is closed and consistent, the hypothesis DFA respects all observed behaviours; an equivalence query returning "yes" certifies correctness. $square$
 
-#theorem(name: "Angluin 1987")[The class of regular languages is *learnable* in polynomial time from MQs and EQs.]
+*Theorem (Angluin 1987).* The class of regular languages is *learnable* in polynomial time from MQs and EQs.
 
 === Worked Example
 
@@ -171,7 +171,7 @@ A *Mealy machine* is a DFA with output: $delta : Q times Sigma arrow.r Q$ and ou
 
 *Adaptation.* Replace membership queries with *output queries* $"OQ"(w) in Gamma$ returning the output sequence; replace the bit-valued table $T : (S union S Sigma) times E arrow.r {0, 1}$ with $T : (S union S Sigma) times E arrow.r Gamma^*$.
 
-#theorem(name: "Niese 2003; Shahbaz--Groz 2009")[$L^*_M$ (Mealy variant) learns the minimal Mealy machine in $O(|Sigma| n^2 m)$ output queries.]
+*Theorem (Niese 2003; Shahbaz--Groz 2009).* $L^*_M$ (Mealy variant) learns the minimal Mealy machine in $O(|Sigma| n^2 m)$ output queries.
 
 Industrial deployments: bank-card EMV protocol fuzzing (Aarts--de Ruiter--Poll 2013), TLS state machine fingerprinting (de Ruiter--Poll 2015), banking-app analysis.
 
@@ -187,7 +187,7 @@ Implementation: *RALib*, building on LearnLib.
 
 *Nominal automata* (Bojańczyk--Klin--Lasota 2014) admit countably many states up to permutations of an infinite atom set. They subsume register automata, capturing data languages where only equality between atoms matters.
 
-#theorem(name: "Moerman--Sammartino--Silva--Klin--Szynwelski 2017")[Active learning of nominal regular languages is decidable and exhibits polynomial query complexity in the *orbit-finite* state count. Implementation: *NLambda* (Haskell).]
+*Theorem (Moerman--Sammartino--Silva--Klin--Szynwelski 2017).* Active learning of nominal regular languages is decidable and exhibits polynomial query complexity in the *orbit-finite* state count. Implementation: *NLambda* (Haskell).
 
 == Learning NFAs and Residual Automata
 
@@ -228,7 +228,7 @@ For *probabilistic automata* (cf. _Weighted and Probabilistic Automata_) or *hid
 
 The *Hankel matrix* of a stochastic language $L : Sigma^* arrow.r [0, 1]$ is the infinite matrix $H[u, v] = L(u v)$. A celebrated result:
 
-#theorem(name: "Fliess 1974, weighted-automata version")[The rank of $H$ equals the minimum number of states of a weighted automaton recognizing $L$.]
+*Theorem (Fliess 1974, weighted-automata version).* The rank of $H$ equals the minimum number of states of a weighted automaton recognizing $L$.
 
 The spectral algorithm:
 
@@ -236,7 +236,7 @@ The spectral algorithm:
 2. Compute an SVD: $hat(H) approx U_k Sigma_k V_k^T$.
 3. Recover transition operators via $hat(A)_a = U_k^+ hat(H)_a V_k^T (Sigma_k)^(-1)$ where $hat(H)_a[u, v] = L(u a v)$.
 
-#theorem(name: "Hsu--Kakade--Zhang 2012")[For HMMs with $n$ states and observations from a discrete alphabet, the spectral method recovers parameters (in observation-operator form, sufficient for prediction) with sample complexity $"poly"(n, 1/epsilon, 1/sigma_n)$, where $sigma_n$ is the smallest singular value of $H_k$.]
+*Theorem (Hsu--Kakade--Zhang 2012).* For HMMs with $n$ states and observations from a discrete alphabet, the spectral method recovers parameters (in observation-operator form, sufficient for prediction) with sample complexity $"poly"(n, 1/epsilon, 1/sigma_n)$, where $sigma_n$ is the smallest singular value of $H_k$.
 
 === Method of Moments for Latent-Variable Models
 
@@ -250,9 +250,9 @@ The *Regular Positive and Negative Inference* algorithm (Oncina--García 1992) i
 2. Process state pairs in lexicographic order; attempt to merge; reject merges that would accept some $w in S_-$.
 3. Return the result.
 
-#theorem(name: "Oncina--García 1992")[RPNI identifies any regular language in the limit from a *complete* sample (a sample distinguishing every pair of states in the minimal DFA).]
+*Theorem (Oncina--García 1992).* RPNI identifies any regular language in the limit from a *complete* sample (a sample distinguishing every pair of states in the minimal DFA).
 
-#theorem(name: "de la Higuera 1997")[The *characteristic sample* required for RPNI has polynomial size in the minimal DFA. Hence regular languages are *polynomially identifiable in the limit from polynomial data* under RPNI.]
+*Theorem (de la Higuera 1997).* The *characteristic sample* required for RPNI has polynomial size in the minimal DFA. Hence regular languages are *polynomially identifiable in the limit from polynomial data* under RPNI.
 
 Implementation: *gi-toolbox*, *flexfringe*.
 
@@ -304,17 +304,17 @@ Recurrent neural networks (LSTMs, GRUs) learn to classify sequences with interna
 2. Use $L^*$ with the RNN as the *membership oracle* (`MQ(w)` returns the RNN's classification) and a counterexample-guided refinement scheme as the equivalence oracle (find $w$ where the extracted DFA disagrees with the RNN).
 3. Refine the partition when counterexamples force splits.
 
-#theorem(name: "Weiss--Goldberg--Yahav 2018, empirical")[For RNNs trained on regular languages, the extracted DFA frequently matches the ground-truth DFA exactly. For RNNs trained on context-free or non-regular languages, the extracted DFA is a regular over-/under-approximation.]
+*Theorem (Weiss--Goldberg--Yahav 2018, empirical).* For RNNs trained on regular languages, the extracted DFA frequently matches the ground-truth DFA exactly. For RNNs trained on context-free or non-regular languages, the extracted DFA is a regular over-/under-approximation.
 
 This is the most striking modern application: a 1987 learning algorithm distills 21st-century neural networks into interpretable finite-state controllers.
 
 == Connections to Cryptography and Lower Bounds
 
-#theorem(name: "Kearns--Valiant 1994; Angluin--Kharitonov 1995")[PAC-learning *DFAs*, even with arbitrary polynomial-time evaluable hypotheses, is *as hard as* breaking certain pseudorandom function families. Specifically, a PAC-learner for DFAs would yield polynomial-time algorithms for inverting RSA or breaking Blum--Micali generators.]
+*Theorem (Kearns--Valiant 1994; Angluin--Kharitonov 1995).* PAC-learning *DFAs*, even with arbitrary polynomial-time evaluable hypotheses, is *as hard as* breaking certain pseudorandom function families. Specifically, a PAC-learner for DFAs would yield polynomial-time algorithms for inverting RSA or breaking Blum--Micali generators.
 
 This is the strongest lower bound in computational learning theory and explains why active learning is essential: the equivalence query is what defeats cryptographic hardness, by giving the learner exact information about hypothesis errors.
 
-#theorem(name: "Pitt--Warmuth 1989")[Approximating the minimum DFA consistent with a given sample within any polynomial factor is NP-hard.]
+*Theorem (Pitt--Warmuth 1989).* Approximating the minimum DFA consistent with a given sample within any polynomial factor is NP-hard.
 
 == Complexity Landscape
 
@@ -391,9 +391,9 @@ The quotient $Sigma^* slash tilde_L$ is finite <==> $L$ is regular, and its size
 
 An $L^*$ observation table $(S, E, T)$ approximates the Myhill--Nerode quotient: rows of $S$ correspond to candidate equivalence classes, and entries are distinguishing tests with the experiments $E$. Closure ensures every observed successor row has a representative in $S$. Consistency ensures the row map is a *congruence* with respect to right-extension, so transitions are well-defined.
 
-#lemma(name: "Angluin 1987")[If $(S, E, T)$ is closed and consistent, the hypothesis DFA $cal(H)(S, E, T)$ has at most $|"distinct rows in" S|$ states. If at termination the hypothesis equals the minimal DFA of $L$, then $|"states"| = |Sigma^* slash tilde_L|$.]
+*Lemma (Angluin 1987).* If $(S, E, T)$ is closed and consistent, the hypothesis DFA $cal(H)(S, E, T)$ has at most $|"distinct rows in" S|$ states. If at termination the hypothesis equals the minimal DFA of $L$, then $|"states"| = |Sigma^* slash tilde_L|$.
 
-#lemma(name: "Angluin 1987")[If $cal(H)(S, E, T) eq."not" L$ and the equivalence query returns counterexample $w$, then adding the prefixes of $w$ to $S$ and refilling either (i) breaks closure (forcing a new row), or (ii) breaks consistency (forcing a new experiment); in either case the next hypothesis has strictly more distinct rows.]
+*Lemma (Angluin 1987).* If $cal(H)(S, E, T) eq."not" L$ and the equivalence query returns counterexample $w$, then adding the prefixes of $w$ to $S$ and refilling either (i) breaks closure (forcing a new row), or (ii) breaks consistency (forcing a new experiment); in either case the next hypothesis has strictly more distinct rows.
 
 == Extended Topic: Counterexample Decomposition
 
@@ -425,7 +425,7 @@ The *Iterative AGAR* loop refines $A$ via counterexamples from either the verifi
 
 *Visibly pushdown languages* (Alur--Madhusudan 2004) restrict pushdown automata so that the input symbol determines whether to push, pop, or no-op. The class enjoys closure under Boolean operations and decidable inclusion, recovering many DFA-like properties.
 
-#theorem(name: "Kumar--Madhusudan--Viswanathan 2007")[VPLs are *learnable in polynomial time* via an $L^*$-style algorithm querying membership and equivalence of visibly pushdown languages. The observation table is replaced by a *call/return* table tracking call-symbol equivalence classes paired with return-context equivalence classes.]
+*Theorem (Kumar--Madhusudan--Viswanathan 2007).* VPLs are *learnable in polynomial time* via an $L^*$-style algorithm querying membership and equivalence of visibly pushdown languages. The observation table is replaced by a *call/return* table tracking call-symbol equivalence classes paired with return-context equivalence classes.
 
 Applications: learning XML document type definitions, recursive program contracts.
 
@@ -440,7 +440,7 @@ The Hsu--Kakade--Zhang spectral algorithm for HMMs generalizes to *probabilistic
 3. Set $hat(M)(a) = U_n^+ hat(H)_a V_n (Sigma_n)^(-1)$.
 4. Estimate initial and terminal vectors from $hat(H)$'s first row/column.
 
-#theorem(name: "Bailly--Denis--Ralaivola 2009")[The recovered WA approximates the target stochastic language with error decreasing as $O(1 slash sqrt(N))$ in the sample size $N$, with a problem-dependent constant inversely proportional to the smallest singular value $sigma_n$.]
+*Theorem (Bailly--Denis--Ralaivola 2009).* The recovered WA approximates the target stochastic language with error decreasing as $O(1 slash sqrt(N))$ in the sample size $N$, with a problem-dependent constant inversely proportional to the smallest singular value $sigma_n$.
 
 The method is *consistent* but does not in general produce a probabilistic automaton: the recovered weights may be negative. Post-hoc projection onto the probabilistic simplex is heuristic; *non-negative spectral learning* methods (Glaude--Pietquin 2016) address this with constrained optimization.
 
@@ -452,7 +452,7 @@ The connection between MDL (minimum description length) and DFA inference yields
 
 == Extended Topic: Learning under Membership-Only Access
 
-#theorem(name: "Angluin 1981")[Regular languages are *not* learnable in polynomial time from membership queries alone (no equivalence oracle), even with arbitrary prior knowledge of the alphabet.]
+*Theorem (Angluin 1981).* Regular languages are *not* learnable in polynomial time from membership queries alone (no equivalence oracle), even with arbitrary prior knowledge of the alphabet.
 
 *Counterexample.* The class of languages ${L_w | w in {0, 1}^n}$ where $L_w = {w}$ requires $2^n$ membership queries in the worst case to distinguish among $2^n$ candidates.
 
@@ -496,9 +496,9 @@ Implemented in *AALpy*. Used for learning network protocols with random behaviou
 
 == Extended Topic: Lower Bounds for Equivalence Queries
 
-#theorem(name: "Balcázar--Diaz--Gavaldà--Watanabe 1991")[Any algorithm learning DFAs in the MAT model requires $Omega(n)$ equivalence queries in the worst case, matching the $L^*$/TTT upper bound.]
+*Theorem (Balcázar--Diaz--Gavaldà--Watanabe 1991).* Any algorithm learning DFAs in the MAT model requires $Omega(n)$ equivalence queries in the worst case, matching the $L^*$/TTT upper bound.
 
-#theorem(name: "Hellerstein--Pillaipakkamnatt--Raghavan--Wilkins 1996")[The class of *linear-threshold functions* requires $Omega(n)$ equivalence queries even given polynomially many membership queries.]
+*Theorem (Hellerstein--Pillaipakkamnatt--Raghavan--Wilkins 1996).* The class of *linear-threshold functions* requires $Omega(n)$ equivalence queries even given polynomially many membership queries.
 
 These lower bounds confirm that the EQ count of mature active-learning algorithms is information-theoretically optimal.
 

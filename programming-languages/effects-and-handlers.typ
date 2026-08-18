@@ -1,5 +1,3 @@
-#import "../template.typ": definition, theorem
-
 = Effects and Handlers
 
 A *pure* function returns a value and does nothing else. An *effectful* computation may also read state, write to disk, throw an exception, fork a thread, sample a random number, or yield control to a scheduler. The history of typed functional programming is, to a first approximation, the history of how to talk about effects without giving up the reasoning principles that purity affords: $beta$-reduction, equational reasoning, parametricity, separate compilation.
@@ -26,7 +24,7 @@ This insight generalises. Effects are *first-class data* described by a type con
 
 Moggi's *Notions of computation and monads* observed that the categorical notion of a monad gives a uniform algebraic structure for computations that produce a value of type $A$.
 
-#definition[A *monad* in the Kleisli sense is a type constructor $T : * arrow.r *$ equipped with:]
+*Definition.* A *monad* in the Kleisli sense is a type constructor $T : * arrow.r *$ equipped with:
 
 - $"return" : forall alpha . alpha arrow.r T alpha$: embed a pure value;
 - $"bind" : forall alpha beta . T alpha arrow.r (alpha arrow.r T beta) arrow.r T beta$: sequence a computation with a continuation;
@@ -375,7 +373,7 @@ reset { 1 + shift { k -> k (k 10) } }
   ==>  whole expression yields 12
 ```
 
-#theorem(name: "Forster–Kammar–Lindley–Pretnar 2017")[Algebraic effects with handlers and multi-prompt delimited continuations are mutually macro-expressible: each can encode the other with a local syntactic transformation.]
+*Theorem (Forster–Kammar–Lindley–Pretnar 2017).* Algebraic effects with handlers and multi-prompt delimited continuations are mutually macro-expressible: each can encode the other with a local syntactic transformation.
 
 The intuition: a `perform` is a `shift` to the nearest matching `reset`-with-handler-clause; the handler's pattern-matching on the operation is the body of the `reset`.
 
@@ -403,7 +401,7 @@ Effect handlers and substructural types interact in deep ways.
 
 Conversely, languages without effect handlers but with linear types must encode effects manually: Linear Haskell's `IO` is still a monad, not a handler.
 
-#theorem(name: "informal, folklore")[In an effect-typed language with handlers, a function with *empty* effect row is referentially transparent: $f space x$ may be replaced by its value freely, equational reasoning is sound.]
+*Theorem (informal, folklore).* In an effect-typed language with handlers, a function with *empty* effect row is referentially transparent: $f space x$ may be replaced by its value freely, equational reasoning is sound.
 
 This is the modern restatement of Wadler's original purity guarantee, now mediated through the effect row rather than the `IO` type constructor.
 
