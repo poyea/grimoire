@@ -1700,8 +1700,10 @@ map.reserve(1000);  // Pre-allocate buckets for 1000 elements
 
 == Further Reading
 
-Bloch, J. (2018). _Effective Java_, 3rd ed. Addison-Wesley. (The standard reference on idiomatic object design in Java.)
+Stroustrup, B. (2013). _The C++ Programming Language_, 4th ed. Addison-Wesley. (Reference treatment of the class model and object semantics.)
 
-Gosling, J., Joy, B., Steele, G., Bracha, G., & Buckley, A. _The Java Language Specification_. Oracle. (Normative semantics for the language constructs in this chapter.)
+Meyers, S. (2014). _Effective Modern C++_. O'Reilly. (Move semantics, resource management, and the idioms this chapter relies on.)
 
-Horstmann, C. S. (2022). _Core Java, Volume I: Fundamentals_, 12th ed. Pearson. (Thorough treatment of the type system and class model.)
+Sutter, H., & Alexandrescu, A. (2004). _C++ Coding Standards_. Addison-Wesley. (Rules for class design, inheritance, and interfaces.)
+
+ISO/IEC 14882. _Programming Languages --- C++_. (Normative semantics for construction, destruction, and virtual dispatch.)

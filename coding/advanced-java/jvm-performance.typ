@@ -1304,8 +1304,10 @@ _See also: CPU Architecture book, Chapter on Branch Prediction for cache and bra
 
 == Further Reading
 
-Oaks, S. (2020). _Java Performance_, 2nd ed. O'Reilly. (Systematic coverage of JIT, GC, and heap tuning.)
+Boehm, H.-J., & Adve, S. V. (2008). "Foundations of the C++ Concurrency Memory Model." PLDI. (Why the memory model is specified as it is, and what the orderings guarantee.)
 
-Gregg, B. (2020). _Systems Performance_, 2nd ed. Addison-Wesley. (Methodology and OS-level observability that JVM tuning sits on top of.)
+Williams, A. (2019). _C++ Concurrency in Action_, 2nd ed. Manning. (Chapters 5 and 7 on the memory model and lock-free performance.)
 
-Shipilev, A. _JMH: Java Microbenchmark Harness_. OpenJDK. (The sanctioned way to benchmark on a JIT runtime, and why naive timing loops mislead.)
+Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat. (Cache behaviour and false sharing, the substrate for these measurements.)
+
+Fog, A. _Software Optimization Resources_. Technical University of Denmark. (Instruction tables and microarchitecture manuals for cycle-level reasoning.)

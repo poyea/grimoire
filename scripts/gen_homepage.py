@@ -113,13 +113,26 @@ def chapters(slug: str) -> list[tuple[str, list[str]]]:
     """Return [(chapter title, [subheadings])] in include order."""
     root_typ = ROOT / f"{slug}.typ"
     out = []
-    for path in INCLUDE_RE.findall(root_typ.read_text(encoding="utf-8")):
-        text = (ROOT / path).read_text(encoding="utf-8")
-        m = HEADING_RE.search(text)
-        if not m:
-            sys.exit(f"error: no `= Heading` in {path}")
-        out.append((m.group(1).strip(),
-                    [s.strip() for s in SUBHEAD_RE.findall(text)]))
+
+    def walk(typ: Path):
+        """Emit chapters in include order, descending into nested includes.
+
+        Includes resolve relative to the including file: coding.typ pulls
+        in distributed-algorithms.typ, which itself includes
+        advanced-java/*.typ. Reading only the root file's includes drops
+        those nine chapters from the site even though they ship in the PDF.
+        """
+        for raw in INCLUDE_RE.findall(typ.read_text(encoding="utf-8")):
+            target = typ.parent / raw
+            text = target.read_text(encoding="utf-8")
+            m = HEADING_RE.search(text)
+            if not m:
+                sys.exit(f"error: no `= Heading` in {raw}")
+            out.append((m.group(1).strip(),
+                        [s.strip() for s in SUBHEAD_RE.findall(text)]))
+            walk(target)
+
+    walk(root_typ)
     if not out:
         sys.exit(f"error: no includes found in {root_typ}")
     return out

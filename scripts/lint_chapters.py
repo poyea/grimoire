@@ -71,20 +71,53 @@ def count_words(p: Path) -> int:
                            errors="replace").split())
 
 
-def parse_includes(subject_typ: Path) -> list[str]:
-    text = subject_typ.read_text(encoding="utf-8")
-    return INCLUDE_RE.findall(text)
+def parse_includes(subject_typ: Path, root: Path
+                   ) -> tuple[list[str], list[tuple[str, str]]]:
+    """Every chapter reachable from a subject file, following nesting.
+
+    Includes nest and resolve relative to the *including* file, not the
+    repo root: coding.typ includes coding/distributed-algorithms.typ,
+    which itself includes advanced-java/*.typ. A single-level scan misses
+    those nine chapters entirely even though they ship in the PDF.
+
+    Returns (repo-relative paths that exist, [(source, raw include)] that
+    do not).
+    """
+    seen: set[str] = set()
+    found: list[str] = []
+    broken: list[tuple[str, str]] = []
+    stack = [subject_typ]
+    while stack:
+        cur = stack.pop()
+        try:
+            text = cur.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        src = cur.relative_to(root).as_posix()
+        for raw in INCLUDE_RE.findall(text):
+            target = (cur.parent / raw).resolve()
+            try:
+                rel = target.relative_to(root).as_posix()
+            except ValueError:
+                broken.append((src, raw))
+                continue
+            if rel in seen:
+                continue
+            seen.add(rel)
+            if not target.exists():
+                broken.append((src, raw))
+                continue
+            found.append(rel)
+            stack.append(target)
+    return found, broken
 
 
 def collect_chapter_files(root: Path, subject: str) -> set[str]:
     d = root / subject
     if not d.is_dir():
         return set()
-    out = set()
-    for p in d.iterdir():
-        if p.is_file() and p.suffix == ".typ":
-            out.add(f"{subject}/{p.name}")
-    return out
+    return {p.relative_to(root).as_posix()
+            for p in d.rglob("*.typ") if p.is_file()}
 
 
 def load_manifest(root: Path) -> dict | None:
@@ -117,19 +150,19 @@ def main() -> int:
         if not subject_typ.exists():
             errors.append(f"missing subject file: {subject}.typ")
             continue
-        included = parse_includes(subject_typ)
+        included, broken = parse_includes(subject_typ, root)
         included_set = set(included)
 
         # 1. broken includes
-        for rel in included:
-            if not (root / rel).exists():
-                errors.append(f"{subject}.typ: broken include {rel!r}")
+        for src, raw in broken:
+            errors.append(f"{src}: broken include {raw!r}")
 
         # 2. orphans
         on_disk = collect_chapter_files(root, subject)
         orphans = on_disk - included_set
         for o in sorted(orphans):
-            errors.append(f"orphan chapter (not #included by {subject}.typ): {o}")
+            errors.append(
+                f"orphan chapter (not reachable from {subject}.typ): {o}")
 
     # 3. size warnings (over all chapter files on disk).
     for subject in SUBJECTS:
@@ -148,7 +181,11 @@ def main() -> int:
         manifest_paths = set()
         for e in entries:
             try:
-                manifest_paths.add(f"{e['subject']}/{e['slug']}.typ")
+                # Use `path`: nested chapters such as
+                # coding/advanced-java/core-java-oop.typ cannot be
+                # rebuilt from subject + slug alone.
+                manifest_paths.add(
+                    e.get("path") or f"{e['subject']}/{e['slug']}.typ")
             except (KeyError, TypeError):
                 errors.append(f"chapters.yml: malformed entry: {e!r}")
         disk_paths = set()

@@ -1122,8 +1122,10 @@ A:
 
 == Further Reading
 
-Goetz, B., et al. (2006). _Java Concurrency in Practice_. Addison-Wesley. (Chapters 5--8 cover the utilities in this chapter.)
+Williams, A. (2019). _C++ Concurrency in Action_, 2nd ed. Manning. (The standard reference for `std::thread`, mutexes, atomics, and the C++20 facilities.)
 
-Lea, D. (2000). "A Java Fork/Join Framework." ACM Java Grande. (The design behind `ForkJoinPool`.)
+Boehm, H.-J., & Adve, S. V. (2008). "Foundations of the C++ Concurrency Memory Model." PLDI. (The paper the C++11 memory model is built on.)
 
-Herlihy, M., & Shavit, N. (2020). _The Art of Multiprocessor Programming_, 2nd ed. Morgan Kaufmann. (Algorithms underlying the concurrent collections.)
+Herlihy, M., & Shavit, N. (2020). _The Art of Multiprocessor Programming_, 2nd ed. Morgan Kaufmann. (Algorithms underlying the synchronisation primitives.)
+
+ISO/IEC 14882. _Programming Languages --- C++_. (Normative specification of `<atomic>`, `<thread>`, and the C++20 `<barrier>`/`<latch>`/`<semaphore>` headers.)
