@@ -214,6 +214,6 @@ Aumasson, J-P., O'Connor, J., Schmidt, S., Wilcox-O'Hearn, Z. (2020). "$"BLAKE3"
 
 Stevens, M. et al. (2017). "The first collision for full $"SHA"$-1." CRYPTO (SHAttered).
 
-Laurie, B., Langley, A., Kasper, E. (2013). "Certificate Transparency." RFC 6962.
+Laurie, B., Messeri, E., & Stradling, R. (2021). "Certificate Transparency Version 2.0." RFC 9162. (Obsoletes RFC 6962, Laurie et al. 2013.)
 
 Aumasson, J-P., Bernstein, D. J. (2012). "$"SipHash"$: a fast short-input PRF." INDOCRYPT.

@@ -69,7 +69,7 @@ The weakest part of the PKI:
 
 === Certificate Transparency
 
-After the DigiNotar (2011) and Symantec mis-issuance incidents, *Certificate Transparency* (RFC 6962) made issuance publicly auditable: CAs submit certificates to append-only Merkle-tree logs and receive *signed certificate timestamps* (SCTs); Chrome and Safari reject certificates without SCTs from independent logs. CT does not prevent mis-issuance — it guarantees detection, which has proven sufficient to discipline the CA ecosystem (mass distrust of Symantec, 2018).
+After the DigiNotar (2011) and Symantec mis-issuance incidents, *Certificate Transparency* (RFC 9162, obsoletes RFC 6962) made issuance publicly auditable: CAs submit certificates to append-only Merkle-tree logs and receive *signed certificate timestamps* (SCTs); Chrome and Safari reject certificates without SCTs from independent logs. CT does not prevent mis-issuance — it guarantees detection, which has proven sufficient to discipline the CA ecosystem (mass distrust of Symantec, 2018).
 
 == Beyond the Web PKI
 

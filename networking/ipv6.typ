@@ -155,17 +155,17 @@ ip -6 ntable show                             # ND table parameters
 tcpdump -i eth0 -vv 'icmp6 and ip6[40] == 134'
 ```
 
-*DHCPv6 [RFC 8415]* runs over UDP/546(client)/547(server) and addresses link-scoped multicast `ff02::1:2`. Unlike DHCPv4 it does *not* convey a default gateway — the router is always learned from the RA. Two flavors:
+*DHCPv6 [RFC 9915 (obsoletes RFC 8415)]* runs over UDP/546(client)/547(server) and addresses link-scoped multicast `ff02::1:2`. Unlike DHCPv4 it does *not* convey a default gateway — the router is always learned from the RA. Two flavors:
 - *Stateful (IA_NA / IA_TA):* server assigns addresses; required for audit-heavy networks.
 - *Stateless:* only DNS, domain search, NTP options; addresses come from SLAAC.
 
-*Prefix Delegation (DHCPv6-PD) [RFC 8415 §6.3]* hands a CPE router a `/56` or `/48` to subnet downstream. This is how residential ISPs deploy IPv6: the customer router requests `IA_PD`, sub-allocates `/64`s to LANs, and re-advertises them in its own RAs.
+*Prefix Delegation (DHCPv6-PD) [RFC 9915 §6.3 (obsoletes RFC 8415)]* hands a CPE router a `/56` or `/48` to subnet downstream. This is how residential ISPs deploy IPv6: the customer router requests `IA_PD`, sub-allocates `/64`s to LANs, and re-advertises them in its own RAs.
 
 *Android caveat:* Android still does not implement stateful DHCPv6. Networks that require DHCPv6 for address assignment do not work for Android clients; SLAAC + RDNSS is the lowest-common-denominator.
 
 == MLD (Multicast Listener Discovery)
 
-MLDv2 [RFC 3810] is the IPv6 counterpart of IGMPv3. Hosts announce multicast group membership so switches can avoid flooding. ND itself depends on multicast (solicited-node groups), so any switch doing MLD snooping must whitelist `ff02::1:ff00:0/104` or break IPv6 entirely — a classic deployment bug.
+MLDv2 [RFC 9777 (obsoletes RFC 3810)] is the IPv6 counterpart of IGMPv3. Hosts announce multicast group membership so switches can avoid flooding. ND itself depends on multicast (solicited-node groups), so any switch doing MLD snooping must whitelist `ff02::1:ff00:0/104` or break IPv6 entirely — a classic deployment bug.
 
 ```bash
 ip -6 maddr show dev eth0
@@ -268,9 +268,9 @@ RFC 4443: Internet Control Message Protocol (ICMPv6) for the Internet Protocol V
 
 RFC 8201: Path MTU Discovery for IP version 6. McCann, J., Deering, S., Mogul, J. & Hinden, R. (2017).
 
-RFC 8415: Dynamic Host Configuration Protocol for IPv6 (DHCPv6). Mrugalski, T., et al. (2018).
+RFC 9915: Dynamic Host Configuration Protocol for IPv6 (DHCPv6). Mrugalski, T., Volz, B., Richardson, M., Jiang, S., & Winters, T. (2026). (Obsoletes RFC 8415.)
 
-RFC 3810: Multicast Listener Discovery Version 2 (MLDv2) for IPv6. Vida, R. & Costa, L. (2004).
+RFC 9777: Multicast Listener Discovery Version 2 (MLDv2) for IPv6. Haberman, B. (2025). (Obsoletes RFC 3810, Vida & Costa 2004.)
 
 *Transition:*
 

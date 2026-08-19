@@ -97,7 +97,7 @@ Server sends Stream 1 first (higher priority)
 
 == TLS (Transport Layer Security)
 
-*Encryption layer above TCP [RFC 8446].*
+*Encryption layer above TCP [RFC 9846 (obsoletes RFC 8446)].*
 
 *TLS 1.3 handshake (1-RTT):*
 ```

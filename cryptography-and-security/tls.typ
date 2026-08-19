@@ -201,7 +201,7 @@ Post-quantum signatures (ML-DSA) are much larger (~2.5 KB) and not yet deployed 
 
 == Further Reading
 
-Rescorla, E. (2018). "The Transport Layer Security (TLS) Protocol Version 1.3." RFC 8446.
+Rescorla, E. (2026). "The Transport Layer Security (TLS) Protocol Version 1.3." RFC 9846. (Obsoletes RFC 8446, 2018.)
 
 Rescorla, E., Oku, K., Sullivan, N., Wood, C. A. "TLS Encrypted Client Hello." draft-ietf-tls-esni (IETF work in progress).
 

@@ -14,7 +14,7 @@ TLS provides confidentiality, integrity, and authentication for network communic
 - TLS 1.0 (1999): IETF standardization [RFC 2246]
 - TLS 1.1 (2006): Explicit IV, deprecated 2021 [RFC 8996]
 - TLS 1.2 (2008): AEAD ciphers, SHA-256 [RFC 5246]
-- TLS 1.3 (2018): Simplified handshake, 0-RTT [RFC 8446]
+- TLS 1.3 (2018): Simplified handshake, 0-RTT [RFC 9846 (obsoletes RFC 8446)]
 
 *Current recommendation:* TLS 1.3 required, TLS 1.2 acceptable for legacy systems.
 
@@ -406,7 +406,7 @@ _Note: throughput measured on Xeon Skylake with AES-NI. ARM devices without hard
 
 *Primary sources:*
 
-RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3. Rescorla, E. (2018).
+RFC 9846: The Transport Layer Security (TLS) Protocol Version 1.3. Rescorla, E. (2026). (Obsoletes RFC 8446, 2018.)
 
 RFC 5246: The Transport Layer Security (TLS) Protocol Version 1.2. Dierks, T. & Rescorla, E. (2008).
 
