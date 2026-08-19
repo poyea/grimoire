@@ -135,7 +135,7 @@ Standard formats:
 - *X.509*: certificates (see _Protocols_).
 - *JWK* (RFC 7517): JSON Web Keys for OIDC/JWT.
 - *OpenSSH*: `ssh-ed25519 AAAA... user@host`.
-- *COSE* (RFC 8152): CBOR-encoded for $"WebAuthn"$, $"FIDO2"$.
+- *COSE* (RFC 9052/9053, obsoletes RFC 8152): CBOR-encoded for $"WebAuthn"$, $"FIDO2"$.
 
 ```python
 priv_pem = priv.private_bytes(

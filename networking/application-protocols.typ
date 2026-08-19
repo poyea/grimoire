@@ -8,7 +8,7 @@ Application-layer protocols define message formats and communication patterns fo
 
 == HTTP (Hypertext Transfer Protocol)
 
-*Request/response protocol over TCP [RFC 7230-7235].*
+*Request/response protocol over TCP [RFC 9110-9112 (obsoletes RFC 7230-7235)].*
 
 *HTTP/1.1 request:*
 ```http
@@ -42,7 +42,7 @@ Connection: keep-alive\r\n
 
 == HTTP/2
 
-*Binary, multiplexed protocol [RFC 7540].*
+*Binary, multiplexed protocol [RFC 9113 (obsoletes RFC 7540)].*
 
 *Key improvements:*
 1. *Binary framing:* Efficient parsing (vs text-based HTTP/1.1)
@@ -184,9 +184,9 @@ service UserService {
 
 == References
 
-RFC 7230: Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing. Fielding, R. & Reschke, J. (2014).
+RFC 9112: HTTP/1.1. Fielding, R., Nottingham, M., & Reschke, J. (2022). (Obsoletes RFC 7230; semantics split out into RFC 9110.)
 
-RFC 7540: Hypertext Transfer Protocol Version 2 (HTTP/2). Belshe, M., Peon, R., & Thomson, M. (2015).
+RFC 9113: HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes RFC 7540, Belshe et al. 2015.)
 
 RFC 9114: HTTP/3. Bishop, M. (2022).
 
@@ -200,7 +200,7 @@ Grigorik, I. (2013). High Performance Browser Networking. O'Reilly Media.
 
 == Further Reading
 
-IETF. (2015). "Hypertext Transfer Protocol Version 2 (HTTP/2)." RFC 7540. Specifies binary framing, multiplexing, header compression (HPACK), and server push — the foundational changes that address HTTP/1.1's head-of-line blocking.
+IETF. (2022). "HTTP/2." RFC 9113 (obsoletes RFC 7540, 2015). Specifies binary framing, multiplexing, header compression (HPACK), and server push — the foundational changes that address HTTP/1.1's head-of-line blocking.
 
 IETF. (2022). "HTTP/3." RFC 9114. Defines HTTP semantics over QUIC, eliminating TCP-level head-of-line blocking and enabling connection migration for mobile clients.
 

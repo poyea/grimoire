@@ -111,7 +111,7 @@ struct AdaptivePool {
 
 === Keep-Alive Configuration
 
-*HTTP Keep-Alive [RFC 7230]:*
+*HTTP Keep-Alive [RFC 9112 (obsoletes RFC 7230)]:*
 ```http
 Connection: keep-alive
 Keep-Alive: timeout=60, max=1000
@@ -515,9 +515,9 @@ Little, J.D.C. (1961). "A Proof for the Queuing Formula: L = λW." Operations Re
 
 Brettwooldridge, B. (2014). "HikariCP: About Pool Sizing." github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing.
 
-RFC 7230: Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing. Fielding, R. & Reschke, J. (2014).
+RFC 9112: HTTP/1.1. Fielding, R., Nottingham, M., & Reschke, J. (2022). (Obsoletes RFC 7230.)
 
-RFC 7540: Hypertext Transfer Protocol Version 2 (HTTP/2). Belshe, M., Peon, R., & Thomson, M. (2015).
+RFC 9113: HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes RFC 7540.)
 
 PostgreSQL Wiki. "Number of Database Connections." wiki.postgresql.org/wiki/Number_Of_Database_Connections.
 

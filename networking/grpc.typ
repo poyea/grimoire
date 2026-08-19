@@ -430,7 +430,7 @@ gRPC Project (2024). gRPC Documentation. https://grpc.io/docs/
 
 Google (2024). Protocol Buffers Encoding. https://protobuf.dev/programming-guides/encoding/
 
-IETF RFC 7540: Hypertext Transfer Protocol Version 2 (HTTP/2). Belshe, M., Peon, R., & Thomson, M. (2015).
+IETF RFC 9113: HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes RFC 7540.)
 
 Nally, M. (2020). "gRPC vs REST: Understanding gRPC, OpenAPI and REST." Google Cloud Blog.
 

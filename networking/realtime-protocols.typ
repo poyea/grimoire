@@ -166,7 +166,7 @@ uint32_t compute_priority(CandidateType type, uint32_t local_pref,
 }
 ```
 
-*TURN (Traversal Using Relays around NAT) [RFC 5766]:*
+*TURN (Traversal Using Relays around NAT) [RFC 8656 (obsoletes RFC 5766)]:*
 
 ```
 When direct connection fails (symmetric NAT):
@@ -678,7 +678,7 @@ RFC 3550: RTP: A Transport Protocol for Real-Time Applications. Schulzrinne, H. 
 
 RFC 8445: Interactive Connectivity Establishment (ICE). Keranen, A., Holmberg, C., & Rosenberg, J. (2018).
 
-RFC 5766: Traversal Using Relays around NAT (TURN). Mahy, R., Matthews, P., & Rosenberg, J. (2010).
+RFC 8656: Traversal Using Relays around NAT (TURN). Reddy, T., Johnston, A., Matthews, P., & Rosenberg, J. (2020). (Obsoletes RFC 5766.)
 
 RFC 8298: Self-Clocked Rate Adaptation for Multimedia (SCReAM). Johansson, I. & Sarker, Z. (2017).
 

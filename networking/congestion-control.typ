@@ -33,7 +33,7 @@ Reno triggers fast retransmit on three duplicate ACKs and fast recovery to skip 
 
 Refines fast recovery: stays in recovery until *all* outstanding data at the start of the recovery has been acknowledged. Each "partial ACK" triggers an immediate retransmission of the next unacknowledged segment. Recovers from $k$ losses in $O(k)$ RTTs.
 
-=== CUBIC (RFC 8312)
+=== CUBIC (RFC 9438)
 
 Default in Linux since 2007 (kernel 2.6.23), in Windows since 10 (2018). Replaces Reno's linear cwnd growth with a *cubic* function of time since the last loss:
 $ W(t) = C dot (t - K)^3 + W_max $
@@ -229,7 +229,7 @@ RFC 5681: TCP Congestion Control. Allman et al., 2009.
 
 RFC 6582: NewReno Modification to TCP's Fast Recovery Algorithm.
 
-RFC 8312: CUBIC for Fast Long-Distance Networks. Rhee et al., 2018.
+RFC 9438: CUBIC for Fast and Long-Distance Networks. Xu, L., Ha, S., Rhee, I., Goel, V., & Eggert, L. (2023). (Obsoletes RFC 8312.)
 
 RFC 8257: DCTCP — Data Center TCP for High-Performance Networks.
 

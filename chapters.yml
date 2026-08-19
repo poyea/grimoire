@@ -406,7 +406,7 @@ chapters:
   - subject: cryptography-and-security
     slug: asymmetric
     path: cryptography-and-security/asymmetric.typ
-    words: 1226
+    words: 1229
     status: reviewed
   - subject: cryptography-and-security
     slug: digital-signatures
@@ -1121,7 +1121,7 @@ chapters:
   - subject: networking
     slug: application-protocols
     path: networking/application-protocols.typ
-    words: 1276
+    words: 1285
     status: reviewed
   - subject: networking
     slug: bgp-routing
@@ -1136,12 +1136,12 @@ chapters:
   - subject: networking
     slug: congestion-control
     path: networking/congestion-control.typ
-    words: 2095
+    words: 2107
     status: reviewed
   - subject: networking
     slug: connection-pooling
     path: networking/connection-pooling.typ
-    words: 1769
+    words: 1766
     status: reviewed
   - subject: networking
     slug: container-networking
@@ -1166,7 +1166,7 @@ chapters:
   - subject: networking
     slug: grpc
     path: networking/grpc.typ
-    words: 1536
+    words: 1532
     status: reviewed
   - subject: networking
     slug: io-multiplexing
@@ -1241,7 +1241,7 @@ chapters:
   - subject: networking
     slug: realtime-protocols
     path: networking/realtime-protocols.typ
-    words: 2377
+    words: 2385
     status: reviewed
   - subject: networking
     slug: resilience-patterns
