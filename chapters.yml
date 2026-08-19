@@ -51,7 +51,7 @@ chapters:
   - subject: coding
     slug: advanced-systems
     path: coding/advanced-systems.typ
-    words: 1954
+    words: 2044
     status: reviewed
   - subject: coding
     slug: approximation-algorithms

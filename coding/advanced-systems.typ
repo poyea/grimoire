@@ -474,27 +474,36 @@ void append_entries(log_entry entry) {
 struct chord_node {
     uint160_t id;  // SHA-1 hash of IP:port
     chord_node* successor;
-    chord_node* finger_table[160];  // Finger[i] = successor of (id + 2^i)
-};
+    chord_node* finger_table[160];  // finger_table[i] = successor of (id + 2^i)
 
-chord_node* find_successor(uint160_t key) {
-    if (key in (id, successor->id]) {
-        return successor;
+    // Identifiers live on a modular ring, so an interval may wrap past
+    // zero: when a >= b the test becomes a disjunction rather than a
+    // conjunction. (a, b] is half-open, (a, b) fully open.
+    static bool in_half_open(uint160_t k, uint160_t a, uint160_t b) {
+        return a < b ? (k > a && k <= b) : (k > a || k <= b);
     }
 
-    // Find closest preceding node
-    chord_node* closest = find_closest_preceding_node(key);
-    return closest->find_successor(key);  // Recursive RPC
-}
+    static bool in_open(uint160_t k, uint160_t a, uint160_t b) {
+        return a < b ? (k > a && k < b) : (k > a || k < b);
+    }
 
-chord_node* find_closest_preceding_node(uint160_t key) {
-    for (int i = 159; i >= 0; i--) {
-        if (finger_table[i]->id in (id, key)) {
-            return finger_table[i];
+    chord_node* find_successor(uint160_t key) {
+        if (in_half_open(key, id, successor->id)) {
+            return successor;
         }
+        chord_node* closest = find_closest_preceding_node(key);
+        return closest->find_successor(key);  // recursive RPC
     }
-    return this;
-}
+
+    chord_node* find_closest_preceding_node(uint160_t key) {
+        for (int i = 159; i >= 0; i--) {
+            if (in_open(finger_table[i]->id, id, key)) {
+                return finger_table[i];
+            }
+        }
+        return this;
+    }
+};
 ```
 
 *Routing:* Each hop halves distance → $O(log N)$ hops for N nodes.
