@@ -82,6 +82,19 @@
 )
 
 // -----------------------------------------------------------------------------
+// RFC reference
+//
+// #rfc(9293) renders "RFC 9293" as a link to the canonical RFC Editor
+// page, so a reader can follow the citation instead of retyping the
+// number. Ranges and slash pairs (RFC 7230-7235, RFC 5389/8489) stay as
+// plain text, since they name more than one document.
+// -----------------------------------------------------------------------------
+
+#let rfc(number) = link(
+  "https://www.rfc-editor.org/rfc/rfc" + str(number) + ".html",
+)[RFC #number]
+
+// -----------------------------------------------------------------------------
 // Cross-reference helper
 //
 // #xref("database", "partitioning-and-elasticity") renders as a styled

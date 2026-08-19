@@ -1,6 +1,8 @@
+#import "../template.typ": rfc
+
 = WebSockets
 
-WebSocket is a full-duplex communication protocol that provides persistent, bidirectional communication between client and server over a single TCP connection [RFC 6455].
+WebSocket is a full-duplex communication protocol that provides persistent, bidirectional communication between client and server over a single TCP connection [#rfc(6455)].
 
 *See also:* Application Protocols (for HTTP foundations), Transport Layer (for TCP internals), I/O Multiplexing (for handling many WebSocket connections)
 
@@ -27,7 +29,7 @@ WebSocket is a full-duplex communication protocol that provides persistent, bidi
 
 == HTTP Upgrade Handshake
 
-WebSocket connections begin as HTTP/1.1 requests with an Upgrade header [RFC 6455 Section 4].
+WebSocket connections begin as HTTP/1.1 requests with an Upgrade header [#rfc(6455) Section 4].
 
 *Client request:*
 ```http
@@ -62,7 +64,7 @@ The magic GUID prevents caching proxies from replaying old responses.
 
 == WebSocket Frame Format
 
-All WebSocket communication uses a binary frame format [RFC 6455 Section 5]:
+All WebSocket communication uses a binary frame format [#rfc(6455) Section 5]:
 
 ```
  0                   1                   2                   3
@@ -109,7 +111,7 @@ All WebSocket communication uses a binary frame format [RFC 6455 Section 5]:
 
 == Masking
 
-*Why masking?* Prevents cache poisoning attacks on intermediary proxies [RFC 6455 Section 10.3].
+*Why masking?* Prevents cache poisoning attacks on intermediary proxies [#rfc(6455) Section 10.3].
 
 *Attack scenario without masking:*
 1. Attacker crafts WebSocket payload that looks like valid HTTP response
@@ -131,7 +133,7 @@ for (size_t i = 0; i < payload_len; i++) {
 
 == Message Fragmentation
 
-Large messages can be split across multiple frames [RFC 6455 Section 5.4]:
+Large messages can be split across multiple frames [#rfc(6455) Section 5.4]:
 
 ```
 Frame 1: FIN=0, opcode=0x1 (text), payload="Hello "
@@ -152,7 +154,7 @@ Frame 3: FIN=1, opcode=0x0 (continuation), payload="!"
 
 == Ping/Pong Keepalive
 
-*Purpose:* Detect dead connections, prevent NAT/firewall timeout [RFC 6455 Section 5.5.2].
+*Purpose:* Detect dead connections, prevent NAT/firewall timeout [#rfc(6455) Section 5.5.2].
 
 *Ping frame:*
 ```
@@ -192,7 +194,7 @@ void websocket_keepalive(ws_connection* conn) {
 
 == Connection Closure
 
-*Clean close handshake [RFC 6455 Section 7]:*
+*Clean close handshake [#rfc(6455) Section 7]:*
 
 ```
 Initiator                        Responder
@@ -312,7 +314,7 @@ Reuse WebSocket connections between services; don't create per-request.
 
 == Security Considerations
 
-*1. Origin validation [RFC 6455 Section 10.2]:*
+*1. Origin validation [#rfc(6455) Section 10.2]:*
 ```cpp
 // Server MUST check Origin header
 const char* origin = get_header(req, "Origin");
@@ -403,11 +405,11 @@ while (1) {
 
 == References
 
-RFC 6455: The WebSocket Protocol. Fette, I. & Melnikov, A. (2011).
+#rfc(6455): The WebSocket Protocol. Fette, I. & Melnikov, A. (2011).
 
-RFC 7692: Compression Extensions for WebSocket. Yoshino, T. (2015).
+#rfc(7692): Compression Extensions for WebSocket. Yoshino, T. (2015).
 
-RFC 8441: Bootstrapping WebSockets with HTTP/2. McManus, P. (2018).
+#rfc(8441): Bootstrapping WebSockets with HTTP/2. McManus, P. (2018).
 
 Lubbers, P. & Greco, F. (2010). "HTML5 WebSocket: A Quantum Leap in Scalability for the Web." SOA World Magazine.
 

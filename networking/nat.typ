@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Network Address Translation (NAT)
 
@@ -74,7 +74,7 @@ nft add rule nat prerouting tcp dport 80 dnat to 192.168.1.10:8080
 
 CGNAT (also called large-scale NAT, LSN, or NAT444) is operated by ISPs to share a small pool of public IPv4 addresses across thousands of subscribers, typically the only way mobile carriers and broadband ISPs can still deliver IPv4 service after RIR pool exhaustion (2011-2019 across regions).
 
-*Address space:* RFC 6598 reserves `100.64.0.0/10` (4 million addresses) specifically for CGNAT; distinct from RFC 1918 to avoid collision with subscriber LANs.
+*Address space:* #rfc(6598) reserves `100.64.0.0/10` (4 million addresses) specifically for CGNAT; distinct from #rfc(1918) to avoid collision with subscriber LANs.
 
 ```
 Subscriber CPE      ISP CGNAT          Internet
@@ -85,7 +85,7 @@ Subscriber CPE      ISP CGNAT          Internet
 *Port allocation strategies:*
 - *Static port block:* Each subscriber gets, e.g., 1024 ports on one public IP. Predictable, easy to log, but wasteful.
 - *Dynamic on-demand:* Ports allocated as flows arrive. Better utilization, but logging becomes a nightmare (timestamped flow records required for law-enforcement requests).
-- *Deterministic NAT (RFC 7422):* Algorithmic mapping `subscriber → (public_ip, port_range)`. Eliminates per-flow logging.
+- *Deterministic NAT (#rfc(7422)):* Algorithmic mapping `subscriber → (public_ip, port_range)`. Eliminates per-flow logging.
 
 *Scale numbers (typical Tier-1 mobile operator):*
 
@@ -105,7 +105,7 @@ Subscriber CPE      ISP CGNAT          Internet
 - Inbound connections (gaming, P2P, self-hosted services) impossible without port forwarding cooperation from the ISP.
 - Port exhaustion under load (especially with web pages opening many parallel TLS connections).
 
-*Mitigations:* PCP (Port Control Protocol, RFC 6887) lets clients request inbound port mappings. IPv6 deployment removes the need entirely for native traffic.
+*Mitigations:* PCP (Port Control Protocol, #rfc(6887)) lets clients request inbound port mappings. IPv6 deployment removes the need entirely for native traffic.
 
 == NAT Traversal
 
@@ -176,7 +176,7 @@ TURN servers consume bandwidth proportional to all relayed flows; operators (Twi
 
 === ICE — Interactive Connectivity Establishment
 
-*ICE [RFC 8445]:* Framework combining STUN, TURN, and direct connectivity checks. Used by WebRTC.
+*ICE [#rfc(8445)]:* Framework combining STUN, TURN, and direct connectivity checks. Used by WebRTC.
 
 ```
 ICE candidate gathering:
@@ -288,21 +288,21 @@ modprobe nf_nat_sip
 
 == Further Reading
 
-RFC 3022: Traditional IP Network Address Translator (Srisuresh & Egevang, 2001).
+#rfc(3022): Traditional IP Network Address Translator (Srisuresh & Egevang, 2001).
 
-RFC 4787: NAT Behavioral Requirements for Unicast UDP (Audet & Jennings, 2007).
+#rfc(4787): NAT Behavioral Requirements for Unicast UDP (Audet & Jennings, 2007).
 
-RFC 5389 / RFC 8489: Session Traversal Utilities for NAT (STUN) (Rosenberg et al.).
+#rfc(5389) / #rfc(8489): Session Traversal Utilities for NAT (STUN) (Rosenberg et al.).
 
-RFC 5766 / RFC 8656: Traversal Using Relays around NAT (TURN).
+#rfc(5766) / #rfc(8656): Traversal Using Relays around NAT (TURN).
 
-RFC 6598: IANA-Reserved IPv4 Prefix for Shared Address Space (CGNAT) (Weil et al., 2012).
+#rfc(6598): IANA-Reserved IPv4 Prefix for Shared Address Space (CGNAT) (Weil et al., 2012).
 
-RFC 6887: Port Control Protocol (PCP) (Wing, Cheshire et al., 2013).
+#rfc(6887): Port Control Protocol (PCP) (Wing, Cheshire et al., 2013).
 
-RFC 7422: Deterministic Address Mapping to Reduce Logging in CGN Deployments.
+#rfc(7422): Deterministic Address Mapping to Reduce Logging in CGN Deployments.
 
-RFC 8445: Interactive Connectivity Establishment (ICE) (Keranen et al., 2018).
+#rfc(8445): Interactive Connectivity Establishment (ICE) (Keranen et al., 2018).
 
 Ford, B., Srisuresh, P. & Kegel, D. (2005). "Peer-to-Peer Communication Across Network Address Translators." USENIX ATC.
 

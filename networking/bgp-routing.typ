@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = BGP Routing
 
 Border Gateway Protocol (BGP) is the de facto standard for inter-domain routing, forming the backbone of internet connectivity between autonomous systems.
@@ -6,7 +8,7 @@ Border Gateway Protocol (BGP) is the de facto standard for inter-domain routing,
 
 == BGP Fundamentals
 
-*BGP provides [RFC 4271]:*
+*BGP provides [#rfc(4271)]:*
 - Path vector routing (full AS path visibility)
 - Policy-based routing (operator-controlled decisions)
 - Incremental updates (only changes propagated)
@@ -38,9 +40,9 @@ Border Gateway Protocol (BGP) is the de facto standard for inter-domain routing,
 
 *Autonomous System:* A collection of IP networks under single administrative control with unified routing policy.
 
-*AS number allocation [RFC 6996]:*
+*AS number allocation [#rfc(6996)]:*
 - 16-bit ASN: 1-65535 (original, still common)
-- 32-bit ASN: 1-4294967295 (extended, RFC 6793)
+- 32-bit ASN: 1-4294967295 (extended, #rfc(6793))
 - Private ASN: 64512-65534 (16-bit), 4200000000-4294967294 (32-bit)
 
 *AS types:*
@@ -55,7 +57,7 @@ Border Gateway Protocol (BGP) is the de facto standard for inter-domain routing,
 
 == BGP Message Types
 
-*Four message types [RFC 4271]:*
+*Four message types [#rfc(4271)]:*
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -91,7 +93,7 @@ Border Gateway Protocol (BGP) is the de facto standard for inter-domain routing,
 
 == BGP Path Attributes
 
-*Path attributes determine route selection [RFC 4271]:*
+*Path attributes determine route selection [#rfc(4271)]:*
 
 *Well-known mandatory:*
 - *ORIGIN:* Route source (IGP=0, EGP=1, INCOMPLETE=2)
@@ -104,7 +106,7 @@ Border Gateway Protocol (BGP) is the de facto standard for inter-domain routing,
 
 *Optional transitive:*
 - *AGGREGATOR:* AS and router that aggregated
-- *COMMUNITY:* 32-bit tag for policy (RFC 1997)
+- *COMMUNITY:* 32-bit tag for policy (#rfc(1997))
 
 *Optional non-transitive:*
 - *MED (Multi-Exit Discriminator):* Hint to external AS (lower = preferred)
@@ -167,7 +169,7 @@ Route select_best_path(vector<Route> candidates) {
 
 == BGP Communities
 
-*Communities enable policy tagging [RFC 1997, RFC 8092]:*
+*Communities enable policy tagging [#rfc(1997), #rfc(8092)]:*
 
 *Well-known communities:*
 - `NO_EXPORT` (0xFFFFFF01): Don't advertise to eBGP peers
@@ -176,7 +178,7 @@ Route select_best_path(vector<Route> candidates) {
 
 *Standard community format:* ASN:VALUE (e.g., 64500:100)
 
-*Large communities [RFC 8092]:* 4-byte ASN : 4-byte value : 4-byte value
+*Large communities [#rfc(8092)]:* 4-byte ASN : 4-byte value : 4-byte value
 
 *Common community uses:*
 
@@ -208,7 +210,7 @@ ip community-list standard CUSTOMER-TAG permit 64500:100
 
 *Problem:* iBGP requires full mesh ($n times (n-1)/2$ sessions). 100 routers = 4,950 sessions.
 
-*Solution:* Route reflectors [RFC 4456].
+*Solution:* Route reflectors [#rfc(4456)].
 
 ```
                 Without RR              With RR
@@ -326,7 +328,7 @@ router bgp 64500
 - Historic examples: YouTube hijack by Pakistan Telecom (2008)
 
 *Mitigations:*
-- RPKI (Resource Public Key Infrastructure) [RFC 6480]
+- RPKI (Resource Public Key Infrastructure) [#rfc(6480)]
 - ROA (Route Origin Authorization): Signed prefix-to-AS mapping
 - ROV (Route Origin Validation): Reject invalid origins
 
@@ -339,7 +341,7 @@ UNKNOWN:  No ROA exists for prefix
 
 *2. BGP session hijacking:*
 - TCP session injection
-- Mitigations: TCP-AO (RFC 5925), TTL security (GTSM)
+- Mitigations: TCP-AO (#rfc(5925)), TTL security (GTSM)
 
 ```
 router bgp 64500
@@ -348,10 +350,10 @@ router bgp 64500
 
 *3. Route leaks:*
 - Misconfigured AS advertises routes it shouldn't
-- Mitigation: BGP roles [RFC 9234], strict filtering
+- Mitigation: BGP roles [#rfc(9234)], strict filtering
 
 *Best practices:*
-- Filter bogons (RFC 1918, default route)
+- Filter bogons (#rfc(1918), default route)
 - Max-prefix limits
 - AS_PATH filtering (reject too-long paths)
 - IRR (Internet Routing Registry) validation
@@ -382,7 +384,7 @@ router bgp 64500
 - Unified protocol (no OSPF+BGP complexity)
 - Mature tooling and debugging
 
-*BGP unnumbered [RFC 5549, obs. by RFC 8950]:*
+*BGP unnumbered [#rfc(5549), obs. by #rfc(8950)]:*
 - Use link-local IPv6 for peering
 - No IP address planning required
 - Simplifies automation
@@ -396,19 +398,19 @@ router bgp 64500
 
 *Primary sources:*
 
-RFC 4271: A Border Gateway Protocol 4 (BGP-4). Rekhter, Y., Li, T., & Hares, S. (2006).
+#rfc(4271): A Border Gateway Protocol 4 (BGP-4). Rekhter, Y., Li, T., & Hares, S. (2006).
 
-RFC 4456: BGP Route Reflection. Bates, T., Chen, E., & Chandra, R. (2006).
+#rfc(4456): BGP Route Reflection. Bates, T., Chen, E., & Chandra, R. (2006).
 
-RFC 1997: BGP Communities Attribute. Chandra, R., Traina, P., & Li, T. (1996).
+#rfc(1997): BGP Communities Attribute. Chandra, R., Traina, P., & Li, T. (1996).
 
-RFC 8092: BGP Large Communities Attribute. Heitz, J. et al. (2017).
+#rfc(8092): BGP Large Communities Attribute. Heitz, J. et al. (2017).
 
-RFC 6480: An Infrastructure to Support Secure Internet Routing. Lepinski, M. & Kent, S. (2012).
+#rfc(6480): An Infrastructure to Support Secure Internet Routing. Lepinski, M. & Kent, S. (2012).
 
-RFC 5549: Advertising IPv4 Network Layer Reachability Information with an IPv6 Next Hop. Le Faucheur, F. & Rosen, E. (2009). Obsoleted by RFC 8950 (2020).
+#rfc(5549): Advertising IPv4 Network Layer Reachability Information with an IPv6 Next Hop. Le Faucheur, F. & Rosen, E. (2009). Obsoleted by #rfc(8950) (2020).
 
-RFC 9234: Route Leak Prevention and Detection Using Roles. Azimov, A. et al. (2022).
+#rfc(9234): Route Leak Prevention and Detection Using Roles. Azimov, A. et al. (2022).
 
 Caesar, M. & Rexford, J. (2005). "BGP Routing Policies in ISP Networks." IEEE Network 19(6): 5-11.
 

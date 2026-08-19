@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = Real-Time Protocols
 
 Real-time communication requires specialized protocols that prioritize low latency over reliability. This chapter covers WebRTC, RTP/RTCP, SRT, and media streaming fundamentals.
@@ -133,7 +135,7 @@ a=rtpmap:97 VP9/90000
 a=rtpmap:98 H264/90000
 ```
 
-*ICE (Interactive Connectivity Establishment) [RFC 8445]:*
+*ICE (Interactive Connectivity Establishment) [#rfc(8445)]:*
 
 ```cpp
 // Candidate types (in preference order)
@@ -166,7 +168,7 @@ uint32_t compute_priority(CandidateType type, uint32_t local_pref,
 }
 ```
 
-*TURN (Traversal Using Relays around NAT) [RFC 8656 (obsoletes RFC 5766)]:*
+*TURN (Traversal Using Relays around NAT) [#rfc(8656) (obsoletes #rfc(5766))]:*
 
 ```
 When direct connection fails (symmetric NAT):
@@ -188,7 +190,7 @@ Bandwidth cost: Server pays for relay
 
 == RTP/RTCP Protocols
 
-*RTP (Real-time Transport Protocol) [RFC 3550]:*
+*RTP (Real-time Transport Protocol) [#rfc(3550)]:*
 
 *RTP header:*
 
@@ -215,7 +217,7 @@ Bandwidth cost: Server pays for relay
 - *Timestamp:* Media timing (90kHz for video, 48kHz for audio)
 - *SSRC:* Synchronization source identifier (random 32-bit)
 
-*RTCP (RTP Control Protocol) [RFC 3550]:*
+*RTCP (RTP Control Protocol) [#rfc(3550)]:*
 
 *RTCP packet types:*
 
@@ -404,7 +406,7 @@ public:
 };
 ```
 
-*SCReAM (Self-Clocked Rate Adaptation for Multimedia) [RFC 8298]:*
+*SCReAM (Self-Clocked Rate Adaptation for Multimedia) [#rfc(8298)]:*
 
 - Self-clocked: Uses receive timestamps, no explicit feedback needed
 - CWND-based: Similar to TCP, but for RTP
@@ -674,13 +676,13 @@ for (const report of stats.values()) {
 
 *Primary sources:*
 
-RFC 3550: RTP: A Transport Protocol for Real-Time Applications. Schulzrinne, H. et al. (2003).
+#rfc(3550): RTP: A Transport Protocol for Real-Time Applications. Schulzrinne, H. et al. (2003).
 
-RFC 8445: Interactive Connectivity Establishment (ICE). Keranen, A., Holmberg, C., & Rosenberg, J. (2018).
+#rfc(8445): Interactive Connectivity Establishment (ICE). Keranen, A., Holmberg, C., & Rosenberg, J. (2018).
 
-RFC 8656: Traversal Using Relays around NAT (TURN). Reddy, T., Johnston, A., Matthews, P., & Rosenberg, J. (2020). (Obsoletes RFC 5766.)
+#rfc(8656): Traversal Using Relays around NAT (TURN). Reddy, T., Johnston, A., Matthews, P., & Rosenberg, J. (2020). (Obsoletes #rfc(5766).)
 
-RFC 8298: Self-Clocked Rate Adaptation for Multimedia (SCReAM). Johansson, I. & Sarker, Z. (2017).
+#rfc(8298): Self-Clocked Rate Adaptation for Multimedia (SCReAM). Johansson, I. & Sarker, Z. (2017).
 
 W3C WebRTC 1.0: Real-Time Communication Between Browsers. W3C Recommendation (2021).
 

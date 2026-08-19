@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = SDN and Programmable Networks
 
 Software-Defined Networking (SDN) decouples the control plane from the data plane, enabling centralized network management and programmable packet processing.
@@ -417,7 +419,7 @@ Packet → vFirewall → vIDS → vLoadBalancer → Server
 
 == Segment Routing and SRv6
 
-*Segment Routing enables source routing in modern networks [RFC 8402]:*
+*Segment Routing enables source routing in modern networks [#rfc(8402)]:*
 
 *Key concepts:*
 - *Segment:* Instruction (node, link, service)
@@ -439,7 +441,7 @@ Packet → vFirewall → vIDS → vLoadBalancer → Server
 └────────────────────────────────────────────────────────────────┘
 ```
 
-*SRv6 Network Programming [RFC 8986]:*
+*SRv6 Network Programming [#rfc(8986)]:*
 
 ```
 SID format: LOC:FUNCT:ARG
@@ -469,9 +471,9 @@ ONF OpenFlow Switch Specification 1.5.1. Open Networking Foundation (2015).
 
 Bosshart, P. et al. (2014). "P4: Programming Protocol-Independent Packet Processors." ACM SIGCOMM CCR 44(3): 87-95.
 
-RFC 8402: Segment Routing Architecture. Filsfils, C. et al. (2018).
+#rfc(8402): Segment Routing Architecture. Filsfils, C. et al. (2018).
 
-RFC 8986: Segment Routing over IPv6 (SRv6) Network Programming. Filsfils, C. et al. (2021).
+#rfc(8986): Segment Routing over IPv6 (SRv6) Network Programming. Filsfils, C. et al. (2021).
 
 Tootoonchian, A. et al. (2012). "On Controller Performance in Software-Defined Networks." USENIX HotICE '12.
 

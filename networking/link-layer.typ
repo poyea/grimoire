@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = Link Layer & Hardware
 
 The link layer handles physical transmission of bits over a medium. For Ethernet (dominant LAN technology), this includes frame structure, MAC addressing, and hardware interrupt handling.
@@ -6,7 +8,7 @@ The link layer handles physical transmission of bits over a medium. For Ethernet
 
 == Ethernet Frame Structure
 
-*Ethernet II frame format (RFC 894, DIX Ethernet):*
+*Ethernet II frame format (#rfc(894), DIX Ethernet):*
 
 ```
 ┌──────────┬──────────┬──────┬─────────┬─────┬─────┐
@@ -435,9 +437,9 @@ Marek, C. & Corbet, J. (2005). The Linux Networking Architecture: Design and Imp
 
 *RFCs:*
 
-RFC 894: A Standard for the Transmission of IP Datagrams over Ethernet Networks. Hornig, C. (1984).
+#rfc(894): A Standard for the Transmission of IP Datagrams over Ethernet Networks. Hornig, C. (1984).
 
-RFC 1122: Requirements for Internet Hosts – Communication Layers. Braden, R. (1989).
+#rfc(1122): Requirements for Internet Hosts – Communication Layers. Braden, R. (1989).
 
 #pagebreak()
 
@@ -456,11 +458,11 @@ The Internet layer provides host-to-host routing across networks using IP addres
 - Class B: 128.0.0.0 - 191.255.255.255 (65K hosts per network)
 - Class C: 192.0.0.0 - 223.255.255.255 (256 hosts per network)
 
-*CIDR (Classless Inter-Domain Routing) [RFC 4632]:* Variable-length subnet masks.
+*CIDR (Classless Inter-Domain Routing) [#rfc(4632)]:* Variable-length subnet masks.
 - Example: 192.168.1.0/24 = 192.168.1.0 - 192.168.1.255 (256 addresses)
 - Subnet mask: 255.255.255.0 (24 bits of network, 8 bits of host)
 
-*Private address ranges [RFC 1918]:*
+*Private address ranges [#rfc(1918)]:*
 - 10.0.0.0/8 (10.0.0.0 - 10.255.255.255)
 - 172.16.0.0/12 (172.16.0.0 - 172.31.255.255)
 - 192.168.0.0/16 (192.168.0.0 - 192.168.255.255)
@@ -525,8 +527,8 @@ default via 192.168.1.1 dev eth0      # Gateway
 
 ==== References
 
-RFC 791: Internet Protocol. Postel, J. (1981).
+#rfc(791): Internet Protocol. Postel, J. (1981).
 
-RFC 4632: Classless Inter-domain Routing (CIDR). Fuller, V. & Li, T. (2006).
+#rfc(4632): Classless Inter-domain Routing (CIDR). Fuller, V. & Li, T. (2006).
 
-RFC 8200: Internet Protocol, Version 6 (IPv6) Specification. Deering, S. & Hinden, R. (2017).
+#rfc(8200): Internet Protocol, Version 6 (IPv6) Specification. Deering, S. & Hinden, R. (2017).

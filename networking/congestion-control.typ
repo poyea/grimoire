@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Congestion Control
 
@@ -20,7 +20,7 @@ Marking (ECN, L4S) lets routers communicate congestion explicitly without drop o
 
 == Loss-Based Algorithms
 
-=== Reno (RFC 5681)
+=== Reno (#rfc(5681))
 
 The original AIMD (additive-increase, multiplicative-decrease) controller. On each ACK in *congestion avoidance*:
 $ "cwnd" ← "cwnd" + "MSS"^2 / "cwnd" $
@@ -29,11 +29,11 @@ $ "cwnd" ← "cwnd" / 2,\  "ssthresh" ← "cwnd" $
 
 Reno triggers fast retransmit on three duplicate ACKs and fast recovery to skip slow-start after a single loss. Suffers badly when multiple segments are lost in one window, as it exits fast recovery prematurely.
 
-=== NewReno (RFC 6582)
+=== NewReno (#rfc(6582))
 
 Refines fast recovery: stays in recovery until *all* outstanding data at the start of the recovery has been acknowledged. Each "partial ACK" triggers an immediate retransmission of the next unacknowledged segment. Recovers from $k$ losses in $O(k)$ RTTs.
 
-=== CUBIC (RFC 9438)
+=== CUBIC (#rfc(9438))
 
 Default in Linux since 2007 (kernel 2.6.23), in Windows since 10 (2018). Replaces Reno's linear cwnd growth with a *cubic* function of time since the last loss:
 $ W(t) = C dot (t - K)^3 + W_max $
@@ -95,7 +95,7 @@ sysctl -w net.ipv4.tcp_congestion_control=bbr
 sysctl -w net.core.default_qdisc=fq
 ```
 
-== ECN — Explicit Congestion Notification (RFC 3168)
+== ECN — Explicit Congestion Notification (#rfc(3168))
 
 Routers can *mark* packets (set CE = Congestion Experienced in the IP header) instead of dropping them when the queue grows. The receiver echoes the mark via the ECE TCP flag; the sender reacts as if a loss had occurred, but without retransmission. This eliminates the latency penalty of drop-based signalling.
 
@@ -109,7 +109,7 @@ IP header bits 14-15 (ECN field):
 
 *Deployment.* ECN negotiation is in the TCP SYN/SYN-ACK. Despite being RFC since 2001, classic ECN was held back for years by middlebox brokenness; today $>$ 80% of paths support it, and DCTCP-style ECN is standard inside data centres.
 
-=== DCTCP (RFC 8257)
+=== DCTCP (#rfc(8257))
 
 DCTCP weighs reaction to the *fraction* of marked packets rather than reacting once per RTT:
 $ alpha ← (1 - g) alpha + g dot F $
@@ -225,15 +225,15 @@ xplot.org a2b_tput.xpl
 
 == Further Reading
 
-RFC 5681: TCP Congestion Control. Allman et al., 2009.
+#rfc(5681): TCP Congestion Control. Allman et al., 2009.
 
-RFC 6582: NewReno Modification to TCP's Fast Recovery Algorithm.
+#rfc(6582): NewReno Modification to TCP's Fast Recovery Algorithm.
 
-RFC 9438: CUBIC for Fast and Long-Distance Networks. Xu, L., Ha, S., Rhee, I., Goel, V., & Eggert, L. (2023). (Obsoletes RFC 8312.)
+#rfc(9438): CUBIC for Fast and Long-Distance Networks. Xu, L., Ha, S., Rhee, I., Goel, V., & Eggert, L. (2023). (Obsoletes #rfc(8312).)
 
-RFC 8257: DCTCP — Data Center TCP for High-Performance Networks.
+#rfc(8257): DCTCP — Data Center TCP for High-Performance Networks.
 
-RFC 3168: The Addition of Explicit Congestion Notification (ECN) to IP.
+#rfc(3168): The Addition of Explicit Congestion Notification (ECN) to IP.
 
 RFC 9330-9332: L4S Architecture, DualPI2, and Identifier.
 

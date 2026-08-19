@@ -1,8 +1,8 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = QUIC and HTTP/3
 
-QUIC is a UDP-based, encrypted, stream-multiplexed transport: effectively a redesign of TCP+TLS+HTTP/2 into a single user-space protocol. Standardised as RFC 9000 (2021), QUIC underpins HTTP/3 (RFC 9114) and now carries the majority of traffic for Google, Cloudflare, and Meta. This chapter covers stream multiplexing, 0-RTT, connection migration, pluggable congestion control, the HTTP/3 mapping, and real-world deployment lessons.
+QUIC is a UDP-based, encrypted, stream-multiplexed transport: effectively a redesign of TCP+TLS+HTTP/2 into a single user-space protocol. Standardised as #rfc(9000) (2021), QUIC underpins HTTP/3 (#rfc(9114)) and now carries the majority of traffic for Google, Cloudflare, and Meta. This chapter covers stream multiplexing, 0-RTT, connection migration, pluggable congestion control, the HTTP/3 mapping, and real-world deployment lessons.
 
 *See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP background), #xref("networking", "congestion-control", label: "Congestion Control") (for $"BBR"$ and $"CUBIC"$), _TLS_ (QUIC integrates TLS 1.3), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (most QUIC stacks live in user space).
 
@@ -114,10 +114,10 @@ Because CC lives in user space, a server can A/B-test new algorithms (e.g. $"BBR
 
 == HTTP/3 Mapping
 
-HTTP/3 (RFC 9114) is HTTP semantics layered onto QUIC streams. The mapping is straightforward:
+HTTP/3 (#rfc(9114)) is HTTP semantics layered onto QUIC streams. The mapping is straightforward:
 
 - One HTTP request/response pair = one bidirectional QUIC stream.
-- Headers compressed with *QPACK* (RFC 9204), like HPACK but tolerant of out-of-order stream delivery (uses a separate encoder / decoder stream).
+- Headers compressed with *QPACK* (#rfc(9204)), like HPACK but tolerant of out-of-order stream delivery (uses a separate encoder / decoder stream).
 - Two unidirectional control streams (one per direction) carry `SETTINGS`, `GOAWAY`, etc.
 - Server push uses `PUSH_PROMISE` (rarely deployed; Chrome removed support).
 
@@ -128,7 +128,7 @@ Stream 2 (uni,  client): QPACK encoder stream
 Stream 3 (uni,  server): control stream (SETTINGS frame)
 ```
 
-*Discovery:* HTTP/3 endpoints advertise themselves via the `Alt-Svc` header in an HTTP/1.1 or HTTP/2 response, or via the `HTTPS` DNS record (RFC 9460):
+*Discovery:* HTTP/3 endpoints advertise themselves via the `Alt-Svc` header in an HTTP/1.1 or HTTP/2 response, or via the `HTTPS` DNS record (#rfc(9460)):
 
 ```
 Alt-Svc: h3=":443"; ma=86400
@@ -194,17 +194,17 @@ bpftrace -e 'usdt:/usr/local/bin/h3-server:quiche:pkt_lost { @[probe] = count();
 
 == Further Reading
 
-RFC 9000: QUIC: A UDP-Based Multiplexed and Secure Transport. Iyengar & Thomson, 2021.
+#rfc(9000): QUIC: A UDP-Based Multiplexed and Secure Transport. Iyengar & Thomson, 2021.
 
-RFC 9001: Using TLS to Secure QUIC.
+#rfc(9001): Using TLS to Secure QUIC.
 
-RFC 9002: QUIC Loss Detection and Congestion Control.
+#rfc(9002): QUIC Loss Detection and Congestion Control.
 
-RFC 9114: HTTP/3.
+#rfc(9114): HTTP/3.
 
-RFC 9204: QPACK Field Compression for HTTP/3.
+#rfc(9204): QPACK Field Compression for HTTP/3.
 
-RFC 9460: Service Binding and Parameter Specification via the DNS (SVCB and HTTPS RRs).
+#rfc(9460): Service Binding and Parameter Specification via the DNS (SVCB and HTTPS RRs).
 
 Langley, A. et al. (2017). "The QUIC Transport Protocol: Design and Internet-Scale Deployment." SIGCOMM.
 

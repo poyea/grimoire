@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = TLS (Transport Layer Security)
 
@@ -10,11 +10,11 @@ TLS provides confidentiality, integrity, and authentication for network communic
 
 *TLS history:*
 - SSL 2.0 (1995): Netscape, deprecated due to cryptographic flaws
-- SSL 3.0 (1996): Major redesign, deprecated 2015 [RFC 7568]
-- TLS 1.0 (1999): IETF standardization [RFC 2246]
-- TLS 1.1 (2006): Explicit IV, deprecated 2021 [RFC 8996]
-- TLS 1.2 (2008): AEAD ciphers, SHA-256 [RFC 5246]
-- TLS 1.3 (2018): Simplified handshake, 0-RTT [RFC 9846 (obsoletes RFC 8446)]
+- SSL 3.0 (1996): Major redesign, deprecated 2015 [#rfc(7568)]
+- TLS 1.0 (1999): IETF standardization [#rfc(2246)]
+- TLS 1.1 (2006): Explicit IV, deprecated 2021 [#rfc(8996)]
+- TLS 1.2 (2008): AEAD ciphers, SHA-256 [#rfc(5246)]
+- TLS 1.3 (2018): Simplified handshake, 0-RTT [#rfc(9846) (obsoletes #rfc(8446))]
 
 *Current recommendation:* TLS 1.3 required, TLS 1.2 acceptable for legacy systems.
 
@@ -55,7 +55,7 @@ Client                                               Server
 
 == TLS 1.3 Full Handshake (1-RTT)
 
-*Key improvement:* Client sends key share in first message, eliminating one round trip [RFC 8446].
+*Key improvement:* Client sends key share in first message, eliminating one round trip [#rfc(8446)].
 
 ```
 Client                                               Server
@@ -87,7 +87,7 @@ Client                                               Server
 
 == 0-RTT Session Resumption
 
-*TLS 1.3 allows sending application data in the first flight using pre-shared keys (PSK) [RFC 8446 Section 2.3]:*
+*TLS 1.3 allows sending application data in the first flight using pre-shared keys (PSK) [#rfc(8446) Section 2.3]:*
 
 ```
 Client                                               Server
@@ -192,14 +192,14 @@ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 └─────────────────────────────────────────┘
 ```
 
-*Validation steps [RFC 5280]:*
+*Validation steps [#rfc(5280)]:*
 1. Verify each signature in chain (bottom to top)
 2. Check validity period (notBefore, notAfter)
 3. Verify certificate purposes (Key Usage, Extended Key Usage)
 4. Check revocation status (CRL, OCSP)
 5. Validate hostname matches certificate (Subject CN or SAN)
 
-*OCSP Stapling [RFC 6066]:*
+*OCSP Stapling [#rfc(6066)]:*
 - Server fetches OCSP response and includes in TLS handshake
 - Avoids client-side OCSP lookup latency (50-200ms)
 - *Benefit:* Faster handshake, improved privacy
@@ -222,7 +222,7 @@ struct SessionCache {
 
 *Problem:* Requires server-side storage, doesn't scale across server farms.
 
-*2. Session Tickets [RFC 5077]:*
+*2. Session Tickets [#rfc(5077)]:*
 - Server encrypts session state, sends to client as opaque ticket
 - Client stores ticket, presents in next ClientHello
 - Server decrypts ticket, resumes session without lookup
@@ -385,7 +385,7 @@ SSL_CTX* create_tls13_context() {
   [0-RTT Resumption], [No], [No], [No], [Yes (with replay risk)],
   [Compression], [Yes (CRIME vuln)], [Yes], [Optional], [Removed],
   [Renegotiation], [Vulnerable], [Patched], [Secure], [Removed (replaced by post-handshake auth)],
-  [Status], [Deprecated (RFC 8996)], [Deprecated (RFC 8996)], [Active], [Current standard],
+  [Status], [Deprecated (#rfc(8996))], [Deprecated (#rfc(8996))], [Active], [Current standard],
 )
 
 === Cipher Suite Performance Comparison
@@ -406,21 +406,21 @@ _Note: throughput measured on Xeon Skylake with AES-NI. ARM devices without hard
 
 *Primary sources:*
 
-RFC 9846: The Transport Layer Security (TLS) Protocol Version 1.3. Rescorla, E. (2026). (Obsoletes RFC 8446, 2018.)
+#rfc(9846): The Transport Layer Security (TLS) Protocol Version 1.3. Rescorla, E. (2026). (Obsoletes #rfc(8446), 2018.)
 
-RFC 5246: The Transport Layer Security (TLS) Protocol Version 1.2. Dierks, T. & Rescorla, E. (2008).
+#rfc(5246): The Transport Layer Security (TLS) Protocol Version 1.2. Dierks, T. & Rescorla, E. (2008).
 
-RFC 5280: Internet X.509 PKI Certificate and CRL Profile. Cooper, D., et al. (2008).
+#rfc(5280): Internet X.509 PKI Certificate and CRL Profile. Cooper, D., et al. (2008).
 
-RFC 5077: Transport Layer Security (TLS) Session Resumption without Server-Side State. Salowey, J., et al. (2008).
+#rfc(5077): Transport Layer Security (TLS) Session Resumption without Server-Side State. Salowey, J., et al. (2008).
 
-RFC 6066: Transport Layer Security (TLS) Extensions: Extension Definitions. Eastlake, D. (2011).
+#rfc(6066): Transport Layer Security (TLS) Extensions: Extension Definitions. Eastlake, D. (2011).
 
-RFC 7568: Deprecating Secure Sockets Layer Version 3.0. Barnes, R., et al. (2015).
+#rfc(7568): Deprecating Secure Sockets Layer Version 3.0. Barnes, R., et al. (2015).
 
-RFC 8996: Deprecating TLS 1.0 and TLS 1.1. Moriarty, K. & Farrell, S. (2021).
+#rfc(8996): Deprecating TLS 1.0 and TLS 1.1. Moriarty, K. & Farrell, S. (2021).
 
-Langley, A., Modadugu, N., & Moeller, B. (2016). "Transport Layer Security (TLS) False Start." RFC 7918.
+Langley, A., Modadugu, N., & Moeller, B. (2016). "Transport Layer Security (TLS) False Start." #rfc(7918).
 
 Sullivan, N. (2016). "Keyless SSL: The Nitty Gritty Technical Details." Cloudflare Blog.
 

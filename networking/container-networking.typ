@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = Container Networking
 
 Containers rely on Linux kernel primitives to create isolated network environments. This section covers the building blocks (namespaces, veth, bridges) and orchestration layers (Docker, Kubernetes, CNI).
@@ -280,7 +282,7 @@ spec:
 
 *Problem:* Pod IPs must be routable across nodes. Solutions: L2 extension, L3 routing, or encapsulation.
 
-*VXLAN (Virtual Extensible LAN) [RFC 7348]:*
+*VXLAN (Virtual Extensible LAN) [#rfc(7348)]:*
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
@@ -460,7 +462,7 @@ ipvsadm -Ln  # If using IPVS mode
 
 *Specifications:*
 
-RFC 7348: Virtual eXtensible Local Area Network (VXLAN). Mahalingam, M. et al. (2014).
+#rfc(7348): Virtual eXtensible Local Area Network (VXLAN). Mahalingam, M. et al. (2014).
 
 CNI Specification v1.0.0. containernetworking/cni. https://github.com/containernetworking/cni
 

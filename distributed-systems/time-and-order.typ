@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Time and Order
 
@@ -18,7 +18,7 @@ A drift of 100 ppm equals $approx 8.6$ s/day. Without synchronization, free-runn
 
 === NTP
 
-Network Time Protocol (Mills 1985; standardised in RFC 5905, 2010) corrects offset using four timestamps in a request-response exchange:
+Network Time Protocol (Mills 1985; standardised in #rfc(5905), 2010) corrects offset using four timestamps in a request-response exchange:
 
 ```
 t1 = client send time      (local clock)
@@ -199,7 +199,7 @@ The snapshot may not correspond to any global instant, but it is *causally consi
 1. *Spanner without commit wait:* a later transaction could observe a timestamp that has not yet passed on another replica, breaking external consistency.
 2. *Cassandra last-write-wins:* a write with a future timestamp from a clock-skewed client suppresses subsequent correct writes for the skew duration.
 3. *Kafka log retention by time:* a clock jump deletes recent data.
-4. *JWT expiry:* skew between issuer and validator causes spurious auth failures (RFC 7519 recommends a small leeway).
+4. *JWT expiry:* skew between issuer and validator causes spurious auth failures (#rfc(7519) recommends a small leeway).
 
 Mitigations: NTP monitoring, capped time deltas, monotonic checks on incoming timestamps, idempotency keys decoupled from time.
 

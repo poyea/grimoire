@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = Service Discovery
 
 Service discovery enables services to locate and communicate with each other in distributed systems without hardcoded addresses.
@@ -61,7 +63,7 @@ Service discovery enables services to locate and communicate with each other in 
 
 == DNS-Based Discovery
 
-*Traditional approach using DNS [RFC 1035, RFC 2782].*
+*Traditional approach using DNS [#rfc(1035), #rfc(2782)].*
 
 *A/AAAA records:* Simple name to IP mapping.
 
@@ -71,7 +73,7 @@ api.example.com.    60    IN    A    10.0.0.2
 api.example.com.    60    IN    A    10.0.0.3
 ```
 
-*SRV records [RFC 2782]:* Service location with port and priority.
+*SRV records [#rfc(2782)]:* Service location with port and priority.
 
 ```
 _http._tcp.api.example.com.  60  IN  SRV  10 5 8080 api1.example.com.
@@ -83,7 +85,7 @@ _http._tcp.api.example.com.  60  IN  SRV  20 0 8080 api3.example.com.
 - Lower priority = preferred
 - Weight = load distribution within same priority
 
-*DNS-SD (DNS Service Discovery) [RFC 6763]:*
+*DNS-SD (DNS Service Discovery) [#rfc(6763)]:*
 
 ```
 ; Service type enumeration
@@ -416,9 +418,9 @@ Fielding, R. & Taylor, R. (2000). "Architectural Styles and the Design of Networ
 
 Ongaro, D. & Ousterhout, J. (2014). "In Search of an Understandable Consensus Algorithm." USENIX ATC '14.
 
-RFC 2782: A DNS RR for specifying the location of services (DNS SRV). Gulbrandsen, A., Vixie, P., & Esibov, L. (2000).
+#rfc(2782): A DNS RR for specifying the location of services (DNS SRV). Gulbrandsen, A., Vixie, P., & Esibov, L. (2000).
 
-RFC 6763: DNS-Based Service Discovery. Cheshire, S. & Krochmal, M. (2013).
+#rfc(6763): DNS-Based Service Discovery. Cheshire, S. & Krochmal, M. (2013).
 
 HashiCorp (2023). Consul Architecture. https://www.consul.io/docs/architecture
 

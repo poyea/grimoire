@@ -406,22 +406,22 @@ chapters:
   - subject: cryptography-and-security
     slug: asymmetric
     path: cryptography-and-security/asymmetric.typ
-    words: 1229
+    words: 1220
     status: reviewed
   - subject: cryptography-and-security
     slug: digital-signatures
     path: cryptography-and-security/digital-signatures.typ
-    words: 1261
+    words: 1260
     status: reviewed
   - subject: cryptography-and-security
     slug: hashing-and-macs
     path: cryptography-and-security/hashing-and-macs.typ
-    words: 1329
+    words: 1331
     status: reviewed
   - subject: cryptography-and-security
     slug: key-exchange-and-pki
     path: cryptography-and-security/key-exchange-and-pki.typ
-    words: 1269
+    words: 1268
     status: reviewed
   - subject: cryptography-and-security
     slug: post-quantum
@@ -436,12 +436,12 @@ chapters:
   - subject: cryptography-and-security
     slug: symmetric-primitives
     path: cryptography-and-security/symmetric-primitives.typ
-    words: 1280
+    words: 1276
     status: reviewed
   - subject: cryptography-and-security
     slug: tls
     path: cryptography-and-security/tls.typ
-    words: 1734
+    words: 1733
     status: reviewed
   - subject: cryptography-and-security
     slug: zero-knowledge-proofs
@@ -701,7 +701,7 @@ chapters:
   - subject: distributed-systems
     slug: time-and-order
     path: distributed-systems/time-and-order.typ
-    words: 1565
+    words: 1564
     status: reviewed
   - subject: distributed-systems
     slug: transactions
@@ -1121,12 +1121,12 @@ chapters:
   - subject: networking
     slug: application-protocols
     path: networking/application-protocols.typ
-    words: 1285
+    words: 1270
     status: reviewed
   - subject: networking
     slug: bgp-routing
     path: networking/bgp-routing.typ
-    words: 1681
+    words: 1660
     status: reviewed
   - subject: networking
     slug: concurrency-models
@@ -1136,22 +1136,22 @@ chapters:
   - subject: networking
     slug: congestion-control
     path: networking/congestion-control.typ
-    words: 2107
+    words: 2097
     status: reviewed
   - subject: networking
     slug: connection-pooling
     path: networking/connection-pooling.typ
-    words: 1766
+    words: 1762
     status: reviewed
   - subject: networking
     slug: container-networking
     path: networking/container-networking.typ
-    words: 1694
+    words: 1695
     status: reviewed
   - subject: networking
     slug: data-center-networking
     path: networking/data-center-networking.typ
-    words: 1667
+    words: 1666
     status: reviewed
   - subject: networking
     slug: debugging
@@ -1161,12 +1161,12 @@ chapters:
   - subject: networking
     slug: dns
     path: networking/dns.typ
-    words: 1430
+    words: 1413
     status: reviewed
   - subject: networking
     slug: grpc
     path: networking/grpc.typ
-    words: 1532
+    words: 1533
     status: reviewed
   - subject: networking
     slug: io-multiplexing
@@ -1176,7 +1176,7 @@ chapters:
   - subject: networking
     slug: ipv6
     path: networking/ipv6.typ
-    words: 2320
+    words: 2289
     status: reviewed
   - subject: networking
     slug: kernel-bypass
@@ -1186,7 +1186,7 @@ chapters:
   - subject: networking
     slug: link-layer
     path: networking/link-layer.typ
-    words: 2414
+    words: 2409
     status: reviewed
   - subject: networking
     slug: load-balancing
@@ -1206,17 +1206,17 @@ chapters:
   - subject: networking
     slug: multipath
     path: networking/multipath.typ
-    words: 1495
+    words: 1489
     status: reviewed
   - subject: networking
     slug: nat
     path: networking/nat.typ
-    words: 1763
+    words: 1749
     status: reviewed
   - subject: networking
     slug: network-security
     path: networking/network-security.typ
-    words: 2923
+    words: 2906
     status: reviewed
   - subject: networking
     slug: observability
@@ -1236,12 +1236,12 @@ chapters:
   - subject: networking
     slug: quic-and-http3
     path: networking/quic-and-http3.typ
-    words: 1578
+    words: 1568
     status: reviewed
   - subject: networking
     slug: realtime-protocols
     path: networking/realtime-protocols.typ
-    words: 2385
+    words: 2377
     status: reviewed
   - subject: networking
     slug: resilience-patterns
@@ -1251,12 +1251,12 @@ chapters:
   - subject: networking
     slug: sdn-programmable-networks
     path: networking/sdn-programmable-networks.typ
-    words: 1738
+    words: 1737
     status: reviewed
   - subject: networking
     slug: service-discovery
     path: networking/service-discovery.typ
-    words: 1659
+    words: 1656
     status: reviewed
   - subject: networking
     slug: service-mesh
@@ -1266,27 +1266,27 @@ chapters:
   - subject: networking
     slug: sockets-api
     path: networking/sockets-api.typ
-    words: 1884
+    words: 1885
     status: reviewed
   - subject: networking
     slug: stateful-firewalls
     path: networking/stateful-firewalls.typ
-    words: 1981
+    words: 1980
     status: reviewed
   - subject: networking
     slug: tls
     path: networking/tls.typ
-    words: 1725
+    words: 1711
     status: reviewed
   - subject: networking
     slug: transport-layer
     path: networking/transport-layer.typ
-    words: 2204
+    words: 2190
     status: reviewed
   - subject: networking
     slug: websockets
     path: networking/websockets.typ
-    words: 1665
+    words: 1657
     status: reviewed
   - subject: networking
     slug: wireless-protocols
@@ -1666,7 +1666,7 @@ chapters:
   - subject: software-architecture
     slug: api-design
     path: software-architecture/api-design.typ
-    words: 1658
+    words: 1653
     status: reviewed
   - subject: software-architecture
     slug: architectural-styles

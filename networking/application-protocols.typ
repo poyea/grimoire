@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Application Protocols
 
@@ -42,7 +42,7 @@ Connection: keep-alive\r\n
 
 == HTTP/2
 
-*Binary, multiplexed protocol [RFC 9113 (obsoletes RFC 7540)].*
+*Binary, multiplexed protocol [#rfc(9113) (obsoletes #rfc(7540))].*
 
 *Key improvements:*
 1. *Binary framing:* Efficient parsing (vs text-based HTTP/1.1)
@@ -63,7 +63,7 @@ Server sends Stream 1 first (higher priority)
 
 == HTTP/3 (QUIC)
 
-*HTTP over QUIC (UDP-based) [RFC 9114].*
+*HTTP over QUIC (UDP-based) [#rfc(9114)].*
 
 *Advantages over HTTP/2:*
 1. *0-RTT connection resumption:* Faster than TCP+TLS handshake
@@ -74,7 +74,7 @@ Server sends Stream 1 first (higher priority)
 
 == DNS (Domain Name System)
 
-*Hierarchical name resolution [RFC 1035].*
+*Hierarchical name resolution [#rfc(1035)].*
 
 *Query flow:*
 ```
@@ -97,7 +97,7 @@ Server sends Stream 1 first (higher priority)
 
 == TLS (Transport Layer Security)
 
-*Encryption layer above TCP [RFC 9846 (obsoletes RFC 8446)].*
+*Encryption layer above TCP [#rfc(9846) (obsoletes #rfc(8446))].*
 
 *TLS 1.3 handshake (1-RTT):*
 ```
@@ -115,7 +115,7 @@ Client → Server: {Finished}
 
 == WebSocket
 
-*Full-duplex framing over a single TCP connection [RFC 6455].*
+*Full-duplex framing over a single TCP connection [#rfc(6455)].*
 
 WebSocket starts as an HTTP/1.1 `Upgrade` handshake and then switches to a framed binary protocol on the same connection. After the upgrade, either side can send frames at any time — eliminating the request/response constraint of HTTP. This makes it the standard transport for real-time applications (chat, collaborative editing, live dashboards, game state).
 
@@ -184,13 +184,13 @@ service UserService {
 
 == References
 
-RFC 9112: HTTP/1.1. Fielding, R., Nottingham, M., & Reschke, J. (2022). (Obsoletes RFC 7230; semantics split out into RFC 9110.)
+#rfc(9112): HTTP/1.1. Fielding, R., Nottingham, M., & Reschke, J. (2022). (Obsoletes #rfc(7230); semantics split out into #rfc(9110).)
 
-RFC 9113: HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes RFC 7540, Belshe et al. 2015.)
+#rfc(9113): HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes #rfc(7540), Belshe et al. 2015.)
 
-RFC 9114: HTTP/3. Bishop, M. (2022).
+#rfc(9114): HTTP/3. Bishop, M. (2022).
 
-RFC 6455: The WebSocket Protocol. Fette, I. & Melnikov, A. (2011).
+#rfc(6455): The WebSocket Protocol. Fette, I. & Melnikov, A. (2011).
 
 OASIS MQTT Version 5.0 Standard. (2019).
 
@@ -200,11 +200,11 @@ Grigorik, I. (2013). High Performance Browser Networking. O'Reilly Media.
 
 == Further Reading
 
-IETF. (2022). "HTTP/2." RFC 9113 (obsoletes RFC 7540, 2015). Specifies binary framing, multiplexing, header compression (HPACK), and server push — the foundational changes that address HTTP/1.1's head-of-line blocking.
+IETF. (2022). "HTTP/2." #rfc(9113) (obsoletes #rfc(7540), 2015). Specifies binary framing, multiplexing, header compression (HPACK), and server push — the foundational changes that address HTTP/1.1's head-of-line blocking.
 
-IETF. (2022). "HTTP/3." RFC 9114. Defines HTTP semantics over QUIC, eliminating TCP-level head-of-line blocking and enabling connection migration for mobile clients.
+IETF. (2022). "HTTP/3." #rfc(9114). Defines HTTP semantics over QUIC, eliminating TCP-level head-of-line blocking and enabling connection migration for mobile clients.
 
-Fette, I., Melnikov, A. (2011). "The WebSocket Protocol." RFC 6455. Standardises the HTTP upgrade handshake and framing layer for full-duplex communication over a single TCP connection.
+Fette, I., Melnikov, A. (2011). "The WebSocket Protocol." #rfc(6455). Standardises the HTTP upgrade handshake and framing layer for full-duplex communication over a single TCP connection.
 
 OASIS. (2019). "MQTT Version 5.0." OASIS Standard. Specifies the publish-subscribe protocol for constrained IoT devices, including QoS levels, retained messages, and the v5 extensions for shared subscriptions and message expiry.
 
@@ -212,4 +212,4 @@ Google. (2015). "gRPC: A High Performance, Open Source Universal RPC Framework."
 
 Grigorik, I. (2013). _High Performance Browser Networking._ O'Reilly Media. Covers the full network stack from TCP through HTTP/2 and WebSocket with practical performance guidance; an accessible bridge between protocol specs and real-world engineering.
 
-Iyengar, J., Thomson, M. (2021). "QUIC: A UDP-Based Multiplexed and Secure Transport." RFC 9000. Defines the QUIC transport protocol underlying HTTP/3, with integrated TLS 1.3, stream multiplexing, and loss recovery without TCP's head-of-line blocking.
+Iyengar, J., Thomson, M. (2021). "QUIC: A UDP-Based Multiplexed and Secure Transport." #rfc(9000). Defines the QUIC transport protocol underlying HTTP/3, with integrated TLS 1.3, stream multiplexing, and loss recovery without TCP's head-of-line blocking.

@@ -1,8 +1,8 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = API Design
 
-An API is a published promise. Unlike internal code, it cannot be refactored at will: every consumer compounds the cost of every design mistake. This chapter covers REST maturity and resource modelling, versioning and pagination, error design under RFC 9457, the gRPC and GraphQL trade space, idempotency, backwards compatibility, and contract tooling with OpenAPI.
+An API is a published promise. Unlike internal code, it cannot be refactored at will: every consumer compounds the cost of every design mistake. This chapter covers REST maturity and resource modelling, versioning and pagination, error design under #rfc(9457), the gRPC and GraphQL trade space, idempotency, backwards compatibility, and contract tooling with OpenAPI.
 
 *See also:* #xref("software-architecture", "event-driven-architecture", label: "Event-Driven Architecture") (asynchronous contracts and event schema evolution), #xref("software-architecture", "distributed-data-patterns", label: "Distributed Data Patterns") (API composition over service-owned data), #xref("software-architecture", "evolutionary-architecture", label: "Evolutionary Architecture") (deprecation policy as a governance practice).
 
@@ -45,11 +45,11 @@ Stripe's model (described by Brandur Leach, 2017) is the gold standard for long-
 
 - *Offset/limit* (`?offset=100&limit=20`): simple, supports jump-to-page; degrades on deep pages (the database still scans and discards `offset` rows) and *drifts*, inserts and deletes between requests shift items across page boundaries, so items are skipped or duplicated.
 - *Cursor/keyset* (`?after=eyJpZCI6MTAyM30&limit=20`): the cursor encodes the last-seen sort key (`WHERE (created, id) > (:c, :i) ORDER BY created, id LIMIT 20`); stable under concurrent writes and $O(log n)$ regardless of depth. The standard for feeds and large collections (Stripe `starting_after`, Slack, GitHub GraphQL connections). Costs: no random access, cursor must be opaque (base64 the key, do not promise its structure), and the sort key must be unique and immutable, hence the `(created, id)` tiebreak.
-- Return pagination metadata uniformly (`next` cursor or RFC 8288 `Link` headers) and document an explicit maximum page size; an unbounded `limit` parameter is a self-service denial-of-service endpoint.
+- Return pagination metadata uniformly (`next` cursor or #rfc(8288) `Link` headers) and document an explicit maximum page size; an unbounded `limit` parameter is a self-service denial-of-service endpoint.
 
-== Error Design and RFC 9457
+== Error Design and #rfc(9457)
 
-Status codes are a coarse taxonomy, machine triage, not diagnosis: 400 vs. 401 vs. 403 vs. 404 vs. 409 vs. 422 vs. 429 each trigger different client behaviour (fix the request, re-authenticate, give up, retry later). The body carries the rest. *RFC 9457, Problem Details for HTTP APIs* (2023, obsoleting RFC 7807) standardises it:
+Status codes are a coarse taxonomy, machine triage, not diagnosis: 400 vs. 401 vs. 403 vs. 404 vs. 409 vs. 422 vs. 429 each trigger different client behaviour (fix the request, re-authenticate, give up, retry later). The body carries the rest. *#rfc(9457), Problem Details for HTTP APIs* (2023, obsoleting #rfc(7807)) standardises it:
 
 ```json
 {
@@ -103,7 +103,7 @@ Either way, the document earns its keep in CI: request/response validation again
 == Further Reading
 
 - Fielding, R. (2000). _Architectural Styles and the Design of Network-based Software Architectures_. PhD dissertation, UC Irvine.
-- Nottingham, M., Wilde, E., & Dalal, S. (2023). RFC 9457: Problem Details for HTTP APIs. IETF.
+- Nottingham, M., Wilde, E., & Dalal, S. (2023). #rfc(9457): Problem Details for HTTP APIs. IETF.
 - Leach, B. (2017). APIs as infrastructure: future-proofing Stripe with versioning. Stripe Engineering Blog.
 - Fowler, M. (2010). Richardson Maturity Model. martinfowler.com.
 - Geewax, J. J. (2021). _API Design Patterns_. Manning.

@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Digital Signatures
 
@@ -49,7 +49,7 @@ DSA (proposed by NIST in 1991, standardised as FIPS 186 in 1994) is a Schnorr va
 
 $ r = (k G)_x mod n, quad s = k^(-1) (H(m) + r d) mod n. $
 
-*The nonce is the Achilles heel.* If $k$ repeats across two messages, the private key follows from two linear equations: this broke the Sony PS3 firmware signing key (2010, constant $k$) and numerous Bitcoin wallets. Even _partial_ nonce bias is fatal: lattice attacks (Howgrave-Graham & Smart; the Minerva and TPM-Fail attacks, 2019) recover keys from a few hundred signatures with only a few bits of bias per nonce. The standard mitigation is *RFC 6979 deterministic ECDSA*, which derives $k$ from the private key and $H(m)$ via HMAC-DRBG, removing the RNG from the hot path.
+*The nonce is the Achilles heel.* If $k$ repeats across two messages, the private key follows from two linear equations: this broke the Sony PS3 firmware signing key (2010, constant $k$) and numerous Bitcoin wallets. Even _partial_ nonce bias is fatal: lattice attacks (Howgrave-Graham & Smart; the Minerva and TPM-Fail attacks, 2019) recover keys from a few hundred signatures with only a few bits of bias per nonce. The standard mitigation is *#rfc(6979) deterministic ECDSA*, which derives $k$ from the private key and $H(m)$ via HMAC-DRBG, removing the RNG from the hot path.
 
 === EdDSA and Ed25519
 
@@ -81,7 +81,7 @@ See _Post-Quantum Cryptography_ for the underlying problems and migration strate
 
 == Implementation Pitfalls
 
-- *Nonce reuse or bias* (ECDSA): use RFC 6979 or Ed25519.
+- *Nonce reuse or bias* (ECDSA): use #rfc(6979) or Ed25519.
 - *Signature malleability*: enforce low-$s$ ECDSA (Bitcoin BIP-62) or use Schnorr/Ed25519; check SUF-CMA if signatures are used as identifiers.
 - *Verification laxity*: always check $r, s in [1, n-1]$; reject the identity point; validate that the public key is on the curve (invalid-curve attacks).
 - *Cross-protocol reuse*: never use one key for both signing and decryption, or across protocol contexts without domain separation in the hash.

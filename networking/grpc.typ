@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = gRPC (Remote Procedure Calls)
 
 gRPC is a high-performance, cross-platform RPC framework built on HTTP/2 and Protocol Buffers.
@@ -430,7 +432,7 @@ gRPC Project (2024). gRPC Documentation. https://grpc.io/docs/
 
 Google (2024). Protocol Buffers Encoding. https://protobuf.dev/programming-guides/encoding/
 
-IETF RFC 9113: HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes RFC 7540.)
+IETF #rfc(9113): HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes #rfc(7540).)
 
 Nally, M. (2020). "gRPC vs REST: Understanding gRPC, OpenAPI and REST." Google Cloud Blog.
 

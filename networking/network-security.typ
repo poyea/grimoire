@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = Network Security
 
 Network security encompasses protocols, architectures, and practices that protect data in transit across untrusted networks. This section covers encryption protocols (IPSec, TLS), VPN architectures, and modern solutions like WireGuard.
@@ -10,7 +12,7 @@ Network security encompasses protocols, architectures, and practices that protec
 
 IPSec operates transparently to applications - no code changes required. Two core protocols:
 
-*1. AH (Authentication Header) [RFC 4302]:*
+*1. AH (Authentication Header) [#rfc(4302)]:*
 - Provides integrity and authentication
 - No encryption (data visible to inspection)
 - Covers entire IP packet including headers (except mutable fields)
@@ -33,7 +35,7 @@ IPSec operates transparently to applications - no code changes required. Two cor
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-*2. ESP (Encapsulating Security Payload) [RFC 4303]:*
+*2. ESP (Encapsulating Security Payload) [#rfc(4303)]:*
 - Provides confidentiality, integrity, and authentication
 - Encrypts payload (data hidden from inspection)
 - Does not protect outer IP header (enables NAT traversal)
@@ -96,7 +98,7 @@ Tunnel Mode (site-to-site):
 
 == IKE (Internet Key Exchange)
 
-*Protocol for establishing IPSec Security Associations (SAs) [RFC 7296].*
+*Protocol for establishing IPSec Security Associations (SAs) [#rfc(7296)].*
 
 IKEv2 establishes shared keys and negotiates algorithms in two phases:
 
@@ -215,7 +217,7 @@ Initiator ──── Noise_IKpsk2 message 1 ────► Responder
 
 == SSH Protocol Internals
 
-*SSH (Secure Shell) is a layered protocol stack defined in RFC 4251–4254. It provides encrypted remote login, command execution, file transfer, and arbitrary TCP tunneling.*
+*SSH (Secure Shell) is a layered protocol stack defined in #rfc(4251)–4254. It provides encrypted remote login, command execution, file transfer, and arbitrary TCP tunneling.*
 
 === Protocol Stack
 
@@ -277,7 +279,7 @@ mac_s→c = HASH(K || H || "F" || session_id)
 ```
 Each direction gets independent IV, cipher key, and MAC key; compromise of one direction does not expose the other.
 
-*OpenSSH source:* `kex_derive_keys()` implements RFC 4253 §7.2 key material expansion: #link("https://github.com/openssh/openssh-portable/blob/master/kex.c")[`kex.c`]
+*OpenSSH source:* `kex_derive_keys()` implements #rfc(4253) §7.2 key material expansion: #link("https://github.com/openssh/openssh-portable/blob/master/kex.c")[`kex.c`]
 
 === Packet Wire Format
 
@@ -298,7 +300,7 @@ Sequence number is implicit (uint32, wraps at 2³²) and prevents replay within 
 
 Three methods in order of security preference:
 
-*1. publickey (RFC 4252 §7):*
+*1. publickey (#rfc(4252) §7):*
 ```
 Client sends: SSH_MSG_USERAUTH_REQUEST
   username, service="ssh-connection", method="publickey",
@@ -322,14 +324,14 @@ Options: `no-pty`, `no-port-forwarding`, `from="IP"`, `command="..."`, `restrict
 
 *2. password:* plaintext password sent inside encrypted channel. Vulnerable to server compromise; avoid in hardened deployments.
 
-*3. keyboard-interactive (RFC 4256):* challenge-response, used for TOTP/PAM integration (e.g., Google Authenticator via `libpam-google-authenticator`).
+*3. keyboard-interactive (#rfc(4256)):* challenge-response, used for TOTP/PAM integration (e.g., Google Authenticator via `libpam-google-authenticator`).
 
 === Host Key Verification and `known_hosts`
 
 On first connect, client receives server's host public key. Client checks `~/.ssh/known_hosts`:
 - If absent: TOFU (Trust On First Use): user prompted, key saved
 - If present but changed: *WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED* (potential MITM)
-- SSHFP DNS records (RFC 4255) provide a CA-independent second channel for verification
+- SSHFP DNS records (#rfc(4255)) provide a CA-independent second channel for verification
 
 ```bash
 # Add SSHFP record to DNS for verified hosts:
@@ -346,7 +348,7 @@ github.com ssh-ed25519 AAAA...
 ```
 Hashed form prevents `known_hosts` from leaking server inventory on client compromise.
 
-=== Channel Multiplexing (RFC 4254)
+=== Channel Multiplexing (#rfc(4254))
 
 SSH multiplexes arbitrary bidirectional streams over a single encrypted TCP connection. Each channel has a local and remote number and independent flow-control windows.
 
@@ -627,13 +629,13 @@ wg-quick up wg0
 
 *IPSec:*
 
-RFC 4301: Security Architecture for the Internet Protocol. Kent, S. & Seo, K. (2005).
+#rfc(4301): Security Architecture for the Internet Protocol. Kent, S. & Seo, K. (2005).
 
-RFC 4302: IP Authentication Header. Kent, S. (2005).
+#rfc(4302): IP Authentication Header. Kent, S. (2005).
 
-RFC 4303: IP Encapsulating Security Payload (ESP). Kent, S. (2005).
+#rfc(4303): IP Encapsulating Security Payload (ESP). Kent, S. (2005).
 
-RFC 7296: Internet Key Exchange Protocol Version 2 (IKEv2). Kaufman, C., et al. (2014).
+#rfc(7296): Internet Key Exchange Protocol Version 2 (IKEv2). Kaufman, C., et al. (2014).
 
 *WireGuard:*
 
@@ -647,19 +649,19 @@ NIST SP 800-207: Zero Trust Architecture. Rose, S., et al. (2020).
 
 *SSH:*
 
-RFC 4251: The Secure Shell (SSH) Protocol Architecture. Ylonen, T. & Lonvick, C. (2006).
+#rfc(4251): The Secure Shell (SSH) Protocol Architecture. Ylonen, T. & Lonvick, C. (2006).
 
-RFC 4252: The Secure Shell (SSH) Authentication Protocol. Ylonen, T. & Lonvick, C. (2006).
+#rfc(4252): The Secure Shell (SSH) Authentication Protocol. Ylonen, T. & Lonvick, C. (2006).
 
-RFC 4253: The Secure Shell (SSH) Transport Layer Protocol. Ylonen, T. & Lonvick, C. (2006).
+#rfc(4253): The Secure Shell (SSH) Transport Layer Protocol. Ylonen, T. & Lonvick, C. (2006).
 
-RFC 4254: The Secure Shell (SSH) Connection Protocol. Ylonen, T. & Lonvick, C. (2006).
+#rfc(4254): The Secure Shell (SSH) Connection Protocol. Ylonen, T. & Lonvick, C. (2006).
 
-RFC 4255: Using DNS to Securely Publish Secure Shell (SSH) Key Fingerprints (SSHFP). Schlyter, J. & Griffin, W. (2006).
+#rfc(4255): Using DNS to Securely Publish Secure Shell (SSH) Key Fingerprints (SSHFP). Schlyter, J. & Griffin, W. (2006).
 
-RFC 4256: Generic Message Exchange Authentication for SSH (keyboard-interactive). Cusack, F. & Forssen, M. (2006).
+#rfc(4256): Generic Message Exchange Authentication for SSH (keyboard-interactive). Cusack, F. & Forssen, M. (2006).
 
-Friedl, M., Provos, N., & Simpson, W. (2006). "Diffie-Hellman Group Exchange for the Secure Shell (SSH) Transport Layer Protocol." RFC 4419.
+Friedl, M., Provos, N., & Simpson, W. (2006). "Diffie-Hellman Group Exchange for the Secure Shell (SSH) Transport Layer Protocol." #rfc(4419).
 
 OpenSSH portable source: #link("https://github.com/openssh/openssh-portable")[`openssh/openssh-portable`]:
 - #link("https://github.com/openssh/openssh-portable/blob/master/kex.c")[`kex.c`]: key exchange and session key derivation

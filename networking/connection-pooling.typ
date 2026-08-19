@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = Connection Pooling
 
 Connection pooling amortizes the cost of establishing connections across multiple requests, eliminating per-request handshake overhead.
@@ -111,13 +113,13 @@ struct AdaptivePool {
 
 === Keep-Alive Configuration
 
-*HTTP Keep-Alive [RFC 9112 (obsoletes RFC 7230)]:*
+*HTTP Keep-Alive [#rfc(9112) (obsoletes #rfc(7230))]:*
 ```http
 Connection: keep-alive
 Keep-Alive: timeout=60, max=1000
 ```
 
-*TCP Keep-Alive [RFC 1122]:*
+*TCP Keep-Alive [#rfc(1122)]:*
 ```cpp
 int optval = 1;
 setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval));
@@ -515,9 +517,9 @@ Little, J.D.C. (1961). "A Proof for the Queuing Formula: L = λW." Operations Re
 
 Brettwooldridge, B. (2014). "HikariCP: About Pool Sizing." github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing.
 
-RFC 9112: HTTP/1.1. Fielding, R., Nottingham, M., & Reschke, J. (2022). (Obsoletes RFC 7230.)
+#rfc(9112): HTTP/1.1. Fielding, R., Nottingham, M., & Reschke, J. (2022). (Obsoletes #rfc(7230).)
 
-RFC 9113: HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes RFC 7540.)
+#rfc(9113): HTTP/2. Thomson, M. & Benfield, C. (2022). (Obsoletes #rfc(7540).)
 
 PostgreSQL Wiki. "Number of Database Connections." wiki.postgresql.org/wiki/Number_Of_Database_Connections.
 

@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Asymmetric Cryptography
 
@@ -36,7 +36,7 @@ NIST recommends $|n| >= 3072$ for new keys ($approx 128$-bit security). $"RSA"$-
 
 The original public-key idea (Diffie-Hellman 1976): given group $G$ with generator $g$, two parties exchange $g^a$ and $g^b$ and compute shared $g^(a b)$. Hardness: Computational Diffie-Hellman (CDH) and Decisional Diffie-Hellman (DDH).
 
-*Finite-field DH* (RFC 7919) requires 3072-bit groups. *Elliptic-curve DH* dominates: 256-bit curves give equivalent security at far lower cost.
+*Finite-field DH* (#rfc(7919)) requires 3072-bit groups. *Elliptic-curve DH* dominates: 256-bit curves give equivalent security at far lower cost.
 
 == Elliptic-Curve Cryptography
 
@@ -71,7 +71,7 @@ pk.verify(b"message", &sig).unwrap();
 
 === $"ECDSA"$ vs EdDSA
 
-$"ECDSA"$ requires a per-signature nonce $k$; *nonce reuse leaks the private key instantly* (Sony PS3 famously did this in 2010). RFC 6979 specifies deterministic ECDSA via $"HMAC"$-derived nonces. EdDSA (Ed25519/Ed448) is deterministic by design: $k = H("hash"("sk") parallel m)$ — recommended for all new code.
+$"ECDSA"$ requires a per-signature nonce $k$; *nonce reuse leaks the private key instantly* (Sony PS3 famously did this in 2010). #rfc(6979) specifies deterministic ECDSA via $"HMAC"$-derived nonces. EdDSA (Ed25519/Ed448) is deterministic by design: $k = H("hash"("sk") parallel m)$ — recommended for all new code.
 
 == Hybrid (KEM/DEM) Encryption
 
@@ -81,7 +81,7 @@ The standard pattern for encrypting arbitrary-length data:
 2. Derive $K = "HKDF"(s parallel g^x parallel g^y)$.
 3. *DEM:* $"AEAD"_K (N, m)$.
 
-Encapsulated form is $(g^x, "ct")$. $"ECIES"$ (SECG SEC 1) formalizes this; modern HPKE (RFC 9180) is the cleaner, more general version used in $"TLS"$ Encrypted Client Hello, $"MLS"$, Apple Private Relay.
+Encapsulated form is $(g^x, "ct")$. $"ECIES"$ (SECG SEC 1) formalizes this; modern HPKE (#rfc(9180)) is the cleaner, more general version used in $"TLS"$ Encrypted Client Hello, $"MLS"$, Apple Private Relay.
 
 ```python
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
@@ -133,9 +133,9 @@ Standard formats:
 
 - *PKCS#8* / SPKI: DER/PEM encoding for private/public keys.
 - *X.509*: certificates (see _Protocols_).
-- *JWK* (RFC 7517): JSON Web Keys for OIDC/JWT.
+- *JWK* (#rfc(7517)): JSON Web Keys for OIDC/JWT.
 - *OpenSSH*: `ssh-ed25519 AAAA... user@host`.
-- *COSE* (RFC 9052/9053, obsoletes RFC 8152): CBOR-encoded for $"WebAuthn"$, $"FIDO2"$.
+- *COSE* (RFC 9052/9053, obsoletes #rfc(8152)): CBOR-encoded for $"WebAuthn"$, $"FIDO2"$.
 
 ```python
 priv_pem = priv.private_bytes(
@@ -146,7 +146,7 @@ priv_pem = priv.private_bytes(
 
 == Common Pitfalls
 
-- *Nonce reuse in ECDSA* exposes the private key after two signatures. Always use RFC 6979 or Ed25519.
+- *Nonce reuse in ECDSA* exposes the private key after two signatures. Always use #rfc(6979) or Ed25519.
 - *Small subgroup attacks* on Curve25519 if cofactor is not handled — X25519 clamping (clear low 3 bits, set bit 254) avoids this.
 - *Invalid-curve attacks*: validate that received points are on the curve and not the identity.
 - *Bleichenbacher and Manger* padding oracles on $"PKCS"$#1 v1.5 and old $"OAEP"$ implementations — use modern libraries that constant-time the padding check.
@@ -159,8 +159,8 @@ priv_pem = priv.private_bytes(
   columns: 2,
   [*Need*], [*Use*],
   [Modern signature], [Ed25519; Ed448 for ultra-high security],
-  [FIPS-required signature], [$"ECDSA"$-P256 with RFC 6979 or $"RSA"$-$"PSS"$-3072],
-  [Hybrid public-key encryption], [HPKE (RFC 9180)],
+  [FIPS-required signature], [$"ECDSA"$-P256 with #rfc(6979) or $"RSA"$-$"PSS"$-3072],
+  [Hybrid public-key encryption], [HPKE (#rfc(9180))],
   [Aggregate signatures], [BLS12-381],
   [Bitcoin / Taproot multisig], [Schnorr + MuSig2],
   [WebAuthn / FIDO2], [$"ECDSA"$-P256 or Ed25519 via COSE],
@@ -178,7 +178,7 @@ Bernstein, D. J. (2006). "Curve25519: new Diffie-Hellman speed records." PKC.
 
 Bernstein, D. J., Duif, N., Lange, T., Schwabe, P., Yang, B-Y. (2012). "High-speed high-security signatures." CHES (Ed25519).
 
-Pornin, T. (2013). "Deterministic Usage of the Digital Signature Algorithm ($"DSA"$) and Elliptic Curve $"DSA"$ ($"ECDSA"$)." RFC 6979.
+Pornin, T. (2013). "Deterministic Usage of the Digital Signature Algorithm ($"DSA"$) and Elliptic Curve $"DSA"$ ($"ECDSA"$)." #rfc(6979).
 
 Wahby, R. S., Boneh, D. (2019). "Fast and simple constant-time hashing to the BLS12-381 elliptic curve."
 
@@ -186,7 +186,7 @@ Boneh, D., Lynn, B., Shacham, H. (2001). "Short Signatures from the Weil Pairing
 
 Nick, J., Ruffing, T., Seurin, Y. (2021). "MuSig2: Simple Two-Round Schnorr Multi-Signatures." CRYPTO.
 
-Barnes, R. et al. (2022). "Hybrid Public Key Encryption." RFC 9180.
+Barnes, R. et al. (2022). "Hybrid Public Key Encryption." #rfc(9180).
 
 Bleichenbacher, D. (1998). "Chosen Ciphertext Attacks Against Protocols Based on the $"RSA"$ Encryption Standard $"PKCS"$#1." CRYPTO.
 

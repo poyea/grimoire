@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Multipath Transport
 
@@ -24,7 +24,7 @@ Multipath transports add a layer above per-path congestion control:
   Wi-Fi  LTE
 ```
 
-Goals (RFC 6182, the MPTCP architecture document):
+Goals (#rfc(6182), the MPTCP architecture document):
 + *Throughput:* aggregate $≥$ any single path.
 + *Robustness:* survive failure of $n-1$ paths.
 + *Fairness:* do not steal bandwidth from single-path TCP sharing any bottleneck.
@@ -96,7 +96,7 @@ sysctl -w net.mptcp.scheduler=blest
 
 If each subflow ran independent NewReno, an MPTCP flow with two paths sharing a single bottleneck would receive twice the bandwidth of a single-path TCP flow, which is unfair. Coupled CC sums (or partially sums) the windows so the aggregate behaves fairly.
 
-=== LIA — Linked Increases Algorithm (RFC 6356)
+=== LIA — Linked Increases Algorithm (#rfc(6356))
 
 For each subflow $r$, on ACK:
 $ w_r ← w_r + min(alpha / w_"total", 1 / w_r) $
@@ -199,13 +199,13 @@ Implementations:
 
 == Further Reading
 
-RFC 6182: Architectural Guidelines for Multipath TCP Development. Ford et al., 2011.
+#rfc(6182): Architectural Guidelines for Multipath TCP Development. Ford et al., 2011.
 
-RFC 6824 (obsoleted by RFC 8684): TCP Extensions for Multipath Operation with Multiple Addresses. Ford et al., 2013.
+#rfc(6824) (obsoleted by #rfc(8684)): TCP Extensions for Multipath Operation with Multiple Addresses. Ford et al., 2013.
 
-RFC 6356: Coupled Congestion Control for Multipath Transport Protocols (LIA). Raiciu et al., 2011.
+#rfc(6356): Coupled Congestion Control for Multipath Transport Protocols (LIA). Raiciu et al., 2011.
 
-RFC 8684: TCP Extensions for Multipath Operation (MPTCP v1, supersedes 6824). 2020.
+#rfc(8684): TCP Extensions for Multipath Operation (MPTCP v1, supersedes 6824). 2020.
 
 Khalili, R. et al. (2012). "MPTCP is not Pareto-Optimal: Performance Issues and a Possible Solution." CoNEXT.
 

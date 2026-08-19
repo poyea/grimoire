@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Key Exchange and PKI
 
@@ -10,7 +10,7 @@ Key exchange lets two parties who share no secret establish one over a public ch
 
 The 1976 Diffie-Hellman protocol (modern practice uses a prime-order subgroup; the original paper worked in $ZZ_p^*$): over a group of prime order $q$ with generator $g$, Alice picks $a$ and sends $g^a$; Bob picks $b$ and sends $g^b$; both compute the shared secret $g^(a b)$.
 
-Security rests on the *computational Diffie-Hellman* (CDH) assumption — given $(g, g^a, g^b)$, computing $g^(a b)$ is hard — and in practice the stronger *decisional* variant (DDH). The raw shared secret is never used directly: a *key derivation function* (HKDF, RFC 5869) extracts uniform keys and binds them to the protocol transcript.
+Security rests on the *computational Diffie-Hellman* (CDH) assumption — given $(g, g^a, g^b)$, computing $g^(a b)$ is hard — and in practice the stronger *decisional* variant (DDH). The raw shared secret is never used directly: a *key derivation function* (HKDF, #rfc(5869)) extracts uniform keys and binds them to the protocol transcript.
 
 === Finite-Field vs. Elliptic-Curve DH
 
@@ -41,7 +41,7 @@ The de facto standard for end-to-end encrypted messaging (Signal, WhatsApp, Goog
 - *Double Ratchet*: each message advances a symmetric KDF chain (forward secrecy per message), and each round trip mixes in a fresh DH exchange (*post-compromise security*: an attacker who steals state is healed out after one honest round trip).
 - *Sealed sender, sender keys*: metadata reduction and group fan-out.
 
-Successor work: *MLS* (Messaging Layer Security, RFC 9420) scales post-compromise-secure group keying to thousands of members via the TreeKEM ratcheting tree; *PQXDH* adds a Kyber (now ML-KEM) ciphertext to X3DH against harvest-now-decrypt-later adversaries.
+Successor work: *MLS* (Messaging Layer Security, #rfc(9420)) scales post-compromise-secure group keying to thousands of members via the TreeKEM ratcheting tree; *PQXDH* adds a Kyber (now ML-KEM) ciphertext to X3DH against harvest-now-decrypt-later adversaries.
 
 == Key Encapsulation Mechanisms
 
@@ -57,7 +57,7 @@ Chain building is genuinely hard: cross-signatures, expired intermediates, and m
 
 === Certificate Issuance and ACME
 
-*ACME* (RFC 8555, the Let's Encrypt protocol) automated domain-validated issuance: the CA challenges the requester to prove control via HTTP-01 (well-known URL), DNS-01 (TXT record), or TLS-ALPN-01. Automation moved the web from yearly manual renewal to 90-day (now trending toward 47-day) certificate lifetimes. *Multi-perspective validation* counters BGP-hijack attacks on the validation path itself.
+*ACME* (#rfc(8555), the Let's Encrypt protocol) automated domain-validated issuance: the CA challenges the requester to prove control via HTTP-01 (well-known URL), DNS-01 (TXT record), or TLS-ALPN-01. Automation moved the web from yearly manual renewal to 90-day (now trending toward 47-day) certificate lifetimes. *Multi-perspective validation* counters BGP-hijack attacks on the validation path itself.
 
 === Revocation
 
@@ -69,7 +69,7 @@ The weakest part of the PKI:
 
 === Certificate Transparency
 
-After the DigiNotar (2011) and Symantec mis-issuance incidents, *Certificate Transparency* (RFC 9162, obsoletes RFC 6962) made issuance publicly auditable: CAs submit certificates to append-only Merkle-tree logs and receive *signed certificate timestamps* (SCTs); Chrome and Safari reject certificates without SCTs from independent logs. CT does not prevent mis-issuance — it guarantees detection, which has proven sufficient to discipline the CA ecosystem (mass distrust of Symantec, 2018).
+After the DigiNotar (2011) and Symantec mis-issuance incidents, *Certificate Transparency* (#rfc(9162), obsoletes #rfc(6962)) made issuance publicly auditable: CAs submit certificates to append-only Merkle-tree logs and receive *signed certificate timestamps* (SCTs); Chrome and Safari reject certificates without SCTs from independent logs. CT does not prevent mis-issuance — it guarantees detection, which has proven sufficient to discipline the CA ecosystem (mass distrust of Symantec, 2018).
 
 == Beyond the Web PKI
 

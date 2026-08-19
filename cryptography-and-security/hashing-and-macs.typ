@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Hashing and MACs
 
@@ -83,7 +83,7 @@ A MAC is a keyed function $T = "MAC"_K (M)$ such that no adversary without $K$ c
 
 === $"HMAC"$
 
-$"HMAC"$ (RFC 2104) wraps any Merkle–Damgård hash and is provably secure under PRF assumption on the compression function. Pad key to block size, XOR with $"ipad"$ and $"opad"$, hash twice:
+$"HMAC"$ (#rfc(2104)) wraps any Merkle–Damgård hash and is provably secure under PRF assumption on the compression function. Pad key to block size, XOR with $"ipad"$ and $"opad"$, hash twice:
 
 $ "HMAC"_K (M) = H((K plus.o "opad") parallel H((K plus.o "ipad") parallel M)) $
 
@@ -111,7 +111,7 @@ Generic hashes are too fast for passwords. Use *memory-hard* functions that resi
   [$"PBKDF2"$], [2000], [legacy, FIPS-required only],
   [$"bcrypt"$], [1999], [moderate, fixed 72-byte input limit],
   [$"scrypt"$], [2009], [memory-hard, CPU/RAM tradeoff],
-  [$"Argon2id"$], [2015], [recommended (OWASP, RFC 9106)],
+  [$"Argon2id"$], [2015], [recommended (OWASP, #rfc(9106))],
 )
 
 ```python
@@ -123,7 +123,7 @@ ph.verify(hash_str, "correct horse battery staple")
 
 OWASP 2023 recommends $"Argon2id"$ $(t=2, m = 19 "MiB", p=1)$ minimum, or $"scrypt"$ $(N=2^17, r=8, p=1)$.
 
-*KDFs* expand or extract entropy. $"HKDF"$ (RFC 5869) is the standard: extract then expand.
+*KDFs* expand or extract entropy. $"HKDF"$ (#rfc(5869)) is the standard: extract then expand.
 
 ```python
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
@@ -160,7 +160,7 @@ def verify_proof(leaf, proof, root, index):
     return h == root
 ```
 
-*Second-preimage on Merkle trees*: without domain separation between leaf and internal nodes, an attacker can swap subtrees. The Bitcoin Merkle root has this flaw; Certificate Transparency (RFC 6962) and Signed Merkle Trees fix it with leaf/node tags.
+*Second-preimage on Merkle trees*: without domain separation between leaf and internal nodes, an attacker can swap subtrees. The Bitcoin Merkle root has this flaw; Certificate Transparency (#rfc(6962)) and Signed Merkle Trees fix it with leaf/node tags.
 
 *Sparse Merkle Trees* (SMTs) and *Verkle trees* (Kuszmaul 2018; using vector commitments) provide more compact proofs for stateful systems like Ethereum.
 
@@ -202,11 +202,11 @@ NIST FIPS 202 (2015). "$"SHA"$-3 Standard: Permutation-Based Hash and Extendable
 
 NIST SP 800-185 (2016). "$"SHA"$-3 Derived Functions: $"cSHAKE"$, $"KMAC"$, $"TupleHash"$, $"ParallelHash"$."
 
-Krawczyk, H., Bellare, M., Canetti, R. (1997). "$"HMAC"$: Keyed-Hashing for Message Authentication." RFC 2104.
+Krawczyk, H., Bellare, M., Canetti, R. (1997). "$"HMAC"$: Keyed-Hashing for Message Authentication." #rfc(2104).
 
-Krawczyk, H., Eronen, P. (2010). "$"HKDF"$: $"HMAC"$-based Extract-and-Expand Key Derivation Function." RFC 5869.
+Krawczyk, H., Eronen, P. (2010). "$"HKDF"$: $"HMAC"$-based Extract-and-Expand Key Derivation Function." #rfc(5869).
 
-Biryukov, A., Dinu, D., Khovratovich, D. (2016). "$"Argon2"$." RFC 9106.
+Biryukov, A., Dinu, D., Khovratovich, D. (2016). "$"Argon2"$." #rfc(9106).
 
 Percival, C. (2009). "Stronger Key Derivation via Sequential Memory-Hard Functions." (scrypt.)
 
@@ -214,6 +214,6 @@ Aumasson, J-P., O'Connor, J., Schmidt, S., Wilcox-O'Hearn, Z. (2020). "$"BLAKE3"
 
 Stevens, M. et al. (2017). "The first collision for full $"SHA"$-1." CRYPTO (SHAttered).
 
-Laurie, B., Messeri, E., & Stradling, R. (2021). "Certificate Transparency Version 2.0." RFC 9162. (Obsoletes RFC 6962, Laurie et al. 2013.)
+Laurie, B., Messeri, E., & Stradling, R. (2021). "Certificate Transparency Version 2.0." #rfc(9162). (Obsoletes #rfc(6962), Laurie et al. 2013.)
 
 Aumasson, J-P., Bernstein, D. J. (2012). "$"SipHash"$: a fast short-input PRF." INDOCRYPT.

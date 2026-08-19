@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = TLS: Transport Layer Security
 
@@ -10,10 +10,10 @@ TLS (formerly SSL) is the cryptographic protocol securing nearly all internet tr
 
 TLS has gone through several iterations, each retiring broken constructions:
 
-- *SSL 3.0* — broken by the POODLE attack (Möller et al. 2014); padding oracle on CBC mode. RFC 7568 prohibits SSL 3.0.
-- *TLS 1.0 / 1.1* — deprecated by RFC 8996 (2021); both share CBC-mode vulnerabilities (BEAST, Lucky Thirteen). Browsers dropped them in 2020.
-- *TLS 1.2* (RFC 5246, 2008) — still widely deployed; supports AEAD ciphers when configured correctly; vulnerable if misconfigured (RC4, static RSA).
-- *TLS 1.3* (RFC 8446, 2018) — current standard; removed all legacy constructions; mandatory forward secrecy; simplified handshake; faster.
+- *SSL 3.0* — broken by the POODLE attack (Möller et al. 2014); padding oracle on CBC mode. #rfc(7568) prohibits SSL 3.0.
+- *TLS 1.0 / 1.1* — deprecated by #rfc(8996) (2021); both share CBC-mode vulnerabilities (BEAST, Lucky Thirteen). Browsers dropped them in 2020.
+- *TLS 1.2* (#rfc(5246), 2008) — still widely deployed; supports AEAD ciphers when configured correctly; vulnerable if misconfigured (RC4, static RSA).
+- *TLS 1.3* (#rfc(8446), 2018) — current standard; removed all legacy constructions; mandatory forward secrecy; simplified handshake; faster.
 
 The practical enforcement baseline is TLS 1.2 minimum, TLS 1.3 preferred. NIST SP 800-52r2 prohibits SSL and TLS 1.0/1.1 in federal systems.
 
@@ -201,7 +201,7 @@ Post-quantum signatures (ML-DSA) are much larger (~2.5 KB) and not yet deployed 
 
 == Further Reading
 
-Rescorla, E. (2026). "The Transport Layer Security (TLS) Protocol Version 1.3." RFC 9846. (Obsoletes RFC 8446, 2018.)
+Rescorla, E. (2026). "The Transport Layer Security (TLS) Protocol Version 1.3." #rfc(9846). (Obsoletes #rfc(8446), 2018.)
 
 Rescorla, E., Oku, K., Sullivan, N., Wood, C. A. "TLS Encrypted Client Hello." draft-ietf-tls-esni (IETF work in progress).
 

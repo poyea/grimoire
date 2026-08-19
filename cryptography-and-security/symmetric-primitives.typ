@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Symmetric Primitives
 
@@ -89,7 +89,7 @@ pt = aesgcm.decrypt(nonce, ct, aad)   # raises InvalidTag if AAD/ct modified
 
 === $"ChaCha20"$-$"Poly1305"$
 
-$"ChaCha20"$ is a 20-round ARX stream cipher; $"Poly1305"$ is a one-time polynomial MAC in $"GF"(2^130 - 5)$. Together they form RFC 8439 AEAD — the default for TLS on mobile (no $"AES"$-NI required, no cache-timing risk).
+$"ChaCha20"$ is a 20-round ARX stream cipher; $"Poly1305"$ is a one-time polynomial MAC in $"GF"(2^130 - 5)$. Together they form #rfc(8439) AEAD — the default for TLS on mobile (no $"AES"$-NI required, no cache-timing risk).
 
 ```rust
 use chacha20poly1305::{ChaCha20Poly1305, Key, Nonce, aead::{Aead, KeyInit}};
@@ -109,7 +109,7 @@ let pt = cipher.decrypt(nonce, ct.as_ref()).unwrap();
   [Nonce size], [96 bits], [96 bits], [96 bits],
   [Nonce reuse], [catastrophic], [catastrophic], [graceful (reveals only equality)],
   [Throughput], [\~4 GB/s with HW], [\~2 GB/s], [\~3 GB/s with HW],
-  [Standard], [NIST SP 800-38D], [RFC 8439], [RFC 8452],
+  [Standard], [NIST SP 800-38D], [#rfc(8439)], [#rfc(8452)],
 )
 
 === Nonce-Misuse-Resistant: $"AES"$-$"GCM"$-$"SIV"$
@@ -201,9 +201,9 @@ NIST SP 800-38D (2007). "Recommendation for Block Cipher Modes of Operation: Gal
 
 Bernstein, D. J. (2008). "$"ChaCha"$, a variant of $"Salsa20"$."
 
-Nir, Y., Langley, A. (2018). "$"ChaCha20"$ and $"Poly1305"$ for IETF Protocols." RFC 8439.
+Nir, Y., Langley, A. (2018). "$"ChaCha20"$ and $"Poly1305"$ for IETF Protocols." #rfc(8439).
 
-Gueron, S., Langley, A., Lindell, Y. (2017). "$"AES"$-$"GCM"$-$"SIV"$: Specification and Analysis." RFC 8452.
+Gueron, S., Langley, A., Lindell, Y. (2017). "$"AES"$-$"GCM"$-$"SIV"$: Specification and Analysis." #rfc(8452).
 
 Joux, A. (2006). "Authentication Failures in NIST version of $"GCM"$." (Forbidden attack.)
 

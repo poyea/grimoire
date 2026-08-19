@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = DNS (Domain Name System)
 
 The Domain Name System is a hierarchical, distributed naming system that maps human-readable domain names to IP addresses and other resource records.
@@ -6,7 +8,7 @@ The Domain Name System is a hierarchical, distributed naming system that maps hu
 
 == DNS Architecture and Hierarchy
 
-*DNS provides [RFC 1034, RFC 1035]:*
+*DNS provides [#rfc(1034), #rfc(1035)]:*
 - Hierarchical namespace (root → TLD → domain → subdomain)
 - Distributed database (no single point of failure)
 - Caching at multiple levels (resolver, OS, application)
@@ -84,7 +86,7 @@ Client                Recursive Resolver        Root NS      .com NS     example
 | SRV   | 33    | Service location (port, priority, weight) | \_ldap.\_tcp.example.com           |
 | CAA   | 257   | Certificate authority authorization       | 0 issue "letsencrypt.org"          |
 
-*CNAME restrictions [RFC 1034]:*
+*CNAME restrictions [#rfc(1034)]:*
 - CNAME cannot coexist with other records at same name
 - Cannot be used at zone apex (use ALIAS/ANAME instead, non-standard)
 
@@ -92,7 +94,7 @@ Client                Recursive Resolver        Root NS      .com NS     example
 
 == DNS Message Format
 
-*DNS message structure [RFC 1035]:*
+*DNS message structure [#rfc(1035)]:*
 
 ```
 ┌────────────────────────────────────────┐
@@ -118,7 +120,7 @@ Client                Recursive Resolver        Root NS      .com NS     example
 - RCODE: Response code (0=NOERROR, 3=NXDOMAIN, 2=SERVFAIL)
 
 *Size limits:*
-- UDP: 512 bytes traditional, 4096 bytes with EDNS0 [RFC 6891]
+- UDP: 512 bytes traditional, 4096 bytes with EDNS0 [#rfc(6891)]
 - TCP: 65535 bytes (2-byte length prefix)
 
 == DNS Caching and TTL
@@ -148,7 +150,7 @@ Application Cache (browser)
    Authoritative Server (source of truth)
 ```
 
-*Negative caching [RFC 2308]:*
+*Negative caching [#rfc(2308)]:*
 - NXDOMAIN responses cached based on SOA minimum TTL
 - Prevents repeated queries for non-existent domains
 - Typical negative TTL: 300-3600s
@@ -159,13 +161,13 @@ Application Cache (browser)
 
 *Traditional DNS:* Plaintext UDP, no authentication. Vulnerable to eavesdropping and manipulation.
 
-*DoT (DNS over TLS) [RFC 7858]:*
+*DoT (DNS over TLS) [#rfc(7858)]:*
 - Port 853
 - TLS 1.2+ encryption
 - Server authentication via certificates
 - *Latency overhead:* +1-2 RTT for TLS handshake (first query)
 
-*DoH (DNS over HTTPS) [RFC 8484]:*
+*DoH (DNS over HTTPS) [#rfc(8484)]:*
 - Port 443 (same as HTTPS)
 - HTTP/2 or HTTP/3 transport
 - Harder to block (indistinguishable from web traffic)
@@ -188,7 +190,7 @@ Application Cache (browser)
 
 *Problem:* DNS responses can be forged (cache poisoning, man-in-the-middle).
 
-*DNSSEC provides [RFC 4033, 4034, 4035]:*
+*DNSSEC provides [#rfc(4033), 4034, 4035]:*
 - Data origin authentication (cryptographic signatures)
 - Data integrity verification
 - Authenticated denial of existence (NSEC/NSEC3)
@@ -262,7 +264,7 @@ Validator verifies all signatures up to root
 
 2. *DNS amplification DDoS:*
    - Small query → large response (amplification factor 50-100x)
-   - ANY queries especially dangerous (now deprecated [RFC 8482])
+   - ANY queries especially dangerous (now deprecated [#rfc(8482)])
    - Mitigated by: Response rate limiting, BCP38 (source address validation)
 
 3. *DNS tunneling:*
@@ -284,25 +286,25 @@ Validator verifies all signatures up to root
 
 *Primary sources:*
 
-RFC 1034: Domain Names - Concepts and Facilities. Mockapetris, P. (1987).
+#rfc(1034): Domain Names - Concepts and Facilities. Mockapetris, P. (1987).
 
-RFC 1035: Domain Names - Implementation and Specification. Mockapetris, P. (1987).
+#rfc(1035): Domain Names - Implementation and Specification. Mockapetris, P. (1987).
 
-RFC 2308: Negative Caching of DNS Queries. Andrews, M. (1998).
+#rfc(2308): Negative Caching of DNS Queries. Andrews, M. (1998).
 
-RFC 4033: DNS Security Introduction and Requirements. Arends, R. et al. (2005).
+#rfc(4033): DNS Security Introduction and Requirements. Arends, R. et al. (2005).
 
-RFC 4034: Resource Records for DNS Security Extensions. Arends, R. et al. (2005).
+#rfc(4034): Resource Records for DNS Security Extensions. Arends, R. et al. (2005).
 
-RFC 4035: Protocol Modifications for DNS Security Extensions. Arends, R. et al. (2005).
+#rfc(4035): Protocol Modifications for DNS Security Extensions. Arends, R. et al. (2005).
 
-RFC 6891: Extension Mechanisms for DNS (EDNS(0)). Damas, J., Graff, M., & Vixie, P. (2013).
+#rfc(6891): Extension Mechanisms for DNS (EDNS(0)). Damas, J., Graff, M., & Vixie, P. (2013).
 
-RFC 7858: Specification for DNS over Transport Layer Security (TLS). Hu, Z. et al. (2016).
+#rfc(7858): Specification for DNS over Transport Layer Security (TLS). Hu, Z. et al. (2016).
 
-RFC 8484: DNS Queries over HTTPS (DoH). Hoffman, P. & McManus, P. (2018).
+#rfc(8484): DNS Queries over HTTPS (DoH). Hoffman, P. & McManus, P. (2018).
 
-RFC 8482: Providing Minimal-Sized Responses to DNS Queries That Have QTYPE=ANY. Abley, J. et al. (2019).
+#rfc(8482): Providing Minimal-Sized Responses to DNS Queries That Have QTYPE=ANY. Abley, J. et al. (2019).
 
 Mockapetris, P. & Dunlap, K. (1988). "Development of the Domain Name System." SIGCOMM '88.
 

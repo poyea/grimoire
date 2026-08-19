@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Data Center Networking
 
@@ -30,7 +30,7 @@ Leaf-Spine (3-stage Clos):
 
 The original *fat-tree* (Al-Fares et al., SIGCOMM 2008) generalises to a $k$-ary structure with $k^3 / 4$ servers and full bisection bandwidth using $k$-port commodity switches throughout. Microsoft's VL2 (2009), Google's Jupiter (2015), and Meta's F16 / Disaggregated Scheduled Fabric all derive from the fat-tree.
 
-*Routing.* The fabric is a Layer-3 network with BGP unnumbered between every leaf and spine (RFC 7938, "Use of BGP for Routing in Large-Scale Data Centers"). OSPF is also used, but BGP has won at hyperscale because of its policy expressiveness and operational maturity.
+*Routing.* The fabric is a Layer-3 network with BGP unnumbered between every leaf and spine (#rfc(7938), "Use of BGP for Routing in Large-Scale Data Centers"). OSPF is also used, but BGP has won at hyperscale because of its policy expressiveness and operational maturity.
 
 == ECMP and Flow Hashing
 
@@ -198,7 +198,7 @@ Greenberg, A. et al. (2009). "VL2: A Scalable and Flexible Data Center Network."
 
 Singh, A. et al. (2015). "Jupiter Rising: A Decade of Clos Topologies and Centralized Control in Google's Datacenter Network." SIGCOMM.
 
-RFC 7938: Use of BGP for Routing in Large-Scale Data Centers.
+#rfc(7938): Use of BGP for Routing in Large-Scale Data Centers.
 
 Guo, C. et al. (2016). "RDMA over Commodity Ethernet at Scale." SIGCOMM (Microsoft RoCEv2 lessons).
 

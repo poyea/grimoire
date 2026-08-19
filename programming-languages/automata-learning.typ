@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Automata Learning
 
@@ -282,7 +282,7 @@ Register-automaton learning, integrating with LearnLib.
 
 == Application: Protocol State-Machine Inference
 
-*Case study (de Ruiter--Poll 2015).* The learner queries a TLS server with handshake messages and records responses. A Mealy-machine $L^*$ run produces a finite state machine of the implementation's TLS state. Comparisons across implementations (OpenSSL, GnuTLS, NSS, Java JSSE) reveal non-conformance: states implementing alerts inconsistently with RFC 5246, "fast forward" paths bypassing client authentication. Several CVE entries traced to learned state machines.
+*Case study (de Ruiter--Poll 2015).* The learner queries a TLS server with handshake messages and records responses. A Mealy-machine $L^*$ run produces a finite state machine of the implementation's TLS state. Comparisons across implementations (OpenSSL, GnuTLS, NSS, Java JSSE) reveal non-conformance: states implementing alerts inconsistently with #rfc(5246), "fast forward" paths bypassing client authentication. Several CVE entries traced to learned state machines.
 
 *Case study (Aarts--de Ruiter--Poll 2013).* EMV bank-card chip protocol learning yields state machines exposing implementation-specific deviations relevant to attack reproduction.
 

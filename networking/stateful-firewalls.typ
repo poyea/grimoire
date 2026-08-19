@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": rfc, xref
 
 = Stateful Firewalls
 
@@ -465,9 +465,9 @@ _Modern deployments: prefer nftables over iptables. For $>$ 10 Gbps, consider XD
 
 == Further Reading
 
-RFC 5382: NAT Behavioral Requirements for TCP. Guha et al., 2008.
+#rfc(5382): NAT Behavioral Requirements for TCP. Guha et al., 2008.
 
-RFC 6146: Stateful NAT64. Bagnulo et al., 2011.
+#rfc(6146): Stateful NAT64. Bagnulo et al., 2011.
 
 Ayuso, P. (2006). "Netfilter's Connection Tracking System." `;login:` USENIX.
 

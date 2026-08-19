@@ -1,3 +1,5 @@
+#import "../template.typ": rfc
+
 = Transport Layer
 
 The transport layer provides end-to-end communication between applications. Two primary protocols: TCP (reliable, ordered, connection-oriented) and UDP (unreliable, unordered, connectionless).
@@ -6,7 +8,7 @@ The transport layer provides end-to-end communication between applications. Two 
 
 == TCP (Transmission Control Protocol)
 
-*TCP provides [RFC 9293 (obsoletes RFC 793)]:*
+*TCP provides [#rfc(9293) (obsoletes #rfc(793))]:*
 - Reliable delivery (retransmission of lost packets)
 - Ordered delivery (sequence numbers)
 - Flow control (receiver window)
@@ -65,7 +67,7 @@ Client                          Server
 
 *Latency:* 1 RTT before client can send data, 1.5 RTT before server can send data.
 
-*Modern optimization - TCP Fast Open (TFO) [RFC 7413]:*
+*Modern optimization - TCP Fast Open (TFO) [#rfc(7413)]:*
 
 ```
 Client                          Server
@@ -236,7 +238,7 @@ sysctl -p
 
 *Solution:* Receiver advertises available buffer space in TCP Window field (16-bit, max 65535 bytes).
 
-*Window scaling [RFC 7323 (obsoletes RFC 1323)]:*
+*Window scaling [#rfc(7323) (obsoletes #rfc(1323))]:*
 ```cpp
 // Option in SYN: window scale factor (0-14)
 // Actual window = TCP_window << scale_factor
@@ -265,7 +267,7 @@ net.ipv4.tcp_wmem = 4096 16384 67108864  # 4KB, 16KB, 64MB
 
 == TCP Retransmission and Timeouts
 
-*RTO (Retransmission Timeout) calculation [RFC 6298]:*
+*RTO (Retransmission Timeout) calculation [#rfc(6298)]:*
 
 ```cpp
 // Karn's algorithm with Jacobson's variance
@@ -280,7 +282,7 @@ RTO = max(RTO, 1 second)  // Floor
 
 *Fast retransmit:* 3 duplicate ACKs → assume packet lost → retransmit immediately (don't wait for RTO).
 
-*SACK (Selective Acknowledgment) [RFC 2018]:*
+*SACK (Selective Acknowledgment) [#rfc(2018)]:*
 
 Without SACK:
 ```
@@ -299,7 +301,7 @@ Sender knows: 100 lost, 101-200 received → retransmit only 100
 
 == TCP Nagle's Algorithm and Delay
 
-*Nagle's algorithm [RFC 896]:* Coalesce small writes to reduce packet count.
+*Nagle's algorithm [#rfc(896)]:* Coalesce small writes to reduce packet count.
 
 ```cpp
 // Simplified logic
@@ -346,7 +348,7 @@ setsockopt(sock, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));  // Flush
 
 == UDP (User Datagram Protocol)
 
-*UDP characteristics [RFC 768]:*
+*UDP characteristics [#rfc(768)]:*
 - Connectionless (no handshake)
 - Unreliable (no retransmission)
 - Unordered (no sequence numbers)
@@ -381,7 +383,7 @@ setsockopt(sock, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));  // Flush
 
 == QUIC (Quick UDP Internet Connections)
 
-*Modern transport protocol (HTTP/3 foundation) [RFC 9000]:*
+*Modern transport protocol (HTTP/3 foundation) [#rfc(9000)]:*
 
 *Key innovations:*
 1. *0-RTT connection resumption:* TLS + transport in single handshake
@@ -411,7 +413,7 @@ Client → Server: QUIC handshake + HTTP request  (1 RTT)
 
 *1. Silly Window Syndrome:* Receiver advertises small windows → sender sends tiny segments.
 
-*Solution:* Don't advertise window < MSS unless buffer empty [RFC 1122].
+*Solution:* Don't advertise window < MSS unless buffer empty [#rfc(1122)].
 
 *2. Delayed ACKs:* Receiver waits up to 500ms to ACK (hoping for data to piggyback).
 
@@ -442,13 +444,13 @@ setsockopt(sock, IPPROTO_TCP, TCP_QUICKACK, &flag, sizeof(flag));
 
 *Primary sources:*
 
-RFC 9293: Transmission Control Protocol. Eddy, W. (2022). (Updates and obsoletes RFC 793, Postel 1981.)
+#rfc(9293): Transmission Control Protocol. Eddy, W. (2022). (Updates and obsoletes #rfc(793), Postel 1981.)
 
-RFC 768: User Datagram Protocol. Postel, J. (1980).
+#rfc(768): User Datagram Protocol. Postel, J. (1980).
 
-RFC 7413: TCP Fast Open. Cheng, Y., Chu, J., Radhakrishnan, S., & Jain, A. (2014).
+#rfc(7413): TCP Fast Open. Cheng, Y., Chu, J., Radhakrishnan, S., & Jain, A. (2014).
 
-RFC 9000: QUIC: A UDP-Based Multiplexed and Secure Transport. Iyengar, J. & Thomson, M. (2021).
+#rfc(9000): QUIC: A UDP-Based Multiplexed and Secure Transport. Iyengar, J. & Thomson, M. (2021).
 
 Jacobson, V. (1988). "Congestion Avoidance and Control." SIGCOMM '88.
 
@@ -456,4 +458,4 @@ Ha, S., Rhee, I., & Xu, L. (2008). "CUBIC: A New TCP-Friendly High-Speed TCP Var
 
 Cardwell, N., Cheng, Y., Gunn, C.S., Yeganeh, S.H., & Jacobson, V. (2016). "BBR: Congestion-Based Congestion Control." Communications of the ACM 60(2): 58-66.
 
-Mathis, M., Mahdavi, J., Floyd, S., & Romanow, A. (1996). "TCP Selective Acknowledgment Options." RFC 2018.
+Mathis, M., Mahdavi, J., Floyd, S., & Romanow, A. (1996). "TCP Selective Acknowledgment Options." #rfc(2018).
