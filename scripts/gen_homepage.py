@@ -201,6 +201,11 @@ SHARED_CSS = """\
     padding: 0.35rem 1rem; transition: background 0.2s;
   }
   .meta a.pdf:hover { background: var(--accent); }
+  .meta a.read {
+    color: var(--ink); text-decoration: none; padding: 0.35rem 1rem;
+    box-shadow: inset 0 0 0 1px var(--ink); transition: background 0.2s, color 0.2s;
+  }
+  .meta a.read:hover { background: var(--ink); color: var(--paper); }
   .toc details {
     border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
   }
@@ -296,8 +301,9 @@ def volume_page(i: int, slug: str, title: str, desc: str,
   <p class="desc">{esc(desc)}</p>
   <div class="meta">
     <span><strong>CHAPTERS</strong> · {len(chs)}</span>
-    <span><strong>FORMAT</strong> · PDF</span>
+    <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="{pdf}">Download PDF ↓</a>
+    <a class="read" href="../__compiled/{slug}.html">Read online ↗</a>
   </div>
   <div class="toc">
 {toc}

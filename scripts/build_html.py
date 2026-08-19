@@ -23,6 +23,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+SITE = "https://poyea.github.io/grimoire/"
 
 # Warnings that are inherent to rendering a paged document as HTML and say
 # nothing about the health of this build.
@@ -53,33 +54,89 @@ def interesting(stderr: str) -> list[str]:
     return out
 
 
+def add_canonical(dest: Path, slug: str) -> None:
+    """Point search engines at the curated volume page, not this export.
+
+    Both pages carry the same title and cover the same material, so without
+    this they compete for the same query. Typst generates <head> itself and
+    rejects a second one emitted from the document body, so the tag has to
+    be spliced in afterwards.
+    """
+    text = dest.read_text(encoding="utf-8")
+    if 'rel="canonical"' in text or "</head>" not in text:
+        return
+    tag = '<link rel="canonical" href="' + SITE + "volumes/" + slug + '.html">'
+    dest.write_text(text.replace("</head>", tag + "</head>", 1),
+                    encoding="utf-8")
+
+
+INDEX_CSS = """
+  :root { color-scheme: light dark; --ink: #17150f; --paper: #faf8f3;
+          --soft: #8883; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #ece8e0; --paper: #14130f; }
+  }
+  body { background: var(--paper); color: var(--ink);
+         font: 400 17px/1.6 Newsreader, Georgia, serif;
+         max-width: 42rem; margin: 0 auto; padding: 2rem 1.2rem 5rem; }
+  a { color: inherit; text-underline-offset: 3px; }
+  .back { font: 500 .78rem/1 Inter, system-ui, sans-serif;
+          letter-spacing: .04em; text-transform: uppercase;
+          text-decoration: none; opacity: .7; }
+  .back:hover { opacity: 1; }
+  h1 { font: 600 2rem/1.2 Newsreader, Georgia, serif; margin: 2rem 0 .5rem; }
+  .note { font-size: .95rem; opacity: .8; border-left: 2px solid var(--soft);
+          padding-left: .9rem; margin: 1.2rem 0 2rem; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li { display: flex; justify-content: space-between; align-items: baseline;
+       gap: 1rem; padding: .5rem 0; border-bottom: 1px solid var(--soft); }
+  .kb { font: 400 .78rem/1 Inter, system-ui, sans-serif; opacity: .55;
+        white-space: nowrap; }
+  footer { margin-top: 3rem; font: 400 .8rem/1.5 Inter, system-ui, sans-serif;
+           opacity: .65; }
+"""
+
+FONTS = ("https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;"
+         "0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap")
+
+
 def write_index(out_dir: Path, built: list[tuple[str, int]]) -> None:
+    """Listing page for the compiled volumes.
+
+    Mirrors the typography of the curated site (scripts/gen_homepage.py) so
+    this does not read as a different property, while staying self-contained
+    rather than importing that module's stylesheet wholesale.
+    """
     rows = "\n".join(
-        f'      <li><a href="{html.escape(slug)}.html">{html.escape(slug)}</a>'
-        f' <span class="kb">{kb:,} KB</span></li>'
+        '    <li><a href="{s}.html">{s}</a>'
+        '<span class="kb">{k:,} KB</span></li>'.format(
+            s=html.escape(slug), k=kb)
         for slug, kb in built
     )
-    (out_dir / "index.html").write_text(
-        "<!doctype html>\n"
-        '<html lang="en"><head><meta charset="utf-8">\n'
-        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        "<title>Grimoire — compiled volumes</title>\n"
-        "<style>\n"
-        " body{font:16px/1.6 system-ui,sans-serif;max-width:44rem;"
-        "margin:3rem auto;padding:0 1rem}\n"
-        " li{margin:.35rem 0} .kb{color:#777;font-size:.85em}\n"
-        " .note{color:#666;font-size:.9em;border-left:3px solid #ddd;"
-        "padding-left:.8rem}\n"
-        "</style></head><body>\n"
+    page = (
+        '<!DOCTYPE html>\n<html lang="en">\n<head>\n'
+        '<meta charset="UTF-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+        "<title>Compiled volumes — Grimoire</title>\n"
+        '<meta name="description" content="Full text of every Grimoire volume, '
+        'rendered to HTML from the Typst sources.">\n'
+        '<link rel="canonical" href="' + SITE + '__compiled/index.html">\n'
+        '<link href="' + FONTS + '" rel="stylesheet">\n'
+        "<style>" + INDEX_CSS + "</style>\n"
+        "</head>\n<body>\n"
+        '  <a class="back" href="../index.html">← Grimoire</a>\n'
         "  <h1>Compiled volumes</h1>\n"
-        '  <p class="note">Generated from the Typst sources by\n'
-        "  <code>scripts/build_html.py</code> at deploy time. Typst HTML\n"
-        "  export is experimental; the PDFs on the releases page remain\n"
-        "  the reference rendering.</p>\n"
-        f"  <ul>\n{rows}\n  </ul>\n"
-        "</body></html>\n",
-        encoding="utf-8",
+        '  <p class="note">The full text of every volume, rendered to HTML '
+        "from the Typst sources at deploy time. Typst’s HTML export is "
+        'experimental, so the <a href="https://github.com/poyea/grimoire/'
+        'releases">released PDFs</a> remain the reference typesetting.</p>\n'
+        "  <ul>\n" + rows + "\n  </ul>\n"
+        "  <footer>\n"
+        '    by <a href="https://github.com/poyea">@poyea</a> ·\n'
+        '    <a href="https://github.com/poyea/grimoire">source ↗</a>\n'
+        "  </footer>\n</body>\n</html>\n"
     )
+    (out_dir / "index.html").write_text(page, encoding="utf-8")
 
 
 def main() -> int:
@@ -119,6 +176,7 @@ def main() -> int:
             for n in notes[:5]:
                 print(f"        {n}")
             continue
+        add_canonical(dest, vol.stem)
         kb = dest.stat().st_size // 1024
         built.append((vol.stem, kb))
         flag = f"  ({len(notes)} note(s))" if notes else ""

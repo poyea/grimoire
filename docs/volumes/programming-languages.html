@@ -72,6 +72,11 @@
     padding: 0.35rem 1rem; transition: background 0.2s;
   }
   .meta a.pdf:hover { background: var(--accent); }
+  .meta a.read {
+    color: var(--ink); text-decoration: none; padding: 0.35rem 1rem;
+    box-shadow: inset 0 0 0 1px var(--ink); transition: background 0.2s, color 0.2s;
+  }
+  .meta a.read:hover { background: var(--ink); color: var(--paper); }
   .toc details {
     border-bottom: 1px solid var(--rule-soft); padding: 0.55rem 0;
   }
@@ -111,8 +116,9 @@
   <p class="desc">Automata, semantics, type theory, and a compiler from scratch — from Myhill–Nerode to HoTT.</p>
   <div class="meta">
     <span><strong>CHAPTERS</strong> · 42</span>
-    <span><strong>FORMAT</strong> · PDF</span>
+    <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_programming_languages.pdf">Download PDF ↓</a>
+    <a class="read" href="../__compiled/programming-languages.html">Read online ↗</a>
   </div>
   <div class="toc">
     <details id="ch-1">
