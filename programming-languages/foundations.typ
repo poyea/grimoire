@@ -1,3 +1,5 @@
+#import "../template.typ": overbar
+
 = Regular Languages and Finite Automata
 
 *The bottom of the Chomsky hierarchy is not a limitation — it is a feature.* Every problem
@@ -130,7 +132,7 @@ Regular languages are closed under:
 - *Complement:* Swap $F$ and $Q without F$ on a *complete* DFA.
 - *Concatenation:* NFA concatenation (Thompson).
 - *Kleene star:* NFA star (Thompson).
-- *Difference* $L_1 without L_2 = L_1 inter overline(L_2)$: follows from intersection and complement.
+- *Difference* $L_1 without L_2 = L_1 inter overbar(L_2)$: follows from intersection and complement.
 - *Reversal, homomorphism, inverse homomorphism:* all preserve regularity.
 
 These closure properties are constructive and lead directly to DFA-based set operations used

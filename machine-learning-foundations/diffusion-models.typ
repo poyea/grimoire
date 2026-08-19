@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Diffusion Models
 
@@ -12,15 +12,15 @@ The *forward process* gradually destroys data by adding Gaussian noise over $T$ 
 
 $ q(x_t | x_(t-1)) = cal(N)(x_t; sqrt(1 - beta_t) x_(t-1), beta_t I) $
 
-where $beta_1, ..., beta_T$ is a noise schedule (typically $beta_t in [10^(-4), 0.02]$). The marginal has a convenient closed form via the reparameterisation $alpha_t = 1 - beta_t$, $overline(alpha)_t = product_(s=1)^t alpha_s$:
+where $beta_1, ..., beta_T$ is a noise schedule (typically $beta_t in [10^(-4), 0.02]$). The marginal has a convenient closed form via the reparameterisation $alpha_t = 1 - beta_t$, $overbar(alpha)_t = product_(s=1)^t alpha_s$:
 
-$ q(x_t | x_0) = cal(N)(x_t; sqrt(overline(alpha)_t) x_0, (1 - overline(alpha)_t) I). $
+$ q(x_t | x_0) = cal(N)(x_t; sqrt(overbar(alpha)_t) x_0, (1 - overbar(alpha)_t) I). $
 
 This means we can sample $x_t$ directly from $x_0$ without simulating the chain:
 
-$ x_t = sqrt(overline(alpha)_t) x_0 + sqrt(1 - overline(alpha)_t) epsilon, quad epsilon tilde cal(N)(0, I). $
+$ x_t = sqrt(overbar(alpha)_t) x_0 + sqrt(1 - overbar(alpha)_t) epsilon, quad epsilon tilde cal(N)(0, I). $
 
-As $t -> T$, $overline(alpha)_T approx 0$ and $x_T approx cal(N)(0, I)$.
+As $t -> T$, $overbar(alpha)_T approx 0$ and $x_T approx cal(N)(0, I)$.
 
 == The Reverse Process
 
@@ -30,7 +30,7 @@ $ q(x_(t-1) | x_t, x_0) = cal(N)(x_(t-1); tilde(mu)_t (x_t, x_0), tilde(beta)_t 
 
 with
 
-$ tilde(mu)_t = (sqrt(overline(alpha)_(t-1)) beta_t) / (1 - overline(alpha)_t) x_0 + (sqrt(alpha_t)(1 - overline(alpha)_(t-1))) / (1 - overline(alpha)_t) x_t, quad tilde(beta)_t = (1 - overline(alpha)_(t-1)) / (1 - overline(alpha)_t) beta_t. $
+$ tilde(mu)_t = (sqrt(overbar(alpha)_(t-1)) beta_t) / (1 - overbar(alpha)_t) x_0 + (sqrt(alpha_t)(1 - overbar(alpha)_(t-1))) / (1 - overbar(alpha)_t) x_t, quad tilde(beta)_t = (1 - overbar(alpha)_(t-1)) / (1 - overbar(alpha)_t) beta_t. $
 
 The model $p_theta (x_(t-1) | x_t)$ approximates this posterior. DDPM (Ho et al., 2020) parameterises it as
 
@@ -46,7 +46,7 @@ $ cal(L)_"simple" = EE_(t, x_0, epsilon) [||epsilon - epsilon_theta (x_t, t)||^2
 
 where $epsilon_theta$ is a U-Net that predicts the noise $epsilon$ added to produce $x_t$. At inference, the prediction is converted to $mu_theta$ via:
 
-$ mu_theta (x_t, t) = 1/sqrt(alpha_t) (x_t - beta_t/sqrt(1 - overline(alpha)_t) epsilon_theta (x_t, t)). $
+$ mu_theta (x_t, t) = 1/sqrt(alpha_t) (x_t - beta_t/sqrt(1 - overbar(alpha)_t) epsilon_theta (x_t, t)). $
 
 The noise-prediction parameterisation is better conditioned than predicting $x_0$ or $x_(t-1)$ directly.
 
@@ -62,7 +62,7 @@ $ cal(L) = EE_(x_0, epsilon, sigma) [||s_theta (x_0 + sigma epsilon, sigma) + ep
 
 Song et al. (2020) unified DDPM and score-based models via stochastic differential equations (SDEs). The forward process is a diffusion SDE; the reverse is the *reverse-time SDE* (Anderson, 1982):
 
-$ d x = [f(x,t) - g(t)^2 nabla_x log p_t(x)] d t + g(t) d overline(W). $
+$ d x = [f(x,t) - g(t)^2 nabla_x log p_t(x)] d t + g(t) d overbar(W). $
 
 This framework recovers DDPM (VP-SDE) and SMLD/NCSN (VE-SDE) as special cases.
 
@@ -71,7 +71,7 @@ This framework recovers DDPM (VP-SDE) and SMLD/NCSN (VE-SDE) as special cases.
 The choice of schedule $beta_t$ controls the signal-to-noise ratio trajectory.
 
 - *Linear schedule* (DDPM): $beta_t$ increases linearly from $10^(-4)$ to $0.02$.
-- *Cosine schedule* (Nichol & Dhariwal, 2021): $overline(alpha)_t = cos^2((t/T + s)/(1+s) dot pi/2)$; avoids abrupt SNR changes near $t=0$.
+- *Cosine schedule* (Nichol & Dhariwal, 2021): $overbar(alpha)_t = cos^2((t/T + s)/(1+s) dot pi/2)$; avoids abrupt SNR changes near $t=0$.
 - *EDM schedule* (Karras et al., 2022): frames diffusion as continuous-time Gaussian convolution; optimal preconditioning of the network inputs leads to better training stability.
 
 == Accelerated Samplers
@@ -82,7 +82,7 @@ Vanilla DDPM requires $T = 1000$ denoising steps. Accelerated samplers reduce th
 
 DDIM (Song et al., 2020) derives a non-Markovian forward process with the same marginals as DDPM, enabling deterministic sampling with $10$–$50$ steps:
 
-$ x_(t-1) = sqrt(overline(alpha)_(t-1)) underbrace(((x_t - sqrt(1-overline(alpha)_t) epsilon_theta) / sqrt(overline(alpha)_t)), "predicted " x_0) + sqrt(1 - overline(alpha)_(t-1)) epsilon_theta. $
+$ x_(t-1) = sqrt(overbar(alpha)_(t-1)) underbrace(((x_t - sqrt(1-overbar(alpha)_t) epsilon_theta) / sqrt(overbar(alpha)_t)), "predicted " x_0) + sqrt(1 - overbar(alpha)_(t-1)) epsilon_theta. $
 
 DDIM samples are deterministic given fixed noise; interpolation in noise space gives smooth semantic interpolation.
 
@@ -140,7 +140,7 @@ Diffusion extends naturally to other modalities:
 Key practical considerations:
 - *EMA*: maintain an exponential moving average of weights for inference; $"decay" = 0.9999$.
 - *Mixed precision*: train in bfloat16; keep EMA in float32.
-- *$v$-prediction*: predict the velocity $v = sqrt(overline(alpha)) epsilon - sqrt(1-overline(alpha)) x_0$ instead of noise; better at low noise levels.
+- *$v$-prediction*: predict the velocity $v = sqrt(overbar(alpha)) epsilon - sqrt(1-overbar(alpha)) x_0$ instead of noise; better at low noise levels.
 - *Min-SNR weighting* (Hang et al., 2023): reweight the loss by $min("SNR"(t), gamma) / "SNR"(t)$ to balance training across timesteps.
 - *Gradient checkpointing*: required for long sequences or large models due to memory.
 

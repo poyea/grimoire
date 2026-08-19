@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Tree Automata
 
@@ -331,7 +331,7 @@ The reachability algorithm given earlier computes, for each $q in "Reach"$, the 
 
 === Inclusion via Antichains
 
-$L(cal(A)_1) subset.eq L(cal(A)_2)$ <==> $L(cal(A)_1) inter overline(L(cal(A)_2)) = emptyset$ <==> $cal(A)_1 times cal(A)_2^c$ has no accepting run. The complementation $cal(A)_2^c$ requires determinisation; the naive algorithm is exponential in $|cal(A)_2|$.
+$L(cal(A)_1) subset.eq L(cal(A)_2)$ <==> $L(cal(A)_1) inter overbar(L(cal(A)_2)) = emptyset$ <==> $cal(A)_1 times cal(A)_2^c$ has no accepting run. The complementation $cal(A)_2^c$ requires determinisation; the naive algorithm is exponential in $|cal(A)_2|$.
 
 *Antichain-based inclusion checking* (de Wulf--Doyen--Maquet--Raskin 2008) avoids explicit complementation by maintaining an *antichain* of maximal failed subset states. The order is reverse subset; an antichain element is a $(q, S)$ pair where $q in cal(A)_1$ and $S subset.eq cal(A)_2$ is a candidate counterexample state-set, with the antichain saving only $subset.eq$-incomparable pairs. Membership checks become antichain insertions; the algorithm is exponential worst-case but practically efficient.
 

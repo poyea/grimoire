@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, underbar, xref
 
 = Error Analysis
 
@@ -81,7 +81,7 @@ elementwise (absolute values taken entrywise). Practical consequences:
 
 == Interval Arithmetic
 
-Instead of one rounded value, carry an enclosure $[underline(x), overline(x)]$ guaranteed to contain the true value, computing each operation with outward rounding (round lower bounds toward $-infinity$, upper toward $+infinity$):
+Instead of one rounded value, carry an enclosure $[underbar(x), overbar(x)]$ guaranteed to contain the true value, computing each operation with outward rounding (round lower bounds toward $-infinity$, upper toward $+infinity$):
 
 $ [a, b] + [c, d] = [a + c, b + d], quad [a, b] dot [c, d] = ["min"(a c, a d, b c, b d), "max"(a c, a d, b c, b d)]. $
 

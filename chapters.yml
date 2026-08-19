@@ -721,7 +721,7 @@ chapters:
   - subject: embedded-and-realtime
     slug: peripherals-and-drivers
     path: embedded-and-realtime/peripherals-and-drivers.typ
-    words: 1945
+    words: 1946
     status: reviewed
   - subject: embedded-and-realtime
     slug: rtos
@@ -731,7 +731,7 @@ chapters:
   - subject: formal-methods
     slug: model-checking
     path: formal-methods/model-checking.typ
-    words: 1857
+    words: 1858
     status: reviewed
   - subject: formal-methods
     slug: notation
@@ -741,7 +741,7 @@ chapters:
   - subject: formal-methods
     slug: propositional-and-fol
     path: formal-methods/propositional-and-fol.typ
-    words: 2054
+    words: 2055
     status: reviewed
   - subject: formal-methods
     slug: sat-and-smt
@@ -1071,7 +1071,7 @@ chapters:
   - subject: machine-learning-foundations
     slug: diffusion-models
     path: machine-learning-foundations/diffusion-models.typ
-    words: 1378
+    words: 1379
     status: reviewed
   - subject: machine-learning-foundations
     slug: generalization-theory
@@ -1086,7 +1086,7 @@ chapters:
   - subject: machine-learning-foundations
     slug: linear-algebra-for-ml
     path: machine-learning-foundations/linear-algebra-for-ml.typ
-    words: 2275
+    words: 2276
     status: reviewed
   - subject: machine-learning-foundations
     slug: loss-functions
@@ -1416,17 +1416,17 @@ chapters:
   - subject: programming-languages
     slug: complexity
     path: programming-languages/complexity.typ
-    words: 5612
+    words: 5615
     status: reviewed
   - subject: programming-languages
     slug: computability-advanced
     path: programming-languages/computability-advanced.typ
-    words: 2837
+    words: 2838
     status: reviewed
   - subject: programming-languages
     slug: computability
     path: programming-languages/computability.typ
-    words: 3525
+    words: 3526
     status: reviewed
   - subject: programming-languages
     slug: concurrency-models
@@ -1436,7 +1436,7 @@ chapters:
   - subject: programming-languages
     slug: context-free-languages
     path: programming-languages/context-free-languages.typ
-    words: 4351
+    words: 4352
     status: reviewed
   - subject: programming-languages
     slug: denotational-semantics
@@ -1466,7 +1466,7 @@ chapters:
   - subject: programming-languages
     slug: foundations
     path: programming-languages/foundations.typ
-    words: 1697
+    words: 1700
     status: reviewed
   - subject: programming-languages
     slug: gradual-and-hybrid
@@ -1481,7 +1481,7 @@ chapters:
   - subject: programming-languages
     slug: infinite-trees-and-games
     path: programming-languages/infinite-trees-and-games.typ
-    words: 5001
+    words: 5002
     status: reviewed
   - subject: programming-languages
     slug: lexing
@@ -1491,7 +1491,7 @@ chapters:
   - subject: programming-languages
     slug: linear-and-substructural
     path: programming-languages/linear-and-substructural.typ
-    words: 3859
+    words: 3862
     status: reviewed
   - subject: programming-languages
     slug: macros-and-metaprogramming
@@ -1511,12 +1511,12 @@ chapters:
   - subject: programming-languages
     slug: omega-automata
     path: programming-languages/omega-automata.typ
-    words: 4056
+    words: 4057
     status: reviewed
   - subject: programming-languages
     slug: operational-semantics
     path: programming-languages/operational-semantics.typ
-    words: 3919
+    words: 3920
     status: reviewed
   - subject: programming-languages
     slug: parsing
@@ -1526,17 +1526,17 @@ chapters:
   - subject: programming-languages
     slug: process-calculi
     path: programming-languages/process-calculi.typ
-    words: 5391
+    words: 5392
     status: reviewed
   - subject: programming-languages
     slug: pushdown-and-beyond
     path: programming-languages/pushdown-and-beyond.typ
-    words: 4277
+    words: 4278
     status: reviewed
   - subject: programming-languages
     slug: pushdown-cfg
     path: programming-languages/pushdown-cfg.typ
-    words: 1795
+    words: 1798
     status: reviewed
   - subject: programming-languages
     slug: regular-languages-proofs
@@ -1556,12 +1556,12 @@ chapters:
   - subject: programming-languages
     slug: simply-typed-lambda-extensions
     path: programming-languages/simply-typed-lambda-extensions.typ
-    words: 4949
+    words: 4952
     status: reviewed
   - subject: programming-languages
     slug: simply-typed-lambda
     path: programming-languages/simply-typed-lambda.typ
-    words: 4149
+    words: 4152
     status: reviewed
   - subject: programming-languages
     slug: subtyping-and-polymorphism
@@ -1571,7 +1571,7 @@ chapters:
   - subject: programming-languages
     slug: system-f-and-parametricity
     path: programming-languages/system-f-and-parametricity.typ
-    words: 5342
+    words: 5343
     status: reviewed
   - subject: programming-languages
     slug: system-f-categorical-models
@@ -1586,12 +1586,12 @@ chapters:
   - subject: programming-languages
     slug: tree-automata
     path: programming-languages/tree-automata.typ
-    words: 5540
+    words: 5541
     status: reviewed
   - subject: programming-languages
     slug: turing-computability
     path: programming-languages/turing-computability.typ
-    words: 1840
+    words: 1843
     status: reviewed
   - subject: programming-languages
     slug: type-systems
@@ -1756,12 +1756,12 @@ chapters:
   - subject: numerical-computing
     slug: error-analysis
     path: numerical-computing/error-analysis.typ
-    words: 1915
+    words: 1917
     status: reviewed
   - subject: numerical-computing
     slug: fft
     path: numerical-computing/fft.typ
-    words: 1312
+    words: 1313
     status: reviewed
   - subject: numerical-computing
     slug: floating-point

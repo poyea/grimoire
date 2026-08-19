@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Computability and Recursion Theory
 
@@ -215,7 +215,7 @@ deciders, pretend the $e$-th decides the $e$-th instance, then construct a progr
 that *disagrees* with itself at the diagonal point. The same template works for
 every concrete undecidability result if one phrases the construction correctly.
 
-The complement $overline(K) = { e | phi_e (e) "diverges" }$ is *productive*
+The complement $overbar(K) = { e | phi_e (e) "diverges" }$ is *productive*
 (see below) and so very far from r.e.
 
 == Rice's Theorem
@@ -228,7 +228,7 @@ The associated *index set* is $I_(cal(A)) = { e | phi_e in cal(A) }$.
 all partial computable functions, then $I_(cal(A))$ is undecidable.
 
 *Proof.* WLOG the everywhere-undefined function $bot in."not" cal(A)$ (else work with
-$overline(cal(A))$). Pick any $psi in cal(A)$, with index $i$. We reduce $K
+$overbar(cal(A))$). Pick any $psi in cal(A)$, with index $i$. We reduce $K
 lt.eq_m I_(cal(A))$. For each $e$, by $s$-$m$-$n$ build $g(e)$ such that
 
 ```text
@@ -291,30 +291,30 @@ $e$. Equivalent formulations:
 preimage under total computable maps, projection. They are *not* closed under
 complement.
 
-*Post's theorem (the easy half).* $A$ is decidable <==> both $A$ and $overline(A)$
+*Post's theorem (the easy half).* $A$ is decidable <==> both $A$ and $overbar(A)$
 are r.e. *Proof.* Run two semideciders in dovetailed fashion; whichever halts gives
 the answer. $square$
 
 *Productive sets (Dekker 1955).* A set $P$ is *productive* if there is a total
 computable $g$ such that whenever $W_e subset.eq P$ then $g(e) in P backslash W_e$.
 $g$ effectively *produces* a new element outside any r.e. subset. The canonical
-example is $overline(K)$: given $e$ with $W_e subset.eq overline(K)$, by the
-recursion theorem (uniformly in $e$) we can construct $g(e) in overline(K)
+example is $overbar(K)$: given $e$ with $W_e subset.eq overbar(K)$, by the
+recursion theorem (uniformly in $e$) we can construct $g(e) in overbar(K)
 backslash W_e$. Productive sets are never r.e. -- much stronger than mere
 non-recursiveness.
 
-*Creative sets.* An r.e. set $A$ is *creative* if $overline(A)$ is productive. $K$
+*Creative sets.* An r.e. set $A$ is *creative* if $overbar(A)$ is productive. $K$
 is creative. Myhill (1955): every creative set is $m$-complete for the r.e. sets,
 hence all creative sets are recursively isomorphic. There is, up to recursive
 isomorphism, *one* halting problem.
 
-*Simple sets (Post 1944).* An r.e. set $S$ is *simple* if $overline(S)$ is
+*Simple sets (Post 1944).* An r.e. set $S$ is *simple* if $overbar(S)$ is
 infinite but contains no infinite r.e. subset. Post constructed one to obtain an
 r.e. set that is not recursive and not $m$-complete; this is the first step toward
 showing the Turing degrees of r.e. sets are richer than the $m$-degrees suggest.
 The construction proceeds by enumerating r.e. sets $W_e$ and, when $W_e$ becomes
 large enough, throwing one of its elements into $S$ -- enough to kill $W_e$
-without exhausting $overline(S)$.
+without exhausting $overbar(S)$.
 
 *Hypersimple, hyperhypersimple, maximal sets.* A whole tower of refinements
 (Dekker, Friedberg, Yates) carves up the r.e. degree below $K$.
@@ -330,8 +330,8 @@ equiv_T B$ for mutual Turing reduction; the equivalence classes are the
 *Turing degrees*.
 
 *Inclusions.* $A lt.eq_m B => A lt.eq_T B$. The converse fails: $K
-equiv_T overline(K)$ (an oracle for $K$ lets us decide $overline(K)$), but $K lt.eq_m
-overline(K)$ is false because $m$-reductions preserve r.e.-ness and $overline(K)$
+equiv_T overbar(K)$ (an oracle for $K$ lets us decide $overbar(K)$), but $K lt.eq_m
+overbar(K)$ is false because $m$-reductions preserve r.e.-ness and $overbar(K)$
 is not r.e.
 
 *$m$-completeness.* An r.e. set $C$ is *$m$-complete* iff every r.e. set $m$-reduces
@@ -437,7 +437,7 @@ So $Sigma^0_1$ = r.e., $Pi^0_1$ = co-r.e., $Delta^0_1$ = decidable.
   [Tot $= { e | phi_e "total" }$], [$forall x exists s . T(e, x, s)$], [$Pi^0_2$-complete],
   [Fin $= { e | W_e "finite" }$], [$exists n forall x > n . forall s . "not" T(e, x, s)$], [$Sigma^0_2$-complete],
   [Inf $= { e | W_e "infinite"}$], [$forall n exists x > n exists s . T(e, x, s)$], [$Pi^0_2$-complete],
-  [Cof $= { e | overline(W_e) "finite" }$], [], [$Sigma^0_3$-complete],
+  [Cof $= { e | overbar(W_e) "finite" }$], [], [$Sigma^0_3$-complete],
   [Rec $= { e | W_e "recursive"}$], [], [$Sigma^0_3$-complete],
 )
 

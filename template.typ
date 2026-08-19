@@ -82,6 +82,32 @@
 )
 
 // -----------------------------------------------------------------------------
+// Overbar / underbar
+//
+// MathML Core has no primitive for a rule drawn over or under an
+// expression, so Typst's HTML export drops it and emits only the base:
+// see typst/typst, crates/typst-html/src/mathml.rs, where MathKind::Line
+// is routed to ignored_math_item(). That silently turns $overline(L)$
+// (language complement) into a plain L, and the active-low $overline("CS")$
+// into CS -- a different claim, not just plainer typography.
+//
+// These render through accents, which do export (as <mover>/<munder>),
+// when the target is HTML, and keep the true full-width rule in the PDF.
+// -----------------------------------------------------------------------------
+
+#let overbar(body) = context {
+  if target() == "html" { math.macron(body) } else { math.overline(body) }
+}
+
+#let underbar(body) = context {
+  if target() == "html" {
+    math.attach(math.limits(body), b: sym.macron)
+  } else {
+    math.underline(body)
+  }
+}
+
+// -----------------------------------------------------------------------------
 // RFC reference
 //
 // #rfc(9293) renders "RFC 9293" as a link to the canonical RFC Editor

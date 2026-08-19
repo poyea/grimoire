@@ -1,3 +1,5 @@
+#import "../template.typ": overbar
+
 = Complexity Theory
 
 Complexity theory classifies *decidable* problems by the resources required to
@@ -90,7 +92,7 @@ that every problem has a "best" algorithm.
 
 A language $L in "NP"$ <==> there is a polynomial $p$ and a polynomial-time
 verifier $V$ with $L = { x | exists y, |y| lt.eq p(|x|), V(x, y) = 1 }$. $"coNP"
-= { L | overline(L) in "NP" }$; characterised by $forall$-quantified polynomial
+= { L | overbar(L) in "NP" }$; characterised by $forall$-quantified polynomial
 witnesses.
 
 The *polynomial hierarchy* (Stockmeyer 1976):
@@ -372,7 +374,7 @@ and shorter.
 == Circuit Complexity
 
 A *Boolean circuit* over $n$ inputs is a DAG with input gates $x_1, ..., x_n,
-overline(x)_1, ..., overline(x)_n$, internal gates $and, or$ (sometimes $not$
+overbar(x)_1, ..., overbar(x)_n$, internal gates $and, or$ (sometimes $not$
 free), and a designated output. *Size* = number of gates; *depth* = longest path
 length.
 

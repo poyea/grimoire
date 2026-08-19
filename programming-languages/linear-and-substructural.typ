@@ -1,3 +1,5 @@
+#import "../template.typ": overbar
+
 = Linear and Substructural Type Systems
 
 Substructural type systems control *how often* a variable may be used. Classical logic and the simply-typed lambda calculus treat the typing context $Gamma$ as a "set": any hypothesis may be duplicated, discarded, or reordered at will. Substructural systems drop one or more of those liberties, and in doing so gain the ability to talk about resources, capabilities, file handles, channel endpoints, and memory ownership inside the type system itself.
@@ -315,12 +317,12 @@ with the dyadic reading:
 - $S_1 amp S_2$: external choice: *the peer* picks the branch.
 - $"end"$: protocol complete.
 
-Duality: $overline(!tau . S) = ?tau . overline(S)$, etc. Two endpoints of a single channel must have dual types: what one sends, the other receives.
+Duality: $overbar(!tau . S) = ?tau . overbar(S)$, etc. Two endpoints of a single channel must have dual types: what one sends, the other receives.
 
 A simple arithmetic-server protocol:
 
 $ S_"server" = ?"Int" . ?"Int" . !"Int" . "end" $
-$ S_"client" = overline(S_"server") = !"Int" . !"Int" . ?"Int" . "end" $
+$ S_"client" = overbar(S_"server") = !"Int" . !"Int" . ?"Int" . "end" $
 
 If session types are *linear*, a channel endpoint cannot be split, duplicated, or forgotten mid-protocol. This rules out the classical errors of protocol implementation: *receiving when the peer expects to receive*, *forgetting to send the reply*, *closing a channel mid-conversation*.
 

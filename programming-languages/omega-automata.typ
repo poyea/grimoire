@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Omega-Automata
 
@@ -28,7 +28,7 @@ The simplest acceptance condition is due to Büchi (1962). A *nondeterministic B
 $ "Inf"(rho) inter F != emptyset, $
 i.e. some state in $F$ is visited infinitely often. The language $L(cal(A))$ is the set of $alpha in Sigma^omega$ admitting some accepting run.
 
-*Example.* Over $Sigma = {a, b}$, the language $L = { alpha | a "occurs infinitely often in" alpha }$ is recognised by a two-state NBA with states $q_0$ (accepting) and $q_1$ (non-accepting), transitions $q_0 arrow.r^a q_0$, $q_0 arrow.r^b q_1$, $q_1 arrow.r^b q_1$, $q_1 arrow.r^a q_0$. The complement $overline(L) = { alpha | a "occurs only finitely often" }$ is also recognisable, but requires a different construction -- and famously, the construction is not symmetric.
+*Example.* Over $Sigma = {a, b}$, the language $L = { alpha | a "occurs infinitely often in" alpha }$ is recognised by a two-state NBA with states $q_0$ (accepting) and $q_1$ (non-accepting), transitions $q_0 arrow.r^a q_0$, $q_0 arrow.r^b q_1$, $q_1 arrow.r^b q_1$, $q_1 arrow.r^a q_0$. The complement $overbar(L) = { alpha | a "occurs only finitely often" }$ is also recognisable, but requires a different construction -- and famously, the construction is not symmetric.
 
 === Expressive Power
 
@@ -259,7 +259,7 @@ For NBA's of size $n$:
 
 - *Universality* ($L(cal(A)) = Sigma^omega$?): PSPACE-complete. Complement and check emptiness; the complement has $2^(O(n log n))$ states, but PSPACE membership follows from a more careful Savitch-style analysis (Sistla--Vardi--Wolper 1987).
 
-- *Inclusion* ($L(cal(A)_1) subset.eq L(cal(A)_2)$?): PSPACE-complete, by the same argument applied to $cal(A)_1 inter overline(cal(A)_2)$.
+- *Inclusion* ($L(cal(A)_1) subset.eq L(cal(A)_2)$?): PSPACE-complete, by the same argument applied to $cal(A)_1 inter overbar(cal(A)_2)$.
 
 - *Equivalence*: PSPACE-complete.
 

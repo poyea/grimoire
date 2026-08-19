@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = The Fast Fourier Transform
 
@@ -34,7 +34,7 @@ In-place radix-2 implementations consume input in *bit-reversed* order — the i
 
 == Real Input and Trigonometric Transforms
 
-Real input $x$ gives conjugate-symmetric output, $X_(n-k) = overline(X_k)$, so half the spectrum is redundant: `rfft` computes $n\/2 + 1$ complex outputs in roughly half the time and memory of a complex FFT. Use it whenever the signal is real, which in practice is almost always.
+Real input $x$ gives conjugate-symmetric output, $X_(n-k) = overbar(X_k)$, so half the spectrum is redundant: `rfft` computes $n\/2 + 1$ complex outputs in roughly half the time and memory of a complex FFT. Use it whenever the signal is real, which in practice is almost always.
 
 The DCT (discrete cosine transform) and DST are DFTs of symmetrically extended sequences. The even-symmetric extension of DCT-II avoids the artificial jump a periodic extension creates at the boundary, concentrating energy in few coefficients — the reason DCT-II underlies JPEG, and why Chebyshev spectral methods (a DCT in disguise, via $x = cos theta$) achieve exponential convergence for smooth non-periodic functions. Multidimensional transforms factor into 1-D transforms along each axis: an $n times n$ image costs $O(n^2 log n)$.
 

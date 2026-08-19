@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Advanced Recursion Theory
 
@@ -27,7 +27,7 @@ $Sigma^1_1$ and $Pi^1_1$).
 The *analytical hierarchy* extends the arithmetical hierarchy with quantification
 over *functions* $f : NN -> NN$.
 
-- $Sigma^1_1$: $A = { x | exists f forall y . R(x, f overline(y), y) }$ with $R$
+- $Sigma^1_1$: $A = { x | exists f forall y . R(x, f overbar(y), y) }$ with $R$
   decidable. Equivalently, $A$ is the projection of a $Pi^0_1$ class in Baire space.
 - $Pi^1_1$: complement of $Sigma^1_1$. Equivalently, "$A$ is the set of trees with
   no infinite path" (well-foundedness).
@@ -144,7 +144,7 @@ $"Cof"(emptyset') = { e | forall n exists s > n . n in emptyset'_s }$ via direct
 encoding.
 
 *Theorem.* $"Fin" = { e | W_e "finite"} in Sigma^0_2$-complete; $"Cof" = { e |
-overline(W_e) "finite"}$ and $"Rec" = { e | W_e "recursive"}$ are $Sigma^0_3$-
+overbar(W_e) "finite"}$ and $"Rec" = { e | W_e "recursive"}$ are $Sigma^0_3$-
 complete; $"Ext" = { e | exists "total" psi "extending" phi_e }$ is $Sigma^0_3$.
 
 These are exact: a complete classification places every natural property at its

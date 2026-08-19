@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Pushdown Automata and Beyond
 
@@ -241,7 +241,7 @@ RE              | UND       | UND   | UND  | UND   | + + - + +
 DEC* = Sénizergues; PSPC = PSPACE-complete; UND = undecidable.
 ```
 
-The pattern is informative: the *closure under complement* tracks closely with *decidability of universality*, since universality of $L$ is the emptiness of $overline(L)$. The VPL row is the elegant exception below CSL, recovering all closure properties while remaining tractable.
+The pattern is informative: the *closure under complement* tracks closely with *decidability of universality*, since universality of $L$ is the emptiness of $overbar(L)$. The VPL row is the elegant exception below CSL, recovering all closure properties while remaining tractable.
 
 == Worked-Out Examples
 

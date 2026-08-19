@@ -1,3 +1,5 @@
+#import "../template.typ": overbar
+
 = Simply-Typed Lambda Calculus: Extensions and Advanced Topics
 
 == Extensions
@@ -288,12 +290,12 @@ Girard's 1972 thesis pushed reducibility to *System F*; the second-order case re
 === Church Numerals (Untyped, Schematic)
 
 The Church numerals
-$ overline(n) = lambda f . lambda x . underbrace(f (f (... (f space x))), n " applications") $
+$ overbar(n) = lambda f . lambda x . underbrace(f (f (... (f space x))), n " applications") $
 encode natural numbers in pure $lambda$-calculus.
 
-In $lambda^arrow.r$ proper, $overline(n)$ types at $(iota arrow.r iota) arrow.r iota arrow.r iota$ for any type $iota$; but each numeral has its own family of types, not a single polymorphic type.
+In $lambda^arrow.r$ proper, $overbar(n)$ types at $(iota arrow.r iota) arrow.r iota arrow.r iota$ for any type $iota$; but each numeral has its own family of types, not a single polymorphic type.
 
-In *System F* (next chapter), one can give $overline(n) : forall alpha . (alpha arrow.r alpha) arrow.r alpha arrow.r alpha$.
+In *System F* (next chapter), one can give $overbar(n) : forall alpha . (alpha arrow.r alpha) arrow.r alpha arrow.r alpha$.
 
 The successor, addition, and multiplication operations in Church encoding:
 $ "succ" &= lambda n . lambda f . lambda x . f space (n space f space x) \

@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": underbar, xref
 
 = Operational Semantics
 
@@ -212,13 +212,13 @@ A naive implementation of $E[r] arrow.r E[r']$ decomposes the term into a contex
 Levy's *call-by-push-value* (1999, monograph 2003) is a fine-grained calculus that *subsumes* both CBV and CBN by making the value/computation distinction explicit in the syntax. The slogan: "a value is, a computation does."
 
 *Two kinds of types.*
-$ A^+ ::= U underline(B) | A_1^+ times A_2^+ | A_1^+ + A_2^+ | dots quad "(values)" $
-$ underline(B) ::= F A^+ | A^+ arrow.r underline(B) | dots quad "(computations)" $
+$ A^+ ::= U underbar(B) | A_1^+ times A_2^+ | A_1^+ + A_2^+ | dots quad "(values)" $
+$ underbar(B) ::= F A^+ | A^+ arrow.r underbar(B) | dots quad "(computations)" $
 
-The thunk $U underline(B)$ is the value type of suspended computations; the returner $F A^+$ is the computation type that produces a value of $A^+$. The basic combinators are:
+The thunk $U underbar(B)$ is the value type of suspended computations; the returner $F A^+$ is the computation type that produces a value of $A^+$. The basic combinators are:
 
-- $"thunk" space M : U underline(B)$ -- suspend a computation $M : underline(B)$
-- $"force" space V : underline(B)$ -- run a thunk
+- $"thunk" space M : U underbar(B)$ -- suspend a computation $M : underbar(B)$
+- $"force" space V : underbar(B)$ -- run a thunk
 - $"return" space V : F A^+$ -- produce a value as a computation
 - $M "to" x. N$ -- sequential composition: run $M$, bind the value to $x$, then run $N$
 

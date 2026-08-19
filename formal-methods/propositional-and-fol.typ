@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Propositional and First-Order Logic
 
@@ -220,7 +220,7 @@ For day-to-day verification this means: total automation of unbounded program re
 
 == Equality and Theories
 
-Equality $=$ is treated as a logical symbol with reflexivity, symmetry, transitivity, and *congruence* ($t_1 = u_1, ..., t_n = u_n$ imply $f(overline(t)) = f(overline(u))$). The *theory of equality with uninterpreted functions* (EUF) is decided in polynomial time by *congruence closure* — the workhorse of every $"SMT"$ solver.
+Equality $=$ is treated as a logical symbol with reflexivity, symmetry, transitivity, and *congruence* ($t_1 = u_1, ..., t_n = u_n$ imply $f(overbar(t)) = f(overbar(u))$). The *theory of equality with uninterpreted functions* (EUF) is decided in polynomial time by *congruence closure* — the workhorse of every $"SMT"$ solver.
 
 ```text
 Congruence closure example:

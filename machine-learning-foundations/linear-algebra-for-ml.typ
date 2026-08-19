@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Linear Algebra for ML
 
@@ -197,9 +197,9 @@ The matrix exponential is the fundamental solution operator for linear ODEs: the
 
 In sequence modeling, continuous-time state-space models (SSMs) such as S4 (Gu et al. 2022) and Mamba parameterize a discrete recurrence via the zero-order-hold discretization
 
-$ overline(A) = e^(A Delta), quad overline(B) = (A)^(-1)(overline(A) - I) B, $
+$ overbar(A) = e^(A Delta), quad overbar(B) = (A)^(-1)(overbar(A) - I) B, $
 
-where $Delta$ is the sampling interval. The matrix exponential $overline(A) = e^(A Delta)$ is computed once at initialization and cached — the recurrence then runs in $O(n)$ per time step rather than requiring a full ODE solve at each forward pass.
+where $Delta$ is the sampling interval. The matrix exponential $overbar(A) = e^(A Delta)$ is computed once at initialization and cached — the recurrence then runs in $O(n)$ per time step rather than requiring a full ODE solve at each forward pass.
 
 *Computation methods* depend on the matrix structure. The Padé approximation — a rational approximant $e^A approx R_(p q)(A)$ of matching Taylor coefficients — is used by `scipy.linalg.expm` and is backward-stable. For normal matrices (those satisfying $A A^top = A^top A$), the Schur decomposition $A = U T U^*$ reduces the exponential to $e^A = U e^T U^*$ where $e^T$ is computed on the triangular factor. For large sparse $A$, Krylov subspace methods (Expokit; Saad 1992) approximate $e^(A t) v$ for a given vector $v$ without ever forming $e^A$ explicitly.
 

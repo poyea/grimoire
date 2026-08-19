@@ -1,3 +1,5 @@
+#import "../template.typ": overbar
+
 = Simply-Typed Lambda Calculus
 
 The simply-typed lambda calculus, $lambda^arrow.r$, is the minimal nontrivial typed language: variables, function abstraction, and application, with a type discipline that forbids self-application.
@@ -265,7 +267,7 @@ All reducts in $cal(R)_(tau_2)$, so by CR3 the application is in $cal(R)_(tau_2)
 
 *Theorem (Tait).* If $x_1 : tau_1, ..., x_n : tau_n tack.r e : tau$ and $a_i in cal(R)_(tau_i)$ for each $i$, then $[x_1 |-> a_1, ..., x_n |-> a_n] e in cal(R)_tau$.
 
-*Proof.* Write $sigma = [overline(x |-> a)]$. Induction on the typing derivation.
+*Proof.* Write $sigma = [overbar(x |-> a)]$. Induction on the typing derivation.
 
 T-VAR: $e = x_i$. $sigma(x_i) = a_i in cal(R)_(tau_i)$ by assumption.
 

@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Context-Free Languages
 
@@ -39,7 +39,7 @@ G_5 (Dyck_2):            S -> ε | ( S ) S | [ S ] S
 
 The *Dyck language* $D_n$ (balanced strings over $n$ kinds of parentheses) is the prototypical CFL; *every* CFL is, up to inverse homomorphism and intersection with a regular set, a Dyck language (Chomsky–Schützenberger 1963):
 
-*Theorem (Chomsky–Schützenberger).* A language $L$ is context-free <==> there exist $n >= 1$, a regular language $R subset.eq { 1, dots, n, overline(1), dots, overline(n) }^*$, and a homomorphism $h$ such that $L = h(D_n inter R)$.
+*Theorem (Chomsky–Schützenberger).* A language $L$ is context-free <==> there exist $n >= 1$, a regular language $R subset.eq { 1, dots, n, overbar(1), dots, overbar(n) }^*$, and a homomorphism $h$ such that $L = h(D_n inter R)$.
 
 This says CFLs are precisely the homomorphic images of intersections of Dyck languages with regular languages, a statement of the same flavour as Kleene's representation of regular languages but two levels deeper.
 

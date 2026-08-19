@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Peripherals and Drivers
 
@@ -117,7 +117,7 @@ The receiver samples the line at the centre of each bit using an internal clock 
 
 === SPI
 
-*Serial Peripheral Interface* ($"SPI"$) is synchronous, full-duplex, single-master multi-slave. Four wires: SCLK (clock), MOSI (master out), MISO (master in), $overline("CS")$ (chip select, active low per slave).
+*Serial Peripheral Interface* ($"SPI"$) is synchronous, full-duplex, single-master multi-slave. Four wires: SCLK (clock), MOSI (master out), MISO (master in), $overbar("CS")$ (chip select, active low per slave).
 
 Data is shifted on SCLK edges; polarity (CPOL) and phase (CPHA) configure which edge is active:
 

@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = System F and Parametricity
 
@@ -93,8 +93,8 @@ where $tau$ is the common type of $e_1, e_2$. Verify: $"if" "true" "then" 3 "els
 === Natural Numbers (Church Numerals)
 
 $ "Nat" &:= forall alpha . (alpha arrow.r alpha) arrow.r alpha arrow.r alpha \
-overline(0) &:= Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . x \
-overline(n+1) &:= Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . f^(n+1) (x) \
+overbar(0) &:= Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . x \
+overbar(n+1) &:= Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . f^(n+1) (x) \
 "succ" &:= lambda n : "Nat" . Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . f (n [alpha] space f space x) \
 "add"  &:= lambda m n : "Nat" . Lambda alpha . lambda f : alpha arrow.r alpha . lambda x : alpha . m [alpha] space f space (n [alpha] space f space x) \
 "mul"  &:= lambda m n : "Nat" . Lambda alpha . lambda f : alpha arrow.r alpha . m [alpha] space (n [alpha] space f) $

@@ -1,3 +1,5 @@
+#import "../template.typ": overbar
+
 = Turing Machines and Computability
 
 The Turing machine is not a model of modern hardware -- it is a model of *what can be
@@ -131,7 +133,7 @@ Both cases are impossible, so $H$ cannot exist. The diagonal argument works beca
 construct $D$ to *disagree* with $H$'s prediction on the self-referential input.
 
 *Corollary:* $A_"TM"$ is recognizable (the universal TM recognizes it) but not decidable.
-Its complement $overline(A_"TM")$ is not even recognizable.
+Its complement $overbar(A_"TM")$ is not even recognizable.
 
 == Rice's Theorem
 
@@ -163,7 +165,7 @@ halting problem.
   [co-RE],                    [Complement of RE],              [Intersection, complement; NOT union],
 )
 
-A language $L$ is *decidable* iff both $L$ and $overline(L)$ are RE (Post's theorem).
+A language $L$ is *decidable* iff both $L$ and $overbar(L)$ are RE (Post's theorem).
 The decidable languages are the sweet spot: machines that always answer. RE-but-not-decidable
 languages are where algorithms get stuck: you can confirm "yes" answers but never rule out
 "no" answers; the program might just be taking a very long time.

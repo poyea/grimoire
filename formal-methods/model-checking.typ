@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Model Checking
 
@@ -94,12 +94,12 @@ BDD for f(x1,x2,x3) = (x1 /\ x2) \/ x3,  ordering x1 < x2 < x3
                 F   T
 ```
 
-*Image computation.* Reachable states from $S$ under $R$ are $"Img"(S) = exists overline(x). (S(overline(x)) and R(overline(x), overline(x)'))$, computable as a BDD existential quantification. Fixpoint iteration $"Reach" = mu Z. (S_0 or "Img"(Z))$ terminates because BDDs over finite variables form a finite lattice. EFG and similar CTL fixpoints reduce to BDD operations.
+*Image computation.* Reachable states from $S$ under $R$ are $"Img"(S) = exists overbar(x). (S(overbar(x)) and R(overbar(x), overbar(x)'))$, computable as a BDD existential quantification. Fixpoint iteration $"Reach" = mu Z. (S_0 or "Img"(Z))$ terminates because BDDs over finite variables form a finite lattice. EFG and similar CTL fixpoints reduce to BDD operations.
 
 #table(
   columns: (auto, auto),
   [*CTL operator*], [*Symbolic computation*],
-  [$bold(E X) phi$], [$exists overline(x)'. (R(overline(x), overline(x)') and phi(overline(x)'))$],
+  [$bold(E X) phi$], [$exists overbar(x)'. (R(overbar(x), overbar(x)') and phi(overbar(x)'))$],
   [$bold(E F) phi$], [$mu Z. (phi or bold(E X) Z)$],
   [$bold(E G) phi$], [$nu Z. (phi and bold(E X) Z)$],
   [$bold(E)(phi bold(U) psi)$], [$mu Z. (psi or (phi and bold(E X) Z))$],

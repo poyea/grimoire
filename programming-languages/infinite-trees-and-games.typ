@@ -1,4 +1,4 @@
-#import "../template.typ": xref
+#import "../template.typ": overbar, xref
 
 = Infinite Trees and Games
 
@@ -267,7 +267,7 @@ Every branch sees $q_a$ infinitely often <==> $a$ appears infinitely often on it
 
 === Example 2: Existence of a Branch with Only Finitely Many $a$'s
 
-The complement $L_2 = overline(L_1)$ -- *some* branch contains only finitely many $a$'s -- is *not* Büchi-recognisable but is recognisable by a parity (or co-Büchi) tree automaton. This separation -- analogous to the word case where DBA cannot recognise "finitely many $a$'s" -- demonstrates that *Büchi tree automata are strictly weaker than parity tree automata*.
+The complement $L_2 = overbar(L_1)$ -- *some* branch contains only finitely many $a$'s -- is *not* Büchi-recognisable but is recognisable by a parity (or co-Büchi) tree automaton. This separation -- analogous to the word case where DBA cannot recognise "finitely many $a$'s" -- demonstrates that *Büchi tree automata are strictly weaker than parity tree automata*.
 
 The witness $L_2$ requires *parity index 3*: the automaton guesses the eventually-$b$-only branch and a finite *cutoff* after which $a$ no longer appears on that branch.
 

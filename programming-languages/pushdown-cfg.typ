@@ -1,3 +1,5 @@
+#import "../template.typ": overbar
+
 = Pushdown Automata and Context-Free Grammars
 
 Context-free languages (CFLs) sit one level above regular languages in the Chomsky
@@ -168,7 +170,7 @@ invariant. In all cases $u v^2 x y^2 z in.not L$. Contradiction.
   [Concatenation $L_1 L_2$],         [Yes],  [New start: $S -> S_1 S_2$],
   [Kleene star $L^*$],               [Yes],  [New start: $S -> S S_1 | epsilon$],
   [Intersection $L_1 inter L_2$],     [No],   [${ a^n b^n } inter { b^n c^n }$ counterexample],
-  [Complement $overline(L)$],        [No],   [De Morgan + intersection failure],
+  [Complement $overbar(L)$],        [No],   [De Morgan + intersection failure],
   [Intersection with regular],       [Yes],  [PDA product construction with DFA],
   [Homomorphism],                     [Yes],  [Apply to each terminal in grammar],
   [Inverse homomorphism],             [Yes],  [PDA simulation],
