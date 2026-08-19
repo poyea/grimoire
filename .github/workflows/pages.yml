@@ -3,7 +3,9 @@ name: Deploy Pages
 on:
   push:
     branches: [main]
-    paths: ['docs/**', '**.typ', 'scripts/gen_homepage.py', '.github/workflows/pages.yml']
+    paths: ['docs/**', '**.typ', 'scripts/gen_homepage.py',
+            'scripts/build_html.py', '.github/actions/setup-typst/**',
+            '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -25,6 +27,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generate homepage from chapters
         run: python3 scripts/gen_homepage.py
+      - uses: ./.github/actions/setup-typst
+      # Typst HTML export is experimental, so this is best-effort: a volume
+      # that fails is skipped and logged rather than blocking the deploy.
+      # Output lands in docs/__compiled/ and is never committed.
+      - name: Export volumes to HTML
+        run: python3 scripts/build_html.py
       - uses: actions/configure-pages@v4
       - uses: actions/upload-pages-artifact@v3
         with:
