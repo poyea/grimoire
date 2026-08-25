@@ -40,20 +40,20 @@ Three common dataflows:
 #table(
   columns: 3,
   [*Dataflow*], [*Stationary in PE*], [*Used by*],
-  [Output-stationary ($"OS"$)], [Partial sums of C], [Google TPU v1],
-  [Weight-stationary ($"WS"$)], [B (weights)], [NVIDIA Tensor Cores, most NPUs],
+  [Output-stationary ($"OS"$)], [Partial sums of C], [ShiDianNao],
+  [Weight-stationary ($"WS"$)], [B (weights)], [Google TPU, most NPUs],
   [Row-stationary ($"RS"$)], [Mixed], [MIT Eyeriss],
 )
 
 == Google TPU
 
-*TPU v1 (2015):* 256$times$256 INT8 $"MAC"$ array, 65k $"MAC"$s, 92 $"TOPS"$ peak, 75 W. Output-stationary; 24 MB on-chip "unified buffer" feeds the array. Built for inference; no training.
+*TPU v1 (2015):* 256$times$256 INT8 $"MAC"$ array, 65k $"MAC"$s, 92 $"TOPS"$ peak, 75 W. Weight-stationary; 24 MB on-chip "unified buffer" feeds the array. Built for inference; no training.
 
-*TPU v2/v3 (2017/18):* BF16 (16-bit brain-float: 8-bit exponent, 7-bit mantissa) added training. Two $"MXU"$s of 128$times$128 per core.
+*TPU v2/v3 (2017/18):* BF16 (16-bit brain-float: 8-bit exponent, 7-bit mantissa) added training. 128$times$128 $"MXU"$s per core: one in v2, two in v3.
 
 *TPU v4 (2021):* sparsecore, optical interconnect (OCS) reconfigures pods.
 
-*TPU v5e / v5p (2023/24):* BF16/INT8, INT4 inference; v5p has $"HBM3"$ and 8960-chip pods.
+*TPU v5e / v5p (2023/24):* BF16/INT8, INT4 inference; v5p has 95 GB $"HBM2e"$ and 8960-chip pods.
 
 The architectural lesson: a small ISA (vector load, vector store, $"MATMUL"$, activation) and a *systolic functional unit* removed most of the control overhead that bottlenecks GPUs.
 
@@ -79,7 +79,7 @@ Whereas systolic arrays are rigid grids, dataflow processors map an *arbitrary* 
 
 === Cerebras Wafer-Scale Engine
 
-The $"WSE"$-3 is a single die that fills a 300 mm wafer: 900,000 cores, 44 GB on-die $"SRAM"$, 21 PB/s aggregate memory bandwidth, no DRAM. Each $"PE"$ has its own $"SRAM"$ and 48 kB; cores communicate through a 2-D mesh. The entire model lives on-chip, eliminating the off-chip bottleneck — at the cost of a million-dollar accelerator with bespoke packaging.
+The $"WSE"$-3 is a single die that fills a 300 mm wafer: 900,000 cores, 44 GB on-die $"SRAM"$, 21 PB/s aggregate memory bandwidth, no DRAM. Each $"PE"$ has its own 48 kB of $"SRAM"$; cores communicate through a 2-D mesh. The entire model lives on-chip, eliminating the off-chip bottleneck — at the cost of a million-dollar accelerator with bespoke packaging.
 
 === Graphcore IPU
 
@@ -87,7 +87,7 @@ The $"IPU"$ ($"Bow"$, $"Mk2"$, Colossus) is a $"BSP"$-style ("Bulk Synchronous P
 
 === Groq LPU / TSP
 
-The Tensor Streaming Processor abandons cache hierarchy entirely: a single 320-way SIMD pipeline executes a *fully compiler-scheduled* program. Every cycle's worth of every $"FU"$ is statically reserved. Deterministic latency makes Groq the throughput leader for transformer inference at small batch sizes (>500 tokens/s on Llama 70B as of 2024). Limitation: model must fit in on-chip $"SRAM"$ (230 MB per chip $arrow$ multi-chip).
+The Tensor Streaming Processor abandons cache hierarchy entirely: a single 320-way SIMD pipeline executes a *fully compiler-scheduled* program. Every cycle's worth of every $"FU"$ is statically reserved. Deterministic latency makes Groq the throughput leader for transformer inference at small batch sizes (~300 tokens/s on Llama-2 70B in early 2024). Limitation: model must fit in on-chip $"SRAM"$ (230 MB per chip $arrow$ multi-chip).
 
 == SambaNova RDU
 
@@ -176,6 +176,6 @@ Sze, V. et al. (2020). _Efficient Processing of Deep Neural Networks_. Morgan & 
 
 Cerebras Systems (2024). _WSE-3 Whitepaper_.
 
-Groq (2022). "$"TSP"$: A Tensor Streaming Processor." _Hot Chips 32 / IEEE Micro_.
+Abts, D. et al. (2020). "Think Fast: A Tensor Streaming Processor (TSP) for Accelerating Deep Learning Workloads." _ISCA '20_.
 
 Hennessy, J.L. & Patterson, D.A. (2019). "A New Golden Age for Computer Architecture." _CACM_ 62(2).
