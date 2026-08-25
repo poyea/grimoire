@@ -56,8 +56,8 @@ Two scheduler designs coexist:
 #table(
   columns: 3,
   [*Design*], [*Used by*], [*Tradeoff*],
-  [Distributed $"RS"$ per port], [Intel P6, modern Intel], [Smaller CAMs, port-specific tuning, harder load balancing],
-  [Unified scheduler], [AMD Zen, Apple], [Single CAM, easier balancing, larger structure],
+  [Distributed $"RS"$ per port], [AMD Zen (integer side), Apple M-series], [Smaller CAMs, port-specific tuning, harder load balancing],
+  [Unified scheduler], [Intel since P6], [Single CAM, easier balancing, larger structure],
 )
 
 A $"RS"$ entry holds operation, source tags or values, and destination tag. Each cycle it wakes up entries whose source tags match a $"CDB"$ broadcast; the select logic picks the oldest ready entry per port. Wakeup-select is the critical path that limits issue width.
@@ -80,8 +80,8 @@ After rename:
 
 Two physical register file styles:
 
-- *Merged $"PRF"$ (Intel since Sandy Bridge, AMD since Zen, Apple, ARM):* one big $"PRF"$ holds both speculative and architectural values; a register alias table ($"RAT"$) maps arch reg to physical tag.
-- *Separate retirement register file (Intel P6, Pentium 4):* speculative results live in the $"ROB"$ and copy into the architectural file at retire. Higher port pressure, now historical.
+- *Merged $"PRF"$ (Intel since Sandy Bridge, AMD since Bulldozer, Apple, ARM; also Pentium 4):* one big $"PRF"$ holds both speculative and architectural values; a register alias table ($"RAT"$) maps arch reg to physical tag.
+- *Separate retirement register file (Intel P6 through Nehalem):* speculative results live in the $"ROB"$ and copy into the architectural file at retire. Higher port pressure, now historical.
 
 A rename checkpoint snapshots the $"RAT"$ at branches; on misprediction, the $"RAT"$ rolls back to the checkpoint, releasing physical registers younger than the branch.
 
