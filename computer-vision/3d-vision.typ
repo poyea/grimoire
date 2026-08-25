@@ -72,7 +72,7 @@ $ C(r) = integral_(t_n)^(t_f) T(t) sigma(r(t)) c(r(t), d) d t $
 where $T(t) = exp(-integral_(t_n)^t sigma(r(s)) d s)$ is the accumulated transmittance. In practice, stratified and importance sampling discretise the integral.
 
 NeRF is trained by minimising the photometric reconstruction loss between rendered and observed colours. It achieves photorealistic novel view synthesis but requires:
-- Per-scene training (30 minutes to hours).
+- Per-scene training (1--2 days on a single GPU).
 - Dense multi-view captures.
 - Slow rendering ($~30$s per image).
 

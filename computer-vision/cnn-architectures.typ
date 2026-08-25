@@ -37,7 +37,7 @@ Separates a $K times K$ convolution into:
 1. *Depthwise*: $K times K$ per-channel convolution — $K^2 C$ parameters.
 2. *Pointwise*: $1 times 1$ cross-channel mixing — $C C'$ parameters.
 
-Total: $K^2 C + C C'$ vs. $K^2 C C'$ for a full convolution — roughly $1/C'$ the cost. Used in MobileNet, Xception, EfficientNet.
+Total: $K^2 C + C C'$ vs. $K^2 C C'$ for a full convolution — a factor of $1/C' + 1/K^2$. At the usual $K = 3$ the $1/K^2$ term dominates, so the saving is closer to $9 times$ than to $C'$. Used in MobileNet, Xception, EfficientNet.
 
 == Pooling and Downsampling
 
@@ -67,7 +67,7 @@ The first successful deep CNN for digit recognition: two conv layers, two poolin
 
 === AlexNet (Krizhevsky et al., 2012)
 
-Won ImageNet 2012 (15.3% top-5 error with ensemble, 16.4% single-model, vs. 26.2% for the next-best). Key advances: ReLU activations, dropout regularisation, GPU training, data augmentation. Established deep learning as the dominant paradigm.
+Won ImageNet 2012 (15.3% top-5 error for the winning entry; 18.2% for a single CNN and 16.4% for a 5-CNN ensemble, vs. 26.2% for the next-best). Key advances: ReLU activations, dropout regularisation, GPU training, data augmentation. Established deep learning as the dominant paradigm.
 
 === VGG (Simonyan & Zisserman, 2014)
 
@@ -87,11 +87,11 @@ Connects each layer to all subsequent layers: $x_l = H_l ([x_0, x_1, ..., x_(l-1
 
 === EfficientNet (Tan & Le, 2019)
 
-Compound scaling: jointly scale width $w$, depth $d$, and resolution $r$ under a compute constraint. Uses NAS-derived MBConv blocks (depthwise separable + squeeze-and-excitation). EfficientNet-B7 achieves 84.3% top-1 on ImageNet at $37 times$ fewer parameters than GPipe. EfficientNetV2 adds fused-MBConv and progressive training.
+Compound scaling: jointly scale width $w$, depth $d$, and resolution $r$ under a compute constraint. Uses NAS-derived MBConv blocks (depthwise separable + squeeze-and-excitation). EfficientNet-B7 achieves 84.3% top-1 on ImageNet at $8.4 times$ fewer parameters than GPipe. EfficientNetV2 adds fused-MBConv and progressive training.
 
 === ConvNeXt (Liu et al., 2022)
 
-A pure CNN that matches ViT performance by systematically modernising ResNet: depthwise $7 times 7$ convolutions, inverted bottleneck, GELU activation, LayerNorm. Trained with the same recipe as DeiT (224 epochs, large augmentation). ConvNeXt-XL matches Swin-L on ADE20K segmentation. Demonstrates that transformer innovations largely transfer to CNNs.
+A pure CNN that matches ViT performance by systematically modernising ResNet: depthwise $7 times 7$ convolutions, inverted bottleneck, GELU activation, LayerNorm. Trained with the same recipe as DeiT (300 epochs, large augmentation). ConvNeXt-XL matches Swin-L on ADE20K segmentation. Demonstrates that transformer innovations largely transfer to CNNs.
 
 == Squeeze-and-Excitation (SE) Networks
 
@@ -125,7 +125,7 @@ Modern recipe (from Wightman et al.): 300 epochs, AdamW, cosine decay, timm libr
   [ResNet-50], [2015], [76.1%], [25M],
   [EfficientNet-B4], [2019], [83.0%], [19M],
   [ConvNeXt-B], [2022], [83.8%], [89M],
-  [ViT-B/16], [2020], [81.8%], [86M],
+  [ViT-B/16], [2020], [84.0%], [86M],
   [Swin-B], [2021], [85.2%], [88M],
   [ConvNeXt-XL], [2022], [87.0%], [350M],
 )
