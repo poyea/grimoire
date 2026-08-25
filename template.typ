@@ -22,7 +22,13 @@ header nav .sep { opacity: .45; margin: 0 .45em; }
 header nav .vol { font-weight: 600; }
 h1, h2, h3, h4 { font-family: system-ui, sans-serif; line-height: 1.25;
   margin: 2.2em 0 .6em; }
-h2 { font-size: 1.5rem; } h3 { font-size: 1.2rem; } h4 { font-size: 1.03rem; }
+h3 { font-size: 1.2rem; } h4 { font-size: 1.03rem; }
+/* Chapters are h2. In the PDF each starts on a fresh page; HTML export
+   drops those 57 pagebreaks, so without a rule the previous chapter's
+   Further Reading runs straight into the next chapter's title. */
+h2 { font-size: 1.6rem; margin-top: 3.5rem; padding-top: 2rem;
+  border-top: 2px solid #8884; }
+h2:first-of-type { margin-top: 1rem; padding-top: 0; border-top: 0; }
 pre { font: 13px/1.5 ui-monospace, 'DejaVu Sans Mono', monospace;
   background: #8881; padding: .8rem 1rem; border-radius: 4px;
   overflow-x: auto; }
