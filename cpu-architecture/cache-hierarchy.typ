@@ -33,16 +33,16 @@ Without caches, every memory access would incur a 200-cycle stall, causing the C
 │  ┌─────┴─────┐  │
 │  │ L1 Cache  │  │  32-64 KB per core, split I/D
 │  └─────┬─────┘  │  Latency: 4 cycles (Zen 4) — 5 cycles (Raptor Lake P-core)
-│        │        │  Bandwidth: ~100 GB/s (Skylake: 2×32 B loads + 1×32 B store per cycle ≈ 96 B/cycle at 4 GHz)
+│        │        │  Bandwidth: ~400 GB/s per core (Skylake: 2×32 B loads + 1×32 B store per cycle = 96 B/cycle ≈ 384 GB/s at 4 GHz)
 │  ┌─────┴─────┐  │
 │  │ L2 Cache  │  │  256-512 KB per core
 │  └─────┬─────┘  │  Latency: 12-15 cycles
-└────────┼────────┘  Bandwidth: ~50 GB/s (Skylake L2→L1: peak 64 B/cycle, sustained ~29 B/cycle ≈ 116 GB/s at 4 GHz)
+└────────┼────────┘  Bandwidth: ~100+ GB/s per core (Skylake L2→L1: peak 64 B/cycle, sustained ~29 B/cycle ≈ 116 GB/s at 4 GHz)
          │
     ┌────┴────┐
     │L3 Cache │       8-64 MB shared
     └────┬────┘       Latency: 40-60 cycles (up to ~80 on large server LLCs)
-         │            Bandwidth: ~20-30 GB/s (Skylake ring bus: 32 B/cycle per stop, sustained ~15 B/cycle per core ≈ 60 GB/s at 4 GHz)
+         │            Bandwidth: ~60 GB/s per core (Skylake ring bus: 32 B/cycle per stop, sustained ~15 B/cycle per core ≈ 60 GB/s at 4 GHz)
     ┌────┴────┐
     │  DRAM   │       8-128 GB
     └─────────┘       Latency: ~200 cycles (60-100 ns)
@@ -142,7 +142,7 @@ Example: L1 with 95% hit rate
 AMAT = 4 + 0.05 × 200 = 14 cycles average
 ```
 
-Cache hierarchies can be organized as either inclusive or exclusive. In Intel's inclusive design, the L3 cache contains everything present in L1 and L2 caches. This approach simplifies coherence protocols since checking only the L3 is sufficient, but wastes capacity due to duplication. AMD's Zen architecture uses an exclusive design where L3 contains only data evicted from L1 and L2, providing an effective capacity equal to the sum of all cache levels, though at the cost of more complex coherence management.
+Cache hierarchies can be organized as either inclusive or exclusive. In Intel's traditional inclusive design (client cores through Skylake), the L3 cache contains everything present in L1 and L2 caches. This approach simplifies coherence protocols since checking only the L3 is sufficient, but wastes capacity due to duplication. AMD's Zen architecture uses an exclusive design where L3 contains only data evicted from L1 and L2, providing an effective capacity equal to the sum of all cache levels, though at the cost of more complex coherence management. Intel itself moved to a non-inclusive L3 on servers with Skylake-SP and on client cores with Tiger Lake.
 
 == Three C's of Cache Misses
 
@@ -164,8 +164,8 @@ Conflict misses occur when multiple addresses map to the same cache set despite 
 // Two arrays, same alignment mod way size
 // Assume an 8 MB, 16-way L3 with 64 B lines: 8192 sets x 64 B = 512 KB
 // per way; addresses any multiple of 512 KB apart map to the same sets.
-int *a = malloc(1048576);  // 1 MB at address X
-int *b = malloc(1048576);  // 1 MB at address X + 8MB (16 x 512 KB -> same sets as a)
+int *a = (int*)malloc(1048576);  // 1 MB at address X
+int *b = (int*)malloc(1048576);  // 1 MB at address X + 8MB (16 x 512 KB -> same sets as a)
 
 for (int i = 0; i < N; i++) {
     result += a[i] + b[i];  // a[i] and b[i] conflict → thrashing
@@ -297,9 +297,9 @@ for (int ii = 0; ii < N; ii += BS)
 
 ```
 Intel Raptor Lake (13th gen, 2023):
-- L1: 48 KB I-cache + 32 KB D-cache per P-core
+- L1: 32 KB I-cache + 48 KB D-cache per P-core
 - L2: 2 MB per P-core, 4 MB shared per E-core cluster
-- L3: 36 MB shared (inclusive)
+- L3: 36 MB shared (non-inclusive)
 
 Intel Arrow Lake (Core Ultra 200S, 2024) — Lion Cove P-core:
 - L1: 64 KB I-cache + 48 KB D-cache per P-core, plus a new 192 KB mid-level cache between L1D and L2 (informally "L1.5" — a separate level, not a split of L1D)
@@ -308,13 +308,13 @@ Intel Arrow Lake (Core Ultra 200S, 2024) — Lion Cove P-core:
 
 AMD Zen 4 (Ryzen 7000, 2022):
 - L1: 32 KB I-cache + 32 KB D-cache per core
-- L2: 1 MB per core (exclusive)
-- L3: 32 MB shared per CCD (exclusive)
+- L2: 1 MB per core (inclusive of L1)
+- L3: 32 MB shared per CCD (exclusive victim of L2)
 - Effective capacity: L2 + L3 = 40 MB (due to exclusivity)
 
 AMD Zen 5 (Ryzen 9000 / EPYC Turin, 2024):
 - L1: 32 KB I-cache + 48 KB D-cache per core (D$ grew to 48 KB, 12-way)
-- L2: 1 MB per core (exclusive)
+- L2: 1 MB per core (inclusive of L1)
 - L3: 32 MB shared per CCD; up to 128 MB with 3D V-Cache (X3D parts)
 
 Apple M3 (2023) / M4 (2024) (estimated; Apple does not officially publish):
@@ -365,11 +365,11 @@ struct Particle particles[10000];
 void update_positions(struct Particle* p, int n, float dt) {
     for (int i = 0; i < n; i++) {
         p[i].x += p[i].vx * dt;  // Loads entire 32-byte struct
-        p[i].y += p[i].vy * dt;  // Only use 12 bytes, waste 20 bytes
-        p[i].z += p[i].vz * dt;  // bandwidth per cache line!
+        p[i].y += p[i].vy * dt;  // Uses 24 bytes; mass + padding
+        p[i].z += p[i].vz * dt;  // are dead weight per cache line
     }
 }
-// Cache line utilization: 37.5% (12/32 bytes used)
+// Cache line utilization: 75% (24/32 bytes used); SoA also enables SIMD
 
 // GOOD: Structure of Arrays (perfect spatial locality)
 struct ParticlesSoA {
@@ -424,6 +424,7 @@ Cache-oblivious algorithms perform well across all cache levels without knowing 
 
 ```c
 // Recursive divide-and-conquer automatically adapts to cache size
+// N = full matrix row stride (global); n = current block size
 void matmul_recursive(float* A, float* B, float* C,
                       int n, int i0, int j0, int k0) {
     if (n <= 32) {  // Base case: small enough for L1
@@ -537,10 +538,12 @@ void process_stream(char* huge_buffer, size_t size) {
     }
 }
 
-// Fix: Use non-temporal stores (bypass cache)
+// Fix: Non-temporal prefetch hint for read-once data
 void process_stream_nt(char* huge_buffer, size_t size) {
-    for (size_t i = 0; i < size; i += 64) {
-        _mm_stream_si64((long long*)&huge_buffer[i], 0);
+    for (size_t i = 0; i < size; i++) {
+        if (i % 64 == 0)
+            _mm_prefetch(&huge_buffer[i + 256], _MM_HINT_NTA);
+        process(huge_buffer[i]);  // Lines marked LRU-first, evicted early
     }
 }
 
