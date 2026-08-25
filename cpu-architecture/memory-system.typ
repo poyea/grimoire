@@ -11,13 +11,15 @@ A DRAM cell consists of one transistor and one capacitor to store a single bit. 
 == DRAM Hierarchy
 
 ```
-DIMM (Dual Inline Memory Module)
+Memory controller
   ├─ Channel 0
-  │   ├─ Rank 0 (8 chips)
-  │   └─ Rank 1 (8 chips)
+  │   └─ DIMM (Dual Inline Memory Module)
+  │       ├─ Rank 0 (8 chips)
+  │       └─ Rank 1 (8 chips)
   ├─ Channel 1
-  │   ├─ Rank 0
-  │   └─ Rank 1
+  │   └─ DIMM
+  │       ├─ Rank 0
+  │       └─ Rank 1
   ...
 
 Chip internals:
@@ -155,7 +157,7 @@ tRCD (RAS to CAS): 16 cycles = 13.3 ns
 tRP (Row Precharge): 16 cycles = 13.3 ns
 tRAS (Row Active time): 36 cycles = 30 ns
 
-Notation: DDR4-2400 CL16-18-18-36
+Notation: DDR4-2400 CL16-16-16-36
           (CL-tRCD-tRP-tRAS)
 
 Lower timings = faster (but more expensive, less stable)
@@ -224,9 +226,9 @@ sum3 = arr3[i];  // Bank 2
 *1. Stream efficiently:*
 
 ```c
-// BAD: Read-modify-write (3× bandwidth)
+// BAD: Write-allocate store (2× bandwidth: RFO read + writeback)
 for (int i = 0; i < n; i++)
-    array[i] = 0;  // Read old value, write new value
+    array[i] = 0;  // Line is read for ownership, then written back
 
 // GOOD: Write-only stream (1× bandwidth)
 memset(array, 0, n * sizeof(int));  // Or non-temporal stores
@@ -302,7 +304,7 @@ DDR5-4800:
 
 Latency comparison:
 DDR4-3200 CL16: ~50 ns total (CAS = 10 ns)
-DDR5-4800 CL40: ~55-65 ns total — *slightly higher* absolute latency despite the same CAS-in-cycles, because DDR5's faster clock means each cycle covers less time. DDR5 wins on bandwidth and bank parallelism, not raw access latency.
+DDR5-4800 CL40: ~55-65 ns total — *slightly higher* absolute latency: the larger CAS count (CL40 vs CL16) more than cancels the faster clock (16.7 ns vs 10 ns CAS). DDR5 wins on bandwidth and bank parallelism, not raw access latency.
 ```
 
 == References
@@ -311,17 +313,17 @@ Jacob, B., Ng, S., & Wang, D. (2007). Memory Systems: Cache, DRAM, Disk. Morgan 
 
 Hennessy, J.L. & Patterson, D.A. (2017). Computer Architecture: A Quantitative Approach (6th ed.). Morgan Kaufmann. Chapter 2 Appendix (Memory Technology).
 
-JEDEC Standard (2020). JESD79-4B: DDR4 SDRAM Specification.
+JEDEC Standard (2020). JESD79-4C: DDR4 SDRAM Specification.
 
 == Further Reading
 
 Jacob, B., Ng, S., & Wang, D. (2008). _Memory Systems: Cache, DRAM, Disk_. Morgan Kaufmann. — Comprehensive reference covering DRAM architecture, timing parameters, bank interleaving, refresh mechanics, and system-level memory controller design; the primary textbook for this chapter's topics.
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix B (Memory Technology and Optimizations) quantifies DRAM latency trends and motivates multi-level memory hierarchies with performance models.
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 2 (Memory Technology and Optimizations) quantifies DRAM latency trends and motivates multi-level memory hierarchies with performance models.
 
 JEDEC Standard (2020). JESD79-5: DDR5 SDRAM Specification. JEDEC Solid State Technology Association. — The authoritative specification for DDR5 electrical characteristics, timing parameters, on-die ECC, and command encoding.
 
-Lameter, C. (2013). "NUMA (Non-Uniform Memory Access): An Overview." Linux Symposium. — Practical introduction to NUMA topology, memory policies, and the Linux kernel mechanisms (mbind, numactl) for controlling placement.
+Lameter, C. (2013). "NUMA (Non-Uniform Memory Access): An Overview." ACM Queue 11(7). — Practical introduction to NUMA topology, memory policies, and the Linux kernel mechanisms (mbind, numactl) for controlling placement.
 
 Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Chapter 2 covers the interaction between the memory controller, prefetchers, and cache hierarchy; includes NUMA considerations for multi-socket Xeon platforms.
 
