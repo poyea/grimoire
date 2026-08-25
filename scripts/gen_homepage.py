@@ -310,6 +310,7 @@ def volume_page(i: int, slug: str, title: str, desc: str,
   </div>
   <footer>
     <span>by <a href="https://github.com/poyea">@poyea</a> with love</span>
+    <span class="disclaimer">Primarily AI-generated, with limited human review.</span>
     <span><a href="{RELEASES}">all releases ↗</a> · <a href="https://github.com/poyea/grimoire">source ↗</a></span>
   </footer>
 </div>

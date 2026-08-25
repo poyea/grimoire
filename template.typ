@@ -88,6 +88,8 @@ math { font-size: 1.02em; }
       #html.p[
         #title -- notes by
         #html.a(href: "https://github.com/poyea")[\@poyea].
+        Contents are primarily AI-generated with limited human review;
+        use at your own discretion.
         Built from the current sources on every deploy. The
         #html.a(href: "https://github.com/poyea/grimoire/releases")[released PDFs]
         are better typeset but are cut per release, so they may lag this page.
