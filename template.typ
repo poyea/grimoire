@@ -10,8 +10,14 @@ body {
   font: 16px/1.65 Georgia, 'Times New Roman', serif;
   max-width: 46rem; margin: 0 auto; padding: 0 1.1rem 4rem;
 }
+/* Sticky, because a volume is one long page: coding.html alone is 2.3 MB,
+   so the way back to the index should never scroll away. */
+header { position: sticky; top: 0; z-index: 10;
+  background: Canvas; margin-bottom: 2rem; }
 header nav { font-family: system-ui, sans-serif; font-size: .85rem;
-  padding: .9rem 0; border-bottom: 1px solid #8883; margin-bottom: 2rem; }
+  padding: .9rem 0; border-bottom: 1px solid #8883; }
+/* Keep anchor targets clear of the sticky header when the TOC jumps. */
+h1, h2, h3, h4, h5, h6 { scroll-margin-top: 3.6rem; }
 header nav .sep { opacity: .45; margin: 0 .45em; }
 header nav .vol { font-weight: 600; }
 h1, h2, h3, h4 { font-family: system-ui, sans-serif; line-height: 1.25;
