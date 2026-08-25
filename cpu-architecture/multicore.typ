@@ -173,13 +173,13 @@ perf record -e ibs_op//p -- ./app
 
 `perf stat -e cache-misses,cycle_activity.stalls_l3_miss,mem_load_l3_hit_retired.xsnp_hitm` gives a quick contention proxy without recording. The `HITM` (hit modified) event is the smoking gun: a load that finds the line in another core's L1/L2 in *Modified* state — i.e. someone is writing what you're reading.
 
-*`std::hardware_destructive_interference_size` (C++17):* the language's answer to "what's the cache-line size for `alignas`?" Sounds clean; is messy. Implementations must pick a *single compile-time constant* that's an ABA-stable part of the platform target, so GCC reports 64 on most x86 targets while Apple Silicon would want 128 (M1's L2 line). Worse, changing the value breaks ABI for any class that embeds it as a layout choice. GCC emits a `-Winterference-size` warning if you use it across translation units. The Standard Library Working Group has discussed deprecation; in practice, hard-code 64 (or 128 for Apple Silicon / IBM POWER) and document it.
+*`std::hardware_destructive_interference_size` (C++17):* the language's answer to "what's the cache-line size for `alignas`?" Sounds clean; is messy. Implementations must pick a *single compile-time constant* that's an ABI-stable part of the platform target, so GCC reports 64 on most x86 targets while Apple Silicon would want 128 (M1's L2 line). Worse, changing the value breaks ABI for any class that embeds it as a layout choice. GCC emits a `-Winterference-size` warning if you use it across translation units. The Standard Library Working Group has discussed deprecation; in practice, hard-code 64 (or 128 for Apple Silicon / IBM POWER) and document it.
 
 == Atomic Operations
 
 *Hardware support:* Atomically read-modify-write.
 
-```c
+```cpp
 #include <atomic>
 
 std::atomic<int> counter(0);
@@ -196,7 +196,7 @@ lock add dword ptr [counter], 1
 
 *Compare-and-swap (CAS):*
 
-```c
+```cpp
 int expected = 0;
 int desired = 1;
 if (counter.compare_exchange_strong(expected, desired)) {
@@ -230,7 +230,7 @@ if (ready) {
 
 *C++11 memory model [Boehm & Adve 2008]:*
 
-```c
+```cpp
 // Relaxed: No ordering guarantees (fastest)
 atomic.store(x, std::memory_order_relaxed);
 
@@ -269,17 +269,18 @@ In practice:
 
 *Fence instructions:*
 
-```c
+```cpp
 // Full barrier (x86: mfence)
 std::atomic_thread_fence(std::memory_order_seq_cst);
 
-// Load barrier (x86: lfence)
+// Acquire fence (x86: no instruction -- compiler barrier; TSO suffices)
 std::atomic_thread_fence(std::memory_order_acquire);
 
-// Store barrier (x86: sfence)
+// Release fence (x86: no instruction -- compiler barrier; TSO suffices)
 std::atomic_thread_fence(std::memory_order_release);
 
-Cost: ~10-20 cycles (serialize pipeline, flush store buffer)
+// Cost: seq_cst fence ~10-20 cycles (drains store buffer);
+// acquire/release fences are free on x86, real barriers on ARM/POWER
 ```
 
 == Producer-Consumer: Where Atomics and Barriers Are Required
@@ -469,15 +470,17 @@ lstopo  # from hwloc package
 *Common NUMA anti-patterns:*
 
 ```c
-// ANTI-PATTERN 1: Master thread allocates, workers access
-float* data = malloc(SIZE);  // Allocated on node 0
+// ANTI-PATTERN 1: Master thread initializes, workers access
+float* data = malloc(SIZE * sizeof(float));
+for (int i = 0; i < SIZE; i++)
+    data[i] = 0;  // First touch by master → every page lands on node 0
 #pragma omp parallel for
 for (int i = 0; i < SIZE; i++) {
     data[i] = compute(data[i]);  // Threads on node 1 → remote access!
 }
 
-// FIX: First-touch allocation
-float* data = malloc(SIZE);
+// FIX: Parallel first-touch
+float* data = malloc(SIZE * sizeof(float));
 #pragma omp parallel for
 for (int i = 0; i < SIZE; i++) {
     data[i] = 0;  // Each thread touches its portion → local allocation
@@ -504,7 +507,7 @@ for (int i = 0; i < num_nodes; i++) {
 ```
 Single core with SMT (2 threads):
 - 2 architectural register files
-- 2 ROBs
+- ROB and store buffer statically partitioned between threads
 - Shared: Caches, execution units, TLBs
 
 Benefit: Hide latency - while Thread 1 waits for memory, Thread 2 executes
