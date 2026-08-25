@@ -69,7 +69,11 @@ math { font-size: 1.02em; }
     html.style(_html-css)
     html.header[
       #html.nav[
-        #html.a(href: "./index.html")[Grimoire]
+        // "Grimoire" must reach the site home, not this directory's
+        // listing -- these pages live one level down in __compiled/.
+        #html.a(href: "../index.html")[Grimoire]
+        #html.span(class: "sep")[/]
+        #html.a(href: "./index.html")[Compiled]
         #html.span(class: "sep")[/]
         #html.span(class: "vol")[#title]
       ]
