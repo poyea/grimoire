@@ -32,7 +32,7 @@ Quick Path Interconnect ($"QPI"$, 2008) and its successor Ultra Path Interconnec
   [$"QPI"$ 1.0], [2008], [6.4], [25.6 GB/s],
   [$"QPI"$ 1.1], [2011], [8.0], [32 GB/s],
   [$"UPI"$ 1.0], [2017], [10.4], [41.6 GB/s],
-  [$"UPI"$ 2.0], [2021], [11.2], [44.8 GB/s],
+  [$"UPI"$ (ICX)], [2021], [11.2], [44.8 GB/s],
   [$"UPI"$ 2.0 (SPR)], [2023], [16.0], [64 GB/s],
 )
 
@@ -105,13 +105,13 @@ Three device classes:
 
 *Memory pooling* is the killer feature: a rack-scale pool of DDR/$"DRAM"$ behind a $"CXL"$ switch can be dynamically allocated to whichever host needs it, raising utilization from the typical 40-60% to 80%+. Latency is the catch: pooled $"CXL"$ memory is ~250-400 ns vs ~80 ns for local DDR — a new "tier 1.5" between DRAM and SSD that the OS must learn to schedule against.
 
-```c
-// Linux user-space view of CXL memory
-// CXL devices appear as NUMA nodes; bind with numactl or set_mempolicy.
+```bash
+# Linux user-space view of CXL memory
+# CXL devices appear as NUMA nodes; bind with numactl or set_mempolicy.
 $ numactl --hardware
-// node 0: local DDR (80 ns)
-// node 1: local DDR (80 ns)
-// node 2: CXL pool   (300 ns)  <- "cpuless" node
+# node 0: local DDR (80 ns)
+# node 1: local DDR (80 ns)
+# node 2: CXL pool   (300 ns)  <- "cpuless" node
 $ numactl --membind=2 ./mostly-cold-app
 ```
 
@@ -124,16 +124,16 @@ NVIDIA's accelerator interconnect, the antithesis of $"PCIe"$'s latency.
 #table(
   columns: 4,
   [*Gen*], [*GPU*], [*Per-link*], [*Per-GPU aggregate*],
-  [NVLink 1], [P100 (2016)], [20 GB/s], [160 GB/s],
-  [NVLink 2], [V100 (2017)], [25 GB/s], [300 GB/s],
-  [NVLink 3], [A100 (2020)], [50 GB/s], [600 GB/s],
-  [NVLink 4], [H100 (2022)], [50 GB/s], [900 GB/s],
-  [NVLink 5], [B200 (2024)], [100 GB/s], [1.8 TB/s],
+  [NVLink 1], [P100 (2016)], [40 GB/s (4 links)], [160 GB/s],
+  [NVLink 2], [V100 (2017)], [50 GB/s (6 links)], [300 GB/s],
+  [NVLink 3], [A100 (2020)], [50 GB/s (12 links)], [600 GB/s],
+  [NVLink 4], [H100 (2022)], [50 GB/s (18 links)], [900 GB/s],
+  [NVLink 5], [B200 (2024)], [100 GB/s (18 links)], [1.8 TB/s],
 )
 
 $"NVSwitch"$ aggregates $"NVLink"$s into a non-blocking fabric: in $"DGX"$/$"HGX"$ H100, 8 GPUs and 4 $"NVSwitch"$es deliver full bisection at 900 GB/s per GPU. $"GB200"$ $"NVL72"$ scales this to 72 GPUs in one coherent domain via copper backplane.
 
-The competing open standard, $"UALink"$ ($"Ultra"$ $"Accelerator"$ $"Link"$), launched 2024 by AMD/Broadcom/Cisco/Google/Intel/Meta/Microsoft to break NVIDIA's lock-in; first products expected 2026.
+The competing open standard, $"UALink"$ ($"Ultra"$ $"Accelerator"$ $"Link"$), launched 2024 by AMD/Broadcom/Cisco/Google/HPE/Intel/Meta/Microsoft to break NVIDIA's lock-in; first products expected 2026.
 
 == AMD Infinity Fabric for GPUs
 
@@ -172,10 +172,10 @@ Intel Corporation (2023). _Intel Xeon Scalable Processor Family Datasheet_ ($"UP
 
 AMD (2023). _AMD EPYC 9004 Series Processor Architecture_ ($"Infinity"$ $"Fabric"$, $"xGMI"$).
 
-Choquette, J. (2022). "NVIDIA Hopper $"H100"$ GPU: Scaling Performance." _IEEE Micro_ 42(5).
+Choquette, J. (2023). "NVIDIA Hopper $"H100"$ GPU: Scaling Performance." _IEEE Micro_ 43(3).
 
 Li, A. et al. (2020). "Evaluating Modern $"GPU"$ Interconnect: $"PCIe"$, $"NVLink"$, $"NV-SLI"$, $"NVSwitch"$ and $"GPUDirect"$." _IEEE TPDS_ 31(1).
 
 Gouk, D. et al. (2022). "Direct Access, High-Performance Memory Disaggregation with $"DirectCXL"$." _USENIX ATC '22_.
 
-UALink Consortium (2024). _Ultra Accelerator Link 1.0 Specification_.
+UALink Consortium (2025). _Ultra Accelerator Link 1.0 Specification_.
