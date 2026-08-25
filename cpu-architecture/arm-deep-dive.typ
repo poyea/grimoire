@@ -36,7 +36,7 @@ Apple's transition from Intel to Apple Silicon (2020) was an architectural lesso
   [Load/store], [3 loads + 2 stores per cycle],
   [L1 I/D], [192 KB / 128 KB],
   [L2 (shared per P-cluster)], [12 MB],
-  [SLC (system-level cache)], [16 MB on M1, 96 MB on M3 Max],
+  [SLC (system-level cache)], [16 MB on M1, 48 MB on M1 Max],
   [Branch predictor], [TAGE-like, very large],
 )
 
@@ -74,6 +74,7 @@ Key concepts:
 // x0=y, x1=x, n=x2, d0=a
 daxpy:
     mov     x3, #0                 // i = 0
+    mov     z0.d, d0               // broadcast a to all lanes
     whilelt p0.d, x3, x2           // p0 lanes = (i+lane < n)
     b.none  .Lend
 .Lloop:
@@ -99,7 +100,7 @@ Vendors' $"VL"$ choices:
   [AWS Graviton 3 (Neoverse V1)], [256], [Two 256-bit pipes],
   [AWS Graviton 4 (Neoverse V2)], [128 (4 pipes)], [Four 128-bit pipes],
   [NVIDIA Grace (Neoverse V2)], [128 (4 pipes)], [],
-  [Apple M4], [128 (SME2)], [],
+  [Apple M4], [512 (streaming, SME2)], [No non-streaming SVE],
 )
 
 The lesson: peak vector throughput depends on (number of pipes)$times$(pipe width), not $"VL"$ alone. Programmers should use $"VL"$-agnostic intrinsics (`svadd_x` etc.) and let the compiler unroll.
@@ -113,13 +114,13 @@ ARM's $"Neoverse"$ line targets servers and infrastructure with a different powe
   [*Core*], [*Class*], [*Decode*], [*Notable customers*],
   [Neoverse N1 (2019)], [Efficiency], [4-wide], [Graviton 2, Ampere Altra],
   [Neoverse V1 (2021)], [Performance], [5-wide, SVE 256], [Graviton 3, SiPearl Rhea],
-  [Neoverse N2 (2022)], [Efficiency], [5-wide, SVE2 128], [Alibaba Yitian 710],
+  [Neoverse N2 (2022)], [Efficiency], [5-wide, SVE2 128], [Yitian 710, MS Cobalt 100],
   [Neoverse V2 (2022)], [Performance], [6-wide, SVE2 4$times$128], [Graviton 4, NVIDIA Grace],
-  [Neoverse V3 (2024)], [Performance], [8-wide, SVE2], [Microsoft Cobalt 100],
-  [Neoverse N3 (2024)], [Efficiency], [9-wide], [],
+  [Neoverse V3 (2024)], [Performance], [Cortex-X4-derived, SVE2], [Microsoft Cobalt 200],
+  [Neoverse N3 (2024)], [Efficiency], [Cortex-A720-derived], [],
 )
 
-By 2024 Neoverse V3 hits 9-wide decode — closing the gap to Apple's P-cores. Cloud providers' preference for ARM is largely about perf/W and the ability to design custom silicon at $"hyperscaler"$ scale (Graviton, Cobalt, Axion, Yitian, Maia).
+The V-series inherits its front end from the Cortex-X flagships (Cortex-X4: 10-wide decode) — closing the gap to Apple's P-cores. Cloud providers' preference for ARM is largely about perf/W and the ability to design custom silicon at $"hyperscaler"$ scale (Graviton, Cobalt, Axion, Yitian, Maia).
 
 == Cortex Families
 
@@ -198,7 +199,7 @@ Stephens, N. et al. (2017). "The ARM Scalable Vector Extension." _IEEE Micro_ 37
 
 Hennessy, J.L. & Patterson, D.A. (2017). _Computer Architecture_, 6th ed., App. K (RISC ISAs incl. ARM).
 
-Johnson, A. (2022). "Apple Silicon: The M1 Microarchitecture." _Hot Chips 33_.
+Johnson, D. (2021). _Apple M1 Microarchitecture Research_ (Firestorm/Icestorm instruction and PRF tables). dougallj.github.io.
 
 Frumusanu, A. _Anandtech reviews of Apple M1/M2/M3 and Neoverse N1/N2/V1/V2_.
 
