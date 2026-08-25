@@ -90,7 +90,7 @@ Lookup (parallel with instruction fetch):
 4. If miss: Predict not taken (fetch sequentially)
 ```
 
-Typical BTB sizes vary widely by microarchitecture: Intel Skylake ~4K entries, Golden Cove (Alder/Raptor Lake P-core) ~12K entries, AMD Zen 4 ~12K entries, Apple M-series estimated ~12-16K. When a branch is encountered for the first time and causes a BTB miss, the predictor assumes it is not taken, which results in a misprediction if the branch is actually taken.
+Typical BTB sizes vary widely by microarchitecture: Intel Skylake ~4K entries, Golden Cove (Alder/Raptor Lake P-core) ~12K entries, AMD Zen 4 1.5K-entry L1 + 7K-entry L2, Apple M-series estimated ~12-16K. When a branch is encountered for the first time and causes a BTB miss, the predictor assumes it is not taken, which results in a misprediction if the branch is actually taken.
 
 == Two-Level Adaptive Predictors
 
@@ -128,7 +128,7 @@ This approach achieves approximately 90-95% accuracy for integer code.
 
 == TAGE Predictor (Tagged Geometric History)
 
-The TAGE predictor represents the state-of-the-art in branch prediction [Seznec & Michaud 2006]. It uses multiple Pattern History Tables with geometrically increasing history lengths: 2, 4, 8, 16, 32, up to 1024 entries.
+The TAGE predictor represents the state-of-the-art in branch prediction [Seznec & Michaud 2006]. It uses multiple Pattern History Tables with geometrically increasing history lengths: 2, 4, 8, 16, 32, up to ~1000 branches of history.
 
 During lookup, all PHTs are checked in parallel, prioritizing the longest history first. The prediction comes from the longest matching history entry, which provides the most specific context. If no match is found, the predictor falls back to a base predictor. Updates occur when mispredictions happen: the predictor allocates an entry in a longer-history table to learn the pattern, and unused entries are aged out over time.
 
@@ -151,7 +151,7 @@ The TAGE predictor achieves 97-99% accuracy. Intel uses variants of TAGE in mode
 
 The `ret` instruction presents a prediction problem because its target depends on the call chain and is therefore unpredictable using standard techniques. The solution is a hardware stack that tracks return addresses.
 
-When a `call` instruction executes, the return address is pushed onto the RAS before jumping to the function. When a `ret` instruction executes, the return address is popped from the RAS, and the CPU predicts a return to that popped address. Modern x86/ARM CPUs use 32-64-entry RAS (older Skylake/Zen 2: 16); deeper than ~32 frames of recursion may overflow.
+When a `call` instruction executes, the return address is pushed onto the RAS before jumping to the function. When a `ret` instruction executes, the return address is popped from the RAS, and the CPU predicts a return to that popped address. Modern x86/ARM CPUs use 32-64-entry RAS (older Skylake: 16); deeper than ~32 frames of recursion may overflow.
 
 ```
 call func:
@@ -162,7 +162,7 @@ ret:
 1. Pop return address from RAS
 2. Predict return to popped address
 
-RAS size: modern CPUs use 32-64 entries (Zen 4: 32, Golden Cove: 32, Apple M-series: ~50-64). Earlier x86 (Skylake, Zen 2) used 16.
+RAS size: modern CPUs use 32-64 entries (Zen 4: 32, Golden Cove: 32, Apple M-series: ~50-64). Skylake used a 16-entry RSB.
 ```
 
 RAS overflow occurs when deep recursion exceeds the RAS capacity, causing the stack to wrap around and resulting in mispredictions. For example, with a 40-level recursion and a 32-entry RAS, overflows occur at depths greater than 32, and returns at depth 33 and beyond will mispredict due to RAS wraparound:
@@ -332,7 +332,8 @@ x = abs(x);  // Often compiled to branchless code
 ```c
 // BAD: Check condition on every iteration
 for (int i = 0; i < 1000000; i++) {
-    if (unlikely_condition) break;  // Mispredicted 999,999 times!
+    if (unlikely_condition) break;  // Predicts well (rarely taken),
+                                    // but costs a test+branch every time
     work(i);
 }
 
@@ -356,9 +357,9 @@ Smith, J.E. (1981). "A Study of Branch Prediction Strategies." ISCA '81.
 
 == Further Reading
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter C covers pipeline hazards and branch handling in depth; essential for understanding the architectural cost of misprediction.
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix C covers pipeline hazards and branch handling in depth; essential for understanding the architectural cost of misprediction.
 
-Seznec, A. (2011). "A New Case for the TAGE Branch Predictor." MICRO-44. — Describes TAGE-SC-L, the predictor that has dominated the Championship Branch Prediction series since 2014.
+Seznec, A. (2011). "A New Case for the TAGE Branch Predictor." MICRO-44. — Describes ISL-TAGE (loop predictor + statistical corrector), the basis of TAGE-SC-L, which has dominated the Championship Branch Prediction series since 2014.
 
 Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Sections 3.4–3.6 cover branch prediction resources, BTB capacity, and optimization guidance for Intel microarchitectures.
 
