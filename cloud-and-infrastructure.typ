@@ -1,6 +1,6 @@
 #import "template.typ": project
 
-#project("Cloud And Infrastructure")[
+#project("Cloud and Infrastructure")[
   #align(center)[#block(fill: luma(245), inset: 10pt, width: 80%, text(size: 9pt)[
     #align(center)[#text(size: 24pt, weight: "bold")[Cloud And Infrastructure]]
   ])]

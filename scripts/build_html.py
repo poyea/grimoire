@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import re
 import shutil
 import subprocess
 import sys
@@ -24,6 +25,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://poyea.github.io/grimoire/"
+INCLUDE_RE = re.compile(r'#include\s+"([^"]+\.typ)"')
 
 # Warnings that are inherent to rendering a paged document as HTML and say
 # nothing about the health of this build.
@@ -38,8 +40,45 @@ BENIGN = (
 )
 
 
+PROJECT_RE = re.compile(r'#project\(\s*"([^"]+)"')
+
+
 def volumes() -> list[Path]:
     return sorted(p for p in ROOT.glob("*.typ") if p.stem != "template")
+
+
+def display_title(vol: Path) -> str:
+    """The volume's real title, e.g. "Web and Browser Internals".
+
+    Falls back to the slug so a volume that has not been given a
+    #project(...) title still gets listed rather than dropped.
+    """
+    m = PROJECT_RE.search(vol.read_text(encoding="utf-8"))
+    return m.group(1).strip() if m else vol.stem
+
+
+def chapter_count(vol: Path) -> int:
+    """Chapters reachable from a volume, following nested includes.
+
+    coding/cpp-and-java/*.typ is included from a chapter rather than from
+    coding.typ, so a single-level scan undercounts by nine.
+    """
+    seen: set[Path] = set()
+    stack, n = [vol], 0
+    while stack:
+        cur = stack.pop()
+        try:
+            text = cur.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        for raw in INCLUDE_RE.findall(text):
+            target = (cur.parent / raw).resolve()
+            if target in seen or not target.exists():
+                continue
+            seen.add(target)
+            n += 1
+            stack.append(target)
+    return n
 
 
 def interesting(stderr: str) -> list[str]:
@@ -100,7 +139,8 @@ FONTS = ("https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;"
          "0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap")
 
 
-def write_index(out_dir: Path, built: list[tuple[str, int]]) -> None:
+def write_index(out_dir: Path,
+                built: list[tuple[str, str, int, int]]) -> None:
     """Listing page for the compiled volumes.
 
     Mirrors the typography of the curated site (scripts/gen_homepage.py) so
@@ -108,10 +148,10 @@ def write_index(out_dir: Path, built: list[tuple[str, int]]) -> None:
     rather than importing that module's stylesheet wholesale.
     """
     rows = "\n".join(
-        '    <li><a href="{s}.html">{s}</a>'
-        '<span class="kb">{k:,} KB</span></li>'.format(
-            s=html.escape(slug), k=kb)
-        for slug, kb in built
+        '    <li><a href="{s}.html">{t}</a>'
+        '<span class="kb">{c} ch · {k:,} KB</span></li>'.format(
+            s=html.escape(slug), t=html.escape(title), c=chapters, k=kb)
+        for slug, title, chapters, kb in built
     )
     page = (
         '<!DOCTYPE html>\n<html lang="en">\n<head>\n'
@@ -157,7 +197,7 @@ def main() -> int:
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True)
 
-    built: list[tuple[str, int]] = []
+    built: list[tuple[str, str, int, int]] = []
     failed: list[str] = []
     for vol in volumes():
         dest = out_dir / f"{vol.stem}.html"
@@ -178,14 +218,15 @@ def main() -> int:
             continue
         add_canonical(dest, vol.stem)
         kb = dest.stat().st_size // 1024
-        built.append((vol.stem, kb))
+        built.append((vol.stem, display_title(vol),
+                      chapter_count(vol), kb))
         flag = f"  ({len(notes)} note(s))" if notes else ""
         print(f"ok    {vol.stem:<32} {kb:>6,} KB{flag}")
         for n in notes[:3]:
             print(f"        {n}")
 
     write_index(out_dir, built)
-    total = sum(kb for _, kb in built)
+    total = sum(kb for *_, kb in built)
     print(f"\n{len(built)} volume(s) -> {args.out} ({total:,} KB total); "
           f"{len(failed)} failed")
     if failed:
