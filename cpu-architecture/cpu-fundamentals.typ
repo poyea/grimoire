@@ -36,7 +36,7 @@ Historically, the CISC versus RISC debate dominated the 1980s and 1990s, but has
 Intel Raptor Lake (13th/14th gen, 2023):
 - 8 P-cores (Performance) + 16 E-cores (Efficiency)
 - P-cores (Golden/Raptor Cove): 6-wide decode, 512-entry ROB
-- E-cores (Gracemont): 4-wide decode, smaller structures
+- E-cores (Gracemont): 6-wide decode (dual 3-wide clusters), smaller structures
 - Hybrid architecture optimized by OS scheduler
 
 Intel Arrow Lake (Core Ultra 200S, late 2024):
@@ -47,8 +47,8 @@ Intel Arrow Lake (Core Ultra 200S, late 2024):
 
 AMD Zen 4 (Ryzen 7000, 2022):
 - 4-way decode, 320-entry ROB
-- Unified scheduler with 6 ALU ports
-- 12K-entry L1 BTB; DDR5; up to 5.7 GHz boost
+- Distributed schedulers; 4 ALUs + 3 AGUs
+- 1.5K-entry L1 + 7K-entry L2 BTB; DDR5; up to 5.7 GHz boost
 
 AMD Zen 5 (Ryzen 9000 / EPYC Turin, 2024):
 - 8-wide decode (dual 4-wide clusters), 448-entry ROB
@@ -147,7 +147,7 @@ lea rax, [rbx+rcx*8]  ; Load effective address (1 cycle, addr calculation)
 ```asm
 add rax, rbx          ; Addition (1 cycle latency, 0.25 CPI)
 sub rax, rbx          ; Subtraction (1 cycle)
-imul rax, rbx         ; Multiply (3 cycles latency; 1 CPI Skylake, 0.5 CPI Zen 4)
+imul rax, rbx         ; Multiply (3 cycles latency, 1 CPI on Skylake/Zen 4)
 idiv rbx              ; Divide (rax / rbx → rax, 20-40 cycles, not pipelined!)
 ```
 
@@ -184,7 +184,7 @@ Modern CPUs like Zen 3 and Skylake exhibit varying latency and throughput charac
   [*Instruction*], [*Latency (cycles)*], [*Throughput (CPI)*], [*Execution Units*],
   [mov r, r], [0-1], [0.25], [Renamed away or ALU],
   [add r, r], [1], [0.25], [4 ALU ports],
-  [imul r, r], [3], [1 (Skylake) / 0.5 (Zen 4)], [1-2 multipliers],
+  [imul r, r], [3], [1 (Skylake, Zen 4)], [1 multiplier],
   [load], [4-5], [0.5], [2 load ports],
   [store], [1 (ST)], [1], [1 store port + 1 data],
   [idiv], [20-40], [20-40], [1 divider, not pipelined],
@@ -221,16 +221,15 @@ mov rax, rax          ; No-op, eliminated during rename
 test rax, rax         ; 1 uop; macro-fuses with following Jcc into one uop
 ```
 
-This works because register renaming tracks that the result is a constant value and eliminates the actual execution. These idioms provide dependency breaking, allowing out-of-order execution to proceed without waiting for previous operations. A false dependency where the old register value is irrelevant but the CPU waits anyway can be avoided by using the proper form that the CPU recognizes:
+This works because register renaming tracks that the result is a constant value and eliminates the actual execution. These idioms provide dependency breaking, allowing out-of-order execution to proceed without waiting for previous operations. A classic false dependency: `popcnt` overwrites its destination, yet Intel CPUs before Cannon Lake treated the destination as a source and stalled on it. Zeroing the register with the recognized idiom breaks the chain:
 
 ```asm
 ; BAD: False dependency
-xor eax, eax      ; Old rax value irrelevant, but CPU may wait
-add eax, 5
+popcnt rax, rbx   ; Old rax value irrelevant, but the CPU waits for it
 
 ; GOOD: Dependency broken
-xor rax, rax      ; CPU recognizes zero, no dependency
-add eax, 5        ; Can execute immediately
+xor eax, eax      ; Recognized zero idiom: no dependency on old rax
+popcnt rax, rbx   ; Can execute immediately
 ```
 
 == Addressing Modes
@@ -324,10 +323,10 @@ call func
 
 ; Callee
 func:
-    push rbx       ; Save callee-saved register
-    mov rbx, rdi   ; Use first arg
-    add rax, rbx   ; Compute result
-    pop rbx        ; Restore
+    push rbx             ; Save callee-saved register
+    mov rbx, rdi         ; Use first arg
+    lea rax, [rbx + rsi] ; Result = arg1 + arg2
+    pop rbx              ; Restore
     ret
 ```
 
@@ -542,7 +541,7 @@ Fog, A. (2023). The Microarchitecture of Intel, AMD and VIA CPUs. Technical Univ
 
 Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapters 1–2 establish the quantitative framework (CPI, Amdahl's law, power-performance trade-offs) that underpins all subsequent CPU design decisions.
 
-Patterson, D. A. & Hennessy, J. L. (2020). _Computer Organization and Design: ARM Edition_, 5th ed. Morgan Kaufmann. — Bridges high-level ISA concepts to gate-level implementation; the ARM edition pairs especially well with modern embedded and mobile CPU study.
+Patterson, D. A. & Hennessy, J. L. (2016). _Computer Organization and Design: ARM Edition_. Morgan Kaufmann. — Bridges high-level ISA concepts to gate-level implementation; the ARM edition pairs especially well with modern embedded and mobile CPU study.
 
 Agner Fog (2024). _The Microarchitecture of Intel, AMD and VIA CPUs_. Technical University of Denmark. — Detailed microarchitectural data for every major x86 generation; fills the gap between ISA specifications and silicon behavior.
 
