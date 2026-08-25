@@ -167,9 +167,10 @@ def write_index(out_dir: Path,
         '  <a class="back" href="../index.html">← Grimoire</a>\n'
         "  <h1>Compiled volumes</h1>\n"
         '  <p class="note">The full text of every volume, rendered to HTML '
-        "from the Typst sources at deploy time. Typst’s HTML export is "
-        'experimental, so the <a href="https://github.com/poyea/grimoire/'
-        'releases">released PDFs</a> remain the reference typesetting.</p>\n'
+        "from the current sources on every deploy. Typst’s HTML export is "
+        'experimental; the <a href="https://github.com/poyea/grimoire/'
+        'releases">released PDFs</a> are better typeset, but are cut per '
+        "release and may lag these pages.</p>\n"
         "  <ul>\n" + rows + "\n  </ul>\n"
         "  <footer>\n"
         '    by <a href="https://github.com/poyea">@poyea</a> ·\n'

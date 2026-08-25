@@ -84,9 +84,9 @@ math { font-size: 1.02em; }
       #html.p[
         #title -- notes by
         #html.a(href: "https://github.com/poyea")[\@poyea].
-        Rendered from the Typst sources; the
+        Built from the current sources on every deploy. The
         #html.a(href: "https://github.com/poyea/grimoire/releases")[released PDFs]
-        remain the reference typesetting.
+        are better typeset but are cut per release, so they may lag this page.
         #html.a(href: "https://github.com/poyea/grimoire")[poyea/grimoire]
       ]
     ]
