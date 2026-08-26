@@ -40,7 +40,7 @@ $ echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_gover
 
 == Turbo Boost / Precision Boost
 
-When fewer cores are active, the chip lets active cores exceed the base frequency until power, current, or temperature limits trip. Intel exposes per-core-count tables (Turbo Boost 2.0) and per-core favored cores (Turbo Boost Max 3.0). AMD's $"PBO"$ ("Precision Boost Overdrive") is the analogue with three concurrent limits: $"PPT"$ (package power), $"TDC"$ (thermal design current), $"EDC"$ (electrical design current).
+When fewer cores are active, the chip lets active cores exceed the base frequency until power, current, or temperature limits trip. Intel exposes per-core-count tables (Turbo Boost 2.0) and per-core favored cores (Turbo Boost Max 3.0). AMD's Precision Boost 2 is the analogue (Precision Boost Overdrive raises its limits) with three concurrent limits: $"PPT"$ (package power), $"TDC"$ (thermal design current), $"EDC"$ (electrical design current).
 
 The opportunistic frequency depends on:
 
@@ -106,7 +106,7 @@ A single die mixes core types optimized for different points on the $"PPA"$ curv
   columns: 4,
   [*Family*], [*Big core*], [*Little core*], [*Notes*],
   [ARM big.LITTLE (2011)], [Cortex-A15/A57], [Cortex-A7/A53], [Cluster migration, then global task scheduling, then $"DynamIQ"$],
-  [Apple A11+ (2017)], [Monsoon/Mistral], [...], [First $"AMP"$ in mainstream phone],
+  [Apple A11+ (2017)], [Monsoon/Mistral], [...], [Apple's first $"AMP"$; all cores usable at once],
   [Apple M1 (2020)], [Firestorm (P)], [Icestorm (E)], [4P+4E, shared L3],
   [Intel Alder Lake (2021)], [Golden Cove (P)], [Gracemont (E)], [Thread Director],
   [Intel Meteor Lake (2023)], [Redwood Cove (P)], [Crestmont (E + $"LP-E"$)], [Three tiers; $"LP-E"$ on $"SoC"$ tile],
@@ -179,7 +179,7 @@ $ likwid-powermeter -M 0 -- ./app
 
 Horowitz, M. (2014). "Computing's Energy Problem (and What We Can Do About It)." _ISSCC '14 Keynote_.
 
-Hennessy, J.L. & Patterson, D.A. (2017). _Computer Architecture_, 6th ed., Ch. 1 ($"DVFS"$, power) and App. B.
+Hennessy, J.L. & Patterson, D.A. (2017). _Computer Architecture_, 6th ed., Ch. 1 ($"DVFS"$, power).
 
 Intel Corporation (2024). _Intel 64 and IA-32 Architectures Software Developer's Manual_, Vol. 3B, Ch. 14-15 ($"HWP"$, $"RAPL"$, Thread Director).
 
