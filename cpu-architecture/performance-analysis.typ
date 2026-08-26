@@ -379,8 +379,8 @@ echo "=== Pipeline Stalls ==="
 perf stat -e cycles,stalled-cycles-frontend,\
 stalled-cycles-backend ./program
 
-# Step 6: Memory bandwidth
-echo "=== Memory Bandwidth ==="
+# Step 6: Where do loads hit? (MEM_LOAD_RETIRED.L1_HIT / L2_HIT)
+echo "=== Load Source Breakdown ==="
 perf stat -e cpu/event=0xd1,umask=0x01/,\
 cpu/event=0xd1,umask=0x02/ ./program
 
@@ -434,7 +434,7 @@ printf("Time per iteration: %.2f ns\n", elapsed * 1e9 / N);
 
 *Pitfalls:*
 
-```c
+```cpp
 // BAD: Compiler optimizes away
 for (int i = 0; i < N; i++) {
     result = operation();  // Dead code elimination if result unused
@@ -483,7 +483,7 @@ Levinthal, D. (2009). "Performance Analysis Guide for Intel Core i7 Processor an
 
 Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapters 1 and appendices establish the CPI model, Amdahl's law, and benchmark methodology that underpin all quantitative performance analysis.
 
-Agner Fog (2024). _Instruction Tables: Lists of Instruction Latencies, Throughpaths and Micro-operation Breakdowns_. Technical University of Denmark. — The go-to reference for instruction-level timing across x86 microarchitectures; essential when correlating PMU event counts with specific bottlenecks.
+Agner Fog (2024). _Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-operation Breakdowns_. Technical University of Denmark. — The go-to reference for instruction-level timing across x86 microarchitectures; essential when correlating PMU event counts with specific bottlenecks.
 
 Gregg, B. (2020). _Systems Performance: Enterprise and the Cloud_, 2nd ed. Addison-Wesley. — Chapters 6 (CPUs) and 13 (Benchmarking) cover Linux perf, flame graphs, USE method, and methodology for avoiding benchmarking pitfalls in production systems.
 
@@ -491,6 +491,4 @@ Yasin, A. (2014). "A Top-Down Method for Performance Analysis and Counters Archi
 
 Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Appendix B (Performance Monitoring Events) lists the hardware counter events and their precise semantics for each Intel core generation.
 
-Mytkowicz, T., Diwan, A., Hauswirth, M., & Sweeney, P. F. (2010). "Producing Wrong Data Without Doing Anything Obviously Wrong!" ASPLOS '10. — Demonstrates how environment variables, linking order, and ASLR can cause measurement variance exceeding 40%; motivates rigorous experimental methodology.
-
-Flajolet, P. & Martin, G. N. (1985). "Probabilistic Counting Algorithms for Data Base Applications." _Journal of Computer and System Sciences_ 31(2): 182–209. — Foundational algorithms underlying modern approximate PMU sampling; useful background for understanding statistical profiling and sampling-based tools.
+Mytkowicz, T., Diwan, A., Hauswirth, M., & Sweeney, P. F. (2009). "Producing Wrong Data Without Doing Anything Obviously Wrong!" ASPLOS '09. — Demonstrates how environment variables, linking order, and ASLR can cause measurement variance exceeding 40%; motivates rigorous experimental methodology.
