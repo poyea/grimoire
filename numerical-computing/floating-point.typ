@@ -47,7 +47,7 @@ A *ulp* (unit in the last place) of $x$ is the spacing of representable numbers 
 import math
 
 def ulp_diff(a: float, b: float) -> float:
-    """Distance between a and b measured in ulps of a."""
+    """Distance between a and b, in ulps at the larger magnitude."""
     if a == b:
         return 0.0
     return abs(a - b) / math.ulp(max(abs(a), abs(b)))
