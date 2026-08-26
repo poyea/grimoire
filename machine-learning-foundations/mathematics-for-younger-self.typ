@@ -2,101 +2,197 @@
 
 = Mathematics for a Younger Self
 
-What follows is the shape of eight subjects, ordered by how much machinery each one presupposes. Every section states the central object, the theorem that does the work, and the single idea that makes the rest follow. Nothing here is a substitute for a proof; the aim is that a definition, once read, stays put.
+Eight subjects, ordered by the machinery each presupposes. Definitions are stated to be used, theorems to be recognised, and each section carries one derivation showing where the content actually comes from.
 
 *See also:* #xref("machine-learning-foundations", "linear-algebra-for-ml", label: "Linear Algebra for ML") (the same objects, aimed at data), #xref("machine-learning-foundations", "probability-and-information", label: "Probability and Information") (the probabilistic half, applied), #xref("machine-learning-foundations", "notation", label: "Notation and Conventions") (symbols used throughout), #xref("numerical-computing", "error-analysis", label: "Error Analysis") (what survives finite precision).
 
 == Linear Algebra
 
-*Object.* A vector space $V$ over a field $k$, and the linear maps between vector spaces. Once bases are fixed a linear map becomes a matrix; changing basis conjugates it, $A |-> P^(-1) A P$. Linear algebra is therefore the study of what does *not* change under conjugation: rank, trace, determinant, characteristic polynomial, spectrum.
+*Setting.* $V$ a vector space over $k$; $T : V arrow.r W$ linear. Fixing bases makes $T$ a matrix; changing basis conjugates, $A |-> P^(-1) A P$. The invariants of conjugation — rank, trace, determinant, characteristic polynomial, spectrum — are the subject.
 
-*The three structure theorems.* Over $CC$, every operator has a Jordan form: it is diagonalizable up to nilpotent debris on the diagonal blocks. Every self-adjoint operator on a finite-dimensional inner-product space is orthogonally diagonalizable with real eigenvalues (*spectral theorem*) — the reason covariance matrices, Hessians, and graph Laplacians are tractable. Every matrix whatsoever, square or not, factors as $A = U Sigma V^*$ with $U, V$ unitary and $Sigma$ diagonal and non-negative (*SVD*): every linear map is a rotation, an axis-aligned scaling, and another rotation.
+*Rank-nullity.* $dim V = dim ker T + dim "im" T$.
 
-*The idea.* Duality. To each space $V$ attach $V^* = {phi : V arrow.r k "linear"}$; to each map $T : V arrow.r W$ attach $T^* : W^* arrow.r V^*$ running backwards. Rank-nullity, the four fundamental subspaces, and the transpose are all one statement seen from different sides. Finite dimension is what makes $V tilde.equiv V^*$; everything that later goes wrong in infinite dimensions goes wrong here first.
+*Spectral theorem.* $A = A^*$ on a finite-dimensional complex inner-product space $arrow.r.double$ $A = U Lambda U^*$ with $U$ unitary and $Lambda$ real diagonal.
+
+*Cayley-Hamilton.* $p_A (A) = 0$ for $p_A (t) = det(t I - A)$.
+
+*Singular value decomposition.* Every $A in CC^(m times n)$ factors $A = U Sigma V^*$, $U, V$ unitary, $Sigma$ diagonal with $sigma_1 >= dots >= sigma_r > 0$.
+
+*Derivation (SVD from the spectral theorem).* $A^* A$ is Hermitian positive semidefinite, so $A^* A = V Lambda V^*$ with $lambda_i >= 0$. Put $sigma_i = sqrt(lambda_i)$ and, for $sigma_i > 0$, $u_i = A v_i \/ sigma_i$. Then
+
+$ chevron.l u_i, u_j chevron.r = (chevron.l A v_i, A v_j chevron.r) / (sigma_i sigma_j) = (chevron.l v_i, A^* A v_j chevron.r) / (sigma_i sigma_j) = (lambda_j delta_(i j)) / (sigma_i sigma_j) = delta_(i j), $
+
+so the $u_i$ are orthonormal and $A v_i = sigma_i u_i$ is exactly $A V = U Sigma$. Singular values are the square roots of the eigenvalues of $A^* A$; this is why forming $A^* A$ numerically squares the condition number.
 
 == Abstract Algebra
 
-*Object.* Sets with operations, studied through the maps that preserve them. A *group* axiomatizes symmetry; a *ring* axiomatizes addition-and-multiplication; a *field* is a ring where division works; a *module* is a vector space whose scalars form a ring rather than a field.
+*Setting.* Groups (symmetry), rings (arithmetic), fields (division), modules (vector spaces over rings). Structure is read off from quotients: normal subgroups and ideals are exactly the kernels.
 
-*Mechanism.* Quotient by what you wish to ignore. Normal subgroups give quotient groups, ideals give quotient rings, and in each case the isomorphism theorems say that a map's image is the domain modulo its kernel. Lagrange bounds subgroup order by divisibility; the orbit-stabilizer theorem converts counting problems into group actions; Sylow's theorems reconstruct a finite group's possible internal structure from the prime factorization of its order alone.
+*First isomorphism theorem.* $G \/ ker phi tilde.equiv "im" phi$.
 
-*The theorem.* The *Galois correspondence*: for a finite Galois extension $L\/K$, the subgroups of $"Gal"(L\/K)$ correspond, inclusion-reversingly, to the intermediate fields. A polynomial is solvable by radicals exactly when its Galois group is solvable — which is why the quintic has no formula. Symmetry of the roots controls what arithmetic can express.
+*Lagrange.* $H <= G$ finite $arrow.r.double$ $|H|$ divides $|G|$.
 
-*Unification.* The structure theorem for finitely generated modules over a principal ideal domain has two famous corollaries, obtained by choosing the ring: over $ZZ$ it classifies finite abelian groups; over $k[x]$ it produces the Jordan form. Two theorems you learned separately are one theorem.
+*Orbit-stabilizer.* $|G| = |G x| dot |"Stab"(x)|$ for a finite group acting on $x$.
+
+*Sylow.* If $|G| = p^n m$ with $p divides.not m$, then Sylow $p$-subgroups exist, are conjugate, and their number $n_p$ satisfies $n_p equiv 1 mod p$ and $n_p divides m$.
+
+*Galois correspondence.* For $L \/ K$ finite Galois, $H |-> L^H$ is an inclusion-reversing bijection between subgroups of $"Gal"(L\/K)$ and intermediate fields, with $[L : L^H] = |H|$. A polynomial is solvable by radicals iff its Galois group is solvable.
+
+*Structure theorem over a PID.* A finitely generated module over a PID $R$ satisfies
+
+$ M tilde.equiv R^r plus.o R\/(d_1) plus.o dots plus.o R\/(d_s), quad d_1 divides d_2 divides dots divides d_s. $
+
+*Derivation (Jordan form as a corollary).* Let $T$ act on a finite-dimensional $V$ over algebraically closed $k$, and make $V$ a $k[x]$-module by $x dot v = T v$. Since $k[x]$ is a PID and $V$ is finitely generated and torsion, the theorem gives $V tilde.equiv plus.o.big_i k[x] \/ ((x - lambda_i)^(m_i))$. On $k[x]\/((x - lambda)^m)$ the basis $1, (x - lambda), dots, (x - lambda)^(m-1)$ makes multiplication by $x$ a single Jordan block. Taking $R = ZZ$ instead classifies finite abelian groups: one theorem, two famous corollaries.
 
 == Real Analysis: Measure, Integration, Hilbert Spaces
 
-*Problem.* The Riemann integral does not survive limits: a pointwise limit of Riemann-integrable functions need not be integrable, and $lim integral$ need not equal $integral lim$. Analysis cannot be built on an integral that breaks under the operation analysis is about.
+*Setting.* A measure $mu$ is countably additive on a $sigma$-algebra. For measurable $f >= 0$, $integral f d mu := sup { integral s d mu : s "simple", 0 <= s <= f }$. The point is that limits now pass through the integral.
 
-*Object.* A *measure* is a countably additive function $mu$ on a $sigma$-algebra of sets. Lebesgue measure is the completion of "length" to the largest class where countable additivity survives; non-measurable sets exist, but only via the axiom of choice, which is the price of asking for too much. Integration is then defined for measurable functions by approximation from below by simple functions.
+*Monotone convergence.* $0 <= f_n arrow.t f$ pointwise $arrow.r.double$ $integral f_n arrow.r integral f$.
 
-*The three limit theorems.* Monotone convergence, Fatou's lemma, and dominated convergence. Together they say: under a monotonicity or domination hypothesis, limits pass through integrals. Essentially every later analytic argument is one of these three wearing a disguise.
+*Fatou.* $integral liminf f_n <= liminf integral f_n$ for $f_n >= 0$.
 
-*Geometry.* The $L^p$ spaces are complete (Riesz-Fischer), and $L^2$ is a *Hilbert space*: it has an inner product, hence orthogonality, orthonormal bases, and the projection theorem — the nearest point of a closed convex set exists and is unique. The Riesz representation theorem says every bounded linear functional on a Hilbert space is an inner product against a fixed vector, so $H tilde.equiv H^*$. Hilbert space is the one infinite-dimensional setting where finite-dimensional intuition remains reliable.
+*Dominated convergence.* $f_n arrow.r f$ a.e. with $|f_n| <= g in L^1$ $arrow.r.double$ $integral f_n arrow.r integral f$.
+
+*Derivation (all three are one).* Set $g_n = inf_(k >= n) f_k$. Then $0 <= g_n arrow.t liminf f_n$, so monotone convergence gives $integral liminf f_n = lim integral g_n$, and $g_n <= f_n$ gives $lim integral g_n <= liminf integral f_n$ — that is Fatou. For domination, apply Fatou to the non-negative sequences $g + f_n$ and $g - f_n$:
+
+$ integral g + integral f <= integral g + liminf integral f_n, quad integral g - integral f <= integral g - limsup integral f_n, $
+
+so $limsup integral f_n <= integral f <= liminf integral f_n$, forcing equality.
+
+*Hölder.* $parallel f g parallel_1 <= parallel f parallel_p parallel g parallel_q$ for $1\/p + 1\/q = 1$.
+
+*Riesz-Fischer.* $L^p (mu)$ is complete for $1 <= p <= infinity$.
+
+*Projection.* $C$ closed convex in a Hilbert space $H$, $x in H$ $arrow.r.double$ there is a unique nearest point of $C$ to $x$.
+
+*Riesz representation.* Every $phi in H^*$ is $phi(x) = chevron.l x, y chevron.r$ for a unique $y$, and $parallel phi parallel = parallel y parallel$.
 
 == Fourier Analysis
 
-*Object.* Decompose a function into characters $e^(2 pi i xi x)$ — the eigenfunctions of translation. On the circle this is Fourier series; on $RR$, the Fourier transform $hat(f)(xi) = integral f(x) e^(-2 pi i x xi) d x$; on a finite abelian group, the DFT.
+*Setting.* $hat(f)(xi) = integral_(RR) f(x) e^(-2 pi i x xi) d x$. The characters $e^(2 pi i x xi)$ are the eigenfunctions of translation, so the transform diagonalizes every translation-invariant operator.
 
-*Why characters.* The transform diagonalizes every translation-invariant operator. Convolution becomes multiplication, $hat(f * g) = hat(f) hat(g)$; differentiation becomes multiplication by $2 pi i xi$. A constant-coefficient differential equation becomes an algebraic one.
+*Convolution.* $hat(f * g) = hat(f) hat(g)$.
 
-*Convergence is delicate.* The Dirichlet kernel is not an approximate identity — its $L^1$ norms diverge logarithmically — so partial sums of a Fourier series need not converge pointwise for a merely continuous function. Cesàro averaging repairs this: the Fejér kernel *is* an approximate identity, and Fejér's theorem gives uniform convergence for continuous $f$. In $L^2$ there is no difficulty at all: Plancherel says the transform is unitary, $parallel hat(f) parallel_2 = parallel f parallel_2$, and the exponentials form an orthonormal basis.
+*Derivation.* By Fubini, admissible for $f, g in L^1$,
 
-*Two consequences worth memorizing.* The uncertainty principle: $f$ and $hat(f)$ cannot both be sharply localized, with the Gaussian as the extremal case. Poisson summation: $sum_(n in ZZ) f(n) = sum_(n in ZZ) hat(f)(n)$, which converts questions about lattices into questions about their duals.
+$ hat(f * g)(xi) = integral integral f(y) g(x - y) e^(-2 pi i x xi) d y d x = integral f(y) e^(-2 pi i y xi) (integral g(u) e^(-2 pi i u xi) d u) d y, $
+
+substituting $u = x - y$. Differentiation transforms the same way: $hat(f')(xi) = 2 pi i xi hat(f)(xi)$, turning constant-coefficient differential equations into algebra.
+
+*Fejér.* The Dirichlet kernel has $parallel D_N parallel_1 tilde log N$, so partial sums may diverge for continuous $f$; the Cesàro means $sigma_N f = f * F_N$ use the Fejér kernel, which is a genuine approximate identity, and $sigma_N f arrow.r f$ uniformly for $f$ continuous on $TT$.
+
+*Plancherel.* $parallel hat(f) parallel_2 = parallel f parallel_2$; the transform extends from $L^1 inter L^2$ to a unitary map of $L^2 (RR)$.
+
+*Inversion.* $f, hat(f) in L^1$ $arrow.r.double$ $f(x) = integral hat(f)(xi) e^(2 pi i x xi) d xi$ a.e.
+
+*Poisson summation.* For Schwartz $f$, $sum_(n in ZZ) f(n) = sum_(n in ZZ) hat(f)(n)$.
+
+*Derivation.* Periodize: $F(x) = sum_n f(x + n)$ is $1$-periodic, and its $n$-th Fourier coefficient is $integral_0^1 F(x) e^(-2 pi i n x) d x = integral_RR f(x) e^(-2 pi i n x) d x = hat(f)(n)$. Evaluating the Fourier series of $F$ at $x = 0$ gives the identity.
+
+*Uncertainty.* $parallel x f parallel_2 dot parallel xi hat(f) parallel_2 >= parallel f parallel_2^2 \/ (4 pi)$, with equality only for Gaussians.
 
 == Complex Analysis
 
-*Object.* A function $f : Omega arrow.r CC$ that is complex-differentiable at every point of an open set. The definition looks like the real one; the consequences do not.
+*Setting.* $f : Omega arrow.r CC$ complex-differentiable on an open set. Writing $f = u + i v$, differentiability forces the Cauchy-Riemann equations $u_x = v_y$, $u_y = -v_x$, so $u$ and $v$ are harmonic. Differentiable once will turn out to mean analytic.
 
-*Rigidity.* Differentiable once implies differentiable infinitely often, and equal to its own power series locally. This has no real-variable analogue, and it is the whole subject. Cauchy's theorem ($integral_gamma f = 0$ for $f$ holomorphic on a simply connected domain) and the Cauchy integral formula (which recovers $f$ inside a contour from its values on the contour) say that a holomorphic function's local data determines it globally.
+*Cauchy-Goursat.* $f$ holomorphic on simply connected $Omega$ $arrow.r.double$ $integral_gamma f = 0$ for every closed $gamma subset Omega$.
 
-*The consequences cascade.* Liouville: a bounded entire function is constant — hence the fundamental theorem of algebra. The identity theorem: two holomorphic functions agreeing on a set with a limit point agree everywhere. Maximum modulus: $|f|$ attains no interior maximum. The open mapping theorem, Rouché's theorem, and the argument principle all follow, and they turn the counting of zeros into the evaluation of an integral.
+*Cauchy integral formula.* For $z$ inside $gamma$,
 
-*Residues.* Isolated singularities are classified as removable, poles, or essential; the residue theorem evaluates contour integrals as a finite sum of local data. Analytic continuation extends a function beyond its original disc, uniquely where it extends at all — the mechanism behind $zeta(s)$ and the Riemann hypothesis. The Riemann mapping theorem says every simply connected proper subdomain of $CC$ is conformally a disc: up to holomorphic change of coordinates, there is only one such domain.
+$ f(z) = 1/(2 pi i) integral_gamma (f(w)) / (w - z) d w. $
+
+*Derivation (rigidity).* Differentiating under the integral sign is legitimate because the integrand is smooth in $z$ off the contour, and it gives
+
+$ f^((n))(z) = (n!)/(2 pi i) integral_gamma (f(w)) / ((w - z)^(n+1)) d w. $
+
+So one derivative implies all of them, and expanding $1\/(w - z)$ as a geometric series yields a local power series. Bounding the $n = 1$ case on a circle of radius $R$ with $|f| <= M$ gives $|f'(z)| <= M \/ R$; if $f$ is entire and bounded, let $R arrow.r infinity$ to get $f' equiv 0$ — *Liouville*, and with it the fundamental theorem of algebra.
+
+*Identity theorem.* Two holomorphic functions agreeing on a set with a limit point in $Omega$ agree on $Omega$.
+
+*Maximum modulus.* A non-constant holomorphic $f$ has no interior maximum of $|f|$.
+
+*Residue theorem.* $integral_gamma f = 2 pi i sum_k "Res"_(z_k) f$ over the enclosed isolated singularities.
+
+*Argument principle.* $(1\/2 pi i) integral_gamma f' \/ f = Z - P$, counting zeros and poles with multiplicity; Rouché's theorem follows by continuity of $Z - P$ in a homotopy.
+
+*Riemann mapping.* Every simply connected $Omega subset.neq CC$ is conformally equivalent to the unit disc.
 
 == Probability Theory
 
-*Object.* A probability space $(Omega, cal(F), PP)$ is a measure space with $PP(Omega) = 1$; a random variable is a measurable function; expectation is the integral. Formally, probability is a special case of measure theory. What makes it a separate subject is *independence*, which has no analogue in general measure theory and which generates product measures, the classical limit theorems, and everything after.
+*Setting.* $(Omega, cal(F), PP)$ with $PP(Omega) = 1$; a random variable is measurable, $EE[X] = integral X d PP$. Formally this is measure theory; what makes it a distinct subject is *independence*.
 
-*Limit theorems.* Convergence comes in four strengths — almost sure, in probability, in $L^p$, in distribution — and the implications between them are strict. The law of large numbers says sample means converge to the mean; the central limit theorem says the fluctuation around it is Gaussian at scale $sqrt(n)$, whatever the underlying law. The clean proof of the CLT is Fourier analysis: the characteristic function $phi_X (t) = EE[e^(i t X)]$ is the Fourier transform of the law, independence makes it multiplicative, and Lévy's continuity theorem converts pointwise convergence of $phi$ into convergence in distribution.
+*Characteristic function.* $phi_X (t) = EE[e^(i t X)]$ — the Fourier transform of the law. Independence makes it multiplicative: $phi_(X + Y) = phi_X phi_Y$.
 
-*Conditioning.* Conditional expectation $EE[X | cal(G)]$ is not a formula but a projection: the $cal(G)$-measurable random variable closest to $X$ in $L^2$, existing in general by Radon-Nikodym. A *martingale* is a process with $EE[X_(n+1) | cal(F)_n] = X_n$ — a fair game. The optional stopping theorem says you cannot beat one by choosing when to quit, and the martingale convergence theorem says a bounded martingale converges almost surely. Most of modern probability is the search for a martingale hiding in the problem.
+*Strong law.* $X_i$ i.i.d. with $EE|X_1| < infinity$ $arrow.r.double$ $S_n \/ n arrow.r EE[X_1]$ almost surely.
+
+*Central limit theorem.* $EE[X_1] = mu$, $"Var"(X_1) = sigma^2 < infinity$ $arrow.r.double$ $(S_n - n mu) \/ (sigma sqrt(n))$ converges in distribution to $cal(N)(0, 1)$.
+
+*Derivation.* Let $Z_i = (X_i - mu) \/ sigma$, so $EE[Z] = 0$, $EE[Z^2] = 1$. Two moments give the expansion $phi_Z (u) = 1 - u^2 \/ 2 + o(u^2)$. By independence,
+
+$ phi_(S_n^*) (t) = [phi_Z (t \/ sqrt(n))]^n = [1 - t^2/(2 n) + o(1\/n)]^n arrow.r e^(-t^2 \/ 2), $
+
+which is the characteristic function of $cal(N)(0,1)$; Lévy's continuity theorem upgrades pointwise convergence of $phi$ to convergence in distribution. The Gaussian appears because it is the fixed point of this quadratic truncation, not because of anything about $X$.
+
+*Conditional expectation.* $EE[X | cal(G)]$ is the a.s. unique $cal(G)$-measurable $Y$ with $integral_G Y d PP = integral_G X d PP$ for all $G in cal(G)$; it exists by Radon-Nikodym and is the $L^2$ projection onto $L^2 (cal(G))$.
+
+*Martingales.* $EE[X_(n+1) | cal(F)_n] = X_n$. Optional stopping: for a bounded stopping time $tau$, $EE[X_tau] = EE[X_0]$. Convergence: an $L^1$-bounded martingale converges almost surely.
 
 == Functional Analysis
 
-*Object.* Infinite-dimensional vector spaces with a topology, and the continuous linear maps between them. A *Banach space* is a complete normed space; a Hilbert space is a Banach space whose norm comes from an inner product.
+*Setting.* Complete normed spaces and the bounded operators between them. Completeness plus Baire category yields the structural theorems.
 
-*The big three.* Hahn-Banach: bounded functionals extend from subspaces without increasing norm, so duals are large enough to separate points. The open mapping and closed graph theorems: a continuous bijection of Banach spaces has continuous inverse, and a linear map with closed graph is continuous. Uniform boundedness: a family of operators bounded pointwise is bounded in norm. All three are consequences of completeness by way of Baire's category theorem — completeness is what buys the subject its power.
+*Hahn-Banach.* A bounded functional on a subspace extends to the whole space with the same norm; hence $X^*$ separates points.
 
-*Compactness returns, weakly.* The closed unit ball is compact only in finite dimensions. The repair is to weaken the topology: Banach-Alaoglu says the dual unit ball is weak-star compact always. This is why existence proofs in PDE and optimization proceed by extracting weakly convergent subsequences.
+*Uniform boundedness.* $sup_alpha parallel T_alpha x parallel < infinity$ for each $x$ $arrow.r.double$ $sup_alpha parallel T_alpha parallel < infinity$.
 
-*Spectral theory.* For a compact self-adjoint operator the finite-dimensional picture survives intact: a real discrete spectrum accumulating only at $0$, and an orthonormal eigenbasis. In general the spectrum need not consist of eigenvalues at all, and the spectral theorem is stated instead as a projection-valued measure — diagonalization becomes integration. *Distributions* extend the calculus to objects too rough to differentiate, by moving the derivative onto a smooth test function; the Fourier transform then acts on tempered distributions, which is the natural home of the theory.
+*Derivation.* Let $E_n = {x : sup_alpha parallel T_alpha x parallel <= n}$. Each $E_n$ is closed and $union_n E_n = X$, so by Baire some $E_N$ contains a ball $B(x_0, r)$. For $parallel y parallel <= 1$, writing $r y = (x_0 + r y) - x_0$ gives $parallel T_alpha y parallel <= 2 N \/ r$ uniformly in $alpha$.
+
+*Open mapping and closed graph.* A bounded surjection of Banach spaces is open, hence a bounded bijection has bounded inverse; a linear map with closed graph is bounded.
+
+*Banach-Alaoglu.* The closed unit ball of $X^*$ is weak-star compact. In infinite dimensions the norm-closed ball is never compact, so existence proofs extract weak-star limits instead.
+
+*Spectral theorem, compact self-adjoint case.* $T = T^*$ compact on a Hilbert space $arrow.r.double$ there is an orthonormal basis of eigenvectors with real eigenvalues accumulating only at $0$. The *Fredholm alternative* follows: $T x - lambda x = y$ is solvable for all $y$ exactly when the homogeneous equation has only the trivial solution.
 
 == Stochastic Calculus
 
-*Object.* Brownian motion $B_t$: the unique continuous process with stationary independent Gaussian increments, $B_t - B_s tilde cal(N)(0, t - s)$. It exists (Wiener), its paths are continuous, and almost surely nowhere differentiable.
+*Setting.* Brownian motion $B_t$: continuous paths, $B_0 = 0$, independent increments, $B_t - B_s tilde cal(N)(0, t - s)$. Paths are almost surely nowhere differentiable.
 
-*Why ordinary calculus fails.* Brownian paths have finite, nonzero *quadratic variation*: $sum (B_(t_(i+1)) - B_(t_i))^2 arrow.r t$ as the partition refines, whereas a differentiable path would give $0$. Because $(d B)^2 = d t$ rather than a negligible quantity, second-order terms survive into first order, and $integral f d B$ cannot be defined pathwise as a Stieltjes integral. The *Itô integral* is instead built as an $L^2$ limit of sums over *predictable* simple integrands — the integrand must not peek at the increment it multiplies, which is exactly what makes the integral a martingale.
+*Quadratic variation.* For partitions of $[0, t]$ with mesh $arrow.r 0$, $sum_i (B_(t_(i+1)) - B_(t_i))^2 arrow.r t$ in $L^2$.
 
-*The formula.* For $f$ twice continuously differentiable,
+*Derivation.* Write $Delta_i = B_(t_(i+1)) - B_(t_i)$, so $EE[Delta_i^2] = Delta t_i$ and, by Gaussianity, $"Var"(Delta_i^2) = 2 (Delta t_i)^2$. The increments are independent, so
 
-$ d f(B_t) = f'(B_t) d B_t + 1/2 f''(B_t) d t. $
+$ EE[(sum_i Delta_i^2 - t)^2] = sum_i "Var"(Delta_i^2) = 2 sum_i (Delta t_i)^2 <= 2 t max_i Delta t_i arrow.r 0. $
 
-That second term is the entire subject. It is the chain rule corrected by the quadratic variation, and it produces the Black-Scholes equation, the Fokker-Planck equation, and the link between diffusions and second-order PDEs.
+A differentiable path would give $0$ here. Nonzero quadratic variation is why $integral H d B$ cannot be a pathwise Stieltjes integral, and why second-order terms survive.
 
-*Three consequences.* Martingale representation: every Brownian martingale is a stochastic integral, so every claim is hedgeable. Girsanov: changing the measure by an exponential martingale changes the drift but not the quadratic variation, which is why risk-neutral pricing works. Feynman-Kac: the solution of a parabolic PDE equals an expectation over paths of an SDE — the analytic and probabilistic descriptions of diffusion are the same description.
+*Itô integral.* Defined on predictable $H$ with $EE integral_0^T H_s^2 d s < infinity$ as the $L^2$ limit of sums over simple integrands, characterised by the isometry
+
+$ EE[(integral_0^T H_s d B_s)^2] = EE[integral_0^T H_s^2 d s]. $
+
+Predictability — the integrand may not anticipate the increment it multiplies — is exactly what makes the integral a martingale.
+
+*Itô's formula.* For $f in C^(1,2)$,
+
+$ d f(t, B_t) = (partial_t f + 1/2 partial_(x x) f) d t + partial_x f d B_t. $
+
+*Derivation.* Taylor to second order gives $Delta f approx partial_t f Delta t + partial_x f Delta B + 1/2 partial_(x x) f (Delta B)^2$. Ordinary calculus discards $(Delta B)^2$; here it converges to $Delta t$, so the term promotes to first order. The whole subject is that one correction.
+
+*Girsanov.* Changing measure by an exponential martingale shifts the drift and leaves the quadratic variation fixed — the basis of risk-neutral pricing.
+
+*Feynman-Kac.* $u(t, x) = EE[phi(X_T) | X_t = x]$ solves the associated parabolic PDE: diffusion described analytically and probabilistically are the same object.
 
 == How the Pieces Fit
 
-Measure theory is the substrate: probability is measure theory with independence, $L^2$ is where Fourier analysis becomes an isometry, and functional analysis is what happens when you keep the linear algebra and lose the finite dimension. Complex analysis stands slightly apart, buying extraordinary rigidity in exchange for a very strong hypothesis. Stochastic calculus sits last because it needs all of it — measure for the integral, probability for the martingale, functional analysis for the $L^2$ limit, and Fourier for the transition densities.
+Measure theory is the substrate: probability is measure theory plus independence, $L^2$ is where Fourier becomes an isometry, and functional analysis is linear algebra with the finite dimension removed and completeness put in its place. Complex analysis stands apart, trading a very strong hypothesis for extraordinary rigidity. Stochastic calculus comes last because it uses all of them at once.
 
 == Further Reading
 
-Axler, S. (2024). _Linear Algebra Done Right_, 4th ed. Springer. (Determinant-free development; the spectral theorem earned rather than assumed.)
+Axler, S. (2024). _Linear Algebra Done Right_, 4th ed. Springer. (Determinant-free; the spectral theorem earned rather than assumed.)
 
-Halmos, P. R. (1958). _Finite-Dimensional Vector Spaces_, 2nd ed. Van Nostrand. (Written so that the infinite-dimensional case feels inevitable afterwards.)
+Halmos, P. R. (1958). _Finite-Dimensional Vector Spaces_, 2nd ed. Van Nostrand. (Written so the infinite-dimensional case feels inevitable afterwards.)
 
-Dummit, D. S., & Foote, R. M. (2004). _Abstract Algebra_, 3rd ed. Wiley. (The standard first graduate course, Galois theory included.)
+Dummit, D. S., & Foote, R. M. (2004). _Abstract Algebra_, 3rd ed. Wiley. (Standard first graduate course, Galois theory included.)
 
 Lang, S. (2002). _Algebra_, revised 3rd ed. Springer. (Terse and complete; a reference rather than a first pass.)
 
@@ -110,7 +206,7 @@ Stein, E. M., & Shakarchi, R. (2011). _Functional Analysis: Introduction to Furt
 
 Rudin, W. (1987). _Real and Complex Analysis_, 3rd ed. McGraw-Hill. (Measure theory and complex analysis in one austere volume.)
 
-Folland, G. B. (1999). _Real Analysis: Modern Techniques and Their Applications_, 2nd ed. Wiley. (The reference for measure, distributions, and Fourier analysis together.)
+Folland, G. B. (1999). _Real Analysis: Modern Techniques and Their Applications_, 2nd ed. Wiley. (Measure, distributions, and Fourier analysis together.)
 
 Durrett, R. (2019). _Probability: Theory and Examples_, 5th ed. Cambridge University Press. (Measure-theoretic probability with the examples kept in view.)
 

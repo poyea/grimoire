@@ -1096,7 +1096,7 @@ chapters:
   - subject: machine-learning-foundations
     slug: mathematics-for-younger-self
     path: machine-learning-foundations/mathematics-for-younger-self.typ
-    words: 2306
+    words: 2545
     status: draft
   - subject: machine-learning-foundations
     slug: network-information-theory
