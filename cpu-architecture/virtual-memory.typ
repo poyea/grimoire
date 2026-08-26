@@ -4,7 +4,7 @@
 
 Virtual memory provides memory abstraction: each process sees isolated, contiguous address space despite physical memory being fragmented and shared. The MMU (Memory Management Unit) translates virtual addresses to physical addresses using page tables.
 
-*See also:* Cache Hierarchy (for physical address caching), Memory System (for DRAM organization), CPU Fundamentals (for TLB as specialized cache), #xref("operating-systems", "virtual-memory", label: "Virtual Memory") (the OS policy side: demand paging, copy-on-write, NUMA placement).
+*See also:* #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy") (for physical address caching), #xref("cpu-architecture", "memory-system", label: "Memory System") (for DRAM organization), #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals") (for TLB as specialized cache), #xref("operating-systems", "virtual-memory", label: "Virtual Memory") (the OS policy side: demand paging, copy-on-write, NUMA placement).
 
 == Virtual vs Physical Addresses
 

@@ -391,7 +391,7 @@ chapters:
   - subject: cpu-architecture
     slug: superscalar
     path: cpu-architecture/superscalar.typ
-    words: 2280
+    words: 2317
     status: reviewed
   - subject: cpu-architecture
     slug: synchronization
@@ -401,7 +401,7 @@ chapters:
   - subject: cpu-architecture
     slug: virtual-memory
     path: cpu-architecture/virtual-memory.typ
-    words: 3020
+    words: 3035
     status: reviewed
   - subject: cryptography-and-security
     slug: asymmetric
@@ -1131,7 +1131,7 @@ chapters:
   - subject: networking
     slug: concurrency-models
     path: networking/concurrency-models.typ
-    words: 623
+    words: 632
     status: reviewed
   - subject: networking
     slug: congestion-control
@@ -1246,7 +1246,7 @@ chapters:
   - subject: networking
     slug: resilience-patterns
     path: networking/resilience-patterns.typ
-    words: 1539
+    words: 1545
     status: reviewed
   - subject: networking
     slug: sdn-programmable-networks
@@ -1276,7 +1276,7 @@ chapters:
   - subject: networking
     slug: tls
     path: networking/tls.typ
-    words: 1711
+    words: 1720
     status: reviewed
   - subject: networking
     slug: transport-layer

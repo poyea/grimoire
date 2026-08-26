@@ -4,7 +4,7 @@
 
 TLS provides confidentiality, integrity, and authentication for network communications. It operates above TCP, encrypting application data before transmission.
 
-*See also:* Transport Layer (for TCP foundations), Application Protocols (for HTTP/2, HTTP/3), Kernel Bypass (for hardware acceleration), #xref("cryptography-and-security", "tls", label: "TLS") (the cryptographic view of the same handshake).
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP foundations), #xref("networking", "application-protocols", label: "Application Protocols") (for HTTP/2, HTTP/3), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for hardware acceleration), #xref("cryptography-and-security", "tls", label: "TLS") (the cryptographic view of the same handshake).
 
 == Protocol Evolution
 

@@ -4,7 +4,7 @@
 
 Distributed systems fail in complex ways. Resilience patterns prevent cascading failures and enable graceful degradation under load.
 
-*See also:* Concurrency Models (for thread isolation), Application Protocols (for HTTP retry semantics), Message Queues (for async decoupling), #xref("software-architecture", "resilience-patterns", label: "Resilience Patterns") (the same patterns as architectural design decisions).
+*See also:* Concurrency Models (for thread isolation), #xref("networking", "application-protocols", label: "Application Protocols") (for HTTP retry semantics), #xref("networking", "message-queues", label: "Message Queues") (for async decoupling), #xref("software-architecture", "resilience-patterns", label: "Resilience Patterns") (the same patterns as architectural design decisions).
 
 == Timeouts
 
