@@ -74,9 +74,9 @@ A family disclosed May 2019. Instead of crossing privilege architecturally, $"MD
 #table(
   columns: 3,
   [*Variant*], [*Buffer*], [*CVE*],
-  [$"RIDL"$ ($"MLPDS"$)], [Line fill buffer], [CVE-2018-12127],
+  [$"RIDL"$ ($"MLPDS"$)], [Load ports], [CVE-2018-12127],
   [Fallout ($"MSBDS"$)], [Store buffer], [CVE-2018-12126],
-  [ZombieLoad ($"MFBDS"$)], [Fill buffer + load ports], [CVE-2018-12130],
+  [ZombieLoad ($"MFBDS"$)], [Line fill buffer], [CVE-2018-12130],
   [$"MDSUM"$], [Uncacheable memory variant], [CVE-2019-11091],
   [$"TAA"$], [TSX async abort variant], [CVE-2019-11135],
   [L1DES (CacheOut)], [Eviction into fill buffer], [CVE-2020-0549],
@@ -95,7 +95,7 @@ L1 Terminal Fault: a faulting page-table entry's *physical address* is still use
 
 `ret` instructions, the foundation of retpoline, are themselves predicted — by the return stack buffer ($"RSB"$) and, when that underflows, by the same indirect predictor retpoline was supposed to avoid. On Intel Skylake-era and AMD Zen 1/2, this defeats retpoline.
 
-*Mitigation:* on Intel, switch to eIBRS (Skylake-X+ have it); on AMD pre-Zen 3, "untrained $"RET"$" software sequence ($"jmp2ret"$) plus $"IBPB"$. Linux kernel `retbleed=auto` selects per CPU.
+*Mitigation:* on Intel, eIBRS where available (Cascade Lake / Ice Lake and later); Skylake-era parts lack it and fall back to full $"IBRS"$. On AMD pre-Zen 3, "untrained $"RET"$" software sequence ($"jmp2ret"$) plus $"IBPB"$. Linux kernel `retbleed=auto` selects per CPU.
 
 == Downfall (CVE-2022-40982) and Inception/SLS
 
