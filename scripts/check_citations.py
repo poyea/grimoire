@@ -46,20 +46,29 @@ def subject_dirs() -> list[Path]:
 
 
 def extract_section(text: str) -> list[str] | None:
-    """Return list of entries in the Further Reading section, or None."""
+    """Return every citation entry in the chapter, or None if there are none.
+
+    A chapter may carry more than one bibliography heading (some have both
+    `== References` and `== Further Reading`). Stopping at the first one
+    left the rest unchecked, so all matching sections are collected.
+    """
     lines = text.splitlines()
-    start = None
-    for i, line in enumerate(lines):
-        if FURTHER_RE.match(line.strip()):
-            start = i + 1
-            break
-    if start is None:
-        return None
     body: list[str] = []
-    for line in lines[start:]:
-        if HEADING_RE.match(line.strip()):
-            break
-        body.append(line)
+    found = False
+    i = 0
+    while i < len(lines):
+        if not FURTHER_RE.match(lines[i].strip()):
+            i += 1
+            continue
+        found = True
+        i += 1
+        while i < len(lines) and not HEADING_RE.match(lines[i].strip()):
+            body.append(lines[i])
+            i += 1
+        # Separate consecutive sections so entries cannot run together.
+        body.append("")
+    if not found:
+        return None
     # Split into paragraphs / bullets.
     entries: list[str] = []
     cur: list[str] = []
