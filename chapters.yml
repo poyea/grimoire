@@ -1094,6 +1094,11 @@ chapters:
     words: 2588
     status: reviewed
   - subject: machine-learning-foundations
+    slug: mathematics-for-younger-self
+    path: machine-learning-foundations/mathematics-for-younger-self.typ
+    words: 2306
+    status: draft
+  - subject: machine-learning-foundations
     slug: network-information-theory
     path: machine-learning-foundations/network-information-theory.typ
     words: 1359
@@ -1751,7 +1756,7 @@ chapters:
   - subject: numerical-computing
     slug: eigenvalue-problems
     path: numerical-computing/eigenvalue-problems.typ
-    words: 1428
+    words: 1441
     status: reviewed
   - subject: numerical-computing
     slug: error-analysis

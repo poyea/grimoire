@@ -14,6 +14,9 @@
   #include "machine-learning-foundations/notation.typ"
   #pagebreak()
 
+  #include "machine-learning-foundations/mathematics-for-younger-self.typ"
+  #pagebreak()
+
   #include "machine-learning-foundations/generalization-theory.typ"
   #pagebreak()
 
