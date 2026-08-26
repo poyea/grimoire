@@ -6,18 +6,18 @@ SIMD processes multiple data elements with single instruction using vector regis
 
 == SIMD Evolution (x86)
 
-The x86 SIMD instruction set has evolved significantly over time, with each generation introducing distinct syntax and semantic differences. MMX (1997) introduced 64-bit registers (mm0-mm7) supporting only integer operations. SSE (1999) expanded to 128-bit registers (xmm0-xmm15) with support for 4× float operations, introducing a fundamentally different programming model. SSE2 (2001) maintained the 128-bit width but added 2× double and integer operations, creating semantic variations in data type handling. AVX (2011) doubled the register width to 256-bit (ymm0-ymm15) for 8× float operations, requiring new instruction encodings and introducing non-destructive three-operand syntax. AVX2 (2013) extended 256-bit support to integer operations. AVX-512 (2017) further doubled register width to 512-bit (zmm0-zmm31) for 16× float operations and added masking predicates, fundamentally changing the semantic model for conditional operations.
+The x86 SIMD instruction set has evolved significantly over time, with each generation introducing distinct syntax and semantic differences. MMX (1997) introduced 64-bit registers (mm0-mm7) supporting only integer operations. SSE (1999) expanded to 128-bit registers (xmm0-xmm7; xmm8-xmm15 arrived with x86-64) with support for 4× float operations, introducing a fundamentally different programming model. SSE2 (2001) maintained the 128-bit width but added 2× double and integer operations, creating semantic variations in data type handling. AVX (2011) doubled the register width to 256-bit (ymm0-ymm15) for 8× float operations, requiring new instruction encodings and introducing non-destructive three-operand syntax. AVX2 (2013) extended 256-bit support to integer operations. AVX-512 (2017) further doubled register width to 512-bit (zmm0-zmm31) for 16× float operations and added masking predicates, fundamentally changing the semantic model for conditional operations.
 
 ```
 MMX (1997):   64-bit registers (mm0-mm7), integer only
-SSE (1999):   128-bit registers (xmm0-xmm15), 4× float
+SSE (1999):   128-bit registers (xmm0-xmm7; 8-15 in 64-bit mode), 4× float
 SSE2 (2001):  128-bit, 2× double, integer ops
 AVX (2011):   256-bit registers (ymm0-ymm15), 8× float
 AVX2 (2013):  256-bit integer operations
 AVX-512 (2017): 512-bit registers (zmm0-zmm31), 16× float
 ```
 
-The current mainstream is AVX2 (256-bit), which is ubiquitous, while AVX-512 is found primarily in server CPUs. This distinction is critical for profiling, as AVX-512 usage can trigger frequency throttling that profilers must account for when interpreting performance measurements.
+The current mainstream is AVX2 (256-bit), which is ubiquitous, while AVX-512 is found in server CPUs and AMD Zen 4/5 (Intel client parts since Alder Lake ship without it). This distinction is critical for profiling, as AVX-512 usage can trigger frequency throttling that profilers must account for when interpreting performance measurements.
 
 == Vector Registers
 
@@ -155,7 +155,7 @@ When profiling with performance counters, look for the specific SIMD instruction
 
 ```c
 // 8 floats per cycle
-__m256 add = _mm256_add_ps(a, b);  // Skylake: 4c lat, 0.5 CPI; Zen 4: 3c lat, 0.33 CPI
+__m256 add = _mm256_add_ps(a, b);  // Skylake: 4c lat, 0.5 CPI; Zen 4: 3c lat, 0.5 CPI
 // 2 ports can execute → 2 adds per cycle → 16 floats/cycle!
 ```
 
@@ -199,7 +199,7 @@ under all-core AVX-512 load):
 - AVX-512 code: 3.5 GHz
 
 Effective speedup: 16 ops × 3.5 GHz / (8 ops × 4.0 GHz) = 1.75× (not 2×!)
-Sapphire Rapids (2023+) and Ice Lake-SP greatly reduce this throttling for "light" AVX-512 (no FMA/VL3); modern client CPUs (Alder/Raptor Lake) ship without server AVX-512 entirely.
+Sapphire Rapids (2023+) and Ice Lake-SP greatly reduce this throttling for "light" AVX-512 (integer/no heavy FP-FMA mix); modern client CPUs (Alder/Raptor Lake) ship without server AVX-512 entirely.
 ```
 
 When profiling SIMD code, frequency scaling creates measurement challenges. Cycle counters continue at the reduced frequency, making direct comparisons misleading. Profilers should monitor the `CPU_CLK_UNHALTED.THREAD` and `CPU_CLK_UNHALTED.REF_TSC` counters to detect frequency changes. Additionally, the `CORE_POWER.LICENSE` events on Intel CPUs indicate when the processor enters different power states that affect instruction throughput.
@@ -240,7 +240,7 @@ __mmask16 mask = _mm512_cmplt_ps_mask(a, b);  // a < b
 __m512 result = _mm512_mask_add_ps(c, mask, a, b);  // Add only where mask true
 ```
 
-When profiling masked operations, note that even masked-off elements may consume execution resources, and performance doesn't scale linearly with the number of active mask bits. The `UOPS_RETIRED.MASK_OPS` counter specifically tracks masked instructions, providing visibility into this execution pattern.
+When profiling masked operations, note that even masked-off elements may consume execution resources: an instruction with a nearly empty mask generally costs the same as one with a full mask, so performance does not scale with the number of active mask bits.
 
 == Auto-Vectorization Troubleshooting
 
@@ -420,7 +420,7 @@ void process(float* __restrict data, int n) {
 
 == References
 
-Intel Corporation (2023). Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 1: Basic Architecture. Chapter 10 (Programming with Intel AVX).
+Intel Corporation (2023). Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 1: Basic Architecture. Chapter 14 (Programming with AVX, FMA and AVX2).
 
 Intel Corporation (2023). Intel Intrinsics Guide. https://www.intel.com/content/www/us/en/docs/intrinsics-guide/
 
@@ -430,7 +430,7 @@ Fog, A. (2023). Optimizing Software in C++. Technical University of Denmark. Cha
 
 Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Chapters 9–11 cover SSE, AVX2, and AVX-512 programming guidelines, alignment requirements, gather/scatter performance, and port-level throughput for vector operations.
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix F (Vector, SIMD, and GPU Architectures) places x86 SIMD in the broader landscape of data-level parallelism and compares it with GPU SIMT and traditional vector processors.
+Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 4 (Data-Level Parallelism in Vector, SIMD, and GPU Architectures) places x86 SIMD in the broader landscape of data-level parallelism and compares it with GPU SIMT and traditional vector processors.
 
 Agner Fog (2024). _Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-operation Breakdowns_. Technical University of Denmark. — Per-instruction latency and throughput data for all SSE/AVX/AVX-512 instructions across Intel and AMD microarchitectures; required reading when hand-scheduling SIMD kernels.
 
