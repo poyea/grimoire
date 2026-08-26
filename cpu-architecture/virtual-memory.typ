@@ -526,7 +526,7 @@ Lameter, C. (2013). "NUMA (Non-Uniform Memory Access): An Overview." Linux Sympo
 
 == Further Reading
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix B.4 (Virtual Memory) covers page table structures, TLB organization, and the interaction between virtual memory and cache hierarchy in modern processors.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix B.4 (Virtual Memory) covers page table structures, TLB organization, and the interaction between virtual memory and cache hierarchy in modern processors.
 
 Jacob, B., Ng, S., & Wang, D. (2008). _Memory Systems: Cache, DRAM, Disk_. Morgan Kaufmann. — Chapters on virtual-to-physical translation explain multi-level page tables, TLB shootdown costs, and huge-page trade-offs in detail, complementing the hardware perspective with system-level analysis.
 

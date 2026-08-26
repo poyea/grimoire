@@ -601,7 +601,7 @@ Frigo, M., Leiserson, C.E., Prokop, H., & Ramachandran, S. (1999). "Cache-Oblivi
 
 Jacob, B., Ng, S., & Wang, D. (2008). _Memory Systems: Cache, DRAM, Disk_. Morgan Kaufmann. — The most thorough single-volume treatment of cache design, replacement policies, inclusion properties, and DRAM interaction; directly complements this chapter.
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 2 (Memory Hierarchy Design) covers set-associativity trade-offs, prefetching, write policies, and multi-level AMAT analysis with real benchmarks.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 2 (Memory Hierarchy Design) covers set-associativity trade-offs, prefetching, write policies, and multi-level AMAT analysis with real benchmarks.
 
 Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Section 2 details L1/L2/L3 capacities, line sizes, prefetch hardware, and cache-miss penalty guidance for current Intel cores.
 

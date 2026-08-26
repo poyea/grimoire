@@ -541,7 +541,7 @@ Fog, A. (2023). The Microarchitecture of Intel, AMD and VIA CPUs. Technical Univ
 
 == Further Reading
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapters 1–2 establish the quantitative framework (CPI, Amdahl's law, power-performance trade-offs) that underpins all subsequent CPU design decisions.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapters 1–2 establish the quantitative framework (CPI, Amdahl's law, power-performance trade-offs) that underpins all subsequent CPU design decisions.
 
 Patterson, D. A. & Hennessy, J. L. (2016). _Computer Organization and Design: ARM Edition_. Morgan Kaufmann. — Bridges high-level ISA concepts to gate-level implementation; the ARM edition pairs especially well with modern embedded and mobile CPU study.
 

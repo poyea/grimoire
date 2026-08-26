@@ -536,7 +536,7 @@ Drepper, U. (2007). "What Every Programmer Should Know About Memory." Red Hat, I
 
 == Further Reading
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 5 (Thread-Level Parallelism) covers cache coherence protocols (MSI, MESI, MOESI), directory coherence, and memory consistency models with worked examples.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 5 (Thread-Level Parallelism) covers cache coherence protocols (MSI, MESI, MOESI), directory coherence, and memory consistency models with worked examples.
 
 McKenney, P. E. (2022). _Is Parallel Programming Hard, And, If So, What Can You Do About It?_ kernel.org. — Comprehensive, freely available text on parallel programming from a Linux kernel developer; covers memory ordering, locking, RCU, and performance pitfalls with extensive real-world examples.
 

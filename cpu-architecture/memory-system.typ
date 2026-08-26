@@ -321,7 +321,7 @@ JEDEC Standard (2020). JESD79-4C: DDR4 SDRAM Specification.
 
 Jacob, B., Ng, S., & Wang, D. (2008). _Memory Systems: Cache, DRAM, Disk_. Morgan Kaufmann. — Comprehensive reference covering DRAM architecture, timing parameters, bank interleaving, refresh mechanics, and system-level memory controller design; the primary textbook for this chapter's topics.
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 2 (Memory Technology and Optimizations) quantifies DRAM latency trends and motivates multi-level memory hierarchies with performance models.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 2 (Memory Technology and Optimizations) quantifies DRAM latency trends and motivates multi-level memory hierarchies with performance models.
 
 JEDEC Standard (2020). JESD79-5: DDR5 SDRAM Specification. JEDEC Solid State Technology Association. — The authoritative specification for DDR5 electrical characteristics, timing parameters, on-die ECC, and command encoding.
 

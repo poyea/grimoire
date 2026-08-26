@@ -432,7 +432,7 @@ Fog, A. (2023). Optimizing Software in C++. Technical University of Denmark. Cha
 
 Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Chapters 9–11 cover SSE, AVX2, and AVX-512 programming guidelines, alignment requirements, gather/scatter performance, and port-level throughput for vector operations.
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 4 (Data-Level Parallelism in Vector, SIMD, and GPU Architectures) places x86 SIMD in the broader landscape of data-level parallelism and compares it with GPU SIMT and traditional vector processors.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 4 (Data-Level Parallelism in Vector, SIMD, and GPU Architectures) places x86 SIMD in the broader landscape of data-level parallelism and compares it with GPU SIMT and traditional vector processors.
 
 Agner Fog (2024). _Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-operation Breakdowns_. Technical University of Denmark. — Per-instruction latency and throughput data for all SSE/AVX/AVX-512 instructions across Intel and AMD microarchitectures; required reading when hand-scheduling SIMD kernels.
 

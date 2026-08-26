@@ -483,7 +483,7 @@ Levinthal, D. (2009). "Performance Analysis Guide for Intel Core i7 Processor an
 
 == Further Reading
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapters 1 and appendices establish the CPI model, Amdahl's law, and benchmark methodology that underpin all quantitative performance analysis.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapters 1 and appendices establish the CPI model, Amdahl's law, and benchmark methodology that underpin all quantitative performance analysis.
 
 Agner Fog (2024). _Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-operation Breakdowns_. Technical University of Denmark. — The go-to reference for instruction-level timing across x86 microarchitectures; essential when correlating PMU event counts with specific bottlenecks.
 

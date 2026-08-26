@@ -443,7 +443,7 @@ Patterson, D.A. & Hennessy, J.L. (2020). Computer Organization and Design (6th e
 
 == Further Reading
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix C provides the definitive academic treatment of five-stage pipeline design, hazard detection, forwarding networks, and exception handling with full hardware diagrams.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix C provides the definitive academic treatment of five-stage pipeline design, hazard detection, forwarding networks, and exception handling with full hardware diagrams.
 
 ARM (2023). _ARM Cortex-A Series Programmer's Guide_. ARM. — Describes the Cortex-A pipeline stages, branch prediction integration, and the programming implications of out-of-order execution visible through the ARM memory model.
 

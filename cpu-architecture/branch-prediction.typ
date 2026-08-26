@@ -359,7 +359,7 @@ Smith, J.E. (1981). "A Study of Branch Prediction Strategies." ISCA '81.
 
 == Further Reading
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix C covers pipeline hazards and branch handling in depth; essential for understanding the architectural cost of misprediction.
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Appendix C covers pipeline hazards and branch handling in depth; essential for understanding the architectural cost of misprediction.
 
 Seznec, A. (2011). "A New Case for the TAGE Branch Predictor." MICRO-44. — Describes ISL-TAGE (loop predictor + statistical corrector), the basis of TAGE-SC-L, which has dominated the Championship Branch Prediction series since 2014.
 

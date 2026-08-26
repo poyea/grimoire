@@ -448,4 +448,4 @@ Jia, Z., Maggioni, M., Staiger, B., & Scarpazza, D. P. (2018). "Dissecting the N
 
 Volkov, V., & Demmel, J. W. (2008). "Benchmarking GPUs to Tune Dense Linear Algebra." SC. (Classic study of occupancy and register/shared-memory tradeoffs.)
 
-Hennessy, J. L., & Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. (Chapter 4 on data-parallel memory systems.)
+Hennessy, J. L., & Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. (Chapter 4 on data-parallel memory systems.)
