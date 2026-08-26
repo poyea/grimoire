@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = Container Networking
 
 Containers rely on Linux kernel primitives to create isolated network environments. This section covers the building blocks (namespaces, veth, bridges) and orchestration layers (Docker, Kubernetes, CNI).
 
-*See also:* Link Layer (for bridge/veth internals), Internet Layer (for IP routing), Kernel Bypass (for high-performance container networking)
+*See also:* #xref("networking", "link-layer", label: "Link Layer") (for bridge/veth internals), Internet Layer (for IP routing), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for high-performance container networking)
 
 == Linux Network Namespaces
 

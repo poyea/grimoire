@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Branch Prediction
 
 Branch prediction guesses the outcome and target of branches to maintain pipeline flow. Modern CPUs predict with 95-99% accuracy for typical code.
 
-*See also:* Pipelining (for control hazards), Superscalar (for speculative execution)
+*See also:* #xref("cpu-architecture", "pipelining", label: "Pipelining") (for control hazards), #xref("cpu-architecture", "superscalar", label: "Superscalar") (for speculative execution)
 
 == Cost of Misprediction
 

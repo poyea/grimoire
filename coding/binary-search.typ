@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Binary Search
 
 *Binary search finds target in sorted array in $O(log n)$ time. Key invariant: search space halves each iteration. Template applies to any monotonic function.*
 
-*See also:* Two Pointers (for linear search on sorted arrays), Dynamic Programming (for optimization problems with search space), Trees (binary search trees)
+*See also:* #xref("coding", "two-pointers", label: "Two Pointers") (for linear search on sorted arrays), #xref("coding", "dynamic-programming", label: "Dynamic Programming") (for optimization problems with search space), #xref("coding", "trees", label: "Trees") (binary search trees)
 
 == Find Minimum in Rotated Sorted Array
 

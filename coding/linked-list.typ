@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Linked List
 
 *Linked lists store elements with explicit pointers between nodes. Enables $O(1)$ insertion/deletion at known positions, but sacrifices random access and cache locality.*
 
-*See also:* Arrays (for cache-friendly alternatives), Trees (similar pointer-based structure), Two Pointers (for linked list traversal patterns), Hashing (for fast cycle detection alternatives)
+*See also:* #xref("coding", "arrays", label: "Arrays") (for cache-friendly alternatives), #xref("coding", "trees", label: "Trees") (similar pointer-based structure), #xref("coding", "two-pointers", label: "Two Pointers") (for linked list traversal patterns), #xref("coding", "hashing", label: "Hashing") (for fast cycle detection alternatives)
 
 *Critical performance note:* Linked lists have poor cache behavior. Each `next` pointer dereference = potential cache miss ($#sym.tilde.op$200 cycles). Array-based solutions are typically 10-100x faster. Use linked lists only when required (LRU cache, memory pooling).
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Memory System
 
 DRAM (Dynamic Random-Access Memory) provides main memory storage. Understanding DRAM organization, timing, and access patterns is critical for performance optimization.
 
-*See also:* Cache Hierarchy (for DRAM interface), Virtual Memory (for address translation), Multicore (for memory bandwidth sharing)
+*See also:* #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy") (for DRAM interface), Virtual Memory (for address translation), #xref("cpu-architecture", "multicore", label: "Multicore") (for memory bandwidth sharing)
 
 == DRAM Organization
 

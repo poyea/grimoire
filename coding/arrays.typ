@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Arrays
 
 *Arrays provide $O(1)$ random access with excellent cache locality when accessed sequentially. Foundation for most data structures and algorithms.*
 
-*See also:* Hashing (for $O(1)$ lookup without ordering), Sliding Window (for contiguous subarray problems), Dynamic Programming (arrays as DP state storage)
+*See also:* #xref("coding", "hashing", label: "Hashing") (for $O(1)$ lookup without ordering), #xref("coding", "sliding-window", label: "Sliding Window") (for contiguous subarray problems), #xref("coding", "dynamic-programming", label: "Dynamic Programming") (arrays as DP state storage)
 
 == Product of Array Except Self
 
@@ -211,7 +213,7 @@ for (auto& x : points.x) {
 - Small objects (< 64 bytes)
 - Better for random access patterns
 
-*See also:* Reference (for detailed cache hierarchy and SIMD vectorization techniques)
+*See also:* #xref("coding", "reference", label: "Reference") (for detailed cache hierarchy and SIMD vectorization techniques)
 
 *Cache-oblivious blocked layout:*
 For 2D arrays larger than cache, blocked layout improves locality for both row and column access:

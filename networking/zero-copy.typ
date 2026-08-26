@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Zero-Copy Networking
 
 Traditional network I/O involves multiple data copies between kernel and userspace. Zero-copy techniques eliminate unnecessary copying to improve throughput and reduce CPU usage.
 
-*See also:* Link Layer (for DMA mechanics), Kernel Bypass (for eliminating kernel entirely), Sockets API (for traditional copy-based I/O)
+*See also:* #xref("networking", "link-layer", label: "Link Layer") (for DMA mechanics), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for eliminating kernel entirely), #xref("networking", "sockets-api", label: "Sockets API") (for traditional copy-based I/O)
 
 == Traditional Copy Path
 

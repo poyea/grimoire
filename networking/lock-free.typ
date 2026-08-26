@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Lock-Free Data Structures for Networking
 
 High-performance network applications require lock-free communication between threads to avoid mutex contention and context switch overhead.
 
-*See also:* Concurrency Models (for thread architectures), Zero-Copy (for minimizing data movement), Message Queues (for ZeroMQ patterns)
+*See also:* Concurrency Models (for thread architectures), #xref("networking", "zero-copy", label: "Zero-Copy") (for minimizing data movement), #xref("networking", "message-queues", label: "Message Queues") (for ZeroMQ patterns)
 
 == SPSC (Single Producer Single Consumer) Queue
 

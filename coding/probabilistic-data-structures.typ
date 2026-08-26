@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Probabilistic Data Structures
 
 *Trade exactness for efficiency:* Probabilistic data structures provide approximate answers with bounded error probability, enabling sub-linear space complexity impossible with exact structures. Widely used in databases, networking, and big data systems [Cormode & Muthukrishnan 2005].
 
-*See also:* Hashing (for hash function design), Bit Manipulation (for bit-level operations), Streaming Algorithms (for related online algorithms)
+*See also:* #xref("coding", "hashing", label: "Hashing") (for hash function design), #xref("coding", "bit-manipulation", label: "Bit Manipulation") (for bit-level operations), #xref("coding", "streaming-algorithms", label: "Streaming Algorithms") (for related online algorithms)
 
 == Bloom Filters
 

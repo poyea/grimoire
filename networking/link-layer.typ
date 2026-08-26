@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = Link Layer & Hardware
 
 The link layer handles physical transmission of bits over a medium. For Ethernet (dominant LAN technology), this includes frame structure, MAC addressing, and hardware interrupt handling.
 
-*See also:* Internet Layer (for IP over Ethernet), Zero-Copy (for DMA mechanics), Kernel Bypass (for avoiding kernel packet processing)
+*See also:* Internet Layer (for IP over Ethernet), #xref("networking", "zero-copy", label: "Zero-Copy") (for DMA mechanics), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for avoiding kernel packet processing)
 
 == Ethernet Frame Structure
 
@@ -447,7 +447,7 @@ Marek, C. & Corbet, J. (2005). The Linux Networking Architecture: Design and Imp
 
 The Internet layer provides host-to-host routing across networks using IP addresses.
 
-*See also:* Transport Layer (for end-to-end communication)
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for end-to-end communication)
 
 ==== IPv4 Addressing
 

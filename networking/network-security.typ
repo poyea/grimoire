@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = Network Security
 
 Network security encompasses protocols, architectures, and practices that protect data in transit across untrusted networks. This section covers encryption protocols (IPSec, TLS), VPN architectures, and modern solutions like WireGuard.
 
-*See also:* Transport Layer (for TCP/UDP foundations), Application Protocols (for TLS/HTTP), Kernel Bypass (for high-performance security appliances)
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP/UDP foundations), #xref("networking", "application-protocols", label: "Application Protocols") (for TLS/HTTP), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for high-performance security appliances)
 
 == IPSec (Internet Protocol Security)
 

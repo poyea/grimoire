@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Heap/Priority Queue
 
 *A binary heap is a complete binary tree stored as an array, providing $O(log n)$ insert and extract-min/max with excellent cache locality. Foundation for priority queues, heap-sort, and greedy algorithms.*
 
-*See also:* Trees (heap is a complete binary tree), Graphs (Dijkstra's, Prim's use priority queues), Greedy (scheduling, Huffman coding)
+*See also:* #xref("coding", "trees", label: "Trees") (heap is a complete binary tree), #xref("coding", "graphs", label: "Graphs") (Dijkstra's, Prim's use priority queues), #xref("coding", "greedy", label: "Greedy") (scheduling, Huffman coding)
 
 == Heap Fundamentals
 

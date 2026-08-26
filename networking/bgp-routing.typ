@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = BGP Routing
 
 Border Gateway Protocol (BGP) is the de facto standard for inter-domain routing, forming the backbone of internet connectivity between autonomous systems.
 
-*See also:* Internet Layer (for IP addressing), Load Balancing (for traffic engineering), Network Security (for route filtering)
+*See also:* Internet Layer (for IP addressing), #xref("networking", "load-balancing", label: "Load Balancing") (for traffic engineering), #xref("networking", "network-security", label: "Network Security") (for route filtering)
 
 == BGP Fundamentals
 

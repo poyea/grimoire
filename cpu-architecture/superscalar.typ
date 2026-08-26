@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Superscalar and Out-of-Order Execution
 
 Superscalar processors execute multiple instructions per cycle using multiple execution units. Out-of-order execution reorders instructions dynamically to hide latencies and maximize throughput.
 
-*See also:* Pipelining (for in-order execution baseline), Branch Prediction (for speculative execution), CPU Fundamentals (for instruction dependencies)
+*See also:* #xref("cpu-architecture", "pipelining", label: "Pipelining") (for in-order execution baseline), #xref("cpu-architecture", "branch-prediction", label: "Branch Prediction") (for speculative execution), #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals") (for instruction dependencies)
 
 == Superscalar Execution
 

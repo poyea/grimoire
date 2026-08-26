@@ -46,7 +46,7 @@ chapters:
   - subject: coding
     slug: advanced-string-algorithms
     path: coding/advanced-string-algorithms.typ
-    words: 2884
+    words: 2896
     status: reviewed
   - subject: coding
     slug: advanced-systems
@@ -61,7 +61,7 @@ chapters:
   - subject: coding
     slug: arrays
     path: coding/arrays.typ
-    words: 1419
+    words: 1434
     status: reviewed
   - subject: coding
     slug: backtracking
@@ -71,7 +71,7 @@ chapters:
   - subject: coding
     slug: binary-search
     path: coding/binary-search.typ
-    words: 2000
+    words: 2012
     status: reviewed
   - subject: coding
     slug: bit-manipulation
@@ -81,7 +81,7 @@ chapters:
   - subject: coding
     slug: computational-geometry
     path: coding/computational-geometry.typ
-    words: 2928
+    words: 2940
     status: reviewed
   - subject: coding
     slug: advanced-concurrency
@@ -136,7 +136,7 @@ chapters:
   - subject: coding
     slug: dynamic-programming
     path: coding/dynamic-programming.typ
-    words: 2809
+    words: 2860
     status: reviewed
   - subject: coding
     slug: flows-and-matching
@@ -156,17 +156,17 @@ chapters:
   - subject: coding
     slug: greedy
     path: coding/greedy.typ
-    words: 1855
+    words: 1864
     status: reviewed
   - subject: coding
     slug: hashing
     path: coding/hashing.typ
-    words: 3608
+    words: 3626
     status: reviewed
   - subject: coding
     slug: heap-priority-queue
     path: coding/heap-priority-queue.typ
-    words: 2275
+    words: 2287
     status: reviewed
   - subject: coding
     slug: interview-systems-design
@@ -186,7 +186,7 @@ chapters:
   - subject: coding
     slug: linked-list
     path: coding/linked-list.typ
-    words: 1999
+    words: 2014
     status: reviewed
   - subject: coding
     slug: math-number-theory
@@ -206,7 +206,7 @@ chapters:
   - subject: coding
     slug: probabilistic-data-structures
     path: coding/probabilistic-data-structures.typ
-    words: 2830
+    words: 2842
     status: reviewed
   - subject: coding
     slug: problem-solving
@@ -226,22 +226,22 @@ chapters:
   - subject: coding
     slug: segment-trees
     path: coding/segment-trees.typ
-    words: 3040
+    words: 3052
     status: reviewed
   - subject: coding
     slug: sliding-window
     path: coding/sliding-window.typ
-    words: 2211
+    words: 2229
     status: reviewed
   - subject: coding
     slug: stack
     path: coding/stack.typ
-    words: 1854
+    words: 1866
     status: reviewed
   - subject: coding
     slug: streaming-algorithms
     path: coding/streaming-algorithms.typ
-    words: 2433
+    words: 2445
     status: reviewed
   - subject: coding
     slug: string-algorithms
@@ -251,12 +251,12 @@ chapters:
   - subject: coding
     slug: tree-decomposition
     path: coding/tree-decomposition.typ
-    words: 2922
+    words: 2937
     status: draft
   - subject: coding
     slug: trees
     path: coding/trees.typ
-    words: 2139
+    words: 2154
     status: reviewed
   - subject: coding
     slug: tries
@@ -266,7 +266,7 @@ chapters:
   - subject: coding
     slug: two-pointers
     path: coding/two-pointers.typ
-    words: 2087
+    words: 2108
     status: reviewed
   - subject: coding
     slug: union-find
@@ -316,87 +316,87 @@ chapters:
   - subject: cpu-architecture
     slug: accelerators
     path: cpu-architecture/accelerators.typ
-    words: 1250
+    words: 1259
     status: reviewed
   - subject: cpu-architecture
     slug: arm-deep-dive
     path: cpu-architecture/arm-deep-dive.typ
-    words: 1240
+    words: 1262
     status: reviewed
   - subject: cpu-architecture
     slug: branch-prediction
     path: cpu-architecture/branch-prediction.typ
-    words: 2526
+    words: 2552
     status: reviewed
   - subject: cpu-architecture
     slug: cache-hierarchy
     path: cpu-architecture/cache-hierarchy.typ
-    words: 3679
+    words: 3761
     status: reviewed
   - subject: cpu-architecture
     slug: cpu-fundamentals
     path: cpu-architecture/cpu-fundamentals.typ
-    words: 3037
+    words: 3064
     status: reviewed
   - subject: cpu-architecture
     slug: interconnects
     path: cpu-architecture/interconnects.typ
-    words: 1240
+    words: 1250
     status: reviewed
   - subject: cpu-architecture
     slug: memory-system
     path: cpu-architecture/memory-system.typ
-    words: 1817
+    words: 1846
     status: reviewed
   - subject: cpu-architecture
     slug: multicore
     path: cpu-architecture/multicore.typ
-    words: 2939
+    words: 3001
     status: reviewed
   - subject: cpu-architecture
     slug: out-of-order-deep-dive
     path: cpu-architecture/out-of-order-deep-dive.typ
-    words: 1633
+    words: 1638
     status: reviewed
   - subject: cpu-architecture
     slug: performance-analysis
     path: cpu-architecture/performance-analysis.typ
-    words: 2016
+    words: 1995
     status: reviewed
   - subject: cpu-architecture
     slug: pipelining
     path: cpu-architecture/pipelining.typ
-    words: 2712
+    words: 2735
     status: reviewed
   - subject: cpu-architecture
     slug: power-and-dvfs
     path: cpu-architecture/power-and-dvfs.typ
-    words: 1267
+    words: 1272
     status: reviewed
   - subject: cpu-architecture
     slug: risc-v
     path: cpu-architecture/risc-v.typ
-    words: 1196
+    words: 1201
     status: reviewed
   - subject: cpu-architecture
     slug: simd
     path: cpu-architecture/simd.typ
-    words: 2764
+    words: 2807
     status: reviewed
   - subject: cpu-architecture
     slug: speculative-execution-security
     path: cpu-architecture/speculative-execution-security.typ
-    words: 1273
+    words: 1284
     status: reviewed
   - subject: cpu-architecture
     slug: superscalar
     path: cpu-architecture/superscalar.typ
-    words: 2268
+    words: 2280
     status: reviewed
   - subject: cpu-architecture
     slug: synchronization
     path: cpu-architecture/synchronization.typ
-    words: 3485
+    words: 3494
     status: reviewed
   - subject: cpu-architecture
     slug: virtual-memory
@@ -766,7 +766,7 @@ chapters:
   - subject: gpu-architecture
     slug: compute-architecture
     path: gpu-architecture/compute-architecture.typ
-    words: 4223
+    words: 4235
     status: reviewed
   - subject: gpu-architecture
     slug: cuda-programming-model
@@ -776,12 +776,12 @@ chapters:
   - subject: gpu-architecture
     slug: execution-model
     path: gpu-architecture/execution-model.typ
-    words: 2323
+    words: 2335
     status: reviewed
   - subject: gpu-architecture
     slug: gpu-fundamentals
     path: gpu-architecture/gpu-fundamentals.typ
-    words: 1982
+    words: 1994
     status: reviewed
   - subject: gpu-architecture
     slug: gpu-virtualization
@@ -796,7 +796,7 @@ chapters:
   - subject: gpu-architecture
     slug: memory-hierarchy
     path: gpu-architecture/memory-hierarchy.typ
-    words: 2261
+    words: 2273
     status: reviewed
   - subject: gpu-architecture
     slug: ml-workloads
@@ -821,12 +821,12 @@ chapters:
   - subject: gpu-architecture
     slug: performance-optimization
     path: gpu-architecture/performance-optimization.typ
-    words: 2511
+    words: 2523
     status: reviewed
   - subject: gpu-architecture
     slug: profiling
     path: gpu-architecture/profiling.typ
-    words: 1834
+    words: 1846
     status: reviewed
   - subject: gpu-architecture
     slug: tensor-cores-and-mma
@@ -1126,7 +1126,7 @@ chapters:
   - subject: networking
     slug: bgp-routing
     path: networking/bgp-routing.typ
-    words: 1660
+    words: 1667
     status: reviewed
   - subject: networking
     slug: concurrency-models
@@ -1141,12 +1141,12 @@ chapters:
   - subject: networking
     slug: connection-pooling
     path: networking/connection-pooling.typ
-    words: 1762
+    words: 1772
     status: reviewed
   - subject: networking
     slug: container-networking
     path: networking/container-networking.typ
-    words: 1695
+    words: 1702
     status: reviewed
   - subject: networking
     slug: data-center-networking
@@ -1156,22 +1156,22 @@ chapters:
   - subject: networking
     slug: debugging
     path: networking/debugging.typ
-    words: 1816
+    words: 1831
     status: reviewed
   - subject: networking
     slug: dns
     path: networking/dns.typ
-    words: 1413
+    words: 1420
     status: reviewed
   - subject: networking
     slug: grpc
     path: networking/grpc.typ
-    words: 1533
+    words: 1543
     status: reviewed
   - subject: networking
     slug: io-multiplexing
     path: networking/io-multiplexing.typ
-    words: 694
+    words: 703
     status: reviewed
   - subject: networking
     slug: ipv6
@@ -1181,27 +1181,27 @@ chapters:
   - subject: networking
     slug: kernel-bypass
     path: networking/kernel-bypass.typ
-    words: 1077
+    words: 1089
     status: reviewed
   - subject: networking
     slug: link-layer
     path: networking/link-layer.typ
-    words: 2409
+    words: 2419
     status: reviewed
   - subject: networking
     slug: load-balancing
     path: networking/load-balancing.typ
-    words: 1865
+    words: 1877
     status: reviewed
   - subject: networking
     slug: lock-free
     path: networking/lock-free.typ
-    words: 2118
+    words: 2127
     status: reviewed
   - subject: networking
     slug: message-queues
     path: networking/message-queues.typ
-    words: 749
+    words: 758
     status: reviewed
   - subject: networking
     slug: multipath
@@ -1216,12 +1216,12 @@ chapters:
   - subject: networking
     slug: network-security
     path: networking/network-security.typ
-    words: 2906
+    words: 2916
     status: reviewed
   - subject: networking
     slug: observability
     path: networking/observability.typ
-    words: 1999
+    words: 2011
     status: reviewed
   - subject: networking
     slug: performance-reference
@@ -1241,7 +1241,7 @@ chapters:
   - subject: networking
     slug: realtime-protocols
     path: networking/realtime-protocols.typ
-    words: 2377
+    words: 2387
     status: reviewed
   - subject: networking
     slug: resilience-patterns
@@ -1251,22 +1251,22 @@ chapters:
   - subject: networking
     slug: sdn-programmable-networks
     path: networking/sdn-programmable-networks.typ
-    words: 1737
+    words: 1747
     status: reviewed
   - subject: networking
     slug: service-discovery
     path: networking/service-discovery.typ
-    words: 1656
+    words: 1663
     status: reviewed
   - subject: networking
     slug: service-mesh
     path: networking/service-mesh.typ
-    words: 1622
+    words: 1631
     status: reviewed
   - subject: networking
     slug: sockets-api
     path: networking/sockets-api.typ
-    words: 1885
+    words: 1892
     status: reviewed
   - subject: networking
     slug: stateful-firewalls
@@ -1281,22 +1281,22 @@ chapters:
   - subject: networking
     slug: transport-layer
     path: networking/transport-layer.typ
-    words: 2190
+    words: 2197
     status: reviewed
   - subject: networking
     slug: websockets
     path: networking/websockets.typ
-    words: 1657
+    words: 1667
     status: reviewed
   - subject: networking
     slug: wireless-protocols
     path: networking/wireless-protocols.typ
-    words: 2855
+    words: 2867
     status: reviewed
   - subject: networking
     slug: zero-copy
     path: networking/zero-copy.typ
-    words: 1166
+    words: 1178
     status: reviewed
   - subject: observability-and-sre
     slug: alerting
@@ -1636,12 +1636,12 @@ chapters:
   - subject: computer-vision
     slug: 3d-vision
     path: computer-vision/3d-vision.typ
-    words: 1168
+    words: 1170
     status: reviewed
   - subject: computer-vision
     slug: cnn-architectures
     path: computer-vision/cnn-architectures.typ
-    words: 1251
+    words: 1285
     status: reviewed
   - subject: computer-vision
     slug: image-formation

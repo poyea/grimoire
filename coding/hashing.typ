@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Hashing
 
 *Hash tables provide $O(1)$ average-case lookup, insert, delete. Key tradeoffs: memory overhead vs speed, collision handling, cache locality.*
 
-*See also:* Arrays (for cache-friendly alternatives to hash sets), Two Pointers (for $O(1)$ space solutions on sorted data)
+*See also:* #xref("coding", "arrays", label: "Arrays") (for cache-friendly alternatives to hash sets), #xref("coding", "two-pointers", label: "Two Pointers") (for $O(1)$ space solutions on sorted data)
 
 == Hashing in std::unordered_map
 
@@ -170,7 +172,7 @@ vector<int> two_sum(vector<int>& nums, int target) {
 
 *Critical:* Check complement before inserting to avoid using same element twice.
 
-*See also:* Two Pointers (for Two Sum II on sorted array with $O(1)$ space)
+*See also:* #xref("coding", "two-pointers", label: "Two Pointers") (for Two Sum II on sorted array with $O(1)$ space)
 
 #pagebreak()
 
@@ -246,7 +248,7 @@ priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> minHeap;
 // Keep heap size ≤ k, top k elements have highest frequency
 ```
 
-*See also:* Heap & Priority Queue (for detailed heap operations and complexity analysis)
+*See also:* #xref("coding", "heap-priority-queue", label: "Heap & Priority Queue") (for detailed heap operations and complexity analysis)
 
 == Longest Consecutive Sequence
 
@@ -315,7 +317,7 @@ unordered_set<int, CustomHash> s;
 *Memory layout:*
 `unordered_set` = array of buckets + linked lists. Each node = $#sym.tilde.op$16-24 bytes depending on implementation (breakdown: 8 bytes for next pointer, 0-8 bytes for cached hash value depending on implementation#footnote[Some implementations cache the hash value in each node to avoid recomputing during rehashing. This trades 8 bytes per node for faster rehash operations, a worthwhile tradeoff for expensive hash functions like strings.], plus the key-value pair size and any alignment padding to maintain proper memory alignment). 1000 elements ≈ 16-24KB minimum.
 
-*See also:* Reference (for detailed memory alignment and cache hierarchy information)
+*See also:* #xref("coding", "reference", label: "Reference") (for detailed memory alignment and cache hierarchy information)
 
 *Cache behavior:*
 - Small sets (< 100 elements): entire hash table fits in L1 = fast

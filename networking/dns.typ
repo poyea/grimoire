@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = DNS (Domain Name System)
 
 The Domain Name System is a hierarchical, distributed naming system that maps human-readable domain names to IP addresses and other resource records.
 
-*See also:* Application Protocols (for HTTP which depends on DNS), Transport Layer (UDP/TCP transport), Internet Layer (IP addressing)
+*See also:* #xref("networking", "application-protocols", label: "Application Protocols") (for HTTP which depends on DNS), #xref("networking", "transport-layer", label: "Transport Layer") (UDP/TCP transport), Internet Layer (IP addressing)
 
 == DNS Architecture and Hierarchy
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Compute Units and Specialized Cores
 
 Modern GPUs contain multiple types of processing units optimized for different workloads: CUDA cores for general compute, Tensor Cores for matrix operations, and RT Cores for ray tracing. Understanding their capabilities and programming is essential for maximum performance.
 
-*See also:* GPU Fundamentals (for architecture overview), Execution Model (for scheduling), Memory Hierarchy (for data movement)
+*See also:* #xref("gpu-architecture", "gpu-fundamentals", label: "GPU Fundamentals") (for architecture overview), #xref("gpu-architecture", "execution-model", label: "Execution Model") (for scheduling), #xref("gpu-architecture", "memory-hierarchy", label: "Memory Hierarchy") (for data movement)
 
 == CUDA Cores (Streaming Processors)
 

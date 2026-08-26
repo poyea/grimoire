@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Streaming Algorithms
 
 *Process data in one pass:* Streaming algorithms handle data too large to store, using sublinear space and limited passes. Essential for real-time analytics, network monitoring, and big data processing [Muthukrishnan 2005].
 
-*See also:* Probabilistic Data Structures (for Bloom filters, HyperLogLog), Hashing (for hash-based techniques), Sliding Window (for window-based processing)
+*See also:* #xref("coding", "probabilistic-data-structures", label: "Probabilistic Data Structures") (for Bloom filters, HyperLogLog), #xref("coding", "hashing", label: "Hashing") (for hash-based techniques), #xref("coding", "sliding-window", label: "Sliding Window") (for window-based processing)
 
 == Reservoir Sampling
 

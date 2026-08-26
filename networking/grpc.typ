@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = gRPC (Remote Procedure Calls)
 
 gRPC is a high-performance, cross-platform RPC framework built on HTTP/2 and Protocol Buffers.
 
-*See also:* Application Protocols (for HTTP/2 foundations), Transport Layer (for TCP/QUIC), Message Queues (for alternative messaging patterns)
+*See also:* #xref("networking", "application-protocols", label: "Application Protocols") (for HTTP/2 foundations), #xref("networking", "transport-layer", label: "Transport Layer") (for TCP/QUIC), #xref("networking", "message-queues", label: "Message Queues") (for alternative messaging patterns)
 
 == Overview
 

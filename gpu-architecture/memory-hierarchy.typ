@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = GPU Memory Hierarchy
 
 GPU memory hierarchy differs fundamentally from CPU caches. Understanding the distinct memory spaces, access patterns, and optimization techniques is essential for high-performance GPU programming.
 
-*See also:* GPU Fundamentals (for architecture overview), Execution Model (for warp-based access), Performance Optimization (for memory-centric tuning)
+*See also:* #xref("gpu-architecture", "gpu-fundamentals", label: "GPU Fundamentals") (for architecture overview), #xref("gpu-architecture", "execution-model", label: "Execution Model") (for warp-based access), #xref("gpu-architecture", "performance-optimization", label: "Performance Optimization") (for memory-centric tuning)
 
 == Memory Hierarchy Overview
 

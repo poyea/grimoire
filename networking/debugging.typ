@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Network Debugging
 
 Systematic approaches to diagnosing network issues: packet capture, socket inspection, latency analysis, and advanced tracing.
 
-*See also:* Transport Layer (for TCP/UDP internals), Sockets API (for socket programming), Kernel Bypass (for XDP/BPF context), Performance Reference (for baseline latency numbers)
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP/UDP internals), #xref("networking", "sockets-api", label: "Sockets API") (for socket programming), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for XDP/BPF context), #xref("networking", "performance-reference", label: "Performance Reference") (for baseline latency numbers)
 
 == tcpdump Essentials
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = CPU Fundamentals
 
 The Central Processing Unit executes instructions stored in memory. Understanding the instruction set architecture (ISA) and execution model is foundational to all performance analysis.
 
-*See also:* Pipelining (for instruction execution stages), Superscalar (for parallel execution), Cache Hierarchy (for data access)
+*See also:* #xref("cpu-architecture", "pipelining", label: "Pipelining") (for instruction execution stages), #xref("cpu-architecture", "superscalar", label: "Superscalar") (for parallel execution), #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy") (for data access)
 
 == Instruction Set Architecture (ISA)
 

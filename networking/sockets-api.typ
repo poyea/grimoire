@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = POSIX Sockets API
 
 The Berkeley Sockets API provides the standard interface for network programming across Unix systems [POSIX.1-2017].
 
-*See also:* I/O Multiplexing (for handling multiple connections), Transport Layer (for protocol details), Concurrency Models (for server architectures)
+*See also:* #xref("networking", "io-multiplexing", label: "I/O Multiplexing") (for handling multiple connections), #xref("networking", "transport-layer", label: "Transport Layer") (for protocol details), Concurrency Models (for server architectures)
 
 == Socket System Calls
 

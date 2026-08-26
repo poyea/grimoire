@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = Connection Pooling
 
 Connection pooling amortizes the cost of establishing connections across multiple requests, eliminating per-request handshake overhead.
 
-*See also:* Transport Layer (TCP handshake costs), Application Protocols (HTTP/2 multiplexing), Sockets API (connection lifecycle)
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (TCP handshake costs), #xref("networking", "application-protocols", label: "Application Protocols") (HTTP/2 multiplexing), #xref("networking", "sockets-api", label: "Sockets API") (connection lifecycle)
 
 == Why Pooling Matters
 

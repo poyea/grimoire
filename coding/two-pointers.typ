@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Two Pointers
 
 *Two pointers technique processes arrays/sequences with two indices moving toward each other or in same direction. Requires: sorted data or specific pattern. Benefits: $O(1)$ space vs $O(n)$ for hash-based solutions.*
 
-*See also:* Sliding Window (for variable-size windows), Hashing (for unsorted data alternatives), Binary Search (for search-based two pointer variants)
+*See also:* #xref("coding", "sliding-window", label: "Sliding Window") (for variable-size windows), #xref("coding", "hashing", label: "Hashing") (for unsorted data alternatives), #xref("coding", "binary-search", label: "Binary Search") (for search-based two pointer variants)
 
 == Valid Palindrome
 
@@ -46,7 +48,7 @@ vector<int> two_sum(vector<int>& nums, int target) {
 
 *Why it works:* Array is sorted. If sum too small, increase left. If sum too large, decrease right.
 
-*See also:* Hashing (for Two Sum on unsorted array with $O(n)$ time but $O(n)$ space)
+*See also:* #xref("coding", "hashing", label: "Hashing") (for Two Sum on unsorted array with $O(n)$ time but $O(n)$ space)
 
 == 3Sum
 
@@ -106,7 +108,7 @@ int maxArea(vector<int>& height) {
 
 *Greedy choice:* Always move pointer with smaller height. Moving larger height can never improve area (width decreases, height stays ≤ min).
 
-*See also:* Greedy (for proving correctness of greedy strategies), Dynamic Programming (for problems where greedy doesn't work)
+*See also:* #xref("coding", "greedy", label: "Greedy") (for proving correctness of greedy strategies), #xref("coding", "dynamic-programming", label: "Dynamic Programming") (for problems where greedy doesn't work)
 
 == Two-Pointer Performance
 

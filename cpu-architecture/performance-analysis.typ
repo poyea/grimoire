@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Performance Analysis and Measurement
 
 Understanding where time is spent requires measurement tools and techniques. Hardware performance counters provide low-overhead visibility into microarchitectural events.
 
-*See also:* CPU Fundamentals (for IPC metrics), Cache Hierarchy (for miss rates), Branch Prediction (for misprediction rates)
+*See also:* #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals") (for IPC metrics), #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy") (for miss rates), #xref("cpu-architecture", "branch-prediction", label: "Branch Prediction") (for misprediction rates)
 
 == Performance Counters
 

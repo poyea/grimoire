@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = Transport Layer
 
 The transport layer provides end-to-end communication between applications. Two primary protocols: TCP (reliable, ordered, connection-oriented) and UDP (unreliable, unordered, connectionless).
 
-*See also:* Sockets API (for programming interface), Application Protocols (for protocol design), Concurrency Models (for handling multiple connections)
+*See also:* #xref("networking", "sockets-api", label: "Sockets API") (for programming interface), #xref("networking", "application-protocols", label: "Application Protocols") (for protocol design), Concurrency Models (for handling multiple connections)
 
 == TCP (Transmission Control Protocol)
 

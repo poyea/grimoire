@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Wireless Protocols
 
 Modern wireless networking encompasses WiFi (802.11), cellular (4G/5G), and emerging technologies like mmWave. Understanding PHY/MAC layer behavior is essential for optimizing wireless application performance.
 
-*See also:* Transport Layer (for TCP over wireless), Application Protocols (for mobile optimization), Observability (for wireless monitoring)
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP over wireless), #xref("networking", "application-protocols", label: "Application Protocols") (for mobile optimization), #xref("networking", "observability", label: "Observability") (for wireless monitoring)
 
 == WiFi 6 (802.11ax) Architecture
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = I/O Multiplexing
 
 I/O multiplexing allows monitoring multiple file descriptors for readiness, enabling single-threaded servers to handle many concurrent connections.
 
-*See also:* Sockets API (for blocking I/O), Concurrency Models (for threading alternatives), Kernel Bypass (for eliminating epoll overhead)
+*See also:* #xref("networking", "sockets-api", label: "Sockets API") (for blocking I/O), Concurrency Models (for threading alternatives), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for eliminating epoll overhead)
 
 == The C10K Problem
 

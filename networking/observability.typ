@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Network Observability
 
 Observability encompasses metrics, logs, and traces to understand system behavior. In distributed systems, correlating these signals across network boundaries is essential for debugging and performance optimization.
 
-*See also:* Debugging (for packet-level analysis), Service Mesh (for sidecar-based telemetry), Performance Reference (for baseline metrics)
+*See also:* #xref("networking", "debugging", label: "Debugging") (for packet-level analysis), #xref("networking", "service-mesh", label: "Service Mesh") (for sidecar-based telemetry), #xref("networking", "performance-reference", label: "Performance Reference") (for baseline metrics)
 
 == Observability Pillars
 

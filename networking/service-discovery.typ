@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = Service Discovery
 
 Service discovery enables services to locate and communicate with each other in distributed systems without hardcoded addresses.
 
-*See also:* Application Protocols (for DNS fundamentals), Message Queues (for distributed communication patterns), Concurrency Models (for handling discovery events)
+*See also:* #xref("networking", "application-protocols", label: "Application Protocols") (for DNS fundamentals), #xref("networking", "message-queues", label: "Message Queues") (for distributed communication patterns), Concurrency Models (for handling discovery events)
 
 == Problem Statement
 

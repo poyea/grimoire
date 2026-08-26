@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Trees
 
 *Trees organize data hierarchically with parent-child relationships. Binary trees: each node has ≤2 children. Traversals: inorder, preorder, postorder (recursive/iterative).*
 
-*See also:* Graphs (trees are acyclic connected graphs), Binary Search (for binary search trees), Dynamic Programming (tree DP), Heap & Priority Queue (for array-based trees)
+*See also:* #xref("coding", "graphs", label: "Graphs") (trees are acyclic connected graphs), #xref("coding", "binary-search", label: "Binary Search") (for binary search trees), #xref("coding", "dynamic-programming", label: "Dynamic Programming") (tree DP), #xref("coding", "heap-priority-queue", label: "Heap & Priority Queue") (for array-based trees)
 
 *Cache locality note:* Tree traversal = pointer chasing = poor cache behavior. Each node access can be cache miss ($#sym.tilde.op$200 cycles). Array-based heaps/segment trees have better locality.
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Tree Decomposition Techniques
 
 *Flattening trees into arrays unlocks range-query machinery on paths and subtrees. Euler tours, binary lifting, heavy-light decomposition, and centroid decomposition are the four core tools — each trading different constants to answer different families of queries on trees in $O(log n)$ or $O(log^2 n)$.*
 
-*See also:* Segment Trees and Range Queries (sparse table, iterative segment tree), Trees (DFS, pointer-based tree basics), Graphs (DFS on general graphs), Advanced Graph Algorithms (offline LCA variants)
+*See also:* #xref("coding", "segment-trees", label: "Segment Trees and Range Queries") (sparse table, iterative segment tree), #xref("coding", "trees", label: "Trees") (DFS, pointer-based tree basics), #xref("coding", "graphs", label: "Graphs") (DFS on general graphs), #xref("coding", "advanced-graphs", label: "Advanced Graph Algorithms") (offline LCA variants)
 
 == Euler Tour and DFS Ordering
 

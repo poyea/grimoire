@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Performance Optimization
 
 GPU performance optimization requires systematic analysis and targeted improvements. This section covers kernel optimization techniques, memory optimizations, and strategies for achieving peak performance.
 
-*See also:* Memory Hierarchy (for memory-specific optimizations), Execution Model (for warp efficiency), Profiling (for measurement techniques)
+*See also:* #xref("gpu-architecture", "memory-hierarchy", label: "Memory Hierarchy") (for memory-specific optimizations), #xref("gpu-architecture", "execution-model", label: "Execution Model") (for warp efficiency), #xref("gpu-architecture", "profiling", label: "Profiling") (for measurement techniques)
 
 == Optimization Hierarchy
 

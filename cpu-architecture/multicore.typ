@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Multicore and Cache Coherence
 
 Modern CPUs contain multiple cores sharing resources. Understanding cache coherence, synchronization, and memory models is essential for correct and efficient parallel programming.
 
-*See also:* Cache Hierarchy (for cache organization), Virtual Memory (for TLB coherence), Memory System (for bandwidth sharing)
+*See also:* #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy") (for cache organization), Virtual Memory (for TLB coherence), #xref("cpu-architecture", "memory-system", label: "Memory System") (for bandwidth sharing)
 
 == Multicore Architecture
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Message Queues and ZeroMQ
 
 Message queues abstract socket complexity, providing high-level patterns for distributed systems.
 
-*See also:* Sockets API (for raw socket programming), Lock-Free (for local inter-thread queues), Concurrency Models (for architectural patterns)
+*See also:* #xref("networking", "sockets-api", label: "Sockets API") (for raw socket programming), #xref("networking", "lock-free", label: "Lock-Free") (for local inter-thread queues), Concurrency Models (for architectural patterns)
 
 == ZeroMQ Architecture
 

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Sliding Window
 
 *Sliding window maintains a contiguous subarray/substring while expanding or contracting based on constraints. Key: amortized $O(n)$ time as each element added/removed at most once.*
 
-*See also:* Two Pointers (sliding window is a special case), Hashing (for tracking window state), Dynamic Programming (for more complex optimization problems)
+*See also:* #xref("coding", "two-pointers", label: "Two Pointers") (sliding window is a special case), #xref("coding", "hashing", label: "Hashing") (for tracking window state), #xref("coding", "dynamic-programming", label: "Dynamic Programming") (for more complex optimization problems)
 
 == Best Time to Buy and Sell Stock
 
@@ -96,7 +98,7 @@ int characterReplacement(string s, int k) {
 
 *Optimization:* No need to recompute maxFreq when shrinking window. It only matters for expanding window. maxFreq is monotonic upper bound.
 
-*See also:* Hashing (frequency counting techniques), String Algorithms (for more complex string patterns)
+*See also:* #xref("coding", "hashing", label: "Hashing") (frequency counting techniques), #xref("coding", "string-algorithms", label: "String Algorithms") (for more complex string patterns)
 
 == Minimum Window Substring
 

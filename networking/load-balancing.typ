@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Load Balancing
 
 Load balancers distribute traffic across multiple servers to improve availability, throughput, and response time. Critical infrastructure component for high-scale systems.
 
-*See also:* Transport Layer (for TCP/UDP), Application Protocols (for HTTP/2, HTTP/3), Kernel Bypass (for high-performance packet processing)
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for TCP/UDP), #xref("networking", "application-protocols", label: "Application Protocols") (for HTTP/2, HTTP/3), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for high-performance packet processing)
 
 == L4 vs L7 Load Balancing
 

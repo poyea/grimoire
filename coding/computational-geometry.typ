@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Computational Geometry
 
 *Algorithms for geometric problems:* Computational geometry handles points, lines, polygons, and spatial queries efficiently. Essential for graphics, robotics, GIS, and CAD systems [de Berg et al. 2008].
 
-*See also:* Segment Trees (for range queries), Graphs (for geometric graph algorithms), Binary Search (for geometric search)
+*See also:* #xref("coding", "segment-trees", label: "Segment Trees") (for range queries), #xref("coding", "graphs", label: "Graphs") (for geometric graph algorithms), #xref("coding", "binary-search", label: "Binary Search") (for geometric search)
 
 *Numerical precision:* Floating-point errors cause geometric predicates to fail. Use epsilon comparisons or exact arithmetic when necessary.
 

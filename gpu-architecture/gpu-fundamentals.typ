@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = GPU Fundamentals
 
 Modern GPUs are massively parallel processors designed for throughput-oriented computing. Unlike CPUs optimized for latency, GPUs maximize aggregate work per unit time through thousands of concurrent threads.
 
-*See also:* Execution Model (for SIMT programming), Memory Hierarchy (for GPU memory system), Compute Architecture (for hardware details)
+*See also:* #xref("gpu-architecture", "execution-model", label: "Execution Model") (for SIMT programming), #xref("gpu-architecture", "memory-hierarchy", label: "Memory Hierarchy") (for GPU memory system), #xref("gpu-architecture", "compute-architecture", label: "Compute Architecture") (for hardware details)
 
 == CPU vs GPU Design Philosophy
 

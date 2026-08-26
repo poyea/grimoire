@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = WebSockets
 
 WebSocket is a full-duplex communication protocol that provides persistent, bidirectional communication between client and server over a single TCP connection [#rfc(6455)].
 
-*See also:* Application Protocols (for HTTP foundations), Transport Layer (for TCP internals), I/O Multiplexing (for handling many WebSocket connections)
+*See also:* #xref("networking", "application-protocols", label: "Application Protocols") (for HTTP foundations), #xref("networking", "transport-layer", label: "Transport Layer") (for TCP internals), #xref("networking", "io-multiplexing", label: "I/O Multiplexing") (for handling many WebSocket connections)
 
 == Motivation and Use Cases
 

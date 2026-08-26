@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Advanced String Algorithms
 
 *Beyond basic pattern matching:* Suffix arrays, suffix automata, and multiple pattern matching enable sophisticated string processing with optimal complexity. Critical for bioinformatics, text indexing, and data compression [Gusfield 1997].
 
-*See also:* String Algorithms (for KMP, Rabin-Karp, Z-algorithm), Tries (for prefix trees), Hashing (for rolling hash techniques)
+*See also:* #xref("coding", "string-algorithms", label: "String Algorithms") (for KMP, Rabin-Karp, Z-algorithm), #xref("coding", "tries", label: "Tries") (for prefix trees), #xref("coding", "hashing", label: "Hashing") (for rolling hash techniques)
 
 == Boyer-Moore Algorithm
 

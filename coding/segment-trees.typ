@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Segment Trees and Range Queries
 
 *Efficient range operations:* Segment trees and Fenwick trees enable $O(log n)$ range queries and point updates on arrays. Essential for competitive programming and database indexing [Bentley 1977].
 
-*See also:* Trees (for basic tree traversal), Bit Manipulation (for Fenwick tree bit tricks), Dynamic Programming (for range DP)
+*See also:* #xref("coding", "trees", label: "Trees") (for basic tree traversal), #xref("coding", "bit-manipulation", label: "Bit Manipulation") (for Fenwick tree bit tricks), #xref("coding", "dynamic-programming", label: "Dynamic Programming") (for range DP)
 
 == Segment Tree Fundamentals
 

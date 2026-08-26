@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Kernel Bypass
 
 Kernel networking stack adds 2-5μs latency per packet. Kernel bypass eliminates this overhead by giving applications direct access to NIC hardware.
 
-*See also:* Link Layer (for NIC ring buffers), Zero-Copy (for optimizing kernel path), Lock-Free (for userspace queues)
+*See also:* #xref("networking", "link-layer", label: "Link Layer") (for NIC ring buffers), #xref("networking", "zero-copy", label: "Zero-Copy") (for optimizing kernel path), #xref("networking", "lock-free", label: "Lock-Free") (for userspace queues)
 
 == Why Bypass the Kernel?
 

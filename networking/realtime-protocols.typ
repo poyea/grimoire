@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = Real-Time Protocols
 
 Real-time communication requires specialized protocols that prioritize low latency over reliability. This chapter covers WebRTC, RTP/RTCP, SRT, and media streaming fundamentals.
 
-*See also:* Transport Layer (for UDP fundamentals), Application Protocols (for HTTP-based streaming), Wireless Protocols (for mobile considerations)
+*See also:* #xref("networking", "transport-layer", label: "Transport Layer") (for UDP fundamentals), #xref("networking", "application-protocols", label: "Application Protocols") (for HTTP-based streaming), #xref("networking", "wireless-protocols", label: "Wireless Protocols") (for mobile considerations)
 
 == Real-Time Communication Fundamentals
 

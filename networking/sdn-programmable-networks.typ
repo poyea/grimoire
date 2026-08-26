@@ -1,10 +1,10 @@
-#import "../template.typ": rfc
+#import "../template.typ": rfc, xref
 
 = SDN and Programmable Networks
 
 Software-Defined Networking (SDN) decouples the control plane from the data plane, enabling centralized network management and programmable packet processing.
 
-*See also:* Container Networking (for CNI implementations), Service Mesh (for application-layer routing), Kernel Bypass (for high-performance data planes)
+*See also:* #xref("networking", "container-networking", label: "Container Networking") (for CNI implementations), #xref("networking", "service-mesh", label: "Service Mesh") (for application-layer routing), #xref("networking", "kernel-bypass", label: "Kernel Bypass") (for high-performance data planes)
 
 == SDN Architecture
 

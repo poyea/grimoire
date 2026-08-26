@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Service Mesh
 
 A service mesh is a dedicated infrastructure layer for handling service-to-service communication in microservices architectures, providing observability, traffic management, and security without application code changes.
 
-*See also:* Application Protocols (for HTTP/gRPC), Concurrency Models (for proxy threading), Message Queues (for alternative communication patterns)
+*See also:* #xref("networking", "application-protocols", label: "Application Protocols") (for HTTP/gRPC), Concurrency Models (for proxy threading), #xref("networking", "message-queues", label: "Message Queues") (for alternative communication patterns)
 
 == Sidecar Proxy Pattern
 

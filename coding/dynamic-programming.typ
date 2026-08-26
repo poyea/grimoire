@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Dynamic Programming
 
 *Dynamic Programming (DP)* solves problems by breaking them into overlapping subproblems, storing results to avoid recomputation.
@@ -12,7 +14,7 @@
 3. Tabulation (bottom-up DP)
 4. Space optimization (rolling arrays, state reduction)
 
-*See also:* Greedy algorithms (when local optimum = global optimum), Backtracking (for exhaustive search), Graphs (for shortest path DP)
+*See also:* Greedy algorithms (when local optimum = global optimum), #xref("coding", "backtracking", label: "Backtracking") (for exhaustive search), #xref("coding", "graphs", label: "Graphs") (for shortest path DP)
 
 == 1-D Dynamic Programming
 
@@ -106,7 +108,7 @@ string longestPalindrome(string s) {
 
 *Manacher's algorithm:* O(n) time but complex. Only worth for very large strings or repeated queries.
 
-*See also:* String Algorithms (for advanced pattern matching techniques)
+*See also:* #xref("coding", "string-algorithms", label: "String Algorithms") (for advanced pattern matching techniques)
 
 === Coin Change
 
@@ -179,7 +181,7 @@ int maxProduct(vector<int>& nums) {
 
 *Integer overflow:* Products can exceed INT_MAX. Use `long long` or detect overflow with `__builtin_mul_overflow()`.
 
-*See also:* Maximum Subarray (Kadane's algorithm for sum instead of product), Sliding Window (for contiguous subarray patterns)
+*See also:* Maximum Subarray (Kadane's algorithm for sum instead of product), #xref("coding", "sliding-window", label: "Sliding Window") (for contiguous subarray patterns)
 
 === Longest Increasing Subsequence
 
@@ -226,7 +228,7 @@ int lengthOfLIS(vector<int>& nums) {
 
 *Cache:* `tails` array typically small = stays in L1 cache. Binary search has poor spatial locality but good temporal locality.
 
-*See also:* Binary Search (for optimization techniques), Greedy (patience sort is a greedy approach)
+*See also:* #xref("coding", "binary-search", label: "Binary Search") (for optimization techniques), #xref("coding", "greedy", label: "Greedy") (patience sort is a greedy approach)
 
 == 2-D Dynamic Programming
 
@@ -244,7 +246,7 @@ for (int j = 0; j < cols; j++)
         process(dp[i][j]);  // Each access = cache miss
 ```
 
-*See also:* Arrays (for memory layout and cache optimization details)
+*See also:* #xref("coding", "arrays", label: "Arrays") (for memory layout and cache optimization details)
 
 === Unique Paths
 
@@ -363,7 +365,7 @@ alignas(32) vector<int> dp(n + 1);
 
 *Note:* Arithmetic with booleans rarely improves performance over well-predicted branches on modern CPUs. The compiler already optimizes simple branches to conditional moves when beneficial.
 
-*See also:* String Algorithms (for edit distance and other string matching problems), Greedy (for special cases with optimal greedy solutions)
+*See also:* #xref("coding", "string-algorithms", label: "String Algorithms") (for edit distance and other string matching problems), #xref("coding", "greedy", label: "Greedy") (for special cases with optimal greedy solutions)
 
 == Multi-Dimensional Dynamic Programming
 
@@ -510,7 +512,7 @@ int count_with_digit_sum(const string& num, int target) {
 }
 ```
 
-*See also:* Bit Manipulation (for bitmask techniques), Graphs (for state-space DP like shortest path)
+*See also:* #xref("coding", "bit-manipulation", label: "Bit Manipulation") (for bitmask techniques), #xref("coding", "graphs", label: "Graphs") (for state-space DP like shortest path)
 
 === DP on Trees
 
@@ -541,7 +543,7 @@ int maxValue = [&]() {
 }();
 ```
 
-*See also:* Trees (for tree traversal techniques), Graphs (for general graph DP)
+*See also:* #xref("coding", "trees", label: "Trees") (for tree traversal techniques), #xref("coding", "graphs", label: "Graphs") (for general graph DP)
 
 == Common DP Patterns Summary
 
@@ -573,7 +575,7 @@ int maxValue = [&]() {
 - TSP, Assignment Problem, Hamiltonian Path
 - State: `dp[mask]` where mask represents subset
 
-*See also:* Backtracking (for exhaustive search baseline), Greedy (when DP unnecessary), Graphs (for shortest path DP variants)
+*See also:* #xref("coding", "backtracking", label: "Backtracking") (for exhaustive search baseline), #xref("coding", "greedy", label: "Greedy") (when DP unnecessary), #xref("coding", "graphs", label: "Graphs") (for shortest path DP variants)
 
 == Complexity Reference
 

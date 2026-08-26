@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Stack
 
 *Stacks enforce LIFO (Last-In, First-Out) ordering. Key patterns: matching/nesting, monotonic stacks for next-greater/smaller queries, and expression evaluation. $O(1)$ push/pop, $O(n)$ total across all operations for monotonic patterns.*
 
-*See also:* Arrays (for cache-friendly linear scans), Trees (for DFS traversal using implicit stack), Backtracking (for explicit state stack)
+*See also:* #xref("coding", "arrays", label: "Arrays") (for cache-friendly linear scans), #xref("coding", "trees", label: "Trees") (for DFS traversal using implicit stack), #xref("coding", "backtracking", label: "Backtracking") (for explicit state stack)
 
 == Valid Parentheses
 

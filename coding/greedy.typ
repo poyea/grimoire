@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Greedy
 
 *Greedy algorithms* build a solution incrementally, choosing the locally optimal option at each step, hoping it leads to a globally optimal solution.
@@ -10,7 +12,7 @@
 - *Exchange argument:* Assume an optimal solution $O$ differs from greedy solution $G$. Show you can swap a choice in $O$ for the greedy choice without worsening the result, contradicting $O$'s supposed superiority.
 - *Greedy stays ahead:* Show by induction that after each step, the greedy solution is at least as good as any other solution at that point.
 
-*See also:* Dynamic Programming (when greedy fails), Graphs (Dijkstra, Prim, Kruskal are greedy), Heaps (priority queues used in many greedy algorithms)
+*See also:* #xref("coding", "dynamic-programming", label: "Dynamic Programming") (when greedy fails), #xref("coding", "graphs", label: "Graphs") (Dijkstra, Prim, Kruskal are greedy), Heaps (priority queues used in many greedy algorithms)
 
 == Maximum Subarray (Kadane's Algorithm)
 

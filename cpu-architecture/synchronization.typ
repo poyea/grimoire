@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Synchronization Primitives
 
 Mutexes, reader-writer locks, and lock-free techniques sit on top of the hardware atomics and memory model from #emph[Multicore and Cache Coherence]. This chapter covers how they are *implemented* and how to reduce their cost when they contend.
 
-*See also:* Multicore (for atomics, memory ordering, cache coherence), Cache Hierarchy (for false sharing and cache-line ping-pong)
+*See also:* #xref("cpu-architecture", "multicore", label: "Multicore") (for atomics, memory ordering, cache coherence), #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy") (for false sharing and cache-line ping-pong)
 
 == Mutex Implementation: User Space + Kernel
 

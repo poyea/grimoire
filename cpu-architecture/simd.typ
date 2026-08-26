@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = SIMD (Single Instruction Multiple Data)
 
 SIMD processes multiple data elements with single instruction using vector registers. Essential for high-performance computing, multimedia, and data-parallel workloads.
 
-*See also:* CPU Fundamentals (for register overview), Superscalar (for execution units), Cache Hierarchy (for bandwidth requirements)
+*See also:* #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals") (for register overview), #xref("cpu-architecture", "superscalar", label: "Superscalar") (for execution units), #xref("cpu-architecture", "cache-hierarchy", label: "Cache Hierarchy") (for bandwidth requirements)
 
 == SIMD Evolution (x86)
 

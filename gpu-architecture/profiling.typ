@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = GPU Profiling and Debugging
 
 Effective GPU optimization requires measurement. This section covers profiling tools, metrics interpretation, and debugging techniques for CUDA applications.
 
-*See also:* Performance Optimization (for optimization techniques), Execution Model (for understanding metrics), Memory Hierarchy (for memory-related metrics)
+*See also:* #xref("gpu-architecture", "performance-optimization", label: "Performance Optimization") (for optimization techniques), #xref("gpu-architecture", "execution-model", label: "Execution Model") (for understanding metrics), #xref("gpu-architecture", "memory-hierarchy", label: "Memory Hierarchy") (for memory-related metrics)
 
 == Profiling Tools Overview
 

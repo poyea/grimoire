@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Cache Hierarchy
 
 Memory hierarchy bridges the speed gap between fast CPU registers and slow main memory. Modern processors have 3-4 levels of cache between registers and DRAM.
 
-*See also:* CPU Fundamentals (for register access), Memory System (for DRAM organization), Virtual Memory (for address translation), Multicore (for cache coherence)
+*See also:* #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals") (for register access), #xref("cpu-architecture", "memory-system", label: "Memory System") (for DRAM organization), Virtual Memory (for address translation), #xref("cpu-architecture", "multicore", label: "Multicore") (for cache coherence)
 
 == The Memory Wall
 

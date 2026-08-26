@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = SIMT Execution Model
 
 GPUs execute thousands of threads using Single Instruction Multiple Thread (SIMT) execution. Understanding warps, thread divergence, and occupancy is critical for writing efficient GPU code.
 
-*See also:* GPU Fundamentals (for architecture overview), Memory Hierarchy (for memory access patterns), Performance Optimization (for tuning techniques)
+*See also:* #xref("gpu-architecture", "gpu-fundamentals", label: "GPU Fundamentals") (for architecture overview), #xref("gpu-architecture", "memory-hierarchy", label: "Memory Hierarchy") (for memory access patterns), #xref("gpu-architecture", "performance-optimization", label: "Performance Optimization") (for tuning techniques)
 
 == Thread Hierarchy
 

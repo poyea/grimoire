@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Pipelining
 
 Pipelining overlaps instruction execution: while one instruction executes, the next instruction decodes, and the one after that fetches. Analogous to assembly line in manufacturing.
 
-*See also:* CPU Fundamentals (for instruction encoding), Superscalar (for multiple pipelines), Branch Prediction (for control hazards)
+*See also:* #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals") (for instruction encoding), #xref("cpu-architecture", "superscalar", label: "Superscalar") (for multiple pipelines), #xref("cpu-architecture", "branch-prediction", label: "Branch Prediction") (for control hazards)
 
 == Classic 5-Stage Pipeline
 
