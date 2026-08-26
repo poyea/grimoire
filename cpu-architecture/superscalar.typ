@@ -375,11 +375,15 @@ uops_dispatched_port.port_5 ./program
 # Balanced usage across ports = good ILP
 ```
 
+== References
+
+Tomasulo, R.M. (1967). "An Efficient Algorithm for Exploiting Multiple Arithmetic Units." IBM Journal of Research and Development 11(1): 25-33.
+
+Smith, J.E. & Sohi, G.S. (1995). "The Microarchitecture of Superscalar Processors." Proceedings of the IEEE 83(12): 1609-1624.
+
+Hennessy, J.L. & Patterson, D.A. (2017). Computer Architecture: A Quantitative Approach (6th ed.). Morgan Kaufmann. Chapter 3 (Instruction-Level Parallelism).
+
 == Further Reading
-
-Tomasulo, R. M. (1967). "An Efficient Algorithm for Exploiting Multiple Arithmetic Units." _IBM Journal of Research and Development_ 11(1): 25--33. --- The original dynamic-scheduling algorithm, as built for the IBM 360/91.
-
-Smith, J. E., & Sohi, G. S. (1995). "The Microarchitecture of Superscalar Processors." _Proceedings of the IEEE_ 83(12): 1609--1624.
 
 Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 3 (Instruction-Level Parallelism and Its Exploitation) is the canonical reference for dynamic scheduling, register renaming, speculation, and the ILP wall.
 
