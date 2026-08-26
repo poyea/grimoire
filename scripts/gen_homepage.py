@@ -303,7 +303,7 @@ def volume_page(i: int, slug: str, title: str, desc: str,
     <span><strong>CHAPTERS</strong> · {len(chs)}</span>
     <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="{pdf}">Download PDF ↓</a>
-    <a class="read" href="../__compiled/{slug}.html">Read online ↗</a>
+    <a class="read" href="../compile/{slug}.html">Read online ↗</a>
   </div>
   <div class="toc">
 {toc}

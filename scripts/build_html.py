@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export every volume to HTML under docs/__compiled/.
+"""Export every volume to HTML under docs/compile/.
 
 Typst's HTML export is still gated behind `--features html` and upstream
 labels it incomplete, so this is deliberately best-effort: a volume that
@@ -7,11 +7,11 @@ fails to export is reported and skipped rather than taking the whole
 Pages deploy down with it. Pass --strict to turn any failure into a
 nonzero exit.
 
-The output is generated at deploy time and never committed; docs/__compiled/
+The output is generated at deploy time and never committed; docs/compile/
 is gitignored.
 
 Usage:
-  build_html.py [--out docs/__compiled] [--typst typst] [--strict]
+  build_html.py [--out docs/compile] [--typst typst] [--strict]
 """
 from __future__ import annotations
 
@@ -160,7 +160,7 @@ def write_index(out_dir: Path,
         "<title>Compiled volumes — Grimoire</title>\n"
         '<meta name="description" content="Full text of every Grimoire volume, '
         'rendered to HTML from the Typst sources.">\n'
-        '<link rel="canonical" href="' + SITE + '__compiled/index.html">\n'
+        '<link rel="canonical" href="' + SITE + 'compile/index.html">\n'
         '<link href="' + FONTS + '" rel="stylesheet">\n'
         "<style>" + INDEX_CSS + "</style>\n"
         "</head>\n<body>\n"
@@ -182,7 +182,7 @@ def write_index(out_dir: Path,
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--out", default="docs/__compiled")
+    ap.add_argument("--out", default="docs/compile")
     ap.add_argument("--typst", default="typst")
     ap.add_argument("--strict", action="store_true",
                     help="exit nonzero if any volume fails to export")

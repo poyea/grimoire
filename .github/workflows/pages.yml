@@ -30,7 +30,7 @@ jobs:
       - uses: ./.github/actions/setup-typst
       # Typst HTML export is experimental, so this is best-effort: a volume
       # that fails is skipped and logged rather than blocking the deploy.
-      # Output lands in docs/__compiled/ and is never committed.
+      # Output lands in docs/compile/ and is never committed.
       - name: Export volumes to HTML
         run: python3 scripts/build_html.py
       - uses: actions/configure-pages@v4

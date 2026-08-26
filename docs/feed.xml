@@ -4,8 +4,15 @@
   <link href="https://poyea.github.io/grimoire/"/>
   <link rel="self" href="https://poyea.github.io/grimoire/feed.xml"/>
   <id>https://poyea.github.io/grimoire/</id>
-  <updated>2026-08-26T01:32:33Z</updated>
+  <updated>2026-08-26T23:51:57Z</updated>
   <author><name>poyea</name></author>
+  <entry>
+    <title>Grimoire v0.19.0</title>
+    <link href="https://github.com/poyea/grimoire/releases/tag/v0.19.0"/>
+    <id>https://github.com/poyea/grimoire/releases/tag/v0.19.0</id>
+    <updated>2026-08-26T02:32:35+01:00</updated>
+    <summary>Release v0.19.0 of the Grimoire volumes.</summary>
+  </entry>
   <entry>
     <title>Grimoire v0.18.0</title>
     <link href="https://github.com/poyea/grimoire/releases/tag/v0.18.0"/>
@@ -103,12 +110,5 @@
     <id>https://github.com/poyea/grimoire/releases/tag/v0.5.0</id>
     <updated>2026-06-05T17:32:16Z</updated>
     <summary>Release v0.5.0 of the Grimoire volumes.</summary>
-  </entry>
-  <entry>
-    <title>Grimoire v0.4.0</title>
-    <link href="https://github.com/poyea/grimoire/releases/tag/v0.4.0"/>
-    <id>https://github.com/poyea/grimoire/releases/tag/v0.4.0</id>
-    <updated>2026-06-03T01:46:53+01:00</updated>
-    <summary>Release v0.4.0 of the Grimoire volumes.</summary>
   </entry>
 </feed>
