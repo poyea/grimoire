@@ -198,7 +198,7 @@ ip netns exec ctr1 ip addr add 10.244.0.5/24 dev eth0
 ip netns exec ctr1 ip route add default via 10.244.0.1
 ```
 
-CNI plugins are detailed in _Kubernetes Internals_.
+CNI plugins are detailed in #xref("cloud-and-infrastructure", "kubernetes-internals", label: "Kubernetes Internals").
 
 == Resource Limits via Cgroups v2
 

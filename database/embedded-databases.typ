@@ -84,7 +84,7 @@ DuckDB stores data as *row groups* (default 122 880 rows) split into *vectors* (
 
 === Vectorized Push Engine
 
-(Discussed in detail in _Column Stores and Vectorized Execution_ and _SQL Engine Internals_.) The engine streams `DataChunk` columnar batches through pipelines. Aggregation uses thread-local hash tables that combine via a final merge.
+(Discussed in detail in #xref("database", "column-stores-and-vectorized-execution", label: "Column Stores and Vectorized Execution") and #xref("database", "sql-engines-internals", label: "SQL Engine Internals").) The engine streams `DataChunk` columnar batches through pipelines. Aggregation uses thread-local hash tables that combine via a final merge.
 
 === Interop
 
@@ -108,7 +108,7 @@ RocksDB (Facebook, 2012) is a fork of LevelDB tuned for server SSDs. It powers M
 
 === Architecture
 
-LSM-tree with memtable (skiplist or hashskiplist) → SSTs in $L_0 ... L_n$. See _Storage Engines_ for level vs tiered details. RocksDB exposes column families, snapshots, prefix bloom filters, and per-CF compaction tuning.
+LSM-tree with memtable (skiplist or hashskiplist) → SSTs in $L_0 ... L_n$. See #xref("database", "storage-engines", label: "Storage Engines") for level vs tiered details. RocksDB exposes column families, snapshots, prefix bloom filters, and per-CF compaction tuning.
 
 === Column Families
 

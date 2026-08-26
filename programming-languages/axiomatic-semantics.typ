@@ -268,7 +268,7 @@ Iris formalizes such proofs to the point of machine-checked completeness; the sa
 Hoare logic and type systems are different presentations of *static reasoning*. Two convergence points:
 
 - *Refinement types* (Freeman-Pfenning 1991; Vazou et al. for Liquid Haskell). A type ${nu : "Int" | nu > 0}$ refines `Int` with a logical predicate. Type checking discharges verification conditions to an SMT solver. This is *axiomatic semantics integrated into the type checker*.
-- *Hoare Type Theory* (HTT, Nanevski-Morrisett-Birkedal 2008). The type $"Hoare"(P, A, Q)$ classifies effectful computations producing $A$ with precondition $P$ and postcondition $Q$. Sequencing is monadic bind; the whole apparatus is a *monad* (cf. _Categorical Semantics_). $F^*$ (Microsoft Research) is the production heir of HTT.
+- *Hoare Type Theory* (HTT, Nanevski-Morrisett-Birkedal 2008). The type $"Hoare"(P, A, Q)$ classifies effectful computations producing $A$ with precondition $P$ and postcondition $Q$. Sequencing is monadic bind; the whole apparatus is a *monad* (cf. #xref("programming-languages", "categorical-semantics", label: "Categorical Semantics")). $F^*$ (Microsoft Research) is the production heir of HTT.
 
 == Tool Ecosystem
 

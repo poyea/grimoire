@@ -295,7 +295,7 @@ The derivative-based matcher is the basis of Owens, Reppy, and Turon's "Regular-
 
 - *$omega$-regular languages.* Büchi, Muller, Rabin, Streett, and parity automata on infinite words each define the same class ($omega$-regular) but with different complementation/determinisation complexities (Safra's determinisation 1988 of NBA to deterministic Rabin automata is the cornerstone of LTL model checking).
 
-- *Visibly pushdown languages.* (Treated in the chapter _Pushdown Automata and Beyond_.) These extend regular closure properties beyond context-free by partitioning $Sigma$ into call/return/internal letters.
+- *Visibly pushdown languages.* (Treated in the chapter #xref("programming-languages", "pushdown-and-beyond", label: "Pushdown Automata and Beyond").) These extend regular closure properties beyond context-free by partitioning $Sigma$ into call/return/internal letters.
 
 The chapter on context-free languages takes up the next layer of the hierarchy, where decidability begins to fracture and the algebra is no longer that of a finitely-presented monoid.
 

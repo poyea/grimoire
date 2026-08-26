@@ -2,7 +2,7 @@
 
 = Virtual Memory
 
-Virtual memory is the abstraction that lets every process believe it owns a private, contiguous, enormous address space while the kernel quietly multiplexes a finite set of physical frames behind it. The machinery is a collaboration: the MMU translates on every reference, the TLB caches translations, and the kernel fills in the gaps via page faults. This chapter covers the architectural mechanics: translation structures, TLB behavior, fault handling, copy-on-write, huge pages, and NUMA placement. Linux's `mmap` interface and VMA bookkeeping live in `linux-kernel/mmap-memory.typ`; allocator and reclaim policy are in _Memory Management_ and _Page Reclaim and OOM_.
+Virtual memory is the abstraction that lets every process believe it owns a private, contiguous, enormous address space while the kernel quietly multiplexes a finite set of physical frames behind it. The machinery is a collaboration: the MMU translates on every reference, the TLB caches translations, and the kernel fills in the gaps via page faults. This chapter covers the architectural mechanics: translation structures, TLB behavior, fault handling, copy-on-write, huge pages, and NUMA placement. Linux's `mmap` interface and VMA bookkeeping live in `linux-kernel/mmap-memory.typ`; allocator and reclaim policy are in #xref("operating-systems", "memory-management", label: "Memory Management") and #xref("operating-systems", "page-reclaim-and-oom", label: "Page Reclaim and OOM").
 
 *See also:* #xref("operating-systems", "memory-management", label: "Memory Management"), #xref("operating-systems", "page-reclaim-and-oom", label: "Page Reclaim and OOM"), #xref("operating-systems", "processes-and-threads", label: "Processes and Threads"), #xref("linux-kernel", "mmap-memory", label: "mmap and Memory Management") (linux-kernel), #xref("linux-kernel", "memory-reclaim", label: "Memory Reclaim") (linux-kernel); #xref("cpu-architecture", "virtual-memory", label: "Virtual Memory") (the hardware side: page-table walks, TLB structure, huge pages).
 
@@ -22,7 +22,7 @@ Properties of the radix design:
 - *Walk cost*: a TLB miss costs up to 4-5 dependent memory reads. Hardware *page-walk caches* (x86 calls them paging-structure caches) cache upper-level entries so most walks resolve in 1-2 reads.
 - *Permission bits at every level*: a non-writable PD entry makes the whole 2 MB region read-only regardless of leaf PTEs; the effective permission is the intersection.
 
-Each leaf PTE carries the PFN plus control bits: present, writable, user/supervisor, *accessed* (set by hardware on any reference), *dirty* (set on write), no-execute, and cache-type bits. The accessed and dirty bits are the raw material for reclaim algorithms (see _Page Reclaim and OOM_).
+Each leaf PTE carries the PFN plus control bits: present, writable, user/supervisor, *accessed* (set by hardware on any reference), *dirty* (set on write), no-execute, and cache-type bits. The accessed and dirty bits are the raw material for reclaim algorithms (see #xref("operating-systems", "page-reclaim-and-oom", label: "Page Reclaim and OOM")).
 
 === Inverted and Hashed Page Tables
 
@@ -95,7 +95,7 @@ On multi-socket (and increasingly multi-chiplet) machines, physical frames live 
 - *Explicit binding*: `mbind`/`numactl` pin a range to a node set.
 - *Dynamic migration*: the kernel samples access patterns (Linux's AutoNUMA periodically unmaps pages and observes which node faults them back) and migrates pages toward their consumers, or tasks toward their memory.
 
-Tiered memory (CXL expanders, persistent memory) generalizes the picture: nodes differ not just in distance but in kind, and the placement problem becomes promotion/demotion across tiers — covered from the reclaim side in _Page Reclaim and OOM_.
+Tiered memory (CXL expanders, persistent memory) generalizes the picture: nodes differ not just in distance but in kind, and the placement problem becomes promotion/demotion across tiers — covered from the reclaim side in #xref("operating-systems", "page-reclaim-and-oom", label: "Page Reclaim and OOM").
 
 == Pitfalls
 

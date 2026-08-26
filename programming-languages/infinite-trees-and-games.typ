@@ -32,7 +32,7 @@ Streett, Muller, and parity tree automata are defined analogously, replacing the
 
 === Equivalence of Acceptance Conditions
 
-*Theorem.* Nondeterministic Rabin, Streett, Muller, and parity tree automata recognise the same class of tree languages -- the *regular tree languages*. Deterministic versions are *strictly weaker*: deterministic top-down tree automata cannot even recognise some regular *finite*-tree languages (see _Tree Automata_).
+*Theorem.* Nondeterministic Rabin, Streett, Muller, and parity tree automata recognise the same class of tree languages -- the *regular tree languages*. Deterministic versions are *strictly weaker*: deterministic top-down tree automata cannot even recognise some regular *finite*-tree languages (see #xref("programming-languages", "tree-automata", label: "Tree Automata")).
 
 The proofs go via determinisation of $omega$-automata applied path-wise, plus the simulation theorem for alternating automata below.
 
@@ -241,7 +241,7 @@ Three themes recur throughout the theory of infinite trees and games:
 
 3. *Fixed points span the spectrum.* The $mu$-calculus is the lingua franca: it expresses exactly the bisimulation-invariant fragment of MSO, its model checking reduces to parity games, and its alternation depth is the right complexity measure for both expressiveness (Bradfield) and algorithm (Jurdziński, CJKLS).
 
-These threads continue in _Tree Automata_, where the same patterns recur in the finite-tree setting and the resulting theory powers everything from algebraic data type analysis to Courcelle's theorem on bounded tree-width graphs.
+These threads continue in #xref("programming-languages", "tree-automata", label: "Tree Automata"), where the same patterns recur in the finite-tree setting and the resulting theory powers everything from algebraic data type analysis to Courcelle's theorem on bounded tree-width graphs.
 
 == Worked Examples on the Infinite Binary Tree
 
@@ -360,7 +360,7 @@ Three threads connect this chapter to the rest of the volume.
 
 *Fixed points and computation.* The $mu$-calculus is the canonical fixed-point logic, expressively complete (modulo bisimulation) for branching-time MSO properties of transition systems. Its model checking, its synthesis, its alternation hierarchy -- all are governed by the same parity-game / tree-automaton machinery.
 
-Together with _Omega-Automata_ (the linear-time / word-shaped half) and _Tree Automata_ (the finite-word / finite-tree half), this chapter completes the picture of automata theory adapted to nonterminating and branching systems. The unifying lesson is that *infinite computation is not a degeneration of finite computation* -- it has its own rich and orderly theory, and the right algorithmic tools (Safra trees, parity games, $mu$-calculus fixed points) make it computationally tractable.
+Together with _Omega-Automata_ (the linear-time / word-shaped half) and #xref("programming-languages", "tree-automata", label: "Tree Automata") (the finite-word / finite-tree half), this chapter completes the picture of automata theory adapted to nonterminating and branching systems. The unifying lesson is that *infinite computation is not a degeneration of finite computation* -- it has its own rich and orderly theory, and the right algorithmic tools (Safra trees, parity games, $mu$-calculus fixed points) make it computationally tractable.
 
 == Further Reading
 

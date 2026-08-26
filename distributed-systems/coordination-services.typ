@@ -81,7 +81,7 @@ The sequential ephemeral node recipe guarantees no herd effect: each waiter watc
 
 == etcd
 
-etcd (CoreOS 2013, now CNCF) is the backing store for Kubernetes and many cloud-native systems. It implements *Raft* (see _Consensus Deep Dive_) and exposes a versioned key-value API with gRPC.
+etcd (CoreOS 2013, now CNCF) is the backing store for Kubernetes and many cloud-native systems. It implements *Raft* (see #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive")) and exposes a versioned key-value API with gRPC.
 
 === MVCC Store
 

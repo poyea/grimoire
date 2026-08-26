@@ -136,7 +136,7 @@ Three modes:
 - *Generic XDP*: runs after skb allocation (`netif_receive_skb`). Works on any device at ~half the throughput of native.
 - *Offloaded XDP*: program JITs into NIC firmware (Netronome). Niche.
 
-`AF_XDP` is the userspace zero-copy sibling: an XDP program redirects a frame into a userspace ring (`UMEM`), and a user process processes it without any kernel TCP/IP involvement at all. This is the polite alternative to DPDK. See _Kernel Bypass_ in the networking volume.
+`AF_XDP` is the userspace zero-copy sibling: an XDP program redirects a frame into a userspace ring (`UMEM`), and a user process processes it without any kernel TCP/IP involvement at all. This is the polite alternative to DPDK. See #xref("networking", "kernel-bypass", label: "Kernel Bypass") in the networking volume.
 
 == Netfilter and nftables
 

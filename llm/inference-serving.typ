@@ -2,7 +2,7 @@
 
 = Inference Serving
 
-*Serving-level optimization:* This chapter covers the techniques that govern how LLM inference servers manage memory, schedule requests, and achieve high throughput in production. It continues from _Inference Optimization_ (KV cache, decoding strategies, speculative decoding, continuous batching).
+*Serving-level optimization:* This chapter covers the techniques that govern how LLM inference servers manage memory, schedule requests, and achieve high throughput in production. It continues from #xref("llm", "inference-optimization", label: "Inference Optimization") (KV cache, decoding strategies, speculative decoding, continuous batching).
 
 *See also:* #xref("llm", "inference-optimization", label: "Inference Optimization") (KV cache, batching fundamentals), #xref("llm", "transformer-architecture", label: "Transformer Architecture"), #xref("gpu-architecture", "memory-hierarchy", label: "GPU Memory Hierarchy (GPU Architecture volume)").
 

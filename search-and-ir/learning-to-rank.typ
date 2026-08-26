@@ -55,7 +55,7 @@ Pairs whose swap would move a relevant document into the top ranks get large gra
 
 LambdaMART (Burges, 2010) drives gradient-boosted regression trees (MART) with lambda gradients instead of a neural network: each boosting round fits a small tree to the per-document lambdas and updates scores additively. It won the Yahoo! Learning to Rank Challenge (2010) and remains the strongest baseline on tabular ranking features. Production implementations: LightGBM (`lambdarank` objective), XGBoost (`rank:ndcg`), and the Elasticsearch/OpenSearch LTR plugins, which apply such models as a rescorer.
 
-Why trees beat neural networks here: LTR features are heterogeneous tabular signals (scores, counts, ratios, booleans) with non-smooth interactions, exactly where GBDTs excel; neural rankers win only when they consume raw text (see _Neural Retrieval_).
+Why trees beat neural networks here: LTR features are heterogeneous tabular signals (scores, counts, ratios, booleans) with non-smooth interactions, exactly where GBDTs excel; neural rankers win only when they consume raw text (see #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval")).
 
 == Features
 

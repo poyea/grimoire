@@ -339,7 +339,7 @@ int veb_index(int i, int h) {
 
 === Segment Trees and Fenwick Trees
 
-Both are array-based trees for $O(log n)$ range queries and updates: the segment tree stores aggregates over halved intervals in a 4n array (with lazy propagation for range updates), and the Fenwick tree packs prefix sums into n+1 slots using the `i & -i` lowest-set-bit trick. Implementations, lazy propagation, 2D variants, and persistence are covered in depth in the dedicated _Segment Trees and Range Queries_ chapter.
+Both are array-based trees for $O(log n)$ range queries and updates: the segment tree stores aggregates over halved intervals in a 4n array (with lazy propagation for range updates), and the Fenwick tree packs prefix sums into n+1 slots using the `i & -i` lowest-set-bit trick. Implementations, lazy propagation, 2D variants, and persistence are covered in depth in the dedicated #xref("coding", "segment-trees", label: "Segment Trees and Range Queries") chapter.
 
 
 == Cache-Oblivious Algorithms for Trees

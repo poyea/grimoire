@@ -45,7 +45,7 @@ A *context map* documents the relationships between bounded contexts, including 
   [Separate ways], [No integration; duplicate the small overlap],
 )
 
-The *anticorruption layer* deserves emphasis: when integrating with a legacy system or a vendor API, a thin adapter and translator layer keeps the foreign model from leaking into your context. ACLs are also the standard mechanism in strangler-fig migrations (see _Evolutionary Architecture_).
+The *anticorruption layer* deserves emphasis: when integrating with a legacy system or a vendor API, a thin adapter and translator layer keeps the foreign model from leaking into your context. ACLs are also the standard mechanism in strangler-fig migrations (see #xref("software-architecture", "evolutionary-architecture", label: "Evolutionary Architecture")).
 
 == Tactical Patterns: Aggregates, Entities, Value Objects
 
@@ -78,7 +78,7 @@ Rule 4 is why aggregates map cleanly to distributed systems: the aggregate bound
 A *domain event* is an immutable record of something that happened in the domain, named in the past tense in the ubiquitous language: `OrderPlaced`, `PaymentCaptured`, `PolicyLapsed`. Introduced informally by Evans and elaborated by Vernon, domain events serve three roles:
 
 - Within a context: decouple side effects (when `OrderPlaced`, the loyalty module awards points) from the command that caused them.
-- Between contexts: the published event becomes the integration contract, often delivered through a broker with an outbox (see _Event-Driven Architecture_).
+- Between contexts: the published event becomes the integration contract, often delivered through a broker with an outbox (see #xref("software-architecture", "event-driven-architecture", label: "Event-Driven Architecture")).
 - As a modelling tool: events are the things domain experts naturally narrate, which is what event storming exploits.
 
 A common discipline: an aggregate method validates a command, mutates state, and records one or more events; infrastructure dispatches them after the transaction commits, avoiding ghost events from rolled-back transactions.

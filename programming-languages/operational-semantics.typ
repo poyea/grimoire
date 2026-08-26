@@ -226,7 +226,7 @@ The thunk $U underbar(B)$ is the value type of suspended computations; the retur
 
 *Embedding CBN.* Translate function type $A_1 arrow.r A_2$ to $(U F A_1) arrow.r (F A_2)$ -- the argument is a thunk producing a value. Variables become forces of thunks.
 
-Both translations are sound and adequate; CBPV is the *meta-calculus* in which CBV and CBN are sub-languages. Categorically, CBPV is the internal language of an *adjunction* $F tack.l U$ between a category of values and a category of computations -- which links back to Moggi's monadic semantics (see _Categorical Semantics_).
+Both translations are sound and adequate; CBPV is the *meta-calculus* in which CBV and CBN are sub-languages. Categorically, CBPV is the internal language of an *adjunction* $F tack.l U$ between a category of values and a category of computations -- which links back to Moggi's monadic semantics (see #xref("programming-languages", "categorical-semantics", label: "Categorical Semantics")).
 
 == Bisimulation and Program Equivalence
 
@@ -252,7 +252,7 @@ The central question is whether applicative bisimilarity *is a congruence* -- cl
 
 The gold standard for program equivalence is *contextual* (or *observational*) equivalence: $e_1 tilde.equiv_"ctx" e_2$ <==> for every program context $C[dot]$ such that $C[e_1]$ and $C[e_2]$ are closed and well-typed, $C[e_1]$ converges <==> $C[e_2]$ converges (and produces the same observable answer at the base type).
 
-Contextual equivalence quantifies over *"all"* contexts. Direct proofs are infeasible. Sound proof techniques include applicative bisimulation (when Howe's method applies), logical relations (next section), and game-semantic models (see _Denotational Semantics_).
+Contextual equivalence quantifies over *"all"* contexts. Direct proofs are infeasible. Sound proof techniques include applicative bisimulation (when Howe's method applies), logical relations (next section), and game-semantic models (see #xref("programming-languages", "denotational-semantics", label: "Denotational Semantics")).
 
 A semantics $bracket.l.stroked dot bracket.r.stroked$ is *sound* if $bracket.l.stroked e_1 bracket.r.stroked = bracket.l.stroked e_2 bracket.r.stroked$ => $e_1 tilde.equiv_"ctx" e_2$, and *complete* (or *fully abstract*) if the converse holds. Full abstraction is the central yardstick connecting denotation and operation: a fully abstract model has neither too few nor too many equations.
 

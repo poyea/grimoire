@@ -84,7 +84,7 @@ CLIP enables zero-shot classification: encode a class as "a photo of a {class}" 
 
 === Multimodal LLMs
 
-To build a multimodal LLM (see also _Transformer Architecture_):
+To build a multimodal LLM (see also #xref("llm", "transformer-architecture", label: "Transformer Architecture")):
 1. *Visual encoder*: pre-trained ViT (CLIP, SigLIP, DINOv2).
 2. *Projector*: linear layer, MLP, or Q-Former that maps visual tokens to the LLM's embedding space.
 3. *LLM*: pre-trained language model (LLaMA, Mistral, Gemma).

@@ -77,7 +77,7 @@ Each pair encodes a *fairness assumption* if $L_i$ infinitely often, then $U_i$ 
 
 A *parity automaton* has a priority function $Omega : Q arrow.r {0, 1, dots, d}$. A run is accepting iff the *maximum* priority appearing infinitely often is even:
 $ max { Omega(q) | q in "Inf"(rho) } "is even". $
-The dual min-parity condition (minimum priority infinitely often is even) is equivalent up to negating priorities. The integer $d$ is the *index*. Parity automata are central because they combine determinisability (every NBA admits a deterministic parity equivalent, Piterman) with positional determinacy of the associated infinite games (Emerson--Jutla, Mostowski) -- see _Infinite Trees and Games_.
+The dual min-parity condition (minimum priority infinitely often is even) is equivalent up to negating priorities. The integer $d$ is the *index*. Parity automata are central because they combine determinisability (every NBA admits a deterministic parity equivalent, Piterman) with positional determinacy of the associated infinite games (Emerson--Jutla, Mostowski) -- see #xref("programming-languages", "infinite-trees-and-games", label: "Infinite Trees and Games").
 
 === The Acceptance Hierarchy
 
@@ -282,7 +282,7 @@ This stratification is the *Wagner hierarchy* (1979): a strict hierarchy of $ome
 
 == Connections and Outlook
 
-Every chapter that follows uses $omega$-automata as a black box. _Infinite Trees and Games_ generalises the alphabet from finite words to infinite trees, replaces limit set by branch-wise acceptance, and proves Rabin's theorem on the decidability of S2S. _Tree Automata_ studies the *finite-word* analogue -- automata on finite trees -- whose theory underpins program analysis, XML schema validation, and Courcelle's theorem. The model-checking pipeline (LTL $arrow.r$ NBA $arrow.r$ product $arrow.r$ emptiness, or $mu$-calculus $arrow.r$ parity game $arrow.r$ solve) is implemented in tools such as SPIN, NuSMV, and PRISM, discussed in the formal methods chapters.
+Every chapter that follows uses $omega$-automata as a black box. #xref("programming-languages", "infinite-trees-and-games", label: "Infinite Trees and Games") generalises the alphabet from finite words to infinite trees, replaces limit set by branch-wise acceptance, and proves Rabin's theorem on the decidability of S2S. #xref("programming-languages", "tree-automata", label: "Tree Automata") studies the *finite-word* analogue -- automata on finite trees -- whose theory underpins program analysis, XML schema validation, and Courcelle's theorem. The model-checking pipeline (LTL $arrow.r$ NBA $arrow.r$ product $arrow.r$ emptiness, or $mu$-calculus $arrow.r$ parity game $arrow.r$ solve) is implemented in tools such as SPIN, NuSMV, and PRISM, discussed in the formal methods chapters.
 
 The principal open questions of the field remain:
 
@@ -291,7 +291,7 @@ The principal open questions of the field remain:
 - Are there practical, scalable algorithms for LTL synthesis approaching the worst-case $2^(2^(O(|phi|)))$?
 - Is there a *single-exponential* determinisation construction matching the $2^(Omega(n))$ trivial lower bound (rather than $2^(Omega(n log n))$)? (No: Michel's lower bound $2^(Omega(n log n))$ is tight.)
 
-Across these questions, the same handful of ideas recur: subset / Safra-tree constructions, positional determinacy, fixed-point iteration, and the topological structure of $Sigma^omega$. The chapter on _Infinite Trees and Games_ pushes each of these from words to trees, with consequences that include the strongest known decidable theory of arithmetic-like structures.
+Across these questions, the same handful of ideas recur: subset / Safra-tree constructions, positional determinacy, fixed-point iteration, and the topological structure of $Sigma^omega$. The chapter on #xref("programming-languages", "infinite-trees-and-games", label: "Infinite Trees and Games") pushes each of these from words to trees, with consequences that include the strongest known decidable theory of arithmetic-like structures.
 
 
 == Further Reading

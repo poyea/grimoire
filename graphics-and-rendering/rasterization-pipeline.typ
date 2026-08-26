@@ -110,7 +110,7 @@ void MeshMain(uint gid : SV_GroupID, uint tid : SV_GroupThreadID,
 }
 ```
 
-Meshlets enable per-cluster culling (frustum, backface cone, $"HZB"$ occlusion) before rasterization — the foundation of Unreal Nanite (covered in _Real-Time Engine Architecture_).
+Meshlets enable per-cluster culling (frustum, backface cone, $"HZB"$ occlusion) before rasterization — the foundation of Unreal Nanite (covered in #xref("graphics-and-rendering", "realtime-engines", label: "Real-Time Engine Architecture")).
 
 == Multisample, Supersample, and Coverage
 

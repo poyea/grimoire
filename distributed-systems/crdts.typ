@@ -26,7 +26,7 @@ A state-based CRDT is a triple: a set of states $S$, a partial order $subset.sq.
 - *Associative:* $(a union.sq b) union.sq c = a union.sq (b union.sq c)$
 - *Idempotent:* $a union.sq a = a$
 
-Updates must be *inflations*: every update moves the state upward in the order ($s subset.sq.eq "update"(s)$). Given these properties, the convergence proof is short: any two replicas that have absorbed the same set of updates hold the join of those updates' effects, and the join of a set is unique in a semilattice; commutativity and associativity make the merge order irrelevant, and idempotence makes duplicate delivery harmless. Replication therefore needs only an unreliable, unordered transport. Gossip and anti-entropy (see _Gossip Protocols_) are a perfect fit.
+Updates must be *inflations*: every update moves the state upward in the order ($s subset.sq.eq "update"(s)$). Given these properties, the convergence proof is short: any two replicas that have absorbed the same set of updates hold the join of those updates' effects, and the join of a set is unique in a semilattice; commutativity and associativity make the merge order irrelevant, and idempotence makes duplicate delivery harmless. Replication therefore needs only an unreliable, unordered transport. Gossip and anti-entropy (see #xref("distributed-systems", "gossip", label: "Gossip Protocols")) are a perfect fit.
 
 The cost is payload size: naive CvRDTs ship the entire state on every exchange.
 
@@ -34,7 +34,7 @@ The cost is payload size: naive CvRDTs ship the entire state on every exchange.
 
 An op-based CRDT ships operations instead of states. Each update splits into a *prepare* phase (executed once, at the origin, may read local state to produce the operation, e.g. generating a unique tag) and an *effect* phase (executed at every replica). Convergence requires that *concurrent* effects commute; effects related by happens-before may be ordered.
 
-Because effects are not idempotent in general, op-based CRDTs push requirements onto the transport: *exactly-once, causal delivery*. Causal broadcast (Birman 1991; see _Time and Order_) provides exactly this, at the cost of vector-clock metadata and delivery buffering. The two formulations are formally equivalent: each can emulate the other (the 2011 paper gives both constructions), so the choice is an engineering trade between bandwidth (state-based) and delivery machinery (op-based).
+Because effects are not idempotent in general, op-based CRDTs push requirements onto the transport: *exactly-once, causal delivery*. Causal broadcast (Birman 1991; see #xref("distributed-systems", "time-and-order", label: "Time and Order")) provides exactly this, at the cost of vector-clock metadata and delivery buffering. The two formulations are formally equivalent: each can emulate the other (the 2011 paper gives both constructions), so the choice is an engineering trade between bandwidth (state-based) and delivery machinery (op-based).
 
 == Canonical CRDTs
 
@@ -44,13 +44,13 @@ The grow-only counter keeps one entry per replica; increment bumps your own entr
 
 === LWW-Register
 
-A register holding $("value", "timestamp")$; merge keeps the entry with the larger timestamp, tie-broken by replica ID. This is a semilattice on the lexicographic order of $("timestamp", "replica id")$. The semantics are exactly as good as the timestamps: with wall clocks, skew silently drops writes (the Cassandra failure mode catalogued in _Time and Order_); HLC timestamps restore causal monotonicity, so a write never loses to an update it causally followed. The alternative, the *MV-Register*, keeps all concurrent values (a version-vector-guarded set, as in Dynamo) and pushes the choice to the reader.
+A register holding $("value", "timestamp")$; merge keeps the entry with the larger timestamp, tie-broken by replica ID. This is a semilattice on the lexicographic order of $("timestamp", "replica id")$. The semantics are exactly as good as the timestamps: with wall clocks, skew silently drops writes (the Cassandra failure mode catalogued in #xref("distributed-systems", "time-and-order", label: "Time and Order")); HLC timestamps restore causal monotonicity, so a write never loses to an update it causally followed. The alternative, the *MV-Register*, keeps all concurrent values (a version-vector-guarded set, as in Dynamo) and pushes the choice to the reader.
 
 === OR-Set: Add-Wins and Remove-Wins
 
 A 2P-Set (a grow-only "added" set plus a grow-only tombstone set) forbids re-adding a removed element. The *Observed-Remove Set* fixes this with unique tags: `add(e)` creates a fresh tag $(("replica"), ("counter"))$ for $e$; `remove(e)` deletes exactly the tags *observed locally* at the time of removal. A concurrent `add(e)` carries a tag the remover never saw, so the element survives: *add-wins* semantics. The dual *remove-wins* set tombstones the element itself so that a concurrent remove beats any concurrent add; it is rarer in practice but offered by Riak alongside the add-wins variant. Which is "right" is an application decision (shopping carts famously want add-wins; access-control lists arguably want remove-wins).
 
-The *optimized OR-Set* of Bieniusa et al. (2012) eliminates per-element tombstones by keeping a version vector of seen dots: a tag absent from the element set but covered by the vector is known-removed. This is the same causal-context idea as dotted version vectors (see _Causal Consistency_) and bounds metadata to $O("elements" + "replicas")$.
+The *optimized OR-Set* of Bieniusa et al. (2012) eliminates per-element tombstones by keeping a version vector of seen dots: a tag absent from the element set but covered by the vector is known-removed. This is the same causal-context idea as dotted version vectors (see #xref("distributed-systems", "causal-consistency", label: "Causal Consistency")) and bounds metadata to $O("elements" + "replicas")$.
 
 === Sequence CRDTs: RGA and Friends
 
@@ -86,7 +86,7 @@ CRDT metadata only grows: OR-Set tags, sequence tombstones, per-replica counter 
 
 A CRDT guarantees convergence, not correctness of application invariants that span replicas. You cannot, coordination-free, maintain "balance $>= 0$", "at most one seat 14A", or "usernames are unique": two partitioned replicas can each locally satisfy the invariant while their join violates it. This is not an implementation gap but a theorem. The CALM result (Hellerstein and Alvaro 2020) states that exactly the *monotone* programs have coordination-free, consistent implementations, and invariants like non-negativity are non-monotone (adding information, a decrement, can falsify them). The *escrow* technique partitions a numeric budget across replicas so each can decrement its share locally, reintroducing coordination only on rebalance; bounded counters in Antidote take this approach.
 
-When the invariant is real, use consensus for the invariant-bearing decisions and CRDTs for everything else (see _Consensus Deep Dive_). Mixed designs are common: Riak uses CRDTs per key but strong consistency buckets when needed; RedBlue consistency (Li et al. 2012) formalizes the split into coordination-free "blue" and serialized "red" operations.
+When the invariant is real, use consensus for the invariant-bearing decisions and CRDTs for everything else (see #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive")). Mixed designs are common: Riak uses CRDTs per key but strong consistency buckets when needed; RedBlue consistency (Li et al. 2012) formalizes the split into coordination-free "blue" and serialized "red" operations.
 
 == Where CRDTs Run Today
 

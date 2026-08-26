@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Subtyping and Polymorphism
 
 Subtyping is the principle that lets you pass a `Cat` to a function expecting an `Animal`. Polymorphism is the principle that lets a function operate uniformly across types it does not name. Where pure parametric polymorphism (System F) erases all type information at runtime and forbids any inspection, subtyping adds a *partial order* on types; the resulting interaction with type constructors, references, generics, and recursion is the source of three decades of language-design subtlety.
 
-_See also: _Type Systems_, _Linear and Substructural Type Systems_, _Effects and Handlers_._
+_See also: _Type Systems_, #xref("programming-languages", "linear-and-substructural", label: "Linear and Substructural Type Systems"), #xref("programming-languages", "effects-and-handlers", label: "Effects and Handlers")._
 
 == The Subsumption Rule
 
@@ -373,7 +375,7 @@ A modern language designer's pragmatic recipe: *prefer parametric polymorphism w
 
 The historical lesson, repeated in Eiffel, Java, Scala 2, and TypeScript, is that subtyping is *easy* to add and *hard* to make sound, decidable, and predictable simultaneously. The pieces are well understood now; the design tasks remaining are tasteful selection from the menu, not invention of fundamentally new machinery.
 
-_See also: _Type Systems_ for the basic subsumption rule and parametric polymorphism, _Linear and Substructural Type Systems_ for the orthogonal axis of how often a value is used, _Effects and Handlers_ for the analogous question on the side-effect axis._
+_See also: _Type Systems_ for the basic subsumption rule and parametric polymorphism, #xref("programming-languages", "linear-and-substructural", label: "Linear and Substructural Type Systems") for the orthogonal axis of how often a value is used, #xref("programming-languages", "effects-and-handlers", label: "Effects and Handlers") for the analogous question on the side-effect axis._
 
 == Further Reading
 

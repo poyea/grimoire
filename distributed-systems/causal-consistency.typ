@@ -2,7 +2,7 @@
 
 = Causal Consistency
 
-Causal consistency is the strongest consistency model that remains available under partition: replicas must apply writes in an order consistent with happens-before, but concurrent writes may be observed in different orders at different replicas. _Time and Order_ introduced the clock machinery (Lamport, vector clocks, HLC); this chapter uses that machinery to build *systems*: causally consistent stores, the metadata they carry, the session guarantees they decompose into, and the stability protocols that let them prune state.
+Causal consistency is the strongest consistency model that remains available under partition: replicas must apply writes in an order consistent with happens-before, but concurrent writes may be observed in different orders at different replicas. #xref("distributed-systems", "time-and-order", label: "Time and Order") introduced the clock machinery (Lamport, vector clocks, HLC); this chapter uses that machinery to build *systems*: causally consistent stores, the metadata they carry, the session guarantees they decompose into, and the stability protocols that let them prune state.
 
 *See also:* #xref("distributed-systems", "time-and-order", label: "Time and Order") (clock algorithms and causal broadcast), #xref("distributed-systems", "crdts", label: "CRDTs") (op-based CRDTs require causal delivery), #xref("distributed-systems", "transactions", label: "Transactions") (stronger isolation levels), #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive") (linearizability, which causal consistency deliberately forgoes).
 
@@ -28,7 +28,7 @@ Everything in causal systems reduces to: how do you represent "what this write d
 
 === Vector Clocks and Their Cost
 
-A full vector clock ($O(N)$ entries for $N$ writers, see _Time and Order_) characterizes causality exactly; Charron-Bost (1991) proved $O(N)$ is necessary for any timestamp scheme that captures concurrency precisely. For a datacenter with a handful of nodes this is fine; for a system where every client device is a writer, it is unbounded, and pruning entries reintroduces false concurrency or false ordering. Systems therefore choose where to spend: track fewer dependencies (coarser, more conservative ordering) or track them per-key (more metadata, more parallelism).
+A full vector clock ($O(N)$ entries for $N$ writers, see #xref("distributed-systems", "time-and-order", label: "Time and Order")) characterizes causality exactly; Charron-Bost (1991) proved $O(N)$ is necessary for any timestamp scheme that captures concurrency precisely. For a datacenter with a handful of nodes this is fine; for a system where every client device is a writer, it is unbounded, and pruning entries reintroduces false concurrency or false ordering. Systems therefore choose where to spend: track fewer dependencies (coarser, more conservative ordering) or track them per-key (more metadata, more parallelism).
 
 === Version Vectors versus Vector Clocks
 
@@ -40,7 +40,7 @@ Plain version vectors fail in the client-server pattern: two clients write throu
 
 === Hybrid Logical Clocks as Causal Timestamps
 
-Where the system can tolerate *potential* rather than exact causality, an HLC (see _Time and Order_ for the algorithm) collapses metadata to one 64-bit scalar: $e_1 arrow.r.hook e_2 ==> "HLC"(e_1) < "HLC"(e_2)$, like a Lamport clock, but staying within NTP skew of wall time. The price is one-directional inference only: HLC order does not imply causality, so HLCs cannot *detect* concurrency, only respect it. That trade is ideal for snapshots and sessions, which is exactly how MongoDB and CockroachDB use them.
+Where the system can tolerate *potential* rather than exact causality, an HLC (see #xref("distributed-systems", "time-and-order", label: "Time and Order") for the algorithm) collapses metadata to one 64-bit scalar: $e_1 arrow.r.hook e_2 ==> "HLC"(e_1) < "HLC"(e_2)$, like a Lamport clock, but staying within NTP skew of wall time. The price is one-directional inference only: HLC order does not imply causality, so HLCs cannot *detect* concurrency, only respect it. That trade is ideal for snapshots and sessions, which is exactly how MongoDB and CockroachDB use them.
 
 == COPS and Eiger: Scalable Causal Stores
 

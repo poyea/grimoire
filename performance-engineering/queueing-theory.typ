@@ -22,7 +22,7 @@ The average number of items in the system equals throughput times average time i
 
 - *Compute the hidden quantity from the two you can measure.* A service at 5,000 req/s with 200 ms mean latency holds $5000 times 0.2 = 1000$ requests in flight; that is the concurrency the system must support (threads, connections, memory per request).
 - *Sanity-check metrics.* If reported concurrency, throughput, and latency violate $L = lambda W$, one of the meters is wrong.
-- *Closed-loop benchmark math.* With $N$ load-generator threads in a closed loop with think time $Z$: $X = N \/ (R + Z)$, the interactive response time law. A benchmark with 10 threads and zero think time _cannot_ measure throughput above $10 \/ R$; throughput and latency are not independently settable in a closed system (compare coordinated omission in _Performance Methodology_).
+- *Closed-loop benchmark math.* With $N$ load-generator threads in a closed loop with think time $Z$: $X = N \/ (R + Z)$, the interactive response time law. A benchmark with 10 threads and zero think time _cannot_ measure throughput above $10 \/ R$; throughput and latency are not independently settable in a closed system (compare coordinated omission in #xref("performance-engineering", "methodology", label: "Performance Methodology")).
 
 == M/M/1: The Shape of Saturation
 
@@ -63,7 +63,7 @@ Two related results worth knowing:
 - *The power of two choices* (Mitzenmacher, 2001): dispatching each arrival to the shorter of two _randomly sampled_ queues achieves nearly the benefit of join-shortest-queue at a fraction of the coordination cost: maximum queue length drops from $Theta(log n \/ log log n)$ (random) to $Theta(log log n)$. This is implemented in Envoy, NGINX (`least_conn` over a sample), and most modern balancers.
 - *Erlang B* governs loss systems (no queue, blocked calls dropped): the right model for connection-limited resources that reject rather than wait.
 
-The trade-off pooling ignores: a shared queue requires shared dispatch (a contention point, see _Concurrency Performance_) and destroys cache locality; thread-per-core designs deliberately accept worse queueing behavior for better per-request cost.
+The trade-off pooling ignores: a shared queue requires shared dispatch (a contention point, see #xref("performance-engineering", "concurrency-performance", label: "Concurrency Performance")) and destroys cache locality; thread-per-core designs deliberately accept worse queueing behavior for better per-request cost.
 
 == Open vs. Closed Systems
 

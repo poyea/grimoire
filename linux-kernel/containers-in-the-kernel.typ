@@ -71,7 +71,7 @@ rmdir("/old_root");
 
 `pivot_root` swaps the namespace's root with a new directory and pushes the old root somewhere we can later unmount. Modern runtimes (runc) use the same dance.
 
-Overlayfs is the standard image-layering vehicle: container images are stacks of read-only `lowerdir` layers; the container gets a writable `upperdir` on top. See _VFS and Filesystems_.
+Overlayfs is the standard image-layering vehicle: container images are stacks of read-only `lowerdir` layers; the container gets a writable `upperdir` on top. See #xref("linux-kernel", "vfs-and-fs", label: "VFS and Filesystems").
 
 == Network Namespace
 
@@ -155,7 +155,7 @@ securityContext:
     type: RuntimeDefault   # or Localhost with localhostProfile: my.json
 ```
 
-See _Security Modules_ for seccomp internals.
+See #xref("linux-kernel", "security-modules", label: "Security Modules") for seccomp internals.
 
 == cgroups in the Container
 

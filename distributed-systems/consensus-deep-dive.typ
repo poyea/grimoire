@@ -59,7 +59,7 @@ Reuses Phase 1 across many slots: a leader runs Phase 1 once to "own" all future
 Practical issues handled in real implementations (Chubby, Spanner, Google's MultiPaxos lib):
 
 - *Log compaction* via snapshots; truncate prefix of agreed log.
-- *Reconfiguration:* use an $alpha$-slot lookahead, or joint consensus (see the Raft paper and _Coordination Services_).
+- *Reconfiguration:* use an $alpha$-slot lookahead, or joint consensus (see the Raft paper and #xref("distributed-systems", "coordination-services", label: "Coordination Services")).
 - *Read leases:* the leader holds a read lease to serve linearizable reads locally.
 - *Batching and pipelining:* group commands per RTT; pipeline accepts without waiting.
 

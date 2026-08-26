@@ -47,10 +47,10 @@ LCP decomposes into four roughly sequential parts — TTFB, resource load delay,
 
 == Runtime Responsiveness
 
-INP work is event-loop work (see _Event Loop and Scheduling_): an interaction's latency is input delay (a long task already running) + handler processing + presentation (the rendering pipeline). The playbook:
+INP work is event-loop work (see #xref("web-and-browsers", "event-loop-and-scheduling", label: "Event Loop and Scheduling")): an interaction's latency is input delay (a long task already running) + handler processing + presentation (the rendering pipeline). The playbook:
 
 - Break long tasks with `scheduler.yield()` / `postTask`; defer non-visual side effects (analytics, state sync) until after the next paint (`requestAnimationFrame` then `setTimeout`).
-- Avoid layout thrashing in handlers; batch reads and writes (see _CSS and Layout_).
+- Avoid layout thrashing in handlers; batch reads and writes (see #xref("web-and-browsers", "css-and-layout", label: "CSS and Layout")).
 - Shrink DOM size: style, layout, and memory all scale with node count; `content-visibility: auto` and list virtualization fence what's offscreen.
 - Move computation to workers; hydrate lazily (or partially — islands architectures, React Server Components, and resumability in Qwik exist substantially to cut main-thread script).
 - Watch third parties: tag managers, A/B testing, and ad scripts are the dominant cause of field long tasks; load them after interactive, sandbox them in iframes or Partytown-style workers, and measure them separately.

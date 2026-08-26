@@ -82,7 +82,7 @@ Choosing wrong is a correctness bug, not a tuning issue: accumulating panes summ
 
 == Putting It Together
 
-A worked configuration for hourly revenue with speculative updates, in Beam terms: tumbling 1-hour windows; watermark from Kafka per-partition timestamps with 30 s bound and 1-minute idleness; trigger = on-watermark with early firings every minute and late firings per element; allowed lateness 15 minutes; accumulating mode into an upsert sink keyed by `(category, window_end)`. The dashboard sees a number within a minute of the hour starting, the number converges through the hour, finalises shortly after the hour ends, and self-corrects for 15 minutes; events later than that land in the side output and are reconciled by the nightly batch job — the streaming/batch agreement check from _Data Quality_ closes the loop.
+A worked configuration for hourly revenue with speculative updates, in Beam terms: tumbling 1-hour windows; watermark from Kafka per-partition timestamps with 30 s bound and 1-minute idleness; trigger = on-watermark with early firings every minute and late firings per element; allowed lateness 15 minutes; accumulating mode into an upsert sink keyed by `(category, window_end)`. The dashboard sees a number within a minute of the hour starting, the number converges through the hour, finalises shortly after the hour ends, and self-corrects for 15 minutes; events later than that land in the side output and are reconciled by the nightly batch job — the streaming/batch agreement check from #xref("data-engineering", "data-quality", label: "Data Quality") closes the loop.
 
 == Pitfalls
 

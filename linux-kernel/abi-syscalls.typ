@@ -260,7 +260,7 @@ Linux runs in two privilege levels (on x86, ring 0 and ring 3). User code cannot
 
 - *Syscall:* Explicit request via the `syscall` instruction. ~100-300 cycles for the ring transition itself, plus whatever the kernel handler does.
 - *Page fault:* Implicit trap when the MMU rejects a memory access. The kernel's fault handler decides whether to fix it (allocate a page, COW-clone, fetch from swap) or kill the process with `SIGSEGV`.
-- *Interrupt:* Hardware-initiated. The CPU is yanked from whatever it was doing into a kernel handler. See _Interrupts and Bottom Halves_.
+- *Interrupt:* Hardware-initiated. The CPU is yanked from whatever it was doing into a kernel handler. See #xref("linux-kernel", "interrupts", label: "Interrupts and Bottom Halves").
 
 Crossing the boundary is not free. A modern CPU pays for the privilege change, the pipeline flush, the kernel's argument validation (`copy_from_user`), and any scheduling work that happens on return. The vDSO exists precisely to avoid this cost for read-only operations like `clock_gettime`.
 
@@ -319,7 +319,7 @@ Other essentials:
 - *`gdb` + `kgdb`* — kernel-side debugging (rarely used in production).
 - *`crash`* — analyzing kernel crash dumps (`/proc/vmcore` via kdump).
 
-The full chapter on tracing is _Kernel Tracing_; this is the orientation list.
+The full chapter on tracing is #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing"); this is the orientation list.
 
 ==== Map of This Book
 

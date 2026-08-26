@@ -233,7 +233,7 @@ Consequences of ETT:
 
 *Theorem (Hofmann–Streicher 1998).* There is a model of ITT in which types are *groupoids* (categories where every morphism is invertible), terms are objects, and propositional equality is *isomorphism*. In this model, UIP fails: two different isomorphisms can yield two different "proofs" of an equality.
 
-*Consequence.* UIP is not derivable from $J$ alone; only an additional axiom (Streicher's K-rule, or equivalently UIP itself) makes it provable. This insight is the seed of *Homotopy Type Theory* (Voevodsky et al., 2009): treat types as $oo$-groupoids and add the *univalence axiom* $("Id"_(cal(U)) A space B) tilde.equiv (A tilde.equiv B)$, where equality of types *"is"* equivalence of types. See _Homotopy Type Theory_ for the full development.
+*Consequence.* UIP is not derivable from $J$ alone; only an additional axiom (Streicher's K-rule, or equivalently UIP itself) makes it provable. This insight is the seed of *Homotopy Type Theory* (Voevodsky et al., 2009): treat types as $oo$-groupoids and add the *univalence axiom* $("Id"_(cal(U)) A space B) tilde.equiv (A tilde.equiv B)$, where equality of types *"is"* equivalence of types. See #xref("programming-languages", "homotopy-type-theory", label: "Homotopy Type Theory") for the full development.
 
 === Transport
 

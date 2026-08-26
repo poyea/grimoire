@@ -301,7 +301,7 @@ Three large patterns unify the tree-automaton landscape and connect it to the re
 
 3. *The exponential ladder.* MSO $arrow.r$ automaton is non-elementary in alternation depth. Determinisation is exponential. Complementation of nondeterministic top-down is exponential. Universality is EXPTIME-complete. Practical algorithms route around these by working with *deterministic bottom-up* models -- DFTAs, deterministic hedge automata, deterministic MTTs -- whose closure under the needed operations is polynomial.
 
-The infinite-tree variants discussed in _Infinite Trees and Games_ inherit this structure -- ranked alphabets, bottom-up runs, MSO equivalence -- with the additional twist that runs are themselves infinite trees, and acceptance is governed by an $omega$-condition on each branch. The same patterns recur, the same arguments adapt, and Rabin's theorem becomes the culmination of the entire program.
+The infinite-tree variants discussed in #xref("programming-languages", "infinite-trees-and-games", label: "Infinite Trees and Games") inherit this structure -- ranked alphabets, bottom-up runs, MSO equivalence -- with the additional twist that runs are themselves infinite trees, and acceptance is governed by an $omega$-condition on each branch. The same patterns recur, the same arguments adapt, and Rabin's theorem becomes the culmination of the entire program.
 
 == Algebraic Recognition
 
@@ -457,7 +457,7 @@ The lessons of tree-automata theory generalise the classical regular-language th
 
 *Practical applications* span every part of language processing: compilation of pattern matching, exhaustiveness checks, XML schema validation, XPath optimisation, term rewriting, model checking on bounded-tree-width inputs (Courcelle). Each of these applications relies on the *decidability of emptiness* and the *closure under Boolean operations* of regular tree languages -- the same two facts that make string regular languages so ubiquitously useful, ported to a richer combinatorial substrate.
 
-The story continues in _Infinite Trees and Games_, where the same algebraic and logical scaffolding survives the move to *infinite* trees, yielding Rabin's theorem and the decidability of S2S -- arguably the strongest decidable logical theory known.
+The story continues in #xref("programming-languages", "infinite-trees-and-games", label: "Infinite Trees and Games"), where the same algebraic and logical scaffolding survives the move to *infinite* trees, yielding Rabin's theorem and the decidability of S2S -- arguably the strongest decidable logical theory known.
 
 == Further Reading
 

@@ -88,7 +88,7 @@ For $N approx 10^5$ or more chunks, brute-force cosine becomes slow. Vector inde
 
 Engine selection: pgvector for "I already have Postgres," Qdrant for production-grade open source, Pinecone for managed, Faiss for batch / research.
 
-(See _Vector and Similarity Search_ in the Database volume for algorithmic depth.)
+(See #xref("database", "vector-and-similarity-search", label: "Vector and Similarity Search") in the Database volume for algorithmic depth.)
 
 == Hybrid Retrieval
 

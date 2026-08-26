@@ -4,7 +4,7 @@
 
 eBPF (extended Berkeley Packet Filter) is a sandboxed in-kernel virtual machine that runs verified, JITed userspace-supplied programs at attach points throughout the kernel. It turned the kernel from a recompile-and-reboot artefact into a programmable platform: tracing, networking, security, observability, and even schedulers (`sched_ext`) are now things you load at runtime. The cost model (single-digit nanoseconds per instruction after JIT, with verifier-proven safety) is what makes it production-grade where kprobes alone were too dangerous and userspace tracing too slow.
 
-This chapter assumes familiarity with the use-case-specific material in _Kernel Tracing_ (bpftrace one-liners, tracepoints) and _Networking Stack_ (XDP, TC). Here we cover the machinery beneath: the verifier, the JIT, the map menagerie, CO-RE & BTF, the loader libraries, and the modern frontier: kfuncs, sleepable programs, BPF LSM, and `struct_ops`.
+This chapter assumes familiarity with the use-case-specific material in #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing") (bpftrace one-liners, tracepoints) and _Networking Stack_ (XDP, TC). Here we cover the machinery beneath: the verifier, the JIT, the map menagerie, CO-RE & BTF, the loader libraries, and the modern frontier: kfuncs, sleepable programs, BPF LSM, and `struct_ops`.
 
 == The eBPF VM
 
@@ -126,7 +126,7 @@ The userspace loader landscape:
 
 - *libbpf*: the canonical C library shipped in-tree. Handles object lifecycle, CO-RE relocations, and skeleton generation (`bpftool gen skeleton`). The right answer for production tools.
 - *BCC*: older Python/C++ frontend, ships clang at runtime and compiles per host. Heavy but feature-rich; many existing tools live here.
-- *bpftrace*: high-level DSL, awk for the kernel. Built on libbpf. Best for ad-hoc tracing and one-liners; see _Kernel Tracing_.
+- *bpftrace*: high-level DSL, awk for the kernel. Built on libbpf. Best for ad-hoc tracing and one-liners; see #xref("linux-kernel", "kernel-tracing", label: "Kernel Tracing").
 - *Aya* (Rust), *cilium/ebpf* (Go), *libxdp*, *libbpf-go*: language bindings of varying maturity. The Go and Rust ecosystems are now first-class.
 
 libbpf skeleton workflow:
@@ -173,7 +173,7 @@ int BPF_PROG(deny_open_etc_shadow, struct file *file)
 }
 ```
 
-This is policy-as-code without a kernel module, complementing SELinux/AppArmor rather than replacing them. See _Security Modules_.
+This is policy-as-code without a kernel module, complementing SELinux/AppArmor rather than replacing them. See #xref("linux-kernel", "security-modules", label: "Security Modules").
 
 == sched_ext: BPF Schedulers
 

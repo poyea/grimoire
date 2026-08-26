@@ -32,7 +32,7 @@ A formula is *satisfiable* if some $nu$ satisfies it; *valid* (a tautology) if e
 
 $ Gamma models phi quad <==> quad Gamma union {not phi} text(" is unsatisfiable") $
 
-This is why $"SAT"$ solvers (chapter on _SAT and SMT_) are universal engines for propositional reasoning: validity, entailment, equivalence, and minimum-cost assignment all reduce to $"SAT"$ or its weighted variant MaxSAT.
+This is why $"SAT"$ solvers (chapter on #xref("formal-methods", "sat-and-smt", label: "SAT and SMT")) are universal engines for propositional reasoning: validity, entailment, equivalence, and minimum-cost assignment all reduce to $"SAT"$ or its weighted variant MaxSAT.
 
 == Normal Forms
 
@@ -113,7 +113,7 @@ Resolution refutation of  (p \/ q) /\ (not p \/ r) /\ (not q \/ r) /\ (not r)
 
 == Decision Procedures and Complexity
 
-Propositional satisfiability is the original NP-complete problem (Cook 1971; Levin 1973). Yet modern CDCL solvers handle industrial instances with $10^7$ variables. The chapter on _SAT and SMT_ explains how. For now, the relevant complexity landmarks:
+Propositional satisfiability is the original NP-complete problem (Cook 1971; Levin 1973). Yet modern CDCL solvers handle industrial instances with $10^7$ variables. The chapter on #xref("formal-methods", "sat-and-smt", label: "SAT and SMT") explains how. For now, the relevant complexity landmarks:
 
 #table(
   columns: (auto, auto, auto),
@@ -206,7 +206,7 @@ FOL is *undecidable* but *semi-decidable*: there is a procedure that halts on ev
   [Peano arithmetic], [Not even semi-decidable for $not phi$], [---],
 )
 
-The decidable theories on the right column are exactly what $"SMT"$ solvers integrate via the *Nelson-Oppen combination* method (chapter on _SAT and SMT_).
+The decidable theories on the right column are exactly what $"SMT"$ solvers integrate via the *Nelson-Oppen combination* method (chapter on #xref("formal-methods", "sat-and-smt", label: "SAT and SMT")).
 
 == Gödel's Theorems in One Page
 
@@ -239,7 +239,7 @@ Congruence closure example:
 
 == Cross-References to Companion Volumes
 
-The programming-languages volume treats *language theory* — automata on $omega$-words and trees, the $mu$-calculus, Courcelle's theorem — as the mathematics behind temporal specification. This volume treats logic algorithmically: how to *decide* it, how to *use* it to verify code. When you read _Omega-Automata_ (programming-languages volume) alongside our _Model Checking_ chapter, the picture is complete: the automata are the spec language, the model-checking algorithms are the engine.
+The programming-languages volume treats *language theory* — automata on $omega$-words and trees, the $mu$-calculus, Courcelle's theorem — as the mathematics behind temporal specification. This volume treats logic algorithmically: how to *decide* it, how to *use* it to verify code. When you read _Omega-Automata_ (programming-languages volume) alongside our #xref("formal-methods", "model-checking", label: "Model Checking") chapter, the picture is complete: the automata are the spec language, the model-checking algorithms are the engine.
 
 For the proof-theoretic side, `programming-languages/operational-semantics.typ` develops Hoare logic as a *language* for assertions about programs; our _Program Verification_ chapter develops the *tooling* — verification condition generation, $"SMT"$ discharge, separation logic, Iris.
 

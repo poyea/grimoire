@@ -104,7 +104,7 @@ long count(long postId) {
 
 *Eventually-consistent counters.* PN-counters (a CRDT) allow concurrent multi-region increments without coordination; convergent merges replace LWW. Used by Riak.
 
-*Approximate counters.* HyperLogLog gives unique-counts at $2$ KB/object with $\<2$% error; CMS gives heavy hitters. Both shine in stream analytics — see _Probabilistic Data Structures_ and _Streaming Algorithms_.
+*Approximate counters.* HyperLogLog gives unique-counts at $2$ KB/object with $\<2$% error; CMS gives heavy hitters. Both shine in stream analytics — see #xref("coding", "probabilistic-data-structures", label: "Probabilistic Data Structures") and #xref("coding", "streaming-algorithms", label: "Streaming Algorithms").
 
 == News Feed (Facebook / Twitter Home Timeline)
 

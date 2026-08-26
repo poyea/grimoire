@@ -311,7 +311,7 @@ Soundness is subtle because session types are *linear*: a channel must be used e
 
 (Lennon-Bertrand–Maillard–Tabareau–Tanter 2022) constructed *Gradual CIC* (GCIC): a gradual extension of the Calculus of Inductive Constructions. The dynamic type "?" becomes a proof-relevant *unknown term* $"?"_A$ at each type $A$. The cast $chevron.l B arrow.l A chevron.r$ on dependent types becomes a unifier that may produce blame, and Gradual CIC enjoys both the gradual guarantee and *strong normalisation*: proofs do not loop, but they may fail to typecheck only after computation.
 
-The construction reveals a deep tension: *univalence* (see _Homotopy Type Theory_) and *gradual guarantee* are *incompatible* in their natural strongest forms. GCIC must weaken one or the other. The chosen weakening (*propositional* gradual guarantee rather than definitional) has consequences for what proofs survive the gradualisation.
+The construction reveals a deep tension: *univalence* (see #xref("programming-languages", "homotopy-type-theory", label: "Homotopy Type Theory")) and *gradual guarantee* are *incompatible* in their natural strongest forms. GCIC must weaken one or the other. The chosen weakening (*propositional* gradual guarantee rather than definitional) has consequences for what proofs survive the gradualisation.
 
 == Soft Typing: The Predecessor
 

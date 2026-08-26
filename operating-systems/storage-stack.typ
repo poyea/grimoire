@@ -107,7 +107,7 @@ The PostgreSQL `fsync` bug of 2018 (Linux silently discarded dirty pages after a
 
 == Distributed Block Storage
 
-Cloud block devices (EBS, Persistent Disk, Azure Disk) and on-prem SAN expose the block-device API over a network. Latency goes from $mu$s to ms; the API model is unchanged. Underlying storage is typically a replicated log (chain replication, Paxos-on-each-write); see _Consensus and Replication_ for the protocols.
+Cloud block devices (EBS, Persistent Disk, Azure Disk) and on-prem SAN expose the block-device API over a network. Latency goes from $mu$s to ms; the API model is unchanged. Underlying storage is typically a replicated log (chain replication, Paxos-on-each-write); see #xref("database", "consensus-and-replication", label: "Consensus and Replication") for the protocols.
 
 == Pitfalls
 

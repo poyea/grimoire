@@ -201,7 +201,7 @@ Coherence-space semantics gave the semantic motivation for the *exponential moda
 
 *Action semantics* (Mosses, Watt 1990s) was an attempt to make denotational semantics readable: meanings are expressed as compositions of *actions* drawn from a fixed vocabulary (control, data, storage, communication). The framework is modular -- adding a new effect adds a new action sort -- but it never achieved widespread adoption.
 
-The deeper development was *monadic semantics* (Moggi 1989, 1991), in which every computational effect (state, exceptions, nondeterminism, continuations, I/O) is captured by a *strong monad* $T$ on a base category. The denotation of a term of type $tau$ in a CBV language becomes a morphism into $T bracket.l.stroked tau bracket.r.stroked$; sequencing is monad composition. This will be developed in detail in _Categorical Semantics_.
+The deeper development was *monadic semantics* (Moggi 1989, 1991), in which every computational effect (state, exceptions, nondeterminism, continuations, I/O) is captured by a *strong monad* $T$ on a base category. The denotation of a term of type $tau$ in a CBV language becomes a morphism into $T bracket.l.stroked tau bracket.r.stroked$; sequencing is monad composition. This will be developed in detail in #xref("programming-languages", "categorical-semantics", label: "Categorical Semantics").
 
 == Adequacy vs. Full Abstraction: The Trade-Off
 

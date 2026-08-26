@@ -56,7 +56,7 @@ A thread pool is a queueing system, and sizing it is a queueing problem:
 - *Blocking work*: the classic sizing estimate is $N = c dot (1 + W \/ S)$, where $c$ is core count, $W$ is wait time, and $S$ is service (compute) time per task. A task that waits 9 ms on I/O for every 1 ms of compute wants about $10 c$ threads.
 - *Oversubscription*: far more runnable threads than cores causes context-switch storms (a switch costs 1-10 microseconds directly, more in cache refill), run-queue latency, and, in the worst case, the scheduler thrashing the working set out of cache every quantum.
 
-Separate pools for separate work classes (fast CPU-bound vs. slow blocking) prevent *head-of-line blocking* where slow tasks occupy all workers. Bounded queues with backpressure beat unbounded queues, which convert overload into latency and OOM (see _Capacity Planning_).
+Separate pools for separate work classes (fast CPU-bound vs. slow blocking) prevent *head-of-line blocking* where slow tasks occupy all workers. Bounded queues with backpressure beat unbounded queues, which convert overload into latency and OOM (see #xref("performance-engineering", "capacity-planning", label: "Capacity Planning")).
 
 == Work Stealing and Structured Parallelism
 

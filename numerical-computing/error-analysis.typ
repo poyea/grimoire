@@ -48,7 +48,7 @@ The same mathematical formula can be implemented stably or unstably:
 - *Inner product, naive summation*: backward stable.
 - *Variance via $EE[X^2] - EE[X]^2$*: not stable — cancellation when mean dominates spread. Welford's recurrence is stable.
 - *Gram-Schmidt*: classical GS can lose orthogonality completely ($parallel Q^top Q - I parallel approx kappa^2 u$); modified GS bounds it by $kappa u$; Householder QR achieves $O(u)$ regardless of conditioning.
-- *Normal equations* for least squares: squares the condition number (see _Linear Systems_).
+- *Normal equations* for least squares: squares the condition number (see #xref("numerical-computing", "linear-systems", label: "Linear Systems")).
 - *Gaussian elimination without pivoting*: unstable; with partial pivoting, stable in practice though not in the worst case.
 
 A useful design heuristic: prefer orthogonal transformations (they do not amplify errors, $kappa = 1$), avoid subtracting computed quantities of similar size, and accumulate in higher precision when cheap.

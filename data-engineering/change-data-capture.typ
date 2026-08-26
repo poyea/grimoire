@@ -87,7 +87,7 @@ The outbox insert commits atomically with the business write; CDC then relays th
 Landing CDC in Iceberg/Delta/Hudi is the standard way to keep an analytical replica minutes behind OLTP. Two-layer pattern:
 
 - *Append-only changelog table* (bronze): every event as-is, partitioned by ingest time. Cheap to write, full audit history, replayable.
-- *Mirror table* (silver): `MERGE` the changelog into a deduplicated current-state table, using merge-on-read so high-rate upserts do not rewrite files (see _Lakehouse Engineering_).
+- *Mirror table* (silver): `MERGE` the changelog into a deduplicated current-state table, using merge-on-read so high-rate upserts do not rewrite files (see #xref("data-engineering", "lakehouse-engineering", label: "Lakehouse Engineering")).
 
 ```sql
 merge into silver.orders t

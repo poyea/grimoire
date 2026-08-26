@@ -30,7 +30,7 @@ Precision matters more than intuition suggests because of *pager fatigue*, the o
 Practical hygiene that keeps the classifier honest:
 
 - *Every page gets a disposition:* actionable, not-actionable, or duplicate. Review weekly; an alert whose pages are repeatedly non-actionable gets retuned, demoted to ticket, or deleted.
-- *Every page has a runbook link* (see _Incident Management_). If no action is conceivable, it is not a page.
+- *Every page has a runbook link* (see #xref("observability-and-sre", "incident-management", label: "Incident Management")). If no action is conceivable, it is not a page.
 - *Budget pages like errors:* Google's guideline of at most about two incidents per 12-hour shift is a recall-side bound too — beyond it, follow-up quality collapses.
 - *Delete fearlessly:* an alert that has never fired truly, or whose condition is covered by a symptom alert, is pure risk.
 
@@ -81,7 +81,7 @@ Between the rule engine and the pager sits an alert router; Prometheus *Alertman
 - *Silences:* time-bounded, label-matched mutes with an author and a comment, used for planned maintenance. Silences must expire; an unbounded silence is a deleted alert without the honesty.
 - *Deduplication and high availability:* Alertmanager instances gossip notification state, so running three replicas does not triple the pages; the paging service deduplicates further on an incident key.
 
-The router is also where flap damping lives (`for:` clauses in rules, group intervals in routing) and where the "page once per incident, not once per evaluation" contract is enforced (see _Incident Management_ for what happens downstream).
+The router is also where flap damping lives (`for:` clauses in rules, group intervals in routing) and where the "page once per incident, not once per evaluation" contract is enforced (see #xref("observability-and-sre", "incident-management", label: "Incident Management") for what happens downstream).
 
 == On-Call Health Metrics
 

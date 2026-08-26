@@ -146,7 +146,7 @@ PPO (Schulman et al., 2017) constrains policy updates to avoid destructive large
 
 $ cal(L)^"CLIP"(theta) = EE_t [min(r_t(theta) hat(A)_t, "clip"(r_t(theta), 1-epsilon, 1+epsilon) hat(A)_t)] $
 
-where $r_t(theta) = pi_theta(a_t|s_t) / pi_(theta_"old")(a_t|s_t)$ is the probability ratio and $epsilon approx 0.2$. The clip prevents the ratio from deviating too far from 1, keeping updates conservative. PPO is the dominant algorithm for RLHF fine-tuning of language models (see _Reasoning Models_).
+where $r_t(theta) = pi_theta(a_t|s_t) / pi_(theta_"old")(a_t|s_t)$ is the probability ratio and $epsilon approx 0.2$. The clip prevents the ratio from deviating too far from 1, keeping updates conservative. PPO is the dominant algorithm for RLHF fine-tuning of language models (see #xref("llm", "reasoning-models", label: "Reasoning Models")).
 
 == Soft Actor-Critic
 
@@ -183,7 +183,7 @@ Self-play (training against past versions of itself) underpins AlphaZero and Ope
 
 == RL from Human Feedback
 
-RLHF, introduced for learning from human preferences by Christiano et al. (2017) and scaled to LLMs by Ouyang et al. (2022, InstructGPT), trains language models to follow instructions. The pipeline: (1) supervised fine-tuning on demonstrations, (2) train a reward model from pairwise preference data, (3) run PPO against the reward model with a KL penalty against the SFT policy. DPO eliminates the reward model by directly optimising preference likelihoods; GRPO retains a reward signal but removes the critic network. See _Reasoning Models_ for details.
+RLHF, introduced for learning from human preferences by Christiano et al. (2017) and scaled to LLMs by Ouyang et al. (2022, InstructGPT), trains language models to follow instructions. The pipeline: (1) supervised fine-tuning on demonstrations, (2) train a reward model from pairwise preference data, (3) run PPO against the reward model with a KL penalty against the SFT policy. DPO eliminates the reward model by directly optimising preference likelihoods; GRPO retains a reward signal but removes the critic network. See #xref("llm", "reasoning-models", label: "Reasoning Models") for details.
 
 == Further Reading
 

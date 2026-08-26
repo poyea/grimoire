@@ -41,9 +41,9 @@ Headroom must also cover *failure*: an N+1 (or N+2) policy means surviving the l
 
 == Finding Capacity: Load Testing and the USL
 
-Per-replica capacity is measured, not computed. The procedure: drive open-loop load (see _Queueing Theory_) at increasing rates against a production-like replica with production-like data and request mix, recording latency percentiles at each plateau. Capacity is the highest rate at which the SLO percentile holds, not the rate at which throughput peaks; the two can differ by 2 times, and the region between them is where the service is technically "up" and practically unusable.
+Per-replica capacity is measured, not computed. The procedure: drive open-loop load (see #xref("performance-engineering", "queueing-theory", label: "Queueing Theory")) at increasing rates against a production-like replica with production-like data and request mix, recording latency percentiles at each plateau. Capacity is the highest rate at which the SLO percentile holds, not the rate at which throughput peaks; the two can differ by 2 times, and the region between them is where the service is technically "up" and practically unusable.
 
-For horizontal scaling, fit the *Universal Scalability Law* (see _Performance Methodology_) to throughput measured at several replica/core counts:
+For horizontal scaling, fit the *Universal Scalability Law* (see #xref("performance-engineering", "methodology", label: "Performance Methodology")) to throughput measured at several replica/core counts:
 
 $ C(n) = n / (1 + sigma (n - 1) + kappa n (n - 1)) $
 
@@ -77,7 +77,7 @@ Test overload deliberately: drive 1.5-2 times capacity and verify goodput stays 
 
 Capacity is denominated in money. The levers, roughly in order of leverage:
 
-- *Efficiency before quantity*: a 30% reduction in CPU per request (profiling, see _CPU Profiling_) is a 30% fleet reduction at every future scale, compounding with growth.
+- *Efficiency before quantity*: a 30% reduction in CPU per request (profiling, see #xref("performance-engineering", "cpu-profiling", label: "CPU Profiling")) is a 30% fleet reduction at every future scale, compounding with growth.
 - *Purchase mix*: reserved/committed capacity for the base load (1-3 year commitments at 30-60% discounts), on-demand for the forecast band, spot/preemptible for interruption-tolerant batch (60-90% discounts, with eviction handling).
 - *Shape fitting*: match instance shape to the binding resource (memory-bound services on memory-optimized shapes); the non-binding resources are pure waste. Bin-packing efficiency (requested vs. used, used vs. allocatable) is the cluster-level version.
 - *Time shifting*: batch and training workloads moved to the diurnal trough consume capacity already paid for at peak.

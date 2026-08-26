@@ -22,7 +22,7 @@ A bi-encoder embeds query and document _independently_ into $RR^d$ (typically $d
 
 $ s(q, d) = E_Q (q) dot E_D (d) $
 
-Document vectors are precomputed offline and indexed; at query time, one encoder pass plus an approximate nearest-neighbor search (see _Vector Search_) retrieves from millions of documents in milliseconds. DPR (Karpukhin et al., 2020) established the recipe for open-domain QA — BERT-base dual encoders, in-batch negatives, one "hard" BM25 negative per query — and beat BM25 by 9–19 points top-20 accuracy on Natural Questions.
+Document vectors are precomputed offline and indexed; at query time, one encoder pass plus an approximate nearest-neighbor search (see #xref("search-and-ir", "vector-search", label: "Vector Search")) retrieves from millions of documents in milliseconds. DPR (Karpukhin et al., 2020) established the recipe for open-domain QA — BERT-base dual encoders, in-batch negatives, one "hard" BM25 negative per query — and beat BM25 by 9–19 points top-20 accuracy on Natural Questions.
 
 === Training Is the Hard Part
 
@@ -64,7 +64,7 @@ A typical production stack: BM25 and dense ANN retrieval in parallel, RRF fusion
 - *Benchmark overfitting*: MS MARCO's shallow, sparse labels (~1 judged positive per query) reward models trained on it far beyond their real-world advantage; always check BEIR-style out-of-domain numbers.
 - *False negatives in training*: random or BM25 negatives often contain unlabeled positives; aggressive hard-negative mining without denoising _hurts_.
 - *Stale embeddings*: re-encoding the corpus after every model update is an operational cost classical indexes never had; plan for versioned indexes and dual-serving during migration.
-- *Long documents*: most encoders see 512 tokens; passage-level chunking with score aggregation (MaxP) is the workaround, and chunking policy materially affects quality (see _RAG and Search Systems_).
+- *Long documents*: most encoders see 512 tokens; passage-level chunking with score aggregation (MaxP) is the workaround, and chunking policy materially affects quality (see #xref("search-and-ir", "rag-and-search-systems", label: "RAG and Search Systems")).
 - *Tokenization blind spots*: product codes, version strings, and rare names fragment into subwords and lose identity; keep a lexical leg in the hybrid for these.
 
 == Further Reading

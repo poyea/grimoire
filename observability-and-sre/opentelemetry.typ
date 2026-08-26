@@ -10,10 +10,10 @@ OpenTelemetry (OTel) is the vendor-neutral standard for generating, processing, 
 
 OTel defines telemetry as *signals* sharing common infrastructure (context, resources, exporters):
 
-- *Traces:* spans with trace/span IDs, attributes, events, links, and status (the Dapper model — see _Distributed Tracing_).
+- *Traces:* spans with trace/span IDs, attributes, events, links, and status (the Dapper model — see #xref("observability-and-sre", "distributed-tracing", label: "Distributed Tracing")).
 - *Metrics:* instruments (`Counter`, `UpDownCounter`, `Histogram`, `Gauge`, and observable/asynchronous variants) that produce sums, gauges, histograms, and *exponential histograms* (base-2 exponential bucket boundaries with a scale parameter, giving constant relative error and mergeability without pre-agreed bucket layouts).
 - *Logs:* unlike traces and metrics, OTel did not define a new logging API for existing languages; it defines a log data model and *bridges* from established libraries (Logback, log4j, the Python `logging` module), enriching records with trace and span IDs for correlation.
-- *Profiles:* the fourth signal, in development since the 2023 acquisition-by-donation of Elastic's profiling agent; OTLP profiles reached experimental status in 2024 (see _Continuous Profiling_).
+- *Profiles:* the fourth signal, in development since the 2023 acquisition-by-donation of Elastic's profiling agent; OTLP profiles reached experimental status in 2024 (see #xref("observability-and-sre", "continuous-profiling", label: "Continuous Profiling")).
 - *Baggage:* not telemetry itself but a propagated key-value channel that travels with context.
 
 Every signal hangs off two shared concepts. A *resource* is an immutable set of attributes describing the entity producing telemetry (`service.name`, `service.version`, `k8s.pod.name`, `cloud.region`) — attached once per SDK, not per event. *Context* is the in-process and cross-process carrier of the active span and baggage.
@@ -39,7 +39,7 @@ Telemetry is only cross-tool queryable if everyone names things identically; *se
 
 Cross-process correlation rides on *propagators* that inject and extract context into carrier headers. The default composite is:
 
-- *W3C TraceContext* — the `traceparent` header (`version-traceid-parentid-flags`) and `tracestate` for vendor data, standardized as a W3C Recommendation in 2020 largely so that proxies, CDNs, and competing vendors would propagate each other's context (see _Distributed Tracing_ for the wire format).
+- *W3C TraceContext* — the `traceparent` header (`version-traceid-parentid-flags`) and `tracestate` for vendor data, standardized as a W3C Recommendation in 2020 largely so that proxies, CDNs, and competing vendors would propagate each other's context (see #xref("observability-and-sre", "distributed-tracing", label: "Distributed Tracing") for the wire format).
 - *W3C Baggage* — a separate `baggage` header carrying application key-values (`tenant=acme,deployment=canary`) through the entire downstream call tree. Baggage is propagated but not recorded; if you want it on spans, a processor must copy it explicitly. Use it sparingly: every entry rides on every outbound request, and untrusted edges should strip it (it is attacker-controllable input).
 
 B3 (Zipkin) and Jaeger propagators remain available for brownfield interop; the in-process side is a `Context` abstraction (thread-local, async-local, or explicitly passed depending on language) whose correct flow across thread pools and async boundaries is historically the largest source of broken traces.
@@ -57,7 +57,7 @@ Two canonical topologies: an *agent* per host or sidecar (low-latency local coll
 
 == Sampling Configuration
 
-OTel supports sampling at three places, with different trade-offs (the strategy taxonomy is covered in _Distributed Tracing_):
+OTel supports sampling at three places, with different trade-offs (the strategy taxonomy is covered in #xref("observability-and-sre", "distributed-tracing", label: "Distributed Tracing")):
 
 1. *SDK (head) sampling* via `OTEL_TRACES_SAMPLER`: `parentbased_always_on` (default), `parentbased_traceidratio` with `OTEL_TRACES_SAMPLER_ARG=0.1`, or always-off. `parentbased_*` honors the upstream decision from `traceparent` flags, which is mandatory for consistent trees; the ratio sampler hashes the trace ID so independent services make the same decision for the same trace.
 2. *Collector tail sampling* via the `tail_sampling` processor: buffer spans for a `decision_wait`, then apply policies (status-code, latency, attribute, probabilistic, rate-limiting, and composite combinations) — keep all errors and slow traces, 1 % of the rest.

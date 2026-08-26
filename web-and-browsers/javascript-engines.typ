@@ -62,7 +62,7 @@ JSC's *DFG* tier speculates from value profiles, and its top tier *FTL* original
 - *Hidden class divergence*: conditionally-added properties (`if (x) this.flag = true`) fork object shapes and poison ICs downstream.
 - *`arguments`, `with`, `eval`, and getters on hot paths* inhibit or complicate optimization; `try/catch` no longer does (a 2017-era myth).
 - *Megamorphic call sites in frameworks*: a single dispatch helper touching every component's objects becomes megamorphic by design; engines added megamorphic caches, but shape-stable code is still markedly faster.
-- *Holding the main thread*: even a fast engine cannot help a 200 ms synchronous task; chunk work or move it to a worker (see _Event Loop and Scheduling_).
+- *Holding the main thread*: even a fast engine cannot help a 200 ms synchronous task; chunk work or move it to a worker (see #xref("web-and-browsers", "event-loop-and-scheduling", label: "Event Loop and Scheduling")).
 - *Premature `delete`*: prefer setting properties to `undefined` or using `Map` for genuinely dynamic key sets.
 
 == Further Reading

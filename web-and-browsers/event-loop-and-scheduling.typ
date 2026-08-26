@@ -32,7 +32,7 @@ console.log("sync");
 
 == Rendering Opportunities
 
-"Update the rendering" is not after every task. The loop takes a *rendering opportunity* aligned with the display's refresh: run `requestAnimationFrame` callbacks, then style, layout, paint (the pipeline of the _Rendering Pipeline_ chapter). Between vsyncs, the loop may process many tasks — or one long one. Corollaries:
+"Update the rendering" is not after every task. The loop takes a *rendering opportunity* aligned with the display's refresh: run `requestAnimationFrame` callbacks, then style, layout, paint (the pipeline of the #xref("web-and-browsers", "rendering-pipeline", label: "Rendering Pipeline") chapter). Between vsyncs, the loop may process many tasks — or one long one. Corollaries:
 
 - Two synchronous style changes in one task never both render; only the final state paints.
 - `requestAnimationFrame` runs *before* paint, so it reads pre-frame state and its writes appear in the same frame. rAF scheduled from within rAF runs next frame — the standard animation loop.
@@ -79,7 +79,7 @@ Node's loop (libuv) is phase-based: timers → pending callbacks → poll (I/O) 
 - *Awaiting in a loop without yielding*: `await fetch(...)` yields, but `await` on an already-resolved promise only defers to the microtask queue — rendering and input still starve.
 - *Microtask starvation*: recursive promise chains block rendering indefinitely; recursive `setTimeout` does not.
 - *Assuming timer fidelity*: background-tab throttling breaks `setInterval`-driven clocks and games; drive animation from rAF timestamps and recompute from wall-clock deltas.
-- *Listening without `passive: true`*: non-passive `wheel`/`touchstart` listeners force the compositor to wait on the main thread before scrolling (see _Rendering Pipeline_).
+- *Listening without `passive: true`*: non-passive `wheel`/`touchstart` listeners force the compositor to wait on the main thread before scrolling (see #xref("web-and-browsers", "rendering-pipeline", label: "Rendering Pipeline")).
 - *Reading layout in rAF after writes*: rAF runs before style/layout; write-then-read inside one callback still forces synchronous layout.
 - *`setInterval` re-entrancy*: if the handler exceeds the interval, callbacks queue up or coalesce per engine; prefer self-rescheduling `setTimeout`.
 

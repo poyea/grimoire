@@ -79,7 +79,7 @@ GNF is the CFG analogue of right-regular grammars: every derivation step *consum
 
 == Pushdown Automata
 
-A *pushdown automaton* (PDA) is the canonical recogniser for CFLs; full treatment is in the next chapter (_Pushdown Automata and Beyond_). For the present chapter the key fact is:
+A *pushdown automaton* (PDA) is the canonical recogniser for CFLs; full treatment is in the next chapter (#xref("programming-languages", "pushdown-and-beyond", label: "Pushdown Automata and Beyond")). For the present chapter the key fact is:
 
 *Theorem (CFG–PDA equivalence; Chomsky, Evey, Schützenberger).* A language $L$ is context-free <==> $L = L(M)$ for some nondeterministic pushdown automaton $M$.
 

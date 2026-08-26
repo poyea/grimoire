@@ -1,4 +1,4 @@
-#import "../template.typ": overbar
+#import "../template.typ": overbar, xref
 
 = Simply-Typed Lambda Calculus
 
@@ -7,7 +7,7 @@ It is the *ur-typed-language* — every modern type system is, at the core, $lam
 It is also the smallest interesting fragment of the *Curry–Howard correspondence* (Curry 1934, Howard 1969/1980): well-typed terms of $lambda^arrow.r$ are exactly the proofs of the implicational fragment of intuitionistic propositional logic.
 The story begins with Church (1932, 1940) and Curry (1934); the modern metatheory is the work of Tait (1967), Girard (1972), Martin-Löf (1972, 1975), and Statman (1979).
 
-_See also: _Type Systems_, _System F and Parametricity_, _Dependent Types_, _Turing Machines and Computability_._
+_See also: _Type Systems_, #xref("programming-languages", "system-f-and-parametricity", label: "System F and Parametricity"), #xref("programming-languages", "dependent-types", label: "Dependent Types"), #xref("programming-languages", "turing-computability", label: "Turing Machines and Computability")._
 
 This chapter does $lambda^arrow.r$ in full. We give the syntax in both Church and Curry presentations; the static and dynamic semantics with every typing and reduction rule; confluence via parallel reduction (Tait–Martin-Löf 1972); subject reduction and progress; and a complete proof of strong normalization via Tait's reducibility / computability predicates (Tait 1967). We close with the Curry–Howard isomorphism for intuitionistic propositional logic, the system T extension with primitive recursion (Gödel 1958), and the connection to combinatory logic.
 
@@ -26,7 +26,7 @@ Variables $x, y, z, ...$ are drawn from a countably infinite set. The abstractio
 *Terms* (Curry presentation).
 $ e ::= x | lambda x . e | e_1 space e_2 $
 
-In the Curry style, abstractions carry no type annotation; types are *assigned* by a separate judgment. Curry-style $lambda^arrow.r$ is type-inferable (Hindley 1969; see _Type Systems_), but a term may admit multiple types. Church-style $lambda^arrow.r$ enjoys *type uniqueness* (every term has at most one type under a given context).
+In the Curry style, abstractions carry no type annotation; types are *assigned* by a separate judgment. Curry-style $lambda^arrow.r$ is type-inferable (Hindley 1969; see #xref("programming-languages", "type-systems", label: "Type Systems")), but a term may admit multiple types. Church-style $lambda^arrow.r$ enjoys *type uniqueness* (every term has at most one type under a given context).
 
 *Free and bound variables.* Define $"FV"(e)$ inductively:
 $ "FV"(x) &= {x} \
@@ -304,7 +304,7 @@ Specifically, $lambda^arrow.r$ corresponds to the *implicational fragment* $"IPC
   [$exists x . P(x)$], [$exists alpha . tau$], [$"pack"$], [$"unpack"$],
 )
 
-The two existential rows require System F (see _System F and Parametricity_); the first six are $lambda^arrow.r$ with products, sums, $"Unit"$, $"Empty"$.
+The two existential rows require System F (see #xref("programming-languages", "system-f-and-parametricity", label: "System F and Parametricity")); the first six are $lambda^arrow.r$ with products, sums, $"Unit"$, $"Empty"$.
 
 *Typing rules for products and sums.*
 ```text

@@ -95,7 +95,7 @@ There are no best styles, only trade-offs against the quality attributes that ma
 )
 
 Heuristics that survive contact with practice:
-- Start from the two or three *driving* quality attributes (see _Architecture Evaluation_), not from a style you admire.
+- Start from the two or three *driving* quality attributes (see #xref("software-architecture", "architecture-evaluation", label: "Architecture Evaluation")), not from a style you admire.
 - Monolithic styles (layered, microkernel, clean as a single deployable) minimise cost and operational burden; distributed styles buy scalability and fault isolation with the *fallacies of distributed computing* (Deutsch, 1994): the network is not reliable, latency is not zero, bandwidth is not infinite.
 - Styles compose: a microservice is often internally hexagonal; an event-driven system's processors may be layered; a space-based processing unit may host plug-ins.
 - The architecture should make the *most frequent change* cheap. If most changes are domain features, partition by domain (vertical slices, bounded contexts) rather than by technical layer.

@@ -301,7 +301,7 @@ Barendregt (1991) organised the family of pure type systems into a *cube* indexe
   [$lambda C$ = CoC], [*yes*], [*yes*], [*yes*],
 )
 
-Terms depending on terms (ordinary $lambda$) is always present. The three axes correspond to three of the four corners of the *Pure Type System* (PTS) classification. The apex $lambda C$ (the *Calculus of Constructions*, Coquand–Huet 1988) is the foundation of Coq (see _Dependent Types_).
+Terms depending on terms (ordinary $lambda$) is always present. The three axes correspond to three of the four corners of the *Pure Type System* (PTS) classification. The apex $lambda C$ (the *Calculus of Constructions*, Coquand–Huet 1988) is the foundation of Coq (see #xref("programming-languages", "dependent-types", label: "Dependent Types")).
 
 *Geometric picture.* Visualise as a cube with $lambda^arrow.r$ at the origin and $lambda C$ at the diagonally opposite corner; each axis is one dependency. F sits adjacent to STLC by one edge; $F_omega$ two edges; CoC three.
 
@@ -309,7 +309,7 @@ Terms depending on terms (ordinary $lambda$) is always present. The three axes c
 
 === Hindley–Milner Decidability
 
-The *let-polymorphic* restriction of System F (no first-class $forall$ in argument positions; quantifiers only at $"let"$-bindings), *Hindley–Milner* (HM; Damas–Milner 1982), has decidable type inference in near-linear time (see _Type Systems_). This is the type system of ML, OCaml, Haskell 98.
+The *let-polymorphic* restriction of System F (no first-class $forall$ in argument positions; quantifiers only at $"let"$-bindings), *Hindley–Milner* (HM; Damas–Milner 1982), has decidable type inference in near-linear time (see #xref("programming-languages", "type-systems", label: "Type Systems")). This is the type system of ML, OCaml, Haskell 98.
 
 === System F Type Inference is Undecidable
 

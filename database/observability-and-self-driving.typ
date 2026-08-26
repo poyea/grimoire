@@ -218,7 +218,7 @@ class KnobTuner:
         self.y.append(throughput)
 ```
 
-*Bao (query-level tuning):* see _Query Optimization_ for Bao's learned query plan selection.
+*Bao (query-level tuning):* see #xref("database", "query-optimization", label: "Query Optimization") for Bao's learned query plan selection.
 
 == Anomaly Detection
 

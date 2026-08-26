@@ -31,7 +31,7 @@ When the exponent underflows below its minimum, IEEE 754 does not jump to zero. 
 
 === Rounding Modes
 
-IEEE 754 specifies that elementary operations ($+, -, times, \/$, `sqrt`) be *correctly rounded*: the result is the exact mathematical value rounded by the active mode. The four modes are round-to-nearest-even (default; ties go to the value with an even last bit, avoiding statistical drift), round toward $+infinity$, round toward $-infinity$, and round toward zero. The directed modes underlie interval arithmetic (see _Error Analysis_). Round-to-nearest gives the fundamental model
+IEEE 754 specifies that elementary operations ($+, -, times, \/$, `sqrt`) be *correctly rounded*: the result is the exact mathematical value rounded by the active mode. The four modes are round-to-nearest-even (default; ties go to the value with an even last bit, avoiding statistical drift), round toward $+infinity$, round toward $-infinity$, and round toward zero. The directed modes underlie interval arithmetic (see #xref("numerical-computing", "error-analysis", label: "Error Analysis")). Round-to-nearest gives the fundamental model
 
 $ "fl"(x compose y) = (x compose y)(1 + delta), quad |delta| <= u, $
 

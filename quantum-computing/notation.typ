@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Notation and Conventions
 
 This chapter fixes the Dirac notation, gate symbols, and error-correction conventions used throughout the volume.
@@ -56,7 +58,7 @@ Measurement in the computational basis yields outcome $x$ with probability $|che
 
 == Complexity and Units
 
-$O(dot)$ is standard asymptotic notation; $N = 2^n$ converts between qubit count and search-space size. Oracle algorithms are measured in *queries*. Gate fidelities are quoted as error rates (e.g. $10^(-3)$ per two-qubit gate); times in $mu$s or ns. Hardware-relevant classes: BQP (quantum polynomial time) vs P, NP — see _Complexity Theory_ (programming-languages).
+$O(dot)$ is standard asymptotic notation; $N = 2^n$ converts between qubit count and search-space size. Oracle algorithms are measured in *queries*. Gate fidelities are quoted as error rates (e.g. $10^(-3)$ per two-qubit gate); times in $mu$s or ns. Hardware-relevant classes: BQP (quantum polynomial time) vs P, NP — see #xref("programming-languages", "complexity", label: "Complexity Theory") (programming-languages).
 
 == Further Reading
 

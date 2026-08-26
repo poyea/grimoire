@@ -2,7 +2,7 @@
 
 = Advanced Recursion Theory
 
-This chapter continues from _Computability and Recursion Theory_, covering the
+This chapter continues from #xref("programming-languages", "computability", label: "Computability and Recursion Theory"), covering the
 hyperarithmetical and analytical hierarchies, effective topology, computable
 analysis, the fine structure of the r.e. degrees, forcing, and algorithmic
 randomness. Together the two chapters give a complete account of the classical
@@ -352,9 +352,9 @@ into a coherent map: every "this is undecidable" claim in software lives at some
 level $Sigma^0_n$ or $Pi^0_n$ , reduces to some canonical complete problem, and
 inherits its degree from a small library of templates.
 
-_See also:_ _Turing Machines and Computability_ for the machine model, _Complexity
+_See also:_ #xref("programming-languages", "turing-computability", label: "Turing Machines and Computability") for the machine model, _Complexity
 Theory_ for the analogous classification of the *feasible* fragment of the
-recursive sets, and _Type Systems_ for syntactic restrictions designed to land
+recursive sets, and #xref("programming-languages", "type-systems", label: "Type Systems") for syntactic restrictions designed to land
 inside the decidable fragment.
 
 == Further Reading

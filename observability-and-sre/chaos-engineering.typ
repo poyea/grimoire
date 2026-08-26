@@ -10,7 +10,7 @@ Chaos engineering is the discipline of experimenting on a distributed system in 
 
 The canonical formulation is the "Principles of Chaos Engineering" manifesto (principlesofchaos.org, 2015), written by the Netflix chaos team and elaborated in Basiri et al., "Chaos Engineering" (IEEE Software, 2016). Four steps:
 
-1. *Define steady state* as a measurable output of the system that indicates normal behavior. Netflix used SPS (stream starts per second), a business metric, rather than CPU or queue depth — internal metrics can look fine while users suffer, and vice versa. SLO-grade SLIs (see _SLO Engineering_) are natural steady-state signals.
+1. *Define steady state* as a measurable output of the system that indicates normal behavior. Netflix used SPS (stream starts per second), a business metric, rather than CPU or queue depth — internal metrics can look fine while users suffer, and vice versa. SLO-grade SLIs (see #xref("observability-and-sre", "slo-engineering", label: "SLO Engineering")) are natural steady-state signals.
 2. *Hypothesize* that the steady state continues in both the control group and the experimental group. The hypothesis must be falsifiable and written down before the experiment: "if we terminate one Kafka broker, consumer lag stays below 10 s and checkout SLI stays above 99.9 %."
 3. *Inject real-world events:* instance death, network partition, latency, dependency failure, resource exhaustion, region loss.
 4. *Disprove the hypothesis* by observing a statistically meaningful divergence between control and experiment. A disproved hypothesis is a found weakness; a confirmed one is earned confidence.
@@ -67,7 +67,7 @@ A recovery procedure that has never been executed is a hypothesis, not a capabil
 
 - *Backups:* the test is restore, not backup. Periodically restore to a scratch environment and verify integrity and restore _time_ — a 14-hour restore against a 1-hour RTO is a failed test. The GitLab database incident of January 2017 is the canonical cautionary tale: five backup/replication mechanisms, none of which had been verified, none of which worked when needed.
 - *Failover:* exercise database and region failover on schedule, measuring actual RTO/RPO against targets. Untested failover paths accumulate drift: stale credentials, security-group changes, capacity that no longer fits.
-- *Runbooks:* execute them during game days exactly as written, by someone who did not write them. Every ambiguity found in an exercise is an ambiguity removed from a 3 a.m. incident (see _Incident Management_).
+- *Runbooks:* execute them during game days exactly as written, by someone who did not write them. Every ambiguity found in an exercise is an ambiguity removed from a 3 a.m. incident (see #xref("observability-and-sre", "incident-management", label: "Incident Management")).
 - *Alerting and paging:* fault injection is also a test of detection — if the experiment degrades the steady state and nothing pages, you have found an alerting gap as surely as a resilience gap (see _Alerting_).
 
 == Relationship to Testing and Formal Methods

@@ -1,8 +1,10 @@
+#import "../template.typ": xref
+
 = Effects and Handlers
 
 A *pure* function returns a value and does nothing else. An *effectful* computation may also read state, write to disk, throw an exception, fork a thread, sample a random number, or yield control to a scheduler. The history of typed functional programming is, to a first approximation, the history of how to talk about effects without giving up the reasoning principles that purity affords: $beta$-reduction, equational reasoning, parametricity, separate compilation.
 
-_See also: _Type Systems_, _Linear and Substructural Type Systems_, _Subtyping and Polymorphism_._
+_See also: _Type Systems_, #xref("programming-languages", "linear-and-substructural", label: "Linear and Substructural Type Systems"), #xref("programming-languages", "subtyping-and-polymorphism", label: "Subtyping and Polymorphism")._
 
 == The Problem of Effects in a Pure Language
 
@@ -446,7 +448,7 @@ A modest schematic of the design space:
 
 The trajectory of the last 30 years is clear: from baked-in side effects, through monads and transformers, to user-definable algebraic effects with handlers. Each step pays a syntactic price for a semantic gain. Algebraic effects appear to be the local optimum: they recover the composability of monadic effects, restore the equational reasoning of purity, and admit efficient compilation by evidence translation.
 
-_See also: _Type Systems_ for the substrate of judgements $Gamma tack.r e : tau ! epsilon$, _Linear and Substructural Type Systems_ for the dual axis of resource accounting, _Subtyping and Polymorphism_ for how effect rows compose subtyping-wise._
+_See also: _Type Systems_ for the substrate of judgements $Gamma tack.r e : tau ! epsilon$, #xref("programming-languages", "linear-and-substructural", label: "Linear and Substructural Type Systems") for the dual axis of resource accounting, #xref("programming-languages", "subtyping-and-polymorphism", label: "Subtyping and Polymorphism") for how effect rows compose subtyping-wise._
 
 == Further Reading
 

@@ -43,7 +43,7 @@ The method itself runs in two phases over roughly nine steps: present business d
 - *SAAM* (Software Architecture Analysis Method, Kazman et al., 1994): ATAM's predecessor, focused on modifiability, evaluate by mapping change scenarios onto the structure and counting which components each change touches; still a perfectly good five-line technique: "list the ten most likely changes; for each, which modules are touched?" High scatter is the answer you were afraid of.
 - *CBAM* (Cost Benefit Analysis Method, Kazman, Asundi & Klein, 2001): extends ATAM with economics, estimate each candidate decision's benefit (utility gain across scenarios) per unit cost, so the portfolio of architectural improvements is chosen by ROI rather than taste.
 - *Architecture reviews as risk hunts*: Fairbanks' "risk-driven model" (_Just Enough Software Architecture_, 2010), spend design and evaluation effort proportional to risk; identify the highest risks, apply just enough technique to mitigate them, stop.
-- *Decision-centric review*: review ADRs rather than diagrams (see _Evolutionary Architecture_), asking for each significant decision: what alternatives were considered, what scenario justifies it, what new risks does it introduce?
+- *Decision-centric review*: review ADRs rather than diagrams (see #xref("software-architecture", "evolutionary-architecture", label: "Evolutionary Architecture")), asking for each significant decision: what alternatives were considered, what scenario justifies it, what new risks does it introduce?
 
 A practitioner heuristic worth keeping from all of these: the evaluation's most valuable output is usually the *list of questions the architects could not answer*, missing scenarios, unstated assumptions, and undocumented constraints surface faster in a structured walk-through than in months of construction.
 
@@ -60,7 +60,7 @@ Scenario walk-throughs are qualitative; some attributes admit numbers early:
 
 A point-in-time review decays the day it ends. The modern synthesis ties evaluation into delivery:
 
-- The driving scenarios' response measures become *fitness functions* in the pipeline and $"SLO"$s in production (see _Evolutionary Architecture_), so the architecture is re-evaluated on every commit and every minute, respectively.
+- The driving scenarios' response measures become *fitness functions* in the pipeline and $"SLO"$s in production (see #xref("software-architecture", "evolutionary-architecture", label: "Evolutionary Architecture")), so the architecture is re-evaluated on every commit and every minute, respectively.
 - Error budgets (SRE practice) operationalise the availability scenario: when the budget burns, feature work yields to reliability work, an evaluation outcome with teeth.
 - Periodic lightweight reviews (quarterly mini-ATAM on the highest-churn area) catch drift that automation cannot express, especially erosion of intent and accumulation of unrecorded decisions.
 

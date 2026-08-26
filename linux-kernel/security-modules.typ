@@ -145,7 +145,7 @@ int BPF_PROG(audit_open, struct file *file)
 }
 ```
 
-BPF LSM is the modern programmable extension: ship runtime-loaded policy without a kernel module, iterate quickly, integrate with the BPF observability ecosystem (ringbuf events, maps for policy state). Falco, Tetragon (Cilium), and Tracee all use it. Sleepable BPF (see _eBPF Deep Dive_) unlocks helpers like `bpf_d_path` and `bpf_copy_from_user` inside LSM hooks.
+BPF LSM is the modern programmable extension: ship runtime-loaded policy without a kernel module, iterate quickly, integrate with the BPF observability ecosystem (ringbuf events, maps for policy state). Falco, Tetragon (Cilium), and Tracee all use it. Sleepable BPF (see #xref("linux-kernel", "ebpf-deep-dive", label: "eBPF Deep Dive")) unlocks helpers like `bpf_d_path` and `bpf_copy_from_user` inside LSM hooks.
 
 BPF LSM does not replace SELinux/AppArmor; those provide the comprehensive baseline, while BPF LSM adds targeted runtime detection and policy.
 

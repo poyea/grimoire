@@ -115,7 +115,7 @@ The `SORT KEY` keeps segments clustered for analytical range scans; the `UNIQUE 
 
 == DuckDB on DuckLake
 
-DuckDB is the embedded analytical engine (see _Embedded Databases_ and _Column Stores_). For a long time it stayed strictly OLAP and strictly local. *DuckLake* (announced 2024) is an open table format that gives DuckDB a multi-writer, transactional, lakehouse-style storage layer — pushing it toward the HTAP edge from the OLAP side.
+DuckDB is the embedded analytical engine (see #xref("database", "embedded-databases", label: "Embedded Databases") and _Column Stores_). For a long time it stayed strictly OLAP and strictly local. *DuckLake* (announced 2024) is an open table format that gives DuckDB a multi-writer, transactional, lakehouse-style storage layer — pushing it toward the HTAP edge from the OLAP side.
 
 === The DuckLake Format
 
@@ -176,7 +176,7 @@ Hybrid Tables are slower for pure scans than columnar tables and more expensive 
 
 == Aurora DSQL: Active-Active OLTP at Cloud Scale
 
-Aurora DSQL (AWS, GA 2024) sits on the OLTP side but inherits the disaggregated cloud-native architecture (see _Cloud-Native Databases_). Its convergence story is *geographic*: a single logical OLTP database that accepts writes in multiple regions with strong consistency, removing the historical OLTP constraint of "one writer, many read replicas."
+Aurora DSQL (AWS, GA 2024) sits on the OLTP side but inherits the disaggregated cloud-native architecture (see #xref("database", "cloud-native-databases", label: "Cloud-Native Databases")). Its convergence story is *geographic*: a single logical OLTP database that accepts writes in multiple regions with strong consistency, removing the historical OLTP constraint of "one writer, many read replicas."
 
 === Architectural Sketch
 

@@ -1,4 +1,4 @@
-#import "../template.typ": overbar
+#import "../template.typ": overbar, xref
 
 = Simply-Typed Lambda Calculus: Extensions and Advanced Topics
 
@@ -44,7 +44,7 @@ For Curry-style $lambda^arrow.r$ (no annotations), type inference is performed b
 + For each application $e_1 space e_2$ producing types $tau_1, tau_2$, emit constraint $tau_1 = tau_2 arrow.r gamma$ with $gamma$ fresh.
 + Solve all constraints by Robinson unification.
 
-The result is a *principal type*, the most-general type from which all valid types are substitution instances (Hindley 1969). Type inference for $lambda^arrow.r$ is linear in the term after near-linear unification (Damas–Milner 1982; see _Type Systems_ for the algorithm).
+The result is a *principal type*, the most-general type from which all valid types are substitution instances (Hindley 1969). Type inference for $lambda^arrow.r$ is linear in the term after near-linear unification (Damas–Milner 1982; see #xref("programming-languages", "type-systems", label: "Type Systems") for the algorithm).
 
 ```ocaml
 (* OCaml: Curry-style lambda calculus inferred *)
@@ -240,7 +240,7 @@ infer ctx (App f a) = do
     _                      -> Left ("not a function: " ++ show ft)
 ```
 
-This is the entire type checker. It runs in $O(n^2)$ in the term size (the bottleneck is structural equality of types in T-APP; with hash-consing it becomes $O(n)$). Type inference for Curry-style is also $O(n)$ via union-find unification (Damas–Milner; see _Type Systems_).
+This is the entire type checker. It runs in $O(n^2)$ in the term size (the bottleneck is structural equality of types in T-APP; with hash-consing it becomes $O(n)$). Type inference for Curry-style is also $O(n)$ via union-find unification (Damas–Milner; see #xref("programming-languages", "type-systems", label: "Type Systems")).
 
 == A Detailed Worked Reduction
 
@@ -350,9 +350,9 @@ This shows: SN does *not* imply efficient normalisation. The normal form exists 
 
 What does $lambda^arrow.r$ lack?
 
-*Polymorphism.* The identity $lambda x . x$ has type $iota arrow.r iota$ for each base $iota$, but $lambda^arrow.r$ cannot internalise the quantification. Adding $forall alpha$ yields *System F*, giving Curry–Howard with second-order intuitionistic logic. See _System F and Parametricity_.
+*Polymorphism.* The identity $lambda x . x$ has type $iota arrow.r iota$ for each base $iota$, but $lambda^arrow.r$ cannot internalise the quantification. Adding $forall alpha$ yields *System F*, giving Curry–Howard with second-order intuitionistic logic. See #xref("programming-languages", "system-f-and-parametricity", label: "System F and Parametricity").
 
-*Type-level computation.* Types in $lambda^arrow.r$ are inert; we cannot compute on them. Adding type-level $lambda$ yields *System $F_omega$*; adding *dependent types* (types indexed by terms) yields the *Edinburgh Logical Framework* and ultimately *Martin-Löf Type Theory* and the *Calculus of Constructions*. See _Dependent Types_.
+*Type-level computation.* Types in $lambda^arrow.r$ are inert; we cannot compute on them. Adding type-level $lambda$ yields *System $F_omega$*; adding *dependent types* (types indexed by terms) yields the *Edinburgh Logical Framework* and ultimately *Martin-Löf Type Theory* and the *Calculus of Constructions*. See #xref("programming-languages", "dependent-types", label: "Dependent Types").
 
 *General recursion.* $lambda^arrow.r$ is sub-Turing. Adding $"fix"$ recovers Turing power at the cost of SN and logical consistency.
 

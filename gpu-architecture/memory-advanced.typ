@@ -2,7 +2,7 @@
 
 = GPU Memory: Caches, HBM, and Optimization
 
-*Advanced GPU memory topics:* This chapter covers L1/L2 caches, constant and texture memory, unified memory, HBM, access optimization patterns, and profiling. It continues from _GPU Memory Hierarchy_ (registers, shared memory, global memory).
+*Advanced GPU memory topics:* This chapter covers L1/L2 caches, constant and texture memory, unified memory, HBM, access optimization patterns, and profiling. It continues from #xref("gpu-architecture", "memory-hierarchy", label: "GPU Memory Hierarchy") (registers, shared memory, global memory).
 
 *See also:* #xref("gpu-architecture", "memory-hierarchy", label: "GPU Memory Hierarchy") (on-chip memory basics), #xref("gpu-architecture", "execution-model", label: "SIMT Execution Model"), #xref("gpu-architecture", "performance-optimization", label: "Performance Optimization").
 

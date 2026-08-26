@@ -23,7 +23,7 @@ Encoders and prompts both bound passage length, so documents are split into chun
 
 === Indexing
 
-Standard practice is a hybrid index per chunk: dense embedding (with the embedding model version recorded — re-embedding on model upgrade is a planned migration, see _Vector Search_), BM25 over the raw text, and metadata fields (source, date, ACL, tenant) for filtering. Permissions deserve emphasis: RAG over corporate documents must enforce document-level ACLs *at retrieval time*; embedding leakage through an unfiltered index is a textbook incident.
+Standard practice is a hybrid index per chunk: dense embedding (with the embedding model version recorded — re-embedding on model upgrade is a planned migration, see #xref("search-and-ir", "vector-search", label: "Vector Search")), BM25 over the raw text, and metadata fields (source, date, ACL, tenant) for filtering. Permissions deserve emphasis: RAG over corporate documents must enforce document-level ACLs *at retrieval time*; embedding leakage through an unfiltered index is a textbook incident.
 
 == The Query Side
 
@@ -38,7 +38,7 @@ Classic search pipelines normalize and interpret the query before retrieval: spe
 
 === Retrieval and Reranking
 
-The retrieval stack inside RAG is exactly the hybrid cascade of _Neural Retrieval_: BM25 plus dense ANN, RRF fusion, top \~50–100 into a cross-encoder reranker, top 3–10 into the prompt. The reranker matters more in RAG than in ranked-list search because the generator sees only a handful of passages: precision\@5 is the binding constraint, and irrelevant context actively harms generation (models are distractible). Passage order in the prompt matters too; placing the strongest evidence first (or first and last) mitigates lost-in-the-middle effects.
+The retrieval stack inside RAG is exactly the hybrid cascade of #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval"): BM25 plus dense ANN, RRF fusion, top \~50–100 into a cross-encoder reranker, top 3–10 into the prompt. The reranker matters more in RAG than in ranked-list search because the generator sees only a handful of passages: precision\@5 is the binding constraint, and irrelevant context actively harms generation (models are distractible). Passage order in the prompt matters too; placing the strongest evidence first (or first and last) mitigates lost-in-the-middle effects.
 
 == Generation and Grounding
 
@@ -71,7 +71,7 @@ Pulling the volume together, a full system comprises:
 
 1. *Ingestion*: crawlers/connectors, parsing and extraction, deduplication (SimHash/MinHash), chunking, enrichment (entities, embeddings), index writing — batch plus a streaming path for freshness.
 2. *Indexes*: inverted (sharded by document, replicated), ANN, metadata/doc store; immutable segments with background merges.
-3. *Query path*: understanding and rewriting, fan-out to shards, first-stage retrieval with pruning (WAND / HNSW beam), fusion, L1/L2 ranking (_Learning to Rank_), business-rule and diversity layers, snippet generation — all under a tail-latency budget (e.g., p99 under 200 ms) enforced with per-stage timeouts and graceful degradation (skip the reranker rather than miss the deadline).
+3. *Query path*: understanding and rewriting, fan-out to shards, first-stage retrieval with pruning (WAND / HNSW beam), fusion, L1/L2 ranking (#xref("search-and-ir", "learning-to-rank", label: "Learning to Rank")), business-rule and diversity layers, snippet generation — all under a tail-latency budget (e.g., p99 under 200 ms) enforced with per-stage timeouts and graceful degradation (skip the reranker rather than miss the deadline).
 4. *Feedback loop*: click and dwell logging, judgment collection, offline metric pipelines, interleaving and A/B infrastructure (_Evaluation_), and retraining schedules for rankers and embedders.
 
 RAG adds the generation tier on top but changes nothing below it — which is the closing point of this volume: large language models did not replace the search stack; they became its most demanding customer.

@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Effects and Handlers: Implementation and Theory
 
 == Free Monads in Detail
@@ -452,7 +454,7 @@ The `!` operator "calls" an effectful computation; pattern matching on the resul
 
 The practical upshot: Koka and OCaml 5 are the production systems; Eff and Frank are research vehicles exploring the design space; Helium explores the efficient restricted fragment. All share the same algebraic foundation.
 
-_See also: _Effects and Handlers_ for the algebraic theory and equational semantics this chapter implements, _Operational Semantics_ for the small-step machinery underlying continuation capture, _Concurrency Models_ for handlers as schedulers._
+_See also: _Effects and Handlers_ for the algebraic theory and equational semantics this chapter implements, #xref("programming-languages", "operational-semantics", label: "Operational Semantics") for the small-step machinery underlying continuation capture, _Concurrency Models_ for handlers as schedulers._
 
 == Further Reading
 

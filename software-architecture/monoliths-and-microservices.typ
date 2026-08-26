@@ -48,7 +48,7 @@ Costs, paid immediately and forever: network latency and partial failure on ever
 When extracting services from a monolith, the unit of decomposition should be a *bounded context* or business capability, never a technical layer (an "entity service" or shared "data service" recreates coupling at network cost).
 
 Practical strategies:
-- *Strangler fig* (Fowler, 2004): place a routing facade in front of the monolith; build or extract capabilities behind it; route traffic over incrementally; retire monolith code as it is starved (detailed in _Evolutionary Architecture_).
+- *Strangler fig* (Fowler, 2004): place a routing facade in front of the monolith; build or extract capabilities behind it; route traffic over incrementally; retire monolith code as it is starved (detailed in #xref("software-architecture", "evolutionary-architecture", label: "Evolutionary Architecture")).
 - *Extract by value and risk*: start with a module that is frequently changed (deploy-independence payoff) but not the most critical (limit blast radius). Newman suggests "easy and valuable" first to build operational muscle.
 - *Branch by abstraction* for in-place seams; *change data capture* or an anticorruption layer where the monolith's data must be mirrored during transition.
 - *Database decomposition last and hardest*: split tables before splitting the schema; break joins and foreign keys deliberately (Newman, _Monolith to Microservices_, 2019, devotes half the book to this).

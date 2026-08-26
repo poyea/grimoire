@@ -119,9 +119,9 @@ The orchestrator (next chapter) guarantees the partition $"DAG"$ runs once per l
 $"ELT"$ tolerates schema drift because raw data is retained. Two practical patterns:
 
 - *Semi-structured columns:* land payloads as $"JSON"$ / `variant` and project columns lazily. BigQuery `JSON`, Snowflake `VARIANT`, Databricks `variantType`.
-- *Open table formats:* Iceberg / Delta / Hudi allow `ADD COLUMN`, `RENAME COLUMN`, and type widening without rewriting files. See _Lakehouse Engineering_.
+- *Open table formats:* Iceberg / Delta / Hudi allow `ADD COLUMN`, `RENAME COLUMN`, and type widening without rewriting files. See #xref("data-engineering", "lakehouse-engineering", label: "Lakehouse Engineering").
 
-*Anti-pattern:* nullable-everything wide tables that hide schema breakage. Pair evolution with contracts (_Data Quality_).
+*Anti-pattern:* nullable-everything wide tables that hide schema breakage. Pair evolution with contracts (#xref("data-engineering", "data-quality", label: "Data Quality")).
 
 == Cost Comparison Sketch
 
@@ -135,7 +135,7 @@ A 1 TB clickstream ingest, transformed daily for 30 days:
   [Engineer time], [Higher (PySpark, $"YAML"$, $"DAG"$)], [Lower (pure $"SQL"$ + dbt)],
 )
 
-The engineer-time delta usually dominates the cloud bill in the first two years; the compute delta dominates after. _Cloud Cost Engineering_ (Cloud & Infrastructure volume) formalizes this.
+The engineer-time delta usually dominates the cloud bill in the first two years; the compute delta dominates after. #xref("cloud-and-infrastructure", "cost-engineering", label: "Cloud Cost Engineering") (Cloud & Infrastructure volume) formalizes this.
 
 == Streaming ELT
 

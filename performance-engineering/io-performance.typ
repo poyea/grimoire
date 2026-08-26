@@ -68,7 +68,7 @@ When per-packet software cost is the bottleneck (millions of packets per second,
 
 == Measurement
 
-- `iostat -x`: per-device IOPS (`r/s`, `w/s`), throughput, queue depth (`aqu-sz`), per-I/O latency (`r_await`, `w_await`), and `%util` (which, on parallel devices, does not mean "full": see _Performance Methodology_).
+- `iostat -x`: per-device IOPS (`r/s`, `w/s`), throughput, queue depth (`aqu-sz`), per-I/O latency (`r_await`, `w_await`), and `%util` (which, on parallel devices, does not mean "full": see #xref("performance-engineering", "methodology", label: "Performance Methodology")).
 - *BPF tools* (bcc/bpftrace): `biolatency` (block-I/O latency histograms, the honest view of the tail), `biosnoop` (per-I/O trace with process attribution), `ext4slower`/`xfsslower` (filesystem-level operations exceeding a threshold, which include cache and locking effects the block layer never sees), `tcpretrans`, `tcplife`.
 - `fio`: the standard storage microbenchmark; specify engine (`io_uring`), block size, queue depth, randomness, and runtime, and report latency percentiles, not just bandwidth. Sweep queue depth to map the device's throughput-latency curve.
 - Network: `ss -ti` (per-connection RTT, cwnd, retransmits), `nstat` (stack counters), `iperf3` (path capacity), `ethtool -S` (NIC drops and per-queue stats).

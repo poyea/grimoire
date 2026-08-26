@@ -41,7 +41,7 @@ The conceptual ancestor of modern schemes. With generator $g$ of a prime-order g
 2. Compute challenge $e = H(R || m)$.
 3. Compute $s = k + e x mod q$. Signature: $(R, s)$ or $(e, s)$.
 
-Verification: check $g^s = R y^e$. Schnorr is derived from the Schnorr identification protocol via the *Fiat-Shamir transform* (see _Zero-Knowledge Proofs_) and has a clean security proof under discrete log in the random-oracle model. Schnorr signatures are *linear*, which enables multi-signatures and aggregation (MuSig2, Bitcoin Taproot).
+Verification: check $g^s = R y^e$. Schnorr is derived from the Schnorr identification protocol via the *Fiat-Shamir transform* (see #xref("cryptography-and-security", "zero-knowledge-proofs", label: "Zero-Knowledge Proofs")) and has a clean security proof under discrete log in the random-oracle model. Schnorr signatures are *linear*, which enables multi-signatures and aggregation (MuSig2, Bitcoin Taproot).
 
 === DSA and ECDSA
 
@@ -77,7 +77,7 @@ Shor's algorithm breaks RSA, DSA, and all elliptic-curve schemes. NIST standardi
 - *SLH-DSA (SPHINCS+)*: stateless hash-based; conservative security, large signatures ($approx 7.7$–$50$ KB).
 - *FN-DSA (Falcon)*: lattice (NTRU); compact but requires floating-point Gaussian sampling that is hard to make constant-time.
 
-See _Post-Quantum Cryptography_ for the underlying problems and migration strategy.
+See #xref("cryptography-and-security", "post-quantum", label: "Post-Quantum Cryptography") for the underlying problems and migration strategy.
 
 == Implementation Pitfalls
 

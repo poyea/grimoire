@@ -84,7 +84,7 @@ They trade off: batching raises throughput at the cost of latency; running at hi
 
 === Why percentiles
 
-Latency distributions are heavy-tailed; means are dominated by the tail and hide it at the same time. Report percentiles: p50 (median), p95, p99, p99.9, and max. Note that percentiles do not compose: the p99 of a service is not the average of per-host p99s, and the p99 of a fan-out request is governed by the per-leg p99 raised to the number of legs (see _Concurrency Performance_). Aggregate with histograms (HDR histograms, Prometheus native histograms), never by averaging precomputed percentiles.
+Latency distributions are heavy-tailed; means are dominated by the tail and hide it at the same time. Report percentiles: p50 (median), p95, p99, p99.9, and max. Note that percentiles do not compose: the p99 of a service is not the average of per-host p99s, and the p99 of a fan-out request is governed by the per-leg p99 raised to the number of legs (see #xref("performance-engineering", "concurrency-performance", label: "Concurrency Performance")). Aggregate with histograms (HDR histograms, Prometheus native histograms), never by averaging precomputed percentiles.
 
 === Coordinated omission
 

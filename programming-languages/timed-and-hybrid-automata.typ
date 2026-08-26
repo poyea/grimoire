@@ -315,7 +315,7 @@ Read $exists phi_1 U_(lt.eq 5) phi_2$ as there is a run along which $phi_1$ hold
 
 *Weighted timed automata* (Alur--La Torre--Pappas 2001; Behrmann--Fehnker--Hune--Larsen--Pettersson--Romijn--Vaandrager 2001) attach a cost rate $r(l)$ to each location and discrete costs to edges. The *optimal-reachability* problem -- find the minimum-cost run reaching a target -- is *PSPACE-complete*. The *bounded-cost reachability* and most natural extensions to multiple cost variables are *undecidable* with $gt.eq 3$ variables.
 
-The connection to weighted automata (cf. _Weighted and Probabilistic Automata_) is intimate: a weighted TA is a TA whose timed runs are evaluated in the tropical semiring $(RR union {oo}, min, +)$ along trajectories.
+The connection to weighted automata (cf. #xref("programming-languages", "weighted-and-probabilistic-automata", label: "Weighted and Probabilistic Automata")) is intimate: a weighted TA is a TA whose timed runs are evaluated in the tropical semiring $(RR union {oo}, min, +)$ along trajectories.
 
 == Complexity Landscape
 

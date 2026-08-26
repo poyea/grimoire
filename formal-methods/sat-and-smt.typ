@@ -196,7 +196,7 @@ Z3's `Int` sort maps to the theory of integers ($"LIA"$); the modulo constraint 
 
 === Bounded Model Checking
 
-BMC (see _Model Checking_) unrolls a transition relation $k$ steps and asks an SMT solver whether a bad state is reachable. SMT (rather than pure SAT) allows the transition relation to be expressed in linear arithmetic or bit-vectors without bit-blasting the full datapath.
+BMC (see #xref("formal-methods", "model-checking", label: "Model Checking")) unrolls a transition relation $k$ steps and asks an SMT solver whether a bad state is reachable. SMT (rather than pure SAT) allows the transition relation to be expressed in linear arithmetic or bit-vectors without bit-blasting the full datapath.
 
 === Symbolic Execution
 

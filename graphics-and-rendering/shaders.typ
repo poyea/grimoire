@@ -18,7 +18,7 @@ Shaders are the programmable spine of every modern $"GPU"$ pipeline. They evolve
   [Slang], [Slang $arrow.r$ $"SPIR-V"$/$"DXIL"$], [All], [Generics, modules, autodiff],
 )
 
-Slang in particular has become the language of choice for new research because of its first-class generics and reverse-mode autodiff (used in differentiable rendering, see _Real-Time Engine Architecture_).
+Slang in particular has become the language of choice for new research because of its first-class generics and reverse-mode autodiff (used in differentiable rendering, see #xref("graphics-and-rendering", "realtime-engines", label: "Real-Time Engine Architecture")).
 
 == A Minimal Forward Pipeline
 
@@ -152,7 +152,7 @@ The classic tessellation pipeline (hull, tessellator, domain) is largely depreca
 
 == Ray-Tracing Shaders
 
-DXR / Vulkan-RT add five new shader stages: ray generation, miss, closest-hit, any-hit, intersection. See _Ray Tracing_.
+DXR / Vulkan-RT add five new shader stages: ray generation, miss, closest-hit, any-hit, intersection. See #xref("graphics-and-rendering", "ray-tracing", label: "Ray Tracing").
 
 == Common Bugs
 

@@ -83,7 +83,7 @@ For overdetermined $A in RR^(m times n)$, $m > n$, minimize $parallel A x - b pa
 
 *QR.* Factor $A = Q R$, solve $R x = Q^top b$. Costs $2 m n^2 - 2/3 n^3$ — about twice the normal equations — and the error bound involves $kappa(A)$ plus a $kappa(A)^2$ term scaled by the *residual*: small-residual problems behave like $kappa(A)$. This is the default (`numpy.linalg.lstsq` historically, LAPACK `gels`).
 
-*SVD.* $x = V Sigma^(+) U^top b$, the minimum-norm solution. Most expensive, but the only honest method for rank-deficient or nearly rank-deficient problems: truncating singular values below a tolerance regularizes explicitly, and the decay of $sigma_i$ *tells you* the numerical rank instead of letting Cholesky guess. Ridge regression is the smooth version, shrinking coefficients by $sigma_i \/ (sigma_i^2 + lambda)$ (see the ML volume's _Linear Algebra for ML_).
+*SVD.* $x = V Sigma^(+) U^top b$, the minimum-norm solution. Most expensive, but the only honest method for rank-deficient or nearly rank-deficient problems: truncating singular values below a tolerance regularizes explicitly, and the decay of $sigma_i$ *tells you* the numerical rank instead of letting Cholesky guess. Ridge regression is the smooth version, shrinking coefficients by $sigma_i \/ (sigma_i^2 + lambda)$ (see the ML volume's #xref("machine-learning-foundations", "linear-algebra-for-ml", label: "Linear Algebra for ML")).
 
 ```python
 import numpy as np

@@ -156,7 +156,7 @@ A *skip list* (Pugh 1990) augments a sorted linked list with multiple "express l
 
 == Bloom Filters and Count-Min (See Cross-References)
 
-These standard randomized sketches are covered in detail in _Probabilistic Data Structures_ and _Streaming Algorithms_; both are Monte Carlo with one-sided error.
+These standard randomized sketches are covered in detail in #xref("coding", "probabilistic-data-structures", label: "Probabilistic Data Structures") and #xref("coding", "streaming-algorithms", label: "Streaming Algorithms"); both are Monte Carlo with one-sided error.
 
 == Tail Bounds Cheat-Sheet
 

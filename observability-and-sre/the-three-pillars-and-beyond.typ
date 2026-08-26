@@ -165,7 +165,7 @@ Profiles use stratified time-based sampling: 100 Hz CPU profile = 1 stack/10 ms 
 
 - *Logging the trace_id only:* no parent/child = not a trace, just labeled logs.
 - *Per-customer dashboards:* $10^4$ customers $times$ $10$ panels = $10^5$ time series the eye cannot scan.
-- *Alerting on raw metrics:* alert on $"SLO"$ burn rate, not on $"P99" > X$ — see _SLO Engineering_.
+- *Alerting on raw metrics:* alert on $"SLO"$ burn rate, not on $"P99" > X$ — see #xref("observability-and-sre", "slo-engineering", label: "SLO Engineering").
 - *Separate ingestion for each signal:* triples your collector failure modes.
 - *Sampling at the SDK:* loses the ability to do tail-based decisions later.
 

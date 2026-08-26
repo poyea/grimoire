@@ -85,7 +85,7 @@ alter table lh.silver.orders add partition field hours(event_ts);
 
 Truly breaking changes (split a column, change semantics, fix a wrong type) cannot be metadata-only. The standard choreography is *expand-contract* (parallel change):
 
-+ *Expand.* Add the new field/table alongside the old; producers write *both* (dual-write within one record is safe; dual-write across systems is not — see _Change Data Capture_ on the outbox pattern).
++ *Expand.* Add the new field/table alongside the old; producers write *both* (dual-write within one record is safe; dual-write across systems is not — see #xref("data-engineering", "change-data-capture", label: "Change Data Capture") on the outbox pattern).
 + *Migrate.* Backfill historical data into the new shape; move consumers one by one, validating new against old (shadow reads, reconciliation queries).
 + *Contract.* After a deprecation window with usage telemetry showing zero readers, drop the old field.
 

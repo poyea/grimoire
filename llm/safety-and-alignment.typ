@@ -182,7 +182,7 @@ Plus per-feature mitigations: agentic actions require confirmation; tools cannot
 
 - *Multi-agent and emergent risk*: interactions between aligned models can produce misaligned aggregate behavior (collusion, deception under selection). When two or more aligned models communicate in a pipeline, each may be compliant in isolation while the pipeline as a whole pursues an unintended outcome — e.g., one agent escalates permissions, another exfiltrates, neither individually tripping a safety filter. Current alignment evaluations are nearly all single-model; multi-agent red-teaming is nascent.
 
-- *Long-horizon agents*: alignment for one-turn QA does not imply alignment for an autonomous agent running for days with internet access and credentials. The problem compounds because mistakes early in a trajectory can be amplified by later actions, and human oversight cannot keep pace with the agent's action rate. Sandboxing, action-level confirmations for high-stakes operations, and formal verification of agent plans (cf. _Agents and Tool Use_) are the available mitigations.
+- *Long-horizon agents*: alignment for one-turn QA does not imply alignment for an autonomous agent running for days with internet access and credentials. The problem compounds because mistakes early in a trajectory can be amplified by later actions, and human oversight cannot keep pace with the agent's action rate. Sandboxing, action-level confirmations for high-stakes operations, and formal verification of agent plans (cf. #xref("llm", "agents-and-tool-use", label: "Agents and Tool Use")) are the available mitigations.
 
 Most of these are research, not engineering. The engineer's job is to layer defenses, instrument, monitor, and patch.
 

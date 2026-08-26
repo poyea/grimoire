@@ -1,4 +1,4 @@
-#import "../template.typ": overbar
+#import "../template.typ": overbar, xref
 
 = Complexity Theory
 
@@ -7,7 +7,7 @@ solve them. Where recursion theory asks "is there an algorithm?", complexity ask
 "is there a *feasible* algorithm?", and -- since 1971 -- has mostly been the
 study of why the answer appears to be "no" while we struggle to prove it.
 
-_See also: _Computability_, _Turing Machines and Computability_, _Omega-Automata_
+_See also: _Computability_, #xref("programming-languages", "turing-computability", label: "Turing Machines and Computability"), _Omega-Automata_
 for the complexity of parity games and infinite-word problems._
 
 == Resource-Bounded Computation

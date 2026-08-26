@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = Dependent Types: Proof Engineering and Advanced Topics
 
 == Tactics and Proof Engineering
@@ -281,7 +283,7 @@ Dependent types entered logic with *de Bruijn's* *Automath* system (1968), the f
 
 *Hofmann and Streicher* (1995) introduced the groupoid model, refuting UIP in pure ITT, which became the seed of HoTT.
 
-*Voevodsky's* 2009 *univalence axiom* + *cubical type theory* (Cohen–Coquand–Huber–Mörtberg 2018) brought computational content back to univalent foundations; see _Homotopy Type Theory_.
+*Voevodsky's* 2009 *univalence axiom* + *cubical type theory* (Cohen–Coquand–Huber–Mörtberg 2018) brought computational content back to univalent foundations; see #xref("programming-languages", "homotopy-type-theory", label: "Homotopy Type Theory").
 
 The *Mathematical Components* library (Coq, Gonthier et al.) and *mathlib* (Lean, the community) have demonstrated that production formalisation of nontrivial mathematics (Four-Color Theorem, Feit–Thompson Odd Order Theorem, Liquid Tensor Experiment) is possible at scale.
 

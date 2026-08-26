@@ -115,7 +115,7 @@ Conversely, *every monad comes from an adjunction*. Two canonical choices:
 
 The Kleisli adjunction is the "free" side -- the category of computations with no algebraic structure beyond the monad. The Eilenberg-Moore adjunction is the "algebraic" side -- the category of *algebras* for the monad.
 
-For CBPV (Levy 1999, see _Operational Semantics_), the underlying adjunction $F tack.l U$ between values and computations is *literally* a monadic adjunction, with $T = U F$ the effect monad. CBPV is *"the"* internal language of an adjunction; CBV and CBN are the two embeddings induced by the Kleisli and Eilenberg-Moore halves.
+For CBPV (Levy 1999, see #xref("programming-languages", "operational-semantics", label: "Operational Semantics")), the underlying adjunction $F tack.l U$ between values and computations is *literally* a monadic adjunction, with $T = U F$ the effect monad. CBPV is *"the"* internal language of an adjunction; CBV and CBN are the two embeddings induced by the Kleisli and Eilenberg-Moore halves.
 
 == Lawvere Theories and Algebraic Effects
 

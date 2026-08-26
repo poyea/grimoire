@@ -222,7 +222,7 @@ For infinite-word languages, the analogue of $L^*$ runs into a structural proble
 
 == Spectral Learning of Probabilistic Automata
 
-For *probabilistic automata* (cf. _Weighted and Probabilistic Automata_) or *hidden Markov models*, active membership queries return probabilities, not bits. Two algorithmic regimes:
+For *probabilistic automata* (cf. #xref("programming-languages", "weighted-and-probabilistic-automata", label: "Weighted and Probabilistic Automata")) or *hidden Markov models*, active membership queries return probabilities, not bits. Two algorithmic regimes:
 
 === Hankel Matrix Approach (Hsu--Kakade--Zhang 2012)
 
@@ -380,7 +380,7 @@ Active learning's success in industrial verification rests on a contingent obser
 4. Show that learning *parity functions* in the PAC model is in P, but learning DFAs that compute parities of substring counts is crypto-hard.
 5. Construct an RNN (4 hidden units, sigmoid) that recognizes $(a b)^*$ and run an $L^*$-with-clustering extraction. Compare extracted DFA to the ground-truth automaton.
 6. Prove that if RPNI is given a *characteristic sample* of $L$, the inferred DFA equals the minimal DFA of $L$.
-7. Show that the value-1 problem for probabilistic automata (cf. _Weighted and Probabilistic Automata_) implies undecidability of a corresponding "learning to threshold" problem.
+7. Show that the value-1 problem for probabilistic automata (cf. #xref("programming-languages", "weighted-and-probabilistic-automata", label: "Weighted and Probabilistic Automata")) implies undecidability of a corresponding "learning to threshold" problem.
 
 == Extended Topic: Observation Tables Formalized
 

@@ -1,3 +1,5 @@
+#import "../template.typ": xref
+
 = System F: Categorical Models and Advanced Topics
 
 == Categorical Models of System F
@@ -21,7 +23,7 @@ In every case, the semantic universe of "types" is a small object in some catego
 - *Scala*: subtyping + higher kinds = essentially $F_(<:)^omega$. Decidability is precarious (Scala type-checking can loop).
 - *Rust*: traits and lifetimes are an HM-like fragment with subtype-like coercions.
 - *Java/C\#*: F-bounded generics. Subtype-checking undecidable in the limit (Grigore 2017 for Java).
-- *Idris/Agda/Lean*: full dependent types, strictly beyond System F (see _Dependent Types_).
+- *Idris/Agda/Lean*: full dependent types, strictly beyond System F (see #xref("programming-languages", "dependent-types", label: "Dependent Types")).
 
 In every case the language designer chose a *fragment* that is either inferable (HM) or merely checkable (System FC). No production language requires the user to type-infer full System F.
 

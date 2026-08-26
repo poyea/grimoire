@@ -106,9 +106,9 @@ Final state: x = 1, but two increments occurred.
 
 Fixes correspond to entire subfields of this book:
 
-- *State-based CRDT* (G-Counter): each node tracks its own count, merges take element-wise max. We will cover this in _Gossip Protocols_ and _CRDTs_.
-- *Operation-based CRDT*: deliver `inc` exactly once in causal order — requires reliable causal broadcast (_Time and Order_).
-- *Consensus*: serialize every `inc` through a leader (_Consensus Deep Dive_).
+- *State-based CRDT* (G-Counter): each node tracks its own count, merges take element-wise max. We will cover this in #xref("distributed-systems", "gossip", label: "Gossip Protocols") and _CRDTs_.
+- *Operation-based CRDT*: deliver `inc` exactly once in causal order — requires reliable causal broadcast (#xref("distributed-systems", "time-and-order", label: "Time and Order")).
+- *Consensus*: serialize every `inc` through a leader (#xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive")).
 - *Compensating transaction*: detect divergence, run a reconciliation (_Transactions Across Systems_).
 
 The choice depends on availability requirements, write rate, and the application's tolerance for staleness.
@@ -153,9 +153,9 @@ Each step weaker level admits more concurrency and tolerates more failures but p
 
 == Reading Map for This Book
 
-- *Foundations:* this chapter, _Time and Order_, _Failure Detection_.
-- *Coordination:* _Leader Election_, _Consensus Deep Dive_, _Coordination Services_.
-- *Data:* _CRDTs_, _Causal Consistency_, _Gossip Protocols_, _Distributed Transactions_.
+- *Foundations:* this chapter, #xref("distributed-systems", "time-and-order", label: "Time and Order"), #xref("distributed-systems", "failure-detection", label: "Failure Detection").
+- *Coordination:* _Leader Election_, #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive"), #xref("distributed-systems", "coordination-services", label: "Coordination Services").
+- *Data:* _CRDTs_, #xref("distributed-systems", "causal-consistency", label: "Causal Consistency"), #xref("distributed-systems", "gossip", label: "Gossip Protocols"), _Distributed Transactions_.
 - *Systems:* _Distributed Scheduling_, _Case Studies_.
 - *Verification:* _Formal Methods_.
 

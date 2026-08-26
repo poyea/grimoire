@@ -1,6 +1,8 @@
+#import "../template.typ": xref
+
 = io_uring
 
-The traditional Linux I/O syscalls (`read`, `write`, `recv`, `send`, `epoll_wait`) are *synchronous from the caller's point of view*: each operation crosses the ring boundary, the kernel does the work, and control returns. At ~120-250 ns per crossing (see _ABI and Syscalls_), an IO-heavy workload doing millions of small operations per second spends a substantial fraction of its CPU on the transition itself, not the work. POSIX AIO never lived up to its name (the glibc implementation is a userspace thread pool), and the kernel `aio_*` interface is restricted to `O_DIRECT` file I/O. `io_uring`, introduced in Linux 5.1 (May 2019) by Jens Axboe, is the first truly general-purpose async I/O interface on Linux: arbitrary syscalls, batched, with zero per-operation ring transition in the fast path.
+The traditional Linux I/O syscalls (`read`, `write`, `recv`, `send`, `epoll_wait`) are *synchronous from the caller's point of view*: each operation crosses the ring boundary, the kernel does the work, and control returns. At ~120-250 ns per crossing (see #xref("linux-kernel", "abi-syscalls", label: "ABI and Syscalls")), an IO-heavy workload doing millions of small operations per second spends a substantial fraction of its CPU on the transition itself, not the work. POSIX AIO never lived up to its name (the glibc implementation is a userspace thread pool), and the kernel `aio_*` interface is restricted to `O_DIRECT` file I/O. `io_uring`, introduced in Linux 5.1 (May 2019) by Jens Axboe, is the first truly general-purpose async I/O interface on Linux: arbitrary syscalls, batched, with zero per-operation ring transition in the fast path.
 
 The cost model changes from "N operations = N syscalls" to "N operations = 1 syscall (or 0 with `SQPOLL`)". For Nginx-class workloads, this can be the difference between 1 M and 3 M req/s on the same hardware.
 

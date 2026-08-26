@@ -57,7 +57,7 @@ When exactness is negotiable:
 - *Static index pruning* drops low-impact postings at build time.
 - *Tiering*: a small high-quality tier (by static rank) is searched first; lower tiers only on insufficient results — standard in web search.
 
-These interact with learned sparse retrieval: SPLADE-style term weights have flatter score distributions, which weakens WAND/BMW pruning and motivated dedicated work on pruning-friendly training (see _Neural Retrieval_).
+These interact with learned sparse retrieval: SPLADE-style term weights have flatter score distributions, which weakens WAND/BMW pruning and motivated dedicated work on pruning-friendly training (see #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval")).
 
 == Phrase and Proximity Queries
 
@@ -75,7 +75,7 @@ A typical chain:
 3. *Token filtering*: lowercasing, stopword removal (now often skipped — pruning makes stopwords cheap and they matter in phrases), synonym expansion, stemming (Porter, Snowball) or lemmatization. Stemming trades recall for precision errors; many engines index both stemmed and exact forms in parallel fields.
 4. *Query construction*: parse operators (quotes, +/-, fields like `title:`), build a query tree of boolean/phrase/term nodes, and apply rewrites — multi-field expansion into a DisMax/combined-fields query, fuzzy matching via Levenshtein automata against the FST dictionary, and wildcard expansion bounded by a term budget.
 
-Higher-level query understanding — spelling correction, segmentation into concepts, intent classification, vector query generation — belongs to the full pipeline picture in _RAG and Search Systems_.
+Higher-level query understanding — spelling correction, segmentation into concepts, intent classification, vector query generation — belongs to the full pipeline picture in #xref("search-and-ir", "rag-and-search-systems", label: "RAG and Search Systems").
 
 == Putting It Together
 

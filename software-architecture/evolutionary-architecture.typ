@@ -64,7 +64,7 @@ Evolvability is mostly a function of coupling. Ford et al. define the *architect
 
 == Architecture Decision Records
 
-Evolution erases context: two years later nobody remembers *why* the system uses asynchronous replication, and the constraint gets "fixed" into an outage. *Architecture Decision Records* (Nygard, 2011) counter this: a short, immutable document per significant decision, stored in the repository, with a stable shape, *context* (forces in play), *decision*, *status* (proposed/accepted/superseded), and *consequences* (including the negative ones). Superseded ADRs are never deleted, only linked forward, so the decision history is itself queryable. ADRs are cheap, demand no tooling, and are the single highest-leverage documentation practice for evolving systems; they also feed evaluation methods (see _Architecture Evaluation_) with honest rationale.
+Evolution erases context: two years later nobody remembers *why* the system uses asynchronous replication, and the constraint gets "fixed" into an outage. *Architecture Decision Records* (Nygard, 2011) counter this: a short, immutable document per significant decision, stored in the repository, with a stable shape, *context* (forces in play), *decision*, *status* (proposed/accepted/superseded), and *consequences* (including the negative ones). Superseded ADRs are never deleted, only linked forward, so the decision history is itself queryable. ADRs are cheap, demand no tooling, and are the single highest-leverage documentation practice for evolving systems; they also feed evaluation methods (see #xref("software-architecture", "architecture-evaluation", label: "Architecture Evaluation")) with honest rationale.
 
 == Managing Technical Debt and Drift
 

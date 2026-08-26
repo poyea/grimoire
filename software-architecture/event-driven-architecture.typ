@@ -39,7 +39,7 @@ Properties:
 - Processors are more coupled (they receive commands, implying a known commander), and the mediator is a scaling and change bottleneck: every workflow change touches it.
 - Complex workflows often use tiers of mediators (simple ones in a lightweight engine, long-running human-in-the-loop ones in a BPM tool).
 
-The choice mirrors *orchestration versus choreography* in saga design (see _Distributed Data Patterns_): choreography (broker) for simple, stable flows with few steps; orchestration (mediator) when the workflow itself is complex, audited, or frequently changed.
+The choice mirrors *orchestration versus choreography* in saga design (see #xref("software-architecture", "distributed-data-patterns", label: "Distributed Data Patterns")): choreography (broker) for simple, stable flows with few steps; orchestration (mediator) when the workflow itself is complex, audited, or frequently changed.
 
 == Brokers and Logs: Queues versus Streams
 

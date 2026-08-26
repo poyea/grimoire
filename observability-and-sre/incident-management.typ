@@ -66,7 +66,7 @@ A runbook (playbook) is the bridge between an alert and a mitigation. The minimu
 3. What are the known mitigations, in order of preference? (exact commands, rollback procedure)
 4. When and how do I escalate?
 
-Good runbooks are imperative and copy-pasteable; "investigate the database" is not a step. They decay quickly — a stale runbook that issues a destructive command against a renamed cluster is worse than none — so teams attach runbook review to alert review, and some validate runbook commands in game days (see _Chaos Engineering_). Transposit, Netflix, and others have pushed toward executable runbooks: scripts with confirmation prompts rather than prose, which both speeds mitigation and is a step toward automating the response away entirely. The end state of a perfect runbook is automation that makes the page unnecessary.
+Good runbooks are imperative and copy-pasteable; "investigate the database" is not a step. They decay quickly — a stale runbook that issues a destructive command against a renamed cluster is worse than none — so teams attach runbook review to alert review, and some validate runbook commands in game days (see #xref("observability-and-sre", "chaos-engineering", label: "Chaos Engineering")). Transposit, Netflix, and others have pushed toward executable runbooks: scripts with confirmation prompts rather than prose, which both speeds mitigation and is a step toward automating the response away entirely. The end state of a perfect runbook is automation that makes the page unnecessary.
 
 == Postmortems
 

@@ -94,7 +94,7 @@ Classically, static scores enter as an additive prior on the ranking score or a 
 - *Efficiency*: bounded per-term contributions enable WAND-family pruning; one index serves all queries.
 - *Robustness out of domain*: exact lexical match cannot hallucinate; rare identifiers, code tokens, and product SKUs match exactly where embeddings blur.
 
-The standard production answer is not BM25 _or_ neural, but BM25 as one leg of a hybrid (see _Neural Retrieval_) and as the candidate generator beneath learned rankers (see _Learning to Rank_).
+The standard production answer is not BM25 _or_ neural, but BM25 as one leg of a hybrid (see _Neural Retrieval_) and as the candidate generator beneath learned rankers (see #xref("search-and-ir", "learning-to-rank", label: "Learning to Rank")).
 
 == Further Reading
 
