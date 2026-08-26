@@ -114,7 +114,7 @@ A "profile" is a fixed bundle of extensions that software can target, eliminatin
   [RVA20], [2021], [RV64GC + Zicntr/Zihpm], [First app-class profile],
   [RVA22], [2022], [+ B, Zihintpause, Zicboz/Zicbom/Zicbop], [General-purpose Linux baseline],
   [RVA23], [2024], [+ V, Zfh, Zfa, Zacas, Zicond, hypervisor], [Vector + hypervisor required],
-  [RVB22 / RVB23], [-], [Server variants], [Adds I/O hooks],
+  [RVB23], [2024], [Bespoke 64-bit app processors], [Relaxed RVA23 mandates (V optional)],
 )
 
 RVA23 is the milestone that lets distros (Debian, Ubuntu, Fedora, Android) ship a single binary that exploits vectors and modern atomics. Pre-RVA23, $"RVV"$ was effectively opt-in via dynamic dispatch.
@@ -165,7 +165,7 @@ $ gcc -march=rva23u64 ...
 $ qemu-riscv64 -cpu max,zvfh=on,v=on,vlen=256 ./app
 ```
 
-Mature: Linux ($"riscv"$ port since 5.17 stable), $"glibc"$, $"LLVM"$ ($"RVV"$ codegen), Debian ($"riscv64"$ official since Debian 13), Ubuntu, Fedora, Android (since 14).
+Mature: Linux ($"riscv"$ port mainlined in 4.15), $"glibc"$, $"LLVM"$ ($"RVV"$ codegen), Debian ($"riscv64"$ official since Debian 13), Ubuntu, Fedora, Android (since 14).
 
 Less mature: $"JVM"$ ($"RVV"$ vectorization in JDK 23+ only), Go ($"RVV"$ in Go 1.23+ experimental), Rust ($"std::arch::riscv64"$ intrinsics stabilizing).
 
@@ -192,7 +192,7 @@ Less mature: $"JVM"$ ($"RVV"$ vectorization in JDK 23+ only), Go ($"RVV"$ in Go 
   [Vector model], [VLA ($"RVV"$)], [VLA ($"SVE"$) + fixed ($"NEON"$)], [Fixed ($"AVX"$)],
   [Memory model], [$"RVWMO"$ (weak)], [Weak], [$"TSO"$],
   [Mode bits], [None], [None (AArch64)], [Many (legacy)],
-  [Encoding], [32-bit + 16-bit (C)], [32-bit + 16-bit (T32)], [Variable 1-15 B],
+  [Encoding], [32-bit + 16-bit (C)], [32-bit (A64; T32 only in AArch32)], [Variable 1-15 B],
 )
 
 == Further Reading
@@ -205,8 +205,8 @@ Patterson, D.A. & Waterman, A. (2017). _The RISC-V Reader: An Open Architecture 
 
 RISC-V International (2024). _RVA23 Profiles Specification_.
 
-Asanovic, K. et al. (2016). "The Berkeley Out-of-Order Machine (BOOM): An Industry-Competitive, Synthesizable, Parameterized RISC-V Processor." UCB Tech Report.
+Celio, C., Patterson, D.A., & Asanović, K. (2015). "The Berkeley Out-of-Order Machine (BOOM): An Industry-Competitive, Synthesizable, Parameterized RISC-V Processor." UCB Tech Report UCB/EECS-2015-167.
 
-Krste Asanovic, Yunsup Lee, et al. (2014). "The RISC-V Vector ISA: Status and Future Directions." _Hot Chips 28_.
+Asanović, K. & Espasa, R. (2018). "The RISC-V Vector ISA Tutorial." _8th RISC-V Workshop_, Barcelona.
 
 Hennessy, J.L. & Patterson, D.A. (2019). "A New Golden Age for Computer Architecture." _CACM_ 62(2).
