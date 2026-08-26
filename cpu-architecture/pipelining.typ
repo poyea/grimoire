@@ -86,11 +86,11 @@ Trend: Moderate depth (14-20 stages) for balance
 Pipeline width (decode):
 - Intel P-cores: 6-wide
 - AMD Zen 4: 4-wide
-- Apple M3: 16-wide (!!)
+- Apple M3: 9-wide
 
 Branch misprediction recovery:
 - Zen 4: ~13 cycles, Raptor Lake P-cores: ~12-15 cycles
-- Older Skylake / Zen 3: ~16-20 cycles
+- Older Skylake: ~16-20 cycles; Zen 3: ~13-18 cycles
 - Determines acceptable misprediction rate (<5%)
 ```
 
@@ -118,7 +118,7 @@ st  r3, [r4]      ; MEM stage cycle 4 - conflict! Stall 1 cycle
 - Single ALU: two ALU instructions in superscalar → stall
   - _Fix:_ multiple functional units
 - Register file ports: simultaneous read and write
-  - _Fix:_ dual-ported register file (read in first half-cycle, write in second)
+  - _Fix:_ dual-ported register file (write in first half-cycle, read in second)
 
 === Data Hazards
 
@@ -292,7 +292,7 @@ Cost breakdown (Skylake, ~16 stage pipeline):
 - Caches branch target addresses for taken branches
 - Indexed by PC, returns predicted target
 - Miss in BTB → predict not-taken (or stall)
-- Modern BTBs: 4K-8K entries (L1), 16K+ entries (L2)
+- Modern BTBs: ~4K entries (Skylake) to ~12K (Golden Cove); often two-level (Zen 4: 1.5K L1 + 7K L2)
 
 *Return Address Stack (RAS):*
 - Hardware stack for CALL/RET prediction
@@ -323,7 +323,7 @@ Cost breakdown (Skylake, ~16 stage pipeline):
   [Intel Pentium Pro], [1995], [14], [First x86 OoO execution],
   [Intel Pentium 4 (Willamette)], [2000], [20], [High clock speed strategy],
   [Intel Pentium 4 (Prescott)], [2004], [31], [Deepest x86 pipeline ever],
-  [Intel Core (Yonah)], [2006], [14], [Return to shorter pipeline],
+  [Intel Core 2 (Merom)], [2006], [14], [Return to shorter pipeline],
   [Intel Skylake], [2015], [14-19], [Variable depth, $mu$op cache shortcut],
   [Apple M1 (Firestorm)], [2020], [~16], [Wide 8-issue OoO],
   [AMD Zen 4], [2022], [~19], [Simultaneous multithreading],
