@@ -8,10 +8,10 @@ Superscalar processors execute multiple instructions per cycle using multiple ex
 
 == Superscalar Execution
 
-A scalar pipeline can execute at most one instruction per cycle, while a superscalar processor can execute N instructions per cycle, making it an N-way superscalar architecture. Modern CPUs typically implement 4-way superscalar execution: Cycle 1 fetches 4 instructions, Cycle 2 decodes them, Cycle 3 executes all 4 if they are independent and execution units are available, and Cycle 4 retires them. The theoretical maximum is 4 instructions per cycle (IPC), but practical performance typically achieves 2-3 IPC due to data dependencies and resource constraints.
+A scalar pipeline can execute at most one instruction per cycle, while a superscalar processor can execute N instructions per cycle, making it an N-way superscalar architecture. Width has grown steadily: Skylake (2015) renames 4 $mu$ops per cycle, Golden Cove 6, and Lion Cove, Zen 5 and Apple's P-cores reach 8-9 (see #xref("cpu-architecture", "cpu-fundamentals", label: "CPU Fundamentals")). Skylake's 4-wide pipeline is the worked example throughout this chapter: Cycle 1 fetches 4 instructions, Cycle 2 decodes them, Cycle 3 executes all 4 if they are independent and execution units are available, and Cycle 4 retires them. The theoretical maximum is then 4 instructions per cycle (IPC), but practical performance typically achieves 2-3 IPC due to data dependencies and resource constraints.
 
 ```
-4-way superscalar (modern CPUs):
+4-way superscalar (Skylake, 2015):
 
 Cycle 1: Fetch 4 instructions
 Cycle 2: Decode 4 instructions
@@ -157,7 +157,7 @@ add rdx, rax    ; P40 ← P40 + P11 (uses new rax, no dependency)
 *Purpose:* Maintain program order for retirement (precise exceptions).
 
 ```
-ROB: Circular buffer, 224-512 entries (modern CPUs)
+ROB: Circular buffer, 224-576 entries (modern CPUs)
 
 ROB entry:
 - Instruction PC
@@ -375,17 +375,13 @@ uops_dispatched_port.port_5 ./program
 # Balanced usage across ports = good ILP
 ```
 
-== References
-
-Tomasulo, R.M. (1967). "An Efficient Algorithm for Exploiting Multiple Arithmetic Units." IBM Journal of Research and Development 11(1): 25-33.
-
-Smith, J.E. & Sohi, G.S. (1995). "The Microarchitecture of Superscalar Processors." Proceedings of the IEEE 83(12): 1609-1624.
-
-Hennessy, J.L. & Patterson, D.A. (2017). Computer Architecture: A Quantitative Approach (6th ed.). Morgan Kaufmann. Chapter 3 (Instruction-Level Parallelism).
-
 == Further Reading
 
-Hennessy, J. L., Patterson, D. A. (2019). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 3 (Instruction-Level Parallelism and Its Exploitation) is the canonical reference for dynamic scheduling, register renaming, speculation, and the ILP wall.
+Tomasulo, R. M. (1967). "An Efficient Algorithm for Exploiting Multiple Arithmetic Units." _IBM Journal of Research and Development_ 11(1): 25--33. --- The original dynamic-scheduling algorithm, as built for the IBM 360/91.
+
+Smith, J. E., & Sohi, G. S. (1995). "The Microarchitecture of Superscalar Processors." _Proceedings of the IEEE_ 83(12): 1609--1624.
+
+Hennessy, J. L., Patterson, D. A. (2017). _Computer Architecture: A Quantitative Approach_, 6th ed. Morgan Kaufmann. — Chapter 3 (Instruction-Level Parallelism and Its Exploitation) is the canonical reference for dynamic scheduling, register renaming, speculation, and the ILP wall.
 
 Intel (2024). _Intel 64 and IA-32 Architectures Optimization Reference Manual_. Intel. — Sections 2–3 describe the front-end (decoders, micro-op cache, loop stream detector) and back-end (scheduler, execution ports, ROB) of current superscalar cores, with throughput and latency guidance.
 
@@ -393,7 +389,7 @@ ARM (2023). _ARM Cortex-A Series Programmer's Guide_. ARM. — Covers out-of-ord
 
 Agner Fog (2024). _The Microarchitecture of Intel, AMD and VIA CPUs_. Technical University of Denmark. — Exhaustive documentation of decode widths, rename register counts, ROB sizes, execution port topologies, and retirement rates across x86 generations.
 
-Sohi, G. S., Breach, S., & Vijaykumar, T. N. (1995). "Multiscalar Processors." ISCA '22. — Proposes hierarchical superscalar execution beyond single-thread ILP; useful context for understanding the limits that eventually pushed the industry toward multicore.
+Sohi, G. S., Breach, S., & Vijaykumar, T. N. (1995). "Multiscalar Processors." _ISCA '95_ (the 22nd ISCA). — Proposes hierarchical superscalar execution beyond single-thread ILP; useful context for understanding the limits that eventually pushed the industry toward multicore.
 
 Wall, D. W. (1991). "Limits of Instruction-Level Parallelism." ASPLOS '91. — Landmark study showing that ILP in typical programs plateaus well below what idealized hardware could exploit; motivated the shift toward thread-level and data-level parallelism.
 
