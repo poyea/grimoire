@@ -51,7 +51,7 @@ Page table size per level: 512 × 8 = 4 KB (fits in one page!)
 ```
 63         52 51        12 11    9 8 7 6 5 4 3 2 1 0
 ├───────────┼─────────────┼───────┬─┬─┬─┬─┬─┬─┬─┬─┬─┤
-│  Reserved │     PFN     │  Avail│G│P│D│A│P│P│U│R│P│
+│XD│Reserved│     PFN     │  Avail│G│P│D│A│P│P│U│R│P│
 │           │             │       │ │A│ │ │C│W│/│/│ │
 │           │             │       │ │T│ │ │D│T│S│W│ │
 └───────────┴─────────────┴───────┴─┴─┴─┴─┴─┴─┴─┴─┴─┘
@@ -65,6 +65,7 @@ A (Accessed): Set by CPU on read/write (for LRU)
 D (Dirty): Set by CPU on write (needs writeback)
 PAT (Page Attribute Table): Memory type
 G (Global): Don't flush from TLB on CR3 change
+XD (bit 63): No-execute, when EFER.NXE = 1
 PFN (Physical Frame Number): Bits 51-12 of physical address
 ```
 
@@ -90,11 +91,11 @@ page-table levels, so a typical walk costs 30-100 cycles.
 ```
 VA: 0000 0000 0000 0000 0111 1111 1000 1010 1011 0000 0000 0001 0010 0011 0100
     └──────────────┘ └────────┘ └────────┘ └────────┘ └────────┘ └──────────────┘
-       Reserved       L4=255    L3=138     L2=176     L1=1        Offset=0x234
+       Sign-ext       L4=255    L3=42      L2=384     L1=1        Offset=0x234
 
 1. PML4[255] → PDP at 0x10000000
-2. PDP[138]  → PD at 0x20000000
-3. PD[176]   → PT at 0x30000000
+2. PDP[42]   → PD at 0x20000000
+3. PD[384]   → PT at 0x30000000
 4. PT[1]     → PFN = 0x40000
 5. PA = 0x40000 << 12 | 0x234 = 0x40000234
 ```
