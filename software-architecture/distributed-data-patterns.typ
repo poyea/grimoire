@@ -83,7 +83,7 @@ The anti-pattern is reaching into another service's database "just for reporting
   [Strict invariant (unique username, no double spend)], [Single owner, one aggregate, one local transaction], [Design boundaries so the invariant fits inside],
 )
 
-The last row is the deepest lesson: the cheapest distributed-data pattern is the one you avoid needing. Draw aggregate and service boundaries so that the invariants requiring atomicity live *inside* one boundary (see _Domain-Driven_ _Design_), and let everything that crosses boundaries be eventually consistent by explicit, documented choice.
+The last row is the deepest lesson: the cheapest distributed-data pattern is the one you avoid needing. Draw aggregate and service boundaries so that the invariants requiring atomicity live *inside* one boundary (see #xref("software-architecture", "domain-driven-design", label: "Domain-Driven Design")), and let everything that crosses boundaries be eventually consistent by explicit, documented choice.
 
 == Pitfalls
 

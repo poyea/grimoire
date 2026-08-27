@@ -1686,7 +1686,7 @@ chapters:
   - subject: software-architecture
     slug: distributed-data-patterns
     path: software-architecture/distributed-data-patterns.typ
-    words: 1799
+    words: 1802
     status: reviewed
   - subject: software-architecture
     slug: domain-driven-design
