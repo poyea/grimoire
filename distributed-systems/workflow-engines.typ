@@ -4,7 +4,7 @@
 
 Modern distributed applications frequently need to coordinate multi-step processes that span hours, days, or weeks — processes that must survive server restarts, handle partial failures gracefully, and retry individual steps without re-executing completed work. *Workflow engines* solve this by externalising durable state and encoding execution semantics in a framework rather than in application code. This chapter covers the durable execution model, the leading engines (Temporal, Airflow, Prefect, Dagster), the relationship to sagas, and failure handling patterns.
 
-*See also:* _Distributed Transactions_, #xref("distributed-systems", "failure-detection", label: "Failure Detection"), #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive")
+*See also:* #xref("distributed-systems", "transactions", label: "Distributed Transactions"), #xref("distributed-systems", "failure-detection", label: "Failure Detection"), #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive")
 
 == The Durable Execution Model
 

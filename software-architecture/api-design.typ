@@ -78,7 +78,7 @@ Rule of thumb: REST for public resource-oriented APIs, gRPC for internal RPC, Gr
 
 == Idempotency
 
-An operation is idempotent if performing it $n >= 1$ times has the effect of performing it once. HTTP declares GET, PUT, DELETE idempotent and POST not. This matters because *retries are mandatory* in distributed systems (see _Resilience Patterns_), and a retried non-idempotent request is a duplicate payment.
+An operation is idempotent if performing it $n >= 1$ times has the effect of performing it once. HTTP declares GET, PUT, DELETE idempotent and POST not. This matters because *retries are mandatory* in distributed systems (see #xref("software-architecture", "resilience-patterns", label: "Resilience Patterns")), and a retried non-idempotent request is a duplicate payment.
 
 The standard fix is the *idempotency key* (Stripe's design, now an IETF draft `Idempotency-Key` header): the client generates a unique key per logical operation (a UUID); the server atomically records the key with the response of the first execution and replays that stored response for any retry with the same key. Implementation subtleties: the key store needs a TTL (Stripe: 24 hours); concurrent duplicates must either block or get 409; the key must be checked *and reserved* in the same transaction as the side effect, or a crash between them recreates the duplicate (the same atomicity problem the outbox pattern solves).
 

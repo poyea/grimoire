@@ -8,7 +8,7 @@ Process calculi are algebraic theories of concurrent computation. Where the $lam
 
 A process calculus is judged by three criteria. First, *compositionality*: the meaning of $P | Q$ should be derivable from the meanings of $P$ and $Q$, otherwise the algebra has no predictive power. Second, *expressiveness*: can the calculus represent the concurrency phenomena one cares about (synchronisation, choice, name passing, mobility, security, locality)? Third, *equational reasoning*: when can we substitute $P$ for $Q$ inside a context $C[dot]$ and preserve behaviour? The latter is the deepest question, and it is the question that the theory of behavioural equivalences was invented to answer.
 
-This chapter surveys the three foundational calculi (CCS, CSP, and the $pi$-calculus) together with their descendants (join, ambient, spi, applied $pi$). The companion chapter _Concurrency Models_ treats the broader semantic landscape: event structures, Petri nets, memory models, actor systems, STM, and the operational semantics of mainstream concurrent languages.
+This chapter surveys the three foundational calculi (CCS, CSP, and the $pi$-calculus) together with their descendants (join, ambient, spi, applied $pi$). The companion chapter #xref("programming-languages", "concurrency-models", label: "Concurrency Models") treats the broader semantic landscape: event structures, Petri nets, memory models, actor systems, STM, and the operational semantics of mainstream concurrent languages.
 
 == Why an Algebra of Processes?
 

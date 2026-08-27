@@ -4,7 +4,7 @@
 
 Memory management spans the boundary between hardware (the MMU, TLB, cache hierarchy) and software (the kernel allocator, the runtime, the application). Done well, processes see a uniform, contiguous, large address space; done poorly, the same processes see TLB storms, NUMA penalties, and unpredictable swap stalls. This chapter is the conceptual treatment; Linux-specific reclaim and `mmap` mechanics live in `linux-kernel/memory-reclaim.typ` and `linux-kernel/mmap-memory.typ`, and the hardware path is in `cpu-architecture/virtual-memory.typ`.
 
-*See also:* _Virtual Memory_ (cpu-architecture), #xref("linux-kernel", "memory-reclaim", label: "Memory Reclaim") (linux-kernel), #xref("linux-kernel", "mmap-memory", label: "mmap and Memory Management") (linux-kernel).
+*See also:* #xref("operating-systems", "virtual-memory", label: "Virtual Memory") (cpu-architecture), #xref("linux-kernel", "memory-reclaim", label: "Memory Reclaim") (linux-kernel), #xref("linux-kernel", "mmap-memory", label: "mmap and Memory Management") (linux-kernel).
 
 == Address Spaces and Virtual Memory
 

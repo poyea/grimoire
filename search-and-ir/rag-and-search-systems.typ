@@ -4,7 +4,7 @@
 
 Retrieval-augmented generation (RAG) puts a search engine in front of a language model: retrieve passages relevant to the user's request, place them in the prompt, and generate a grounded answer. It is the dominant pattern for giving LLMs access to private, fresh, or voluminous knowledge without retraining, and it makes retrieval quality directly visible — a RAG system is a search system whose final ranker is a generator. This chapter covers the pipeline end to end (chunking, indexing, retrieval, reranking, generation), query understanding for both classic search and RAG, advanced patterns (multi-hop, agentic, GraphRAG), RAG-specific evaluation, and the architecture of a complete production search system.
 
-*See also:* #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (the embedding and reranking models), #xref("search-and-ir", "vector-search", label: "Vector Search") (the index underneath), _Evaluation_ (retrieval metrics RAG inherits), #xref("search-and-ir", "inverted-indexes", label: "Inverted Indexes") and #xref("search-and-ir", "ranking-classical", label: "Ranking: Classical Models") (the lexical leg of the hybrid).
+*See also:* #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (the embedding and reranking models), #xref("search-and-ir", "vector-search", label: "Vector Search") (the index underneath), #xref("search-and-ir", "evaluation", label: "Evaluation") (retrieval metrics RAG inherits), #xref("search-and-ir", "inverted-indexes", label: "Inverted Indexes") and #xref("search-and-ir", "ranking-classical", label: "Ranking: Classical Models") (the lexical leg of the hybrid).
 
 == Why Retrieval for Generation
 
@@ -59,7 +59,7 @@ The generator receives instructions, the retrieved passages (typically delimited
 
 Decompose, then measure end to end:
 
-- *Retrieval*: recall\@k and nDCG against judged qrels (see _Evaluation_); for RAG specifically, "context contains the answer"\@k.
+- *Retrieval*: recall\@k and nDCG against judged qrels (see #xref("search-and-ir", "evaluation", label: "Evaluation")); for RAG specifically, "context contains the answer"\@k.
 - *Generation, given context*: *faithfulness/groundedness* (is every claim supported by the retrieved passages?) and *answer relevance* — typically scored by an LLM judge (the RAGAS-style metric family; Es et al., 2024), with periodic human calibration of the judge.
 - *End-to-end*: answer correctness on a gold QA set; citation precision/recall.
 
@@ -72,7 +72,7 @@ Pulling the volume together, a full system comprises:
 1. *Ingestion*: crawlers/connectors, parsing and extraction, deduplication (SimHash/MinHash), chunking, enrichment (entities, embeddings), index writing — batch plus a streaming path for freshness.
 2. *Indexes*: inverted (sharded by document, replicated), ANN, metadata/doc store; immutable segments with background merges.
 3. *Query path*: understanding and rewriting, fan-out to shards, first-stage retrieval with pruning (WAND / HNSW beam), fusion, L1/L2 ranking (#xref("search-and-ir", "learning-to-rank", label: "Learning to Rank")), business-rule and diversity layers, snippet generation — all under a tail-latency budget (e.g., p99 under 200 ms) enforced with per-stage timeouts and graceful degradation (skip the reranker rather than miss the deadline).
-4. *Feedback loop*: click and dwell logging, judgment collection, offline metric pipelines, interleaving and A/B infrastructure (_Evaluation_), and retraining schedules for rankers and embedders.
+4. *Feedback loop*: click and dwell logging, judgment collection, offline metric pipelines, interleaving and A/B infrastructure (#xref("search-and-ir", "evaluation", label: "Evaluation")), and retraining schedules for rankers and embedders.
 
 RAG adds the generation tier on top but changes nothing below it — which is the closing point of this volume: large language models did not replace the search stack; they became its most demanding customer.
 

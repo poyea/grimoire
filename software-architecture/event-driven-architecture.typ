@@ -4,7 +4,7 @@
 
 In an event-driven architecture (EDA), components communicate by producing and consuming *events*: immutable records that something happened ("OrderPlaced", "PaymentCaptured"). Producers do not know who consumes; consumers do not know who produced. This inversion, from "call the service that does X" to "announce that X happened", is what buys EDA its decoupling, scalability, and fault tolerance, and also what makes it the hardest mainstream style to reason about end to end. This chapter covers the messaging vocabulary, broker and mediator topologies, delivery semantics, event sourcing and CQRS, and the failure modes that distinguish production systems from conference demos.
 
-*See also:* #xref("software-architecture", "architectural-styles", label: "Architectural Styles") (where EDA sits among the styles), #xref("software-architecture", "distributed-data-patterns", label: "Distributed Data Patterns") (sagas, outbox, CQRS data flow), _Resilience Patterns_ (handling consumer and broker failure).
+*See also:* #xref("software-architecture", "architectural-styles", label: "Architectural Styles") (where EDA sits among the styles), #xref("software-architecture", "distributed-data-patterns", label: "Distributed Data Patterns") (sagas, outbox, CQRS data flow), #xref("software-architecture", "resilience-patterns", label: "Resilience Patterns") (handling consumer and broker failure).
 
 == Events, Commands, and Messages
 

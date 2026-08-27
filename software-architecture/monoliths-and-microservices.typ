@@ -4,7 +4,7 @@
 
 "Monolith versus microservices" is the most over-litigated debate in software architecture, and most of the heat comes from treating it as binary. The real spectrum runs from a tangled monolith, through a modular monolith, to coarse-grained services, to fine-grained microservices, and systems move along it in both directions. This chapter covers modularity within a single deployable, decomposition strategies, the antipatterns that make distribution fail, and the case studies, including the celebrated reversals, that anchor the debate in evidence.
 
-*See also:* #xref("software-architecture", "domain-driven-design", label: "Domain-Driven Design") (bounded contexts as the unit of decomposition), #xref("software-architecture", "distributed-data-patterns", label: "Distributed Data Patterns") (what happens to the database when you split), _Resilience Patterns_ (the failure modes distribution buys you).
+*See also:* #xref("software-architecture", "domain-driven-design", label: "Domain-Driven Design") (bounded contexts as the unit of decomposition), #xref("software-architecture", "distributed-data-patterns", label: "Distributed Data Patterns") (what happens to the database when you split), #xref("software-architecture", "resilience-patterns", label: "Resilience Patterns") (the failure modes distribution buys you).
 
 == Definitions, Precisely
 
@@ -30,7 +30,7 @@ The pragmatic guidance, echoed by Fowler ("MonolithFirst", 2015) and Newman: a m
 Benefits that genuinely require independent deployability:
 - *Independent deploy cadence*: 50 teams releasing without a shared release train. This is the dominant driver at scale; DORA research correlates loosely-coupled architecture with elite delivery performance.
 - *Independent scaling*: scale the image-processing service to 200 instances while checkout runs 10; also heterogeneous hardware (GPU vs. memory-optimised).
-- *Fault isolation*: a memory leak in recommendations cannot OOM checkout (only if the integration is asynchronous or properly bulkheaded, see _Resilience Patterns_).
+- *Fault isolation*: a memory leak in recommendations cannot OOM checkout (only if the integration is asynchronous or properly bulkheaded, see #xref("software-architecture", "resilience-patterns", label: "Resilience Patterns")).
 - *Technology heterogeneity*: a JVM service next to a Python ML service, within reason.
 
 Costs, paid immediately and forever: network latency and partial failure on every internal call, distributed transactions become sagas, debugging requires distributed tracing, every service needs its own CI/CD, on-call, and security surface, and local development needs orchestration. Newman's rule: do not adopt microservices without a problem on the benefits list that you actually have.

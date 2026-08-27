@@ -4,7 +4,7 @@
 
 Many distributed databases sacrifice strong consistency for availability and performance. Understanding the formal models — CRDT, causal consistency, eventual consistency, CALM — allows engineers to reason about what guarantees an application actually needs.
 
-*See also:* #xref("database", "isolation-and-consistency-models", label: "Isolation and Consistency Models"), #xref("database", "consensus-and-replication", label: "Consensus and Replication"), _Distributed Transactions_
+*See also:* #xref("database", "isolation-and-consistency-models", label: "Isolation and Consistency Models"), #xref("database", "consensus-and-replication", label: "Consensus and Replication"), #xref("database", "transactions-distributed", label: "Distributed Transactions")
 
 == CAP Theorem
 

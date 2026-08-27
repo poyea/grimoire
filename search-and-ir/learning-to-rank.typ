@@ -4,7 +4,7 @@
 
 Learning to rank (LTR) replaces hand-tuned scoring formulas with models trained on relevance judgments or click data. Rather than guessing how to combine BM25, PageRank, freshness, and a hundred other signals, a learned ranker fits the combination to optimize a ranking metric. LTR powered the second generation of web search (Bing's RankNet lineage, Yandex's MatrixNet) and remains the standard final-stage ranker in production: gradient-boosted trees over rich features, with LambdaMART the perennial benchmark winner. This chapter covers the pointwise/pairwise/listwise taxonomy, RankNet through LambdaMART, features and training data, click models, and the cascade architecture LTR lives in.
 
-*See also:* #xref("search-and-ir", "ranking-classical", label: "Ranking: Classical Models") (the features), _Evaluation_ (the metrics LTR optimizes), #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (learned first stages and cross-encoder rerankers), _Query Processing_ (why LTR runs only on a candidate set).
+*See also:* #xref("search-and-ir", "ranking-classical", label: "Ranking: Classical Models") (the features), #xref("search-and-ir", "evaluation", label: "Evaluation") (the metrics LTR optimizes), #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (learned first stages and cross-encoder rerankers), #xref("search-and-ir", "query-processing", label: "Query Processing") (why LTR runs only on a candidate set).
 
 == The Problem Setup
 
@@ -92,7 +92,7 @@ Each stage trades recall for precision; the training subtlety is that downstream
 - *Training/serving skew*: features computed differently offline (from logs) and online (from the live index) silently degrade the model. Log the served feature values.
 - *Click feedback loops*: training on clicks produced by the current ranker entrenches it; without exploration or propensity correction the system cannot learn that an unshown document is good.
 - *Per-query imbalance*: queries with hundreds of judged documents dominate pairwise losses unless pairs are normalized per query.
-- *Stale negatives*: judgments pooled years ago miss newer relevant documents, so "unjudged" must not be treated as "irrelevant" when evaluating (see _Evaluation_, condensed lists and bpref).
+- *Stale negatives*: judgments pooled years ago miss newer relevant documents, so "unjudged" must not be treated as "irrelevant" when evaluating (see #xref("search-and-ir", "evaluation", label: "Evaluation"), condensed lists and bpref).
 
 == Further Reading
 

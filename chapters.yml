@@ -386,7 +386,7 @@ chapters:
   - subject: cpu-architecture
     slug: speculative-execution-security
     path: cpu-architecture/speculative-execution-security.typ
-    words: 1285
+    words: 1288
     status: reviewed
   - subject: cpu-architecture
     slug: superscalar
@@ -506,7 +506,7 @@ chapters:
   - subject: database
     slug: cloud-native-databases
     path: database/cloud-native-databases.typ
-    words: 1815
+    words: 1818
     status: reviewed
   - subject: database
     slug: column-stores-and-vectorized-execution
@@ -521,12 +521,12 @@ chapters:
   - subject: database
     slug: concurrency-control
     path: database/concurrency-control.typ
-    words: 1942
+    words: 1945
     status: reviewed
   - subject: database
     slug: consensus-and-replication
     path: database/consensus-and-replication.typ
-    words: 1798
+    words: 1801
     status: reviewed
   - subject: database
     slug: embedded-databases
@@ -551,7 +551,7 @@ chapters:
   - subject: database
     slug: isolation-and-consistency-models
     path: database/isolation-and-consistency-models.typ
-    words: 1328
+    words: 1331
     status: reviewed
   - subject: database
     slug: joins-and-aggregation
@@ -576,17 +576,17 @@ chapters:
   - subject: database
     slug: oltp-htap-olap-convergence
     path: database/oltp-htap-olap-convergence.typ
-    words: 2473
+    words: 2476
     status: reviewed
   - subject: database
     slug: oltp-vs-olap
     path: database/oltp-vs-olap.typ
-    words: 1774
+    words: 1777
     status: reviewed
   - subject: database
     slug: partitioning-and-elasticity
     path: database/partitioning-and-elasticity.typ
-    words: 1572
+    words: 1575
     status: reviewed
   - subject: database
     slug: query-compilation
@@ -651,7 +651,7 @@ chapters:
   - subject: database
     slug: weakly-consistent-systems
     path: database/weakly-consistent-systems.typ
-    words: 1349
+    words: 1352
     status: reviewed
   - subject: distributed-systems
     slug: causal-consistency
@@ -666,7 +666,7 @@ chapters:
   - subject: distributed-systems
     slug: coordination-services
     path: distributed-systems/coordination-services.typ
-    words: 1557
+    words: 1560
     status: reviewed
   - subject: distributed-systems
     slug: crdts
@@ -686,7 +686,7 @@ chapters:
   - subject: distributed-systems
     slug: introduction
     path: distributed-systems/introduction.typ
-    words: 1512
+    words: 1515
     status: reviewed
   - subject: distributed-systems
     slug: leader-election-and-leases
@@ -696,7 +696,7 @@ chapters:
   - subject: distributed-systems
     slug: log-based-systems
     path: distributed-systems/log-based-systems.typ
-    words: 1905
+    words: 1908
     status: reviewed
   - subject: distributed-systems
     slug: time-and-order
@@ -711,7 +711,7 @@ chapters:
   - subject: distributed-systems
     slug: workflow-engines
     path: distributed-systems/workflow-engines.typ
-    words: 1916
+    words: 1919
     status: reviewed
   - subject: embedded-and-realtime
     slug: mcus-and-soc
@@ -966,7 +966,7 @@ chapters:
   - subject: llm
     slug: data-curation
     path: llm/data-curation.typ
-    words: 1915
+    words: 1918
     status: reviewed
   - subject: llm
     slug: distillation
@@ -1041,7 +1041,7 @@ chapters:
   - subject: llm
     slug: reasoning-models
     path: llm/reasoning-models.typ
-    words: 1726
+    words: 1729
     status: reviewed
   - subject: llm
     slug: rlhf
@@ -1361,17 +1361,17 @@ chapters:
   - subject: operating-systems
     slug: memory-management
     path: operating-systems/memory-management.typ
-    words: 2411
+    words: 2414
     status: reviewed
   - subject: operating-systems
     slug: page-reclaim-and-oom
     path: operating-systems/page-reclaim-and-oom.typ
-    words: 2058
+    words: 2061
     status: reviewed
   - subject: operating-systems
     slug: processes-and-threads
     path: operating-systems/processes-and-threads.typ
-    words: 2318
+    words: 2321
     status: reviewed
   - subject: operating-systems
     slug: real-time-scheduling
@@ -1466,7 +1466,7 @@ chapters:
   - subject: programming-languages
     slug: effects-handlers-implementation
     path: programming-languages/effects-handlers-implementation.typ
-    words: 3645
+    words: 3648
     status: reviewed
   - subject: programming-languages
     slug: foundations
@@ -1531,7 +1531,7 @@ chapters:
   - subject: programming-languages
     slug: process-calculi
     path: programming-languages/process-calculi.typ
-    words: 5393
+    words: 5396
     status: reviewed
   - subject: programming-languages
     slug: pushdown-and-beyond
@@ -1671,7 +1671,7 @@ chapters:
   - subject: software-architecture
     slug: api-design
     path: software-architecture/api-design.typ
-    words: 1654
+    words: 1657
     status: reviewed
   - subject: software-architecture
     slug: architectural-styles
@@ -1681,12 +1681,12 @@ chapters:
   - subject: software-architecture
     slug: architecture-evaluation
     path: software-architecture/architecture-evaluation.typ
-    words: 1619
+    words: 1622
     status: reviewed
   - subject: software-architecture
     slug: distributed-data-patterns
     path: software-architecture/distributed-data-patterns.typ
-    words: 1796
+    words: 1799
     status: reviewed
   - subject: software-architecture
     slug: domain-driven-design
@@ -1696,7 +1696,7 @@ chapters:
   - subject: software-architecture
     slug: event-driven-architecture
     path: software-architecture/event-driven-architecture.typ
-    words: 1718
+    words: 1721
     status: reviewed
   - subject: software-architecture
     slug: evolutionary-architecture
@@ -1706,7 +1706,7 @@ chapters:
   - subject: software-architecture
     slug: monoliths-and-microservices
     path: software-architecture/monoliths-and-microservices.typ
-    words: 1676
+    words: 1682
     status: reviewed
   - subject: software-architecture
     slug: resilience-patterns
@@ -1841,17 +1841,17 @@ chapters:
   - subject: search-and-ir
     slug: inverted-indexes
     path: search-and-ir/inverted-indexes.typ
-    words: 1498
+    words: 1501
     status: reviewed
   - subject: search-and-ir
     slug: learning-to-rank
     path: search-and-ir/learning-to-rank.typ
-    words: 1379
+    words: 1388
     status: reviewed
   - subject: search-and-ir
     slug: neural-retrieval
     path: search-and-ir/neural-retrieval.typ
-    words: 1300
+    words: 1303
     status: reviewed
   - subject: search-and-ir
     slug: query-processing
@@ -1861,15 +1861,15 @@ chapters:
   - subject: search-and-ir
     slug: rag-and-search-systems
     path: search-and-ir/rag-and-search-systems.typ
-    words: 1457
+    words: 1466
     status: reviewed
   - subject: search-and-ir
     slug: ranking-classical
     path: search-and-ir/ranking-classical.typ
-    words: 1446
+    words: 1449
     status: reviewed
   - subject: search-and-ir
     slug: vector-search
     path: search-and-ir/vector-search.typ
-    words: 1351
+    words: 1354
     status: reviewed

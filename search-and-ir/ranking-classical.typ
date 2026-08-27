@@ -4,7 +4,7 @@
 
 Classical ranking functions score documents against queries using only term statistics — no training data, no embeddings — yet remain remarkably hard to beat. BM25, published in 1994, is still the default first-stage ranker in nearly every production search system and a mandatory baseline in neural IR papers. This chapter derives TF-IDF and BM25, develops the language-modeling view of retrieval, extends to fielded documents with BM25F, and covers query-independent static signals, chiefly PageRank.
 
-*See also:* #xref("search-and-ir", "inverted-indexes", label: "Inverted Indexes") (where tf and df live), _Query Processing_ (maximizing these scores under pruning), #xref("search-and-ir", "learning-to-rank", label: "Learning to Rank") (these scores as features), #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (learned alternatives and hybrids).
+*See also:* #xref("search-and-ir", "inverted-indexes", label: "Inverted Indexes") (where tf and df live), #xref("search-and-ir", "query-processing", label: "Query Processing") (maximizing these scores under pruning), #xref("search-and-ir", "learning-to-rank", label: "Learning to Rank") (these scores as features), #xref("search-and-ir", "neural-retrieval", label: "Neural Retrieval") (learned alternatives and hybrids).
 
 == The Vector Space Model and TF-IDF
 

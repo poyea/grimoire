@@ -4,7 +4,7 @@
 
 A frontier LLM is trained on $10^(13)$ tokens. At that scale, the data pipeline determines model quality more than the architecture: small differences in deduplication, filtering, and decontamination shift downstream benchmarks by several points. This chapter walks the modern web-scale pipeline — extraction from Common Crawl, language identification, deduplication (exact, MinHash near-dup, semantic), quality filtering (heuristics, classifiers, perplexity), decontamination against eval sets, and the publicly documented pipelines that produced C4, RefinedWeb, RedPajama, Dolma, and FineWeb.
 
-*See also:* #xref("llm", "pretraining", label: "Pretraining") (consumes this output), #xref("llm", "tokenization", label: "Tokenization") (fit on the curated corpus), _Evaluation_ (contamination invalidates benchmarks).
+*See also:* #xref("llm", "pretraining", label: "Pretraining") (consumes this output), #xref("llm", "tokenization", label: "Tokenization") (fit on the curated corpus), #xref("llm", "evaluation", label: "Evaluation") (contamination invalidates benchmarks).
 
 == The Pipeline Shape
 

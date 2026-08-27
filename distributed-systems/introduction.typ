@@ -155,7 +155,7 @@ Each step weaker level admits more concurrency and tolerates more failures but p
 
 - *Foundations:* this chapter, #xref("distributed-systems", "time-and-order", label: "Time and Order"), #xref("distributed-systems", "failure-detection", label: "Failure Detection").
 - *Coordination:* _Leader Election_, #xref("distributed-systems", "consensus-deep-dive", label: "Consensus Deep Dive"), #xref("distributed-systems", "coordination-services", label: "Coordination Services").
-- *Data:* _CRDTs_, #xref("distributed-systems", "causal-consistency", label: "Causal Consistency"), #xref("distributed-systems", "gossip", label: "Gossip Protocols"), _Distributed Transactions_.
+- *Data:* _CRDTs_, #xref("distributed-systems", "causal-consistency", label: "Causal Consistency"), #xref("distributed-systems", "gossip", label: "Gossip Protocols"), #xref("distributed-systems", "transactions", label: "Distributed Transactions").
 - *Systems:* _Distributed Scheduling_, _Case Studies_.
 - *Verification:* _Formal Methods_.
 
