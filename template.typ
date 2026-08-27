@@ -213,12 +213,22 @@ math { font-size: 1.02em; }
 // renders as _CSS and Layout_ rather than the raw path.
 // -----------------------------------------------------------------------------
 
-#let xref(subject, slug, label: none) = {
-  // Target the rendered chapter on the site, not the Typst source on GitHub:
-  // volumes/<subject>.html carries a stable id="<chapter-slug>" on each
-  // chapter (scripts/gen_homepage.py), and it is also what the compiled
-  // full-text pages declare as their rel="canonical".
-  let url = "https://poyea.github.io/grimoire/volumes/" + subject + ".html#" + slug
+// The destination depends on what the reader is holding.
+//
+// HTML: the rendered chapter on the site. volumes/<subject>.html carries a
+// stable id="<chapter-slug>" per chapter (scripts/gen_homepage.py), and that
+// page is also what the compiled full-text pages declare as rel="canonical".
+//
+// PDF: the referenced volume's own PDF from the latest release, since a
+// reader with the PDF wants the companion PDF, not a web page. Asset names
+// are grimoire_<subject with hyphens as underscores>.pdf, matching
+// scripts/gen_homepage.py and what release.yml publishes.
+#let xref(subject, slug, label: none) = context {
+  let url = if target() == "html" {
+    "https://poyea.github.io/grimoire/volumes/" + subject + ".html#" + slug
+  } else {
+    "https://github.com/poyea/grimoire/releases/latest/download/grimoire_" + subject.replace("-", "_") + ".pdf"
+  }
   if label == none {
     emph(link(url)[#subject\/#slug])
   } else {
