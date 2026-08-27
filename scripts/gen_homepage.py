@@ -109,8 +109,13 @@ def js_str(s: str) -> str:
     return "'" + s.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
 
-def chapters(slug: str) -> list[tuple[str, list[str]]]:
-    """Return [(chapter title, [subheadings])] in include order."""
+def chapters(slug: str) -> list[tuple[str, list[str], str]]:
+    """Return [(chapter title, [subheadings], chapter slug)] in include order.
+
+    The chapter slug is the file stem, and is what #xref() in template.typ
+    targets: volumes/<subject>.html#<chapter-slug>. It must stay stable,
+    unlike the positional ch-N ids.
+    """
     root_typ = ROOT / f"{slug}.typ"
     out = []
 
@@ -129,7 +134,8 @@ def chapters(slug: str) -> list[tuple[str, list[str]]]:
             if not m:
                 sys.exit(f"error: no `= Heading` in {raw}")
             out.append((m.group(1).strip(),
-                        [s.strip() for s in SUBHEAD_RE.findall(text)]))
+                        [s.strip() for s in SUBHEAD_RE.findall(text)],
+                        target.stem))
             walk(target)
 
     walk(root_typ)
@@ -263,17 +269,18 @@ THEME_TOGGLE_JS = """\
 
 
 def volume_page(i: int, slug: str, title: str, desc: str,
-                chs: list[tuple[str, list[str]]]) -> str:
+                chs: list[tuple[str, list[str], str]]) -> str:
     pdf = f"{RELEASE_DL}grimoire_{slug.replace('-', '_')}.pdf"
     items = []
-    for n, (ctitle, subs) in enumerate(chs, 1):
+    for n, (ctitle, subs, cslug) in enumerate(chs, 1):
         sub_html = ""
         if subs:
             sub_html = "\n      <ul>\n" + "\n".join(
                 f"        <li>{esc(s)}</li>" for s in subs) + "\n      </ul>"
         items.append(
             f'    <details id="ch-{n}">\n'
-            f'      <summary><span class="n">{n:02d}</span>{esc(ctitle)}</summary>'
+            f'      <summary id="{esc(cslug)}">'
+            f'<span class="n">{n:02d}</span>{esc(ctitle)}</summary>'
             f'{sub_html}\n    </details>'
         )
     toc = "\n".join(items)
@@ -397,7 +404,7 @@ def main() -> None:
     # 1) index.html VOLUMES array
     cards = []
     for i, (slug, title, desc) in enumerate(VOLUMES, 1):
-        topics = ",".join(js_str(t) for t, _ in data[slug])
+        topics = ",".join(js_str(t) for t, _, _ in data[slug])
         cards.append(
             f"    {{ id: '{i:02d}', slug: {js_str(slug)}, title: {js_str(title)},\n"
             f"      desc: {js_str(desc)},\n"
@@ -438,7 +445,7 @@ def main() -> None:
     # 3) search index
     search = []
     for slug, title, _ in VOLUMES:
-        for n, (ctitle, subs) in enumerate(data[slug], 1):
+        for n, (ctitle, subs, _) in enumerate(data[slug], 1):
             search.append({"slug": slug, "volume": title, "chapter": ctitle,
                            "anchor": f"ch-{n}", "headings": subs})
     (DOCS / "search.json").write_text(

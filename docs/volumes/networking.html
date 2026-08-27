@@ -122,7 +122,7 @@
   </div>
   <div class="toc">
     <details id="ch-1">
-      <summary><span class="n">01</span>Link Layer &amp; Hardware</summary>
+      <summary id="link-layer"><span class="n">01</span>Link Layer &amp; Hardware</summary>
       <ul>
         <li>Ethernet Frame Structure</li>
         <li>Network Interface Card (NIC)</li>
@@ -140,7 +140,7 @@
       </ul>
     </details>
     <details id="ch-2">
-      <summary><span class="n">02</span>IPv6</summary>
+      <summary id="ipv6"><span class="n">02</span>IPv6</summary>
       <ul>
         <li>Addressing Architecture</li>
         <li>Header Structure</li>
@@ -154,7 +154,7 @@
       </ul>
     </details>
     <details id="ch-3">
-      <summary><span class="n">03</span>Transport Layer</summary>
+      <summary id="transport-layer"><span class="n">03</span>Transport Layer</summary>
       <ul>
         <li>TCP (Transmission Control Protocol)</li>
         <li>TCP Connection Establishment (3-Way Handshake)</li>
@@ -170,7 +170,7 @@
       </ul>
     </details>
     <details id="ch-4">
-      <summary><span class="n">04</span>Congestion Control</summary>
+      <summary id="congestion-control"><span class="n">04</span>Congestion Control</summary>
       <ul>
         <li>The Problem</li>
         <li>Loss-Based Algorithms</li>
@@ -185,7 +185,7 @@
       </ul>
     </details>
     <details id="ch-5">
-      <summary><span class="n">05</span>Multipath Transport</summary>
+      <summary id="multipath"><span class="n">05</span>Multipath Transport</summary>
       <ul>
         <li>Motivation</li>
         <li>MPTCP Architecture</li>
@@ -200,7 +200,7 @@
       </ul>
     </details>
     <details id="ch-6">
-      <summary><span class="n">06</span>POSIX Sockets API</summary>
+      <summary id="sockets-api"><span class="n">06</span>POSIX Sockets API</summary>
       <ul>
         <li>Socket System Calls</li>
         <li>TCP Server Example</li>
@@ -216,7 +216,7 @@
       </ul>
     </details>
     <details id="ch-7">
-      <summary><span class="n">07</span>I/O Multiplexing</summary>
+      <summary id="io-multiplexing"><span class="n">07</span>I/O Multiplexing</summary>
       <ul>
         <li>The C10K Problem</li>
         <li>select()</li>
@@ -228,7 +228,7 @@
       </ul>
     </details>
     <details id="ch-8">
-      <summary><span class="n">08</span>Application Protocols</summary>
+      <summary id="application-protocols"><span class="n">08</span>Application Protocols</summary>
       <ul>
         <li>HTTP (Hypertext Transfer Protocol)</li>
         <li>HTTP/2</li>
@@ -243,7 +243,7 @@
       </ul>
     </details>
     <details id="ch-9">
-      <summary><span class="n">09</span>WebSockets</summary>
+      <summary id="websockets"><span class="n">09</span>WebSockets</summary>
       <ul>
         <li>Motivation and Use Cases</li>
         <li>HTTP Upgrade Handshake</li>
@@ -261,7 +261,7 @@
       </ul>
     </details>
     <details id="ch-10">
-      <summary><span class="n">10</span>DNS (Domain Name System)</summary>
+      <summary id="dns"><span class="n">10</span>DNS (Domain Name System)</summary>
       <ul>
         <li>DNS Architecture and Hierarchy</li>
         <li>DNS Resolution Process</li>
@@ -276,7 +276,7 @@
       </ul>
     </details>
     <details id="ch-11">
-      <summary><span class="n">11</span>gRPC (Remote Procedure Calls)</summary>
+      <summary id="grpc"><span class="n">11</span>gRPC (Remote Procedure Calls)</summary>
       <ul>
         <li>Overview</li>
         <li>Protocol Buffers (Protobuf) Encoding</li>
@@ -292,7 +292,7 @@
       </ul>
     </details>
     <details id="ch-12">
-      <summary><span class="n">12</span>TLS (Transport Layer Security)</summary>
+      <summary id="tls"><span class="n">12</span>TLS (Transport Layer Security)</summary>
       <ul>
         <li>Protocol Evolution</li>
         <li>TLS 1.2 Full Handshake (2-RTT)</li>
@@ -312,7 +312,7 @@
       </ul>
     </details>
     <details id="ch-13">
-      <summary><span class="n">13</span>QUIC and HTTP/3</summary>
+      <summary id="quic-and-http3"><span class="n">13</span>QUIC and HTTP/3</summary>
       <ul>
         <li>Why QUIC?</li>
         <li>Packet and Frame Structure</li>
@@ -328,7 +328,7 @@
       </ul>
     </details>
     <details id="ch-14">
-      <summary><span class="n">14</span>Zero-Copy Networking</summary>
+      <summary id="zero-copy"><span class="n">14</span>Zero-Copy Networking</summary>
       <ul>
         <li>Traditional Copy Path</li>
         <li>sendfile() - Kernel-to-Kernel Copy</li>
@@ -344,7 +344,7 @@
       </ul>
     </details>
     <details id="ch-15">
-      <summary><span class="n">15</span>Kernel Bypass</summary>
+      <summary id="kernel-bypass"><span class="n">15</span>Kernel Bypass</summary>
       <ul>
         <li>Why Bypass the Kernel?</li>
         <li>DPDK (Data Plane Development Kit)</li>
@@ -356,7 +356,7 @@
       </ul>
     </details>
     <details id="ch-16">
-      <summary><span class="n">16</span>Concurrency Models</summary>
+      <summary id="concurrency-models"><span class="n">16</span>Concurrency Models</summary>
       <ul>
         <li>Thread-Per-Connection</li>
         <li>Thread Pool</li>
@@ -367,7 +367,7 @@
       </ul>
     </details>
     <details id="ch-17">
-      <summary><span class="n">17</span>Lock-Free Data Structures for Networking</summary>
+      <summary id="lock-free"><span class="n">17</span>Lock-Free Data Structures for Networking</summary>
       <ul>
         <li>SPSC (Single Producer Single Consumer) Queue</li>
         <li>Performance Measurements</li>
@@ -383,7 +383,7 @@
       </ul>
     </details>
     <details id="ch-18">
-      <summary><span class="n">18</span>Message Queues and ZeroMQ</summary>
+      <summary id="message-queues"><span class="n">18</span>Message Queues and ZeroMQ</summary>
       <ul>
         <li>ZeroMQ Architecture</li>
         <li>ZeroMQ Socket Types</li>
@@ -396,7 +396,7 @@
       </ul>
     </details>
     <details id="ch-19">
-      <summary><span class="n">19</span>Performance Reference</summary>
+      <summary id="performance-reference"><span class="n">19</span>Performance Reference</summary>
       <ul>
         <li>Latency Numbers (2025)</li>
         <li>Throughput Limits</li>
@@ -409,7 +409,7 @@
       </ul>
     </details>
     <details id="ch-20">
-      <summary><span class="n">20</span>Network Debugging</summary>
+      <summary id="debugging"><span class="n">20</span>Network Debugging</summary>
       <ul>
         <li>tcpdump Essentials</li>
         <li>Wireshark Filters</li>
@@ -423,7 +423,7 @@
       </ul>
     </details>
     <details id="ch-21">
-      <summary><span class="n">21</span>Network Address Translation (NAT)</summary>
+      <summary id="nat"><span class="n">21</span>Network Address Translation (NAT)</summary>
       <ul>
         <li>NAT Overview</li>
         <li>NAT Types</li>
@@ -436,7 +436,7 @@
       </ul>
     </details>
     <details id="ch-22">
-      <summary><span class="n">22</span>Stateful Firewalls</summary>
+      <summary id="stateful-firewalls"><span class="n">22</span>Stateful Firewalls</summary>
       <ul>
         <li>Connection Tracking (conntrack)</li>
         <li>iptables Architecture</li>
@@ -450,7 +450,7 @@
       </ul>
     </details>
     <details id="ch-23">
-      <summary><span class="n">23</span>Load Balancing</summary>
+      <summary id="load-balancing"><span class="n">23</span>Load Balancing</summary>
       <ul>
         <li>L4 vs L7 Load Balancing</li>
         <li>Load Balancing Algorithms</li>
@@ -464,7 +464,7 @@
       </ul>
     </details>
     <details id="ch-24">
-      <summary><span class="n">24</span>Data Center Networking</summary>
+      <summary id="data-center-networking"><span class="n">24</span>Data Center Networking</summary>
       <ul>
         <li>Clos and Fat-Tree Topologies</li>
         <li>ECMP and Flow Hashing</li>
@@ -479,7 +479,7 @@
       </ul>
     </details>
     <details id="ch-25">
-      <summary><span class="n">25</span>Container Networking</summary>
+      <summary id="container-networking"><span class="n">25</span>Container Networking</summary>
       <ul>
         <li>Linux Network Namespaces</li>
         <li>veth Pairs and Bridges</li>
@@ -494,7 +494,7 @@
       </ul>
     </details>
     <details id="ch-26">
-      <summary><span class="n">26</span>Service Mesh</summary>
+      <summary id="service-mesh"><span class="n">26</span>Service Mesh</summary>
       <ul>
         <li>Sidecar Proxy Pattern</li>
         <li>Data Plane vs Control Plane</li>
@@ -508,7 +508,7 @@
       </ul>
     </details>
     <details id="ch-27">
-      <summary><span class="n">27</span>Service Discovery</summary>
+      <summary id="service-discovery"><span class="n">27</span>Service Discovery</summary>
       <ul>
         <li>Problem Statement</li>
         <li>Discovery Patterns</li>
@@ -524,7 +524,7 @@
       </ul>
     </details>
     <details id="ch-28">
-      <summary><span class="n">28</span>Connection Pooling</summary>
+      <summary id="connection-pooling"><span class="n">28</span>Connection Pooling</summary>
       <ul>
         <li>Why Pooling Matters</li>
         <li>Pool Sizing Strategies</li>
@@ -538,7 +538,7 @@
       </ul>
     </details>
     <details id="ch-29">
-      <summary><span class="n">29</span>Resilience Patterns</summary>
+      <summary id="resilience-patterns"><span class="n">29</span>Resilience Patterns</summary>
       <ul>
         <li>Timeouts</li>
         <li>Retries with Exponential Backoff</li>
@@ -553,7 +553,7 @@
       </ul>
     </details>
     <details id="ch-30">
-      <summary><span class="n">30</span>Network Security</summary>
+      <summary id="network-security"><span class="n">30</span>Network Security</summary>
       <ul>
         <li>IPSec (Internet Protocol Security)</li>
         <li>IPSec Modes: Transport vs Tunnel</li>
@@ -569,7 +569,7 @@
       </ul>
     </details>
     <details id="ch-31">
-      <summary><span class="n">31</span>BGP Routing</summary>
+      <summary id="bgp-routing"><span class="n">31</span>BGP Routing</summary>
       <ul>
         <li>BGP Fundamentals</li>
         <li>Autonomous System (AS) Architecture</li>
@@ -586,7 +586,7 @@
       </ul>
     </details>
     <details id="ch-32">
-      <summary><span class="n">32</span>SDN and Programmable Networks</summary>
+      <summary id="sdn-programmable-networks"><span class="n">32</span>SDN and Programmable Networks</summary>
       <ul>
         <li>SDN Architecture</li>
         <li>OpenFlow Protocol</li>
@@ -599,7 +599,7 @@
       </ul>
     </details>
     <details id="ch-33">
-      <summary><span class="n">33</span>Programmable Data Planes and P4</summary>
+      <summary id="programmable-data-planes"><span class="n">33</span>Programmable Data Planes and P4</summary>
       <ul>
         <li>Why Programmable Data Planes</li>
         <li>PISA: The Abstract Machine</li>
@@ -614,7 +614,7 @@
       </ul>
     </details>
     <details id="ch-34">
-      <summary><span class="n">34</span>Wireless Protocols</summary>
+      <summary id="wireless-protocols"><span class="n">34</span>Wireless Protocols</summary>
       <ul>
         <li>WiFi 6 (802.11ax) Architecture</li>
         <li>WiFi 7 (802.11be) - Extremely High Throughput</li>
@@ -629,7 +629,7 @@
       </ul>
     </details>
     <details id="ch-35">
-      <summary><span class="n">35</span>Network Observability</summary>
+      <summary id="observability"><span class="n">35</span>Network Observability</summary>
       <ul>
         <li>Observability Pillars</li>
         <li>Distributed Tracing Concepts</li>
@@ -643,7 +643,7 @@
       </ul>
     </details>
     <details id="ch-36">
-      <summary><span class="n">36</span>Real-Time Protocols</summary>
+      <summary id="realtime-protocols"><span class="n">36</span>Real-Time Protocols</summary>
       <ul>
         <li>Real-Time Communication Fundamentals</li>
         <li>WebRTC Architecture</li>

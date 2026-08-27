@@ -214,7 +214,11 @@ math { font-size: 1.02em; }
 // -----------------------------------------------------------------------------
 
 #let xref(subject, slug, label: none) = {
-  let url = "https://github.com/poyea/grimoire/blob/main/" + subject + "/" + slug + ".typ"
+  // Target the rendered chapter on the site, not the Typst source on GitHub:
+  // volumes/<subject>.html carries a stable id="<chapter-slug>" on each
+  // chapter (scripts/gen_homepage.py), and it is also what the compiled
+  // full-text pages declare as their rel="canonical".
+  let url = "https://poyea.github.io/grimoire/volumes/" + subject + ".html#" + slug
   if label == none {
     emph(link(url)[#subject\/#slug])
   } else {
