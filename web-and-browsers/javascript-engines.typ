@@ -24,7 +24,7 @@ All three major engines converged on multi-tier execution: cheap tiers start fas
   [SpiderMonkey], [interpreter], [Baseline Interpreter + Baseline JIT], [Warp (Ion backend)],
 )
 
-Ignition compiles each function to a compact register-machine bytecode (designed to minimize memory: bytecode is roughly 4–8× smaller than baseline machine code). Sparkplug compiles that bytecode to machine code in a single linear pass — no IR, no register allocation — purely to eliminate dispatch overhead. Maglev builds an SSA graph with feedback-driven types but skips TurboFan's heaviest analyses, filling the gap for code that is warm but not scorching. TurboFan builds a sea-of-nodes graph (replaced by the simpler *Turboshaft* CFG-based IR for its back half, 2023–2024), performs typed lowering, escape analysis, redundancy elimination, and emits optimized code.
+Ignition compiles each function to a compact register-machine bytecode (designed to minimize memory: V8 reports the bytecode at 25–50% the size of the equivalent baseline machine code). Sparkplug compiles that bytecode to machine code in a single linear pass — no IR, no register allocation — purely to eliminate dispatch overhead. Maglev builds an SSA graph with feedback-driven types but skips TurboFan's heaviest analyses, filling the gap for code that is warm but not scorching. TurboFan builds a sea-of-nodes graph (replaced by the simpler *Turboshaft* CFG-based IR for its back half, 2023–2024), performs typed lowering, escape analysis, redundancy elimination, and emits optimized code.
 
 Functions move up tiers when invocation and loop-iteration counters cross thresholds, and can be *on-stack replaced* (OSR) mid-loop so a hot loop doesn't have to return before benefiting.
 

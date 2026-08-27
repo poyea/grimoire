@@ -1816,7 +1816,7 @@ chapters:
   - subject: web-and-browsers
     slug: javascript-engines
     path: web-and-browsers/javascript-engines.typ
-    words: 1252
+    words: 1257
     status: reviewed
   - subject: web-and-browsers
     slug: rendering-pipeline
@@ -1831,7 +1831,7 @@ chapters:
   - subject: web-and-browsers
     slug: webassembly
     path: web-and-browsers/webassembly.typ
-    words: 1304
+    words: 1319
     status: reviewed
   - subject: search-and-ir
     slug: evaluation
