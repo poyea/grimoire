@@ -16,6 +16,11 @@ ignored; a name also resolves if it appears as a whole-word phrase
 inside a title (e.g. "Scheduler" -> "The Scheduler") or equals the
 title's acronym (e.g. "RAG").
 
+Every #xref target is checked three ways, one per rendering: the volume
+exists (so its release PDF does), the chapter is reachable through the
+includes (so it ships and gets a site anchor), and its heading carries the
+<chapter-slug> label (so same-volume PDF links can jump to it).
+
 Unresolved references are reported and exit nonzero.
 """
 from __future__ import annotations
@@ -137,19 +142,69 @@ def resolve(name: str, here: str, vols: dict[str, Volume]) -> bool:
     return any(in_volume(name, v) for s, v in vols.items() if s != here)
 
 
+INCLUDE_RE = re.compile(r'#include\s+"([^"]+\.typ)"')
+LABEL_RE = re.compile(r"^=\s+.*?<([a-z0-9-]+)>\s*$", re.M)
+
+
+def reachable(volume: str) -> dict[str, Path]:
+    """Chapter stem -> path, for chapters actually included by the volume.
+
+    Follows nested includes, since coding/cpp-and-java/*.typ is pulled in
+    from a chapter rather than from coding.typ. A file that exists but is
+    not reachable ships in no PDF and gets no anchor on the site, so it is
+    not a usable #xref target.
+    """
+    root_typ = ROOT / f"{volume}.typ"
+    out: dict[str, Path] = {}
+    stack, seen = [root_typ], set()
+    while stack:
+        cur = stack.pop()
+        try:
+            text = cur.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        for raw in INCLUDE_RE.findall(text):
+            target = (cur.parent / raw).resolve()
+            if target in seen or not target.exists():
+                continue
+            seen.add(target)
+            out[target.stem] = target
+            stack.append(target)
+    return out
+
+
 def main() -> int:
     vols = load()
     errors = 0
+    reach = {v: reachable(v) for v in vols}
     for slug in sorted(vols):
         for chap in sorted((ROOT / slug).rglob("*.typ")):
             text = chap.read_text(encoding="utf-8")
             rel = chap.relative_to(ROOT)
-            # Structured #xref("subject", "slug") calls resolve exactly:
-            # the target file must exist on disk.
+            # An #xref must survive in all three renderings: an internal
+            # jump inside the volume's PDF, a link to that volume's release
+            # PDF from another volume, and a site anchor in HTML. Each has a
+            # separate precondition, so each is checked.
             for subj, stem in XREF_RE.findall(text):
-                if not (ROOT / subj / f"{stem}.typ").is_file():
-                    print(f"ERROR: {rel}: #xref target does not exist "
-                          f"'{subj}/{stem}'")
+                if subj not in vols:
+                    print(f"ERROR: {rel}: #xref names no such volume "
+                          f"'{subj}' (so grimoire_{subj.replace('-', '_')}"
+                          f".pdf will not exist)")
+                    errors += 1
+                    continue
+                target = reach[subj].get(stem)
+                if target is None:
+                    where = "not reachable from" if (ROOT / subj).glob(
+                        f"**/{stem}.typ") else "does not exist under"
+                    print(f"ERROR: {rel}: #xref target '{subj}/{stem}' "
+                          f"is {where} {subj}.typ")
+                    errors += 1
+                    continue
+                labels = LABEL_RE.findall(target.read_text(encoding="utf-8"))
+                if stem not in labels:
+                    print(f"ERROR: {rel}: #xref target '{subj}/{stem}' has no "
+                          f"<{stem}> label on its heading, so same-volume "
+                          f"links cannot jump to it")
                     errors += 1
             for line in text.splitlines():
                 if "*See also:*" not in line:
