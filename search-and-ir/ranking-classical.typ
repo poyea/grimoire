@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Ranking: Classical Models
+= Ranking: Classical Models <ranking-classical>
 
 Classical ranking functions score documents against queries using only term statistics — no training data, no embeddings — yet remain remarkably hard to beat. BM25, published in 1994, is still the default first-stage ranker in nearly every production search system and a mandatory baseline in neural IR papers. This chapter derives TF-IDF and BM25, develops the language-modeling view of retrieval, extends to fielded documents with BM25F, and covers query-independent static signals, chiefly PageRank.
 

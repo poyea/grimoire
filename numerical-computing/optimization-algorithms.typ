@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Optimization Algorithms
+= Optimization Algorithms <optimization-algorithms>
 
 Minimize $f(x)$ over $x in RR^n$ — the problem behind regression, maximum likelihood, neural network training, optimal control, and design. The continuous optimization toolkit divides along two axes: how much derivative information is available (values only, gradients, Hessians), and how the global step is controlled (line search versus trust region). This chapter covers optimality conditions, line search, gradient descent and its conditioning, Newton and quasi-Newton methods, nonlinear least squares, constrained optimization via KKT, and the stochastic methods that dominate machine learning.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Tokenization
+= Tokenization <tokenization>
 
 Tokenization sits between raw text and the model: it determines what a "token" *is*, and therefore what the model can natively represent. Choices made here propagate into vocabulary size (which controls the embedding and output projection matrices, often the largest single parameter blocks), context efficiency (tokens-per-byte), multilingual fairness, and downstream behaviors as concrete as arithmetic and code formatting. This chapter covers the major algorithms (BPE, WordPiece, Unigram/SentencePiece), the byte-level variant that dominates modern LLMs, the practical engineering of `tiktoken`-style fast tokenizers, and the failure modes that arise in multilingual and code settings.
 

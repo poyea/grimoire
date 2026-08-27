@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Containers in the Kernel
+= Containers in the Kernel <containers-in-the-kernel>
 
 A "container" is a userspace fiction. The kernel knows only namespaces, cgroups, capabilities, seccomp filters, LSM labels, and bind mounts; Docker, podman, containerd, runc, and the Kubernetes kubelet are orchestrators that assemble these primitives into a coherent isolation unit. Understanding what the kernel actually does (especially the user-namespace pitfalls and root/unprivileged trade-offs) is essential to running containers safely.
 

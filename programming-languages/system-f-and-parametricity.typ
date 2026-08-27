@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= System F and Parametricity
+= System F and Parametricity <system-f-and-parametricity>
 
 System F (the *polymorphic $lambda$-calculus*, or second-order $lambda$-calculus) extends the simply-typed $lambda$-calculus with quantification over types. Discovered independently by Jean-Yves Girard (1971, thesis 1972) as a tool to prove the consistency of second-order Peano arithmetic, and rediscovered by John Reynolds (1974) as the type system underlying polymorphic programming, System F is the bridge between proof theory and modern functional language design.
 

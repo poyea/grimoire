@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Mathematics for a Younger Self
+= Mathematics for a Younger Self <mathematics-for-younger-self>
 
 Eight subjects, ordered by the machinery each presupposes. Definitions are stated to be used, theorems to be recognised, and each section carries one derivation showing where the content actually comes from.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Distributed Transactions
+= Distributed Transactions <transactions>
 
 A transaction is the unit of *all-or-nothing* change: either every operation in a group commits durably, or none does. Distributing that guarantee across multiple nodes, disks, and data centres requires careful coordination of atomicity, concurrency control, and failure handling — the subject of this chapter.
 

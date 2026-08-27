@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Observability and Self-Driving Databases
+= Observability and Self-Driving Databases <observability-and-self-driving>
 
 A database that cannot be observed cannot be tuned. Observability (metrics, logs, traces) is the prerequisite for self-driving capabilities — automated index selection, knob tuning, query plan selection, and anomaly detection.
 

@@ -1,4 +1,4 @@
-= RLHF and Alignment
+= RLHF and Alignment <rlhf>
 
 Pretraining optimizes a language model to predict the next token across a massive corpus of internet text. This produces a model that is fluent and knowledgeable, but not necessarily _helpful_, _harmless_, or _honest_. The distributional mismatch between "predict tokens from Common Crawl" and "assist a user safely and usefully" is the alignment problem in its practical form.
 

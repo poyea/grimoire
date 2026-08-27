@@ -1,4 +1,4 @@
-= Notation and Conventions
+= Notation and Conventions <notation>
 
 This chapter fixes the logical and semantic notation used throughout the volume. Individual chapters introduce tool-specific syntax (TLA+, SMT-LIB) where needed; the mathematical core below is shared.
 

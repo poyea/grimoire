@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Memory Performance
+= Memory Performance <memory-performance>
 
 On modern hardware, most programs are not compute-bound but memory-bound: a load from DRAM costs 60-100 ns, time enough for several hundred instructions. This chapter covers data layout for cache friendliness, false sharing, allocator selection and strategies, NUMA, the bandwidth/latency distinction, and the tools that make memory behavior visible.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Data Center Networking
+= Data Center Networking <data-center-networking>
 
 Data-centre fabrics are engineered for very different goals than the public internet: tight latency variance, full bisection bandwidth, and RDMA-grade losslessness. This chapter covers the dominant topologies (Clos / fat-tree), ECMP flow hashing, RDMA over Converged Ethernet (RoCEv2) with PFC/ECN, InfiniBand, and modern NIC offloads.
 

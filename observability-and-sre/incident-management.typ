@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Incident Management
+= Incident Management <incident-management>
 
 An incident is an unplanned degradation of service that demands coordinated human response. Incident management is the discipline that turns that response from ad-hoc heroics into a repeatable process: detection, mobilization, mitigation, resolution, and learning. The structures here descend from the Incident Command System (developed by California fire agencies in the 1970s, later adopted by FEMA) and were adapted by Google, PagerDuty, and Atlassian into the patterns most engineering organizations now run. This chapter covers the lifecycle, the roles, the paging machinery, and the postmortem practice — including why "MTTR" is a more fragile number than dashboards suggest.
 

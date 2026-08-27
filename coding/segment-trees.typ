@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Segment Trees and Range Queries
+= Segment Trees and Range Queries <segment-trees>
 
 *Efficient range operations:* Segment trees and Fenwick trees enable $O(log n)$ range queries and point updates on arrays. Essential for competitive programming and database indexing [Bentley 1977].
 

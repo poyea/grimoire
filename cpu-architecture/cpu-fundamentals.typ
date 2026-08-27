@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= CPU Fundamentals
+= CPU Fundamentals <cpu-fundamentals>
 
 The Central Processing Unit executes instructions stored in memory. Understanding the instruction set architecture (ISA) and execution model is foundational to all performance analysis.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Microcontrollers and Systems-on-Chip
+= Microcontrollers and Systems-on-Chip <mcus-and-soc>
 
 A microcontroller ($"MCU"$) packages a CPU core, on-chip SRAM and flash, and a peripheral fabric onto one die — typically tens of kilobytes of RAM, megahertz to a few hundred MHz clock, and a power budget measured in milliwatts. A system-on-chip ($"SoC"$) scales this up: application-class cores (Cortex-A, RISC-V U-mode), DRAM controllers, GPUs, and accelerators sit alongside one or more $"MCU"$-class real-time cores. This chapter walks the silicon, the memory map, the interrupt fabric, and the boot path that every embedded engineer must internalize.
 

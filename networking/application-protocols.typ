@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Application Protocols
+= Application Protocols <application-protocols>
 
 Application-layer protocols define message formats and communication patterns for specific services.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Symmetric Primitives
+= Symmetric Primitives <symmetric-primitives>
 
 Symmetric cryptography is built from a small set of well-studied primitives: block ciphers (AES), stream ciphers (ChaCha20), polynomial MACs (Poly1305, GMAC), and the AEAD modes that combine them. Choosing the right mode, using nonces correctly, and writing constant-time code matter far more than the underlying algorithm.
 

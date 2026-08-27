@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= GPU Virtualization and Partitioning
+= GPU Virtualization and Partitioning <gpu-virtualization>
 
 A single H100 or B200 is overkill for most inference workloads, yet you cannot share it the way you share a CPU: GPU state is large, kernel preemption is coarse, and memory bandwidth is contested. NVIDIA ships three different sharing mechanisms — MIG, MPS, and vGPU — each making different tradeoffs between isolation, flexibility, and overhead.
 

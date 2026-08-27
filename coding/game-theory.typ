@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Game Theory
+= Game Theory <game-theory>
 
 *Combinatorial game theory* studies two-player, perfect-information, zero-sum games played under deterministic rules. The central question is always the same: given a position, does the player about to move win or lose under optimal play?
 

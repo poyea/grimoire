@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= 3D Vision and Neural Fields
+= 3D Vision and Neural Fields <3d-vision>
 
 3D vision reconstructs, represents, and reasons about the three-dimensional world from 2D images. This chapter covers structure-from-motion, depth estimation, point clouds, and the revolutionary neural field representations (NeRF, Gaussian splatting) that have transformed novel view synthesis and 3D generation.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Triton and GPU Domain-Specific Languages
+= Triton and GPU Domain-Specific Languages <triton-and-dsls>
 
 Writing peak-performance CUDA by hand is a job for a small number of experts; writing it in Python with single-digit-percent loss in efficiency is now a job for many more. The new generation of GPU DSLs — Triton, Pallas, ThunderKittens, and CUTLASS in its template form — trade some of CUDA's flexibility for a *block-level* programming model that lets the compiler handle the painful parts: shared-memory layout, async pipelining, and tensor-core scheduling.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Benchmarking
+= Benchmarking <benchmarking>
 
 A benchmark is an experiment, and most benchmarks are bad experiments: they measure the wrong thing, on the wrong workload, with no error bars, and then generalize. This chapter covers the failure modes of microbenchmarks, the tools that mitigate them, the statistics needed to claim "A is faster than B", and how to run experiments safely in production.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Evaluation
+= Evaluation <evaluation>
 
 Search quality cannot be eyeballed: rankings differ subtly, queries vary wildly, and intuition about "better" is unreliable. IR built one of the most disciplined evaluation traditions in computer science — the Cranfield paradigm of fixed collections, pooled judgments, and rank-based metrics, institutionalized by TREC since 1992 — and complemented it with online experimentation on live traffic. This chapter covers the offline metrics (precision/recall through nDCG), test-collection construction and its biases, statistical significance, the modern benchmarks (MS MARCO, BEIR), and online evaluation via interleaving and A/B tests.
 

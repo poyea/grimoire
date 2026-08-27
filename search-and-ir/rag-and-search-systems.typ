@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= RAG and Search Systems
+= RAG and Search Systems <rag-and-search-systems>
 
 Retrieval-augmented generation (RAG) puts a search engine in front of a language model: retrieve passages relevant to the user's request, place them in the prompt, and generate a grounded answer. It is the dominant pattern for giving LLMs access to private, fresh, or voluminous knowledge without retraining, and it makes retrieval quality directly visible — a RAG system is a search system whose final ranker is a generator. This chapter covers the pipeline end to end (chunking, indexing, retrieval, reranking, generation), query understanding for both classic search and RAG, advanced patterns (multi-hop, agentic, GraphRAG), RAG-specific evaluation, and the architecture of a complete production search system.
 

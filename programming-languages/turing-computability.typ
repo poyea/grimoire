@@ -1,6 +1,6 @@
 #import "../template.typ": overbar
 
-= Turing Machines and Computability
+= Turing Machines and Computability <turing-computability>
 
 The Turing machine is not a model of modern hardware -- it is a model of *what can be
 computed at all*. Every question about whether a program terminates, whether two programs

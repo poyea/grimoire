@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Processes and Threads
+= Processes and Threads <processes-and-threads>
 
 The process is the operating system's unit of resource ownership; the thread is its unit of scheduling. Every modern kernel, from monolithic Unix derivatives to microkernels like seL4, draws this distinction in some form, even when the surface vocabulary differs. This chapter treats the abstractions conceptually; Linux's specific implementation lives in `linux-kernel/scheduler.typ` and `linux-kernel/cgroups-namespaces.typ`.
 

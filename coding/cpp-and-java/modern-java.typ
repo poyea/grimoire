@@ -1,4 +1,4 @@
-= Part VII: Modern Java Features (Java 8-21)
+= Part VII: Modern Java Features (Java 8-21) <modern-java>
 
 == Functional Programming
 

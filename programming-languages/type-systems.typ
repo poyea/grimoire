@@ -1,4 +1,4 @@
-= Type Systems
+= Type Systems <type-systems>
 
 A type system is a syntactic method for proving the absence of certain program behaviors. That definition from Pierce is deliberately narrow: types are a *proof*, not a test. They are checked statically, before any execution, and their guarantees hold for all possible inputs.
 

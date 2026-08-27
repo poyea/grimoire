@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Real-Time Operating Systems
+= Real-Time Operating Systems <rtos>
 
 A real-time operating system ($"RTOS"$) supplies a preemptive priority-based scheduler, deterministic IPC primitives, and a memory-frugal kernel — typically a few kilobytes of code, no MMU dependency, and no dynamic allocation in the critical path. This chapter dissects the three dominant designs: *FreeRTOS* (minimal, source-available, AWS-stewarded), *Zephyr* (Apache-licensed, Linux-style infrastructure, broad driver model), and *PREEMPT_RT Linux* (full POSIX, real-time only after invasive patches).
 

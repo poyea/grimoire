@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Post-Quantum Cryptography
+= Post-Quantum Cryptography <post-quantum>
 
 Shor's algorithm (1994) factors integers and computes discrete logs in polynomial time on a sufficiently large quantum computer, breaking $"RSA"$, finite-field $"DH"$, and elliptic-curve cryptography. NIST began standardizing post-quantum (PQ) replacements in 2016; FIPS 203/204/205 (2024) finalized ML-KEM, ML-DSA, and SLH-DSA. Real-world deployment is well underway in *hybrid* mode (classical + PQ KEM combined).
 

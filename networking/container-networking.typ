@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Container Networking
+= Container Networking <container-networking>
 
 Containers rely on Linux kernel primitives to create isolated network environments. This section covers the building blocks (namespaces, veth, bridges) and orchestration layers (Docker, Kubernetes, CNI).
 

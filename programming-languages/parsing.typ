@@ -1,4 +1,4 @@
-= Parsing
+= Parsing <parsing>
 
 The parser turns a flat token stream into a tree. That tree — the *abstract syntax tree* (AST) — makes the recursive structure of the source explicit: an `if` node has a condition subtree, a then-branch subtree, and an optional else-branch subtree. Everything downstream (type checking, IR generation, optimizers) walks trees, not token streams.
 

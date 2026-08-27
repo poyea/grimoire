@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Hashing and MACs
+= Hashing and MACs <hashing-and-macs>
 
 A cryptographic hash function $H : {0,1}^* -> {0,1}^n$ is the workhorse of modern cryptography: it underpins digital signatures, password storage, blockchain identifiers, key derivation, and Merkle proofs. MACs add a key, turning the unkeyed hash into an authenticated integrity tag.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Information Theory
+= Information Theory <information-theory>
 
 Information theory, founded by Claude Shannon in 1948, provides the mathematical language for quantifying uncertainty, compression, and the fundamental limits of communication. Its core quantities — entropy, mutual information, and channel capacity — appear throughout machine learning, statistics, compression, and communications. This chapter develops the classical theory rigorously and connects it to the tools used daily in learning systems.
 

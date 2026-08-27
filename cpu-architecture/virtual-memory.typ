@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Virtual Memory
+= Virtual Memory <virtual-memory>
 
 Virtual memory provides memory abstraction: each process sees isolated, contiguous address space despite physical memory being fragmented and shared. The MMU (Memory Management Unit) translates virtual addresses to physical addresses using page tables.
 

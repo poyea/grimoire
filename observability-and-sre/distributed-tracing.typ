@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Distributed Tracing
+= Distributed Tracing <distributed-tracing>
 
 A trace is a causally ordered tree (or DAG) of spans across processes that together represent one logical request. Tracing answers _where_ time went and _which_ downstream calls amplify latency or errors. This chapter starts from the Dapper paper, follows the evolution through Zipkin and Jaeger to OpenTelemetry, and covers the hard parts: context propagation, sampling, and tail-based decisions at scale.
 

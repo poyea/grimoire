@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Physically Based Rendering
+= Physically Based Rendering <physically-based-rendering>
 
 Physically based rendering ($"PBR"$) replaces ad-hoc shading models (Phong, Blinn–Phong) with formulations grounded in the rendering equation and microfacet theory. The result is materials that respond plausibly under arbitrary lighting — a prerequisite for $"HDR"$ pipelines, image-based lighting, and any system mixing rasterization with path tracing.
 

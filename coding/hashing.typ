@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Hashing
+= Hashing <hashing>
 
 *Hash tables provide $O(1)$ average-case lookup, insert, delete. Key tradeoffs: memory overhead vs speed, collision handling, cache locality.*
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= I/O Multiplexing
+= I/O Multiplexing <io-multiplexing>
 
 I/O multiplexing allows monitoring multiple file descriptors for readiness, enabling single-threaded servers to handle many concurrent connections.
 

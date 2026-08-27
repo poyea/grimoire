@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= CNN Architectures
+= CNN Architectures <cnn-architectures>
 
 Convolutional neural networks are the backbone of classical deep vision. Although vision transformers now dominate large-scale benchmarks, CNNs remain indispensable in resource-constrained deployment, medical imaging, and as encoders in hybrid architectures. This chapter covers the convolution operation, pooling, normalization, and the evolution of architectures from LeNet to ConvNeXt.
 

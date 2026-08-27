@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Homotopy Type Theory
+= Homotopy Type Theory <homotopy-type-theory>
 
 Homotopy type theory (HoTT) is the synthesis of two disciplines that for half a century had eyed each other from across an unbridged gulf: Martin-Löf's *intensional type theory*, in which propositions are types and proofs are programs, and *abstract homotopy theory*, in which spaces are identified up to continuous deformation and the equality of two paths is itself an object of study. The bridge, perceived by (Awodey–Warren 2009) and (Voevodsky 2006–2014) and developed into the *Univalent Foundations* programme, is breathtakingly simple to state: the identity type $"Id"_A(a, b)$ is to be read as the *space of paths* from $a$ to $b$ inside the space $A$. With this reading the entire apparatus of higher categorical algebra becomes available inside a constructive type theory, and the type theory in turn provides a *synthetic* language for homotopy theory in which the formal rules are the geometric intuitions.
 

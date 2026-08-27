@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Load Balancing
+= Load Balancing <load-balancing>
 
 Load balancers distribute traffic across multiple servers to improve availability, throughput, and response time. Critical infrastructure component for high-scale systems.
 

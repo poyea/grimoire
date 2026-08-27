@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Process Calculi
+= Process Calculi <process-calculi>
 
 Process calculi are algebraic theories of concurrent computation. Where the $lambda$-calculus reduces all computation to function application, a process calculus takes *interaction* (the synchronised exchange of signals between independent agents) as primitive. The objects of study are not values produced by a terminating computation but *behaviours*: possibly infinite, possibly nondeterministic, possibly nonterminating patterns of observable action.
 

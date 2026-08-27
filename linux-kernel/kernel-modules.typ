@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Kernel Modules
+= Kernel Modules <kernel-modules>
 
 A kernel module is code loaded into the running kernel at runtime, sharing its address space and privilege level. Modules are how Linux ships drivers, filesystems, network protocols, and crypto algorithms without baking them into a monolithic image. Writing one is straightforward; writing one *correctly* requires care, because everything the module does runs in ring 0 and a bug typically panics the box.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Time and Order
+= Time and Order <time-and-order>
 
 Distributed systems have no global "now". What they have are *clocks* (each imperfect) and *messages* (which establish happens-before relationships). The art of this chapter is converting one into the other: using clocks to approximate causality and using causality to compensate for clock skew.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Message Queues and ZeroMQ
+= Message Queues and ZeroMQ <message-queues>
 
 Message queues abstract socket complexity, providing high-level patterns for distributed systems.
 

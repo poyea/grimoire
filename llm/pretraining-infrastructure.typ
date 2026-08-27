@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Pretraining Infrastructure
+= Pretraining Infrastructure <pretraining-infrastructure>
 
 *Training at scale:* This chapter covers the optimizer, distributed training, and training stability — the infrastructure side of pretraining. It continues from _Pretraining_ (data pipelines, objectives, scaling laws, mixed precision, gradient checkpointing).
 

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Asymmetric Cryptography
+= Asymmetric Cryptography <asymmetric>
 
 Public-key cryptography rests on number-theoretic problems believed hard for classical computers: integer factorization (RSA), discrete log in $(ZZ slash p)^*$ and elliptic curve groups (DH, ECDSA, EdDSA), and bilinear pairings (BLS signatures, identity-based encryption). Modern deployments are dominated by elliptic curves with classical hardness arguments, in transition to post-quantum.
 

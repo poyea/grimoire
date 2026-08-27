@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Service Mesh
+= Service Mesh <service-mesh>
 
 A service mesh is a dedicated infrastructure layer for handling service-to-service communication in microservices architectures, providing observability, traffic management, and security without application code changes.
 

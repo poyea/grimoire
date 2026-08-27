@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Computability and Recursion Theory
+= Computability and Recursion Theory <computability>
 
 Recursion theory is the mathematical study of what can be computed, and -- more
 importantly -- of the fine structure of what *cannot*. Turing machines give the

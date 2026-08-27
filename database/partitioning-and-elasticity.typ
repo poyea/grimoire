@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Partitioning and Elasticity
+= Partitioning and Elasticity <partitioning-and-elasticity>
 
 Partitioning (sharding) distributes data across multiple nodes to scale beyond a single machine's capacity. Elasticity means the cluster can grow and shrink while continuing to serve traffic. The key challenge: minimize data movement when rebalancing while maintaining even load.
 

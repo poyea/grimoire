@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Hardware-Aware Database Design
+= Hardware-Aware Database Design <hardware-aware-design>
 
 Database performance is ultimately constrained by hardware: DRAM bandwidth, NVMe latency, cache hierarchy, RDMA, and GPU compute. Modern systems are redesigned for each generation of hardware — NVMe SSDs, CXL memory pooling, and GPU OLAP represent the current frontier.
 

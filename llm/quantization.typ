@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Quantization
+= Quantization <quantization>
 
 Quantization reduces the numerical precision of a model's weights and activations, shrinking memory footprint and accelerating matrix operations. For large language models the payoff is asymmetric: a 70B-parameter model at FP16 requires 140 GB of GPU memory — impossible on a single 80 GB A100 — while INT4 brings it to roughly 35 GB. This chapter covers the math, the algorithms that achieve near-lossless compression, and the file formats that ship quantized models to end users.
 

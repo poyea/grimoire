@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Domain-Specific Accelerators
+= Domain-Specific Accelerators <accelerators>
 
 When Dennard scaling stopped, perf/W gains shifted from general-purpose cores to domain-specific architectures ($"DSA"$s): chips that trade generality for orders-of-magnitude efficiency on a narrow workload class. This chapter surveys the dominant accelerator families.
 

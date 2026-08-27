@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Gossip Protocols
+= Gossip Protocols <gossip>
 
 Epidemic algorithms spread information through a cluster the way a rumour spreads through a crowd: each node periodically contacts a small random set of peers, and the information reaches every node in $O(log N)$ rounds with high probability. This chapter covers the three fundamental gossip variants, convergence analysis, anti-entropy repair, the SWIM failure detector, and how CRDTs pair naturally with gossip dissemination.
 

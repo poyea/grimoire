@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Query Languages
+= Query Languages <query-languages>
 
 A query language is the surface through which users describe what they want; the optimizer and engine decide how. SQL has dominated for fifty years because relational algebra composes cleanly, but it now sits beside SQL/JSON for semistructured data, GQL (ISO/IEC 39075:2024) for property graphs, and Datalog descendants for recursive analytics. This chapter surveys the modern standards landscape and the algebraic kernels behind each.
 

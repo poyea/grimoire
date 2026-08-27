@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Batch Processing
+= Batch Processing <batch-processing>
 
 Batch processing is the workhorse of analytics: read a large bounded dataset, transform it through a $"DAG"$ of operators, write the result. The lineage runs MapReduce (2004) → Hive → Spark → Photon-class vectorized engines. This chapter covers Spark internals — Catalyst, Tungsten, Adaptive Query Execution ($"AQE"$), the shuffle, and the vectorized successors — because Spark remains the dominant engine for petabyte-scale jobs.
 

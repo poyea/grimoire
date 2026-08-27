@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Speculative Execution Security
+= Speculative Execution Security <speculative-execution-security>
 
 Speculative execution, the engine of modern $"IPC"$, leaks data through microarchitectural side channels. Since 2018 a steady stream of disclosures has forced a complete rethink of the boundary between architectural and microarchitectural state.
 

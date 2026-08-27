@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Consensus Deep Dive
+= Consensus Deep Dive <consensus-deep-dive>
 
 Consensus is the abstraction every fault-tolerant distributed system reduces to: $N$ processes propose values, a single value is decided, and all correct processes eventually learn it. Beneath Paxos, Raft, EPaxos, and the Byzantine family lies a shared structure — *quorum intersection* plus *value carry-forward* across configuration epochs — that this chapter unfolds.
 

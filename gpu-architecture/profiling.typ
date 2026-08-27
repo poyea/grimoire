@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= GPU Profiling and Debugging
+= GPU Profiling and Debugging <profiling>
 
 Effective GPU optimization requires measurement. This section covers profiling tools, metrics interpretation, and debugging techniques for CUDA applications.
 

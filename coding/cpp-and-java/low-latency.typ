@@ -1,4 +1,4 @@
-= Part VI: Low-Latency Patterns
+= Part VI: Low-Latency Patterns <low-latency>
 
 == Memory Management for Low Latency
 

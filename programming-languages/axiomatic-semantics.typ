@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Axiomatic Semantics
+= Axiomatic Semantics <axiomatic-semantics>
 
 Axiomatic semantics describes program meaning by what programs *prove*. Where operational semantics says how a program executes and denotational semantics says what mathematical object it is, axiomatic semantics gives *assertions* about its behavior and inference rules for deriving those assertions from program text. The discipline begins with Floyd's flowchart proofs (1967) and Hoare's *An Axiomatic Basis for Computer Programming* (1969); it has matured into program logics powerful enough to verify operating-system kernels, cryptographic libraries, and concurrent data structures.
 

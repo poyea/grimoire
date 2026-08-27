@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Interpretability
+= Interpretability <interpretability>
 
 Interpretability tries to answer: what is *inside* a trained LLM, and how does it compute? The field has matured rapidly from "attention is interpretation" (largely wrong) to *mechanistic interpretability*, a research program that aims to reverse-engineer specific circuits implementing specific behaviors. This chapter covers the toolbox: probing classifiers, the residual stream view, activation patching and causal tracing, sparse autoencoders, dictionary learning, monosemantic features, attention head analysis, and the open problems that limit interpretability as a safety tool.
 

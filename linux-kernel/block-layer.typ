@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= The Block Layer
+= The Block Layer <block-layer>
 
 Beneath every filesystem read and every `O_DIRECT` write sits the block layer: the kernel subsystem that batches, reorders, and dispatches I/O to storage devices. It is the home of `struct bio`, request queues, the multi-queue scheduling framework (blk-mq), and the I/O schedulers (`none`, `mq-deadline`, `bfq`, `kyber`). Its job is to bridge the gap between filesystem-level "write this folio" intent and device-level "issue this NVMe command on submission queue 7" mechanics.
 

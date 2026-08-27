@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Inverted Indexes
+= Inverted Indexes <inverted-indexes>
 
 The inverted index is the central data structure of full-text search: a mapping from each term in the vocabulary to the list of documents that contain it. Virtually every search engine — from Lucene and Elasticsearch to the web-scale indexes at Google and Bing — is built on this structure, refined over five decades with compression schemes, skip pointers, and segment-based architectures. This chapter covers index anatomy, construction algorithms, posting compression, and the Lucene segment model.
 

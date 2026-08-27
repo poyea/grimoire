@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Evolutionary Architecture
+= Evolutionary Architecture <evolutionary-architecture>
 
 Architecture is traditionally framed as "the decisions that are hard to change", which quietly assumes the goal is to get them right up front. Evolutionary architecture inverts the assumption: since requirements, technology, and the organisation *will* change in ways no one can predict, the architecture's primary job is to support *guided, incremental change across multiple dimensions* (Ford, Parsons & Kua, _Building Evolutionary Architectures_, 2017). The guidance comes from *fitness functions*, executable checks that the qualities you care about still hold, and the increments come from techniques like strangler fig, branch by abstraction, and expand–contract. This chapter covers the mechanics.
 

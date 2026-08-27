@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Tensor Cores and Matrix Multiply-Accumulate
+= Tensor Cores and Matrix Multiply-Accumulate <tensor-cores-and-mma>
 
 Tensor Cores are specialized matrix-multiply pipelines that deliver an order of magnitude more throughput than the FP32 CUDA cores beside them. Every generation since Volta has widened the tile, added new datatypes (BF16, TF32, FP8, INT8/INT4), and moved more of the data-movement burden into hardware (cp.async, TMA, wgmma).
 

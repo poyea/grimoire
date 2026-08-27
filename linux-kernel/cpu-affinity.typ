@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= CPU Affinity, Isolation, and NUMA
+= CPU Affinity, Isolation, and NUMA <cpu-affinity>
 
 A modern server has dozens of cores, multiple NUMA nodes, hardware-interrupt sources, and a kernel that's free to migrate any task to any core at any time. For latency-sensitive or throughput-critical workloads, leaving the kernel's defaults in place is usually wrong. This chapter covers the primitives for *pinning* threads to cores, *isolating* cores from the rest of the system, and *binding* memory to NUMA nodes.
 

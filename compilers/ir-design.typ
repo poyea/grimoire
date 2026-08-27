@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= IR Design and SSA Form
+= IR Design and SSA Form <ir-design>
 
 The choice of intermediate representation determines what optimizations are tractable. $"SSA"$ made dataflow sparse; $"CPS"$ made control explicit; sea-of-nodes erased the program order; $"MLIR"$ made the IR itself extensible. This chapter compares the practical tradeoffs of each.
 

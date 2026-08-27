@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Optimization
+= Optimization <optimization>
 
 Training a model is, mechanically, the act of running a numerical optimizer on a non-convex objective. The optimizer determines convergence rate, final loss, generalization (yes, really — implicit regularization is real), memory footprint, and how robust training is to hyperparameter choice. This chapter covers the optimization machinery actually used in modern ML: SGD and its momentum variants, Adam and its descendants, second-order and preconditioned methods, learning-rate schedules, and the recent wave of structured-curvature optimizers (Shampoo, Muon, Sophia).
 

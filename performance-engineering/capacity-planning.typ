@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Capacity Planning
+= Capacity Planning <capacity-planning>
 
 Capacity planning answers a forward-looking question: how much resource will the workload need, when, and at what cost. Done well, it is measurement plus a model plus a margin; done badly, it is last year's spend times a guess. This chapter covers demand forecasting, headroom policy, load testing for capacity (not just performance), scalability modeling with the USL, autoscaling, overload protection, and cost-aware sizing.
 

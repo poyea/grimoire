@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Register Allocation
+= Register Allocation <register-allocation>
 
 Register allocation maps an unbounded set of virtual registers (or $"SSA"$ values) to a finite set of machine registers. It is one of the hardest problems in compiler backends --- optimal allocation is NP-complete in general --- and the quality of allocation directly determines instruction count, spill code, and ultimately runtime performance.
 

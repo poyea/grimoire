@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Service Discovery
+= Service Discovery <service-discovery>
 
 Service discovery enables services to locate and communicate with each other in distributed systems without hardcoded addresses.
 

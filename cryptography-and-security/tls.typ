@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= TLS: Transport Layer Security
+= TLS: Transport Layer Security <tls>
 
 TLS (formerly SSL) is the cryptographic protocol securing nearly all internet traffic. Every HTTPS connection, gRPC call, and database connection uses TLS. Understanding TLS means understanding how the cryptographic primitives from earlier chapters compose into a real protocol: asymmetric cryptography for authentication and key exchange, symmetric ciphers for bulk encryption, and MACs for integrity.
 

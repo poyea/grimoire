@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Dependent Types: Proof Engineering and Advanced Topics
+= Dependent Types: Proof Engineering and Advanced Topics <dependent-types-proof-engineering>
 
 == Tactics and Proof Engineering
 

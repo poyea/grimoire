@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Coordination Services
+= Coordination Services <coordination-services>
 
 Distributed systems need a small, highly-available store for configuration, group membership, and locks — something that tolerates node failures yet delivers the strong consistency required for leader election and distributed locking. This chapter examines the three canonical coordination services: ZooKeeper, etcd, and Google's Chubby.
 

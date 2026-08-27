@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Cache Hierarchy
+= Cache Hierarchy <cache-hierarchy>
 
 Memory hierarchy bridges the speed gap between fast CPU registers and slow main memory. Modern processors have 3-4 levels of cache between registers and DRAM.
 

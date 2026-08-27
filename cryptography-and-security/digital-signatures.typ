@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Digital Signatures
+= Digital Signatures <digital-signatures>
 
 A digital signature binds a message to a public key such that anyone can verify the binding but only the holder of the private key can produce it. Signatures provide authenticity, integrity, and non-repudiation, and they underpin TLS certificates, software updates, blockchains, and secure boot. This chapter covers security definitions, the RSA and discrete-log signature families, modern deterministic schemes, and aggregate and threshold constructions.
 

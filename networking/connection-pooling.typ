@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Connection Pooling
+= Connection Pooling <connection-pooling>
 
 Connection pooling amortizes the cost of establishing connections across multiple requests, eliminating per-request handshake overhead.
 

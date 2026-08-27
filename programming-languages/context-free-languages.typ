@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Context-Free Languages
+= Context-Free Languages <context-free-languages>
 
 The context-free languages (CFLs) form the second layer of the Chomsky hierarchy and the operational sweet spot of programming-language syntax: rich enough to express balanced delimiters, nested scopes, and recursive expressions; tractable enough to admit cubic-time parsing in full generality and linear-time parsing for several practically important subclasses (LL($k$), LR($k$), LALR(1), GLR with sub-quadratic average case). Where regular languages are characterised by a *finite* syntactic invariant (the syntactic monoid), context-free languages are characterised by recognition with an *unbounded* but structured memory: a single pushdown stack. The cost of that unbounded memory is the loss of essentially every nontrivial decidability result: equivalence of CFGs is undecidable (Bar-Hillel–Perles–Shamir 1961), as are ambiguity, inclusion, intersection-emptiness with regular sets in cascades, and regularity of a CFL.
 

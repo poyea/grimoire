@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Distributed Transactions
+= Distributed Transactions <transactions-distributed>
 
 A distributed transaction spans multiple nodes (shards, replicas, or data centers). Achieving ACID properties in this setting requires *atomic commit protocols* (2PC, 3PC) and *distributed concurrency control*. The fundamental tension: coordination overhead vs consistency guarantees.
 

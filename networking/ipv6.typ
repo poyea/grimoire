@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= IPv6
+= IPv6 <ipv6>
 
 IPv6 [#rfc(8200)] replaces IPv4's 32-bit address space with 128 bits, eliminates header checksums and in-network fragmentation, and bakes autoconfiguration into the protocol itself via Neighbor Discovery [#rfc(4861)] and SLAAC [#rfc(4862)]. Deployment is now majority traffic at major eyeball networks (Google measures roughly 45-50% IPv6 client traffic as of 2026), but coexistence with the IPv4 internet still drives most operational complexity: dual stack, NAT64/DNS64, 6rd, and 464XLAT remain everyday concerns.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Non-NVIDIA Accelerators
+= Non-NVIDIA Accelerators <non-nvidia>
 
 NVIDIA dominates the discrete-GPU market but is no longer the only credible target for serious compute. AMD's MI300-series competes head-to-head on training, Apple's Metal stack runs production inference on tens of millions of laptops, Intel ships Xe and Gaudi accelerators, and a wave of startups (Tenstorrent, Cerebras, Groq, Graphcore) offers genuinely different architectures. This chapter surveys the alternatives and the portability stories that target them.
 

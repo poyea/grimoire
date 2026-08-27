@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Trees
+= Trees <trees>
 
 *Trees organize data hierarchically with parent-child relationships. Binary trees: each node has ≤2 children. Traversals: inorder, preorder, postorder (recursive/iterative).*
 

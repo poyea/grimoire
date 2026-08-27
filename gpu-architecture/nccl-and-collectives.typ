@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= NCCL and Collective Communication
+= NCCL and Collective Communication <nccl-and-collectives>
 
 Training LLMs on hundreds or thousands of GPUs is fundamentally a communication problem: every step exchanges activations, gradients, and parameters across ranks. NVIDIA's *NCCL* (NVIDIA Collective Communications Library) provides MPI-style collectives optimized for GPU memory and NVLink/PCIe/InfiniBand fabrics, and it is the substrate beneath PyTorch DDP/FSDP, JAX `pmap`, and Megatron-LM.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Security Modules
+= Security Modules <security-modules>
 
 Linux's DAC (discretionary access control: uid/gid + mode bits) is necessary but insufficient: a compromised process running as `root` ignores it, a vulnerable service running as a user can still touch everything that user owns, and there is no fine-grained mediation of network, IPC, or capability operations. The *Linux Security Module* (LSM) framework, added in 2.6 to host SELinux, is the kernel's hook architecture for stacking *mandatory* access control on top of DAC. Today it hosts SELinux, AppArmor, Landlock, SMACK, TOMOYO, Yama, the integrity modules (IMA/EVM), and the modern programmable plug-in *BPF LSM*.
 

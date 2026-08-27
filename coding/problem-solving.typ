@@ -1,4 +1,4 @@
-= Problem-Solving Framework
+= Problem-Solving Framework <problem-solving>
 
 == Pattern Recognition
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= The Scheduler
+= The Scheduler <scheduler>
 
 The Linux scheduler decides which runnable task gets the CPU next. For most workloads its default class (CFS, the Completely Fair Scheduler) is good enough that you don't think about it. For latency-sensitive, real-time, or contended systems, understanding what it is doing is the difference between a smooth system and a system with mysterious tail latency.
 

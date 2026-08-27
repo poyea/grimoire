@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Transport Layer
+= Transport Layer <transport-layer>
 
 The transport layer provides end-to-end communication between applications. Two primary protocols: TCP (reliable, ordered, connection-oriented) and UDP (unreliable, unordered, connectionless).
 

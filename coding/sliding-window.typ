@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Sliding Window
+= Sliding Window <sliding-window>
 
 *Sliding window maintains a contiguous subarray/substring while expanding or contracting based on constraints. Key: amortized $O(n)$ time as each element added/removed at most once.*
 

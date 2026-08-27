@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Monoliths and Microservices
+= Monoliths and Microservices <monoliths-and-microservices>
 
 "Monolith versus microservices" is the most over-litigated debate in software architecture, and most of the heat comes from treating it as binary. The real spectrum runs from a tangled monolith, through a modular monolith, to coarse-grained services, to fine-grained microservices, and systems move along it in both directions. This chapter covers modularity within a single deployable, decomposition strategies, the antipatterns that make distribution fail, and the case studies, including the celebrated reversals, that anchor the debate in evidence.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Column Stores and Vectorized Execution
+= Column Stores and Vectorized Execution <column-stores-and-vectorized-execution>
 
 Column-oriented storage (C-Store, MonetDB, Vertica, ClickHouse, DuckDB) achieves 10–100× better OLAP performance than row stores by exploiting column locality, compression, and SIMD vectorization. The key insight: analytical queries typically read a few columns from millions of rows — column storage eliminates reading irrelevant columns entirely.
 

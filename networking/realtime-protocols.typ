@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Real-Time Protocols
+= Real-Time Protocols <realtime-protocols>
 
 Real-time communication requires specialized protocols that prioritize low latency over reliability. This chapter covers WebRTC, RTP/RTCP, SRT, and media streaming fundamentals.
 

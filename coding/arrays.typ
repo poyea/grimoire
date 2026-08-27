@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Arrays
+= Arrays <arrays>
 
 *Arrays provide $O(1)$ random access with excellent cache locality when accessed sequentially. Foundation for most data structures and algorithms.*
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Object Detection
+= Object Detection <object-detection>
 
 Object detection requires simultaneously localising and classifying every object instance in an image. It is one of the core computer vision tasks, underpinning autonomous driving, robotics, medical imaging, and video understanding. This chapter covers the two-stage and one-stage detector families, anchor-free methods, and the transformer-based DETR family.
 

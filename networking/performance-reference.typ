@@ -1,4 +1,4 @@
-= Performance Reference
+= Performance Reference <performance-reference>
 
 Quick reference for network latency, throughput, and CPU costs.
 

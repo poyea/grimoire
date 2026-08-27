@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Weakly Consistent Systems
+= Weakly Consistent Systems <weakly-consistent-systems>
 
 Many distributed databases sacrifice strong consistency for availability and performance. Understanding the formal models — CRDT, causal consistency, eventual consistency, CALM — allows engineers to reason about what guarantees an application actually needs.
 

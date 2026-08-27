@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Stateful Firewalls
+= Stateful Firewalls <stateful-firewalls>
 
 A stateful firewall tracks full connection state rather than evaluating each packet independently. Every accepted new flow is recorded in a state table; return packets match the existing entry and bypass rule evaluation. This chapter covers Linux netfilter / nftables, connection tracking (conntrack), eBPF/XDP firewalling, and next-generation deep-packet-inspection (NGFW) systems.
 

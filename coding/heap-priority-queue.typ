@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Heap/Priority Queue
+= Heap/Priority Queue <heap-priority-queue>
 
 *A binary heap is a complete binary tree stored as an array, providing $O(log n)$ insert and extract-min/max with excellent cache locality. Foundation for priority queues, heap-sort, and greedy algorithms.*
 

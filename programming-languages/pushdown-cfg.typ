@@ -1,6 +1,6 @@
 #import "../template.typ": overbar
 
-= Pushdown Automata and Context-Free Grammars
+= Pushdown Automata and Context-Free Grammars <pushdown-cfg>
 
 Context-free languages (CFLs) sit one level above regular languages in the Chomsky
 hierarchy. Every programming language syntax is context-free or very nearly so; the

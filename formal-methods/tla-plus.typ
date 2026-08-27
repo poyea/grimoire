@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= TLA+
+= TLA+ <tla-plus>
 
 TLA+ (Temporal Logic of Actions, Lamport 1994) is a formal specification language designed for describing and reasoning about concurrent and distributed systems at the level of their state machines rather than their code. A TLA+ specification is a mathematical formula — a predicate over behaviors (infinite sequences of states) — that any correct implementation must satisfy. The same formalism supports both automated model checking (TLC) and machine-assisted deductive proof (TLAPS), and it has been adopted by Amazon Web Services, Microsoft Azure, MongoDB, and others to find subtle bugs in complex distributed protocols.
 

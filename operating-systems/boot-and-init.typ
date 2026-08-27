@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Boot and Init
+= Boot and Init <boot-and-init>
 
 Booting is a chain of trust and handoffs: each stage knows just enough to find, validate, and transfer control to the next, shedding privilege and adding abstraction as it goes. From the first instruction the CPU fetches out of firmware ROM to the moment a login prompt appears, half a dozen distinct programs run, each in a different environment: no MMU, then flat memory, then a kernel, then a tiny root, then the real root. This chapter treats the path conceptually; Linux's concrete early-boot code and module machinery live in `linux-kernel/introduction.typ` and `linux-kernel/kernel-modules.typ`.
 

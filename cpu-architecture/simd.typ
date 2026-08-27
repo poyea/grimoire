@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= SIMD (Single Instruction Multiple Data)
+= SIMD (Single Instruction Multiple Data) <simd>
 
 SIMD processes multiple data elements with single instruction using vector registers. Essential for high-performance computing, multimedia, and data-parallel workloads.
 

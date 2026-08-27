@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= WebSockets
+= WebSockets <websockets>
 
 WebSocket is a full-duplex communication protocol that provides persistent, bidirectional communication between client and server over a single TCP connection [#rfc(6455)].
 

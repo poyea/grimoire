@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Storage Engines
+= Storage Engines <storage-engines>
 
 A storage engine maps the logical data model (tables, rows, columns) onto persistent bytes on disk or flash. The two dominant families are *B-Tree* (update-in-place) and *LSM-Tree* (log-structured merge). The right choice depends on the read/write ratio, key distribution, and hardware.
 

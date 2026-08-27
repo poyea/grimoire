@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Tree Automata
+= Tree Automata <tree-automata>
 
 Strings are the data structure of parsing; *trees* are the data structure of *programs*. Abstract syntax, algebraic data types, XML documents, term-rewriting rules, type derivations, proof objects -- all are trees. Tree automata are the finite-state machines that recognise sets of trees, and they generalise the classical theory of regular languages with surprising fidelity: Myhill--Nerode, pumping lemma, MSO equivalence, closure under Boolean operations, and decidable membership / emptiness all carry over. They diverge from the string case at exactly one striking point: *top-down determinism is strictly weaker than bottom-up determinism*. This single asymmetry shapes the rest of the theory.
 

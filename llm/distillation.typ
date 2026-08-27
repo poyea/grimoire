@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Distillation
+= Distillation <distillation>
 
 Distillation transfers capability from a large *teacher* model to a smaller *student*. The student trains not (only) on the original labels but on the teacher's outputs, distributions, or reasoning traces. Done well, a 7B student can recover 80–95% of a 70B teacher's performance at 10× lower inference cost. This chapter covers the original Hinton formulation, modern LLM-specific variants — sequence-level, white-box, on-policy, reasoning-trace distillation — and the failure modes that limit how far distillation can go.
 

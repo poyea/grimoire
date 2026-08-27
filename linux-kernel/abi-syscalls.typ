@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= ABI and Syscalls
+= ABI and Syscalls <abi-syscalls>
 
 Every meaningful interaction between a user-space program and the kernel goes through a syscall. The mechanics (how arguments are passed, how the CPU transitions to ring 0, how the kernel validates pointers, how it returns) are surprisingly subtle, and the cost is non-negligible: a syscall round trip on modern x86-64 is ~100-300 cycles for the privilege transition itself, plus whatever work the handler does. Understanding the path lets you predict performance and exploit shortcuts like the vDSO.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= SDN and Programmable Networks
+= SDN and Programmable Networks <sdn-programmable-networks>
 
 Software-Defined Networking (SDN) decouples the control plane from the data plane, enabling centralized network management and programmable packet processing.
 

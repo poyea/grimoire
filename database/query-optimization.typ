@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Query Optimization
+= Query Optimization <query-optimization>
 
 The query optimizer transforms a declarative SQL query into an efficient physical execution plan. This is the hardest engineering problem in databases: the search space of plans grows super-exponentially with the number of joins, cardinality estimation is error-prone, and cost models are approximations. Modern optimizers combine dynamic programming, heuristics, and increasingly, learned components.
 

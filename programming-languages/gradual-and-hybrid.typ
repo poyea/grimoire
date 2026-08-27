@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Gradual and Hybrid Type Systems
+= Gradual and Hybrid Type Systems <gradual-and-hybrid>
 
 Static and dynamic typing are usually presented as a binary choice: a language commits to one discipline and pays the corresponding price. Static languages catch errors early but reject programs the programmer knows are correct, demand annotations on prototypes, and complicate exploratory programming. Dynamic languages accept anything until the moment of execution, at which point an unrelated error message materializes deep inside a stack of library code. The discipline of *gradual typing* (Siek–Taha 2006) refuses the dichotomy: it lets a single program contain both statically typed and dynamically typed fragments, with the two communicating through *casts* whose run-time checks are derived mechanically from the type structure. *Hybrid type checking* (Flanagan 2006) generalises the idea to refinement types: the checker proves what it can statically and inserts residual checks where decidability fails.
 

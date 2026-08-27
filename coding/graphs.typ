@@ -1,4 +1,4 @@
-= Graphs
+= Graphs <graphs>
 
 *Representation tradeoffs:*
 - *Adjacency matrix:* $O(V^2)$ space. O(1) edge lookup. Cache-friendly for dense graphs. Row-major iteration optimal.

@@ -1,4 +1,4 @@
-= Math & Number Theory
+= Math & Number Theory <math-number-theory>
 
 *Hardware foundation:* Integer arithmetic (ADD, MUL) = 1-3 cycles latency [Intel Opt. Manual 2023]. Division (DIV) = 10-40 cycles depending on operands. Modular reduction dominates many algorithms.
 

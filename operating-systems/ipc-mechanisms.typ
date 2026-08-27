@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Inter-Process Communication
+= Inter-Process Communication <ipc-mechanisms>
 
 Once the operating system isolates processes into separate address spaces, it must hand back a controlled way for them to cooperate. Inter-process communication (IPC) is the set of primitives that punch holes (carefully) through that isolation: to move bytes, to share pages, to wake a sleeper, or to pass a capability. Every IPC mechanism is a negotiated trade across three axes: cost per message, payload framing, and channel lifetime ownership. This chapter treats those primitives conceptually; their Linux realizations live in `linux-kernel/networking-stack.typ` and the kernel's signal and futex code.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Network Security
+= Network Security <network-security>
 
 Network security encompasses protocols, architectures, and practices that protect data in transit across untrusted networks. This section covers encryption protocols (IPSec, TLS), VPN architectures, and modern solutions like WireGuard.
 

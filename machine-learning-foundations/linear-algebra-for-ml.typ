@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Linear Algebra for ML
+= Linear Algebra for ML <linear-algebra-for-ml>
 
 Almost every ML algorithm reduces, at the inner loop, to a sequence of matrix multiplications, decompositions, or solves. Understanding when a decomposition exists, what it costs, and how it conditions a downstream problem is the difference between a stable training run and a NaN at step 17. This chapter focuses on the parts of linear algebra that show up in actual ML pipelines: structured matrices, decompositions (SVD, QR, eigen, Cholesky), matrix calculus, numerical stability, and the dimensionality-aware tricks (Johnson–Lindenstrom, random projections, Kronecker structure) that make large models tractable.
 

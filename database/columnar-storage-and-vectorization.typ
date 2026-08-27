@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Columnar Storage and Vectorization
+= Columnar Storage and Vectorization <columnar-storage-and-vectorization>
 
 Analytical workloads read a small subset of columns across millions of rows, making the traditional row-oriented layout wasteful — every cache line pulled from disk or DRAM carries irrelevant field bytes. *Columnar storage* reorders the physical layout so that all values of a single column are contiguous, enabling aggressive compression and SIMD-friendly batch processing. Combined with *vectorised execution*, columnar engines routinely outperform row-store engines by 10–100× on OLAP queries.
 

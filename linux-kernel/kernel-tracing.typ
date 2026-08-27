@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Kernel Tracing
+= Kernel Tracing <kernel-tracing>
 
 Modern Linux is the most observable kernel ever shipped. You can attach a probe to almost any kernel function, sample on hardware events, trace every syscall, watch every block-IO completion, all in production, with overhead measured in single-digit percentage points or less. This chapter covers the four major tracing mechanisms: kprobes, ftrace, perf, and eBPF, and the tools built on them.
 

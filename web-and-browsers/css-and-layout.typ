@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= CSS and Layout
+= CSS and Layout <css-and-layout>
 
 Style and layout turn a DOM tree and a pile of stylesheets into a geometry tree: every box's position and size. This is the most algorithmically dense stage of the rendering pipeline, and the one with the sharpest performance cliffs. This chapter covers the CSSOM, selector matching, the cascade, invalidation, the architecture of layout engines, and the cost model authors must internalize.
 

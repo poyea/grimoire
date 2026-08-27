@@ -1,6 +1,6 @@
 #import "../template.typ": overbar
 
-= Regular Languages and Finite Automata
+= Regular Languages and Finite Automata <foundations>
 
 *The bottom of the Chomsky hierarchy is not a limitation — it is a feature.* Every problem
 that can be solved with a finite automaton is solved in $O(n)$ time and $O(1)$ space (the

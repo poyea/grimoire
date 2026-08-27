@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Concurrency Models
+= Concurrency Models <concurrency-models>
 
 Network servers must handle multiple simultaneous connections. Choice of concurrency model affects performance, scalability, and code complexity.
 

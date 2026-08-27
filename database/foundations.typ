@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Database Foundations
+= Database Foundations <foundations>
 
 Databases manage persistent, shared, and reliable data. The field rests on three pillars: the relational model (Codd 1970), transaction theory (ACID), and the architecture of a DBMS. Every modern system — from SQLite to Spanner — can be analyzed through these lenses.
 

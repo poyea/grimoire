@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Dynamic Programming
+= Dynamic Programming <dynamic-programming>
 
 *Dynamic Programming (DP)* solves problems by breaking them into overlapping subproblems, storing results to avoid recomputation.
 

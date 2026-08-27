@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= RCU and Locking
+= RCU and Locking <rcu-and-locking>
 
 A modern kernel running on 256 cores cannot scale with traditional locking; a single `rwlock` becomes the slowest part of the system long before the workload itself does. The Linux kernel's answer is a layered locking discipline: spinlocks and mutexes where contention is tolerable; per-CPU data wherever possible; *read-copy-update* (RCU) wherever readers vastly outnumber writers. Combined with strict lock-ordering rules and the lockdep validator, this is what lets the kernel scale linearly to hundreds of cores while remaining correct.
 

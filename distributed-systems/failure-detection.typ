@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Failure Detection
+= Failure Detection <failure-detection>
 
 A failure detector is an oracle that tells a process which peers it believes to have crashed. It is the abstraction that lets asynchronous systems make progress despite FLP. The art is balancing *completeness* (every crashed process is eventually suspected) against *accuracy* (no correct process is suspected forever).
 

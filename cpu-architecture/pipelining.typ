@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Pipelining
+= Pipelining <pipelining>
 
 Pipelining overlaps instruction execution: while one instruction executes, the next instruction decodes, and the one after that fetches. Analogous to assembly line in manufacturing.
 

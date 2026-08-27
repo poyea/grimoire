@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Pretraining
+= Pretraining <pretraining>
 
 Pretraining is the process of learning a general-purpose language model from raw text by predicting the next token at scale. Every capability a model has (reasoning, code generation, factual recall) is acquired here, before any fine-tuning. This chapter covers the full stack: data pipelines, the training objective, scaling laws, numerical precision, memory management, optimizers, distributed training, and stability.
 

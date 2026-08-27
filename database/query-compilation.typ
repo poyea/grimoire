@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Query Compilation
+= Query Compilation <query-compilation>
 
 The execution engine translates a physical query plan into CPU instructions. The traditional *Volcano* (iterator) model is simple but slow — one virtual function call per row per operator. Modern systems use *vectorized execution* or *code generation* (compiling plans to machine code) to close the gap to hand-written C.
 

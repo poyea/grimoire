@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Memory System
+= Memory System <memory-system>
 
 DRAM (Dynamic Random-Access Memory) provides main memory storage. Understanding DRAM organization, timing, and access patterns is critical for performance optimization.
 

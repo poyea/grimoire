@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Live Patching
+= Live Patching <live-patching>
 
 Live patching applies critical kernel fixes (typically security CVEs) to a *running* kernel without reboot. The unit is a kernel module that redirects calls to a buggy function to a replacement implementation. Done right, the patched kernel is indistinguishable in behaviour from one booted with the fix; done wrong, you have racy in-flight callers running half-old half-new code. The Linux *livepatch* infrastructure (`kernel/livepatch/`, mainlined 4.0) and the userspace toolchains around it (kpatch from Red Hat, kGraft from SUSE now merged into livepatch, and Ksplice from Oracle out-of-tree) provide the engineering rigour.
 

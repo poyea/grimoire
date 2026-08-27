@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Multipath Transport
+= Multipath Transport <multipath>
 
 Multipath transports (MPTCP, MPQUIC, and SCTP-CMT) use several network paths simultaneously between a single pair of endpoints, improving throughput, resilience, and seamless handover between heterogeneous links (Wi-Fi + LTE, dual-uplink data centres). This chapter focuses on MPTCP, the most widely deployed multipath transport, with a survey of MPQUIC.
 

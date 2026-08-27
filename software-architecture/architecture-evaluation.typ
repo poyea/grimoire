@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Architecture Evaluation
+= Architecture Evaluation <architecture-evaluation>
 
 An architecture is good only relative to the qualities a system must exhibit, and those qualities are worthless as adjectives ("scalable", "secure") until they are made concrete enough to test a design against. Architecture evaluation is the discipline of doing exactly that: eliciting the quality attributes that matter, expressing them as scenarios, and analysing whether the architecture's decisions support or undermine them, before the expensive parts are built, and continuously afterwards. This chapter covers quality-attribute scenarios, utility trees, ATAM and its lightweight descendants, quantitative approaches, and how to document the results so they survive.
 

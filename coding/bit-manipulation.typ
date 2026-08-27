@@ -1,4 +1,4 @@
-= Bit Manipulation
+= Bit Manipulation <bit-manipulation>
 
 *Hardware foundation:* Bitwise operations compile to single CPU instructions with 1-cycle latency, 0.25-0.5 cycle throughput on modern CPUs [Intel Opt. Manual 2023, Appx. C]. Branch-free by nature = perfect for pipelined execution.
 

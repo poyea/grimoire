@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Causal Consistency
+= Causal Consistency <causal-consistency>
 
 Causal consistency is the strongest consistency model that remains available under partition: replicas must apply writes in an order consistent with happens-before, but concurrent writes may be observed in different orders at different replicas. #xref("distributed-systems", "time-and-order", label: "Time and Order") introduced the clock machinery (Lamport, vector clocks, HLC); this chapter uses that machinery to build *systems*: causally consistent stores, the metadata they carry, the session guarantees they decompose into, and the stability protocols that let them prune state.
 

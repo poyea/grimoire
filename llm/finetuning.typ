@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Fine-tuning
+= Fine-tuning <finetuning>
 
 Pre-trained LLMs encode vast world knowledge but respond poorly to instructions and specific task formats out of the box. Fine-tuning adapts the model's behavior, teaching it to follow instructions, hold multi-turn conversations, or specialize in a domain, without relearning language from scratch. This chapter covers the full spectrum from expensive full fine-tuning to the parameter-efficient methods (LoRA, QLoRA) that dominate production work, plus the data formats, alignment algorithms, and practical recipes needed to run a real training job.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Introduction
+= Introduction <introduction>
 
 Large Language Models (LLMs) are the defining systems of modern AI. A single model like LLaMA 3 70B encodes over 70 billion learned parameters, requires terabytes of training data, and demands hundreds of GPU-hours to serve efficiently at scale. Understanding how they work, from the mathematics of attention to the engineering of distributed training and low-latency inference, is essential for anyone building or operating AI systems today.
 

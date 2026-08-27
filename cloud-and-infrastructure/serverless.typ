@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Serverless Computing
+= Serverless Computing <serverless>
 
 *Serverless* is a misnomer — servers exist, but the operator no longer provisions, patches, or capacity-plans them. The defining contract is *pay-per-invocation*: the provider bills for compute time consumed, not for idle capacity. This shifts the economic model from always-on reserved capacity toward a step function where cost scales exactly with load, making serverless ideal for spiky, event-driven, or rarely-triggered workloads. This chapter covers the execution model, cold start physics, Lambda internals, event sources, serverless containers, and the stateless constraints that govern system design.
 

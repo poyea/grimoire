@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Introduction: Models and Impossibilities
+= Introduction: Models and Impossibilities <introduction>
 
 A distributed system is a collection of independent computers that appears to its users as a single coherent system. The discipline studies what is *possible* under partial failure, asynchrony, and adversarial scheduling — and what is *impossible*. Every engineering decision in a real system (timeout values, quorum sizes, lease durations) is a concrete answer to one of these theoretical questions.
 

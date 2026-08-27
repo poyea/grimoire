@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Omega-Automata
+= Omega-Automata <omega-automata>
 
 Finite automata read finite words and accept by halting in a designated state. Real systems -- operating system kernels, reactive controllers, communication protocols, hardware pipelines -- do not halt. Their executions are *infinite* sequences of states, and the questions we ask about them (does every request eventually receive a response?, is the bus never granted to two masters simultaneously?) are properties of those infinite sequences. To check such properties algorithmically we need automata that read infinite inputs and accept by the *limiting behaviour* of the run. That is the subject of $omega$-automata.
 

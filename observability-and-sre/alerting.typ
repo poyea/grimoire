@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Alerting
+= Alerting <alerting>
 
 An alert is a claim that something deserves human attention; a page is a claim that it deserves attention _now_. Alerting design is therefore an exercise in classifier engineering: the alert pipeline labels system states as page-worthy or not, and it can be wrong in both directions. Too many false positives and responders stop trusting the pager; too many false negatives and customers become your monitoring. This chapter covers the symptom-versus-cause principle, alert quality as precision and recall, the multi-window multi-burn-rate method from the SRE Workbook with its arithmetic, the routing machinery (Alertmanager), and the human side — on-call health.
 

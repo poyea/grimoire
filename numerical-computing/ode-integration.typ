@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= ODE Integration
+= ODE Integration <ode-integration>
 
 Initial value problems $y' = f(t, y)$, $y(t_0) = y_0$ are the dynamics of everything: orbital mechanics, chemical kinetics, neuron models, the training dynamics of neural ODEs. Numerical integration replaces the continuum by discrete steps, and the central tensions are accuracy versus cost, stability versus step size, and the special demands of stiff problems and long-time simulation. This chapter covers Runge-Kutta methods, error control, stiffness and implicit methods, multistep methods, and symplectic integration.
 

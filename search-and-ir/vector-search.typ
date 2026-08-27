@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Vector Search
+= Vector Search <vector-search>
 
 Dense retrieval reduces matching to nearest-neighbor search in $RR^d$: given a query vector, find the $k$ closest of $N$ document vectors. Exact search is a linear scan — fine to a few hundred thousand vectors, hopeless at billions — so production systems use *approximate* nearest neighbor (ANN) indexes that trade a little recall for orders of magnitude in speed. This chapter covers the distance metrics, the two dominant index families (graph-based HNSW and cluster-based IVF), quantization for memory, and the operational concerns — filtering, updates, and the recall/latency/memory triangle — that decide real deployments.
 

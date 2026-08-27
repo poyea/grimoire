@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Data Quality
+= Data Quality <data-quality>
 
 Data quality is the discipline of detecting, preventing, and communicating defects in data before they corrupt downstream decisions. Unlike software bugs, data bugs are silent: a pipeline can run green for months while loading nulls into a revenue column, and the failure surfaces only when a finance report disagrees with the bank statement. This chapter covers the dimensions used to define quality, declarative expectations frameworks (Great Expectations, dbt tests, Soda), statistical anomaly detection on metrics, data contracts, the write-audit-publish pattern, circuit breakers, and data SLAs.
 

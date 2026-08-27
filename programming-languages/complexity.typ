@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Complexity Theory
+= Complexity Theory <complexity>
 
 Complexity theory classifies *decidable* problems by the resources required to
 solve them. Where recursion theory asks "is there an algorithm?", complexity asks

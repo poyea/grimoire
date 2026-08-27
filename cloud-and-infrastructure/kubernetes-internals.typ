@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Kubernetes Internals
+= Kubernetes Internals <kubernetes-internals>
 
 Kubernetes is best understood as a *control loop platform built around a strongly-consistent key-value store*. The apiserver is the only client of etcd; everything else — controllers, schedulers, kubelets — watches the apiserver and writes back desired state through it. This level-triggered, declarative model is the deep structural decision that makes the system extensible (CRDs and custom controllers are first-class) and self-healing (every reconciliation step recomputes from current state, never from deltas).
 

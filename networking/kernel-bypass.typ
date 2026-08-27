@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Kernel Bypass
+= Kernel Bypass <kernel-bypass>
 
 Kernel networking stack adds 2-5μs latency per packet. Kernel bypass eliminates this overhead by giving applications direct access to NIC hardware.
 

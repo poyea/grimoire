@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Leader Election and Leases
+= Leader Election and Leases <leader-election-and-leases>
 
 Many distributed protocols are simpler with a distinguished coordinator: a sequencer for ordering, an exclusive writer to a shard, a master scheduling tasks. The challenge is electing a leader despite failures, and *bounding* leadership so a partitioned former leader cannot corrupt state. Leases and fencing tokens are how this bound is enforced.
 

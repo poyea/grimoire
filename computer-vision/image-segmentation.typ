@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Image Segmentation
+= Image Segmentation <image-segmentation>
 
 Segmentation assigns a label to every pixel in an image. The three main tasks are *semantic segmentation* (per-pixel class label), *instance segmentation* (per-pixel class + instance identity), and *panoptic segmentation* (unified semantic + instance). This chapter traces the evolution from fully convolutional networks through Mask R-CNN to the Segment Anything Model.
 

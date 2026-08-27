@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, underbar, xref
 
-= Error Analysis
+= Error Analysis <error-analysis>
 
 An algorithm that returns the wrong answer is useless; an algorithm whose error you cannot bound is dangerous. Error analysis is the discipline of separating what is the *problem's* fault (conditioning) from what is the *algorithm's* fault (stability), and of proving bounds that hold for every input rather than the ones you happened to test. This chapter develops forward and backward error, condition numbers, Wilkinson's backward error analysis, concrete bounds for inner products and matrix multiplication, interval arithmetic, and stochastic rounding.
 

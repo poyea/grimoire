@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= The Rasterization Pipeline
+= The Rasterization Pipeline <rasterization-pipeline>
 
 Rasterization remains the dominant real-time rendering paradigm because GPUs are organized — at every level from the SM down to the ROP — to scan-convert triangles in massively parallel batches. Understanding the fixed-function stages and their programmable hooks is the prerequisite for everything that follows: shaders, $"PBR"$, deferred lighting, and even hybrid ray-traced effects.
 

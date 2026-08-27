@@ -1,4 +1,4 @@
-= Part IV: Advanced Concurrency
+= Part IV: Advanced Concurrency <advanced-concurrency>
 
 == Lock-Free Programming
 

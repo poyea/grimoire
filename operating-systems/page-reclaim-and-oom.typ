@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Page Reclaim and OOM
+= Page Reclaim and OOM <page-reclaim-and-oom>
 
 Every page of physical memory is eventually contested: the page cache wants it for file data, applications want it for heap, the kernel wants it for slabs. *Reclaim* is the machinery that resolves the contest by evicting the least valuable pages, and the *OOM killer* is the admission of defeat when reclaim cannot keep up. This chapter covers when reclaim runs, how victims are chosen, where evicted data goes, how the system measures its own distress, and what happens when nothing else works. The conceptual replacement-algorithm background is in #xref("operating-systems", "memory-management", label: "Memory Management"); Linux source-level mechanics are in `linux-kernel/memory-reclaim.typ`.
 

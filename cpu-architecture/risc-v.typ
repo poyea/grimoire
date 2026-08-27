@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= RISC-V
+= RISC-V <risc-v>
 
 RISC-V (pronounced "risk-five") is an open, modular instruction set architecture born at UC Berkeley in 2010 and now governed by RISC-V International. Unlike $"x86"$ or $"ARM"$, the $"ISA"$ itself is royalty-free; vendors compose extensions to fit their target.
 

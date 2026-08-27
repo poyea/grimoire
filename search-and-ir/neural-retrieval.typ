@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Neural Retrieval
+= Neural Retrieval <neural-retrieval>
 
 Neural retrieval applies pretrained language models to the matching problem itself, not just to reranking features. The field reorganized around BERT (2019–2021) into a small set of architectures distinguished by _where_ the query–document interaction happens: cross-encoders (full interaction, expensive, rerank-only), dense bi-encoders (no interaction until a single dot product, indexable), late interaction (per-token dot products, in between), and learned sparse models (neural term weighting on a classical inverted index). This chapter covers each, the training recipes that make or break them, and the hybrid systems production actually ships.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= JIT Compilation and Runtime Systems
+= JIT Compilation and Runtime Systems <jit-and-runtimes>
 
 Just-in-time compilation defers code generation to runtime, enabling optimisations based on observed execution profiles. JITs underpin JavaScript engines (V8, SpiderMonkey), the JVM (HotSpot, GraalVM), Python (PyPy), and increasingly ML frameworks (XLA, Triton, torch.compile). This chapter covers tiered compilation, deoptimisation, garbage collection interactions, and the LLVM ORC JIT API.
 

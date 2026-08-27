@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= eBPF Deep Dive
+= eBPF Deep Dive <ebpf-deep-dive>
 
 eBPF (extended Berkeley Packet Filter) is a sandboxed in-kernel virtual machine that runs verified, JITed userspace-supplied programs at attach points throughout the kernel. It turned the kernel from a recompile-and-reboot artefact into a programmable platform: tracing, networking, security, observability, and even schedulers (`sched_ext`) are now things you load at runtime. The cost model (single-digit nanoseconds per instruction after JIT, with verifier-proven safety) is what makes it production-grade where kprobes alone were too dangerous and userspace tracing too slow.
 

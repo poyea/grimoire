@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Time-Series and Graph Databases
+= Time-Series and Graph Databases <time-series-and-graph>
 
 Time-series and graph data have access patterns that don't fit relational models well. Specialized engines exploit domain structure for 10–100× better performance on their target workloads.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Multi-GPU Communication and Scaling
+= Multi-GPU Communication and Scaling <multi-gpu>
 
 Modern ML training (LLMs with 100B+ parameters) and HPC simulations no longer fit on a single GPU. Scaling requires high-bandwidth GPU-to-GPU interconnects, efficient collective communication libraries, and parallelism strategies that map workload structure onto hardware topology.
 

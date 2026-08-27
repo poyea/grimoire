@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Superscalar and Out-of-Order Execution
+= Superscalar and Out-of-Order Execution <superscalar>
 
 Superscalar processors execute multiple instructions per cycle using multiple execution units. Out-of-order execution reorders instructions dynamically to hide latencies and maximize throughput.
 

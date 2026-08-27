@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Infinite Trees and Games
+= Infinite Trees and Games <infinite-trees-and-games>
 
 If $omega$-automata are the right tool for reasoning about linear-time properties of nonterminating systems, *tree automata on infinite trees* are the right tool for reasoning about *branching-time* properties -- properties of the entire computation tree of a nondeterministic or open system. The flagship result is Rabin's theorem (1969): the monadic second-order theory of two successor functions, S2S, is decidable. Modern proofs route this through *infinite games of perfect information* with $omega$-regular winning conditions, where the central technical fact is the *positional determinacy of parity games*.
 

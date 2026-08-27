@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Advanced String Algorithms
+= Advanced String Algorithms <advanced-string-algorithms>
 
 *Beyond basic pattern matching:* Suffix arrays, suffix automata, and multiple pattern matching enable sophisticated string processing with optimal complexity. Critical for bioinformatics, text indexing, and data compression [Gusfield 1997].
 

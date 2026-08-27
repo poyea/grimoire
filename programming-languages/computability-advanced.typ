@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Advanced Recursion Theory
+= Advanced Recursion Theory <computability-advanced>
 
 This chapter continues from #xref("programming-languages", "computability", label: "Computability and Recursion Theory"), covering the
 hyperarithmetical and analytical hierarchies, effective topology, computable

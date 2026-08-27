@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Simply-Typed Lambda Calculus
+= Simply-Typed Lambda Calculus <simply-typed-lambda>
 
 The simply-typed lambda calculus, $lambda^arrow.r$, is the minimal nontrivial typed language: variables, function abstraction, and application, with a type discipline that forbids self-application.
 It is the *ur-typed-language* — every modern type system is, at the core, $lambda^arrow.r$ with extensions.

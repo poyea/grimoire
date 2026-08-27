@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Streaming
+= Streaming <streaming>
 
 Streaming systems process unbounded data with bounded latency. Three concerns dominate: ordering (event time vs processing time), correctness under failure (exactly-once semantics), and state management (how billions of keyed aggregates fit in memory). This chapter covers Kafka as the durable log, Flink as the canonical processing engine, and the streaming-$"SQL"$ wave (RisingWave, Materialize, ksqlDB).
 

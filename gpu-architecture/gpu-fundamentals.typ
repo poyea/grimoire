@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= GPU Fundamentals
+= GPU Fundamentals <gpu-fundamentals>
 
 Modern GPUs are massively parallel processors designed for throughput-oriented computing. Unlike CPUs optimized for latency, GPUs maximize aggregate work per unit time through thousands of concurrent threads.
 

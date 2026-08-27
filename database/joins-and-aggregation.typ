@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Joins and Aggregation
+= Joins and Aggregation <joins-and-aggregation>
 
 Join algorithms are the performance-critical core of relational query processing. The right algorithm depends on input sizes, available memory, sort order, and key distribution. Aggregation is deeply intertwined with join order and physical layout.
 

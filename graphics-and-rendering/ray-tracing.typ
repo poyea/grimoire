@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Ray Tracing
+= Ray Tracing <ray-tracing>
 
 Hardware-accelerated ray tracing, standardized through $"DXR"$ (DirectX Raytracing) and Vulkan Ray Tracing, adds a programmable ray-intersection pipeline alongside the rasterization pipeline. This enables effects — soft shadows, reflections, ambient occlusion, and global illumination — that either require expensive screen-space hacks or prohibitive offline cost when done in a rasterizer alone.
 

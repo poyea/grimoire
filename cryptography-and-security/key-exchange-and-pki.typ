@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Key Exchange and PKI
+= Key Exchange and PKI <key-exchange-and-pki>
 
 Key exchange lets two parties who share no secret establish one over a public channel; public-key infrastructure (PKI) solves the remaining problem of knowing _whose_ key you are exchanging with. Together they form the trust backbone of TLS, SSH, VPNs, and messaging. This chapter covers Diffie-Hellman and its modern instantiations, authenticated key exchange, the Signal protocol stack, and the X.509 certificate ecosystem.
 

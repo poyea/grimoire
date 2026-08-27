@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= VFS and Filesystems
+= VFS and Filesystems <vfs-and-fs>
 
 The Virtual File System (VFS) is the kernel's polymorphism layer for filesystems. Every `open`, `read`, `write`, `stat`, `unlink` enters a small set of generic functions in `fs/` that dispatch through function-pointer tables (`*_operations` structs) implemented by the concrete filesystem (ext4, XFS, btrfs, F2FS, tmpfs, FUSE, procfs, overlayfs). Without the VFS, every syscall would need a `switch` on filesystem type; with it, a `cat` of `/proc/meminfo` and a `cat` of `/data/foo.txt` on XFS share exactly the same syscall fast path.
 

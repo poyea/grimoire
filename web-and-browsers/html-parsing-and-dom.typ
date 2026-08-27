@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= HTML Parsing and the DOM
+= HTML Parsing and the DOM <html-parsing-and-dom>
 
 HTML is the only mainstream language whose parser is fully specified *including error recovery*: every byte sequence produces a well-defined tree in every conforming browser. This chapter covers the HTML5 parsing algorithm, the speculative optimizations engines layer on top of it, and the internals of the DOM — including shadow DOM, custom elements, and mutation observers.
 

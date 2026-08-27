@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= POSIX Sockets API
+= POSIX Sockets API <sockets-api>
 
 The Berkeley Sockets API provides the standard interface for network programming across Unix systems [POSIX.1-2017].
 

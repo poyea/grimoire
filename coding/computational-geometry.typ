@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Computational Geometry
+= Computational Geometry <computational-geometry>
 
 *Algorithms for geometric problems:* Computational geometry handles points, lines, polygons, and spatial queries efficiently. Essential for graphics, robotics, GIS, and CAD systems [de Berg et al. 2008].
 

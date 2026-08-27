@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= System F: Categorical Models and Advanced Topics
+= System F: Categorical Models and Advanced Topics <system-f-categorical-models>
 
 == Categorical Models of System F
 

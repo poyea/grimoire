@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Concurrency Control
+= Concurrency Control <concurrency-control>
 
 Concurrency control ensures that concurrent transactions produce results consistent with some serial execution. The two dominant paradigms are *pessimistic* (two-phase locking) and *optimistic* (OCC / MVCC). Modern OLTP systems have converged on MVCC with serial validation.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": underbar, xref
 
-= Operational Semantics
+= Operational Semantics <operational-semantics>
 
 Operational semantics defines the meaning of a program by describing the rules under which it executes on an abstract machine. The machine is not silicon; it is a mathematical artefact -- a transition system whose states are syntactic configurations and whose steps are determined by inference rules over the syntax. This stance, due to Plotkin (1981) in the Aarhus lecture notes _A Structural Approach to Operational Semantics_, gave the field its modern shape: meaning is *what the program does*, presented as a rewriting calculus on the program text itself.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Workflow Engines
+= Workflow Engines <workflow-engines>
 
 Modern distributed applications frequently need to coordinate multi-step processes that span hours, days, or weeks — processes that must survive server restarts, handle partial failures gracefully, and retry individual steps without re-executing completed work. *Workflow engines* solve this by externalising durable state and encoding execution semantics in a framework rather than in application code. This chapter covers the durable execution model, the leading engines (Temporal, Airflow, Prefect, Dagster), the relationship to sagas, and failure handling patterns.
 

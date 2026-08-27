@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Weighted and Probabilistic Automata
+= Weighted and Probabilistic Automata <weighted-and-probabilistic-automata>
 
 Classical automata are Boolean: a word is either accepted or rejected. *Weighted automata* generalize this to maps $Sigma^* arrow.r K$ taking values in a semiring $K$ -- counts of accepting paths ($K = NN$), shortest path costs ($K = (RR union {oo}, min, +)$), probabilities ($K = [0, 1]$), or formal power series ($K = ZZ[[X]]$). *Probabilistic automata* (Rabin 1963) take the stochastic specialization seriously: input determines a distribution over next states, and acceptance is a cut-point condition on the probability of reaching a final state. The unified algebraic theory begins with Schützenberger (1961), who showed that recognizable power series are exactly the rational (regular-expression-definable) ones, and the picture is completed by Eilenberg's variety theorem and Mohri's algorithmics for transducers.
 

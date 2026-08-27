@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Tree Decomposition Techniques
+= Tree Decomposition Techniques <tree-decomposition>
 
 *Flattening trees into arrays unlocks range-query machinery on paths and subtrees. Euler tours, binary lifting, heavy-light decomposition, and centroid decomposition are the four core tools — each trading different constants to answer different families of queries on trees in $O(log n)$ or $O(log^2 n)$.*
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Loss Functions
+= Loss Functions <loss-functions>
 
 The choice of loss function encodes what "correct" means for a model. Cross-entropy for classification, MSE for regression — but modern deep learning uses a much richer palette: contrastive losses for representation learning, focal loss for class imbalance, InfoNCE for self-supervised learning. A loss function is not merely a training convenience; it is the formal statement of the task. Understanding the landscape from first principles clarifies why certain losses dominate certain domains and how to design objectives for new ones.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Notation and Conventions
+= Notation and Conventions <notation>
 
 This chapter fixes the Dirac notation, gate symbols, and error-correction conventions used throughout the volume.
 

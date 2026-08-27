@@ -89,7 +89,7 @@ VOLUMES = [
 ]
 
 INCLUDE_RE = re.compile(r'#include\s+"([^"]+\.typ)"')
-HEADING_RE = re.compile(r"^=\s+(.+)$", re.MULTILINE)
+HEADING_RE = re.compile(r"^=\s+(.+?)(?:\s*<[a-z0-9-]+>)?\s*$", re.MULTILINE)
 SUBHEAD_RE = re.compile(r"^==\s+(.+)$", re.MULTILINE)
 
 

@@ -223,15 +223,22 @@ math { font-size: 1.02em; }
 // reader with the PDF wants the companion PDF, not a web page. Asset names
 // are grimoire_<subject with hyphens as underscores>.pdf, matching
 // scripts/gen_homepage.py and what release.yml publishes.
+// `label` is shadowed by the parameter below, so keep a handle on the
+// builtin before it is.
+#let _label = label
+
 #let xref(subject, slug, label: none) = context {
-  let url = if target() == "html" {
-    "https://poyea.github.io/grimoire/volumes/" + subject + ".html#" + slug
+  let body = if label == none [#subject\/#slug] else [#label]
+  // Every chapter heading carries `<chapter-slug>`. If that label resolves
+  // in this document the target is in the volume the reader already has,
+  // so jump there instead of sending them out to fetch the same file.
+  let here = query(_label(slug))
+  if here.len() > 0 {
+    emph(link(here.first().location(), body))
+  } else if target() == "html" {
+    emph(link("https://poyea.github.io/grimoire/volumes/" + subject + ".html#" + slug, body))
   } else {
-    "https://github.com/poyea/grimoire/releases/latest/download/grimoire_" + subject.replace("-", "_") + ".pdf"
-  }
-  if label == none {
-    emph(link(url)[#subject\/#slug])
-  } else {
-    emph(link(url)[#label])
+    emph(link("https://github.com/poyea/grimoire/releases/latest/download/grimoire_"
+      + subject.replace("-", "_") + ".pdf", body))
   }
 }

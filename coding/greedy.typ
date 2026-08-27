@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Greedy
+= Greedy <greedy>
 
 *Greedy algorithms* build a solution incrementally, choosing the locally optimal option at each step, hoping it leads to a globally optimal solution.
 

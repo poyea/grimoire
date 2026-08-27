@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Interrupts and Bottom Halves
+= Interrupts and Bottom Halves <interrupts>
 
 When a hardware device needs attention — a packet arrived, a disk completed a transfer, a timer expired — it raises an interrupt. The CPU stops whatever it was doing, transfers control to the kernel's interrupt handler, runs that handler with interrupts disabled, and resumes. This is fast for the device (microsecond response) but expensive in aggregate: every interrupt is a pipeline flush, a register save, and a forced preemption. At 10 GbE line rate (~14.8 Mpps for 64-byte frames), one interrupt per packet would saturate a CPU on overhead alone.
 

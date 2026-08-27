@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Network Debugging
+= Network Debugging <debugging>
 
 Systematic approaches to diagnosing network issues: packet capture, socket inspection, latency analysis, and advanced tracing.
 

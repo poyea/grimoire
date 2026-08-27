@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Distributed and ML Algorithms
+= Distributed and ML Algorithms <distributed-algorithms>
 
 Distributed coordination, large-model training, and inference algorithms share a common thread: they push single-machine abstractions to their limits and require explicit reasoning about concurrency, failure, and communication cost. This chapter covers consensus-adjacent coordination primitives, data-parallel and pipeline-parallel training patterns, and LLM inference scheduling — the algorithms a systems engineer encounters when a workload outgrows a single node.
 

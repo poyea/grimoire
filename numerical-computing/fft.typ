@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= The Fast Fourier Transform
+= The Fast Fourier Transform <fft>
 
 The FFT computes the discrete Fourier transform of $n$ points in $O(n log n)$ operations instead of $O(n^2)$ — a speedup that turned spectral analysis, fast convolution, and signal processing from theoretical curiosities into everyday tools. Gilbert Strang called it "the most important numerical algorithm of our lifetime"; it ships in every phone, modem, and MRI scanner. This chapter covers the DFT and its algebra, the Cooley-Tukey recursion, real-input and trigonometric transforms, fast convolution, accuracy, and the non-obvious traps of using FFTs correctly.
 

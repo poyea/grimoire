@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Evaluation
+= Evaluation <evaluation>
 
 Evaluating a large language model is harder than evaluating most software systems. A model with billions of parameters can excel at summarization while failing at arithmetic, ace multiple-choice science while hallucinating biographical facts, and refuse harmful requests while also refusing benign ones. No single number captures capability. This chapter covers the principal evaluation methodologies — from perplexity to human preference rankings — and the practical setup needed to reproduce published results.
 

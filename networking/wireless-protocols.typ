@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Wireless Protocols
+= Wireless Protocols <wireless-protocols>
 
 Modern wireless networking encompasses WiFi (802.11), cellular (4G/5G), and emerging technologies like mmWave. Understanding PHY/MAC layer behavior is essential for optimizing wireless application performance.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= GPU Memory: Caches, HBM, and Optimization
+= GPU Memory: Caches, HBM, and Optimization <memory-advanced>
 
 *Advanced GPU memory topics:* This chapter covers L1/L2 caches, constant and texture memory, unified memory, HBM, access optimization patterns, and profiling. It continues from #xref("gpu-architecture", "memory-hierarchy", label: "GPU Memory Hierarchy") (registers, shared memory, global memory).
 

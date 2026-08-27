@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Zero-Knowledge Proofs
+= Zero-Knowledge Proofs <zero-knowledge-proofs>
 
 A zero-knowledge proof lets a prover convince a verifier that a statement is true while revealing nothing beyond its truth. Once a theoretical curiosity, ZK proofs now run in production at scale: blockchain rollups prove the correct execution of millions of transactions, and privacy systems prove properties of hidden data. This chapter builds from interactive proofs and sigma protocols to the modern SNARK and STARK families.
 

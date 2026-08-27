@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Two Pointers
+= Two Pointers <two-pointers>
 
 *Two pointers technique processes arrays/sequences with two indices moving toward each other or in same direction. Requires: sorted data or specific pattern. Benefits: $O(1)$ space vs $O(n)$ for hash-based solutions.*
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= The Networking Stack
+= The Networking Stack <networking-stack>
 
 The Linux networking stack handles ~30 M pps per core on commodity hardware in 2025, runs on every device with an IP address from a Raspberry Pi to a 400 GbE switch ASIC, and is the substrate beneath every container runtime's networking model. Its architecture is layered but porous: drivers, the NAPI poll loop, the IP/TCP/UDP code in `net/ipv4` and `net/ipv6`, traffic-control queueing disciplines, netfilter hooks, and the eBPF programmable data plane (XDP, TC, sk_lookup) all interlock through a single data structure: the `struct sk_buff`.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Shaders and Shading Languages
+= Shaders and Shading Languages <shaders>
 
 Shaders are the programmable spine of every modern $"GPU"$ pipeline. They evolved from fixed-function combiners in the late 1990s into Turing-complete $"SIMT"$ programs that today drive rasterization, ray tracing, $"ML"$ inference, and general compute. Understanding $"HLSL"$, $"GLSL"$, and the underlying execution model (warps, divergence, occupancy) is mandatory before tackling $"PBR"$ or global illumination.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Algorithms and Data Structures: An Orientation
+= Algorithms and Data Structures: An Orientation <introduction>
 
 This subject is a practitioner's reference for algorithms and data structures. Each chapter covers one core data structure or algorithm family, presenting the essential invariants, worked problems that illustrate canonical patterns, complexity analysis, and implementation sketches. The goal is not to replace a textbook. CLRS gives you proofs; Skiena gives you design intuition. This reference gives you density: the material most likely to surface in an interview loop, a competitive programming contest, or a production engineering decision, distilled into a navigable form.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= gRPC (Remote Procedure Calls)
+= gRPC (Remote Procedure Calls) <grpc>
 
 gRPC is a high-performance, cross-platform RPC framework built on HTTP/2 and Protocol Buffers.
 

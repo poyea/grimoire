@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Lock-Free Data Structures for Networking
+= Lock-Free Data Structures for Networking <lock-free>
 
 High-performance network applications require lock-free communication between threads to avoid mutex contention and context switch overhead.
 

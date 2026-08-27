@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= CUDA Programming Model
+= CUDA Programming Model <cuda-programming-model>
 
 CUDA exposes the GPU as a heterogeneous co-processor with an explicit host/device split, an SPMD kernel model, and a hierarchy of execution scopes (thread, warp, block, cluster, grid). Mastering the launch surface and the warp-level primitives is what separates correct CUDA from fast CUDA.
 

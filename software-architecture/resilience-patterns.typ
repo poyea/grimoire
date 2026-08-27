@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Resilience Patterns
+= Resilience Patterns <resilience-patterns>
 
 Distribution makes partial failure the normal operating condition: dependencies time out, return errors, slow down, or, worst of all, slow down *intermittently*. Resilience is the system's ability to keep delivering acceptable service while parts of it fail, and to recover without human heroics. This chapter covers the core patterns, timeouts, retries, circuit breakers, bulkheads, load shedding, graceful degradation, the arithmetic that motivates them, and chaos engineering as the discipline that verifies they actually work.
 

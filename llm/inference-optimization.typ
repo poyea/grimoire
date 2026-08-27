@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Inference Optimization
+= Inference Optimization <inference-optimization>
 
 Training a language model is a one-time cost; _inference_ runs continuously in production. Inference efficiency determines cost per query, latency, and how many users a single GPU cluster can serve. This chapter covers the full stack: KV cache mechanics, decoding strategies, speculative decoding, continuous batching, paged memory management, prefix reuse, chunked prefill, tensor parallelism, and how to measure what matters.
 

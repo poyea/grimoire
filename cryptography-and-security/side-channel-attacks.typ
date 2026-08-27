@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Side-Channel Attacks
+= Side-Channel Attacks <side-channel-attacks>
 
 A side-channel attack extracts secrets not from mathematical weaknesses but from the physical or behavioural traces of computation: timing, cache state, power draw, electromagnetic emission, or induced faults. The algorithm can be provably secure while its implementation leaks the key. This chapter covers timing and cache attacks, power analysis, fault injection, and the engineering discipline of constant-time code.
 

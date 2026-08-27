@@ -1,4 +1,4 @@
-= String Algorithms
+= String Algorithms <string-algorithms>
 
 *Memory access patterns critical:* Strings are character arrays = sequential access optimal. Random access = cache-hostile. Modern SSE4.2/AVX2 instructions provide SIMD acceleration [Intel Opt. Manual 2023, §14.8].
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Benchmarking and Research Methods
+= Benchmarking and Research Methods <benchmarking-and-research-methods>
 
 Benchmarking measures database performance under controlled conditions. Bad benchmarks produce misleading results — and the database field has a long history of systems being published with cherry-picked workloads. Understanding benchmark design, statistical analysis, and how to read research papers critically is as important as knowing the systems themselves.
 

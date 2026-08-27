@@ -1,4 +1,4 @@
-= Lexing
+= Lexing <lexing>
 
 A compiler or interpreter sees its input as a flat stream of bytes. The lexer (also called a scanner or tokenizer) imposes the first layer of structure: it converts that stream into a sequence of *tokens*, each carrying a type (integer literal, identifier, keyword, operator) and the raw text that produced it. Everything downstream works on tokens, never on individual characters.
 

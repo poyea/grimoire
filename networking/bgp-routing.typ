@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= BGP Routing
+= BGP Routing <bgp-routing>
 
 Border Gateway Protocol (BGP) is the de facto standard for inter-domain routing, forming the backbone of internet connectivity between autonomous systems.
 

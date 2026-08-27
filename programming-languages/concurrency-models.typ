@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Concurrency Models
+= Concurrency Models <concurrency-models>
 
 When a program runs on more than one thread of control, the question "what does this program mean?" is no longer answered by a single trace of states. Concurrent execution multiplies the possible behaviours combinatorially; weak memory hardware multiplies them again; failures multiply them still further. The discipline of *concurrency semantics* is the study of which behaviours are admitted, which are excluded, and what guarantees the programmer may rely on.
 

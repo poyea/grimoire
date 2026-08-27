@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Garbage Collection
+= Garbage Collection <garbage-collection>
 
 Garbage collection (GC) is the subsystem that reclaims heap memory automatically, without explicit `free` calls from the programmer. Every managed runtime --- the JVM, .NET CLR, Python, Go, Swift, JavaScript engines --- ships a GC, and the design of that GC is one of the most consequential choices a language implementer makes. This chapter surveys the principal algorithm families, the compiler infrastructure required to support them, and the trade-offs between pause time, throughput, and space overhead.
 

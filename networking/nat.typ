@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Network Address Translation (NAT)
+= Network Address Translation (NAT) <nat>
 
 Network Address Translation rewrites IP and port headers as packets cross an administrative boundary. Originally introduced to mitigate IPv4 address exhaustion, NAT has become a de-facto security and topology hiding mechanism, and a perennial source of pain for peer-to-peer protocols.
 

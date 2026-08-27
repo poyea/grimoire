@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= JavaScript Engines
+= JavaScript Engines <javascript-engines>
 
 A JavaScript engine must run a dynamically typed, garbage-collected, eval-capable language at near-native speed, starting from source text it has never seen, often with a budget of milliseconds before the user notices. The result is some of the most sophisticated systems software in existence: multi-tier JIT compilers, speculative optimization with deoptimization, hidden classes, inline caches, and concurrent garbage collectors. This chapter uses V8 (Chrome, Node.js) as the spine, with JavaScriptCore (Safari) and SpiderMonkey (Firefox) for contrast.
 

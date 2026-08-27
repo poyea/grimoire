@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Global Illumination Techniques
+= Global Illumination Techniques <gi-techniques>
 
 Global illumination ($"GI"$) accounts for indirect light — photons that bounce one or more times before reaching the camera. The gap between a rasterized local-illumination model and a physically accurate $"GI"$ solution is precisely the gap between a flat studio render and a scene that looks like it belongs in its environment.
 

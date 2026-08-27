@@ -1,4 +1,4 @@
-= Tries
+= Tries <tries>
 
 *Memory overhead warning:* Naive trie = 26 pointers per node = 208 bytes (64-bit). Empty children waste space. Typical English word datasets: 70-95% of pointers are null due to sparse branching.
 

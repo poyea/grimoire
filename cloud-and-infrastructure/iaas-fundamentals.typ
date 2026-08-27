@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= IaaS Fundamentals
+= IaaS Fundamentals <iaas-fundamentals>
 
 Infrastructure-as-a-Service abstracts compute, storage, and networking behind APIs so that capacity becomes an operational expense rather than a procurement cycle. The three hyperscalers (AWS, GCP, Azure) expose conceptually parallel primitives — virtual machines, virtual networks, object stores, managed identities — but the API shapes, isolation boundaries, and pricing models differ enough that portable design requires understanding each abstraction in detail. This chapter maps the primitives side-by-side and digs into the substrate (Nitro, Titan, hypervisors) that makes them possible.
 

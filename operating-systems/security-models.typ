@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Security Models
+= Security Models <security-models>
 
 Every protection system answers one question: *which subject may perform which operation on which object?* The answers differ wildly (Unix mode bits, SELinux type enforcement, an seL4 capability table) but all are concrete projections of the same abstract structure, and all aspire to the same ideal of a small, trustworthy decision point that nothing can bypass. This chapter treats the models conceptually; the Linux mechanisms that implement them live in `linux-kernel/security-modules.typ` and `linux-kernel/cgroups-namespaces.typ`.
 

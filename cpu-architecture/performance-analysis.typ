@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Performance Analysis and Measurement
+= Performance Analysis and Measurement <performance-analysis>
 
 Understanding where time is spent requires measurement tools and techniques. Hardware performance counters provide low-overhead visibility into microarchitectural events.
 

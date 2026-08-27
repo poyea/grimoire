@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Linear Systems
+= Linear Systems <linear-systems>
 
 Solving $A x = b$ is the workhorse of scientific computing — discretized PDEs, circuit simulation, regression, Kalman filters, and the inner loop of interior-point optimizers all reduce to it. The direct-method toolkit is mature: factor once, solve cheaply, with stability guarantees inherited from a half-century of error analysis. This chapter covers LU with pivoting, Cholesky, QR via Householder and Givens, the interplay of condition number and residual, sparse direct methods, and the three roads to least squares.
 

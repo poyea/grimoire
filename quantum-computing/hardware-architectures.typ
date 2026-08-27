@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Hardware Architectures
+= Hardware Architectures <hardware-architectures>
 
 A qubit is whatever two-level quantum system you can isolate, control, and read out faster than it decoheres. Engineering tradeoffs — coherence time, gate fidelity, connectivity, scalability, operating temperature — split the industry into four credible modalities: superconducting circuits, trapped ions, neutral atoms, and photonics. Topological qubits remain an open research bet. This chapter surveys the physical implementations, their native gate sets, and how the choice cascades up the stack into compilers and codes.
 

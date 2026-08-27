@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Vision Transformers
+= Vision Transformers <vision-transformers>
 
 The Vision Transformer (ViT) transplanted the transformer architecture to images, showing that a pure attention-based model pre-trained at sufficient scale outperforms CNNs without inductive biases for translation equivariance. This chapter covers ViT, its training recipe, hierarchical variants, and multimodal vision-language models.
 

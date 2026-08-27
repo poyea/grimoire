@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= WebAssembly
+= WebAssembly <webassembly>
 
 WebAssembly (Wasm) is the web's second language: a compact, statically typed binary instruction format designed to be a portable compilation target with near-native performance, validated and sandboxed by construction. Announced in 2015 by a four-browser coalition, an MVP shipped in all engines in 2017, and Wasm 2.0/3.0-era features (GC, threads, SIMD, tail calls, exceptions) have steadily landed since. This chapter covers the design, how engines execute it, the memory and security model, and the ecosystem beyond the browser.
 

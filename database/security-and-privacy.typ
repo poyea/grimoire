@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Database Security and Privacy
+= Database Security and Privacy <security-and-privacy>
 
 Database security must be designed in — SQL injection, privilege escalation, and data leakage are the most common causes of data breaches. Privacy-preserving computation (differential privacy, encryption in use) adds a layer beyond access control.
 

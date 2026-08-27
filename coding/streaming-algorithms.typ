@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Streaming Algorithms
+= Streaming Algorithms <streaming-algorithms>
 
 *Process data in one pass:* Streaming algorithms handle data too large to store, using sublinear space and limited passes. Essential for real-time analytics, network monitoring, and big data processing [Muthukrishnan 2005].
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Dataflow Analysis
+= Dataflow Analysis <dataflow-analysis>
 
 Dataflow analysis is the engineering core of every optimizer: it answers questions of the form "at this program point, what could be true about the program state?" by propagating facts through the control-flow graph until they stabilize. This chapter focuses on the algorithms and data structures used in production — bitvectors, sparse iteration, $"SSA"$-aware variants.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Effects and Handlers
+= Effects and Handlers <effects-and-handlers>
 
 A *pure* function returns a value and does nothing else. An *effectful* computation may also read state, write to disk, throw an exception, fork a thread, sample a random number, or yield control to a scheduler. The history of typed functional programming is, to a first approximation, the history of how to talk about effects without giving up the reasoning principles that purity affords: $beta$-reduction, equational reasoning, parametricity, separate compilation.
 

@@ -1,4 +1,4 @@
-= Advanced Graph Algorithms
+= Advanced Graph Algorithms <advanced-graphs>
 
 *Graph representation performance:* Adjacency list (sparse) = pointer chasing. Adjacency matrix (dense) = contiguous but $O(V^2)$ space. Edge list = sort-friendly for MST algorithms.
 

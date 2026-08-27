@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Branch Prediction
+= Branch Prediction <branch-prediction>
 
 Branch prediction guesses the outcome and target of branches to maintain pipeline flow. Modern CPUs predict with 95-99% accuracy for typical code.
 

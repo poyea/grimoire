@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Out-of-Order Execution Deep Dive
+= Out-of-Order Execution Deep Dive <out-of-order-deep-dive>
 
 Out-of-order (OoO) execution extracts instruction-level parallelism by dynamically scheduling instructions around long-latency operations. This chapter dissects the structures that make OoO possible: the reorder buffer (ROB), reservation stations (RS), register renaming, and the memory disambiguation machinery.
 

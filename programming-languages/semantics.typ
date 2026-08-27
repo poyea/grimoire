@@ -1,4 +1,4 @@
-= Program Semantics
+= Program Semantics <semantics>
 
 A grammar tells you which strings are syntactically valid programs. It says nothing about
 what those programs *mean*. Two programs with identical syntax trees may have entirely

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= TLS (Transport Layer Security)
+= TLS (Transport Layer Security) <tls>
 
 TLS provides confidentiality, integrity, and authentication for network communications. It operates above TCP, encrypting application data before transmission.
 

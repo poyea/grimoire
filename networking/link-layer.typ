@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Link Layer & Hardware
+= Link Layer & Hardware <link-layer>
 
 The link layer handles physical transmission of bits over a medium. For Ethernet (dominant LAN technology), this includes frame structure, MAC addressing, and hardware interrupt handling.
 

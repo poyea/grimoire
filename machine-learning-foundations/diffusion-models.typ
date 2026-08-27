@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Diffusion Models
+= Diffusion Models <diffusion-models>
 
 Diffusion models are generative models that learn to reverse a noise-addition process. They have become the dominant approach for high-fidelity image, audio, and video synthesis, surpassing GANs on perceptual quality benchmarks while being more stable to train. This chapter develops the score-based and DDPM formulations, derives the evidence lower bound, covers accelerated samplers, and connects diffusion to flow matching and consistency models.
 

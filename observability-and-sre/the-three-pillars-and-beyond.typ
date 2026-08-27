@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= The Three Pillars and Beyond
+= The Three Pillars and Beyond <the-three-pillars-and-beyond>
 
 Observability begins with three classical signal types — metrics, logs, traces — but production systems require two more first-class citizens: continuous profiles and discrete events. This chapter frames each pillar by its information density, query model, retention economics, and the questions it answers, then sketches how OpenTelemetry semantic conventions stitch them into a single graph keyed by resource and span context.
 

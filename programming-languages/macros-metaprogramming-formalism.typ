@@ -1,4 +1,4 @@
-= Macros and Metaprogramming: Formal Foundations
+= Macros and Metaprogramming: Formal Foundations <macros-metaprogramming-formalism>
 
 == Hygiene Formalized: Macros That Work (Clinger--Rees)
 

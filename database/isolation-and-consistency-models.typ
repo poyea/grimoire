@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Isolation and Consistency Models
+= Isolation and Consistency Models <isolation-and-consistency-models>
 
 The ANSI SQL standard defines four isolation levels by the anomalies they permit. Adya (1999) formalized this with a graph-based framework that precisely characterizes each level and exposes gaps in the ANSI specification. Understanding this framework is essential for reasoning about correctness in real systems.
 

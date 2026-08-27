@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Randomized Algorithms
+= Randomized Algorithms <randomized-algorithms>
 
 *Randomization* often yields algorithms that are simpler, faster, or more practical than their deterministic counterparts: it breaks symmetry, smooths adversarial inputs, and enables sublinear computation. This chapter covers the two flavours of randomization (Las Vegas and Monte Carlo), Karger's surprising min-cut algorithm, MinHash for set similarity, reservoir sampling for streams, and treaps as a self-balancing BST with no rotations to memorise.
 

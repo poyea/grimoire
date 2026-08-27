@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Containers: OCI, runc, containerd, Image Layers
+= Containers: OCI, runc, containerd, Image Layers <containers>
 
 Containers are not a kernel feature but a *user-space packaging convention* over kernel features — namespaces, cgroups, seccomp, capabilities, mount propagation, and union filesystems. The OCI standards (runtime-spec, image-spec, distribution-spec) define the contract between image builders, registries, and runtimes so that an image produced by Docker, Buildah, or Bazel runs unchanged under runc, crun, youki, or gVisor. This chapter follows a container from `docker push` through registry, kubelet pull, image unpacking, runc invocation, and finally the `clone()` that creates the container's first process.
 

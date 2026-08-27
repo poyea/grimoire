@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Retrieval-Augmented Generation
+= Retrieval-Augmented Generation <rag>
 
 RAG injects information retrieved from an external corpus into the LLM's prompt at query time. The model gains access to up-to-date, domain-specific, or proprietary knowledge without retraining, and citations become attributable. This chapter covers the full pipeline — chunking, embedding, indexing, hybrid retrieval, reranking, fusion strategies — plus the evaluation methodology and the design tradeoffs versus long context and fine-tuning.
 

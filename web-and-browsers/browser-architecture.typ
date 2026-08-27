@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Browser Architecture
+= Browser Architecture <browser-architecture>
 
 A modern browser is one of the largest pieces of software most people run: Chromium contains roughly 35 million lines of code, comparable to an operating system kernel plus much of its userland. This chapter covers the multi-process architecture that browsers converged on, the security boundaries between processes, inter-process communication, and an end-to-end overview of how a URL typed in the address bar becomes pixels on screen.
 

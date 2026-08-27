@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Performance Optimization
+= Performance Optimization <performance-optimization>
 
 GPU performance optimization requires systematic analysis and targeted improvements. This section covers kernel optimization techniques, memory optimizations, and strategies for achieving peak performance.
 

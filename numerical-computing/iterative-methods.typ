@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Iterative Methods
+= Iterative Methods <iterative-methods>
 
 When $A$ is large and sparse — a 3-D PDE discretization with $10^8$ unknowns, a graph Laplacian, a kernel matrix touched only through matrix-vector products — direct factorization drowns in fill-in or simply does not fit in memory. Iterative methods trade the certainty of $O(n^3)$ for a sequence of cheap steps, each dominated by a matrix-vector product, that converge at a rate governed by the spectrum. This chapter covers the classical splittings, Krylov subspace methods (CG, MINRES, GMRES, BiCGSTAB), convergence theory, preconditioning, and multigrid.
 

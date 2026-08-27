@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= OpenTelemetry
+= OpenTelemetry <opentelemetry>
 
 OpenTelemetry (OTel) is the vendor-neutral standard for generating, processing, and exporting telemetry. Formed in 2019 from the merger of OpenTracing (2016, API-only) and OpenCensus (2018, Google's SDK-included approach), it became a CNCF incubating project in 2021; by repository activity it has been the second-most-active CNCF project after Kubernetes for years. The bet OTel makes is that instrumentation should be a write-once commodity decoupled from the backend that stores and queries the data. This chapter covers the signals model, the API/SDK split, OTLP, semantic conventions, context propagation, the Collector, sampling configuration, and instrumentation strategy.
 

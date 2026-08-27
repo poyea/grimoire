@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= NISQ Devices and Benchmarking
+= NISQ Devices and Benchmarking <nisq-and-benchmarking>
 
 John Preskill coined *NISQ* (Noisy Intermediate-Scale Quantum) in 2018 to describe the 50--1000 qubit devices available today: large enough that classical simulation is hard, small enough that error correction is impractical. Understanding what NISQ devices can and cannot do requires precise benchmarking and honest assessment of noise.
 

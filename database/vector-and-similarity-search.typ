@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Vector and Similarity Search
+= Vector and Similarity Search <vector-and-similarity-search>
 
 Embedding models (BERT, CLIP, text-embedding-3) map text, images, and other data into dense vectors in $RR^d$ (typically $d$ = 768–3072). *Nearest-neighbor search* — finding the $k$ vectors closest to a query vector — is the performance-critical operation in retrieval-augmented generation, semantic search, and recommendation systems.
 

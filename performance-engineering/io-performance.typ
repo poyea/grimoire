@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= I/O Performance
+= I/O Performance <io-performance>
 
 Storage and network I/O are where nanosecond-scale CPUs meet microsecond- and millisecond-scale devices, and where the operating system inserts its thickest layer of indirection: page caches, schedulers, socket buffers, protocol stacks. This chapter covers the storage stack from syscall to flash, the asynchronous I/O models and `io_uring`, network performance from socket tuning to kernel bypass, and the measurement tools that distinguish device limits from software overhead.
 

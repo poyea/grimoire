@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Subtyping and Polymorphism
+= Subtyping and Polymorphism <subtyping-and-polymorphism>
 
 Subtyping is the principle that lets you pass a `Cat` to a function expecting an `Animal`. Polymorphism is the principle that lets a function operate uniformly across types it does not name. Where pure parametric polymorphism (System F) erases all type information at runtime and forbids any inspection, subtyping adds a *partial order* on types; the resulting interaction with type constructors, references, generics, and recursion is the source of three decades of language-design subtlety.
 

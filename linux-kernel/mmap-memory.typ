@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= mmap and Memory Management
+= mmap and Memory Management <mmap-memory>
 
 `mmap` is the most important memory primitive in Linux. Almost everything in the kernel's memory subsystem (file I/O, shared libraries, `fork()`'s copy-on-write, anonymous heaps, hugepages) is either implemented as `mmap` or trivially layered on top of it. This chapter is a deep dive into what `mmap` actually does, and the family of features built around it.
 

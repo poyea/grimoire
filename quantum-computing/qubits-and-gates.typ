@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Qubits and Gates
+= Qubits and Gates <qubits-and-gates>
 
 A qubit is a unit vector in $bb(C)^2$, the simplest non-trivial quantum system. Where a classical bit chooses one of two values, a qubit superposes them — and when you compose $n$ qubits via tensor product, the state space grows to $bb(C)^(2^n)$, the source of every quantum speedup and every implementation headache. This chapter develops the linear-algebraic foundation: state vectors, the Bloch sphere, single- and multi-qubit gates, measurement, and the universal gate sets that quantum software stacks compile to.
 

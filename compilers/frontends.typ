@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Frontends
+= Frontends <frontends>
 
 A production compiler frontend is judged not by what it accepts but by what it does when input is wrong. This chapter is about lexing, parsing, error recovery, and incremental reparsing as engineered artifacts — the theory of context-free grammars and LR/LL parsing lives in the programming-languages volume.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Reinforcement Learning
+= Reinforcement Learning <reinforcement-learning>
 
 Reinforcement learning (RL) formalises the problem of an agent learning to act in an environment by trial and error. Unlike supervised learning, there is no labelled target: the agent receives a scalar reward signal and must discover, through interaction, a policy that maximises cumulative reward. This chapter develops the mathematical foundations — Markov decision processes, dynamic programming, temporal-difference learning, policy gradients, through to the modern deep RL methods that underpin current large-scale systems.
 

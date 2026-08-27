@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= ETL vs ELT
+= ETL vs ELT <etl-vs-elt>
 
 $"ETL"$ (extract, transform, load) and $"ELT"$ (extract, load, transform) describe where transformation runs. In the warehouse era of the 1990s and 2000s, compute on the target system was scarce and transformation happened in a separate engine (Informatica, Talend) before loading curated rows. The cloud warehouse and lakehouse era inverted that economics: storage is cheap, compute is elastic, and $"SQL"$ engines (BigQuery, Snowflake, Databricks, Trino) can run transformations on raw data at scale.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Effects and Handlers: Implementation and Theory
+= Effects and Handlers: Implementation and Theory <effects-handlers-implementation>
 
 == Free Monads in Detail
 

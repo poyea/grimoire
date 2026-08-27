@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Transformer Architecture
+= Transformer Architecture <transformer-architecture>
 
 The transformer is a sequence-to-sequence architecture built entirely from attention and feed-forward layers. Every modern LLM (GPT, LLaMA, Mistral, Gemma, Qwen) is a decoder-only transformer. Understanding its internals precisely is prerequisite to everything that follows.
 

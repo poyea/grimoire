@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Inference Serving
+= Inference Serving <inference-serving>
 
 *Serving-level optimization:* This chapter covers the techniques that govern how LLM inference servers manage memory, schedule requests, and achieve high throughput in production. It continues from #xref("llm", "inference-optimization", label: "Inference Optimization") (KV cache, decoding strategies, speculative decoding, continuous batching).
 

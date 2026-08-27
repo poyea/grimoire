@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= The Storage Stack
+= The Storage Stack <storage-stack>
 
 Between `write(2)` and a flash cell sit half a dozen layers, each with its own queueing, ordering, and failure semantics. Understanding the stack as a whole (VFS, page cache, block layer, I/O scheduler, driver, controller, media) is what separates a system that scales from one that mysteriously stalls under load. This chapter is the conceptual treatment; Linux-specific `blk-mq` and io_uring are in `linux-kernel/block-layer.typ` and `linux-kernel/io-uring.typ`.
 

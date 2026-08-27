@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Binary Search
+= Binary Search <binary-search>
 
 *Binary search finds target in sorted array in $O(log n)$ time. Key invariant: search space halves each iteration. Template applies to any monotonic function.*
 

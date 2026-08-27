@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Safety and Alignment
+= Safety and Alignment <safety-and-alignment>
 
 Alignment is the engineering discipline of getting models to *behave as intended*: follow instructions, refuse harmful requests, respect user values, remain honest about uncertainty. This chapter covers the techniques that go beyond PPO-style RLHF (introduced in the _RLHF_ chapter): Constitutional AI and RLAIF, DPO/IPO/KTO and their successors, red-teaming, jailbreak taxonomies, refusal calibration, weak-to-strong supervision, and the safety stack used in modern production systems. It is concrete about what current methods can and cannot do.
 

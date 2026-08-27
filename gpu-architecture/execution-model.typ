@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= SIMT Execution Model
+= SIMT Execution Model <execution-model>
 
 GPUs execute thousands of threads using Single Instruction Multiple Thread (SIMT) execution. Understanding warps, thread divergence, and occupancy is critical for writing efficient GPU code.
 

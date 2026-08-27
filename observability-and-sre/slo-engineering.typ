@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= SLO Engineering
+= SLO Engineering <slo-engineering>
 
 Service Level Objectives translate reliability ambitions into operational contracts: a number the product team owns, the engineering team defends, and the business uses to make prioritization decisions. Unlike SLAs, which are legal instruments with financial penalties, SLOs are internal agreements that drive on-call behavior and feature-vs-reliability tradeoffs. This chapter builds the full stack — SLI measurement, budget arithmetic, multi-window burn rate alerting, and the organizational practices that make SLOs durable.
 

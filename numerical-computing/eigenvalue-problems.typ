@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Eigenvalue Problems
+= Eigenvalue Problems <eigenvalue-problems>
 
 Eigenvalues are the frequencies of a vibrating structure, the stability exponents of a dynamical system, the principal components of a dataset, and the page ranks of the web. Unlike linear systems, eigenvalue problems cannot be solved in finitely many arithmetic operations — Abel's theorem forbids closed forms for the characteristic polynomial beyond degree four — so every eigenvalue algorithm is intrinsically iterative. This chapter covers conditioning, power iteration and its inverse, the QR algorithm, Lanczos and Arnoldi for large sparse problems, and the SVD.
 

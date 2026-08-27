@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Change Data Capture
+= Change Data Capture <change-data-capture>
 
 Change data capture (CDC) turns a database's internal replication log into an event stream, so every insert, update, and delete in the OLTP system appears, in commit order, as a record consumers can react to. It replaces the two bad alternatives: periodic full dumps (expensive, stale, miss intermediate states) and dual writes from application code (race-prone, drift-prone). This chapter covers log-based CDC mechanics, the Debezium architecture, Postgres logical decoding and the MySQL binlog, the snapshot-to-streaming handoff, exactly-once concerns, the transactional outbox pattern, and landing CDC in a lakehouse.
 

@@ -1,4 +1,4 @@
-= Part III: C++ Concurrency - std::thread, Mutex, Atomics & C++20 Synchronization
+= Part III: C++ Concurrency - std::thread, Mutex, Atomics & C++20 Synchronization <cpp-concurrency>
 
 == Atomic Variables
 

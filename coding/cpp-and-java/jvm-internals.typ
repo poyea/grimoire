@@ -1,4 +1,4 @@
-= Part I: Java Memory Model & JVM Internals
+= Part I: Java Memory Model & JVM Internals <jvm-internals>
 
 == Java Memory Model (JMM)
 

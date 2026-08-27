@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 ITALIC_RE = re.compile(r"_([^_]+)_")
 XREF_RE = re.compile(r'#xref\("([^"]+)",\s*"([^"]+)"')
-TITLE_RE = re.compile(r"^=\s+(.+?)\s*$", re.M)
+TITLE_RE = re.compile(r"^=\s+(.+?)(?:\s*<[a-z0-9-]+>)?\s*$", re.M)
 PROJECT_RE = re.compile(r'#project\("([^"]+)"\)')
 PAREN_RE = re.compile(r"\s*\([^()]*\)\s*$")
 

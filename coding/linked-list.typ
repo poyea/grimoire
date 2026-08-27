@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Linked List
+= Linked List <linked-list>
 
 *Linked lists store elements with explicit pointers between nodes. Enables $O(1)$ insertion/deletion at known positions, but sacrifices random access and cache locality.*
 

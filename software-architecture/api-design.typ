@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= API Design
+= API Design <api-design>
 
 An API is a published promise. Unlike internal code, it cannot be refactored at will: every consumer compounds the cost of every design mistake. This chapter covers REST maturity and resource modelling, versioning and pagination, error design under #rfc(9457), the gRPC and GraphQL trade space, idempotency, backwards compatibility, and contract tooling with OpenAPI.
 

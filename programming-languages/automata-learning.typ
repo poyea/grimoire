@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Automata Learning
+= Automata Learning <automata-learning>
 
 The *automata learning* problem is: given access to an unknown regular (or probabilistic, or $omega$-regular) language, infer a finite-state model of it. The question is older than computer science -- Gold's *identification in the limit* (1967) framed it in formal-language terms, Valiant's PAC model (1984) reframed it in statistical-learning terms, and Angluin's $L^*$ (1987) gave the first polynomial-time *active* learning algorithm. Active learning remains the dominant paradigm in *model learning* for verification (LearnLib, AALpy), and recent work uses it to extract symbolic surrogates from neural networks (Weiss--Goldberg--Yahav 2018). The story is a microcosm of theoretical computer science: hardness results on the negative side (Angluin--Kharitonov 1995's cryptographic lower bound) match precisely the line where positive results stop.
 

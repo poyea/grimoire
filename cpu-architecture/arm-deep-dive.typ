@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= ARM Deep Dive
+= ARM Deep Dive <arm-deep-dive>
 
 ARM is the most-shipped $"CPU"$ architecture in history — more than 250 billion cores. From microcontrollers to Apple's M-series desktops to AWS Graviton servers, AArch64 spans seven orders of magnitude in power. This chapter focuses on modern AArch64 microarchitecture: Apple silicon, $"SVE"$/$"SVE2"$, Neoverse, and the Cortex families.
 

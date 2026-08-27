@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Simply-Typed Lambda Calculus: Extensions and Advanced Topics
+= Simply-Typed Lambda Calculus: Extensions and Advanced Topics <simply-typed-lambda-extensions>
 
 == Extensions
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= GPU Memory Hierarchy
+= GPU Memory Hierarchy <memory-hierarchy>
 
 GPU memory hierarchy differs fundamentally from CPU caches. Understanding the distinct memory spaces, access patterns, and optimization techniques is essential for high-performance GPU programming.
 

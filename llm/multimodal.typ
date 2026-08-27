@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Multimodal Models
+= Multimodal Models <multimodal>
 
 A multimodal model takes inputs from more than one modality — images, audio, video, sometimes interleaved with text — and emits text (or other modalities). The dominant architectural pattern is *bolt a visual / audio encoder onto a text LLM via a projection module*, which trades training cost for the ability to inherit the LLM's reasoning. This chapter covers the projection-based pattern (LLaVA, Qwen-VL, Idefics), native multimodal training (Gemini, GPT-4o, Chameleon), audio LLMs (Whisper conditioning, AudioLM, Qwen-Audio), and the tokenization and training-data engineering required for each.
 

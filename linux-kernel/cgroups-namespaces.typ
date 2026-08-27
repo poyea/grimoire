@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= cgroups and Namespaces
+= cgroups and Namespaces <cgroups-namespaces>
 
 A "container" is not a kernel object. There is no `struct container` anywhere in the kernel source. What runtimes like Docker, containerd, and Kubernetes ship is a userspace orchestration layer that calls two largely-independent kernel features: *namespaces* (which give a process its own view of system resources) and *cgroups* (which limit and account those resources). Together they are sufficient to build OS-level virtualization that is much cheaper than full VMs.
 

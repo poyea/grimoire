@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Network Flows and Matching
+= Network Flows and Matching <flows-and-matching>
 
 *Network flow* is the universal solvent of combinatorial optimization: shortest paths, bipartite matching, project selection, image segmentation, and many scheduling problems all reduce to max-flow or min-cost flow. This chapter presents the modern toolkit: Dinic's algorithm, ISAP, Push-Relabel, the Successive Shortest Paths (SSP) min-cost flow, and the two pillars of bipartite assignment (Hopcroft-Karp and Kuhn-Munkres / Hungarian).
 

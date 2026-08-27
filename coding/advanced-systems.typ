@@ -1,4 +1,4 @@
-= Advanced Algorithms in Modern Systems
+= Advanced Algorithms in Modern Systems <advanced-systems>
 
 *Bridging theory and practice:* Algorithms don't exist in vacuum. Real-world systems - from CPU architectures to distributed databases to LLMs - rely on fundamental data structures and algorithms, optimized for specific hardware and workload characteristics.
 

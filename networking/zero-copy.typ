@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Zero-Copy Networking
+= Zero-Copy Networking <zero-copy>
 
 Traditional network I/O involves multiple data copies between kernel and userspace. Zero-copy techniques eliminate unnecessary copying to improve throughput and reduce CPU usage.
 

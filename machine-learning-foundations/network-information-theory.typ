@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Network Information Theory
+= Network Information Theory <network-information-theory>
 
 Classical information theory analyses a single sender communicating with a single receiver. Network information theory generalises this to systems with multiple senders, receivers, and shared resources: broadcast channels, multiple-access channels, interference channels, relay networks, and distributed source coding. The field reveals that separation of source and channel coding is no longer optimal in multi-user settings, and that cooperation between terminals can dramatically increase capacity.
 

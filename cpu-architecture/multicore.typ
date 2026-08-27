@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Multicore and Cache Coherence
+= Multicore and Cache Coherence <multicore>
 
 Modern CPUs contain multiple cores sharing resources. Understanding cache coherence, synchronization, and memory models is essential for correct and efficient parallel programming.
 

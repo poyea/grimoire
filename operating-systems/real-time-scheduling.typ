@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Real-Time Scheduling
+= Real-Time Scheduling <real-time-scheduling>
 
 A real-time system is not a fast system; it is a *predictable* one. The defining question is not "how quickly does this usually finish?" but "can I prove it always finishes by its deadline?" That shift — from expectation to guarantee — produces a body of theory with actual theorems (utilization bounds, optimality proofs, blocking-time bounds) and a body of engineering (priority protocols, preemptible kernels, bandwidth servers) for making commodity OSes honor them. #xref("operating-systems", "scheduling-theory", label: "Scheduling Theory") surveys the general landscape; this chapter goes deep on the real-time half.
 

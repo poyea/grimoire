@@ -1,4 +1,4 @@
-= Union-Find (Disjoint Set Union)
+= Union-Find (Disjoint Set Union) <union-find>
 
 *Core operations:* Find (which set?) and Union (merge sets). Both nearly $O(1)$ amortized with path compression + union by rank [Tarjan 1975].
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Denotational Semantics
+= Denotational Semantics <denotational-semantics>
 
 Denotational semantics assigns to each program a *mathematical object* -- a function, a set, an element of a domain -- in a way that respects the syntactic structure: the meaning of a compound is determined by the meanings of its parts. Where operational semantics says *what the program does step by step*, denotational semantics says *what the program is*, once and for all. The framework was crystallized by Scott and Strachey at Oxford in the late 1960s and early 1970s; the technical core is the theory of domains and continuous functions developed by Scott (1969, 1972, 1976) to give recursive functions and recursive types a mathematical home.
 

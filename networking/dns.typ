@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= DNS (Domain Name System)
+= DNS (Domain Name System) <dns>
 
 The Domain Name System is a hierarchical, distributed naming system that maps human-readable domain names to IP addresses and other resource records.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": rfc, xref
 
-= Congestion Control
+= Congestion Control <congestion-control>
 
 Congestion control governs how fast a sender may inject data into the network. The choice of algorithm directly determines tail latency, link utilisation, and fairness, and is one of the few transport-layer knobs that has measurable end-user impact. This chapter covers the loss-based classics ($"Reno"$, $"NewReno"$, $"CUBIC"$), the rate-model family ($"BBR"$ v1/v2/v3), and modern marking-based approaches (ECN, L4S with DualPI2 and $"Prague"$).
 

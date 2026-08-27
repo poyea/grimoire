@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Quantum Algorithms
+= Quantum Algorithms <quantum-algorithms>
 
 Quantum algorithms exploit interference — amplitudes can cancel, not just add — to make wrong answers destructive and right answers constructive. The canonical examples (Deutsch-Jozsa, Grover, Shor) demonstrate this on structured problems; the variational family (VQE, QAOA) trades provable speedup for near-term tractability on noisy hardware. This chapter walks through each with explicit circuits and complexity bounds.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Domain-Driven Design
+= Domain-Driven Design <domain-driven-design>
 
 Domain-driven design (DDD), introduced by Eric Evans in his 2003 book, is a school of design that puts the business domain, not the database schema, not the framework, at the centre of the architecture. Its core claim: the hardest part of most software is not technical but conceptual, and software that does not embody a rigorous model of its domain rots into a *big ball of mud*. DDD splits into *strategic* design (where are the boundaries?) and *tactical* design (how is the model expressed in code?).
 

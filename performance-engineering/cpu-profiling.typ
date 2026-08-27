@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= CPU Profiling
+= CPU Profiling <cpu-profiling>
 
 Profiling answers the question a benchmark cannot: _where_ does the time go. This chapter covers sampling and instrumentation profilers, the Linux `perf` and eBPF toolchains, flame graphs, off-CPU analysis, hardware performance counters and Intel's top-down methodology, and how profiles feed back into the compiler.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Network Observability
+= Network Observability <observability>
 
 Observability encompasses metrics, logs, and traces to understand system behavior. In distributed systems, correlating these signals across network boundaries is essential for debugging and performance optimization.
 

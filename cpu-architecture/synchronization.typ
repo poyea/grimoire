@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Synchronization Primitives
+= Synchronization Primitives <synchronization>
 
 Mutexes, reader-writer locks, and lock-free techniques sit on top of the hardware atomics and memory model from #emph[Multicore and Cache Coherence]. This chapter covers how they are *implemented* and how to reduce their cost when they contend.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Online Algorithms
+= Online Algorithms <online-algorithms>
 
 *Online* algorithms make irrevocable decisions on a sequence of inputs without seeing the future. They are evaluated by the *competitive ratio* — the worst-case ratio of the online cost to that of the optimal *offline* algorithm that sees the whole sequence in advance. This chapter develops the standard playbook: ski rental, paging (LRU, FIFO, Marking), the $k$-server problem, and how randomization beats deterministic lower bounds.
 

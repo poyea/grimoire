@@ -1,6 +1,6 @@
 #import "../template.typ": overbar
 
-= Linear and Substructural Type Systems
+= Linear and Substructural Type Systems <linear-and-substructural>
 
 Substructural type systems control *how often* a variable may be used. Classical logic and the simply-typed lambda calculus treat the typing context $Gamma$ as a "set": any hypothesis may be duplicated, discarded, or reordered at will. Substructural systems drop one or more of those liberties, and in doing so gain the ability to talk about resources, capabilities, file handles, channel endpoints, and memory ownership inside the type system itself.
 

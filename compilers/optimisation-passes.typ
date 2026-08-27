@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Optimisation Passes
+= Optimisation Passes <optimisation-passes>
 
 A compiler's middle-end applies a sequence of analysis and transformation passes over the IR. Each pass either analyses — computing properties and annotating the IR — or transforms, rewriting instructions to be faster, smaller, or more parallel. This chapter surveys the canonical scalar optimisations, loop transformations, and vectorisation, and explains how LLVM's pass manager orchestrates them.
 

@@ -1,4 +1,4 @@
-= Notation and Conventions
+= Notation and Conventions <notation>
 
 This chapter fixes the symbols and conventions used throughout the volume. When a chapter deviates (e.g., a paper-specific convention), it says so explicitly.
 

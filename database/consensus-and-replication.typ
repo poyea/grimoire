@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Consensus and Replication
+= Consensus and Replication <consensus-and-replication>
 
 Replication makes data available despite node failures. Consensus protocols coordinate replicas so they agree on a single log of operations. The FLP impossibility result bounds what is achievable; Paxos and Raft define the practical design space.
 

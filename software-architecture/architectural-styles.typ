@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Architectural Styles
+= Architectural Styles <architectural-styles>
 
 An architectural style is a named collection of design decisions: how a system is partitioned into components, how those components communicate, and which constraints govern their evolution. Styles are not mutually exclusive; real systems mix them. This chapter surveys the major styles, layered, hexagonal, clean, pipes-and-filters, event-driven, microkernel, and space-based, and develops the trade-off vocabulary needed to choose between them.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= ML Workload Optimization on GPUs
+= ML Workload Optimization on GPUs <ml-workloads>
 
 Modern machine learning (particularly LLM training and inference) dominates GPU design decisions. Understanding how core primitives (GEMM, attention) map onto GPU hardware is essential for achieving near-peak throughput on Hopper/Blackwell-class devices.
 

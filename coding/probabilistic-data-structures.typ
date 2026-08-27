@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Probabilistic Data Structures
+= Probabilistic Data Structures <probabilistic-data-structures>
 
 *Trade exactness for efficiency:* Probabilistic data structures provide approximate answers with bounded error probability, enabling sub-linear space complexity impossible with exact structures. Widely used in databases, networking, and big data systems [Cormode & Muthukrishnan 2005].
 

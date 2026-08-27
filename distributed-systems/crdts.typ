@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Conflict-Free Replicated Data Types
+= Conflict-Free Replicated Data Types <crdts>
 
 CRDTs let replicas accept writes locally, without coordination, and still converge to the same state once they have exchanged updates. The trick is to restrict the data type so that concurrent updates *commute by construction*: there is nothing to "resolve" at merge time because the type's semantics already define a deterministic outcome for every interleaving. This chapter develops the lattice theory behind that guarantee, walks through the canonical counter, register, set, and sequence CRDTs, and ends where CRDTs end: at global invariants that genuinely require consensus.
 

@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Serving Systems
+= Serving Systems <serving-systems>
 
 Inference serving bridges the gap between a trained model checkpoint and a production HTTP endpoint. A serving system must handle concurrent requests, manage GPU memory for KV caches, enforce latency SLAs, and sustain throughput measured in millions of tokens per second. This chapter covers the full stack: from request lifecycle to scheduler internals, with concrete numbers on H100 80 GB hardware running LLaMA 3 8B in BF16.
 

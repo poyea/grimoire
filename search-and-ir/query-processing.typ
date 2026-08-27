@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Query Processing
+= Query Processing <query-processing>
 
 Query processing turns a user query and an inverted index into a ranked list of documents, ideally in a few milliseconds over billions of documents. The art is in not scoring most of the collection: dynamic pruning algorithms such as WAND and Block-Max WAND skip the vast majority of postings while returning exactly the same top-$k$ results as exhaustive evaluation. This chapter covers boolean retrieval, traversal strategies, top-$k$ pruning, phrase and proximity evaluation, and the analysis chain that produces query terms in the first place.
 

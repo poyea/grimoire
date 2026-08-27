@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= OLTP vs OLAP
+= OLTP vs OLAP <oltp-vs-olap>
 
 Databases are commonly partitioned into two workload archetypes: *OLTP* (Online Transactional Processing), which serves high-concurrency short requests against individual records, and *OLAP* (Online Analytical Processing), which executes long-running aggregations over large portions of a dataset. Understanding this divide determines the appropriate storage layout, concurrency model, index strategy, and hardware provisioning for a system. Modern *HTAP* engines blur the boundary by serving both workloads from a single system, trading some specialisation for operational simplicity.
 

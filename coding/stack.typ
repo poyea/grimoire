@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Stack
+= Stack <stack>
 
 *Stacks enforce LIFO (Last-In, First-Out) ordering. Key patterns: matching/nesting, monotonic stacks for next-greater/smaller queries, and expression evaluation. $O(1)$ push/pop, $O(n)$ total across all operations for monotonic patterns.*
 

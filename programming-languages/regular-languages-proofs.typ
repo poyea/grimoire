@@ -1,4 +1,4 @@
-= Regular Languages: Proofs, Algorithms, and Advanced Theory
+= Regular Languages: Proofs, Algorithms, and Advanced Theory <regular-languages-proofs>
 
 == Myhill–Nerode: Full Proof and Constructive Content
 

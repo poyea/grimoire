@@ -1,4 +1,4 @@
-= Omega-Automata: Detailed Constructions and Algorithms
+= Omega-Automata: Detailed Constructions and Algorithms <omega-automata-constructions>
 
 == Detailed Constructions Revisited
 

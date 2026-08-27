@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Queueing Theory
+= Queueing Theory <queueing-theory>
 
 Every shared resource with variable demand is a queue: a CPU run queue, a disk, a connection pool, a load balancer, a barista. Queueing theory supplies the small set of formulas that explain why latency explodes near saturation, why variability is as expensive as load, and why "the server is only at 80%" is not reassurance. This chapter covers Little's law, the M/M/1 family, the utilization-latency curve, the effects of variability and multiple servers, and the practical translation to systems work.
 

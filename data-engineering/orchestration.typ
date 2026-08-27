@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Orchestration
+= Orchestration <orchestration>
 
 An orchestrator schedules and supervises the $"DAG"$ of jobs that move and transform data. The classical concern is "run this Spark job at 02:00, then this dbt job, then this load." Modern systems extend that with backfill management, asset awareness, durable execution, and event-driven triggers. The four major schools are Airflow (task-centric), Dagster (asset-centric), Prefect (Python-first dynamic), and Temporal (durable workflows).
 

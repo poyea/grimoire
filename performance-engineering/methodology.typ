@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Performance Methodology
+= Performance Methodology <methodology>
 
 Performance work without methodology degenerates into guessing: tweaking flags, restarting services, and blaming the network. This chapter covers the structured methods that turn performance analysis into engineering: the USE and RED checklists, workload characterization, the scaling laws (Amdahl, Gustafson, and the Universal Scalability Law), and the statistical discipline needed to talk about latency honestly.
 

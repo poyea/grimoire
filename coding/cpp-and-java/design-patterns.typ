@@ -1,4 +1,4 @@
-= Part VIII: Design Patterns for Concurrency
+= Part VIII: Design Patterns for Concurrency <design-patterns>
 
 == Thread-Safe Singleton
 

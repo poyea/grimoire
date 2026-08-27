@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Macros and Metaprogramming
+= Macros and Metaprogramming <macros-and-metaprogramming>
 
 A macro is a program that runs at compile time and emits source code. The idea is older than the high-level languages: assembler macros expanded mnemonic sequences before the assembler proper saw them. McCarthy's Lisp made the macro a *first-class* facility by making program text and runtime data the same type (*s-expressions*), so that a program that produces programs is just a program that produces lists. Three generations of language designers have since shown that this simple idea, when combined with a serious binding theory, gives a discipline that supplants nearly every other "syntactic extension" mechanism: pattern matching, async/await, do-notation, contract systems, ORM DSLs, and entire embedded languages are macros.
 

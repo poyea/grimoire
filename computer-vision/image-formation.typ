@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Image Formation and Representation
+= Image Formation and Representation <image-formation>
 
 Before an algorithm can understand an image, we must understand how images form. This chapter covers the physics of image formation: projection geometry, radiometry, and optics, along with the digital representations and preprocessing pipelines that transform raw sensor data into arrays amenable to learning.
 

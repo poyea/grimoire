@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Schema Evolution
+= Schema Evolution <schema-evolution>
 
 Schemas change: products add fields, teams rename columns, types widen. The engineering problem is letting producers and consumers evolve *independently* without coordinated deploys or broken pipelines. This chapter covers compatibility modes (backward, forward, full), the evolution semantics of Avro, Protobuf, and JSON Schema, schema registries, table-format evolution in Iceberg and Delta (column mapping, field IDs), migration mechanics, and versioning strategy.
 

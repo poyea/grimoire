@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Dependent Types
+= Dependent Types <dependent-types>
 
 A *dependent type* is a type that may depend on a *term*. The function type $A arrow.r B$ becomes the *dependent function type* $Pi x : A . B(x)$ where the codomain $B$ may mention $x$; the product $A times B$ becomes $Sigma x : A . B(x)$ where the second component's type depends on the first. With this single move, types acquire the full expressive power of a logic: $Pi$ encodes universal quantification, $Sigma$ encodes existence with a witness, and the *Curry–Howard correspondence* extends to predicate logic. This is the foundation of Martin-Löf Type Theory (Martin-Löf 1972, 1975, 1984), the Calculus of Constructions (Coquand–Huet 1988), and modern proof assistants Coq/Rocq, Agda, Lean, Idris, and F\*.
 

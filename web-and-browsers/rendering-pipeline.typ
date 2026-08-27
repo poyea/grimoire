@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Rendering Pipeline
+= Rendering Pipeline <rendering-pipeline>
 
 After style and layout produce a geometry tree, the browser must turn it into pixels — repeatedly, sixty or more times per second, while the page scrolls, animates, and mutates underneath. This chapter covers the stages downstream of layout: paint, layerization, rasterization, and compositing, with Chromium's pipeline (Blink + cc + Viz) as the running example, plus Firefox's WebRender as the contrasting design.
 

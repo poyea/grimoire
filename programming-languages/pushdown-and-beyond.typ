@@ -1,6 +1,6 @@
 #import "../template.typ": overbar, xref
 
-= Pushdown Automata and Beyond
+= Pushdown Automata and Beyond <pushdown-and-beyond>
 
 The pushdown automaton is the operational counterpart of the context-free grammar: a finite control augmented with a single unbounded last-in-first-out memory. Its expressive power coincides exactly with the CFLs (Chomsky 1962; Evey 1963; Schützenberger 1963), but the operational view exposes structural distinctions invisible at the grammar level: *deterministic vs nondeterministic* acceptance modes are equivalent only at the CFG level, *empty-stack vs final-state* acceptance modes are equivalent only up to a stack-bottom marker, and *visibly pushdown* automata recover the closure-property elegance of the regular languages by externalising the stack discipline to the input alphabet. Above the CFLs lies a rich landscape (indexed grammars, tree-adjoining grammars, multiple context-free grammars, higher-order pushdown automata generating the Caucal hierarchy, linear bounded automata at the context-sensitive level, and finally the unrestricted grammars equivalent to Turing machines) together forming the *Chomsky hierarchy* and its modern refinements.
 

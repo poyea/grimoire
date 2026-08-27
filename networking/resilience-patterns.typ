@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Resilience Patterns
+= Resilience Patterns <resilience-patterns>
 
 Distributed systems fail in complex ways. Resilience patterns prevent cascading failures and enable graceful degradation under load.
 

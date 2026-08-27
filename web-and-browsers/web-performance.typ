@@ -1,6 +1,6 @@
 #import "../template.typ": xref
 
-= Web Performance
+= Web Performance <web-performance>
 
 Web performance is the discipline of making pages load fast, respond instantly, and stay visually stable — and of *proving* it with measurement, because intuition about latency is reliably wrong. This chapter covers the modern metrics (Core Web Vitals), the measurement stack (field vs. lab), the loading waterfall and how to shorten it, runtime responsiveness, and the optimization techniques with the best evidence behind them. It is the applied capstone of everything earlier in this volume: every metric maps to a pipeline stage from the preceding chapters.
 
