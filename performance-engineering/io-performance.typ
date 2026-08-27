@@ -86,7 +86,7 @@ The recurring diagnostic question is *where the time goes*: device service time 
 == Further Reading
 
 - Gregg, B. (2020). _Systems Performance_, 2nd ed., chs. 8-10 (File Systems, Disks, Network). Addison-Wesley.
-- Axboe, J. (2019). Efficient IO with io_uring. Kernel documentation/paper, kernel.dk.
+- Axboe, J. (2019). Efficient IO with io_uring. (The original design paper; kernel.dk no longer hosts it. See also #link("https://github.com/axboe/liburing")[axboe/liburing].)
 - Corbet, J., Rubini, A., & Kroah-Hartman, G. (2005). _Linux Device Drivers_, 3rd ed. O'Reilly.
 - Cardwell, N. et al. (2016). BBR: congestion-based congestion control. _ACM Queue_, 14(5).
 - Didona, D. et al. (2022). Understanding modern storage APIs: a systematic study. _SYSTOR_ (and the SPDK literature, Yang et al. 2017); see also Barroso, L. et al. (2017). Attack of the killer microseconds. _CACM_, 60(4).

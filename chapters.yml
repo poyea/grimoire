@@ -1736,7 +1736,7 @@ chapters:
   - subject: performance-engineering
     slug: io-performance
     path: performance-engineering/io-performance.typ
-    words: 1512
+    words: 1521
     status: reviewed
   - subject: performance-engineering
     slug: memory-performance
