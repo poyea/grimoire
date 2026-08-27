@@ -307,7 +307,7 @@ For server-side workloads where you control the binary, the right move is the op
 
 == Further Reading
 
-Axboe, J. (2019). _Efficient IO with io_uring_. Available at #link("https://kernel.dk/io_uring.pdf")[kernel.dk/io_uring.pdf].
+Axboe, J. (2019). _Efficient IO with io_uring_. (The original design paper; kernel.dk no longer hosts it. See also #link("https://github.com/axboe/liburing")[axboe/liburing].)
 
 liburing source: #link("https://github.com/axboe/liburing")[github.com/axboe/liburing] (examples/ directory is the best tutorial).
 

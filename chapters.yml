@@ -906,7 +906,7 @@ chapters:
   - subject: linux-kernel
     slug: io-uring
     path: linux-kernel/io-uring.typ
-    words: 2457
+    words: 2466
     status: reviewed
   - subject: linux-kernel
     slug: kernel-modules
@@ -1201,7 +1201,7 @@ chapters:
   - subject: networking
     slug: lock-free
     path: networking/lock-free.typ
-    words: 2128
+    words: 2141
     status: reviewed
   - subject: networking
     slug: message-queues

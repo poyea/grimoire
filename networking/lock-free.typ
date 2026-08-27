@@ -463,4 +463,4 @@ Preshing, J. (2012). "An Introduction to Lock-Free Programming." Preshing on Pro
 
 *Benchmarks:*
 
-Vyukov, D. (2012). "Bounded MPMC Queue." 1024cores.net. http://www.1024cores.net/home/lock-free-algorithms/queues/bounded-mpmc-queue
+Vyukov, D. (2012). "Bounded MPMC Queue." 1024cores.net. (The site is no longer reachable; the algorithm is widely reproduced under this name.)

@@ -176,4 +176,4 @@ Hudi documentation, https://hudi.apache.org/docs/overview.
 
 Databricks. "Lakehouse: A New Generation of Open Platforms." CIDR 2021.
 
-Project Nessie documentation, https://projectnessie.org/.
+Project Nessie documentation, #link("https://github.com/projectnessie/nessie")[projectnessie/nessie].
