@@ -728,6 +728,11 @@ chapters:
     path: embedded-and-realtime/rtos.typ
     words: 1455
     status: reviewed
+  - subject: embedded-and-realtime
+    slug: timing-analysis
+    path: embedded-and-realtime/timing-analysis.typ
+    words: 2835
+    status: draft
   - subject: formal-methods
     slug: model-checking
     path: formal-methods/model-checking.typ

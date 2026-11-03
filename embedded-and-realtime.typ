@@ -20,4 +20,7 @@
   #include "embedded-and-realtime/rtos.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/timing-analysis.typ"
+  #pagebreak()
+
 ]
