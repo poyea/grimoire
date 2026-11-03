@@ -35,4 +35,7 @@
   #include "embedded-and-realtime/low-power-design.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/bootloaders-and-updates.typ"
+  #pagebreak()
+
 ]

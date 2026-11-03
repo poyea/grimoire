@@ -714,6 +714,11 @@ chapters:
     words: 1919
     status: reviewed
   - subject: embedded-and-realtime
+    slug: bootloaders-and-updates
+    path: embedded-and-realtime/bootloaders-and-updates.typ
+    words: 2147
+    status: draft
+  - subject: embedded-and-realtime
     slug: embedded-cpp
     path: embedded-and-realtime/embedded-cpp.typ
     words: 2623
