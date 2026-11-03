@@ -17,6 +17,9 @@
   #include "embedded-and-realtime/linker-scripts-and-startup.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/embedded-cpp.typ"
+  #pagebreak()
+
   #include "embedded-and-realtime/peripherals-and-drivers.typ"
   #pagebreak()
 

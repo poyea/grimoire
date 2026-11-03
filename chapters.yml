@@ -714,9 +714,14 @@ chapters:
     words: 1919
     status: reviewed
   - subject: embedded-and-realtime
+    slug: embedded-cpp
+    path: embedded-and-realtime/embedded-cpp.typ
+    words: 2623
+    status: draft
+  - subject: embedded-and-realtime
     slug: linker-scripts-and-startup
     path: embedded-and-realtime/linker-scripts-and-startup.typ
-    words: 2238
+    words: 2245
     status: draft
   - subject: embedded-and-realtime
     slug: mcus-and-soc

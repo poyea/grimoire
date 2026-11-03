@@ -4,7 +4,7 @@
 
 On a hosted system the loader, the C runtime and the operating system decide where code and data live and prepare them before `main` runs. On a bare-metal $"MCU"$ nobody does that for you. The linker script decides the address of every byte, and a few dozen lines of startup code turn a flash image into a running C++ program. This chapter takes both apart: the sections a toolchain emits, the difference between where data is stored and where it runs, a complete annotated linker script, a startup routine written in C++, and the techniques for reading map files and shrinking images.
 
-*See also:* #xref("embedded-and-realtime", "mcus-and-soc", label: "Microcontrollers and Systems-on-Chip"), #xref("compilers", "backend-and-codegen", label: "Backend and Code Generation") (compilers), #xref("operating-systems", "boot-and-init", label: "Boot and Init") (operating systems)
+*See also:* #xref("embedded-and-realtime", "mcus-and-soc", label: "Microcontrollers and Systems-on-Chip"), #xref("embedded-and-realtime", "embedded-cpp", label: "C++ for Embedded Systems"), #xref("compilers", "backend-and-codegen", label: "Backend and Code Generation") (compilers), #xref("operating-systems", "boot-and-init", label: "Boot and Init") (operating systems)
 
 == Sections: What the Compiler Emits
 
