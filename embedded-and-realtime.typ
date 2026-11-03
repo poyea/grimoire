@@ -41,4 +41,7 @@
   #include "embedded-and-realtime/debugging-and-testing.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/functional-safety.typ"
+  #pagebreak()
+
 ]

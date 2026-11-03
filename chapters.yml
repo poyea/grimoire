@@ -734,6 +734,11 @@ chapters:
     words: 2435
     status: draft
   - subject: embedded-and-realtime
+    slug: functional-safety
+    path: embedded-and-realtime/functional-safety.typ
+    words: 2574
+    status: draft
+  - subject: embedded-and-realtime
     slug: linker-scripts-and-startup
     path: embedded-and-realtime/linker-scripts-and-startup.typ
     words: 2245
