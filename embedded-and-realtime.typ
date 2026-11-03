@@ -23,6 +23,9 @@
   #include "embedded-and-realtime/peripherals-and-drivers.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/fieldbuses.typ"
+  #pagebreak()
+
   #include "embedded-and-realtime/rtos.typ"
   #pagebreak()
 
