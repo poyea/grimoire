@@ -14,6 +14,9 @@
   #include "embedded-and-realtime/mcus-and-soc.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/linker-scripts-and-startup.typ"
+  #pagebreak()
+
   #include "embedded-and-realtime/peripherals-and-drivers.typ"
   #pagebreak()
 
