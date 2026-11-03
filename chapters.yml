@@ -729,6 +729,11 @@ chapters:
     words: 2245
     status: draft
   - subject: embedded-and-realtime
+    slug: low-power-design
+    path: embedded-and-realtime/low-power-design.typ
+    words: 2149
+    status: draft
+  - subject: embedded-and-realtime
     slug: mcus-and-soc
     path: embedded-and-realtime/mcus-and-soc.typ
     words: 1500

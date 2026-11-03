@@ -32,4 +32,7 @@
   #include "embedded-and-realtime/timing-analysis.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/low-power-design.typ"
+  #pagebreak()
+
 ]
