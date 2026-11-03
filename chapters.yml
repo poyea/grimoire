@@ -719,6 +719,11 @@ chapters:
     words: 2147
     status: draft
   - subject: embedded-and-realtime
+    slug: debugging-and-testing
+    path: embedded-and-realtime/debugging-and-testing.typ
+    words: 2365
+    status: draft
+  - subject: embedded-and-realtime
     slug: embedded-cpp
     path: embedded-and-realtime/embedded-cpp.typ
     words: 2623

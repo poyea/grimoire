@@ -38,4 +38,7 @@
   #include "embedded-and-realtime/bootloaders-and-updates.typ"
   #pagebreak()
 
+  #include "embedded-and-realtime/debugging-and-testing.typ"
+  #pagebreak()
+
 ]
