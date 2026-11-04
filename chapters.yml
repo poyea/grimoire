@@ -1704,6 +1704,11 @@ chapters:
     words: 1309
     status: reviewed
   - subject: quantum-computing
+    slug: quantum-compilation
+    path: quantum-computing/quantum-compilation.typ
+    words: 2015
+    status: reviewed
+  - subject: quantum-computing
     slug: quantum-information
     path: quantum-computing/quantum-information.typ
     words: 2238

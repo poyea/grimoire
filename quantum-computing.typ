@@ -35,4 +35,7 @@
   #include "quantum-computing/simulating-quantum-circuits.typ"
   #pagebreak()
 
+  #include "quantum-computing/quantum-compilation.typ"
+  #pagebreak()
+
 ]
