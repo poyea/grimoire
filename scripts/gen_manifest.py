@@ -2,7 +2,8 @@
 """Generate chapters.yml from the current filesystem.
 
 Preserves `status` and `last_reviewed_at` for entries that already exist in
-chapters.yml; defaults new entries to status: draft.
+chapters.yml; new entries start as status: reviewed (there is no draft
+stage: chapters are merged as finished).
 
 Run from repo root: `python3 scripts/gen_manifest.py`
 """
@@ -102,7 +103,7 @@ def main() -> int:
             slug = p.stem
             n = count_words(p)
             prev = existing.get((subject, slug), {})
-            status = prev.get("status", "draft")
+            status = prev.get("status", "reviewed")
             reviewer = prev.get("reviewer", None)
             last_reviewed = prev.get("last_reviewed_at", None)
             lines.append(f"  - subject: {subject}")

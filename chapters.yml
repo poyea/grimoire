@@ -87,47 +87,47 @@ chapters:
     slug: advanced-concurrency
     path: coding/cpp-and-java/advanced-concurrency.typ
     words: 3305
-    status: draft
+    status: reviewed
   - subject: coding
     slug: concurrency-primitives
     path: coding/cpp-and-java/concurrency-primitives.typ
     words: 3095
-    status: draft
+    status: reviewed
   - subject: coding
     slug: core-cpp-oop
     path: coding/cpp-and-java/core-cpp-oop.typ
     words: 6882
-    status: draft
+    status: reviewed
   - subject: coding
     slug: cpp-concurrency
     path: coding/cpp-and-java/cpp-concurrency.typ
     words: 3929
-    status: draft
+    status: reviewed
   - subject: coding
     slug: cpp-memory-model
     path: coding/cpp-and-java/cpp-memory-model.typ
     words: 5170
-    status: draft
+    status: reviewed
   - subject: coding
     slug: design-patterns
     path: coding/cpp-and-java/design-patterns.typ
     words: 2408
-    status: draft
+    status: reviewed
   - subject: coding
     slug: jvm-internals
     path: coding/cpp-and-java/jvm-internals.typ
     words: 3185
-    status: draft
+    status: reviewed
   - subject: coding
     slug: low-latency
     path: coding/cpp-and-java/low-latency.typ
     words: 3304
-    status: draft
+    status: reviewed
   - subject: coding
     slug: modern-java
     path: coding/cpp-and-java/modern-java.typ
     words: 2940
-    status: draft
+    status: reviewed
   - subject: coding
     slug: distributed-algorithms
     path: coding/distributed-algorithms.typ
@@ -147,7 +147,7 @@ chapters:
     slug: game-theory
     path: coding/game-theory.typ
     words: 1661
-    status: draft
+    status: reviewed
   - subject: coding
     slug: graphs
     path: coding/graphs.typ
@@ -252,7 +252,7 @@ chapters:
     slug: tree-decomposition
     path: coding/tree-decomposition.typ
     words: 2938
-    status: draft
+    status: reviewed
   - subject: coding
     slug: trees
     path: coding/trees.typ
@@ -292,7 +292,7 @@ chapters:
     slug: garbage-collection
     path: compilers/garbage-collection.typ
     words: 3407
-    status: draft
+    status: reviewed
   - subject: compilers
     slug: ir-design
     path: compilers/ir-design.typ
@@ -717,37 +717,37 @@ chapters:
     slug: bootloaders-and-updates
     path: embedded-and-realtime/bootloaders-and-updates.typ
     words: 2147
-    status: draft
+    status: reviewed
   - subject: embedded-and-realtime
     slug: debugging-and-testing
     path: embedded-and-realtime/debugging-and-testing.typ
     words: 2365
-    status: draft
+    status: reviewed
   - subject: embedded-and-realtime
     slug: embedded-cpp
     path: embedded-and-realtime/embedded-cpp.typ
     words: 2623
-    status: draft
+    status: reviewed
   - subject: embedded-and-realtime
     slug: fieldbuses
     path: embedded-and-realtime/fieldbuses.typ
     words: 2435
-    status: draft
+    status: reviewed
   - subject: embedded-and-realtime
     slug: functional-safety
     path: embedded-and-realtime/functional-safety.typ
     words: 2574
-    status: draft
+    status: reviewed
   - subject: embedded-and-realtime
     slug: linker-scripts-and-startup
     path: embedded-and-realtime/linker-scripts-and-startup.typ
     words: 2245
-    status: draft
+    status: reviewed
   - subject: embedded-and-realtime
     slug: low-power-design
     path: embedded-and-realtime/low-power-design.typ
     words: 2149
-    status: draft
+    status: reviewed
   - subject: embedded-and-realtime
     slug: mcus-and-soc
     path: embedded-and-realtime/mcus-and-soc.typ
@@ -767,7 +767,7 @@ chapters:
     slug: timing-analysis
     path: embedded-and-realtime/timing-analysis.typ
     words: 2835
-    status: draft
+    status: reviewed
   - subject: formal-methods
     slug: model-checking
     path: formal-methods/model-checking.typ
@@ -912,7 +912,7 @@ chapters:
     slug: transforms-and-cameras
     path: graphics-and-rendering/transforms-and-cameras.typ
     words: 2224
-    status: draft
+    status: reviewed
   - subject: linux-kernel
     slug: abi-syscalls
     path: linux-kernel/abi-syscalls.typ
@@ -1142,7 +1142,7 @@ chapters:
     slug: mathematics-for-younger-self
     path: machine-learning-foundations/mathematics-for-younger-self.typ
     words: 2546
-    status: draft
+    status: reviewed
   - subject: machine-learning-foundations
     slug: network-information-theory
     path: machine-learning-foundations/network-information-theory.typ
@@ -1697,12 +1697,12 @@ chapters:
     slug: feature-matching
     path: computer-vision/feature-matching.typ
     words: 1881
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: generative-vision
     path: computer-vision/generative-vision.typ
     words: 2015
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: image-formation
     path: computer-vision/image-formation.typ
@@ -1717,7 +1717,7 @@ chapters:
     slug: multi-view-geometry
     path: computer-vision/multi-view-geometry.typ
     words: 2086
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: object-detection
     path: computer-vision/object-detection.typ
@@ -1727,12 +1727,12 @@ chapters:
     slug: tracking-and-video
     path: computer-vision/tracking-and-video.typ
     words: 1882
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: vision-deployment
     path: computer-vision/vision-deployment.typ
     words: 2067
-    status: draft
+    status: reviewed
   - subject: computer-vision
     slug: vision-transformers
     path: computer-vision/vision-transformers.typ
@@ -1742,7 +1742,7 @@ chapters:
     slug: visual-slam
     path: computer-vision/visual-slam.typ
     words: 2069
-    status: draft
+    status: reviewed
   - subject: software-architecture
     slug: api-design
     path: software-architecture/api-design.typ
