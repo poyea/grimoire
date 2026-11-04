@@ -884,6 +884,11 @@ chapters:
     words: 2301
     status: reviewed
   - subject: graphics-and-rendering
+    slug: color-and-hdr
+    path: graphics-and-rendering/color-and-hdr.typ
+    words: 1926
+    status: reviewed
+  - subject: graphics-and-rendering
     slug: explicit-gpu-apis
     path: graphics-and-rendering/explicit-gpu-apis.typ
     words: 2361

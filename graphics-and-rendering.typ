@@ -44,4 +44,7 @@
   #include "graphics-and-rendering/explicit-gpu-apis.typ"
   #pagebreak()
 
+  #include "graphics-and-rendering/color-and-hdr.typ"
+  #pagebreak()
+
 ]
