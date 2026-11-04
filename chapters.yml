@@ -1929,6 +1929,11 @@ chapters:
     words: 1283
     status: reviewed
   - subject: web-and-browsers
+    slug: browser-networking
+    path: web-and-browsers/browser-networking.typ
+    words: 1986
+    status: reviewed
+  - subject: web-and-browsers
     slug: css-and-layout
     path: web-and-browsers/css-and-layout.typ
     words: 1367

@@ -17,6 +17,9 @@
   #include "web-and-browsers/web-security-model.typ"
   #pagebreak()
 
+  #include "web-and-browsers/browser-networking.typ"
+  #pagebreak()
+
   #include "web-and-browsers/html-parsing-and-dom.typ"
   #pagebreak()
 
