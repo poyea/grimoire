@@ -29,4 +29,7 @@
   #include "quantum-computing/qubits-and-gates.typ"
   #pagebreak()
 
+  #include "quantum-computing/quantum-information.typ"
+  #pagebreak()
+
 ]

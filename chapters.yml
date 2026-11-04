@@ -901,7 +901,7 @@ chapters:
   - subject: graphics-and-rendering
     slug: physically-based-rendering
     path: graphics-and-rendering/physically-based-rendering.typ
-    words: 1224
+    words: 1230
     status: reviewed
   - subject: graphics-and-rendering
     slug: rasterization-pipeline
@@ -1702,6 +1702,11 @@ chapters:
     slug: quantum-algorithms
     path: quantum-computing/quantum-algorithms.typ
     words: 1309
+    status: reviewed
+  - subject: quantum-computing
+    slug: quantum-information
+    path: quantum-computing/quantum-information.typ
+    words: 2238
     status: reviewed
   - subject: quantum-computing
     slug: qubits-and-gates
