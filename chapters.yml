@@ -908,6 +908,11 @@ chapters:
     path: graphics-and-rendering/shaders.typ
     words: 1212
     status: reviewed
+  - subject: graphics-and-rendering
+    slug: transforms-and-cameras
+    path: graphics-and-rendering/transforms-and-cameras.typ
+    words: 2224
+    status: draft
   - subject: linux-kernel
     slug: abi-syscalls
     path: linux-kernel/abi-syscalls.typ

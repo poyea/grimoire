@@ -11,6 +11,9 @@
 
   #pagebreak()
 
+  #include "graphics-and-rendering/transforms-and-cameras.typ"
+  #pagebreak()
+
   #include "graphics-and-rendering/gi-techniques.typ"
   #pagebreak()
 
