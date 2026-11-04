@@ -41,4 +41,7 @@
   #include "quantum-computing/hamiltonian-simulation.typ"
   #pagebreak()
 
+  #include "quantum-computing/quantum-communication.typ"
+  #pagebreak()
+
 ]

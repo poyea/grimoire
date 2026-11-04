@@ -1709,6 +1709,11 @@ chapters:
     words: 1309
     status: reviewed
   - subject: quantum-computing
+    slug: quantum-communication
+    path: quantum-computing/quantum-communication.typ
+    words: 2004
+    status: reviewed
+  - subject: quantum-computing
     slug: quantum-compilation
     path: quantum-computing/quantum-compilation.typ
     words: 2015
