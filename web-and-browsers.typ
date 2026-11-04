@@ -35,6 +35,9 @@
   #include "web-and-browsers/javascript-engines.typ"
   #pagebreak()
 
+  #include "web-and-browsers/modules-and-tooling.typ"
+  #pagebreak()
+
   #include "web-and-browsers/event-loop-and-scheduling.typ"
   #pagebreak()
 

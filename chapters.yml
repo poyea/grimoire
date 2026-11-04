@@ -1959,6 +1959,11 @@ chapters:
     words: 1257
     status: reviewed
   - subject: web-and-browsers
+    slug: modules-and-tooling
+    path: web-and-browsers/modules-and-tooling.typ
+    words: 1937
+    status: reviewed
+  - subject: web-and-browsers
     slug: rendering-pipeline
     path: web-and-browsers/rendering-pipeline.typ
     words: 1334
