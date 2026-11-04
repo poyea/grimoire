@@ -29,6 +29,9 @@
   #include "computer-vision/multi-view-geometry.typ"
   #pagebreak()
 
+  #include "computer-vision/feature-matching.typ"
+  #pagebreak()
+
   #include "computer-vision/3d-vision.typ"
   #pagebreak()
 

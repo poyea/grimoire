@@ -1689,6 +1689,11 @@ chapters:
     words: 1286
     status: reviewed
   - subject: computer-vision
+    slug: feature-matching
+    path: computer-vision/feature-matching.typ
+    words: 1881
+    status: draft
+  - subject: computer-vision
     slug: image-formation
     path: computer-vision/image-formation.typ
     words: 1060
