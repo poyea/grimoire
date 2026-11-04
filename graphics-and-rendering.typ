@@ -20,6 +20,9 @@
   #include "graphics-and-rendering/shadows.typ"
   #pagebreak()
 
+  #include "graphics-and-rendering/animation-and-skinning.typ"
+  #pagebreak()
+
   #include "graphics-and-rendering/gi-techniques.typ"
   #pagebreak()
 

@@ -879,6 +879,11 @@ chapters:
     words: 1374
     status: reviewed
   - subject: graphics-and-rendering
+    slug: animation-and-skinning
+    path: graphics-and-rendering/animation-and-skinning.typ
+    words: 2301
+    status: reviewed
+  - subject: graphics-and-rendering
     slug: gi-techniques
     path: graphics-and-rendering/gi-techniques.typ
     words: 1493
