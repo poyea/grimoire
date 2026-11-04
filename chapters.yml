@@ -909,6 +909,11 @@ chapters:
     words: 1212
     status: reviewed
   - subject: graphics-and-rendering
+    slug: textures-and-sampling
+    path: graphics-and-rendering/textures-and-sampling.typ
+    words: 1985
+    status: reviewed
+  - subject: graphics-and-rendering
     slug: transforms-and-cameras
     path: graphics-and-rendering/transforms-and-cameras.typ
     words: 2224
