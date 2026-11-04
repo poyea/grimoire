@@ -35,6 +35,9 @@
   #include "computer-vision/visual-slam.typ"
   #pagebreak()
 
+  #include "computer-vision/tracking-and-video.typ"
+  #pagebreak()
+
   #include "computer-vision/3d-vision.typ"
   #pagebreak()
 
