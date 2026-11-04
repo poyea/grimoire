@@ -1694,6 +1694,11 @@ chapters:
     words: 1881
     status: draft
   - subject: computer-vision
+    slug: generative-vision
+    path: computer-vision/generative-vision.typ
+    words: 2015
+    status: draft
+  - subject: computer-vision
     slug: image-formation
     path: computer-vision/image-formation.typ
     words: 1060

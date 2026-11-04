@@ -38,6 +38,9 @@
   #include "computer-vision/tracking-and-video.typ"
   #pagebreak()
 
+  #include "computer-vision/generative-vision.typ"
+  #pagebreak()
+
   #include "computer-vision/3d-vision.typ"
   #pagebreak()
 
