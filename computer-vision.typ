@@ -41,6 +41,9 @@
   #include "computer-vision/generative-vision.typ"
   #pagebreak()
 
+  #include "computer-vision/vision-deployment.typ"
+  #pagebreak()
+
   #include "computer-vision/3d-vision.typ"
   #pagebreak()
 
