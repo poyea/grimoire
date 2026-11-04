@@ -1684,6 +1684,11 @@ chapters:
     words: 1334
     status: reviewed
   - subject: quantum-computing
+    slug: hamiltonian-simulation
+    path: quantum-computing/hamiltonian-simulation.typ
+    words: 2102
+    status: reviewed
+  - subject: quantum-computing
     slug: hardware-architectures
     path: quantum-computing/hardware-architectures.typ
     words: 1287
