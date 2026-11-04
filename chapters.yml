@@ -1959,6 +1959,11 @@ chapters:
     words: 1360
     status: reviewed
   - subject: web-and-browsers
+    slug: web-security-model
+    path: web-and-browsers/web-security-model.typ
+    words: 1987
+    status: reviewed
+  - subject: web-and-browsers
     slug: webassembly
     path: web-and-browsers/webassembly.typ
     words: 1319
