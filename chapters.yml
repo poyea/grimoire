@@ -1959,6 +1959,11 @@ chapters:
     words: 1334
     status: reviewed
   - subject: web-and-browsers
+    slug: storage-and-offline
+    path: web-and-browsers/storage-and-offline.typ
+    words: 1927
+    status: reviewed
+  - subject: web-and-browsers
     slug: web-performance
     path: web-and-browsers/web-performance.typ
     words: 1360

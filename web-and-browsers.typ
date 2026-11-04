@@ -20,6 +20,9 @@
   #include "web-and-browsers/browser-networking.typ"
   #pagebreak()
 
+  #include "web-and-browsers/storage-and-offline.typ"
+  #pagebreak()
+
   #include "web-and-browsers/html-parsing-and-dom.typ"
   #pagebreak()
 
