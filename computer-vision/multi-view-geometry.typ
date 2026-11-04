@@ -4,7 +4,7 @@
 
 Deep networks have taken over recognition, but geometry still decides where things are. Every metric measurement a camera makes (the distance to a pedestrian, the pose of a robot arm, the scale of a reconstructed building) rests on a calibrated camera model and the projective geometry relating several views. This chapter develops that geometry: the pinhole camera with lens distortion, calibration, homographies, the epipolar constraint between two views, triangulation, camera pose from known points, stereo depth and its error, and bundle adjustment, the nonlinear least-squares problem underneath every structure-from-motion and SLAM system.
 
-*See also:* #xref("computer-vision", "image-formation", label: "Image Formation") (camera basics), #xref("computer-vision", "3d-vision", label: "3D Vision and Neural Fields"), #xref("numerical-computing", "linear-systems", label: "Linear Systems") (least squares and SVD)
+*See also:* #xref("computer-vision", "image-formation", label: "Image Formation") (camera basics), #xref("computer-vision", "3d-vision", label: "3D Vision and Neural Fields"), #xref("computer-vision", "feature-matching", label: "Feature Matching and Robust Estimation"), #xref("numerical-computing", "linear-systems", label: "Linear Systems") (least squares and SVD)
 
 == The Projective Camera
 
@@ -59,7 +59,7 @@ Estimation:
 
 - *Eight-point algorithm*: stack one linear equation per correspondence, solve by SVD, then enforce rank 2 by zeroing the smallest singular value. With Hartley normalisation it is competitive with far more complex methods (Hartley, 1997).
 - *Seven-point algorithm*: the minimal case for $F$, giving one or three solutions from a cubic.
-- *Five-point algorithm* (Nistér, 2004): the minimal case for $E$ with calibrated cameras, up to 10 solutions. It is the default inside RANSAC for calibrated relative pose because a smaller minimal set needs fewer RANSAC iterations.
+- *Five-point algorithm* (Nistér, 2004): the minimal case for $E$ with calibrated cameras, up to 10 solutions. It is the default inside RANSAC for calibrated relative pose because a smaller minimal set needs fewer RANSAC iterations (#xref("computer-vision", "feature-matching", label: "Feature Matching and Robust Estimation")).
 
 Decomposing $E$ by SVD gives four combinations of $(R, bold(t))$. Only one places the triangulated points in front of both cameras (the *cheirality* check), and that is the relative pose.
 
