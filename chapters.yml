@@ -1706,7 +1706,7 @@ chapters:
   - subject: computer-vision
     slug: multi-view-geometry
     path: computer-vision/multi-view-geometry.typ
-    words: 2070
+    words: 2086
     status: draft
   - subject: computer-vision
     slug: object-detection
@@ -1718,6 +1718,11 @@ chapters:
     path: computer-vision/vision-transformers.typ
     words: 1175
     status: reviewed
+  - subject: computer-vision
+    slug: visual-slam
+    path: computer-vision/visual-slam.typ
+    words: 2069
+    status: draft
   - subject: software-architecture
     slug: api-design
     path: software-architecture/api-design.typ

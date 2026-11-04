@@ -32,6 +32,9 @@
   #include "computer-vision/feature-matching.typ"
   #pagebreak()
 
+  #include "computer-vision/visual-slam.typ"
+  #pagebreak()
+
   #include "computer-vision/3d-vision.typ"
   #pagebreak()
 
