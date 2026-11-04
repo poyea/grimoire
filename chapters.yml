@@ -884,6 +884,11 @@ chapters:
     words: 2301
     status: reviewed
   - subject: graphics-and-rendering
+    slug: explicit-gpu-apis
+    path: graphics-and-rendering/explicit-gpu-apis.typ
+    words: 2361
+    status: reviewed
+  - subject: graphics-and-rendering
     slug: gi-techniques
     path: graphics-and-rendering/gi-techniques.typ
     words: 1493

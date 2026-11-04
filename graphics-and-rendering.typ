@@ -41,4 +41,7 @@
   #include "graphics-and-rendering/shaders.typ"
   #pagebreak()
 
+  #include "graphics-and-rendering/explicit-gpu-apis.typ"
+  #pagebreak()
+
 ]
