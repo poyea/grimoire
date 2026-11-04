@@ -44,4 +44,7 @@
   #include "quantum-computing/quantum-communication.typ"
   #pagebreak()
 
+  #include "quantum-computing/quantum-complexity.typ"
+  #pagebreak()
+
 ]
