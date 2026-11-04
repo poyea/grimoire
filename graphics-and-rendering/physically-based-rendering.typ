@@ -132,7 +132,7 @@ Linear-light shading must be mapped into display range. Common operators:
   columns: 3,
   [*Operator*], [*Formula*], [*Notes*],
   [Reinhard], [$x \/ (1 + x)$], [Soft, washes contrast],
-  [ACES Filmic], [Rational fit, RRT+ODT], [Industry default, hue-preserving],
+  [ACES Filmic], [Rational fit, RRT+ODT], [Industry default; per-channel curve shifts hues of saturated highlights],
   [Hable / Uncharted 2], [$"U2"(x)$ rational], [Game industry classic],
   [AgX], [LUT-based, hue-preserving], [Blender 4.x default],
 )
