@@ -17,6 +17,9 @@
   #include "graphics-and-rendering/textures-and-sampling.typ"
   #pagebreak()
 
+  #include "graphics-and-rendering/shadows.typ"
+  #pagebreak()
+
   #include "graphics-and-rendering/gi-techniques.typ"
   #pagebreak()
 

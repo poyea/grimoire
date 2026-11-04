@@ -909,6 +909,11 @@ chapters:
     words: 1212
     status: reviewed
   - subject: graphics-and-rendering
+    slug: shadows
+    path: graphics-and-rendering/shadows.typ
+    words: 2155
+    status: reviewed
+  - subject: graphics-and-rendering
     slug: textures-and-sampling
     path: graphics-and-rendering/textures-and-sampling.typ
     words: 1985
