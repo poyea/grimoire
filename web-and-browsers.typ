@@ -41,6 +41,9 @@
   #include "web-and-browsers/webassembly.typ"
   #pagebreak()
 
+  #include "web-and-browsers/web-graphics-and-media.typ"
+  #pagebreak()
+
   #include "web-and-browsers/web-performance.typ"
   #pagebreak()
 

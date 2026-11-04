@@ -1964,6 +1964,11 @@ chapters:
     words: 1927
     status: reviewed
   - subject: web-and-browsers
+    slug: web-graphics-and-media
+    path: web-and-browsers/web-graphics-and-media.typ
+    words: 1768
+    status: reviewed
+  - subject: web-and-browsers
     slug: web-performance
     path: web-and-browsers/web-performance.typ
     words: 1360
