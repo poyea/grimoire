@@ -1699,6 +1699,11 @@ chapters:
     words: 1083
     status: reviewed
   - subject: computer-vision
+    slug: multi-view-geometry
+    path: computer-vision/multi-view-geometry.typ
+    words: 2070
+    status: draft
+  - subject: computer-vision
     slug: object-detection
     path: computer-vision/object-detection.typ
     words: 1191

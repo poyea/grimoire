@@ -26,6 +26,9 @@
   #include "computer-vision/vision-transformers.typ"
   #pagebreak()
 
+  #include "computer-vision/multi-view-geometry.typ"
+  #pagebreak()
+
   #include "computer-vision/3d-vision.typ"
   #pagebreak()
 
