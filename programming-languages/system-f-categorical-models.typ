@@ -29,7 +29,7 @@ In every case the language designer chose a *fragment* that is either inferable 
 
 == Worked Example: Fold-as-Type
 
-The Church encoding of $"List" alpha$ as $forall beta . (alpha arrow.r beta arrow.r beta) arrow.r beta arrow.r beta$ *"is"* the fold operator: applying a list to $(c, n)$ is computing its right fold. So we can define:
+The Church encoding of $"List" alpha$ as $forall beta . (alpha arrow.r beta arrow.r beta) arrow.r beta arrow.r beta$ *is* the fold operator: applying a list to $(c, n)$ is computing its right fold. So we can define:
 
 ```haskell
 {-\# LANGUAGE RankNTypes \#-}
@@ -174,7 +174,7 @@ let zoo : (module SHOWABLE) list = [
 ]
 ```
 
-The module type *"is"* the existential; module values pack a concrete type with operations.
+The module type *is* the existential; module values pack a concrete type with operations.
 
 == Connection to Category Theory
 

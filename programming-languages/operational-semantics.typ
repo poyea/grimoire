@@ -119,7 +119,7 @@ $ e ::= x | lambda x. e | e_1 space e_2 $
 
 The single computation rule is $beta$-reduction $(lambda x. e) space e' arrow.r e[x := e']$. Where in the term we may fire it -- and what shape of $e'$ we accept -- defines the *strategy*.
 
-*Call-"by"-name* (CBN). Reduce the leftmost-outermost redex. Arguments are substituted unevaluated.
+*Call-by-name* (CBN). Reduce the leftmost-outermost redex. Arguments are substituted unevaluated.
 
 ```text
   e1 -> e1'                       ----------------------------
@@ -127,7 +127,7 @@ The single computation rule is $beta$-reduction $(lambda x. e) space e' arrow.r 
   e1 e2 -> e1' e2
 ```
 
-*Call-"by"-value* (CBV). Arguments must be reduced to values before they are substituted.
+*Call-by-value* (CBV). Arguments must be reduced to values before they are substituted.
 
 ```text
   v ::= lam x. e
@@ -137,7 +137,7 @@ The single computation rule is $beta$-reduction $(lambda x. e) space e' arrow.r 
   e1 e2 -> e1' e2            v e2 -> v e2'
 ```
 
-*Call-"by"-need* (lazy). Identical to CBN in observed values but uses a heap of *thunks* to share evaluation; once an argument is forced, its value is memoized for further uses. CBN's $(lambda x. x + x)(2 + 3)$ recomputes $2+3$ twice; CBN with sharing computes it once. Haskell is call-"by"-need.
+*Call-by-need* (lazy). Identical to CBN in observed values but uses a heap of *thunks* to share evaluation; once an argument is forced, its value is memoized for further uses. CBN's $(lambda x. x + x)(2 + 3)$ recomputes $2+3$ twice; CBN with sharing computes it once. Haskell is call-by-need.
 
 The classical results connecting these strategies live in the *Church-Rosser* theorem and its descendants.
 
@@ -149,7 +149,7 @@ The classical results connecting these strategies live in the *Church-Rosser* th
 
 Plotkin's original SOS for $lambda$ has one congruence rule per syntactic constructor. Felleisen and Hieb (1992) repackaged the congruence into a single rule using *evaluation contexts*: term-shaped patterns with a hole.
 
-For call-"by"-value $lambda$:
+For call-by-value $lambda$:
 
 $ E ::= square | E space e | v space E $
 
@@ -252,7 +252,7 @@ The central question is whether applicative bisimilarity *is a congruence* -- cl
 
 The gold standard for program equivalence is *contextual* (or *observational*) equivalence: $e_1 tilde.equiv_"ctx" e_2$ <==> for every program context $C[dot]$ such that $C[e_1]$ and $C[e_2]$ are closed and well-typed, $C[e_1]$ converges <==> $C[e_2]$ converges (and produces the same observable answer at the base type).
 
-Contextual equivalence quantifies over *"all"* contexts. Direct proofs are infeasible. Sound proof techniques include applicative bisimulation (when Howe's method applies), logical relations (next section), and game-semantic models (see #xref("programming-languages", "denotational-semantics", label: "Denotational Semantics")).
+Contextual equivalence quantifies over *all* contexts. Direct proofs are infeasible. Sound proof techniques include applicative bisimulation (when Howe's method applies), logical relations (next section), and game-semantic models (see #xref("programming-languages", "denotational-semantics", label: "Denotational Semantics")).
 
 A semantics $bracket.l.stroked dot bracket.r.stroked$ is *sound* if $bracket.l.stroked e_1 bracket.r.stroked = bracket.l.stroked e_2 bracket.r.stroked$ => $e_1 tilde.equiv_"ctx" e_2$, and *complete* (or *fully abstract*) if the converse holds. Full abstraction is the central yardstick connecting denotation and operation: a fully abstract model has neither too few nor too many equations.
 
@@ -265,7 +265,7 @@ A *logical relation* is a type-indexed family of relations defined by induction 
 Define a unary logical predicate $"SN"_tau$ on closed terms of type $tau$:
 
 - $"SN"_o (e)$ <==> $e$ is strongly normalizing.
-- $"SN"_(tau_1 arrow.r tau_2) (e)$ <==> $e$ is SN *"and"* for every $e' in "SN"_(tau_1)$, $e space e' in "SN"_(tau_2)$.
+- $"SN"_(tau_1 arrow.r tau_2) (e)$ <==> $e$ is SN *and* for every $e' in "SN"_(tau_1)$, $e space e' in "SN"_(tau_2)$.
 
 *Theorem (Tait 1967).* For every $tau$, every closed $e : tau$ is in $"SN"_tau$.
 

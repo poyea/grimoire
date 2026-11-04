@@ -153,7 +153,7 @@ A computation rewrites $q_0(t)$ to a tree over $Omega$ by repeatedly applying ru
 
 *Theorem.* The class of *top-down tree transductions* is properly contained in the class of *bottom-up tree transductions* (BUTT, Engelfriet 1975). The two classes are *incomparable* on the deterministic level.
 
-The key difference: a BUTT can *inspect* a subterm and *"then"* decide what to output (the input is processed before the output is committed), whereas a TDTT commits to output structure at each step and then recurses; this lets BUTT realise transductions like if the input is $f(a, a)$ output $g$, else output $h$ that TDTT cannot.
+The key difference: a BUTT can *inspect* a subterm and *then* decide what to output (the input is processed before the output is committed), whereas a TDTT commits to output structure at each step and then recurses; this lets BUTT realise transductions like if the input is $f(a, a)$ output $g$, else output $h$ that TDTT cannot.
 
 === Macro Tree Transducers
 
@@ -232,7 +232,7 @@ Courcelle's theorem is the unifying meta-theorem of *parameterised complexity*: 
 
 === Type Inference for Algebraic Data Types
 
-Pattern-match exhaustiveness checking for ML / Haskell / Rust reduces to tree-automaton emptiness. Given a function with patterns $p_1, dots, p_n$ over a sum-"of"-products type, build a DFTA $cal(A)_i$ for the set of values matching $p_i$, form $cal(A)_"all" = union_i cal(A)_i$, and check whether $T_Sigma \\ L(cal(A)_"all") = emptyset$. If not, an unmatched value (a *counterexample*) is computable.
+Pattern-match exhaustiveness checking for ML / Haskell / Rust reduces to tree-automaton emptiness. Given a function with patterns $p_1, dots, p_n$ over a sum-of-products type, build a DFTA $cal(A)_i$ for the set of values matching $p_i$, form $cal(A)_"all" = union_i cal(A)_i$, and check whether $T_Sigma \\ L(cal(A)_"all") = emptyset$. If not, an unmatched value (a *counterexample*) is computable.
 
 ```text
   type tree = Leaf | Node of tree * int * tree

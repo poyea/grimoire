@@ -250,7 +250,7 @@ $1 - 2^(-"poly")$ without change of class.
 
 *Proof.* Amplify error to $< 2^(-(n + 1))$. By the union bound, for fixed input
 length $n$, at most a $2^n dot 2^(-(n + 1)) = 1/2$ fraction of random strings $r$
-fails on any input; in particular there exists an $r$ correct on *"all"* $2^n$
+fails on any input; in particular there exists an $r$ correct on *all* $2^n$
 inputs of length $n$. Hard-wire this $r$ as the advice string. $square$
 
 *Theorem (Sipser 1983, Gács; Lautemann 1983).* $"BPP" subset.eq Sigma^p_2 inter

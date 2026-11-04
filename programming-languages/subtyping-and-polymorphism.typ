@@ -198,7 +198,7 @@ The assumption set $A$ is the *coinductive certificate* that recursive subtyping
 
 == Intersection Types
 
-*Intersection types* (Coppo–Dezani 1980; Pottinger 1980) add a connective $tau_1 inter tau_2$ for types *"both"* of $tau_1$ and $tau_2$. The subtyping rules:
+*Intersection types* (Coppo–Dezani 1980; Pottinger 1980) add a connective $tau_1 inter tau_2$ for types *both* of $tau_1$ and $tau_2$. The subtyping rules:
 
 $ tau_1 inter tau_2 lt.closed tau_1 quad tau_1 inter tau_2 lt.closed tau_2 \
 "if" tau lt.closed tau_1 "and" tau lt.closed tau_2, "then" tau lt.closed tau_1 inter tau_2 $

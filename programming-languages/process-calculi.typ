@@ -233,7 +233,7 @@ Refinement is the central proof obligation in CSP-based verification: a specific
 
 === Trace, Failures, Failures–Divergences
 
-CSP supports a hierarchy of three models, each fully abstract for a different cal(C) of properties:
+CSP supports a hierarchy of three models, each fully abstract for a different class of properties:
 
 - *Traces model $cal(T)$:* the set of finite traces. Adequate for *safety* (nothing bad happens) but blind to liveness.
 - *Stable failures model $cal(F)$:* traces plus refusal sets. Adequate for safety plus deadlock-freedom.

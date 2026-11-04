@@ -324,7 +324,7 @@ $K^A$ is prefix-free complexity with $A$ as oracle.
   equivalence, Presburger arithmetic are decidable; first-order Peano, the lambda
   calculus's $beta eta$ convertibility (on closed terms it is decidable; in
   general undecidable), and program equivalence are not. The arithmetical hierarchy
-  predicts *"where"* in the difficulty spectrum a problem sits.
+  predicts *where* in the difficulty spectrum a problem sits.
 - *The recursion theorem* is the formal underpinning of self-modifying code,
   reflective towers, metacircular interpreters, and -- in the small -- of Haskell's
   `fix :: (a -> a) -> a`.

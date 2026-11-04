@@ -123,7 +123,7 @@ $ D_infinity = {(d_0, d_1, d_2, dots) | d_n in D_n, j_n(d_(n+1)) = d_n}, $
 
 ordered componentwise. Then $D_infinity tilde.eq [D_infinity arrow.r D_infinity]$ holds, the isomorphism being induced by the universal property of the limit.
 
-This is *"the"* original solution. Smyth and Plotkin (1982) generalized the construction to arbitrary *locally continuous* functors on the category of CPOs and embedding-projection pairs ("the *category $bold("CPO")^"E"$*): every such functor has an *initial algebra* / *terminal coalgebra* that solves the corresponding domain equation. Functors built from sum, product, function space, and the lift monad are locally continuous, so every type expression of an ML-like language has a denotation.
+This is *the* original solution. Smyth and Plotkin (1982) generalized the construction to arbitrary *locally continuous* functors on the category of CPOs and embedding-projection pairs ("the *category $bold("CPO")^"E"$*): every such functor has an *initial algebra* / *terminal coalgebra* that solves the corresponding domain equation. Functors built from sum, product, function space, and the lift monad are locally continuous, so every type expression of an ML-like language has a denotation.
 
 For *recursive types* $mu alpha. tau$ in a typed language, the same technology gives $bracket.l.stroked mu alpha. tau bracket.r.stroked$ as a fixed point of the locally continuous functor induced by $tau$.
 

@@ -133,7 +133,7 @@ Rules:
 ```
 
 Bidirectional checking pushes type information *into* abstractions (no annotation needed on the binder) and *pulls* it out of variables and applications.
-The user annotates *"only"* at function-definition sites, not at every $lambda$.
+The user annotates *only* at function-definition sites, not at every $lambda$.
 This is the kernel of all modern dependently-typed elaborators.
 
 == Categorical Semantics
@@ -155,7 +155,7 @@ The interpretation $[| - |]$ sends:
 
 *Soundness.* $beta eta$-conversion is sound: if $e_1 =_(beta eta) e_2$ then $[| e_1 |] = [| e_2 |]$.
 
-*Completeness (Lambek 1980).* The *syntactic CCC* whose objects are types and morphisms are $beta eta$-equivalence classes of terms is the free CCC on the base objects. So $lambda^arrow.r$ up to $beta eta$ *"is"* the theory of CCCs.
+*Completeness (Lambek 1980).* The *syntactic CCC* whose objects are types and morphisms are $beta eta$-equivalence classes of terms is the free CCC on the base objects. So $lambda^arrow.r$ up to $beta eta$ *is* the theory of CCCs.
 
 *Set-theoretic model.* Take $cal(C) = "Set"$: $[| tau_1 arrow.r tau_2 |] = $ set of functions $[| tau_1 |] arrow.r [| tau_2 |]$. This gives a sound (but not complete) model.
 
@@ -206,7 +206,7 @@ $eta$-equality $lambda x : tau . (e space x) =_eta e$ (for $x in.not "FV"(e)$) e
 
 == Eta and Categorical Naturality
 
-Under the CCC interpretation, $eta$-conversion corresponds to the equation $Lambda("ev" circle.small (f times "id"_A)) = f$, which is the *uniqueness* part of the universal property of the exponential. So an "$eta$-sensitive" categorical model is one in which the exponential adjunction is strict; the syntactic CCC modulo $beta$ alone is *not* a CCC, but modulo $beta eta$ it *"is"*.
+Under the CCC interpretation, $eta$-conversion corresponds to the equation $Lambda("ev" circle.small (f times "id"_A)) = f$, which is the *uniqueness* part of the universal property of the exponential. So an "$eta$-sensitive" categorical model is one in which the exponential adjunction is strict; the syntactic CCC modulo $beta$ alone is *not* a CCC, but modulo $beta eta$ it *is*.
 
 == Practical Implementation: Type Checking $lambda^arrow.r$
 
@@ -338,7 +338,7 @@ This contrasts sharply with untyped $lambda$: $beta$-equality of arbitrary $lamb
 
 == Recursion-Free Programming
 
-What can $lambda^arrow.r$ compute? The cal(C) of *higher-type primitive recursive* functions, properly contained in the primitive recursive functions on naturals. The Ackermann function is not expressible in pure $lambda^arrow.r$ (no recursion), nor in $lambda^arrow.r$ + finite-type primitive recursion at first-order types — but it *"is"* expressible in System T (Gödel 1958) using primitive recursion at higher type $("Nat" arrow.r "Nat") arrow.r ("Nat" arrow.r "Nat")$.
+What can $lambda^arrow.r$ compute? The class of *higher-type primitive recursive* functions, properly contained in the primitive recursive functions on naturals. The Ackermann function is not expressible in pure $lambda^arrow.r$ (no recursion), nor in $lambda^arrow.r$ + finite-type primitive recursion at first-order types — but it *is* expressible in System T (Gödel 1958) using primitive recursion at higher type $("Nat" arrow.r "Nat") arrow.r ("Nat" arrow.r "Nat")$.
 
 Pure $lambda^arrow.r$ without iterators or recursors computes only *bounded* polynomial functions; specifically, the term-complexity of normalisation can be hyperexponential (Statman 1979): there are terms of size $n$ whose normal form has size a tower of exponentials in $n$. So even SN, decidable type-checking systems can be computationally explosive.
 
