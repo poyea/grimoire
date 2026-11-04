@@ -38,6 +38,9 @@
   #include "web-and-browsers/event-loop-and-scheduling.typ"
   #pagebreak()
 
+  #include "web-and-browsers/input-and-accessibility.typ"
+  #pagebreak()
+
   #include "web-and-browsers/webassembly.typ"
   #pagebreak()
 

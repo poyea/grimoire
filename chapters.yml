@@ -1949,6 +1949,11 @@ chapters:
     words: 1313
     status: reviewed
   - subject: web-and-browsers
+    slug: input-and-accessibility
+    path: web-and-browsers/input-and-accessibility.typ
+    words: 1883
+    status: reviewed
+  - subject: web-and-browsers
     slug: javascript-engines
     path: web-and-browsers/javascript-engines.typ
     words: 1257
