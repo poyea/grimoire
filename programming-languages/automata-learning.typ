@@ -23,7 +23,7 @@ So regular languages are not learnable from text alone, but are learnable from t
 === PAC Learning (Valiant 1984)
 
 A class $cal(C)$ over instance space $X$ is *probably approximately correct (PAC)-learnable* if there is an algorithm that, given $epsilon, delta > 0$ and access to an example oracle drawing $x in X$ from an unknown distribution $D$ and labelled by an unknown $c in cal(C)$, outputs $h$ with
-$ "Pr"_(S tilde D^m)[ "Pr"_(x tilde D)[h(x) eq."not" c(x)] gt.eq epsilon ] lt.eq delta $
+$ "Pr"_(S tilde D^m)[ "Pr"_(x tilde D)[h(x) eq.not c(x)] gt.eq epsilon ] lt.eq delta $
 in time and sample size polynomial in $1/epsilon, 1/delta$, and the size of $c$.
 
 The PAC framework abstracts away from any particular distribution and replaces "identify exactly" with "approximate w.h.p."
@@ -119,7 +119,7 @@ Initial table: $S = {epsilon}, E = {epsilon}$. $T(epsilon, epsilon) = "MQ"(epsil
 
 Expand to $S dot Sigma = {a, b}$: $T(a, epsilon) = 0, T(b, epsilon) = 1$.
 
-Rows: $"row"(epsilon) = (1), "row"(a) = (0), "row"(b) = (1)$. Closed (every extension row appears in $S$? No -- $"row"(a) eq."not" "row"(epsilon)$). Add $a$ to $S$.
+Rows: $"row"(epsilon) = (1), "row"(a) = (0), "row"(b) = (1)$. Closed (every extension row appears in $S$? No -- $"row"(a) eq.not "row"(epsilon)$). Add $a$ to $S$.
 
 Now $S = {epsilon, a}$, expand to ${epsilon, a, b, a a, a b}$. After filling:
 $"row"(epsilon) = 1, "row"(a) = 0, "row"(b) = 1, "row"(a a) = 1, "row"(a b) = 0$. Closed, consistent. Hypothesis: 2 states, with even/odd $a$ parity. EQ confirms. Total: $5$ MQs, $1$ EQ.
@@ -393,14 +393,14 @@ An $L^*$ observation table $(S, E, T)$ approximates the Myhill--Nerode quotient:
 
 *Lemma (Angluin 1987).* If $(S, E, T)$ is closed and consistent, the hypothesis DFA $cal(H)(S, E, T)$ has at most $|"distinct rows in" S|$ states. If at termination the hypothesis equals the minimal DFA of $L$, then $|"states"| = |Sigma^* slash tilde_L|$.
 
-*Lemma (Angluin 1987).* If $cal(H)(S, E, T) eq."not" L$ and the equivalence query returns counterexample $w$, then adding the prefixes of $w$ to $S$ and refilling either (i) breaks closure (forcing a new row), or (ii) breaks consistency (forcing a new experiment); in either case the next hypothesis has strictly more distinct rows.
+*Lemma (Angluin 1987).* If $cal(H)(S, E, T) eq.not L$ and the equivalence query returns counterexample $w$, then adding the prefixes of $w$ to $S$ and refilling either (i) breaks closure (forcing a new row), or (ii) breaks consistency (forcing a new experiment); in either case the next hypothesis has strictly more distinct rows.
 
 == Extended Topic: Counterexample Decomposition
 
 Rivest--Schapire's binary-search counterexample analysis is best understood as decomposing $w = w_1 dots w_m$ at the unique *break point* $i$ where the hypothesis transitions diverge from the target. Define
 $ alpha(i) = cal(H)("access string for state reached after " w_1 dots w_i) dot w_(i+1) dots w_m. $
 
-For $i = 0$, $alpha(0) = w$ (the counterexample). For $i = m$, $alpha(m) = "access string of accepting state"$. By construction $"MQ"(alpha(0)) eq."not" "MQ"(alpha(m))$ (one is true, one is false). Binary search finds the unique $i^*$ where $"MQ"(alpha(i^*-1)) eq."not" "MQ"(alpha(i^*))$ in $O(log m)$ queries.
+For $i = 0$, $alpha(0) = w$ (the counterexample). For $i = m$, $alpha(m) = "access string of accepting state"$. By construction $"MQ"(alpha(0)) eq.not "MQ"(alpha(m))$ (one is true, one is false). Binary search finds the unique $i^*$ where $"MQ"(alpha(i^*-1)) eq.not "MQ"(alpha(i^*))$ in $O(log m)$ queries.
 
 The suffix $w_(i^* + 1) dots w_m$ is the new distinguishing experiment; the prefix points to the state needing a new representative.
 
@@ -508,7 +508,7 @@ Target: $L = Sigma^* a$ over $Sigma = {a, b}$. Minimal DFA has $2$ states (last=
 
 *Iter 1:* $S = E = {epsilon}$. $T(epsilon, epsilon) = 0$. Extensions: $T(a, epsilon) = 1, T(b, epsilon) = 0$.
 
-Rows: $"row"(epsilon) = (0), "row"(a) = (1), "row"(b) = (0)$. *Not closed*: $"row"(a) eq."not" "row"(epsilon)$, $"row"(a) eq."not" "row"(b)$, so $a$'s row not in $S$. Move $a$ to $S$.
+Rows: $"row"(epsilon) = (0), "row"(a) = (1), "row"(b) = (0)$. *Not closed*: $"row"(a) eq.not "row"(epsilon)$, $"row"(a) eq.not "row"(b)$, so $a$'s row not in $S$. Move $a$ to $S$.
 
 *Iter 2:* $S = {epsilon, a}$. Extensions to $S Sigma = {a, b, a a, a b}$. Fill: $T(a a, epsilon) = 1, T(a b, epsilon) = 0$. Rows: $"row"(epsilon) = 0, "row"(a) = 1, "row"(b) = 0, "row"(a a) = 1, "row"(a b) = 0$. Closed, consistent.
 

@@ -56,7 +56,7 @@ gap is $f(n)^2 = o(g(n))$ (Hartmanis--Stearns original); for RAM machines it
 collapses to $f(n) = o(g(n))$ (Cobham). Random-access models that simulate any TM
 in linear time achieve the cleanest hierarchy.
 
-*Corollary.* $"P" subset.eq."not" "EXP"$; in particular $"DTIME"(n) subset.neq
+*Corollary.* $"P" subset.eq.not "EXP"$; in particular $"DTIME"(n) subset.neq
 "DTIME"(n^2)$, $"DTIME"(2^n) subset.neq "DTIME"(2^(2 n))$.
 
 *Theorem (Space Hierarchy, Stearns--Hartmanis--Lewis 1965).* If $f$ is
@@ -66,8 +66,8 @@ $f$-space machine within its own space budget once it has a clock to prevent
 infinite loops; configurations are bounded by $2^(O(f))$ so a counter of that size
 suffices.)
 
-*Corollary.* $"L" subset.eq."not" "PSPACE"$, $"PSPACE" subset.eq."not" "EXPSPACE"$. We do
-*not* know $"L" subset.eq."not" "P"$, $"P" subset.eq."not" "PSPACE"$, or $"P" subset.neq
+*Corollary.* $"L" subset.eq.not "PSPACE"$, $"PSPACE" subset.eq.not "EXPSPACE"$. We do
+*not* know $"L" subset.eq.not "P"$, $"P" subset.eq.not "PSPACE"$, or $"P" subset.neq
 "NP"$ -- all are open.
 
 *Theorem (Gap Theorem, Borodin 1972; Trakhtenbrot 1964).* For every total
@@ -173,13 +173,13 @@ only if $"NP" = "coNP"$.
 
 == Ladner's Theorem
 
-*Theorem (Ladner 1975).* If $"P" eq."not" "NP"$, then there exists an *NP-intermediate*
+*Theorem (Ladner 1975).* If $"P" eq.not "NP"$, then there exists an *NP-intermediate*
 language: $L in "NP" backslash "P"$ with $L$ not NP-complete.
 
 *Proof idea.* Define $L = "SAT" inter cal(F)$ where $cal(F)$ is a recursively
 constructed set of formula sizes designed by *delayed diagonalisation*: at even
 stages, "blow up" $L$ enough to defeat the $i$-th polynomial-time machine
-(ensuring $L in."not" "P"$); at odd stages, "blow down" $L$ enough to defeat the
+(ensuring $L in.not "P"$); at odd stages, "blow down" $L$ enough to defeat the
 $i$-th polynomial reduction $f_i : "SAT" lt.eq^p_m L$ (ensuring $L$ is not
 NP-complete). The blow-up/blow-down is parameterised by a slow-growing function
 that depends on which stage was last accomplished. $square$
@@ -259,7 +259,7 @@ Pi^p_2$.
 *Proof (Lautemann's covering trick).* Let $M$ be a BPP machine with error $< 2^(-n)$
 on inputs of length $n$, using $m = "poly"(n)$ random bits. Let $S_x = { r in
 {0, 1}^m | M(x, r) "accepts"}$. For $x in L$, $|S_x| gt.eq (1 - 2^(-n)) 2^m$; for
-$x in."not" L$, $|S_x| lt.eq 2^(-n) 2^m$. Claim:
+$x in.not L$, $|S_x| lt.eq 2^(-n) 2^m$. Claim:
 
 $ x in L arrow.l.r.double exists t_1, ..., t_m in {0, 1}^m forall r in {0, 1}^m exists i . r xor t_i in S_x. $
 
@@ -278,7 +278,7 @@ Generalise NP by allowing the verifier $V$ to be probabilistic and the prover $P
 to be unbounded but adaptive. An *interactive proof system* for $L$:
 
 - *Completeness*: $x in L => exists P . Pr[(P, V)(x) "accepts"] gt.eq 2/3$.
-- *Soundness*: $x in."not" L => forall P^* . Pr[(P^*, V)(x) "accepts"] lt.eq 1/3$.
+- *Soundness*: $x in.not L => forall P^* . Pr[(P^*, V)(x) "accepts"] lt.eq 1/3$.
 
 $"IP" = $ languages with $"poly"(n)$ rounds and poly-time $V$. Variants:
 
@@ -409,7 +409,7 @@ In particular $"AC"^0 [2]$ cannot compute $"MOD"_3$.
 
 *Proof.* Approximate each gate by a *low-degree polynomial* over $bb(F)_p$.
 Over $O(log n)$ depth this gives a degree-$"polylog"$ approximator for the
-entire circuit, agreeing with it on most inputs. But $"MOD"_q$ for $q eq."not" p$
+entire circuit, agreeing with it on most inputs. But $"MOD"_q$ for $q eq.not p$
 has full degree as a function $bb(F)_p^n -> bb(F)_p$; no low-degree polynomial
 agrees with it on a $1/2 + epsilon$ fraction. $square$
 
@@ -434,11 +434,11 @@ satisfies:
   property $cal(P)_n$ with non-negligible probability.
 + *Constructivity*: membership "$f in cal(P)_n$?" is decidable in time $2^(O(n))$
   given the truth table of $f$ (i.e. polynomial in the truth-table size).
-+ *Usefulness*: $f in cal(P)_n => f in."not" cal(C)$.
++ *Usefulness*: $f in cal(P)_n => f in.not cal(C)$.
 
 *Theorem (Razborov--Rudich 1997).* If pseudorandom function generators secure
 against $2^(n^epsilon)$-size circuits exist, then there is no natural proof of
-$cal(C) eq."not" "P/poly"$ for any superpolynomial $cal(C)$.
+$cal(C) eq.not "P/poly"$ for any superpolynomial $cal(C)$.
 
 *Proof intuition.* A constructive, large property is itself a polynomial-time
 *statistical test* distinguishing "random" functions from functions in $cal(C)$.
@@ -460,8 +460,8 @@ Williams's blueprint -- "improved SAT algorithm for $cal(C)$ $=>$
 $"NEXP" subset.eq.not cal(C)$" -- is one of the few known routes around the barrier.
 
 *Other barriers.* The *relativisation barrier* (Baker--Gill--Solovay 1975): there
-exist oracles $A$ with $"P"^A = "NP"^A$ and oracles $B$ with $"P"^B eq."not" "NP"^B$,
-so any proof of $"P" eq."not" "NP"$ must use techniques that *do not relativise*.
+exist oracles $A$ with $"P"^A = "NP"^A$ and oracles $B$ with $"P"^B eq.not "NP"^B$,
+so any proof of $"P" eq.not "NP"$ must use techniques that *do not relativise*.
 The *algebrisation barrier* (Aaronson--Wigderson 2008): low-degree extensions of
 oracles also fail to separate $"P"$ from $"NP"$.
 
@@ -628,7 +628,7 @@ Cryptography rests on average-case hardness assumptions stronger than $"P" eq.no
 PRFs exist.
 
 *Theorem (Impagliazzo 1995, "five worlds").* Depending on which assumptions hold,
-we live in one of *Algorithmica* ($"P" = "NP"$), *Heuristica* ($"P" eq."not" "NP"$
+we live in one of *Algorithmica* ($"P" = "NP"$), *Heuristica* ($"P" eq.not "NP"$
 but average-case easy), *Pessiland* (NP hard on average, no OWFs), *Minicrypt*
 (OWFs but no public-key), or *Cryptomania* (trapdoor permutations). All but
 Cryptomania are consistent with our current knowledge.
@@ -693,11 +693,11 @@ $k$-local Hamiltonian to inverse-polynomial precision) is QMA-complete for $k gt
 - *$"VP"$*: families of polynomials computable by poly-size *arithmetic circuits*.
 - *$"VNP"$*: polynomials whose coefficients are computable as $sum_(arrow(e))
   f(arrow(e), arrow(x))$ over poly-many indices.
-- $"VP" subset.eq "VNP"$; *Valiant's hypothesis*: $"VP" eq."not" "VNP"$, the
-  algebraic analogue of $"P" eq."not" "NP"$.
+- $"VP" subset.eq "VNP"$; *Valiant's hypothesis*: $"VP" eq.not "VNP"$, the
+  algebraic analogue of $"P" eq.not "NP"$.
 
 *Theorem (Valiant 1979).* $"PERMANENT" in "VNP"$-complete (over any field of
-characteristic $eq."not" 2$); $"DETERMINANT" in "VP"$.
+characteristic $eq.not 2$); $"DETERMINANT" in "VP"$.
 
 *Geometric complexity theory* (Mulmuley--Sohoni 2001) attempts to prove $"VP"
 eq.not "VNP"$ via representation theory of $"GL"_n$: separate orbit closures of
@@ -705,8 +705,8 @@ permanent and (padded) determinant by *occurrence obstructions*. Bürgisser--Ike
 Panova (2019) showed occurrence obstructions alone are insufficient; the program
 continues with finer multiplicity obstructions.
 
-*$"VP" eq."not" "VNP"$ over finite fields* (the *boolean* version) implies
-$\#"P" eq."not" "FP"$ in the appropriate non-uniform setting.
+*$"VP" eq.not "VNP"$ over finite fields* (the *boolean* version) implies
+$\#"P" eq.not "FP"$ in the appropriate non-uniform setting.
 
 == Average-Case Complexity
 
@@ -753,7 +753,7 @@ which is why post-quantum cryptography centres on lattices.
                                                     EXPSPACE
 ```
 
-Among these, *proper* inclusions are exactly: $"L" subset.eq."not" "PSPACE"$, $"NL"
+Among these, *proper* inclusions are exactly: $"L" subset.eq.not "PSPACE"$, $"NL"
 subset.neq "PSPACE"$, $"P" subset.neq "EXP"$, $"NP" subset.neq "NEXP"$, $"PSPACE"
 subset.neq "EXPSPACE"$ (all from hierarchy theorems). Everything else -- $"L"
 "versus" "P"$, $"P" "versus" "NP"$, $"NP" "versus" "PSPACE"$, $"BPP" "versus" "P"$ -- is
@@ -770,7 +770,7 @@ subset.neq "EXPSPACE"$ (all from hierarchy theorems). Everything else -- $"L"
 - *PCP / hardness of approximation* tells you when even *approximating* a problem
   is hopeless, sparing effort spent on impossible approximation ratios.
 - *Circuit lower bounds* and *natural proofs* shape what we believe is provable;
-  they are why $"P" eq."not" "NP"$ is the central open problem of theoretical
+  they are why $"P" eq.not "NP"$ is the central open problem of theoretical
   computer science, not just an unproven conjecture but one with quantified
   reasons why all standard techniques fail.
 - *Fine-grained complexity* gives engineering meaning to "is this the right

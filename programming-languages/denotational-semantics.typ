@@ -40,7 +40,7 @@ Continuity is the *finitary* condition: $f$'s value at a limit is determined by 
 The order on a CPO induces a topology. The *Scott-open* sets are subsets $U subset.eq D$ that are:
 
 - *Upward-closed*: $d in U$ and $d subset.eq d'$ => $d' in U$.
-- *Inaccessible by directed suprema*: $sup X in U$ => $X inter U eq."not" emptyset$ for every directed $X$.
+- *Inaccessible by directed suprema*: $sup X in U$ => $X inter U eq.not emptyset$ for every directed $X$.
 
 A function is Scott-continuous (in the order-theoretic sense above) iff it is continuous with respect to the Scott topologies on its domain and codomain. The Scott topology is *not Hausdorff* -- $bot$ is in every open set containing any other point -- but it captures the right notion of approximation. Compact sets, the way-below relation, and Stone duality with locales all unfold from this point.
 
@@ -101,7 +101,7 @@ We have two semantics: operational ($arrow.r^*$) and denotational ($bracket.l.st
 
 (a) If $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$, then $bracket.l.stroked c bracket.r.stroked sigma = sigma'$.
 
-(b) If $bracket.l.stroked c bracket.r.stroked sigma = sigma'$ (with $sigma' eq."not" bot$), then $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$.
+(b) If $bracket.l.stroked c bracket.r.stroked sigma = sigma'$ (with $sigma' eq.not bot$), then $chevron.l c, sigma chevron.r arrow.r^* chevron.l "skip", sigma' chevron.r$.
 
 *Proof sketch.* (a) by induction on the length of reduction (or on the big-step derivation, using the equivalence theorem). (b) is harder for the loop case: one shows by induction on $n$ that $Phi_(b,c)^n (bot)(sigma) = sigma'$ => the loop terminates with $sigma'$ in at most $n$ iterations, then takes the supremum. $square$
 

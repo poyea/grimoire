@@ -224,10 +224,10 @@ A class $cal(A)$ of partial computable functions is *extensional* if membership 
 $phi_e$ in $cal(A)$ depends only on $phi_e$ as a function, not on the index $e$.
 The associated *index set* is $I_(cal(A)) = { e | phi_e in cal(A) }$.
 
-*Theorem (Rice 1953).* If $cal(A) eq."not" emptyset$ and $cal(A)$ is not the set of
+*Theorem (Rice 1953).* If $cal(A) eq.not emptyset$ and $cal(A)$ is not the set of
 all partial computable functions, then $I_(cal(A))$ is undecidable.
 
-*Proof.* WLOG the everywhere-undefined function $bot in."not" cal(A)$ (else work with
+*Proof.* WLOG the everywhere-undefined function $bot in.not cal(A)$ (else work with
 $overbar(cal(A))$). Pick any $psi in cal(A)$, with index $i$. We reduce $K
 lt.eq_m I_(cal(A))$. For each $e$, by $s$-$m$-$n$ build $g(e)$ such that
 
@@ -267,14 +267,14 @@ $ phi_e in cal(A) arrow.l.r.double exists theta in cal(F) . theta subset.eq phi_
 subset.eq phi_e$ by running $phi_e$ on $"dom"(theta)$. ($arrow.r$) Use a
 finite-information argument: if $phi_e in cal(A)$ then this is witnessed after
 finitely many computation steps and so depends on only a finite restriction of
-$phi_e$; conversely if $phi_e in."not" cal(A)$ then some finite restriction is
+$phi_e$; conversely if $phi_e in.not cal(A)$ then some finite restriction is
 already excluded. A careful application of the recursion theorem rules out
 pathologies. $square$
 
 *Consequence.* The set "$phi_e$ is total" is not r.e. (no finite extension forces
 totality), and so totality is $Pi^0_2$-complete. The set "$phi_e$ halts on $0$" is
 r.e. (witnessed by $theta = {(0, y)}$ for any $y$). The set "$L(phi_e) = NN$" is
-not r.e., but "$L(phi_e) eq."not" emptyset$" is.
+not r.e., but "$L(phi_e) eq.not emptyset$" is.
 
 == Recursively Enumerable Sets
 
@@ -282,7 +282,7 @@ Let $W_e = "dom"(phi_e)$. A set $A subset.eq NN$ is *r.e.* <==> $A = W_e$ for so
 $e$. Equivalent formulations:
 
 + $A$ is the range of a partial computable function.
-+ $A$ is the range of a total computable function (if $A eq."not" emptyset$).
++ $A$ is the range of a total computable function (if $A eq.not emptyset$).
 + $A = { x | exists y . R(x, y) }$ for some decidable predicate $R$.
 + $A$ is the projection of a decidable subset of $NN^2$.
 + $A$ is the image of a recursive set under a computable map.
@@ -359,13 +359,13 @@ and $K$.
 *The finite injury priority method.* We construct $A$ and $B$ in stages to satisfy
 the *requirements*
 
-$ R_(2 e) : Phi_e^B eq."not" chi_A, quad R_(2 e + 1) : Phi_e^A eq."not" chi_B. $
+$ R_(2 e) : Phi_e^B eq.not chi_A, quad R_(2 e + 1) : Phi_e^A eq.not chi_B. $
 
 Each $R_(2 e)$ demands that the $e$-th oracle machine, given oracle $B$, fails to
 compute the characteristic function of $A$. To satisfy $R_(2 e)$, wait for a stage
 $s$ and a *witness* $x$ such that $Phi_e^(B_s) (x) arrow.b = 0$ with use $u$.
 Then *enumerate* $x$ into $A$, and *restrain* $B$ from changing below $u$ at later
-stages. This forces $Phi_e^B (x) = 0 eq."not" 1 = chi_A (x)$.
+stages. This forces $Phi_e^B (x) = 0 eq.not 1 = chi_A (x)$.
 
 The conflict: a higher-priority requirement $R_(2 e')$ might later need to put
 some $y < u$ into $B$, *injuring* $R_(2 e)$ by violating the restraint. Solution:
@@ -457,7 +457,7 @@ $emptyset^((n))$ is the projection of a $emptyset^((n))$-decidable predicate,
 which unfolds to $Sigma^0_(n + 1)$ form. $square$
 
 *Hierarchy theorem.* All inclusions $Sigma^0_n subset.eq Sigma^0_(n + 1)$ are
-strict; $Sigma^0_n union Pi^0_n subset.eq."not" Delta^0_(n + 1)$. The jump operator
+strict; $Sigma^0_n union Pi^0_n subset.eq.not Delta^0_(n + 1)$. The jump operator
 witnesses the strictness: $emptyset^((n))$ is $Sigma^0_n$-complete.
 
 == Further Reading

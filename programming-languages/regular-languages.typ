@@ -49,7 +49,7 @@ A language $L$ is *regular* <==> $L = L(M)$ for some DFA $M$. Equivalently, by t
 
 == Nondeterministic Finite Automata
 
-An *NFA* is $N = (Q, Sigma, Delta, q_0, F)$ with $Delta subset.eq Q times Sigma times Q$, a transition *relation* rather than a function. The extended transition is $hat(Delta)(S, w) = { q' | exists q in S. (q, w, q') in Delta^* }$ where $Delta^*$ closes $Delta$ under concatenation. Acceptance: $w in L(N) <==> hat(Delta)({ q_0 }, w) inter F eq."not" emptyset$.
+An *NFA* is $N = (Q, Sigma, Delta, q_0, F)$ with $Delta subset.eq Q times Sigma times Q$, a transition *relation* rather than a function. The extended transition is $hat(Delta)(S, w) = { q' | exists q in S. (q, w, q') in Delta^* }$ where $Delta^*$ closes $Delta$ under concatenation. Acceptance: $w in L(N) <==> hat(Delta)({ q_0 }, w) inter F eq.not emptyset$.
 
 An *$epsilon$-NFA* additionally permits transitions labelled $epsilon$; the *$epsilon$-closure* of a state set $S$ is the least $S' supset.eq S$ closed under $epsilon$-transitions. Adding $epsilon$-transitions does not extend expressive power but is essential for compositional constructions (Thompson 1968).
 
@@ -57,7 +57,7 @@ An *$epsilon$-NFA* additionally permits transitions labelled $epsilon$; the *$ep
 
 *Theorem (Rabin–Scott).* For every NFA $N = (Q, Sigma, Delta, q_0, F)$ there exists a DFA $M$ with at most $2^(|Q|)$ states such that $L(M) = L(N)$.
 
-*Proof.* Define $M = (2^Q, Sigma, delta', { q_0 }, F')$ with $delta'(S, a) = { q' | exists q in S. (q, a, q') in Delta }$ and $F' = { S | S inter F eq."not" emptyset }$. A trivial induction on $|w|$ shows $hat(delta')({ q_0 }, w) = hat(Delta)({ q_0 }, w)$, whence the languages agree. $square$
+*Proof.* Define $M = (2^Q, Sigma, delta', { q_0 }, F')$ with $delta'(S, a) = { q' | exists q in S. (q, a, q') in Delta }$ and $F' = { S | S inter F eq.not emptyset }$. A trivial induction on $|w|$ shows $hat(delta')({ q_0 }, w) = hat(Delta)({ q_0 }, w)$, whence the languages agree. $square$
 
 The exponential bound is tight: the language $L_n = Sigma^* a Sigma^(n-1)$ over $Sigma = { a, b }$ (strings whose $n$-th-to-last symbol is $a$) is recognised by an NFA with $n + 1$ states but requires $2^n$ DFA states (the DFA must remember the last $n$ symbols).
 
@@ -80,9 +80,9 @@ The size of the resulting NFA is linear in $|r|$, exactly $2 |r|$ states in the 
 
 === NFA to Regex: State Elimination
 
-*Proof (NFA $arrow.r.long$ regex).* Add a fresh start $s$ and accept $f$ to the NFA, with $epsilon$-transitions $s arrow.r q_0$ and $q arrow.r f$ for $q in F$. Now systematically *eliminate* internal states one at a time: when removing state $q$, for every pair $(p, r)$ with $p eq."not" q eq."not" r$ and transitions $p arrow.r^(alpha) q$, $q arrow.r^(beta) q$, $q arrow.r^(gamma) r$, $p arrow.r^(delta) r$, add a transition $p arrow.r^(delta + alpha dot beta^* dot gamma) r$. After all internal states are eliminated, a single transition $s arrow.r^r f$ remains, and $L(N) = L(r)$. $square$
+*Proof (NFA $arrow.r.long$ regex).* Add a fresh start $s$ and accept $f$ to the NFA, with $epsilon$-transitions $s arrow.r q_0$ and $q arrow.r f$ for $q in F$. Now systematically *eliminate* internal states one at a time: when removing state $q$, for every pair $(p, r)$ with $p eq.not q eq.not r$ and transitions $p arrow.r^(alpha) q$, $q arrow.r^(beta) q$, $q arrow.r^(gamma) r$, $p arrow.r^(delta) r$, add a transition $p arrow.r^(delta + alpha dot beta^* dot gamma) r$. After all internal states are eliminated, a single transition $s arrow.r^r f$ remains, and $L(N) = L(r)$. $square$
 
-An alternative, *Brzozowski–McCluskey* via linear systems, solves $X_q = sum_(a, q') a dot X_(q') + [q in F]$ over the regex semiring using Arden's lemma ($X = A X + B$ has least solution $X = A^* B$ when $epsilon in."not" L(A)$).
+An alternative, *Brzozowski–McCluskey* via linear systems, solves $X_q = sum_(a, q') a dot X_(q') + [q in F]$ over the regex semiring using Arden's lemma ($X = A X + B$ has least solution $X = A^* B$ when $epsilon in.not L(A)$).
 
 == Myhill–Nerode Theorem
 
@@ -163,7 +163,7 @@ The pumping lemma is *necessary* but *not sufficient* for regularity. *Jaffe's e
 
 == State Complexity and Communication-Complexity Lower Bounds
 
-The *state complexity* of $L$ is the size of its minimal DFA. Lower bounds via communication complexity (Hromkovič, Karchmer–Wigderson) exploit the *fooling set* technique: a set $S subset.eq Sigma^* times Sigma^*$ is a fooling set for $L$ if (i) $x y in L$ for all $(x, y) in S$ and (ii) for all distinct $(x_1, y_1), (x_2, y_2) in S$, either $x_1 y_2 in."not" L$ or $x_2 y_1 in."not" L$. Then the minimal DFA needs at least $|S|$ states. This is the standard tool for proving exponential separations between NFAs and DFAs.
+The *state complexity* of $L$ is the size of its minimal DFA. Lower bounds via communication complexity (Hromkovič, Karchmer–Wigderson) exploit the *fooling set* technique: a set $S subset.eq Sigma^* times Sigma^*$ is a fooling set for $L$ if (i) $x y in L$ for all $(x, y) in S$ and (ii) for all distinct $(x_1, y_1), (x_2, y_2) in S$, either $x_1 y_2 in.not L$ or $x_2 y_1 in.not L$. Then the minimal DFA needs at least $|S|$ states. This is the standard tool for proving exponential separations between NFAs and DFAs.
 
 *Sakoda–Sipser problem (1978).* Is the conversion from *two-way nondeterministic* finite automata (2NFA) to *two-way deterministic* (2DFA) polynomial or exponential? Equivalently: is $"NL" = "L"$ in the small? This is one of the longest-standing open problems in automata theory; partial results (Geffert, Hromkovič, Schnitger) show super-polynomial blow-up for restricted machine models, but the general question remains open.
 

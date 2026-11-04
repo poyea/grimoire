@@ -207,7 +207,7 @@ Inherent ambiguity is *undecidable* in general (Cantor 1962; Floyd 1962) but is 
 
 (g) *Intersection emptiness:* given $G_1, G_2$, is $L(G_1) inter L(G_2) = emptyset$?
 
-*Proof sketch.* Reduction from the *Post Correspondence Problem* (PCP). Given a PCP instance with dominoes $(u_i, v_i)$, build CFGs $G_U$ generating ${ u_(i_1) dots u_(i_k) \# i_k dots i_1 }$ and $G_V$ similarly for the $v_i$. Then $L(G_U) inter L(G_V) eq."not" emptyset$ <==> the PCP has a solution. This gives (g) directly; the others follow by simple language manipulations (e.g., universality: complement $L(G_U inter G_V)$ relative to the appropriate regular envelope; equivalence: compare with a known universal language).
+*Proof sketch.* Reduction from the *Post Correspondence Problem* (PCP). Given a PCP instance with dominoes $(u_i, v_i)$, build CFGs $G_U$ generating ${ u_(i_1) dots u_(i_k) \# i_k dots i_1 }$ and $G_V$ similarly for the $v_i$. Then $L(G_U) inter L(G_V) eq.not emptyset$ <==> the PCP has a solution. This gives (g) directly; the others follow by simple language manipulations (e.g., universality: complement $L(G_U inter G_V)$ relative to the appropriate regular envelope; equivalence: compare with a known universal language).
 
 Floyd (1962) gave the original ambiguity-undecidability proof: from a PCP instance build a grammar $G$ generating ${ w_U \# w_V | u"-sequence" = v"-sequence" }$ in two derivational ways, ambiguous when the PCP has a solution. $square$
 
@@ -217,7 +217,7 @@ Floyd (1962) gave the original ambiguity-undecidability proof: from a PCP instan
 
 A *deterministic pushdown automaton* (DPDA) has a partial transition function $delta : Q times (Sigma union { epsilon }) times Gamma arrow.r Q times Gamma^*$ with the determinism condition: if $delta(q, epsilon, Z)$ is defined then $delta(q, a, Z)$ is undefined for all $a in Sigma$. A language is a *deterministic CFL* (DCFL) if it is recognised by a DPDA accepting by *final state*.
 
-*Theorem.* DCFL is *strictly* between regular and CFL: $"Reg" subset.eq."not" "DCFL" subset.eq."not" "CFL"$.
+*Theorem.* DCFL is *strictly* between regular and CFL: $"Reg" subset.eq.not "DCFL" subset.eq.not "CFL"$.
 
 Separation from CFL: even-length palindromes $L = { w w^R | w in { a, b }^* }$ are context-free but not DCFL (no PDA can deterministically guess the midpoint).
 
@@ -231,7 +231,7 @@ A grammar is *LR($k$)* if a deterministic bottom-up parser can decide each reduc
 
 So LR(1) captures *exactly* the DCFLs. Practically, *LALR(1)* (a coarser equivalence relation on LR(1) states yielding smaller parse tables; Korenjak 1969, DeRemer 1969) is the basis of yacc/bison; *LR(1)* tables can be hundreds of times larger.
 
-The dual class *LL($k$)* (top-down deterministic parsers with $k$-symbol lookahead) forms a *strict* hierarchy: $"LL"(k) subset.eq."not" "LL"(k+1)$ for every $k$, and $union.big_k "LL"(k) subset.eq."not" "LR"(1) = "DCFL"$. The language $L = { a^n b^n | n >= 0 } union { a^n b^(2n) | n >= 0 }$ is LR(1) but not LL($k$) for any $k$.
+The dual class *LL($k$)* (top-down deterministic parsers with $k$-symbol lookahead) forms a *strict* hierarchy: $"LL"(k) subset.eq.not "LL"(k+1)$ for every $k$, and $union.big_k "LL"(k) subset.eq.not "LR"(1) = "DCFL"$. The language $L = { a^n b^n | n >= 0 } union { a^n b^(2n) | n >= 0 }$ is LR(1) but not LL($k$) for any $k$.
 
 === Sénizergues's Theorem
 

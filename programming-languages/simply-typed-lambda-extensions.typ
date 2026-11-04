@@ -195,7 +195,7 @@ reify (a :=> b) v         = Lam a (reify b (apply v (reflect a (NVar 0))))
 
 == $eta$-Equality and Extensionality
 
-$eta$-equality $lambda x : tau . (e space x) =_eta e$ (for $x in."not" "FV"(e)$) expresses *functional extensionality*: two functions are equal iff they agree on every argument. There are two ways to treat $eta$ in the operational semantics:
+$eta$-equality $lambda x : tau . (e space x) =_eta e$ (for $x in.not "FV"(e)$) expresses *functional extensionality*: two functions are equal iff they agree on every argument. There are two ways to treat $eta$ in the operational semantics:
 
 + *$eta$-conversion as a rewrite rule* ($arrow.r_eta$): breaks confluence with $beta$ in some extended calculi (e.g., when $e$ has a free variable later substituted). The combined $beta eta$-reduction is confluent for pure $lambda^arrow.r$ but not always for extensions.
 + *$eta$-expansion + restriction to $eta$-long normal forms*: every term is expanded so neutral subterms at arrow types acquire visible abstractions; $beta$ alone then suffices. Standard in NbE.
@@ -326,7 +326,7 @@ These *Church encodings* show that products and sums are *derivable* in pure $la
 
 The $beta eta$-equational theory of $lambda^arrow.r$ is the smallest congruence containing:
 + $(beta)$  $(lambda x : tau . e_1) space e_2 = [x |-> e_2] e_1$
-+ $(eta)$  $lambda x : tau . (e space x) = e$ (if $x in."not" "FV"(e)$)
++ $(eta)$  $lambda x : tau . (e space x) = e$ (if $x in.not "FV"(e)$)
 + Reflexivity, symmetry, transitivity.
 + Congruence under $lambda$, application.
 
@@ -436,7 +436,7 @@ $lambda^arrow.r$ is the *origin* of this table; every column tells us something 
 
 == Exercises (for the dedicated reader)
 
-+ Prove that $beta$-reduction is *not* confluent in the presence of *unrestricted $eta$* without the side condition $x in."not" "FV"(e)$; give the standard counterexample.
++ Prove that $beta$-reduction is *not* confluent in the presence of *unrestricted $eta$* without the side condition $x in.not "FV"(e)$; give the standard counterexample.
 + Show that the term $omega = lambda x . x space x$ is *not* typable in $lambda^arrow.r$. (Hint: T-APP would demand $x : tau arrow.r sigma$ and $x : tau$ simultaneously.)
 + Verify that $S K K =_(beta) I$ in detail. Then show $S K K : forall alpha . alpha arrow.r alpha$ in System F.
 + Translate the proof of $((P supset Q) supset P) supset (P supset Q) supset Q$ (a simple intuitionistic tautology) into a $lambda^arrow.r$ term.

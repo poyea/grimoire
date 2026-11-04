@@ -289,7 +289,7 @@ theorem.
 
 A binary sequence $X in 2^omega$ is *Martin-Löf random* (1966) if it passes every
 *effective statistical test*: for every uniformly c.e. sequence $(U_n)$ of open
-sets in $2^omega$ with $mu(U_n) lt.eq 2^(-n)$, $X in."not" inter_n U_n$.
+sets in $2^omega$ with $mu(U_n) lt.eq 2^(-n)$, $X in.not inter_n U_n$.
 
 *Theorem (universal test).* There is a universal Martin-Löf test, so the class of
 ML-random sequences has measure $1$ and is $Pi^0_2$.

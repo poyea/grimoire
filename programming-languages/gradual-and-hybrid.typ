@@ -30,7 +30,7 @@ The mechanism that does this work is the *consistency relation* $tau_1 tilde tau
   tau1 -> tau2 ~ tau1' -> tau2'
 ```
 
-Consistency is reflexive ($tau tilde tau$), symmetric ($tau_1 tilde tau_2 => tau_2 tilde tau_1$), and a congruence with respect to type constructors, but it is *not* transitive. The standard counterexample is $"Int" tilde "?"$ and $"?" tilde "Bool"$ but $"Int" tilde."not" "Bool"$. Transitivity would collapse the whole hierarchy and make every two types interchangeable.
+Consistency is reflexive ($tau tilde tau$), symmetric ($tau_1 tilde tau_2 => tau_2 tilde tau_1$), and a congruence with respect to type constructors, but it is *not* transitive. The standard counterexample is $"Int" tilde "?"$ and $"?" tilde "Bool"$ but $"Int" tilde.not "Bool"$. Transitivity would collapse the whole hierarchy and make every two types interchangeable.
 
 Gradual typing replaces the equality $tau_1 = tau_2$ that appears in the premise of the static T-APP rule with consistency:
 
@@ -128,7 +128,7 @@ The recipe in four steps:
 
 1. *Start with a static type system.* Types $tau in T$; typing judgement; subtyping or equality where relevant.
 2. *Choose a concretisation function* $gamma : tilde(T) -> P(T)$, where $tilde(T)$ is the set of *gradual types* (containing "?" as a new constant). The intuition: a gradual type *denotes* a set of possible static types. The canonical choice is $gamma("?") = T$ and $gamma(tau) = {tau}$ for static $tau$. For arrows, $gamma(tau_1 arrow.r tau_2) = {tau_1' arrow.r tau_2' | tau_1' in gamma(tau_1), tau_2' in gamma(tau_2)}$.
-3. *Lift static predicates and functions to gradual ones* via the Galois connection $(alpha, gamma)$ between $tilde(T)$ and $P(T)$. The abstraction $alpha : P(T) -> tilde(T)$ is the *most precise* gradual type whose concretisation contains the given set. Consistency $tilde(tau_1) tilde tilde(tau_2)$ becomes the concretisations overlap: $gamma(tilde(tau_1)) inter gamma(tilde(tau_2)) eq."not" emptyset$. Consistent subtyping becomes the lifted version of subtyping.
+3. *Lift static predicates and functions to gradual ones* via the Galois connection $(alpha, gamma)$ between $tilde(T)$ and $P(T)$. The abstraction $alpha : P(T) -> tilde(T)$ is the *most precise* gradual type whose concretisation contains the given set. Consistency $tilde(tau_1) tilde tilde(tau_2)$ becomes the concretisations overlap: $gamma(tilde(tau_1)) inter gamma(tilde(tau_2)) eq.not emptyset$. Consistent subtyping becomes the lifted version of subtyping.
 4. *Derive the dynamic semantics* by *evidence-based* reduction: each typing step records the *evidence* that justifies it (the most precise type to which both sides are consistent), and reductions update the evidence; failure to maintain non-empty evidence is blame.
 
 The remarkable feature of AGT is that *the gradual guarantee is automatic*: it falls out of the soundness and optimality of the Galois connection. The technique has been instantiated for:

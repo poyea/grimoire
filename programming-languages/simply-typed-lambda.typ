@@ -41,11 +41,11 @@ $ [x |-> s] x &= s \
 [x |-> s] (e_1 space e_2) &= ([x |-> s] e_1) space ([x |-> s] e_2) \
 [x |-> s] (lambda y : tau . e) &= lambda y : tau . [x |-> s] e space space (y eq.not x, space y in.not "FV"(s)) $
 
-The side condition $y in."not" "FV"(s)$ is enforced by $alpha$-renaming $y$ to a fresh variable if necessary. Substitution composition: $[x |-> s_1][y |-> s_2]$ is in general not commutative; the order matters.
+The side condition $y in.not "FV"(s)$ is enforced by $alpha$-renaming $y$ to a fresh variable if necessary. Substitution composition: $[x |-> s_1][y |-> s_2]$ is in general not commutative; the order matters.
 
 == Static Semantics
 
-The typing judgment $Gamma tack.r e : tau$ is read "in context $Gamma$, term $e$ has type $tau$". The context $Gamma$ is a finite partial function from variables to types, often written as a list $x_1 : tau_1, ..., x_n : tau_n$. We write $Gamma, x : tau$ for the extension provided $x in."not" "dom"(Gamma)$.
+The typing judgment $Gamma tack.r e : tau$ is read "in context $Gamma$, term $e$ has type $tau$". The context $Gamma$ is a finite partial function from variables to types, often written as a list $x_1 : tau_1, ..., x_n : tau_n$. We write $Gamma, x : tau$ for the extension provided $x in.not "dom"(Gamma)$.
 
 ```text
   x : tau in Gamma
@@ -63,9 +63,9 @@ The typing judgment $Gamma tack.r e : tau$ is read "in context $Gamma$, term $e$
 
 These three rules are the entire static semantics of $lambda^arrow.r$. With base types we add typing axioms $Gamma tack.r "true" : "Bool"$, $Gamma tack.r "false" : "Bool"$, $Gamma tack.r n : "Int"$, etc.
 
-*Lemma (Weakening).* If $Gamma tack.r e : tau$ and $x in."not" "dom"(Gamma)$, then $Gamma, x : sigma tack.r e : tau$.
+*Lemma (Weakening).* If $Gamma tack.r e : tau$ and $x in.not "dom"(Gamma)$, then $Gamma, x : sigma tack.r e : tau$.
 
-*Proof.* Induction on the derivation of $Gamma tack.r e : tau$. T-VAR: $e = y$ with $y : tau in Gamma$; since $y eq."not" x$ (as $x in."not" "dom"(Gamma)$), still $y : tau in Gamma, x : sigma$. T-ABS, T-APP: trivial by IH on subderivations, with $alpha$-renaming for T-ABS to avoid clashing with $x$. $square$
+*Proof.* Induction on the derivation of $Gamma tack.r e : tau$. T-VAR: $e = y$ with $y : tau in Gamma$; since $y eq.not x$ (as $x in.not "dom"(Gamma)$), still $y : tau in Gamma, x : sigma$. T-ABS, T-APP: trivial by IH on subderivations, with $alpha$-renaming for T-ABS to avoid clashing with $x$. $square$
 
 *Lemma (Type Uniqueness, Church-style).* If $Gamma tack.r e : tau_1$ and $Gamma tack.r e : tau_2$, then $tau_1 = tau_2$.
 
@@ -86,7 +86,7 @@ The computational rule of $lambda^arrow.r$ is *$beta$-reduction*:
 $ (lambda x : tau . e_1) space e_2 arrow.r_beta [x |-> e_2] e_1 $
 
 We also consider *$eta$-conversion*:
-$ lambda x : tau . (e space x) arrow.r_eta e space space space (x in."not" "FV"(e)) $
+$ lambda x : tau . (e space x) arrow.r_eta e space space space (x in.not "FV"(e)) $
 
 The $eta$-rule expresses *functional extensionality*: a function equals "itself $eta$-expanded". The reverse direction, $eta$-expansion, is sometimes useful for normalisation by evaluation.
 
@@ -164,7 +164,7 @@ So $=>$ contracts an arbitrary set of redexes simultaneously, possibly none.
 
 *Lemma 2 (Substitution).* If $e_1 => e_1'$ and $e_2 => e_2'$, then $[x |-> e_2] e_1 => [x |-> e_2'] e_1'$.
 
-*Proof.* Induction on $e_1 => e_1'$. Case $x$: $[x |-> e_2] x = e_2 => e_2' = [x |-> e_2'] x$. Case $y eq."not" x$: both sides are $y$. Case $lambda y . e => lambda y . e'$ with $e => e'$: $alpha$-rename $y$ fresh, apply IH. Case $f space a => f' space a'$: by IH and congruence. Case $(lambda y . e) space a => [y |-> a'] e'$: apply IH then use the well-known substitution lemma $[x |-> e_2'] [y |-> a'] e' = [y |-> [x |-> e_2'] a'] [x |-> e_2'] e'$. $square$
+*Proof.* Induction on $e_1 => e_1'$. Case $x$: $[x |-> e_2] x = e_2 => e_2' = [x |-> e_2'] x$. Case $y eq.not x$: both sides are $y$. Case $lambda y . e => lambda y . e'$ with $e => e'$: $alpha$-rename $y$ fresh, apply IH. Case $f space a => f' space a'$: by IH and congruence. Case $(lambda y . e) space a => [y |-> a'] e'$: apply IH then use the well-known substitution lemma $[x |-> e_2'] [y |-> a'] e' = [y |-> [x |-> e_2'] a'] [x |-> e_2'] e'$. $square$
 
 *Lemma 3 (Diamond for $=>$).* If $e => e_1$ and $e => e_2$, there exists $e'$ with $e_1 => e'$ and $e_2 => e'$.
 
@@ -186,9 +186,9 @@ By induction on $e$, if $e => e'$ then $e' => e^*$ — every parallel reduct can
 
 *Proof.* Induction on the derivation of $Gamma, x : sigma tack.r e : tau$.
 
-T-VAR: $e = y$. If $y = x$ then $tau = sigma$ and $[x |-> s] y = s$, with $Gamma tack.r s : sigma$ given. If $y eq."not" x$ then $y : tau in Gamma$ and $[x |-> s] y = y$ with $Gamma tack.r y : tau$ by T-VAR.
+T-VAR: $e = y$. If $y = x$ then $tau = sigma$ and $[x |-> s] y = s$, with $Gamma tack.r s : sigma$ given. If $y eq.not x$ then $y : tau in Gamma$ and $[x |-> s] y = y$ with $Gamma tack.r y : tau$ by T-VAR.
 
-T-ABS: $e = lambda y : tau_1 . e'$, $tau = tau_1 arrow.r tau_2$. $alpha$-rename $y$ so $y eq."not" x$ and $y in."not" "FV"(s)$. Then $Gamma, x : sigma, y : tau_1 tack.r e' : tau_2$; by Weakening, $Gamma, y : tau_1 tack.r s : sigma$; by IH (exchanging $x$ and $y$ in the context, which is sound for distinct variables) $Gamma, y : tau_1 tack.r [x |-> s] e' : tau_2$; T-ABS yields the conclusion.
+T-ABS: $e = lambda y : tau_1 . e'$, $tau = tau_1 arrow.r tau_2$. $alpha$-rename $y$ so $y eq.not x$ and $y in.not "FV"(s)$. Then $Gamma, x : sigma, y : tau_1 tack.r e' : tau_2$; by Weakening, $Gamma, y : tau_1 tack.r s : sigma$; by IH (exchanging $x$ and $y$ in the context, which is sound for distinct variables) $Gamma, y : tau_1 tack.r [x |-> s] e' : tau_2$; T-ABS yields the conclusion.
 
 T-APP: $e = e_1 space e_2$, $Gamma, x : sigma tack.r e_i$ at appropriate types. IH on each, then T-APP. $square$
 

@@ -163,7 +163,7 @@ This methodology is implemented in tools such as Refine and the B-Method (Abrial
 
 == Separation Logic
 
-Hoare logic models the state as a single *map* and the assertion language has no good way to express *disjoint* updates. Two threads writing to disjoint regions, or a recursive procedure operating on a sublist of a linked list, force the verifier to write ugly aliasing conditions $x eq."not" y$ that cripple compositional reasoning.
+Hoare logic models the state as a single *map* and the assertion language has no good way to express *disjoint* updates. Two threads writing to disjoint regions, or a recursive procedure operating on a sublist of a linked list, force the verifier to write ugly aliasing conditions $x eq.not y$ that cripple compositional reasoning.
 
 *Separation logic* (Reynolds 2002; O'Hearn-Reynolds-Yang 2001) introduced two new connectives:
 

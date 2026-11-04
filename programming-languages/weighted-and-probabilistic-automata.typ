@@ -246,7 +246,7 @@ Both tools accept the same input formats (PRISM language, JANI); benchmark compa
 
 Weighted automata interact with classical computability in unexpected ways.
 
-*Theorem (Halava--Harju 1996; Hirvensalo 2007).* The *zero-isolation* problem ("does there exist $epsilon > 0$ with $|cal(A)(w)| > epsilon$ for all $w$ with $cal(A)(w) eq."not" 0$?") for $ZZ$-weighted automata is *undecidable*.
+*Theorem (Halava--Harju 1996; Hirvensalo 2007).* The *zero-isolation* problem ("does there exist $epsilon > 0$ with $|cal(A)(w)| > epsilon$ for all $w$ with $cal(A)(w) eq.not 0$?") for $ZZ$-weighted automata is *undecidable*.
 
 *Theorem (Daviaud--Jecker--Reynier--Villevalois 2017).* *Quantitative simulation* of weighted automata (a relaxation of equivalence) is decidable for tropical automata over bounded ambit, undecidable in general.
 
@@ -309,7 +309,7 @@ They are *not* closed under "complement" (which is meaningless outside the Boole
 
 == Probabilistic Büchi Automata
 
-*Probabilistic Büchi automata* (PBA) extend the Rabin model to infinite words with Büchi acceptance condition $"Pr"({pi | "Inf"(pi) inter F eq."not" emptyset.rev}) > lambda$.
+*Probabilistic Büchi automata* (PBA) extend the Rabin model to infinite words with Büchi acceptance condition $"Pr"({pi | "Inf"(pi) inter F eq.not emptyset.rev}) > lambda$.
 
 *Theorem (Baier--Bertrand--Grösser 2008).* *Almost-sure* emptiness ($lambda = 1$) is decidable for PBA, but *positive* emptiness ($lambda > 0$) is undecidable. Determinization fails: PBA are *strictly more expressive* than deterministic PBA, breaking the McNaughton-style symmetry of the classical theory.
 

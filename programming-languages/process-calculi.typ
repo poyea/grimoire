@@ -112,7 +112,7 @@ $ cal(F)(cal(R)) = { (P, Q) : "the bisimulation clauses hold for" cal(R) } $
 
 *Proof.* Symmetry of bisimulation is built in. Reflexivity: the identity is a bisimulation. Transitivity: $cal(R)_1 circle.small cal(R)_2$ is a bisimulation if both are. The fixed-point characterisation follows from the Knaster–Tarski theorem, since $cal(F)$ is monotone on the complete lattice $cal(P^2)$. $square$
 
-The fixed-point view yields the *bisimulation game*: to show $P tilde Q$, supply a bisimulation containing $(P, Q)$. To show $P tilde."not" Q$, exhibit a strategy by which Attacker (choosing a move from one side) defeats every Defender response (matching from the other).
+The fixed-point view yields the *bisimulation game*: to show $P tilde Q$, supply a bisimulation containing $(P, Q)$. To show $P tilde.not Q$, exhibit a strategy by which Attacker (choosing a move from one side) defeats every Defender response (matching from the other).
 
 === Congruence and Equational Axiomatisation
 
@@ -136,7 +136,7 @@ Strong bisimulation distinguishes $tau$-actions. For most purposes, $tau$ should
 
 $ P =>^alpha P' <==> P arrow.r^tau^* arrow.r^alpha arrow.r^tau^* P' $
 
-and $=>^hat(alpha) = =>^alpha$ for $alpha eq."not" tau$, while $=>^hat(tau) = arrow.r^tau^*$ (zero or more $tau$-steps).
+and $=>^hat(alpha) = =>^alpha$ for $alpha eq.not tau$, while $=>^hat(tau) = arrow.r^tau^*$ (zero or more $tau$-steps).
 
 *Definition (Weak bisimulation).* $cal(R)$ is a *weak bisimulation* <==> whenever $P cal(R) Q$:
 
@@ -271,7 +271,7 @@ P + 0 &equiv P quad P + Q equiv Q + P quad dots $
 
 The most important law is *scope extrusion*:
 
-$ (nu x)(P bar Q) equiv P bar (nu x) Q quad (x in."not" "fn"(P)) $
+$ (nu x)(P bar Q) equiv P bar (nu x) Q quad (x in.not "fn"(P)) $
 
 This law allows a private name to escape its original scope when it is communicated to a partner.
 

@@ -61,8 +61,8 @@ The fact that `mapC` just works by composition with `f` is *parametricity in act
 System F enjoys $beta eta$-conversion at both term and type levels:
 + $(beta)$  $(lambda x : tau . e_1) space e_2 = [x |-> e_2] e_1$
 + $(beta_2)$ $(Lambda alpha . e) [sigma] = [alpha |-> sigma] e$
-+ $(eta)$  $lambda x : tau . (e space x) = e$ if $x in."not" "FV"(e)$
-+ $(eta_2)$ $Lambda alpha . (e [alpha]) = e$ if $alpha in."not" "FTV"(e)$
++ $(eta)$  $lambda x : tau . (e space x) = e$ if $x in.not "FV"(e)$
++ $(eta_2)$ $Lambda alpha . (e [alpha]) = e$ if $alpha in.not "FTV"(e)$
 
 *Theorem.* $beta eta$-equality is *decidable* in System F (because SN + confluence).
 
