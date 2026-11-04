@@ -1713,6 +1713,11 @@ chapters:
     path: quantum-computing/qubits-and-gates.typ
     words: 1187
     status: reviewed
+  - subject: quantum-computing
+    slug: simulating-quantum-circuits
+    path: quantum-computing/simulating-quantum-circuits.typ
+    words: 2007
+    status: reviewed
   - subject: computer-vision
     slug: 3d-vision
     path: computer-vision/3d-vision.typ

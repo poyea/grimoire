@@ -32,4 +32,7 @@
   #include "quantum-computing/quantum-information.typ"
   #pagebreak()
 
+  #include "quantum-computing/simulating-quantum-circuits.typ"
+  #pagebreak()
+
 ]
