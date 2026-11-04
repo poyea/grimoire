@@ -7,9 +7,9 @@ It is the *ur-typed-language* — every modern type system is, at the core, $lam
 It is also the smallest interesting fragment of the *Curry–Howard correspondence* (Curry 1934, Howard 1969/1980): well-typed terms of $lambda^arrow.r$ are exactly the proofs of the implicational fragment of intuitionistic propositional logic.
 The story begins with Church (1932, 1940) and Curry (1934); the modern metatheory is the work of Tait (1967), Girard (1972), Martin-Löf (1972, 1975), and Statman (1979).
 
-_See also: _Type Systems_, #xref("programming-languages", "system-f-and-parametricity", label: "System F and Parametricity"), #xref("programming-languages", "dependent-types", label: "Dependent Types"), #xref("programming-languages", "turing-computability", label: "Turing Machines and Computability")._
+*See also:* #xref("programming-languages", "type-systems", label: "Type Systems"), #xref("programming-languages", "system-f-and-parametricity", label: "System F and Parametricity"), #xref("programming-languages", "dependent-types", label: "Dependent Types"), #xref("programming-languages", "turing-computability", label: "Turing Machines and Computability").
 
-This chapter does $lambda^arrow.r$ in full. We give the syntax in both Church and Curry presentations; the static and dynamic semantics with every typing and reduction rule; confluence via parallel reduction (Tait–Martin-Löf 1972); subject reduction and progress; and a complete proof of strong normalization via Tait's reducibility / computability predicates (Tait 1967). We close with the Curry–Howard isomorphism for intuitionistic propositional logic, the system T extension with primitive recursion (Gödel 1958), and the connection to combinatory logic.
+This chapter does $lambda^arrow.r$ in full. We give the syntax in both Church and Curry presentations; the static and dynamic semantics with every typing and reduction rule; confluence via parallel reduction (Tait–Martin-Löf 1972); subject reduction and progress; and a complete proof of strong normalization via Tait's reducibility / computability predicates (Tait 1967). We close with the Curry–Howard isomorphism for intuitionistic propositional logic. System T, fixed points, combinatory logic and the other extensions follow in #xref("programming-languages", "simply-typed-lambda-extensions", label: "Simply-Typed Lambda Calculus: Extensions and Advanced Topics").
 
 == Syntax
 
@@ -124,7 +124,7 @@ To get a deterministic semantics suitable for implementation, restrict where red
   (lam x:tau. e_1) v_2 ->v [x|->v_2] e_1
 ```
 
-For pure $lambda^arrow.r$ (no side effects, no general recursion) CBN and CBV are *contextually equivalent* on closed base-type terms (Plotkin 1975) but compute different terms in general. CBN may diverge on subterms whose values are never needed in CBV; CBV may diverge on subterms whose values are not needed in CBN (e.g., $(lambda x : "Int" . 0) space Omega$ where $Omega$ is divergent — but $Omega$ does not exist as a well-typed $lambda^arrow.r$ term: $lambda^arrow.r$ is strongly normalising).
+For pure $lambda^arrow.r$ (no side effects, no general recursion) CBN and CBV are *contextually equivalent* on closed base-type terms (Plotkin 1975) but compute different terms in general. In languages with divergence the two differ in one direction only. CBV evaluates every argument, so it diverges on $(lambda x : "Int" . 0) space Omega$ when $Omega$ diverges, while CBN never evaluates the unused argument and returns $0$. The converse never happens: by the standardisation theorem, if any strategy reaches a normal form, leftmost-outermost reduction does too. In $lambda^arrow.r$ itself no term diverges (it is strongly normalising, below), so $Omega$ is not even typable.
 
 == Confluence (Church–Rosser)
 
@@ -145,7 +145,7 @@ The diagram-completion property is:
 
 The classical proof via the *Tait–Martin-Löf parallel reduction* method (independently Tait, Martin-Löf 1972; see Barendregt 1984, Ch. 3).
 
-*Parallel reduction* $=>$ is defined inductively:
+*Parallel reduction* $=>$ (written `->>` in the rules below) is defined inductively:
 ```text
   ------                 e ->> e'
   x ->> x       --------------------------
@@ -158,7 +158,7 @@ The classical proof via the *Tait–Martin-Löf parallel reduction* method (inde
 
 So $=>$ contracts an arbitrary set of redexes simultaneously, possibly none.
 
-*Lemma 1.* $e arrow.r_beta e' => e => e'$, and $e => e' => e arrow.r_beta^* e'$. Hence $=>^* = arrow.r_beta^*$.
+*Lemma 1.* If $e arrow.r_beta e'$ then $e => e'$; if $e => e'$ then $e arrow.r_beta^* e'$. Hence $=>^* = arrow.r_beta^*$.
 
 *Proof.* Direct induction on the derivations. $square$
 
@@ -220,9 +220,9 @@ A direct induction on typing derivations fails: in the T-APP case, the IH gives 
 
 === Reducibility Predicates
 
-Define $cal(R)_tau subset.eq {e : "closed term with " emptyset tack.r e : tau }$ by induction on $tau$:
-$ cal(R)_iota &= {e : emptyset tack.r e : iota and "SN"(e)} \
-cal(R)_(tau_1 arrow.r tau_2) &= {e : emptyset tack.r e : tau_1 arrow.r tau_2 and forall e' in cal(R)_(tau_1) . space e space e' in cal(R)_(tau_2)} $
+Define $cal(R)_tau$, a set of terms of type $tau$ in some context ($Gamma tack.r e : tau$ for some $Gamma$; open terms are allowed), by induction on $tau$:
+$ cal(R)_iota &= {e : Gamma tack.r e : iota and "SN"(e)} \
+cal(R)_(tau_1 arrow.r tau_2) &= {e : Gamma tack.r e : tau_1 arrow.r tau_2 and forall e' in cal(R)_(tau_1) . space e space e' in cal(R)_(tau_2)} $
 
 We extend $cal(R)$ to open terms via *closing substitutions*: if $Gamma = x_1 : tau_1, ..., x_n : tau_n$ and $sigma$ is a substitution with $sigma(x_i) in cal(R)_(tau_i)$, then $Gamma tack.r e : tau$ should give $sigma(e) in cal(R)_tau$. This is exactly what we will prove.
 
@@ -233,7 +233,7 @@ We extend $cal(R)$ to open terms via *closing substitutions*: if $Gamma = x_1 : 
 + *(CR2)* If $e in cal(R)_tau$ and $e arrow.r e'$, then $e' in cal(R)_tau$.
 + *(CR3)* If $e$ is *neutral* (i.e., not an abstraction) and every $e'$ with $e arrow.r e'$ lies in $cal(R)_tau$, then $e in cal(R)_tau$.
 
-(Variables are not closed but the right notion of neutral is "not an abstraction"; for the closed-term version, neutral means an application $x space ...$ or, after substitution, headed by a variable. We sketch the standard formulation; see Girard, Lafont, Taylor 1989 for details.)
+(Allowing open terms is what makes the proof work: a variable is neutral and has no reducts, so by CR3 it belongs to every $cal(R)_tau$. This is the formulation of Girard, Lafont and Taylor 1989, chapter 6.)
 
 *Proof.* Simultaneous induction on $tau$.
 
@@ -241,7 +241,7 @@ We extend $cal(R)$ to open terms via *closing substitutions*: if $Gamma = x_1 : 
 
 *Arrow type $tau_1 arrow.r tau_2$.*
 
-CR1: Let $e in cal(R)_(tau_1 arrow.r tau_2)$. We need SN$(e)$. By CR3 at type $tau_1$ (induction hypothesis on the smaller type — although neither $tau_1$ nor $tau_2$ is structurally smaller, the predicate is being unfolded — Tait's argument actually proceeds by induction on $tau$ as type-tree-size, with both subgoals inductively available; we are careful about the order), a variable $x : tau_1$ lies in $cal(R)_(tau_1)$ (it is neutral with no reducts). Then $e space x in cal(R)_(tau_2)$, so by IH CR1, SN$(e space x)$. Any infinite reduction of $e$ would give one of $e space x$. So SN$(e)$.
+CR1: Let $e in cal(R)_(tau_1 arrow.r tau_2)$. We need SN$(e)$. By CR3 at type $tau_1$ (the induction hypothesis, since $tau_1$ and $tau_2$ are both proper subterms of $tau_1 arrow.r tau_2$), a variable $x : tau_1$ lies in $cal(R)_(tau_1)$ (it is neutral with no reducts). Then $e space x in cal(R)_(tau_2)$, so by IH CR1, SN$(e space x)$. Any infinite reduction of $e$ would give one of $e space x$. So SN$(e)$.
 
 CR2: Let $e in cal(R)_(tau_1 arrow.r tau_2)$ and $e arrow.r e'$. For any $a in cal(R)_(tau_1)$, $e space a in cal(R)_(tau_2)$ and $e space a arrow.r e' space a$, so by IH CR2 at $tau_2$, $e' space a in cal(R)_(tau_2)$. Hence $e' in cal(R)_(tau_1 arrow.r tau_2)$.
 
@@ -279,7 +279,7 @@ T-ABS: $e = lambda y : tau_1' . e'$ with $tau = tau_1' arrow.r tau_2'$. $alpha$-
 
 *Proof.* Take $a_i = x_i$ (variables in $cal(R)_(tau_i)$ by CR3, neutral with no reducts). Then $sigma$ is the identity and $e in cal(R)_tau$; CR1 gives SN$(e)$. $square$
 
-A *consequence:* $lambda^arrow.r$ is *not* Turing complete. There is no fixed-point combinator $Y$ with the property $Y space f arrow.r^* f space (Y space f)$ in $lambda^arrow.r$ — such a $Y$ would type at $forall tau . (tau arrow.r tau) arrow.r tau$, contradicting SN by producing non-terminating reductions. The price of strong normalization is loss of computational universality; the gain is decidable type checking, totality, and logical consistency under Curry–Howard.
+A *consequence:* $lambda^arrow.r$ is *not* Turing complete. There is no fixed-point combinator $Y$ with the property $Y space f arrow.r^* f space (Y space f)$ in $lambda^arrow.r$ — such a $Y$ would have type $(tau arrow.r tau) arrow.r tau$ for some $tau$, and $Y space (lambda x : tau . x)$ would reduce forever, contradicting SN. The price of strong normalization is loss of computational universality; the gain is decidable type checking, totality, and logical consistency under Curry–Howard.
 
 == The Curry–Howard Isomorphism
 
@@ -300,11 +300,11 @@ Specifically, $lambda^arrow.r$ corresponds to the *implicational fragment* $"IPC
   [$P or Q$], [$tau_1 + tau_2$], [$"inl"(e), "inr"(e)$], [$"case"$],
   [$top$], [$"Unit"$], [$()$], [—],
   [$bot$], [$"Empty"$], [— (no intro)], [$"abort" : "Empty" arrow.r tau$],
-  [$forall x . P(x)$], [$forall alpha . tau$ (System F)], [$Lambda alpha . e$], [$e[tau]$],
-  [$exists x . P(x)$], [$exists alpha . tau$], [$"pack"$], [$"unpack"$],
+  [$forall X . P$ (second-order)], [$forall alpha . tau$ (System F)], [$Lambda alpha . e$], [$e[tau]$],
+  [$exists X . P$ (second-order)], [$exists alpha . tau$], [$"pack"$], [$"unpack"$],
 )
 
-The two existential rows require System F (see #xref("programming-languages", "system-f-and-parametricity", label: "System F and Parametricity")); the first six are $lambda^arrow.r$ with products, sums, $"Unit"$, $"Empty"$.
+The two quantifier rows quantify over *propositions* (second-order logic) and require System F (see #xref("programming-languages", "system-f-and-parametricity", label: "System F and Parametricity")). Quantifying over *individuals*, as in $forall x . P(x)$, corresponds instead to dependent function and pair types (see #xref("programming-languages", "dependent-types", label: "Dependent Types")). The first five rows are $lambda^arrow.r$ with products, sums, $"Unit"$ and $"Empty"$.
 
 *Typing rules for products and sums.*
 ```text
@@ -336,7 +336,7 @@ pi_2 (e_1, e_2) &arrow.r e_2 \
 "case" ("inr" e) "of" "inl" x => e_1 | "inr" y => e_2 &arrow.r [y |-> e] e_2 \
 (lambda x : tau . e_1) space e_2 &arrow.r [x |-> e_2] e_1 $
 
-Strong normalization of $lambda^arrow.r$ is therefore the proof-theoretic statement *cut elimination* for $"IPC"^supset$: every proof reduces to a normal proof in finitely many steps. Gentzen (1936) proved cut elimination for classical logic syntactically; Tait's reducibility argument is essentially a semantic cut-elimination proof.
+Strong normalization of $lambda^arrow.r$ is therefore *normalisation* of natural-deduction proofs in $"IPC"^supset$ (Prawitz 1965), the natural-deduction counterpart of cut elimination: every proof reduces to a normal proof in finitely many steps. Gentzen (1935) proved cut elimination for the classical and intuitionistic sequent calculi syntactically; Tait's reducibility argument is essentially a semantic cut-elimination proof.
 
 *Logical consistency.* $bot$ (= $"Empty"$) has no closed normal term: by Inversion, a closed normal term of type $"Empty"$ would have to be an application $e_1 space e_2$ with $e_1$ of arrow type ending in $"Empty"$; but $e_1$ would have to be normal, hence a variable (none, in empty context) or an abstraction (concluding type starts with $arrow.r$). Hence $emptyset tack.r e : "Empty"$ is empty, i.e., $bot$ is unprovable — $"IPC"^supset$ is *consistent*. This is the logical content of strong normalization.
 
