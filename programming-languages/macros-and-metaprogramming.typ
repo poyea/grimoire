@@ -60,7 +60,7 @@ A macro system that handles this automatically is called *hygienic*. The pursuit
 3. Identifiers from the *macro's arguments* (substituted into the template) retain their original colour.
 4. When resolving identifier references after expansion, identifiers with the same name but *different colours* are treated as distinct.
 
-The result: identifiers introduced by the macro are guaranteed not to collide with identifiers from the user's context, since they have different paint. Identifiers shared between macro and user (intentionally, as when the macro inserts a call to a helper `f` that the user is expected to have in scope) require explicit machinery to *break* hygiene.
+The result: identifiers introduced by the macro are guaranteed not to collide with identifiers from the user's context, since they have different paint. Hygiene also covers free references in the template: a call to a helper `f` inserted by the macro refers to the `f` in scope where the macro was *defined*, even if the use site binds its own `f` (this half of hygiene is called *referential transparency*). So calling a helper needs no special machinery. Explicit machinery to *break* hygiene is needed only when the macro must bind or reference a name in the *user's* scope, as with an anaphoric `it` that the user's code is meant to see.
 
 In `syntax-rules` notation:
 
@@ -106,20 +106,20 @@ The idea is brutally simple:
 
 - Every binding introduction creates a fresh *scope*, an opaque token.
 - Every identifier carries a *set* of scopes.
-- An identifier *use* refers to a *binding* iff the use's scope set *contains* the binding's scope set.
+- An identifier *use* is resolved among the bindings with the *same symbol* whose scope set is a *subset* of the use's scope set. Of those candidates, it refers to the one with the *largest* scope set, which must be a superset of every other candidate's; if no candidate is largest, the reference is *ambiguous* and expansion fails with an error; if there is no candidate, the identifier is unbound.
 
 The expander's job is then to *add scopes* to the identifiers it traverses:
 
 - When the expander enters a `(lambda (x) e)` form, it creates a fresh scope $s$, adds $s$ to $x$, adds $s$ to every identifier in $e$, and recursively expands $e$.
 - When the expander expands a macro use, it creates a fresh scope $s_"macro"$ for the macro's introduced bindings, adds $s_"macro"$ to identifiers that come *from the macro template*, and leaves identifiers that come *from the macro's arguments* untouched (those keep their original scope set from the *use* site).
 
-The result: an identifier introduced by the macro has $s_"macro"$ in its scope set; the user's identifier of the same name does not. A binding of the user's identifier is *outside* the macro's introduced binding (it has a *different* scope set), so the two do not capture each other.
+The result: a binding introduced by the macro has $s_"macro"$ in its scope set, and a user reference of the same name does not, so the macro's binding is not a subset of the reference's scopes and cannot capture it. In the other direction, a binding at the use site (say a user `let` around the macro call) carries the scope of that `let`, which the template's identifiers never received, so the template's free references skip over it and resolve to bindings at the macro's definition site.
 
-The set-of-scopes model is *equational*: two identifiers are *the same* <==> they have the same name and the same scope set. There is no painting, no marking, no renaming; just set membership. The model handles macros, modules, separately compiled code, and recursive expansion uniformly, and it is the basis of the current Racket macro expander.
+The set-of-scopes model gives both identifier comparisons directly: two identifiers are `bound-identifier=?` iff they have the same symbol and the same scope set (one would bind the other if introduced together), and `free-identifier=?` iff both resolve, by the subset rule, to the same binding. There is no painting, no marking, no renaming; just set membership. The model handles macros, modules, separately compiled code, and recursive expansion uniformly, and it is the basis of the current Racket macro expander.
 
 *Theorem (Hygiene, Flatt 2016).* In the set-of-scopes model, a macro's expansion never causes an identifier from the macro template to capture an identifier from the macro's use site, and never causes an identifier from the use site to capture an identifier from the template.
 
-*Proof sketch.* The macro template's identifiers acquire $s_"macro"$ on expansion; the use-site identifiers do not. A binding introduced by the template binds only identifiers with $s_"macro"$ in their scope set; a use-site reference (without $s_"macro"$) cannot resolve to it. Symmetrically, a use-site binding cannot capture a template reference, because the template reference has $s_"macro"$ extra. $square$
+*Proof sketch.* The macro template's identifiers acquire $s_"macro"$ on expansion; the use-site identifiers do not. A binding introduced by the template has $s_"macro"$ in its scope set, so it is a candidate only for references that also carry $s_"macro"$; a use-site reference cannot resolve to it. Conversely, a binding form at the use site adds its own scope to the syntax it encloses before the macro is expanded, and the identifiers the template later introduces never received that scope, so the use-site binding's scope set is not a subset of theirs and it cannot capture a template reference. $square$
 
 == Phase Separation and Modules
 
