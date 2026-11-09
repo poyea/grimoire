@@ -159,6 +159,9 @@
 // PART V: Meta-programming and Concurrency
 // ============================================================================
 
+#include "programming-languages/scheme-and-racket.typ"
+#pagebreak()
+
 #include "programming-languages/macros-and-metaprogramming.typ"
 #pagebreak()
 

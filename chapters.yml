@@ -1624,6 +1624,11 @@ chapters:
     words: 4527
     status: reviewed
   - subject: programming-languages
+    slug: scheme-and-racket
+    path: programming-languages/scheme-and-racket.typ
+    words: 4017
+    status: reviewed
+  - subject: programming-languages
     slug: semantics
     path: programming-languages/semantics.typ
     words: 1966
