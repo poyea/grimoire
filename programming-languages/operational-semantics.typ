@@ -143,7 +143,9 @@ The classical results connecting these strategies live in the *Church-Rosser* th
 
 *Theorem (Church-Rosser, untyped $lambda$).* If $e arrow.r^* e_1$ and $e arrow.r^* e_2$ then there exists $e'$ with $e_1 arrow.r^* e'$ and $e_2 arrow.r^* e'$.
 
-*Theorem (Standardization, Curry-Feys).* If $e$ has a normal form $v$, then the leftmost-outermost reduction strategy reaches $v$. That is, CBN is *normalizing*: it finds a normal form whenever one exists. CBV is not normalizing: $(lambda x. y)(Omega)$ has normal form $y$ under CBN but diverges under CBV (where $Omega = (lambda x. x x)(lambda x. x x)$).
+*Theorem (Standardization, Curry-Feys).* If $e$ has a normal form $v$, then *normal-order* reduction, which always contracts the leftmost-outermost redex anywhere in the term (including under $lambda$ and inside arguments), reaches $v$. Normal order is therefore *normalizing*: it finds a normal form whenever one exists.
+
+The CBN relation above is not normal order. It never reduces under a $lambda$ or inside an argument, so it stops at a *weak head normal form* (for a closed term, a $lambda$-abstraction): $lambda x. (lambda y. y) space x$ is a CBN value but not a normal form. Its guarantee is the weak-head analogue: CBN reaches a weak head normal form whenever the term has one. CBV lacks even that: $(lambda x. y)(Omega)$ reaches $y$ under CBN but diverges under CBV (where $Omega = (lambda x. x x)(lambda x. x x)$).
 
 == Evaluation Contexts
 
