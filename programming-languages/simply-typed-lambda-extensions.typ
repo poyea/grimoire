@@ -10,7 +10,8 @@ Already specified above. Each extension is a *positive* type former: it has an i
 
 === System T: Primitive Recursion (Gödel 1958)
 
-Gödel's System T adds natural numbers with a primitive recursor:
+Gödel introduced System T in his 1958 _Dialectica_ paper (from work done around 1941) as a quantifier-free theory of primitive recursive functionals of finite type, written with combinators and defining equations rather than $lambda$-terms.
+The $lambda$-calculus formulation used here is the later standard one; it adds natural numbers with a primitive recursor:
 $ tau &::= ... | "Nat" \
 e &::= ... | 0 | S space e | "rec"(e_z, e_s, e_n) $
 
@@ -32,11 +33,15 @@ To recover Turing completeness we add a fixed-point operator $"fix"$:
 $ Gamma tack.r e : tau arrow.r tau  /  Gamma tack.r "fix" space e : tau \
 "fix" space (lambda x : tau . e) arrow.r [x |-> "fix"(lambda x : tau . e)] e $
 
-Once $"fix"$ is added, $lambda^arrow.r + "fix"$ is Turing complete; SN fails; Curry–Howard now corresponds to a *classical* (or inconsistent) logic: every proposition is "provable" via the inhabitant $"fix"(lambda x . x)$. This is the price of general recursion: type soundness still holds (well-typed programs do not get stuck), but they may diverge, and the language is no longer a sound logic.
+Once $"fix"$ is added (with base types such as $"Nat"$ to compute on), the language is Turing complete and SN fails.
+Read through Curry–Howard, the logic becomes *inconsistent*, not classical: $"fix"(lambda x : tau . x)$ inhabits every type $tau$, so every proposition, including $bot$, is "provable".
+Classical logic comes from a different extension, control operators such as `callcc` (Griffin 1990), and that extension stays consistent.
+This is the price of general recursion: type soundness still holds (well-typed programs do not get stuck), but they may diverge, and the language is no longer a sound logic.
 
 == Type Checking and Inference
 
-For Church-style $lambda^arrow.r$, type checking is straightforward: every binder is annotated, so a single pass reading T-VAR, T-ABS, T-APP suffices, $O(n)$ in the term size.
+For Church-style $lambda^arrow.r$, type checking is straightforward: every binder is annotated, so a single pass reading T-VAR, T-ABS, T-APP suffices.
+The pass visits each node once, but each T-APP compares two types; with types as plain trees a comparison costs up to $O(n)$, so the naive checker is $O(n^2)$, and with hash-consed types each comparison is a pointer test and checking is $O(n)$.
 
 For Curry-style $lambda^arrow.r$ (no annotations), type inference is performed by *constraint generation + unification*:
 + Assign a fresh metavariable $alpha_x$ to each variable.
@@ -44,7 +49,10 @@ For Curry-style $lambda^arrow.r$ (no annotations), type inference is performed b
 + For each application $e_1 space e_2$ producing types $tau_1, tau_2$, emit constraint $tau_1 = tau_2 arrow.r gamma$ with $gamma$ fresh.
 + Solve all constraints by Robinson unification.
 
-The result is a *principal type*, the most-general type from which all valid types are substitution instances (Hindley 1969). Type inference for $lambda^arrow.r$ is linear in the term after near-linear unification (Damas–Milner 1982; see #xref("programming-languages", "type-systems", label: "Type Systems") for the algorithm).
+The result is a *principal type*, the most-general type from which all valid types are substitution instances (Hindley 1969).
+The constraint set has size $O(n)$, and unification with union-find over type graphs (Huet 1976) solves it in $O(n alpha(n))$; Paterson and Wegman (1978) give a linear-time algorithm, so simple-type inference is linear.
+Types must be kept as shared graphs: written out as trees, principal types can be exponentially larger than the term.
+Damas–Milner (1982) is an algorithm for a larger system: it adds `let`-polymorphism on top of this procedure, and that addition makes inference DEXPTIME-complete in the worst case (Mairson 1990; Kfoury, Tiuryn and Urzyczyn 1990), although it is fast on real programs (see #xref("programming-languages", "type-systems", label: "Type Systems")).
 
 ```ocaml
 (* OCaml: Curry-style lambda calculus inferred *)
@@ -87,13 +95,15 @@ These are exactly the axioms K and S of the Hilbert-style presentation of $"IPC"
 
 == $lambda$I and $lambda$K
 
-*$lambda$K-calculus* (the "K" for *constant*): the calculus we have been studying, where $lambda$ is allowed even when the bound variable does not occur. $K = lambda x . lambda y . x$ is a $lambda$K term.
+*$lambda$K-calculus* (named after the combinator $K$, which it can define): the calculus we have been studying, where $lambda$ is allowed even when the bound variable does not occur. $K = lambda x . lambda y . x$ is a $lambda$K term.
 
-*$lambda$I-calculus* (Church 1941): restrict $lambda x . e$ to terms with $x in "FV"(e)$. So $K$ is not a $lambda$I term, but $I$ and $S$ are. The $lambda$I-calculus has stronger termination properties:
-+ Every reduction either terminates or every subterm is reduced infinitely often (no "trash collection" of erased terms).
-+ A $lambda$I-term has a normal form iff it is strongly normalising (Church 1941).
+*$lambda$I-calculus* (Church 1941): restrict $lambda x . e$ to terms with $x in "FV"(e)$. So $K$ is not a $lambda$I term, but $I$ and $S$ are. Because no $beta$-step can discard its argument, the $lambda$I-calculus has stronger normalisation properties:
++ If a $lambda$I-term has a normal form, so does every one of its subterms: a subterm without a normal form can never be erased, so it would block normalisation of the whole term.
++ *Conservation theorem* (Church–Rosser 1936): if a $lambda$I-term has a normal form, it is strongly normalising, so every reduction strategy reaches that normal form.
 
-Modern computer-science presentations always work in $lambda$K. The $lambda$I-calculus is a curiosity, important historically and for *linear* and *relevance* logics, where every assumption must be used.
+In $lambda$K both properties fail: $K space I space Omega$ has normal form $I$, yet its subterm $Omega$ has none, and a strategy that keeps reducing $Omega$ never terminates.
+
+Modern computer-science presentations always work in $lambda$K. The $lambda$I-calculus matters historically and as the term calculus of *relevant* implication, where every assumption must be used at least once; *linear* logic, where every assumption is used exactly once, corresponds to the narrower BCI fragment.
 
 == Long Normal Forms and $eta$-Expansion
 
@@ -240,7 +250,7 @@ infer ctx (App f a) = do
     _                      -> Left ("not a function: " ++ show ft)
 ```
 
-This is the entire type checker. It runs in $O(n^2)$ in the term size (the bottleneck is structural equality of types in T-APP; with hash-consing it becomes $O(n)$). Type inference for Curry-style is also $O(n)$ via union-find unification (Damas–Milner; see #xref("programming-languages", "type-systems", label: "Type Systems")).
+This is the entire type checker. It runs in $O(n^2)$ in the term size (the bottleneck is structural equality of types in T-APP; with hash-consing it becomes $O(n)$). Type inference for Curry-style terms is $O(n alpha(n))$ with union-find unification (Huet 1976), or $O(n)$ with Paterson–Wegman; that is simple-type inference, not Damas–Milner, which adds `let`-polymorphism and is exponential in the worst case (see #xref("programming-languages", "type-systems", label: "Type Systems")).
 
 == A Detailed Worked Reduction
 
@@ -273,7 +283,7 @@ Same answer (Church–Rosser), different reduction trace.
 == Historical Notes
 
 Alonzo Church introduced the untyped $lambda$-calculus in 1932 as a foundation for logic, intending it as an alternative to set theory.
-The original system was inconsistent (Kleene–Rosser 1935 found a paradox: the $lambda$-definability of a fixed-point combinator allowed reproduction of the Richard paradox).
+The original system was inconsistent: Kleene and Rosser (1935) derived a contradiction in it by encoding a form of Richard's paradox.
 Church responded in two ways: (1) restricting to *Church numerals* and pure computational behaviour, the *Church thesis* (1936) that $lambda$-definable equals effectively computable; (2) introducing the *simply-typed* fragment (1940) that excluded self-application and avoided the paradox.
 
 Curry, working from a different angle on *combinatory logic* (1930), independently arrived at a typing discipline (1934) where types are assigned by inference rules rather than syntactic annotation.
@@ -293,7 +303,8 @@ The Church numerals
 $ overbar(n) = lambda f . lambda x . underbrace(f (f (... (f space x))), n " applications") $
 encode natural numbers in pure $lambda$-calculus.
 
-In $lambda^arrow.r$ proper, $overbar(n)$ types at $(iota arrow.r iota) arrow.r iota arrow.r iota$ for any type $iota$; but each numeral has its own family of types, not a single polymorphic type.
+In $lambda^arrow.r$ proper, every numeral has type $"Nat"_tau = (tau arrow.r tau) arrow.r tau arrow.r tau$ for every type $tau$ (and $overbar(0)$, $overbar(1)$ also have more general types).
+All numerals share this family; what $lambda^arrow.r$ cannot do is quantify over it, so a term fixes one $tau$ for each numeral it uses, and a numeral can serve at a single instance only.
 
 In *System F* (next chapter), one can give $overbar(n) : forall alpha . (alpha arrow.r alpha) arrow.r alpha arrow.r alpha$.
 
@@ -302,7 +313,8 @@ $ "succ" &= lambda n . lambda f . lambda x . f space (n space f space x) \
 "add"  &= lambda m . lambda n . lambda f . lambda x . m space f space (n space f space x) \
 "mul"  &= lambda m . lambda n . lambda f . m space (n space f) $
 
-All type in $lambda^arrow.r$ at appropriate monomorphic instances; uniformly polymorphic only in System F.
+All three type as $"Nat"_tau arrow.r ... arrow.r "Nat"_tau$ for any fixed $tau$; they are uniformly polymorphic only in System F.
+Exponentiation $lambda m . lambda n . n space m$, computing $m^n$, also types, but only with its inputs at different instances: $"Nat"_tau arrow.r "Nat"_(tau arrow.r tau) arrow.r "Nat"_tau$.
 
 === Booleans
 
@@ -334,13 +346,20 @@ The $beta eta$-equational theory of $lambda^arrow.r$ is the smallest congruence 
 
 *Proof.* By SN + confluence, every term has a unique $beta$-normal form; further $eta$-normalize (or $eta$-expand) to obtain a canonical form. Equality of canonical forms is structural and decidable. $square$
 
-This contrasts sharply with untyped $lambda$: $beta$-equality of arbitrary $lambda$-terms is undecidable (Scott 1963).
+This contrasts sharply with untyped $lambda$: $beta$-equality of arbitrary $lambda$-terms is undecidable (Church 1936, the first undecidability result for a formal system).
+Scott (1963) strengthened this to a Rice-style theorem: no nontrivial set of $lambda$-terms closed under $beta$-equality is decidable.
 
 == Recursion-Free Programming
 
-What can $lambda^arrow.r$ compute? The class of *higher-type primitive recursive* functions, properly contained in the primitive recursive functions on naturals. The Ackermann function is not expressible in pure $lambda^arrow.r$ (no recursion), nor in $lambda^arrow.r$ + finite-type primitive recursion at first-order types — but it *is* expressible in System T (Gödel 1958) using primitive recursion at higher type $("Nat" arrow.r "Nat") arrow.r ("Nat" arrow.r "Nat")$.
+What can $lambda^arrow.r$ compute without any recursor? Represent numbers as Church numerals at one fixed type $"Nat"_tau$.
 
-Pure $lambda^arrow.r$ without iterators or recursors computes only *bounded* polynomial functions; specifically, the term-complexity of normalisation can be hyperexponential (Statman 1979): there are terms of size $n$ whose normal form has size a tower of exponentials in $n$. So even SN, decidable type-checking systems can be computationally explosive.
+*Theorem (Schwichtenberg 1976; Statman).* The functions $NN^k arrow.r NN$ definable by closed terms of type $"Nat"_tau arrow.r ... arrow.r "Nat"_tau$ are exactly the *extended polynomials*: the smallest class containing the constants $0$ and $1$ and the projections, and closed under $+$, $times$, and the zero test $"ifzero"(n, m, p)$, which returns $m$ if $n = 0$ and $p$ otherwise.
+
+So subtraction, predecessor and equality are not definable at a single type.
+Predecessor becomes definable once its input may sit at a higher instance than its output: $lambda n . lambda f . lambda x . n space (lambda g . lambda h . h space (g space f)) space (lambda u . x) space (lambda u . u)$ types with $n : "Nat"_((iota arrow.r iota) arrow.r iota)$.
+The Ackermann function is out of reach here and in $lambda^arrow.r$ with primitive recursion restricted to first-order types; it *is* expressible in System T (Gödel 1958) using primitive recursion at higher type $("Nat" arrow.r "Nat") arrow.r ("Nat" arrow.r "Nat")$.
+
+Weak expressiveness does not mean cheap evaluation: normalisation can be hyperexponential (Statman 1979). There are terms of size $n$ whose normal form has size a tower of exponentials whose height grows with $n$. So even SN, decidable type-checking systems can be computationally explosive.
 
 *Statman's Theorem (1979).* The decision problem "is $e_1 =_(beta) e_2$?" for $lambda^arrow.r$ is *non-elementary*: it lies outside the elementary hierarchy.
 
@@ -362,9 +381,9 @@ What does $lambda^arrow.r$ lack?
 
 Each extension is conservative over $lambda^arrow.r$: every pure $lambda^arrow.r$ derivation is still derivable in the extended system. The art of type-system design is to add power while preserving (or carefully relaxing) the metatheorems we have just proved: confluence, SR, progress, SN, and decidability of type checking.
 
-== The Statman Hierarchy
+== Type Order and the Cost of Normalisation
 
-A subtle question: how *expressive* is $lambda^arrow.r$ at low type orders?
+A subtle question: how does the cost of normalisation depend on the *order* of the types involved?
 
 Define *type order*:
 - $"ord"(iota) = 0$ for base $iota$.
@@ -372,13 +391,16 @@ Define *type order*:
 
 So $"Int"$ is order $0$; $"Int" arrow.r "Int"$ is order $1$; $("Int" arrow.r "Int") arrow.r "Int"$ is order $2$.
 
-*Statman's $1$-section Theorem (1979).* The number-theoretic functions definable in $lambda^arrow.r$ at order $<= 2$ are exactly the *polynomially-bounded* functions; at order $<= 3$, the *Kalmar elementary* functions; at unbounded order, the higher-type primitive recursive functions.
+Church numerals at $"Nat"_iota$ have order $2$, and each lift from $"Nat"_tau$ to $"Nat"_(tau arrow.r tau)$ raises the order by one.
+Lifting buys growth: with $overbar(n) : "Nat"_(iota arrow.r iota)$ and $overbar(2) : "Nat"_iota$, the term $overbar(n) space overbar(2)$ computes $2^n$, and $k$ such lifts compose into a tower of $k$ exponentials.
+The matching upper bound is Schwichtenberg's (1982): a term whose redexes have type order at most $k$ normalises in a number of steps bounded by a tower of exponentials whose height grows with $k$; Beckmann (2001) gives the exact bound.
+So normalisation is elementary for each fixed order, and only unbounded order produces Statman's non-elementary behaviour.
 
-So there is a strict hierarchy by type order, a phenomenon absent in untyped or general-recursion settings.
+== System T and Peano Arithmetic
 
-== Schwichtenberg's Theorem
-
-*Schwichtenberg (1976).* The functions of type $"Nat" arrow.r "Nat"$ definable in *Gödel's System T* are exactly the *provably total functions of first-order Peano Arithmetic*, equivalently the functions whose totality is provable using transfinite induction up to $epsilon_0$.
+*Theorem (Gödel 1958; Kreisel 1952; Tait 1965).* The functions of type $"Nat" arrow.r "Nat"$ definable in *Gödel's System T* are exactly the *provably total functions of first-order Peano Arithmetic*.
+Gödel's _Dialectica_ interpretation extracts a System T term from every PA proof of a $Pi^0_2$ statement, which gives one inclusion; the converse holds because PA proves each System T term of this type total.
+Kreisel (1952) showed that the provably total functions of PA are the $<epsilon_0$-recursive functions, and Tait (1965) related System T directly to $epsilon_0$-recursion, which gives the equivalent ordinal description.
 
 This places System T (and hence $lambda^arrow.r$ + primitive recursion) in correspondence with PA, just as $lambda^arrow.r$ alone corresponds to $"IPC"^supset$, System F corresponds to second-order arithmetic, and the Calculus of Constructions corresponds to higher-order intuitionistic logic plus inductive types.
 
@@ -456,7 +478,7 @@ The simply-typed lambda calculus is small, sharp, and complete-to-itself. The tw
 - *Strong normalization:* every reduction sequence terminates.
 - *Curry–Howard:* types are propositions; terms are proofs; reduction is proof normalisation.
 - *Consistency:* the inhabitedness of $bot$ is decidable; it is uninhabited.
-- *Decidability:* type checking is decidable in $O(n)$; type inference (Curry) is decidable in $O(n alpha(n))$.
+- *Decidability:* type checking is decidable in $O(n)$ with hash-consed types; type inference (Curry) is decidable in $O(n alpha(n))$, or linear time with Paterson–Wegman unification.
 
 The four landmark theorems (Church–Rosser (confluence), Subject Reduction (preservation), Progress, and Strong Normalisation) together with their proofs (parallel reduction, structural induction, canonical forms, and Tait reducibility) form the *standard playbook* for every typed calculus.
 Master them here, and the proofs for System F, $F_omega$, MLTT, CIC, and beyond are variations on these themes, with sharper tools (reducibility candidates, logical relations indexed by candidate assignments) but the same melody.
@@ -466,7 +488,7 @@ Every theorem we proved (confluence, SR, progress, SN) will recur in the chapter
 
 == Further Reading
 
-Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Chapters 11–15 cover the extensions treated in this chapter: let-polymorphism, references, exceptions, recursive types, and subtyping, all built on the STLC core.
+Pierce, B. C. (2002). _Types and Programming Languages_. MIT Press. Builds each extension on the STLC core: simple extensions (Chapter 11), normalisation (12), references (13), exceptions (14), subtyping (15), recursive types (20), and type reconstruction with let-polymorphism (22).
 
 Milner, R. (1978). "A Theory of Type Polymorphism in Programming." JCSS 17(3). Introduces Hindley-Milner type inference; the principal-type theorem is proved here, enabling the polymorphic let-extension.
 
