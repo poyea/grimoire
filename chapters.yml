@@ -1571,7 +1571,7 @@ chapters:
   - subject: programming-languages
     slug: macros-and-metaprogramming
     path: programming-languages/macros-and-metaprogramming.typ
-    words: 4524
+    words: 4735
     status: reviewed
   - subject: programming-languages
     slug: macros-metaprogramming-formalism
@@ -1591,7 +1591,7 @@ chapters:
   - subject: programming-languages
     slug: operational-semantics
     path: programming-languages/operational-semantics.typ
-    words: 3927
+    words: 4006
     status: reviewed
   - subject: programming-languages
     slug: parsing
@@ -1631,12 +1631,12 @@ chapters:
   - subject: programming-languages
     slug: simply-typed-lambda-extensions
     path: programming-languages/simply-typed-lambda-extensions.typ
-    words: 4966
+    words: 5608
     status: reviewed
   - subject: programming-languages
     slug: simply-typed-lambda
     path: programming-languages/simply-typed-lambda.typ
-    words: 4169
+    words: 4237
     status: reviewed
   - subject: programming-languages
     slug: subtyping-and-polymorphism
@@ -1672,6 +1672,11 @@ chapters:
     slug: type-systems
     path: programming-languages/type-systems.typ
     words: 3209
+    status: reviewed
+  - subject: programming-languages
+    slug: untyped-lambda
+    path: programming-languages/untyped-lambda.typ
+    words: 4977
     status: reviewed
   - subject: programming-languages
     slug: weighted-and-probabilistic-automata

@@ -116,6 +116,9 @@
 #include "programming-languages/type-systems.typ"
 #pagebreak()
 
+#include "programming-languages/untyped-lambda.typ"
+#pagebreak()
+
 #include "programming-languages/simply-typed-lambda.typ"
 #pagebreak()
 
