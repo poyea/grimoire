@@ -9,6 +9,11 @@ chapters:
     words: 3487
     status: reviewed
   - subject: cloud-and-infrastructure
+    slug: cloud-storage
+    path: cloud-and-infrastructure/cloud-storage.typ
+    words: 2939
+    status: reviewed
+  - subject: cloud-and-infrastructure
     slug: containers
     path: cloud-and-infrastructure/containers.typ
     words: 1489
