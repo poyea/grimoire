@@ -4,6 +4,11 @@
 # derived from the filesystem.
 chapters:
   - subject: cloud-and-infrastructure
+    slug: cloud-networking
+    path: cloud-and-infrastructure/cloud-networking.typ
+    words: 3487
+    status: reviewed
+  - subject: cloud-and-infrastructure
     slug: containers
     path: cloud-and-infrastructure/containers.typ
     words: 1489

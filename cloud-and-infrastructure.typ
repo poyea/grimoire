@@ -14,6 +14,9 @@
   #include "cloud-and-infrastructure/containers.typ"
   #pagebreak()
 
+  #include "cloud-and-infrastructure/cloud-networking.typ"
+  #pagebreak()
+
   #include "cloud-and-infrastructure/cost-engineering.typ"
   #pagebreak()
 
