@@ -529,6 +529,11 @@ chapters:
     words: 1650
     status: reviewed
   - subject: data-engineering
+    slug: dimensional-modelling
+    path: data-engineering/dimensional-modelling.typ
+    words: 2165
+    status: reviewed
+  - subject: data-engineering
     slug: etl-vs-elt
     path: data-engineering/etl-vs-elt.typ
     words: 955

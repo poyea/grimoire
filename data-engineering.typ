@@ -20,6 +20,9 @@
   #include "data-engineering/data-quality.typ"
   #pagebreak()
 
+  #include "data-engineering/dimensional-modelling.typ"
+  #pagebreak()
+
   #include "data-engineering/etl-vs-elt.typ"
   #pagebreak()
 
