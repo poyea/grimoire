@@ -35,6 +35,9 @@
   #include "compilers/e-graphs.typ"
   #pagebreak()
 
+  #include "compilers/compiler-correctness.typ"
+  #pagebreak()
+
   #include "compilers/jit-and-runtimes.typ"
   #pagebreak()
 

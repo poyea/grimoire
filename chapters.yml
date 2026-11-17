@@ -304,6 +304,11 @@ chapters:
     words: 1890
     status: reviewed
   - subject: compilers
+    slug: compiler-correctness
+    path: compilers/compiler-correctness.typ
+    words: 2436
+    status: reviewed
+  - subject: compilers
     slug: dataflow-analysis
     path: compilers/dataflow-analysis.typ
     words: 1525
