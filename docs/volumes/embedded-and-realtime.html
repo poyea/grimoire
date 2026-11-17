@@ -115,7 +115,7 @@
   <h1>Embedded &amp; Real-Time</h1>
   <p class="desc">RTOS internals, hardware interfaces, scheduling, and safety-critical systems.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 3</span>
+    <span><strong>CHAPTERS</strong> · 11</span>
     <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_embedded_and_realtime.pdf">Download PDF ↓</a>
     <a class="read" href="../compile/embedded-and-realtime.html">Read online ↗</a>
@@ -135,7 +135,38 @@
       </ul>
     </details>
     <details id="ch-2">
-      <summary id="peripherals-and-drivers"><span class="n">02</span>Peripherals and Drivers</summary>
+      <summary id="linker-scripts-and-startup"><span class="n">02</span>Linker Scripts, Startup Code, and the Memory Map</summary>
+      <ul>
+        <li>Sections: What the Compiler Emits</li>
+        <li>VMA and LMA</li>
+        <li>A Complete Linker Script</li>
+        <li>Startup Code in C++</li>
+        <li>Memory That Survives Reset</li>
+        <li>Running Code from RAM</li>
+        <li>Reading the Map File</li>
+        <li>Shrinking the Image</li>
+        <li>Execute-in-Place from External Flash</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary id="embedded-cpp"><span class="n">03</span>C++ for Embedded Systems</summary>
+      <ul>
+        <li>Freestanding C++ and the Feature Cost Table</li>
+        <li>Error Handling Without Exceptions</li>
+        <li>Memory Without a Heap</li>
+        <li>Hardware Registers: volatile and Zero-Cost Abstraction</li>
+        <li>Sharing Data Between Interrupts and Tasks</li>
+        <li>Calling C++ from Interrupt Vectors</li>
+        <li>Doing the Work at Compile Time</li>
+        <li>Static Polymorphism and Code Size</li>
+        <li>Strong Types for Physical Quantities</li>
+        <li>A Recommended Baseline</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary id="peripherals-and-drivers"><span class="n">04</span>Peripherals and Drivers</summary>
       <ul>
         <li>Memory-Mapped I/O vs Port I/O</li>
         <li>Interrupt Handling</li>
@@ -147,8 +178,20 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-3">
-      <summary id="rtos"><span class="n">03</span>Real-Time Operating Systems</summary>
+    <details id="ch-5">
+      <summary id="fieldbuses"><span class="n">05</span>Fieldbuses: CAN, LIN, and Deterministic Ethernet</summary>
+      <ul>
+        <li>Controller Area Network</li>
+        <li>Response-Time Analysis for CAN</li>
+        <li>LIN</li>
+        <li>Automotive and Industrial Ethernet</li>
+        <li>Security on the Bus</li>
+        <li>Choosing a Bus</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary id="rtos"><span class="n">06</span>Real-Time Operating Systems</summary>
       <ul>
         <li>What Makes an OS &quot;Real-Time&quot;</li>
         <li>FreeRTOS</li>
@@ -157,6 +200,72 @@
         <li>Tickless and Power-Aware Schedulers</li>
         <li>Lock-Free Patterns</li>
         <li>Picking an RTOS</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary id="timing-analysis"><span class="n">07</span>Timing Analysis and WCET</summary>
+      <ul>
+        <li>Why the Worst Case Is Hard</li>
+        <li>Three Ways to Get a WCET</li>
+        <li>Measuring Cycles on Cortex-M</li>
+        <li>From WCET to Response Time on a Real System</li>
+        <li>Stack Depth Is Part of Timing Analysis</li>
+        <li>Multicore Interference</li>
+        <li>Designing for Analysability</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary id="low-power-design"><span class="n">08</span>Low-Power Design</summary>
+      <ul>
+        <li>The Energy Budget</li>
+        <li>Where the Power Goes</li>
+        <li>Sleep Modes on a Modern MCU</li>
+        <li>Tickless Idle in an RTOS</li>
+        <li>Leakage Hunting: The Board, Not the Chip</li>
+        <li>Measuring Current</li>
+        <li>The Radio Usually Dominates</li>
+        <li>Energy Harvesting</li>
+        <li>Checklist</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary id="bootloaders-and-updates"><span class="n">09</span>Bootloaders, Secure Boot, and Firmware Updates</summary>
+      <ul>
+        <li>The Boot Chain</li>
+        <li>Flash Layouts for Atomic Updates</li>
+        <li>Secure Boot</li>
+        <li>Delta Updates and Compression</li>
+        <li>Transport and Manifests</li>
+        <li>Failure Modes to Design Against</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary id="debugging-and-testing"><span class="n">10</span>Debugging and Testing Embedded Software</summary>
+      <ul>
+        <li>The Debug Port</li>
+        <li>Logging Without Wrecking Timing</li>
+        <li>Diagnosing a HardFault</li>
+        <li>Trace: Seeing What Actually Ran</li>
+        <li>External Instruments</li>
+        <li>A Testing Strategy in Layers</li>
+        <li>Debugging in the Field</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary id="functional-safety"><span class="n">11</span>Functional Safety and Certification</summary>
+      <ul>
+        <li>The Standards Landscape</li>
+        <li>Two Kinds of Faults</li>
+        <li>Hardware Safety Mechanisms</li>
+        <li>Software Safety Mechanisms</li>
+        <li>Process Evidence: Requirements, Coverage, Tools</li>
+        <li>Beyond Malfunctions: SOTIF and Security</li>
+        <li>The Safety Case</li>
         <li>Further Reading</li>
       </ul>
     </details>

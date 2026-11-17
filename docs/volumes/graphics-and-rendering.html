@@ -115,14 +115,70 @@
   <h1>Graphics &amp; Rendering</h1>
   <p class="desc">Rasterization, ray tracing, physically-based rendering, global illumination, and real-time engines.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 6</span>
+    <span><strong>CHAPTERS</strong> · 12</span>
     <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_graphics_and_rendering.pdf">Download PDF ↓</a>
     <a class="read" href="../compile/graphics-and-rendering.html">Read online ↗</a>
   </div>
   <div class="toc">
     <details id="ch-1">
-      <summary id="gi-techniques"><span class="n">01</span>Global Illumination Techniques</summary>
+      <summary id="transforms-and-cameras"><span class="n">01</span>Transforms, Projections, and Cameras</summary>
+      <ul>
+        <li>The Coordinate Space Chain</li>
+        <li>Homogeneous Coordinates and Affine Transforms</li>
+        <li>Representing Rotation</li>
+        <li>Perspective Projection and Depth Precision</li>
+        <li>Cameras</li>
+        <li>Large Worlds and Floating-Point Precision</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary id="textures-and-sampling"><span class="n">02</span>Textures, Sampling, and Aliasing</summary>
+      <ul>
+        <li>Sampling and Aliasing</li>
+        <li>Addressing and Basic Filtering</li>
+        <li>Mipmaps</li>
+        <li>Colour Space in Textures</li>
+        <li>Texture Compression</li>
+        <li>Memory Layout and Caching</li>
+        <li>Virtual Texturing and Streaming</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary id="shadows"><span class="n">03</span>Shadows and Occlusion</summary>
+      <ul>
+        <li>What a Shadow Is</li>
+        <li>Shadow Mapping</li>
+        <li>Directional Lights: Cascaded Shadow Maps</li>
+        <li>Point and Spot Lights</li>
+        <li>Soft Shadows</li>
+        <li>Virtual Shadow Maps</li>
+        <li>Contact Shadows</li>
+        <li>Ray-Traced Shadows</li>
+        <li>Shadow Volumes</li>
+        <li>Ambient Occlusion</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary id="animation-and-skinning"><span class="n">04</span>Character Animation and Skinning</summary>
+      <ul>
+        <li>Skeletons and Poses</li>
+        <li>Linear Blend Skinning</li>
+        <li>Dual-Quaternion Skinning</li>
+        <li>Blend Shapes</li>
+        <li>Animation Clips</li>
+        <li>Motion Matching</li>
+        <li>Inverse Kinematics</li>
+        <li>GPU Skinning</li>
+        <li>Physics and Secondary Motion</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary id="gi-techniques"><span class="n">05</span>Global Illumination Techniques</summary>
       <ul>
         <li>Classical Methods</li>
         <li>Monte Carlo Path Tracing</li>
@@ -133,8 +189,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-2">
-      <summary id="physically-based-rendering"><span class="n">02</span>Physically Based Rendering</summary>
+    <details id="ch-6">
+      <summary id="physically-based-rendering"><span class="n">06</span>Physically Based Rendering</summary>
       <ul>
         <li>The Rendering Equation</li>
         <li>Microfacet Theory</li>
@@ -148,8 +204,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-3">
-      <summary id="rasterization-pipeline"><span class="n">03</span>The Rasterization Pipeline</summary>
+    <details id="ch-7">
+      <summary id="rasterization-pipeline"><span class="n">07</span>The Rasterization Pipeline</summary>
       <ul>
         <li>Pipeline Overview</li>
         <li>Triangle Setup and Edge Equations</li>
@@ -164,8 +220,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-4">
-      <summary id="ray-tracing"><span class="n">04</span>Ray Tracing</summary>
+    <details id="ch-8">
+      <summary id="ray-tracing"><span class="n">08</span>Ray Tracing</summary>
       <ul>
         <li>Acceleration Structures</li>
         <li>DXR and Vulkan Ray Tracing Shader Stages</li>
@@ -176,8 +232,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-5">
-      <summary id="realtime-engines"><span class="n">05</span>Real-Time Engine Architecture</summary>
+    <details id="ch-9">
+      <summary id="realtime-engines"><span class="n">09</span>Real-Time Engine Architecture</summary>
       <ul>
         <li>Nanite: Virtualized Geometry</li>
         <li>Lumen: Engine Integration</li>
@@ -188,8 +244,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-6">
-      <summary id="shaders"><span class="n">06</span>Shaders and Shading Languages</summary>
+    <details id="ch-10">
+      <summary id="shaders"><span class="n">10</span>Shaders and Shading Languages</summary>
       <ul>
         <li>Shader Languages: a Comparison</li>
         <li>A Minimal Forward Pipeline</li>
@@ -201,6 +257,36 @@
         <li>Common Bugs</li>
         <li>Shader Compilation Pipeline</li>
         <li>Debugging and Validation</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary id="explicit-gpu-apis"><span class="n">11</span>Explicit GPU APIs: Vulkan, Direct3D 12, and Metal</summary>
+      <ul>
+        <li>Why Explicit</li>
+        <li>Devices, Queues, and Command Buffers</li>
+        <li>Pipeline State Objects</li>
+        <li>Resource Binding</li>
+        <li>Memory Management</li>
+        <li>Synchronisation</li>
+        <li>Render Passes and Tiled GPUs</li>
+        <li>Presentation</li>
+        <li>Debugging</li>
+        <li>Choosing an API</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary id="color-and-hdr"><span class="n">12</span>Colour, HDR, and Display</summary>
+      <ul>
+        <li>From Light to Perception</li>
+        <li>Colour Spaces</li>
+        <li>Transfer Functions</li>
+        <li>Rendering in a Wide Gamut</li>
+        <li>HDR Output</li>
+        <li>The Display Rendering Transform</li>
+        <li>Banding and Dithering</li>
+        <li>Colour Grading</li>
         <li>Further Reading</li>
       </ul>
     </details>

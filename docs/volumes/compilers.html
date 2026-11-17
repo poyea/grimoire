@@ -115,7 +115,7 @@
   <h1>Compilers</h1>
   <p class="desc">Frontend parsing, IR design, dataflow analysis, and optimization passes.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 8</span>
+    <span><strong>CHAPTERS</strong> · 12</span>
     <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_compilers.pdf">Download PDF ↓</a>
     <a class="read" href="../compile/compilers.html">Read online ↗</a>
@@ -212,7 +212,61 @@
       </ul>
     </details>
     <details id="ch-7">
-      <summary id="jit-and-runtimes"><span class="n">07</span>JIT Compilation and Runtime Systems</summary>
+      <summary id="dependence-and-polyhedral"><span class="n">07</span>Dependence Analysis and the Polyhedral Model</summary>
+      <ul>
+        <li>Dependences</li>
+        <li>Iteration Spaces and Distance Vectors</li>
+        <li>Testing for Dependence</li>
+        <li>Legality of Loop Transformations</li>
+        <li>The Polyhedral Model</li>
+        <li>Systems Using the Model</li>
+        <li>Limits</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-8">
+      <summary id="e-graphs"><span class="n">08</span>E-Graphs and Equality Saturation</summary>
+      <ul>
+        <li>The Data Structure</li>
+        <li>Rebuilding</li>
+        <li>E-Matching</li>
+        <li>The Saturation Loop and Extraction</li>
+        <li>A Complete E-Graph in C++</li>
+        <li>E-Class Analyses</li>
+        <li>Applications</li>
+        <li>Limits</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-9">
+      <summary id="compiler-correctness"><span class="n">09</span>Compiler Correctness: Undefined Behaviour, Testing, and Validation</summary>
+      <ul>
+        <li>Undefined Behaviour as a Contract</li>
+        <li>Deferred Undefined Behaviour in the IR</li>
+        <li>Refinement</li>
+        <li>Translation Validation with Alive2</li>
+        <li>Random Testing of Compilers</li>
+        <li>Verified Compilers</li>
+        <li>What Programmers Can Do</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary id="whole-program-optimisation"><span class="n">10</span>Whole-Program and Post-Link Optimisation</summary>
+      <ul>
+        <li>What the Linker Can Already Do</li>
+        <li>Link-Time Optimisation</li>
+        <li>Interprocedural Optimisations</li>
+        <li>Devirtualisation</li>
+        <li>Collecting Profiles</li>
+        <li>Code Layout</li>
+        <li>Post-Link Optimisation</li>
+        <li>Costs and Practice</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary id="jit-and-runtimes"><span class="n">11</span>JIT Compilation and Runtime Systems</summary>
       <ul>
         <li>Why JIT?</li>
         <li>Tiered Compilation</li>
@@ -224,8 +278,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-8">
-      <summary id="garbage-collection"><span class="n">08</span>Garbage Collection</summary>
+    <details id="ch-12">
+      <summary id="garbage-collection"><span class="n">12</span>Garbage Collection</summary>
       <ul>
         <li>Heap Layout and the Root Set</li>
         <li>Mark-Sweep Collection</li>

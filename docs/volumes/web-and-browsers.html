@@ -115,7 +115,7 @@
   <h1>Web and Browser Internals</h1>
   <p class="desc">Browser architecture, rendering, JavaScript engines, WebAssembly, and web performance.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 8</span>
+    <span><strong>CHAPTERS</strong> · 14</span>
     <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_web_and_browsers.pdf">Download PDF ↓</a>
     <a class="read" href="../compile/web-and-browsers.html">Read online ↗</a>
@@ -136,7 +136,49 @@
       </ul>
     </details>
     <details id="ch-2">
-      <summary id="html-parsing-and-dom"><span class="n">02</span>HTML Parsing and the DOM</summary>
+      <summary id="web-security-model"><span class="n">02</span>The Web Security Model</summary>
+      <ul>
+        <li>Origins and the Same-Origin Policy</li>
+        <li>Cross-Origin Resource Sharing</li>
+        <li>Cookies</li>
+        <li>Cross-Site Scripting</li>
+        <li>Cross-Site Request Forgery</li>
+        <li>Clickjacking and Framing</li>
+        <li>Transport Security</li>
+        <li>Spectre and Cross-Origin Isolation</li>
+        <li>Permissions and Powerful Features</li>
+        <li>A Header Baseline</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary id="browser-networking"><span class="n">03</span>Networking and Resource Loading</summary>
+      <ul>
+        <li>Anatomy of a Navigation</li>
+        <li>The HTTP Cache</li>
+        <li>Connections</li>
+        <li>Prioritisation</li>
+        <li>Discovering Resources Early</li>
+        <li>Speculative Loading and the Back/Forward Cache</li>
+        <li>Compression</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary id="storage-and-offline"><span class="n">04</span>Storage, Service Workers, and Offline</summary>
+      <ul>
+        <li>The Storage APIs</li>
+        <li>Quotas and Eviction</li>
+        <li>IndexedDB</li>
+        <li>The Origin Private File System</li>
+        <li>Service Workers</li>
+        <li>Background Capabilities</li>
+        <li>Coordinating Tabs</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary id="html-parsing-and-dom"><span class="n">05</span>HTML Parsing and the DOM</summary>
       <ul>
         <li>Why HTML Parsing Is Special</li>
         <li>The Two-Stage Pipeline</li>
@@ -148,8 +190,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-3">
-      <summary id="css-and-layout"><span class="n">03</span>CSS and Layout</summary>
+    <details id="ch-6">
+      <summary id="css-and-layout"><span class="n">06</span>CSS and Layout</summary>
       <ul>
         <li>The CSSOM</li>
         <li>Selector Matching</li>
@@ -160,8 +202,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-4">
-      <summary id="rendering-pipeline"><span class="n">04</span>Rendering Pipeline</summary>
+    <details id="ch-7">
+      <summary id="rendering-pipeline"><span class="n">07</span>Rendering Pipeline</summary>
       <ul>
         <li>The Stages of a Frame</li>
         <li>Paint: Display Lists, Not Pixels</li>
@@ -174,8 +216,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-5">
-      <summary id="javascript-engines"><span class="n">05</span>JavaScript Engines</summary>
+    <details id="ch-8">
+      <summary id="javascript-engines"><span class="n">08</span>JavaScript Engines</summary>
       <ul>
         <li>Parsing and Startup</li>
         <li>The Tiering Pipeline</li>
@@ -187,8 +229,21 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-6">
-      <summary id="event-loop-and-scheduling"><span class="n">06</span>Event Loop and Scheduling</summary>
+    <details id="ch-9">
+      <summary id="modules-and-tooling"><span class="n">09</span>Modules, Bundlers, and the Build Toolchain</summary>
+      <ul>
+        <li>From Globals to Modules</li>
+        <li>Modules in the Browser</li>
+        <li>Why Bundle Anyway</li>
+        <li>Inside a Bundler</li>
+        <li>Source Maps</li>
+        <li>Hot Module Replacement</li>
+        <li>The Supply Chain</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary id="event-loop-and-scheduling"><span class="n">10</span>Event Loop and Scheduling</summary>
       <ul>
         <li>Tasks and Task Sources</li>
         <li>Microtasks</li>
@@ -201,8 +256,21 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-7">
-      <summary id="webassembly"><span class="n">07</span>WebAssembly</summary>
+    <details id="ch-11">
+      <summary id="input-and-accessibility"><span class="n">11</span>Input, Scrolling, and Accessibility</summary>
+      <ul>
+        <li>The Input Pipeline</li>
+        <li>Event Dispatch</li>
+        <li>Interaction Latency</li>
+        <li>Focus and Keyboard Interaction</li>
+        <li>The Accessibility Tree</li>
+        <li>Beyond Screen Readers</li>
+        <li>Standards and Testing</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary id="webassembly"><span class="n">12</span>WebAssembly</summary>
       <ul>
         <li>Design: A Sandboxed Stack Machine</li>
         <li>Linear Memory and the Security Model</li>
@@ -214,8 +282,21 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-8">
-      <summary id="web-performance"><span class="n">08</span>Web Performance</summary>
+    <details id="ch-13">
+      <summary id="web-graphics-and-media"><span class="n">13</span>Graphics and Media in the Browser</summary>
+      <ul>
+        <li>The GPU Process</li>
+        <li>Canvas 2D</li>
+        <li>WebGL</li>
+        <li>WebGPU</li>
+        <li>The Video Pipeline</li>
+        <li>Real-Time Communication</li>
+        <li>Web Audio</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-14">
+      <summary id="web-performance"><span class="n">14</span>Web Performance</summary>
       <ul>
         <li>Core Web Vitals</li>
         <li>Field vs. Lab</li>

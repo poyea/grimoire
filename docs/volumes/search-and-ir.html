@@ -115,14 +115,29 @@
   <h1>Search and Information Retrieval</h1>
   <p class="desc">Inverted indexes, ranking, neural retrieval, vector search, and RAG systems.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 8</span>
+    <span><strong>CHAPTERS</strong> · 12</span>
     <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_search_and_ir.pdf">Download PDF ↓</a>
     <a class="read" href="../compile/search-and-ir.html">Read online ↗</a>
   </div>
   <div class="toc">
     <details id="ch-1">
-      <summary id="inverted-indexes"><span class="n">01</span>Inverted Indexes</summary>
+      <summary id="text-analysis"><span class="n">01</span>Text Analysis and Tokenisation</summary>
+      <ul>
+        <li>Characters, Bytes, and Unicode</li>
+        <li>Segmentation</li>
+        <li>Stemming and Lemmatisation</li>
+        <li>Stop Words, Compounds, Synonyms</li>
+        <li>N-grams and Phonetic Matching</li>
+        <li>Language Identification</li>
+        <li>Subword Tokenisation for Neural Models</li>
+        <li>Index and Query Must Agree</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-2">
+      <summary id="inverted-indexes"><span class="n">02</span>Inverted Indexes</summary>
       <ul>
         <li>Anatomy of an Inverted Index</li>
         <li>Index Construction</li>
@@ -133,8 +148,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-2">
-      <summary id="query-processing"><span class="n">02</span>Query Processing</summary>
+    <details id="ch-3">
+      <summary id="query-processing"><span class="n">03</span>Query Processing</summary>
       <ul>
         <li>Boolean Retrieval</li>
         <li>TAAT versus DAAT</li>
@@ -145,8 +160,23 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-3">
-      <summary id="ranking-classical"><span class="n">03</span>Ranking: Classical Models</summary>
+    <details id="ch-4">
+      <summary id="query-understanding"><span class="n">04</span>Query Understanding</summary>
+      <ul>
+        <li>The Pipeline</li>
+        <li>Spelling Correction</li>
+        <li>Query Auto-Completion</li>
+        <li>Segmentation and Structure</li>
+        <li>Intent and Classification</li>
+        <li>Expansion and Relevance Feedback</li>
+        <li>Rewriting from Logs and with Language Models</li>
+        <li>Evaluating Query Understanding</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary id="ranking-classical"><span class="n">05</span>Ranking: Classical Models</summary>
       <ul>
         <li>The Vector Space Model and TF-IDF</li>
         <li>BM25</li>
@@ -157,8 +187,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-4">
-      <summary id="learning-to-rank"><span class="n">04</span>Learning to Rank</summary>
+    <details id="ch-6">
+      <summary id="learning-to-rank"><span class="n">06</span>Learning to Rank</summary>
       <ul>
         <li>The Problem Setup</li>
         <li>The Taxonomy</li>
@@ -170,8 +200,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-5">
-      <summary id="neural-retrieval"><span class="n">05</span>Neural Retrieval</summary>
+    <details id="ch-7">
+      <summary id="neural-retrieval"><span class="n">07</span>Neural Retrieval</summary>
       <ul>
         <li>Vocabulary Mismatch and the Case for Learning</li>
         <li>Cross-Encoders: Reranking with Full Interaction</li>
@@ -183,8 +213,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-6">
-      <summary id="vector-search"><span class="n">06</span>Vector Search</summary>
+    <details id="ch-8">
+      <summary id="vector-search"><span class="n">08</span>Vector Search</summary>
       <ul>
         <li>Distances and the Curse of Dimensionality</li>
         <li>Locality-Sensitive Hashing</li>
@@ -196,8 +226,40 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-7">
-      <summary id="evaluation"><span class="n">07</span>Evaluation</summary>
+    <details id="ch-9">
+      <summary id="distributed-search"><span class="n">09</span>Distributed Search Architecture</summary>
+      <ul>
+        <li>Partitioning the Index</li>
+        <li>Scatter-Gather</li>
+        <li>Tail Latency at Fan-Out</li>
+        <li>Global Statistics</li>
+        <li>Replication and Indexing</li>
+        <li>Tiering and Selective Search</li>
+        <li>Caching</li>
+        <li>Shard Sizing and Rebalancing</li>
+        <li>Distributed Vector Search</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary id="crawling-and-deduplication"><span class="n">10</span>Web Crawling and Near-Duplicate Detection</summary>
+      <ul>
+        <li>Crawler Architecture</li>
+        <li>Politeness</li>
+        <li>URLs, Normalisation, and Traps</li>
+        <li>What to Crawl First</li>
+        <li>Freshness and Recrawling</li>
+        <li>Exact Duplicates</li>
+        <li>Near Duplicates</li>
+        <li>Content Extraction</li>
+        <li>The Adversarial Web</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-11">
+      <summary id="evaluation"><span class="n">11</span>Evaluation</summary>
       <ul>
         <li>The Cranfield Paradigm</li>
         <li>Set-Based Metrics</li>
@@ -209,8 +271,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-8">
-      <summary id="rag-and-search-systems"><span class="n">08</span>RAG and Search Systems</summary>
+    <details id="ch-12">
+      <summary id="rag-and-search-systems"><span class="n">12</span>RAG and Search Systems</summary>
       <ul>
         <li>Why Retrieval for Generation</li>
         <li>The Ingestion Side</li>

@@ -115,7 +115,7 @@
   <h1>Formal Methods</h1>
   <p class="desc">Model checking, TLA+, SAT/SMT, theorem proving, and separation logic.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 7</span>
+    <span><strong>CHAPTERS</strong> · 12</span>
     <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_formal_methods.pdf">Download PDF ↓</a>
     <a class="read" href="../compile/formal-methods.html">Read online ↗</a>
@@ -134,7 +134,51 @@
       </ul>
     </details>
     <details id="ch-2">
-      <summary id="model-checking"><span class="n">02</span>Model Checking</summary>
+      <summary id="abstract-interpretation"><span class="n">02</span>Abstract Interpretation</summary>
+      <ul>
+        <li>From Semantics to Fixpoints</li>
+        <li>Galois Connections</li>
+        <li>Numerical Domains</li>
+        <li>Widening and Narrowing</li>
+        <li>An Interval Analyser</li>
+        <li>Precision, False Alarms, and Soundiness</li>
+        <li>Industrial Use</li>
+        <li>Relation to Other Techniques</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary id="alloy"><span class="n">03</span>Alloy and Relational Modelling</summary>
+      <ul>
+        <li>Everything Is a Relation</li>
+        <li>A First Model</li>
+        <li>Bounded Analysis and the Small Scope Hypothesis</li>
+        <li>From Relations to SAT: Kodkod</li>
+        <li>The Relational Core in C++</li>
+        <li>Dynamic Models and Alloy 6</li>
+        <li>Alloy in Practice</li>
+        <li>Alloy and TLA+</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary id="deductive-verification"><span class="n">04</span>Auto-Active Deductive Verification</summary>
+      <ul>
+        <li>The Spectrum of Verification</li>
+        <li>The Pipeline</li>
+        <li>Generating Verification Conditions</li>
+        <li>Loops and Invariants</li>
+        <li>Procedures, Contracts, and Frames</li>
+        <li>Termination</li>
+        <li>Ghost Code and Lemmas</li>
+        <li>Quantifiers and Triggers</li>
+        <li>Industrial Record</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary id="model-checking"><span class="n">05</span>Model Checking</summary>
       <ul>
         <li>Kripke Structures and Transition Systems</li>
         <li>Linear and Branching Temporal Logic</li>
@@ -153,8 +197,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-3">
-      <summary id="propositional-and-fol"><span class="n">03</span>Propositional and First-Order Logic</summary>
+    <details id="ch-6">
+      <summary id="propositional-and-fol"><span class="n">06</span>Propositional and First-Order Logic</summary>
       <ul>
         <li>Propositional Logic: Syntax</li>
         <li>Semantics and Entailment</li>
@@ -172,8 +216,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-4">
-      <summary id="sat-and-smt"><span class="n">04</span>SAT and SMT</summary>
+    <details id="ch-7">
+      <summary id="sat-and-smt"><span class="n">07</span>SAT and SMT</summary>
       <ul>
         <li>The SAT Problem</li>
         <li>DPLL: The Foundation</li>
@@ -193,8 +237,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-5">
-      <summary id="separation-logic"><span class="n">05</span>Separation Logic</summary>
+    <details id="ch-8">
+      <summary id="separation-logic"><span class="n">08</span>Separation Logic</summary>
       <ul>
         <li>The Heap Model</li>
         <li>Hoare Logic Recap and the Aliasing Problem</li>
@@ -207,8 +251,23 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-6">
-      <summary id="theorem-proving"><span class="n">06</span>Theorem Proving</summary>
+    <details id="ch-9">
+      <summary id="symbolic-execution-and-fuzzing"><span class="n">09</span>Symbolic Execution and Fuzzing</summary>
+      <ul>
+        <li>Symbolic States and Path Conditions</li>
+        <li>A Symbolic Executor on Z3</li>
+        <li>Path Explosion</li>
+        <li>Memory and the Environment</li>
+        <li>Concolic Testing</li>
+        <li>Coverage-Guided Fuzzing</li>
+        <li>Hybrid Fuzzing</li>
+        <li>Under-Approximate Reasoning</li>
+        <li>Results in Practice</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-10">
+      <summary id="theorem-proving"><span class="n">10</span>Theorem Proving</summary>
       <ul>
         <li>The Curry-Howard Correspondence</li>
         <li>Dependent Types</li>
@@ -222,8 +281,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-7">
-      <summary id="tla-plus"><span class="n">07</span>TLA+</summary>
+    <details id="ch-11">
+      <summary id="tla-plus"><span class="n">11</span>TLA+</summary>
       <ul>
         <li>The Mathematical Foundation</li>
         <li>Specification Structure</li>
@@ -236,6 +295,20 @@
         <li>Real-World Adoption</li>
         <li>Refinement and Specification Hierarchies</li>
         <li>Tool Ecosystem</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-12">
+      <summary id="verified-distributed-systems"><span class="n">12</span>Verifying Distributed Systems</summary>
+      <ul>
+        <li>Systems as Transition Systems</li>
+        <li>Testing That Takes Interleavings Seriously</li>
+        <li>Model Checking Specifications</li>
+        <li>Inductive Invariants</li>
+        <li>Decidable Fragments: Ivy</li>
+        <li>Refinement Proofs of Implementations</li>
+        <li>Choosing a Level of Assurance</li>
+        <li>Pitfalls</li>
         <li>Further Reading</li>
       </ul>
     </details>

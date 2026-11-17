@@ -115,7 +115,7 @@
   <h1>Cloud &amp; Infrastructure</h1>
   <p class="desc">IaaS fundamentals, Kubernetes internals, serverless, IaC, multi-tenancy, and cost engineering.</p>
   <div class="meta">
-    <span><strong>CHAPTERS</strong> · 7</span>
+    <span><strong>CHAPTERS</strong> · 12</span>
     <span><strong>FORMAT</strong> · PDF · HTML</span>
     <a class="pdf" href="https://github.com/poyea/grimoire/releases/latest/download/grimoire_cloud_and_infrastructure.pdf">Download PDF ↓</a>
     <a class="read" href="../compile/cloud-and-infrastructure.html">Read online ↗</a>
@@ -141,7 +141,98 @@
       </ul>
     </details>
     <details id="ch-2">
-      <summary id="cost-engineering"><span class="n">02</span>Cloud Cost Engineering</summary>
+      <summary id="cloud-networking"><span class="n">02</span>Cloud Networking</summary>
+      <ul>
+        <li>Address Planning</li>
+        <li>Route Tables</li>
+        <li>Gateways and Address Translation</li>
+        <li>Filtering: Stateful and Stateless</li>
+        <li>Connecting Many Networks</li>
+        <li>Private Access to Services</li>
+        <li>DNS Inside the VPC</li>
+        <li>Hybrid Connectivity</li>
+        <li>MTU and Path MTU</li>
+        <li>Load Balancers in the Cloud</li>
+        <li>IPv6</li>
+        <li>Instance Metadata Service</li>
+        <li>Traffic Paths and Their Cost</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-3">
+      <summary id="cloud-storage"><span class="n">03</span>Cloud Storage Services</summary>
+      <ul>
+        <li>The Four Shapes</li>
+        <li>Object Storage Semantics</li>
+        <li>Durability Engineering</li>
+        <li>Storage Classes and Lifecycle</li>
+        <li>Block Storage Performance</li>
+        <li>Managed File Systems</li>
+        <li>Local Instance Storage</li>
+        <li>Encryption</li>
+        <li>Data Protection</li>
+        <li>Choosing a Shape</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-4">
+      <summary id="cloud-iam"><span class="n">04</span>Cloud Identity and Access Management</summary>
+      <ul>
+        <li>The Resource Hierarchy</li>
+        <li>Principals</li>
+        <li>Policy Models</li>
+        <li>AWS Policy Evaluation</li>
+        <li>Temporary Credentials</li>
+        <li>Workload Identity Federation</li>
+        <li>The Confused Deputy</li>
+        <li>Privilege Escalation Paths</li>
+        <li>Approaching Least Privilege</li>
+        <li>Verifying Policies</li>
+        <li>Auditing</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-5">
+      <summary id="autoscaling"><span class="n">05</span>Autoscaling and Capacity Management</summary>
+      <ul>
+        <li>Autoscaling as a Control Loop</li>
+        <li>Choosing the Signal</li>
+        <li>Target Tracking</li>
+        <li>Other Policies</li>
+        <li>Queueing and the Utilisation Knee</li>
+        <li>Scaling Layers</li>
+        <li>Startup Time Is the Hidden Lever</li>
+        <li>Capacity Is Not Infinite</li>
+        <li>Static Stability</li>
+        <li>Scaling Does Not Fix Everything</li>
+        <li>Long-Term Capacity Planning</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-6">
+      <summary id="disaster-recovery"><span class="n">06</span>Multi-Region Architecture and Disaster Recovery</summary>
+      <ul>
+        <li>Failure Scopes</li>
+        <li>Recovery Objectives</li>
+        <li>DR Strategies</li>
+        <li>Data Replication Across Regions</li>
+        <li>Availability Arithmetic</li>
+        <li>Failover Mechanics</li>
+        <li>Hidden Global Dependencies</li>
+        <li>Cells and Blast Radius</li>
+        <li>Backups as the Last Line</li>
+        <li>Testing</li>
+        <li>Cost</li>
+        <li>Pitfalls</li>
+        <li>Further Reading</li>
+      </ul>
+    </details>
+    <details id="ch-7">
+      <summary id="cost-engineering"><span class="n">07</span>Cloud Cost Engineering</summary>
       <ul>
         <li>Cost Visibility</li>
         <li>Unit Economics</li>
@@ -154,8 +245,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-3">
-      <summary id="iac"><span class="n">03</span>Infrastructure as Code</summary>
+    <details id="ch-8">
+      <summary id="iac"><span class="n">08</span>Infrastructure as Code</summary>
       <ul>
         <li>Declarative vs Imperative IaC</li>
         <li>Terraform</li>
@@ -168,8 +259,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-4">
-      <summary id="iaas-fundamentals"><span class="n">04</span>IaaS Fundamentals</summary>
+    <details id="ch-9">
+      <summary id="iaas-fundamentals"><span class="n">09</span>IaaS Fundamentals</summary>
       <ul>
         <li>The IaaS Stack</li>
         <li>Cross-Cloud Abstraction Map</li>
@@ -186,8 +277,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-5">
-      <summary id="kubernetes-internals"><span class="n">05</span>Kubernetes Internals</summary>
+    <details id="ch-10">
+      <summary id="kubernetes-internals"><span class="n">10</span>Kubernetes Internals</summary>
       <ul>
         <li>Architectural Overview</li>
         <li>etcd as the System of Record</li>
@@ -206,8 +297,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-6">
-      <summary id="multi-tenancy"><span class="n">06</span>Multi-Tenancy</summary>
+    <details id="ch-11">
+      <summary id="multi-tenancy"><span class="n">11</span>Multi-Tenancy</summary>
       <ul>
         <li>Isolation Models</li>
         <li>Threat Model</li>
@@ -221,8 +312,8 @@
         <li>Further Reading</li>
       </ul>
     </details>
-    <details id="ch-7">
-      <summary id="serverless"><span class="n">07</span>Serverless Computing</summary>
+    <details id="ch-12">
+      <summary id="serverless"><span class="n">12</span>Serverless Computing</summary>
       <ul>
         <li>The FaaS Execution Model</li>
         <li>Lambda Internals: Firecracker and MicroVMs</li>
