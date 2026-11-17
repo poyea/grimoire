@@ -469,6 +469,11 @@ chapters:
     words: 1269
     status: reviewed
   - subject: cryptography-and-security
+    slug: memory-safety
+    path: cryptography-and-security/memory-safety.typ
+    words: 2399
+    status: reviewed
+  - subject: cryptography-and-security
     slug: post-quantum
     path: cryptography-and-security/post-quantum.typ
     words: 1230

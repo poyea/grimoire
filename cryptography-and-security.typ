@@ -38,4 +38,7 @@
   #include "cryptography-and-security/side-channel-attacks.typ"
   #pagebreak()
 
+  #include "cryptography-and-security/memory-safety.typ"
+  #pagebreak()
+
 ]
