@@ -848,6 +848,11 @@ chapters:
     path: formal-methods/tla-plus.typ
     words: 1723
     status: reviewed
+  - subject: formal-methods
+    slug: verified-distributed-systems
+    path: formal-methods/verified-distributed-systems.typ
+    words: 2576
+    status: reviewed
   - subject: gpu-architecture
     slug: compute-architecture
     path: gpu-architecture/compute-architecture.typ

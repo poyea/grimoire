@@ -44,4 +44,7 @@
   #include "formal-methods/tla-plus.typ"
   #pagebreak()
 
+  #include "formal-methods/verified-distributed-systems.typ"
+  #pagebreak()
+
 ]
