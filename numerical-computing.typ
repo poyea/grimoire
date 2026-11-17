@@ -32,6 +32,9 @@
   #include "numerical-computing/interpolation-and-approximation.typ"
   #pagebreak()
 
+  #include "numerical-computing/numerical-integration.typ"
+  #pagebreak()
+
   #include "numerical-computing/ode-integration.typ"
   #pagebreak()
 

@@ -1999,6 +1999,11 @@ chapters:
     words: 1490
     status: reviewed
   - subject: numerical-computing
+    slug: numerical-integration
+    path: numerical-computing/numerical-integration.typ
+    words: 2273
+    status: reviewed
+  - subject: numerical-computing
     slug: ode-integration
     path: numerical-computing/ode-integration.typ
     words: 1898
