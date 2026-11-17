@@ -1959,6 +1959,11 @@ chapters:
     words: 2222
     status: reviewed
   - subject: performance-engineering
+    slug: managed-runtime-performance
+    path: performance-engineering/managed-runtime-performance.typ
+    words: 1929
+    status: reviewed
+  - subject: performance-engineering
     slug: memory-performance
     path: performance-engineering/memory-performance.typ
     words: 1325
