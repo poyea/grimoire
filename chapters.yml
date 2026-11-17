@@ -34,6 +34,11 @@ chapters:
     words: 1701
     status: reviewed
   - subject: cloud-and-infrastructure
+    slug: disaster-recovery
+    path: cloud-and-infrastructure/disaster-recovery.typ
+    words: 2328
+    status: reviewed
+  - subject: cloud-and-infrastructure
     slug: iaas-fundamentals
     path: cloud-and-infrastructure/iaas-fundamentals.typ
     words: 2036

@@ -26,6 +26,9 @@
   #include "cloud-and-infrastructure/autoscaling.typ"
   #pagebreak()
 
+  #include "cloud-and-infrastructure/disaster-recovery.typ"
+  #pagebreak()
+
   #include "cloud-and-infrastructure/cost-engineering.typ"
   #pagebreak()
 
