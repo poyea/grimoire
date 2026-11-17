@@ -1944,6 +1944,11 @@ chapters:
     words: 1516
     status: reviewed
   - subject: performance-engineering
+    slug: continuous-performance-testing
+    path: performance-engineering/continuous-performance-testing.typ
+    words: 2220
+    status: reviewed
+  - subject: performance-engineering
     slug: cpu-profiling
     path: performance-engineering/cpu-profiling.typ
     words: 1245

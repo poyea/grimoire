@@ -17,6 +17,9 @@
   #include "performance-engineering/benchmarking.typ"
   #pagebreak()
 
+  #include "performance-engineering/continuous-performance-testing.typ"
+  #pagebreak()
+
   #include "performance-engineering/cpu-profiling.typ"
   #pagebreak()
 
