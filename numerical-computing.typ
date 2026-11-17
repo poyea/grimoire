@@ -29,6 +29,9 @@
   #include "numerical-computing/fft.typ"
   #pagebreak()
 
+  #include "numerical-computing/interpolation-and-approximation.typ"
+  #pagebreak()
+
   #include "numerical-computing/ode-integration.typ"
   #pagebreak()
 

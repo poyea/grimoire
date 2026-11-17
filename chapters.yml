@@ -1806,7 +1806,7 @@ chapters:
   - subject: quantum-computing
     slug: quantum-information
     path: quantum-computing/quantum-information.typ
-    words: 2238
+    words: 2263
     status: reviewed
   - subject: quantum-computing
     slug: qubits-and-gates
@@ -1984,6 +1984,11 @@ chapters:
     words: 2007
     status: reviewed
   - subject: numerical-computing
+    slug: interpolation-and-approximation
+    path: numerical-computing/interpolation-and-approximation.typ
+    words: 2483
+    status: reviewed
+  - subject: numerical-computing
     slug: iterative-methods
     path: numerical-computing/iterative-methods.typ
     words: 1532
@@ -2051,7 +2056,7 @@ chapters:
   - subject: web-and-browsers
     slug: storage-and-offline
     path: web-and-browsers/storage-and-offline.typ
-    words: 1927
+    words: 1944
     status: reviewed
   - subject: web-and-browsers
     slug: web-graphics-and-media
@@ -2066,7 +2071,7 @@ chapters:
   - subject: web-and-browsers
     slug: web-security-model
     path: web-and-browsers/web-security-model.typ
-    words: 1987
+    words: 1997
     status: reviewed
   - subject: web-and-browsers
     slug: webassembly
