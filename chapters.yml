@@ -796,7 +796,7 @@ chapters:
   - subject: formal-methods
     slug: abstract-interpretation
     path: formal-methods/abstract-interpretation.typ
-    words: 2484
+    words: 2494
     status: reviewed
   - subject: formal-methods
     slug: model-checking
@@ -822,6 +822,11 @@ chapters:
     slug: separation-logic
     path: formal-methods/separation-logic.typ
     words: 2300
+    status: reviewed
+  - subject: formal-methods
+    slug: symbolic-execution-and-fuzzing
+    path: formal-methods/symbolic-execution-and-fuzzing.typ
+    words: 2771
     status: reviewed
   - subject: formal-methods
     slug: theorem-proving
