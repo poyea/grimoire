@@ -110,7 +110,7 @@ Two measures dominate:
 - *Trace distance* $D(rho, sigma) = 1/2 norm(rho - sigma)_1$, half the sum of the absolute eigenvalues of $rho - sigma$. It has a direct operational meaning: given one copy of either state with equal prior probability, the best possible measurement guesses correctly with probability $1/2 (1 + D(rho, sigma))$.
 - *Fidelity* $F(rho, sigma) = (op("tr") sqrt(sqrt(rho) sigma sqrt(rho)))^2$, which reduces to $|chevron.l psi|phi chevron.r|^2$ for pure states. (Some texts define fidelity without the square; check the convention before comparing numbers.)
 
-They are related by $1 - sqrt(F) <= D <= sqrt(1 - F)$. Neither increases under any channel: processing cannot make states more distinguishable. Gate and state fidelities quoted for hardware use these definitions or the closely related *average gate fidelity* over all input states.
+They are related by $1 - sqrt(F) <= D <= sqrt(1 - F)$. Under any channel, trace distance never increases and fidelity never decreases: processing cannot make states more distinguishable. Gate and state fidelities quoted for hardware use these definitions or the closely related *average gate fidelity* over all input states.
 
 == Entropy and the Holevo Bound
 
@@ -153,7 +153,7 @@ Could quantum correlations be explained by hidden classical variables carried by
 
 $ S = chevron.l A_0 B_0 chevron.r + chevron.l A_0 B_1 chevron.r + chevron.l A_1 B_0 chevron.r - chevron.l A_1 B_1 chevron.r $
 
-Every local hidden-variable model has $|S| <= 2$. A Bell pair with suitably rotated measurements gives $S = 2 sqrt(2) approx 2.83$, which is the maximum quantum mechanics allows (*Tsirelson's bound*). Experiments violating CHSH while closing the detection and locality loopholes simultaneously were performed in 2015 (Hensen et al. and others), work recognised by the 2022 Nobel Prize in Physics. Beyond foundations, Bell violations are a resource: *device-independent* protocols certify randomness and secret keys from the observed statistics alone, without trusting the devices.
+Every local hidden-variable model has $|S| <= 2$. A Bell pair with suitably rotated measurements gives $S = 2 sqrt(2) approx 2.83$, which is the maximum quantum mechanics allows (*Tsirelson's bound*). Experiments violating CHSH while closing the detection and locality loopholes simultaneously were performed in 2015 (Hensen et al. and others). The experimental programme from the first tests in the 1970s and 1980s onward was recognised by the 2022 Nobel Prize in Physics, awarded to Aspect, Clauser, and Zeilinger. Beyond foundations, Bell violations are a resource: *device-independent* protocols certify randomness and secret keys from the observed statistics alone, without trusting the devices.
 
 == Detecting Entanglement
 
