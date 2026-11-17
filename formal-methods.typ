@@ -17,6 +17,9 @@
   #include "formal-methods/abstract-interpretation.typ"
   #pagebreak()
 
+  #include "formal-methods/deductive-verification.typ"
+  #pagebreak()
+
   #include "formal-methods/model-checking.typ"
   #pagebreak()
 
