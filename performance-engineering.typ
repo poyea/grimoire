@@ -29,6 +29,9 @@
   #include "performance-engineering/concurrency-performance.typ"
   #pagebreak()
 
+  #include "performance-engineering/low-latency-systems.typ"
+  #pagebreak()
+
   #include "performance-engineering/io-performance.typ"
   #pagebreak()
 

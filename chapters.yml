@@ -1954,6 +1954,11 @@ chapters:
     words: 1521
     status: reviewed
   - subject: performance-engineering
+    slug: low-latency-systems
+    path: performance-engineering/low-latency-systems.typ
+    words: 2222
+    status: reviewed
+  - subject: performance-engineering
     slug: memory-performance
     path: performance-engineering/memory-performance.typ
     words: 1325
