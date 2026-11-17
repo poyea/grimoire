@@ -11,6 +11,9 @@
 
   #pagebreak()
 
+  #include "search-and-ir/text-analysis.typ"
+  #pagebreak()
+
   #include "search-and-ir/inverted-indexes.typ"
   #pagebreak()
 

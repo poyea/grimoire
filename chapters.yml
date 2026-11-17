@@ -2154,6 +2154,11 @@ chapters:
     words: 1449
     status: reviewed
   - subject: search-and-ir
+    slug: text-analysis
+    path: search-and-ir/text-analysis.typ
+    words: 2225
+    status: reviewed
+  - subject: search-and-ir
     slug: vector-search
     path: search-and-ir/vector-search.typ
     words: 1354
