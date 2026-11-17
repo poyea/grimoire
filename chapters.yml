@@ -1934,6 +1934,11 @@ chapters:
     words: 2059
     status: reviewed
   - subject: performance-engineering
+    slug: compiler-aware-optimization
+    path: performance-engineering/compiler-aware-optimization.typ
+    words: 2066
+    status: reviewed
+  - subject: performance-engineering
     slug: concurrency-performance
     path: performance-engineering/concurrency-performance.typ
     words: 1516

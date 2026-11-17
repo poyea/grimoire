@@ -23,6 +23,9 @@
   #include "performance-engineering/memory-performance.typ"
   #pagebreak()
 
+  #include "performance-engineering/compiler-aware-optimization.typ"
+  #pagebreak()
+
   #include "performance-engineering/concurrency-performance.typ"
   #pagebreak()
 
