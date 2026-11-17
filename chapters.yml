@@ -794,6 +794,11 @@ chapters:
     words: 2835
     status: reviewed
   - subject: formal-methods
+    slug: abstract-interpretation
+    path: formal-methods/abstract-interpretation.typ
+    words: 2484
+    status: reviewed
+  - subject: formal-methods
     slug: model-checking
     path: formal-methods/model-checking.typ
     words: 1859
