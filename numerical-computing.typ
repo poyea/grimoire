@@ -41,6 +41,9 @@
   #include "numerical-computing/ode-integration.typ"
   #pagebreak()
 
+  #include "numerical-computing/pde-discretization.typ"
+  #pagebreak()
+
   #include "numerical-computing/optimization-algorithms.typ"
   #pagebreak()
 

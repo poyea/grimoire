@@ -2018,6 +2018,11 @@ chapters:
     path: numerical-computing/optimization-algorithms.typ
     words: 1621
     status: reviewed
+  - subject: numerical-computing
+    slug: pde-discretization
+    path: numerical-computing/pde-discretization.typ
+    words: 2854
+    status: reviewed
   - subject: web-and-browsers
     slug: browser-architecture
     path: web-and-browsers/browser-architecture.typ
