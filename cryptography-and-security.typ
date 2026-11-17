@@ -38,6 +38,9 @@
   #include "cryptography-and-security/secure-multiparty-computation.typ"
   #pagebreak()
 
+  #include "cryptography-and-security/homomorphic-encryption.typ"
+  #pagebreak()
+
   #include "cryptography-and-security/post-quantum.typ"
   #pagebreak()
 

@@ -464,6 +464,11 @@ chapters:
     words: 1332
     status: reviewed
   - subject: cryptography-and-security
+    slug: homomorphic-encryption
+    path: cryptography-and-security/homomorphic-encryption.typ
+    words: 2215
+    status: reviewed
+  - subject: cryptography-and-security
     slug: key-exchange-and-pki
     path: cryptography-and-security/key-exchange-and-pki.typ
     words: 1269
