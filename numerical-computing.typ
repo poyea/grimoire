@@ -47,4 +47,7 @@
   #include "numerical-computing/optimization-algorithms.typ"
   #pagebreak()
 
+  #include "numerical-computing/automatic-differentiation.typ"
+  #pagebreak()
+
 ]

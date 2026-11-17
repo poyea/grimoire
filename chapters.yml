@@ -1964,6 +1964,11 @@ chapters:
     words: 1961
     status: reviewed
   - subject: numerical-computing
+    slug: automatic-differentiation
+    path: numerical-computing/automatic-differentiation.typ
+    words: 2328
+    status: reviewed
+  - subject: numerical-computing
     slug: eigenvalue-problems
     path: numerical-computing/eigenvalue-problems.typ
     words: 1442
