@@ -309,6 +309,11 @@ chapters:
     words: 1525
     status: reviewed
   - subject: compilers
+    slug: dependence-and-polyhedral
+    path: compilers/dependence-and-polyhedral.typ
+    words: 2317
+    status: reviewed
+  - subject: compilers
     slug: frontends
     path: compilers/frontends.typ
     words: 1467

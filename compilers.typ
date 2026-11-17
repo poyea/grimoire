@@ -29,6 +29,9 @@
   #include "compilers/optimisation-passes.typ"
   #pagebreak()
 
+  #include "compilers/dependence-and-polyhedral.typ"
+  #pagebreak()
+
   #include "compilers/jit-and-runtimes.typ"
   #pagebreak()
 
