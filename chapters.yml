@@ -799,6 +799,11 @@ chapters:
     words: 2494
     status: reviewed
   - subject: formal-methods
+    slug: alloy
+    path: formal-methods/alloy.typ
+    words: 2330
+    status: reviewed
+  - subject: formal-methods
     slug: deductive-verification
     path: formal-methods/deductive-verification.typ
     words: 2527
