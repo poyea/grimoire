@@ -1999,6 +1999,11 @@ chapters:
     words: 1490
     status: reviewed
   - subject: numerical-computing
+    slug: monte-carlo-methods
+    path: numerical-computing/monte-carlo-methods.typ
+    words: 2439
+    status: reviewed
+  - subject: numerical-computing
     slug: numerical-integration
     path: numerical-computing/numerical-integration.typ
     words: 2273

@@ -35,6 +35,9 @@
   #include "numerical-computing/numerical-integration.typ"
   #pagebreak()
 
+  #include "numerical-computing/monte-carlo-methods.typ"
+  #pagebreak()
+
   #include "numerical-computing/ode-integration.typ"
   #pagebreak()
 
