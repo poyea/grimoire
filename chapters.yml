@@ -2119,6 +2119,11 @@ chapters:
     words: 1319
     status: reviewed
   - subject: search-and-ir
+    slug: distributed-search
+    path: search-and-ir/distributed-search.typ
+    words: 2266
+    status: reviewed
+  - subject: search-and-ir
     slug: evaluation
     path: search-and-ir/evaluation.typ
     words: 1407

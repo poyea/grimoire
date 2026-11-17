@@ -35,6 +35,9 @@
   #include "search-and-ir/vector-search.typ"
   #pagebreak()
 
+  #include "search-and-ir/distributed-search.typ"
+  #pagebreak()
+
   #include "search-and-ir/evaluation.typ"
   #pagebreak()
 
