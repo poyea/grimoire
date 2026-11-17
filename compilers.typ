@@ -32,6 +32,9 @@
   #include "compilers/dependence-and-polyhedral.typ"
   #pagebreak()
 
+  #include "compilers/e-graphs.typ"
+  #pagebreak()
+
   #include "compilers/jit-and-runtimes.typ"
   #pagebreak()
 

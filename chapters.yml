@@ -314,6 +314,11 @@ chapters:
     words: 2317
     status: reviewed
   - subject: compilers
+    slug: e-graphs
+    path: compilers/e-graphs.typ
+    words: 2559
+    status: reviewed
+  - subject: compilers
     slug: frontends
     path: compilers/frontends.typ
     words: 1467
