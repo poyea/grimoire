@@ -479,6 +479,11 @@ chapters:
     words: 1230
     status: reviewed
   - subject: cryptography-and-security
+    slug: randomness-and-key-management
+    path: cryptography-and-security/randomness-and-key-management.typ
+    words: 2427
+    status: reviewed
+  - subject: cryptography-and-security
     slug: side-channel-attacks
     path: cryptography-and-security/side-channel-attacks.typ
     words: 1169

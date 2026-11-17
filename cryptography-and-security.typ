@@ -26,6 +26,9 @@
   #include "cryptography-and-security/key-exchange-and-pki.typ"
   #pagebreak()
 
+  #include "cryptography-and-security/randomness-and-key-management.typ"
+  #pagebreak()
+
   #include "cryptography-and-security/tls.typ"
   #pagebreak()
 
