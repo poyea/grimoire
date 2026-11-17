@@ -2144,6 +2144,11 @@ chapters:
     words: 1376
     status: reviewed
   - subject: search-and-ir
+    slug: query-understanding
+    path: search-and-ir/query-understanding.typ
+    words: 2320
+    status: reviewed
+  - subject: search-and-ir
     slug: rag-and-search-systems
     path: search-and-ir/rag-and-search-systems.typ
     words: 1466

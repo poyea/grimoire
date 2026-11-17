@@ -20,6 +20,9 @@
   #include "search-and-ir/query-processing.typ"
   #pagebreak()
 
+  #include "search-and-ir/query-understanding.typ"
+  #pagebreak()
+
   #include "search-and-ir/ranking-classical.typ"
   #pagebreak()
 
