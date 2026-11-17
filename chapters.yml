@@ -484,6 +484,11 @@ chapters:
     words: 2427
     status: reviewed
   - subject: cryptography-and-security
+    slug: secure-multiparty-computation
+    path: cryptography-and-security/secure-multiparty-computation.typ
+    words: 2481
+    status: reviewed
+  - subject: cryptography-and-security
     slug: side-channel-attacks
     path: cryptography-and-security/side-channel-attacks.typ
     words: 1169
