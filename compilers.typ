@@ -38,6 +38,9 @@
   #include "compilers/compiler-correctness.typ"
   #pagebreak()
 
+  #include "compilers/whole-program-optimisation.typ"
+  #pagebreak()
+
   #include "compilers/jit-and-runtimes.typ"
   #pagebreak()
 

@@ -353,6 +353,11 @@ chapters:
     path: compilers/register-allocation.typ
     words: 1643
     status: reviewed
+  - subject: compilers
+    slug: whole-program-optimisation
+    path: compilers/whole-program-optimisation.typ
+    words: 2298
+    status: reviewed
   - subject: cpu-architecture
     slug: accelerators
     path: cpu-architecture/accelerators.typ
