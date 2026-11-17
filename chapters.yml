@@ -4,6 +4,11 @@
 # derived from the filesystem.
 chapters:
   - subject: cloud-and-infrastructure
+    slug: autoscaling
+    path: cloud-and-infrastructure/autoscaling.typ
+    words: 2484
+    status: reviewed
+  - subject: cloud-and-infrastructure
     slug: cloud-iam
     path: cloud-and-infrastructure/cloud-iam.typ
     words: 2715
