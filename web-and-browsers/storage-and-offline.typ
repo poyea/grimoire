@@ -75,7 +75,7 @@ A service worker is a script registered for a *scope* (a URL path prefix on an o
 2. *Install*: the new worker runs its `install` handler, typically *precaching* the app shell. If any precache request fails, installation fails and the old worker stays.
 3. *Wait*: if an older worker controls open pages, the new one waits until all those pages close, so that one page never sees two versions of the app. `self.skipWaiting()` skips the wait, at the risk of a page loaded by the old version now talking to the new one.
 4. *Activate*: the new worker's `activate` handler deletes caches from old versions. `clients.claim()` makes it control already-open pages immediately.
-5. *Update*: on navigations (and at most every 24 hours) the browser re-fetches the worker script, bypassing the HTTP cache by default, and installs a new version if it differs by even one byte.
+5. *Update*: on each navigation into the scope, and on other events such as `push` and `sync` if no check has happened in the last 24 hours, the browser re-fetches the worker script (bypassing the HTTP cache by default) and installs a new version if it differs by even one byte.
 
 The waiting phase is the root of the classic complaint "users don't get the new version": the update installed, but it will not activate until every tab of the app closes. Applications usually show an "update available, reload" prompt that calls `skipWaiting` on request.
 

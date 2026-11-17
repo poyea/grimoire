@@ -66,7 +66,7 @@ Cookies predate the same-origin policy and follow different rules: they are scop
   [`Partitioned`], [Stored separately per top-level site (CHIPS), for embedded third-party use without cross-site tracking],
 )
 
-A good default for session cookies is `__Host-session=...; Secure; HttpOnly; SameSite=Lax; Path=/`. Third-party cookies, the basis of cross-site tracking, are blocked by default in Safari and Firefox, and storage of all kinds is increasingly *partitioned* by top-level site, so that an iframe from `widget.example` embedded in two different sites sees two separate storage jars.
+A good default for session cookies is `__Host-session=...; Secure; HttpOnly; SameSite=Lax; Path=/`. Third-party cookies, the basis of cross-site tracking, are blocked by default in Safari and partitioned per top-level site by default in Firefox (Total Cookie Protection), and storage of all kinds is increasingly *partitioned* by top-level site, so that an iframe from `widget.example` embedded in two different sites sees two separate storage jars.
 
 == Cross-Site Scripting
 
