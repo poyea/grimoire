@@ -38,6 +38,9 @@
   #include "search-and-ir/distributed-search.typ"
   #pagebreak()
 
+  #include "search-and-ir/crawling-and-deduplication.typ"
+  #pagebreak()
+
   #include "search-and-ir/evaluation.typ"
   #pagebreak()
 

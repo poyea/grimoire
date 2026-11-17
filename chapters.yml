@@ -2119,6 +2119,11 @@ chapters:
     words: 1319
     status: reviewed
   - subject: search-and-ir
+    slug: crawling-and-deduplication
+    path: search-and-ir/crawling-and-deduplication.typ
+    words: 2463
+    status: reviewed
+  - subject: search-and-ir
     slug: distributed-search
     path: search-and-ir/distributed-search.typ
     words: 2266
