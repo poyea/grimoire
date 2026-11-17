@@ -20,6 +20,9 @@
   #include "cloud-and-infrastructure/cloud-storage.typ"
   #pagebreak()
 
+  #include "cloud-and-infrastructure/cloud-iam.typ"
+  #pagebreak()
+
   #include "cloud-and-infrastructure/cost-engineering.typ"
   #pagebreak()
 

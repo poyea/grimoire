@@ -4,6 +4,11 @@
 # derived from the filesystem.
 chapters:
   - subject: cloud-and-infrastructure
+    slug: cloud-iam
+    path: cloud-and-infrastructure/cloud-iam.typ
+    words: 2715
+    status: reviewed
+  - subject: cloud-and-infrastructure
     slug: cloud-networking
     path: cloud-and-infrastructure/cloud-networking.typ
     words: 3487
